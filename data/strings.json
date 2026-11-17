@@ -2,7 +2,7 @@
   "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. String executada de cada faceta, composição de E1 a E4 e qual delas é a executada. É deste arquivo que a derivação local lê a lista de termos executados.",
   "fonte": {
     "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
   },
   "derivado": {
     "sha256": "b0afd17fb34adb2df8277eed29590dfe6fca0bad0ba9a511f6e4459ce3f9966c",

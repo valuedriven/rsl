@@ -3,8 +3,8 @@
 Contrato geral e reutilizável. Define **como o agente trabalha**, não em que projeto.
 
 - **Em que projeto** o agente está trabalhando, com questão, escopo, critérios, bases,
-  parâmetros, limiares, decisões já tomadas e estado das atividades: os documentos em `docs/`,
-  indexados pelo `README.md`.
+  parâmetros, limiares, decisões já tomadas e estado das atividades: o `README.md`, que é a
+  memória operacional, e os documentos que ele indexa.
 - **Como executar uma atividade especializada**: as skills em `.agents/skills/`.
 - **Dados e resultados concretos**: os artefatos do projeto.
 - **Como executar tecnicamente uma operação**: a documentação técnica do projeto.
@@ -62,6 +62,11 @@ Os artefatos são **ambiente de trabalho compartilhado**, como num projeto de so
 - **Geração automatizada é opção arquitetural, não premissa.** Só se adota mecanismo de
   geração, compilação ou sincronização quando ele agrega valor à atividade; e onde o
   projeto o adotou, isso está documentado no `README.md`, não aqui.
+- **Altera-se a fonte, não a saída.** Onde o projeto adota geração, o produto gerado é
+  saída de compilação: edita-se a fonte e regenera-se, na ordem que o `README.md` declara.
+  O mesmo vale para cópia de saída e, num artefato misto, para a parte autoral, que se
+  edita no lugar que o projeto identifica. Corrigir o produto à mão esconde o defeito da
+  fonte e desaparece na regeneração seguinte.
 
 ## 4. Autonomia científica do pesquisador
 
@@ -189,7 +194,8 @@ Acionar a skill correspondente **antes** de executar a atividade, não depois de
   skill** se a atividade for recorrente, reutilizável e exigir mais detalhe do que este
   contrato oferece.
 - Operação simples de manipulação de dados ou de arquivo **não precisa de skill**: é
-  capacidade geral do agente.
+  capacidade geral do agente. Não se cria skill cuja finalidade seja operar uma ferramenta
+  ou manipular arquivo: isso pertence à documentação técnica de procedimentos.
 
 ## 11. Comunicação e apresentação de resultados
 

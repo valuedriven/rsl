@@ -58,8 +58,10 @@ Dois arquivos são **auxiliares**, criados só se ausentes e nunca reescritos:
 | `data/evidencia/{tbci,unesco}/` | resposta bruta de cada consulta | `validar_termos.py` |
 | `data/arquivo/` | cópias anteriores, com `SHA256` | migrações e conferências |
 
-`data/arquivo/pre-migracao/` guarda o estado de 16/11/2026, anterior à reestruturação,
-com `SHA256.txt`. É a referência para provar que nenhum conteúdo se perdeu.
+`data/arquivo/` guarda cópias anteriores, com `SHA256`, para provar o que mudou em
+migrações. Está vazio: o arquivo de `pre-migracao` — estado de 16/11/2026, com a planilha
+de 373 linhas — foi descartado por decisão de 17/11/2026, depois de conferida a migração.
+O registro da migração está no Anexo A.
 
 ## 3. Ordem de execução
 
@@ -297,7 +299,7 @@ no UNESCO —, nada que justifique paralelismo.
 ## 8. Pendências e histórico
 
 `data/pendencias.json` é o **estado** do que está aberto. Não é histórico: o histórico é o
-**Anexo A**, `docs/1_gestao/log.md`. `--pendencias` relata o que encontra nos artefatos,
+**Anexo A**, `docs/1_gestao/historico.md`. `--pendencias` relata o que encontra nos artefatos,
 sem escrever; a promoção de um achado a pendência registrada é decisão do pesquisador.
 
 ## 9. Datas

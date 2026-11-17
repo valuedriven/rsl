@@ -135,7 +135,7 @@ LEIA_AUX = {
         "OPERACIONAIS: a data oficial de execução continua sendo a do IO 7."),
     "pendencias": (
         "Estado das tarefas e pendências abertas do projeto. Escrito pelo pesquisador. Não é "
-        "histórico: o histórico é o Anexo A, docs/1_gestao/log.md. src/protocolo.py "
+        "histórico: o histórico é o Anexo A, docs/1_gestao/historico.md. src/protocolo.py "
         "--pendencias apenas relata o que encontra, sem escrever aqui."),
 }
 

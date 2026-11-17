@@ -58,16 +58,15 @@ Não havendo resposta, o critério fica.
 ## 4. Regra de borda e regra de exceção
 
 - **Regra de borda** — o que está dentro e o que está fora de uma categoria
-  fronteiriça. Aqui, o que é e o que não é fator situacional: propósitos, objetivos e
-  necessidades do aluno **são** fator situacional, sem desdobramento próprio nem
-  revisão própria; operações sobre fatores **não** são.
+  fronteiriça. Aqui, o que é e o que não é fator situacional: operações sobre
+  fatores **não** são fator situacional.
 - **Regra de exceção** — quando a contribuição excluída não basta para excluir o
   estudo. Aqui: incluído se, além dela, formalizar práticas e/ou fatores.
 
-**Conferir as duas uma contra a outra, no mesmo item.** A regra de exceção dizia que
-"a exceção não alcança a formalização de propósitos do aluno" enquanto a regra de
-borda, no parágrafo seguinte, tratava propósitos como fator situacional. Contradição
-de frente, resíduo de redação anterior, e o achado mais urgente do parecer.
+**Conferir as duas uma contra a outra, no mesmo item.** Regra de borda e regra de
+exceção que se contradigam produzem decisões opostas para o mesmo estudo; a
+contradição entre elas já ocorreu neste projeto e é o defeito que a conferência
+evita.
 
 ## 5. Contra-escopo, recorte e revisão autônoma — três coisas
 

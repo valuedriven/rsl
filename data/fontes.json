@@ -2,10 +2,10 @@
   "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. Bases, ordem de execução, via de acesso, acervos especiais e ferramenta de gestão. O conjunto-semente fica em sementes.json.",
   "fonte": {
     "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
   },
   "derivado": {
-    "sha256": "69672c0199a31d47f44d7935cc51fda33cec98cdd6f30d41333461384e19a727",
+    "sha256": "d9e6002d98e2c158c88339f260f4992fbc483b580417967d88e23f6dd9fb53a5",
     "chaves": [
       "acervos_especiais",
       "bases[].n",
@@ -54,7 +54,7 @@
     },
     {
       "tema": "Triagem por pares",
-      "texto": "Rayyan Definição operacional das três filtragens. A sequência é cumulativa: cada filtragem recebe apenas o que a anterior manteve. 1ª FILTRAGEM — unidade: título. Critério: pertinência temática preliminar, nos termos da regra única de inclusão — Presença plausível de artefato de representação, de domínio educacional E de pelo menos uma das duas dimensões do objeto — práticas ou fatores situacionais. Na dúvida, mantém-se. Responsáveis: dois revisores humanos em modo cego no Rayyan, com classificação assistida por LLM em paralelo, que não exclui e cuja divergência com o humano vai a leitura. O revisor NÃO vê a classificação da IA nem a decisão do outro revisor antes de registrar a sua: a saída da IA só é aberta depois do desbloqueio da rodada, e serve a conferência, não a decisão. KAPPA: CALCULADO, entre os dois revisores humanos, nunca com a IA. 2ª FILTRAGEM — unidade: título e resumo, mais os metadados de tipo documental, idioma e ano. Critério: aplicação dos critérios de elegibilidade deste item 2 que se possam decidir sem o texto completo — recorte temporal, idioma, tipo documental e exclusões temáticas manifestas. Responsáveis: os mesmos dois revisores humanos, em modo cego. KAPPA: CALCULADO. Documento não localizado em texto completo nesta etapa é excluído pelo critério 4, após esgotadas as vias de obtenção. 3ª FILTRAGEM — unidade: texto completo. Critério: confirmação da elegibilidade, com aplicação integral do critério 5, inclusive a regra de exceção e a regra de borda, e justificativa individual de cada exclusão. Responsáveis: dois revisores humanos independentes, sem assistência de IA na decisão. KAPPA: CALCULADO. Divergência remanescente após discussão vai ao VT, cuja decisão é registrada."
+      "texto": "Rayyan Definição operacional das três filtragens. A sequência é cumulativa: cada filtragem recebe apenas o que a anterior manteve. 1ª FILTRAGEM — unidade: título. Critério: pertinência temática preliminar, nos termos da regra única de inclusão — Presença plausível de artefato de representação, de domínio educacional E de pelo menos uma das duas dimensões do objeto — práticas ou fatores situacionais. Na dúvida, mantém-se. Responsáveis: dois revisores humanos em modo cego no Rayyan, com classificação assistida por LLM em paralelo, que não exclui e cuja divergência com o humano vai a leitura. O revisor NÃO vê a classificação da IA nem a decisão do outro revisor antes de registrar a sua: a saída da IA só é aberta depois do desbloqueio da rodada, e serve a conferência, não a decisão. KAPPA: CALCULADO, entre os dois revisores humanos, nunca com a IA. 2ª FILTRAGEM — unidade: título e resumo, mais os metadados de tipo documental, idioma e ano. Critério: aplicação dos critérios de elegibilidade deste item 2 que se possam decidir sem o texto completo — recorte temporal, idioma, tipo documental e exclusões temáticas manifestas. Responsáveis: os mesmos dois revisores humanos, em modo cego. KAPPA: CALCULADO. Documento não localizado em texto completo nesta etapa é excluído pelo critério 4, após esgotadas as vias de obtenção. 3ª FILTRAGEM — unidade: texto completo. Critério: confirmação da elegibilidade, com aplicação integral do critério 5, inclusive a regra de borda, e justificativa individual de cada exclusão. Responsáveis: dois revisores humanos independentes, sem assistência de IA na decisão. KAPPA: CALCULADO. Divergência remanescente após discussão vai ao VT, cuja decisão é registrada."
     },
     {
       "tema": "Assistência de IA",

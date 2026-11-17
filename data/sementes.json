@@ -2,7 +2,7 @@
   "_leia": "MISTO. Referências, mapa por base, distribuição e limiar são DERIVADOS do protocolo por src/protocolo.py --gerar. Os campos de conferência (verificação, escopo, tipo, alinhamento, nota, veículo, eric) são AUTORAIS e nunca são sobrescritos. Semente retirada do protocolo permanece com no_protocolo=false.",
   "fonte": {
     "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
   },
   "derivado": {
     "sha256": "eddb4e2044ce31915690832b3d07f4c3b9600c4ccfa085266bfec1a5944ac109",

@@ -46,7 +46,7 @@ O recorte recai sobre a capacidade representacional dos artefatos de representa�
 - (a) as práticas do processo de ensino-aprendizagem; e 
 - (b) os fatores situacionais que condicionam a sua aplicação. 
 
-Examinam-se a cobertura conceitual, a granularidade e o grau de formalização dessas estruturas, bem como as condições de alinhamento e reutilização entre elas. Infere-se sobre a adequação, a cobertura e os limites das soluções representacionais existentes no domínio, e não sobre o mérito pedagógico das práticas por elas representadas. Regra de borda: o papel que o aluno desempenha na representação: condição da prática, dentro; destinatário cujas metas se formalizam, fora. A regra, com exemplo de cada lado, está nos critérios de elegibilidade do item 2\.
+Examinam-se a cobertura conceitual, a granularidade e o grau de formalização dessas estruturas, bem como as condições de alinhamento e reutilização entre elas. Infere-se sobre a adequação, a cobertura e os limites das soluções representacionais existentes no domínio, e não sobre o mérito pedagógico das práticas por elas representadas.
 
 ### Objeto de estudo da revisão
 

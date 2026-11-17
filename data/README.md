@@ -40,10 +40,12 @@ Termo ou semente retirado do protocolo **não** é apagado: fica com `no_protoco
 | `saida/semente/` | `Conjunto_Semente.md` e `semente_aderencia.csv` |
 | `saida/validacao/` | `validacao_termologica.csv`, exportação a partir de `descritores.json` |
 | `evidencia/{tbci,unesco}/` | resposta bruta de cada consulta terminológica |
-| `arquivo/` | cópias anteriores com `SHA256`, para provar o que mudou |
+| `arquivo/` | cópias anteriores com `SHA256`, para provar o que mudou — vazio no momento |
 
-`arquivo/pre-migracao/` é o estado de 16/11/2026, anterior à reestruturação dos arquivos.
-Serve de linha de base: o conteúdo dos derivados foi conferido campo a campo contra ele.
+O arquivo de `pre-migracao` — estado de 16/11/2026, com a planilha de 373 linhas — foi
+descartado por decisão de 17/11/2026, depois de conferida a migração. O registro está no
+Anexo A, entrada de 16/11; a planilha em uso tem **366 linhas**: 278 a validar e 88
+classificadas.
 
 ## Regenerar
 

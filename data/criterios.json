@@ -2,7 +2,7 @@
   "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. Critérios de inclusão e de exclusão por dimensão e recorte temporal. Regra de borda, regra de exceção e regra única de inclusão vivem no IO 1, não aqui.",
   "fonte": {
     "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
   },
   "derivado": {
     "sha256": "f2f7c85b1058e701bd9505a2552e3de5d655de6cf35794ae3e3244a98e1725f3",
