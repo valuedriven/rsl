@@ -52,12 +52,13 @@ amarra o objetivo à questão (passo 4).
 
 Duas regras de decomposição que este projeto aprendeu:
 
-- **Uma dimensão por questão.** A QS2 tratava ao mesmo tempo das práticas e dos
-  fatores situacionais; foi partida, e os fatores passaram inteiros para a QS3.
-- **Referência não é enquadramento.** A QS3 enquadrava os fatores obrigatoriamente
-  nas cinco categorias de Fink. Passou a tomá-las como REFERÊNCIA DE PARTIDA: fator
-  não previsto nelas é registrado com a sua própria designação e **constitui achado**,
-  não se força a uma das cinco.
+- **Uma dimensão por questão.** Uma questão que tratasse ao mesmo tempo das práticas e
+  dos fatores situacionais foi partida, e os fatores passaram inteiros para questão
+  própria.
+- **Referência não é enquadramento.** Os fatores situacionais já foram enquadrados
+  obrigatoriamente nas cinco categorias de Fink. Passou-se a tomá-las como REFERÊNCIA
+  DE PARTIDA: fator não previsto nelas é registrado com a sua própria designação e
+  **constitui achado**, não se força a uma das cinco.
 
 Ao mover conteúdo entre questões, perguntar o que ficou sem dono. O vínculo entre
 prática e fator ficaria sem questão que o apurasse — e essa é pergunta para o ReT,

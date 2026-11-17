@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Derivação local das expressões E1 a E3 (E4, de cobertura, é a executada) — RS Banyan, Módulo 3, Etapa 2.
+Derivação local das expressões não executadas (EB4, de cobertura, é a executada) — RS Banyan, Módulo 3, Etapa 2.
 
 Emenda ao protocolo de 06/11/2026. Todas as quatro expressões começam por strings
-1 + 2 e apenas acrescentam facetas: E1, E2 e E3 são subconjuntos estritos de E4, e a
-união das quatro é exatamente E4. Executa-se E4, a de cobertura, uma vez por base,
+1 + 2 e apenas acrescentam facetas: EB1, EB2 e EB3 são subconjuntos estritos de EB4, e a
+união das quatro é exatamente EB4. Executa-se EB4, a de cobertura, uma vez por base,
 exporta-se o resultado, e a pertinência de cada registro às demais é calculada aqui.
 
 O que este script NÃO faz: não exclui registro algum, não decide inclusão e não
@@ -27,7 +27,7 @@ Saídas em data/saida/derivacao/
                        a chave de ordenação de leitura e a marca de duplicata
   io2_contagens.csv    base x expressão, para alimentar o IO 2
   ordem_triagem.csv    a fila da 1ª filtragem já ordenada (Medida 4)
-  fidelidade_E<n>.csv  as divergências do teste, item a item
+  fidelidade_EB<n>.csv as divergências do teste, item a item
 
 Deduplicação: dentro da mesma base, registro com o mesmo DOI — ou, na falta dele, o
 mesmo título normalizado — é marcado em `duplicata_de` com o identificador da primeira
@@ -37,10 +37,10 @@ vezes o mesmo registro.
 
 Uso
   python3 src/protocolo.py --gerar                    # antes de tudo, e após alterar o protocolo
-  python3 src/derivar_expressoes.py --registrar wos E4 data/execucoes/wos/e4.ris --retorno 18432
+  python3 src/derivar_expressoes.py --registrar wos EB4 data/execucoes/wos/e4.ris --retorno 18432
   python3 src/derivar_expressoes.py --derivar
   python3 src/derivar_expressoes.py --aderencia
-  python3 src/derivar_expressoes.py --fidelidade E2 data/execucoes/wos/e2_conferencia.ris
+  python3 src/derivar_expressoes.py --fidelidade EB2 data/execucoes/wos/e2_conferencia.ris
 """
 
 import argparse
@@ -65,8 +65,12 @@ SAIDA = DATA / "saida" / "derivacao"
 
 _STRINGS = protocolo.carrega(STRINGS_JSON)
 _CRITERIOS = protocolo.carrega(CRITERIOS_JSON)
-EXPRESSOES = {int(n): c for n, c in _STRINGS["expressoes"].items()}
-SUPERCONJUNTO = int(_STRINGS["executada"])
+_FACETAS = protocolo.carrega(protocolo.ARQ["facetas"])
+# A composição do protocolo vem em strings (STRn); a derivação casa facetas (FCTn).
+EXPRESSOES = {e: [f"FCT{s[3:]}" for s in comps]
+              for e, comps in _STRINGS["expressoes"].items()}
+SUPERCONJUNTO = _STRINGS["executada"]
+ANCORAS = {f["id"] for f in _FACETAS["facetas"] if f.get("ancora")}
 
 # Recorte temporal do protocolo, aplicado como CONFERÊNCIA em todas as bases. Na
 # Web of Science, na Scopus e na BRAPCI o filtro de ano vai na própria consulta;
@@ -119,11 +123,11 @@ def carrega_facetas():
             if k not in vistos:
                 vistos.add(k)
                 limpos.append(t)
-        facetas[f["n"]] = {"nome": "", "termos": limpos,
-                           "padroes": [padrao(t) for t in limpos]}
-    for f in protocolo.carrega(protocolo.ARQ["facetas"])["facetas"]:
-        if f["n"] in facetas:
-            facetas[f["n"]]["nome"] = f["nome"]
+        facetas[f["faceta"]] = {"nome": "", "termos": limpos,
+                                "padroes": [padrao(t) for t in limpos]}
+    for f in _FACETAS["facetas"]:
+        if f["id"] in facetas:
+            facetas[f["id"]]["nome"] = f["nome"]
     return facetas
 
 
@@ -285,6 +289,19 @@ def carrega_consultas(exigir=True):
     return dado, validas
 
 
+def _id_expressao(expr):
+    """Identificador da expressão a partir de `EB4`, `E4` ou `4`; None se não existir."""
+    s = str(expr).strip().upper()
+    for prefixo in ("EB", "E"):
+        if s.startswith(prefixo):
+            s = s[len(prefixo):]
+            break
+    if not s.isdigit():
+        return None
+    ident = f"EB{int(s)}"
+    return ident if ident in EXPRESSOES else None
+
+
 def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
     """Registra uma execução e confere o retorno declarado contra o arquivo."""
     caminho = pathlib.Path(arquivo)
@@ -298,9 +315,9 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
         print(f"Nenhum registro legível em {arquivo}. Nada foi registrado.")
         return 1
 
-    n_expr = str(expressao).upper().lstrip("E")
-    if not n_expr.isdigit() or int(n_expr) not in EXPRESSOES:
-        print(f"Expressão inválida: {expressao!r}. Use E1, E2, E3 ou E4.")
+    id_expr = _id_expressao(expressao)
+    if id_expr is None:
+        print(f"Expressão inválida: {expressao!r}. Use EB1 a EB4.")
         return 1
 
     lidos = len(regs)
@@ -325,11 +342,11 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
     _, validas = carrega_consultas(exigir=False)
     dado = json.loads(CONSULTAS_JSON.read_text(encoding="utf-8"))
     consultas = dado.setdefault("consultas", [])
-    ident = f"{base}-E{n_expr}-{pathlib.Path(arquivo).stem}"
+    ident = f"{base}-{id_expr}-{pathlib.Path(arquivo).stem}"
     entrada = {
         "id": ident,
         "base": base,
-        "expressao": f"E{n_expr}",
+        "expressao": id_expr,
         "data_hora": data_hora or datetime.datetime.now().astimezone().isoformat(
             timespec="seconds"),
         "retorno_declarado": int(retorno),
@@ -486,9 +503,9 @@ def aderencia():
         if casa:
             achados += 1
             bases = ", ".join(sorted({r.get("base", "?") for r in casa}))
-            print(f"  [OK ] {e['n']:>2}. {e['ano']}  {e['titulo'][:58]:<60} {bases}")
+            print(f"  [OK ] {e['id']:>4}. {e['ano']}  {e['titulo'][:58]:<60} {bases}")
         else:
-            print(f"  [   ] {e['n']:>2}. {e['ano']}  {e['titulo'][:58]:<60} "
+            print(f"  [   ] {e['id']:>4}. {e['ano']}  {e['titulo'][:58]:<60} "
                   f"esperado em: {', '.join(e['bases'])}")
     print(f"\n  recuperados: {achados} de {len(sementes)} sementes "
           f"({achados / len(sementes):.0%} do total informado)")
@@ -546,9 +563,9 @@ def derivar():
                         "base": r["base"], "arquivo_origem": r["arquivo_origem"],
                         "consulta": r["consulta"], "registro": r["registro"],
                         "duplicata_de": r["duplicata_de"],
-                        "facetas": " ".join(str(n) for n in sorted(fac)),
-                        "expressoes": " ".join(f"E{n}" for n in sorted(exprs)),
-                        "ancoras_confirmadas": "sim" if {1, 2} <= fac else "não",
+                        "facetas": " ".join(sorted(fac)),
+                        "expressoes": " ".join(sorted(exprs)),
+                        "ancoras_confirmadas": "sim" if ANCORAS <= fac else "não",
                         "recorte": r.get("recorte", ""),
                         "ordem": ordem.get(r["registro"], "")})
 
@@ -559,7 +576,7 @@ def derivar():
                     "registros_com_duplicatas", "procedencia"])
         for b in bases:
             for n in sorted(EXPRESSOES):
-                w.writerow([b, f"E{n}", "+".join(map(str, EXPRESSOES[n])),
+                w.writerow([b, n, "+".join(EXPRESSOES[n]),
                             contagens.get((b, n), 0), brutas.get((b, n), 0),
                             "EXECUTADA" if n == SUPERCONJUNTO else "DERIVADA"])
 
@@ -569,19 +586,20 @@ def derivar():
         for r in unicos:
             _, exprs, _ = por_registro[r["registro"]]
             w.writerow([ordem[r["registro"]], r["base"], r["ano"],
-                        " ".join(f"E{n}" for n in sorted(exprs)), r["titulo"], r["doi"]])
+                        " ".join(sorted(exprs)), r["titulo"], r["doi"]])
 
     print(f"\n{len(linhas)} registros processados, {len(unicos)} únicos.")
     print(f"{SAIDA.relative_to(RAIZ)}/registros.csv, io2_contagens.csv e ordem_triagem.csv "
           f"gravados.")
-    sem_ancora = sum(1 for r in unicos if not ({1, 2} <= por_registro[r["registro"]][0]))
+    sem_ancora = sum(1 for r in unicos if not (ANCORAS <= por_registro[r["registro"]][0]))
     if sem_ancora:
         pct = 100 * sem_ancora / len(unicos)
         print(f"\nAVISO: em {sem_ancora} registros ({pct:.1f}%) o casamento local não confirmou "
               "as duas âncoras. É divergência esperada — a base casou por Keywords Plus ou por "
               "lematização. Nenhum registro foi descartado. Se esse percentual for alto, o teste "
               "de fidelidade tende a reprovar.")
-    print("\nAs contagens de E1 a E3 são DERIVADAS. Declará-las como tal no IO 2 e no relatório, "
+    print("\nAs contagens das expressões não executadas são DERIVADAS. Declará-las como tal "
+          "no IO 2 e no relatório, "
           "e só aceitá-las após o teste de fidelidade (--fidelidade).")
 
 
@@ -592,9 +610,9 @@ def chave(reg):
 
 
 def fidelidade(expr, caminho):
-    n = int(str(expr).upper().lstrip("E"))
-    if n not in EXPRESSOES:
-        print(f"Expressão E{n} não existe."); sys.exit(1)
+    ident = _id_expressao(expr)
+    if ident is None:
+        print(f"Expressão {expr!r} não existe. Use EB1 a EB4."); sys.exit(1)
     arq = pathlib.Path(caminho)
     if not arq.exists():
         print(f"Arquivo não encontrado: {arq}"); sys.exit(1)
@@ -610,7 +628,7 @@ def fidelidade(expr, caminho):
         if r["duplicata_de"]:
             continue
         fac = facetas_atingidas(r, facetas)
-        if set(EXPRESSOES[n]) <= fac:
+        if set(EXPRESSOES[ident]) <= fac:
             derivado.add(chave(r))
 
     so_direto = direto - derivado
@@ -618,14 +636,14 @@ def fidelidade(expr, caminho):
     uniao = direto | derivado
     div = (len(so_direto) + len(so_derivado)) / len(uniao) if uniao else 0
 
-    print(f"\nTESTE DE FIDELIDADE — E{n}")
+    print(f"\nTESTE DE FIDELIDADE — {ident}")
     print(f"  execução direta na base : {len(direto)}")
     print(f"  conjunto derivado       : {len(derivado)}")
     print(f"  só na execução direta   : {len(so_direto)}")
     print(f"  só no conjunto derivado : {len(so_derivado)}")
     print(f"  divergência simétrica   : {div:.1%}  (limite: {LIMITE_DIVERGENCIA:.0%})")
     SAIDA.mkdir(parents=True, exist_ok=True)
-    rel = SAIDA / f"fidelidade_E{n}.csv"
+    rel = SAIDA / f"fidelidade_{ident}.csv"
     with rel.open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh, delimiter=";")
         w.writerow(["chave", "situacao"])
@@ -655,9 +673,10 @@ def main():
     ap.add_argument("--aderencia", action="store_true",
                     help="teste de aderência ao conjunto-semente, sobre as consultas")
     ap.add_argument("--derivar", action="store_true",
-                    help="lê as consultas e deriva E1 a E3, as contagens e a ordem de triagem")
+                    help="lê as consultas, deriva as expressões não executadas, as contagens "
+                         "e a ordem de triagem")
     ap.add_argument("--fidelidade", nargs=2, metavar=("EXPRESSAO", "ARQUIVO"),
-                    help="compara o conjunto derivado com a execução direta (ex.: E2 arq.ris)")
+                    help="compara o conjunto derivado com a execução direta (ex.: EB2 arq.ris)")
     a = ap.parse_args()
     if a.registrar:
         return registrar(*a.registrar, a.retorno, a.data_hora, a.justificar)

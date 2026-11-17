@@ -1,4 +1,4 @@
-# Protocolo para revisão sistemática - Direcionamento da revisão
+# Protocolo - Informações gerais
 
 | Revisão Sistemática Banyan[^1] \| Versão Piloto – 2026 PROTOCOLO PARA REVISÃO SISTEMÁTICA EM ÁREAS MULTIDISCIPLINARES Instrumento Operacional (IO) 01 |  |
 | ----- | :---: |

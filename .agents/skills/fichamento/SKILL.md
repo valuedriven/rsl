@@ -14,12 +14,12 @@ rastro.
 Cada campo responde a uma questão secundária. Campo sem questão não se preenche, e
 questão sem campo não se responde.
 
-| Campo | Questão |
+| Campo | Questão que apura |
 | --- | --- |
-| Artefatos: tipo, escopo, granularidade, grau de formalização | QS1 |
-| Entidades e relações: como representa práticas; definições de prática, estratégia, método, técnica, atividade, intervenção, abordagem | QS2 |
-| **Fatores situacionais** | QS3 |
-| Avaliação, alinhamento, reuso, manutenção, lacunas | QS4 |
+| Artefatos: tipo, escopo, granularidade, grau de formalização | a de caracterização dos artefatos |
+| Entidades e relações: como representa práticas; definições de prática, estratégia, método, técnica, atividade, intervenção, abordagem | a da representação das práticas |
+| **Fatores situacionais** | a dos fatores situacionais |
+| Avaliação, alinhamento, reuso, manutenção, lacunas | a da avaliação e das lacunas |
 | Contexto de utilização | registro, **não** amplia o objeto |
 
 ## 2. Fink é referência de partida, não enquadramento
@@ -36,7 +36,8 @@ Forçar o enquadramento transforma achado em ausência, e a ausência depois é 
 lacuna da literatura quando é lacuna da codificação.
 
 Registrar também o **vínculo entre fator e prática**, inclusive sob a forma de
-regras, dependências e restrições — é o que a QS3 pede além da identificação.
+regras, dependências e restrições — é o que a questão dos fatores situacionais pede além
+da identificação.
 
 ## 3. Contexto de utilização, e o que ele não é
 
@@ -63,7 +64,7 @@ dentro da síntese, porque depois ninguém volta ao texto original.
 
 O estudo chama de "estratégia" o que outro chama de "método". **Registrar os dois**:
 o termo do autor, literal, e o termo da revisão a que se mapeia. O mapeamento é
-achado da QS2, não ruído a normalizar.
+achado da questão da representação, não ruído a normalizar.
 
 Termo novo que apareça com frequência vai ao glossário (IO 5) — e se for conceito que
 o vocabulário de busca não cobria, é **ampliação conceitual**, com as consequências

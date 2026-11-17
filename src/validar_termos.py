@@ -322,10 +322,10 @@ def linhas_de(dados):
             for termo in f["termos"][idioma]:
                 e = f.get("estatuto", {}).get(idioma, {}).get(protocolo.normaliza(termo))
                 if e is None:
-                    raise SystemExit(f"descritores.json: termo {termo!r} da faceta {f['n']} "
+                    raise SystemExit(f"descritores.json: termo {termo!r} da faceta {f['id']} "
                                      f"sem bloco de estatuto; rode  src/protocolo.py --gerar")
                 for v in e.get("validacoes", []):
-                    yield {"faceta": f["n"], "faceta_nome": f["nome"],
+                    yield {"faceta": f["id"], "faceta_nome": f["nome"],
                            "ancora": "sim" if f["ancora"] else "não",
                            "idioma": idioma, "termo": termo, "_v": v}
 

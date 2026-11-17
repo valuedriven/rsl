@@ -69,7 +69,7 @@
 | Anexo A — registro de decisões, verificações e histórico | Documento de apoio aos instrumentos: linha do tempo das decisões, verificação dos instrumentos terminológicos, calibração das buscas, emendas e pendências |
 | Relatório da revisão, em conformidade com o PRISMA | Texto completo com a lista de verificação respondida e o diagrama de fluxo, destinado a submissão a periódico |
 | Apresentação (.pptx) | Síntese do percurso e dos achados, para a qualificação e para a divulgação do resultado |
-| Estratégias de busca por fonte | Uma ficha por base, com as expressões executáveis, o estado de verificação da sintaxe e o registro de execução |
+| Estratégias de busca por fonte | Uma ficha por base, com as expressões executáveis e o estado de verificação da sintaxe; o registro de execução de cada base fica em `data/registro_execucao.json` |
 
 ## 2.4 Contra-escopo
 
@@ -202,7 +202,7 @@
 | Índice kappa entre os dois revisores humanos | Concordância da decisão de triagem, sempre antes do desbloqueio do modo cego | Calculado nas TRÊS filtragens; nunca com a IA | Divergência vai a discussão e, remanescendo, ao VT, com a decisão registrada |
 | Calibração da triagem assistida | Sensibilidade do ASReview, aferida em conjunto DISJUNTO do de ajuste | 95% | Triagem permanece integralmente humana |
 | Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Coincidência exata das contagens | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
-| Conferência de coerência entre as quatro expressões | Se a arquitetura de contenção se verifica no retorno de cada base | E1 ⊆ E2 ⊆ E4 e E1 ⊆ E3 ⊆ E4, com E1 \= E2 ∩ E3 | Reexecução na base, e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE — ver a lição no preâmbulo desta seção |
+| Conferência de coerência entre as quatro expressões | Se a arquitetura de contenção se verifica no retorno de cada base | A geral está contida nas duas específicas, e ambas na de cobertura; a geral é exatamente a interseção das duas específicas | Reexecução na base, e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE — ver a lição no preâmbulo desta seção |
 | Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A geração dos instrumentos é RECUSADA pela guarda, e não há saída a conferir |
 | Dupla passagem de deduplicação | Duplicatas remanescentes após DOI e título, e depois por semelhança semântica | Par duvidoso NÃO é fundido | O par permanece como dois registros e a decisão é registrada |
 | Cobertura de campo nas exportações | Registros sem palavras-chave ou sem resumo, que cegam a aferição de aderência | Fração declarada por base | A fração cega é reportada como limitação daquela base, e não silenciada |

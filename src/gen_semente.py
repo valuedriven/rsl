@@ -32,10 +32,12 @@ SEMENTES = DATA / "sementes.json"
 STRINGS = DATA / "strings.json"
 
 BASES = ["WoS", "Scopus", "ERIC", "BRAPCI"]
-CORES = {1: "\U0001F7E6", 2: "\U0001F7E8", 3: "\U0001F7E5", 4: "\U0001F7E7"}
+FACETAS = ["FCT1", "FCT2", "FCT3", "FCT4"]
+CORES = {"FCT1": "\U0001F7E6", "FCT2": "\U0001F7E8",
+         "FCT3": "\U0001F7E5", "FCT4": "\U0001F7E7"}
 
 COLS = [
-    ("n", "número da semente, conforme o protocolo"),
+    ("id", "identificador da semente (SEn), conforme o protocolo"),
     ("autores_ano", "autoria abreviada e ano"),
     ("titulo", "título, como consta na referência do protocolo"),
     ("tipo", "primário ou secundário — preencher em sementes.json"),
@@ -45,7 +47,7 @@ COLS = [
     ("esperada_na_base", "sim se o mapa do protocolo indica esta base"),
     ("indexada", "etapa 1: sim ou não, por busca de título. **obrigatório**"),
     ("data_etapa1", "data da busca de título"),
-    ("recuperada", "etapa 2: sim ou não, por busca na exportação de E4"),
+    ("recuperada", "etapa 2: sim ou não, por busca na exportação de EB4"),
     ("como_localizada", "DOI, título ou não localizada"),
     ("data_etapa2", "data da conferência na exportação"),
     ("observacao", "o que explica o não: termo ausente, campo não indexado, recorte"),
@@ -84,7 +86,7 @@ def casa(titulo, termos):
 
 
 def ensaio(estudos, facetas):
-    por_faceta = {f["n"]: f["termos"] for f in facetas["facetas"]}
+    por_faceta = {f["faceta"]: f["termos"] for f in facetas["facetas"]}
     linhas = []
     for e in estudos:
         linhas.append((e, {n: casa(e["titulo"], ts) for n, ts in por_faceta.items()}))
@@ -139,12 +141,12 @@ def md(facetas, sementes, estudos):
           "`A CONFERIR` ou `PENDÊNCIA` não foi verificado nesta rodada; o instrumento "
           "registra a pendência em vez de a esconder.\n")
         for e, campos in pendentes:
-            A(f"> - **{e['n']}. {e['chave']}** — {', '.join(campos)}")
+            A(f"> - **{e['id']}. {e['chave']}** — {', '.join(campos)}")
         A("")
 
     A("## 3. Referências\n")
     for e in estudos:
-        A(f"**{e['n']}. {e['autores']} ({e['ano']}).** {e['titulo']}")
+        A(f"**{e['id']}. {e['autores']} ({e['ano']}).** {e['titulo']}")
         if e.get("doi"):
             A(f"- DOI: `{e['doi']}`")
         A(f"- Bases esperadas: {', '.join(e['bases']) or '—'}")
@@ -167,15 +169,15 @@ def md(facetas, sementes, estudos):
       "três idiomas. **É ensaio, não execução**: a busca procura em título, resumo e "
       "palavras-chave, de modo que a semente sem termo no título ainda pode ser "
       "recuperada pelo resumo.\n")
-    A("| # | " + " | ".join(f"{CORES[n]} F{n}" for n in sorted(CORES)) +
-      " | E4 (F1+F2) pelo título |")
-    A("| :---: | " + " | ".join(":---" for _ in CORES) + " | :--- |")
+    A("| id | " + " | ".join(f"{CORES[f]} {f}" for f in FACETAS) +
+      " | EB4 (FCT1+FCT2) pelo título |")
+    A("| :---: | " + " | ".join(":---" for _ in FACETAS) + " | :--- |")
     for e, pf in ens:
-        cels = ["`" + "`, `".join(pf[n]) + "`" if pf[n] else "—" for n in sorted(CORES)]
-        e4 = "**sim**" if pf.get(1) and pf.get(2) else "**não**"
-        A(f"| {e['n']} | " + " | ".join(cels) + f" | {e4} |")
+        cels = ["`" + "`, `".join(pf[f]) + "`" if pf[f] else "—" for f in FACETAS]
+        e4 = "**sim**" if pf.get("FCT1") and pf.get("FCT2") else "**não**"
+        A(f"| {e['id']} | " + " | ".join(cels) + f" | {e4} |")
     A("")
-    n_e4 = sum(1 for _, pf in ens if pf.get(1) and pf.get(2))
+    n_e4 = sum(1 for _, pf in ens if pf.get("FCT1") and pf.get("FCT2"))
     A(f"**{n_e4} de {len(estudos)} satisfazem as duas âncoras pelo título.** Nas demais, a "
       "recuperação depende do resumo — e é nelas que a etapa 2 do procedimento exige "
       "cuidado: ausência na exportação pode ser falha da busca ou ausência do termo em "
@@ -216,7 +218,7 @@ def csv_out(estudos):
     for e in estudos:
         for b in BASES:
             linhas.append({
-                "n": e["n"],
+                "id": e["id"],
                 "autores_ano": f"{e['autores'].split(',')[0].strip()} et al. {e['ano']}",
                 "titulo": e["titulo"],
                 "tipo": e.get("tipo", ""),
@@ -261,7 +263,7 @@ def main():
     if pendentes:
         print("pendências de metadados:")
         for e, campos in pendentes:
-            print(f"  {e['n']:>2}. {e['chave']}: {', '.join(campos)}")
+            print(f"  {e['id']:>4}. {e['chave']}: {', '.join(campos)}")
     return 0
 
 

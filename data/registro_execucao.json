@@ -1,0 +1,1033 @@
+{
+  "_leia": "Registro de execução das buscas, por base. AUTORAL: escrito a partir do que a base exibiu e do que a exportação contém — não é derivado do protocolo e não se regenera com `--gerar`. Guarda o que a ficha de busca deixou de carregar: sondagens, retornos, estado da interface, exportações, conferências e aderência. A data e a hora aqui são OPERACIONAIS; a data oficial de execução continua sendo a do IO 7. Divisão de responsabilidade: `data/consultas.json` é o rastro técnico que `src/derivar_expressoes.py --registrar` escreve ao conferir uma exportação; este arquivo é o registro documental, e um número aqui nunca substitui o registro técnico quando a consulta for registrada. Todo número declara `origem` (interface, exportacao, captura, derivacao) e toda execução declara `mede` e `estado`, para que retorno que mediu forma reduzida não seja lido como retorno da expressão. `data` e `edicao` nulas significam, respectivamente, data e versão da base não declaradas no registro de origem.",
+  "versao": 1,
+  "bases": {
+    "BD1": {
+      "slug": "wos",
+      "base": "Web of Science (Core Collection)",
+      "acesso": "Portal de Periódicos da CAPES, autenticação federada CAFe, pelo pesquisador",
+      "edicao": null,
+      "interface": {
+        "campo": "TS (tópico: título, resumo, palavras-chave de autor e Keywords Plus)",
+        "filtros_integrados": [
+          "PY=(2017-2026)",
+          "DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")"
+        ],
+        "fora_da_consulta": [
+          "idioma, por LA= ou por refinamento",
+          "disponibilidade de texto completo, apenas por refinamento"
+        ],
+        "limite_de_conjuntos_por_sessao": 200,
+        "origem": "interface"
+      },
+      "sondagens": [
+        {
+          "id": "S1",
+          "consulta": "TS=ontology AND LA=Portuguese",
+          "mede": "aceitação da tag LA=, verificada apenas em fonte secundária",
+          "retorno": null,
+          "veredito": "a executar antes de usar LA=",
+          "evidencia": "interface"
+        }
+      ],
+      "calibracao": [
+        {
+          "forma": "ampla, por conjunção",
+          "retorno": 10357,
+          "data": "2026-11-06",
+          "estado": "ordem de grandeza",
+          "nota": "anterior ao desdobramento morfológico e à ampliação de D3; não é linha de base",
+          "origem": "interface"
+        },
+        {
+          "forma": "âncoras em proximidade NEAR/5",
+          "retorno": 1839,
+          "data": "2026-11-06",
+          "estado": "ordem de grandeza",
+          "nota": "mesma ressalva da linha anterior",
+          "origem": "interface"
+        }
+      ],
+      "execucoes": [
+        {
+          "id": "EX1",
+          "expressao": "EB1",
+          "forma": "assimétrica, anterior a D6",
+          "retorno": 140,
+          "data": "2026-11-06",
+          "mede": "EB1 sem proximidade e sem filtro de tipo",
+          "estado": "vencido",
+          "motivo_do_vencimento": "forma assimétrica: a expressão já não existe",
+          "origem": "interface"
+        },
+        {
+          "id": "EX2",
+          "expressao": "EB2",
+          "forma": "assimétrica, anterior a D6",
+          "retorno": 2515,
+          "data": "2026-11-06",
+          "mede": "EB2 sem proximidade e sem filtro de tipo",
+          "estado": "vencido",
+          "motivo_do_vencimento": "excedia EB4, o que a composição não permite",
+          "origem": "interface"
+        },
+        {
+          "id": "EX3",
+          "expressao": "EB3",
+          "forma": "assimétrica, anterior a D6",
+          "retorno": 643,
+          "data": "2026-11-06",
+          "mede": "EB3 sem proximidade e sem filtro de tipo",
+          "estado": "vencido",
+          "motivo_do_vencimento": "forma assimétrica: a expressão já não existe",
+          "origem": "interface"
+        },
+        {
+          "id": "EX4",
+          "expressao": "EB1",
+          "forma": "âncoras em proximidade, PY e DT nas quatro",
+          "retorno": 27,
+          "data": "2026-11-06",
+          "mede": "EB1",
+          "estado": "vigente",
+          "origem": "interface"
+        },
+        {
+          "id": "EX5",
+          "expressao": "EB2",
+          "forma": "âncoras em proximidade, PY e DT nas quatro",
+          "retorno": 386,
+          "data": "2026-11-06",
+          "mede": "EB2",
+          "estado": "vigente",
+          "origem": "interface"
+        },
+        {
+          "id": "EX6",
+          "expressao": "EB3",
+          "forma": "âncoras em proximidade, PY e DT nas quatro",
+          "retorno": 149,
+          "data": "2026-11-06",
+          "mede": "EB3",
+          "estado": "vigente",
+          "origem": "interface"
+        },
+        {
+          "id": "EX7",
+          "expressao": "EB4",
+          "forma": "âncoras em proximidade, PY e DT",
+          "retorno": 1596,
+          "data": "2026-11-06",
+          "mede": "EB4, a expressão de cobertura",
+          "estado": "vigente",
+          "nota": "repetiu 1596 em duas execuções do mesmo texto",
+          "exportacao": {
+            "arquivos": 2,
+            "formato": "RIS",
+            "registros_lidos": 1596,
+            "distintos": 1594,
+            "colisoes_de_titulo_a_resolver": 4,
+            "fora_do_recorte": 0,
+            "tipos": {
+              "JOUR": 1179,
+              "CPAPER": 384,
+              "CHAP": 16,
+              "BOOK": 15
+            },
+            "por_ano": {
+              "2017": 154,
+              "2018": 158,
+              "2019": 174,
+              "2020": 113,
+              "2021": 167,
+              "2022": 136,
+              "2023": 158,
+              "2024": 153,
+              "2025": 164,
+              "2026": 217
+            },
+            "origem": "exportacao"
+          },
+          "origem": "interface"
+        }
+      ],
+      "retencoes": [
+        {
+          "expressao": "EB1",
+          "amplia": 140,
+          "com_proximidade": 27,
+          "variacao": -0.81
+        },
+        {
+          "expressao": "EB2",
+          "amplia": 2515,
+          "com_proximidade": 386,
+          "variacao": -0.85
+        },
+        {
+          "expressao": "EB3",
+          "amplia": 643,
+          "com_proximidade": 149,
+          "variacao": -0.77
+        }
+      ],
+      "conferencias": {
+        "contencao": [
+          {
+            "relacao": "EB1 <= EB2",
+            "valores": [
+              27,
+              386
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB1 <= EB3",
+            "valores": [
+              27,
+              149
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB2 <= EB4",
+            "valores": [
+              386,
+              1596
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB3 <= EB4",
+            "valores": [
+              149,
+              1596
+            ],
+            "passa": true
+          }
+        ],
+        "particao_EB4": {
+          "quatro_facetas": 27,
+          "praticas_sem_fatores": 359,
+          "fatores_sem_praticas": 122,
+          "so_ancoras": 1088,
+          "total": 1596,
+          "origem": "interface"
+        },
+        "fidelidade_da_derivacao": {
+          "estado": "pendente",
+          "nota": "EB2 e EB3 foram executadas; a comparação com o conjunto derivado não está registrada"
+        }
+      },
+      "aderencia": {
+        "limiar": 0.8,
+        "esperadas": [
+          "SE2",
+          "SE7",
+          "SE9",
+          "SE10"
+        ],
+        "recuperadas": [
+          {
+            "semente": "SE2",
+            "casamento": "DOI"
+          },
+          {
+            "semente": "SE7",
+            "casamento": "DOI"
+          },
+          {
+            "semente": "SE9",
+            "casamento": "DOI"
+          }
+        ],
+        "ausentes": [
+          "SE10"
+        ],
+        "resultado_declarado": "3 de 3 se a SE10 não estiver indexada; 3 de 4 se estiver",
+        "estado": "suspenso",
+        "nota": "a SE10 é comunicação em anais da ISKO, e o volume tem outro registro na exportação; a indexação de anais é seletiva por trabalho",
+        "origem": "exportacao"
+      },
+      "pendencias": [
+        "Consultar o título de Khoo & Kan (SE10) na base, sem filtro, para fixar o denominador da aderência.",
+        "Rodar o teste de fidelidade da derivação e registrar a divergência contra EB2 e EB3.",
+        "Registrar a execução de EB4 com `src/derivar_expressoes.py --registrar`."
+      ],
+      "edicao_nota": "versão ou atualização da base não registrada na captura; anotar na próxima execução"
+    },
+    "BD2": {
+      "slug": "scopus",
+      "base": "Scopus",
+      "acesso": "Portal de Periódicos da CAPES, autenticação federada CAFe, pelo pesquisador",
+      "edicao": null,
+      "interface": {
+        "campo": "TITLE-ABS-KEY()",
+        "filtros_integrados": [
+          "PUBYEAR > 2016 AND PUBYEAR < 2027",
+          "(LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish))",
+          "(DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))"
+        ],
+        "fora_da_consulta": [
+          "OPENACCESS(1), só como contingência e com viés declarado"
+        ],
+        "origem": "interface"
+      },
+      "sondagens": [
+        {
+          "id": "S1",
+          "consulta": "TITLE-ABS-KEY(ontology AND education) AND PUBYEAR > 2016",
+          "mede": "conjunção entre termos simples",
+          "retorno": 3729,
+          "veredito": "linha de base da sonda",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S2",
+          "consulta": "TITLE-ABS-KEY(ontology W/5 education) AND PUBYEAR > 2016",
+          "mede": "proximidade entre termos simples",
+          "retorno": 380,
+          "retencao": 0.102,
+          "veredito": "W/5 funciona entre termos simples",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S3",
+          "consulta": "TITLE-ABS-KEY((\"ontology\" OR \"thesaurus\") AND (\"education\" OR \"curriculum\")) AND PUBYEAR > 2016",
+          "mede": "conjunção entre grupos de frases entre aspas",
+          "retorno": 4230,
+          "veredito": "linha de base da sonda",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S4",
+          "consulta": "TITLE-ABS-KEY((\"ontology\" OR \"thesaurus\") W/5 (\"education\" OR \"curriculum\")) AND PUBYEAR > 2016",
+          "mede": "proximidade entre grupos de frases entre aspas",
+          "retorno": 465,
+          "retencao": 0.11,
+          "veredito": "W/5 funciona entre grupos de frases",
+          "evidencia": "interface"
+        }
+      ],
+      "execucoes": [
+        {
+          "id": "EX1",
+          "expressao": "EB1",
+          "forma": "ampla, por conjunção",
+          "retorno": 608,
+          "mede": "EB1",
+          "estado": "medido",
+          "origem": "interface"
+        },
+        {
+          "id": "EX2",
+          "expressao": "EB2",
+          "forma": "ampla, por conjunção",
+          "retorno": 5365,
+          "mede": "EB2",
+          "estado": "medido",
+          "origem": "interface"
+        },
+        {
+          "id": "EX3",
+          "expressao": "EB3",
+          "forma": "ampla, por conjunção",
+          "retorno": 1943,
+          "mede": "EB3",
+          "estado": "medido",
+          "origem": "interface"
+        },
+        {
+          "id": "EX4",
+          "expressao": "EB4",
+          "forma": "ampla, por conjunção",
+          "caracteres": 5269,
+          "retorno": 17677,
+          "data": null,
+          "mede": "EB4 na forma ampla: limite superior do recorte",
+          "estado": "medido",
+          "origem": "interface"
+        },
+        {
+          "id": "EX5",
+          "expressao": "EB1",
+          "forma": "âncoras em W/5",
+          "retorno": 178,
+          "retencao": 0.293,
+          "mede": "EB1",
+          "estado": "vigente",
+          "origem": "interface"
+        },
+        {
+          "id": "EX6",
+          "expressao": "EB2",
+          "forma": "âncoras em W/5",
+          "retorno": 1013,
+          "retencao": 0.189,
+          "mede": "EB2",
+          "estado": "vigente",
+          "origem": "interface"
+        },
+        {
+          "id": "EX7",
+          "expressao": "EB3",
+          "forma": "âncoras em W/5",
+          "retorno": 543,
+          "retencao": 0.279,
+          "mede": "EB3",
+          "estado": "vigente",
+          "origem": "interface"
+        },
+        {
+          "id": "EX8",
+          "expressao": "EB4",
+          "forma": "âncoras em W/5",
+          "caracteres": 5258,
+          "retorno": 3194,
+          "retencao": 0.181,
+          "mede": "EB4",
+          "estado": "vigente",
+          "nota": "submetida a partir de arquivo, para não depender de recuperar o texto da interface",
+          "exportacao": {
+            "registros_lidos": 3194,
+            "distintos": 3190,
+            "fora_do_recorte": 8,
+            "nota_fora_do_recorte": "todos de 2027, anteriores à cota superior acrescentada ao filtro",
+            "defeito_do_exportador": "291 registros trazem label.ris.referenceType.BOOK_CHAPTER em lugar do rótulo traduzido",
+            "origem": "exportacao"
+          },
+          "origem": "interface"
+        }
+      ],
+      "conferencias": {
+        "contencao": [
+          {
+            "relacao": "EB1 <= EB2",
+            "valores": [
+              178,
+              1013
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB1 <= EB3",
+            "valores": [
+              178,
+              543
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB2 <= EB4",
+            "valores": [
+              1013,
+              3194
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB3 <= EB4",
+            "valores": [
+              543,
+              3194
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "cota deduzida da união de EB2 e EB3",
+            "valores": [
+              1378,
+              3194,
+              17677
+            ],
+            "passa": true
+          }
+        ],
+        "particao_EB4": {
+          "quatro_facetas": 178,
+          "praticas_sem_fatores": 835,
+          "fatores_sem_praticas": 365,
+          "so_ancoras": 1816,
+          "total": 3194,
+          "origem": "interface"
+        },
+        "fidelidade_da_derivacao": {
+          "estado": "pendente"
+        }
+      },
+      "aderencia": {
+        "limiar": 0.8,
+        "esperadas": [
+          "SE2",
+          "SE3",
+          "SE4",
+          "SE7",
+          "SE8",
+          "SE9"
+        ],
+        "recuperadas": [
+          {
+            "semente": "SE2",
+            "casamento": "DOI"
+          },
+          {
+            "semente": "SE7",
+            "casamento": "DOI"
+          },
+          {
+            "semente": "SE8",
+            "casamento": "DOI"
+          },
+          {
+            "semente": "SE9",
+            "casamento": "DOI"
+          }
+        ],
+        "ausentes": [
+          {
+            "semente": "SE3",
+            "doi": "10.1111/exsy.12246"
+          },
+          {
+            "semente": "SE4",
+            "doi": "10.5220/0012471400003645"
+          }
+        ],
+        "resultado": "4 de 6 = 67%",
+        "estado": "reprovado",
+        "nota": "as duas ausentes trazem as duas âncoras no título, a duas palavras de distância, logo a perda não é da proximidade; a causa está por isolar",
+        "origem": "exportacao"
+      },
+      "pendencias": [
+        "Anatomia da perda das sementes 3 e 4: DOI, depois DOI com filtros, depois DOI com as âncoras, depois DOI com as âncoras em W/5.",
+        "Exportar EB4 na forma adotada, depois de a anatomia da perda indicar se a forma é a de proximidade ou a ampla.",
+        "Registrar a execução de EB4 com `src/derivar_expressoes.py --registrar`."
+      ],
+      "edicao_nota": "versão ou atualização da base não registrada na captura; anotar na próxima execução"
+    },
+    "BD3": {
+      "slug": "eric",
+      "base": "ERIC",
+      "acesso": "Interface pública eric.ed.gov, sem credencial",
+      "edicao": null,
+      "interface": {
+        "campo": "prefixo por termo: title:, abstract:, descriptor:",
+        "filtros": [
+          "data, pela página de resultados: 2017 a 2026",
+          "Peer reviewed only: desmarcada",
+          "Full text available on ERIC: desmarcada"
+        ],
+        "teto_de_caracteres": {
+          "minimo_medido": 1502,
+          "maximo_medido": 1799,
+          "regra_de_bolso": 1400
+        },
+        "origem": "captura"
+      },
+      "sondagens": [
+        {
+          "id": "S1",
+          "consulta": "ontology",
+          "mede": "texto livre",
+          "retorno": 1500,
+          "evidencia": "interface"
+        },
+        {
+          "id": "S2",
+          "consulta": "title:ontology",
+          "mede": "prefixo de campo restringe",
+          "retorno": 343,
+          "evidencia": "interface"
+        },
+        {
+          "id": "S3",
+          "consulta": "ontolog*",
+          "mede": "truncamento",
+          "retorno": 0,
+          "veredito": "não trunca",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S4",
+          "consulta": "title:ontologies",
+          "mede": "lematização do plural regular",
+          "retorno": null,
+          "veredito": "igual a title:ontology",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S5",
+          "consulta": "thesaurus",
+          "mede": "lematização do plural irregular",
+          "retorno": 318,
+          "evidencia": "interface"
+        },
+        {
+          "id": "S6",
+          "consulta": "thesauri",
+          "mede": "lematização do plural irregular",
+          "retorno": 41,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D1",
+          "consulta": "descriptor:Thesauri",
+          "mede": "campo descriptor",
+          "retorno": 568,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D2",
+          "consulta": "descriptor:Classification",
+          "mede": "campo descriptor",
+          "retorno": 21241,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D3",
+          "consulta": "descriptor:Indexing",
+          "mede": "campo descriptor",
+          "retorno": 1966,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D4",
+          "consulta": "descriptor:Metadata",
+          "mede": "campo descriptor",
+          "retorno": 1001,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D5",
+          "consulta": "descriptor:Semantics",
+          "mede": "campo descriptor",
+          "retorno": 13577,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D6",
+          "consulta": "descriptor:Vocabulary",
+          "mede": "campo descriptor",
+          "retorno": 28729,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D7",
+          "consulta": "descriptor:Taxonomy",
+          "mede": "campo descriptor",
+          "retorno": 1628,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D8",
+          "consulta": "descriptor:\"Knowledge Representation\"",
+          "mede": "campo descriptor",
+          "retorno": 869,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D9",
+          "consulta": "descriptor:\"Semantic Web\"",
+          "mede": "campo descriptor",
+          "retorno": 0,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D10",
+          "consulta": "descriptor:Ontology",
+          "mede": "campo descriptor",
+          "retorno": 0,
+          "veredito": "a grafia não é descritor; não prova ausência do conceito",
+          "evidencia": "interface"
+        },
+        {
+          "id": "D11",
+          "consulta": "descriptor:\"Information Retrieval\"",
+          "mede": "campo descriptor",
+          "retorno": 9070,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D12",
+          "consulta": "descriptor:\"Educational Technology\"",
+          "mede": "campo descriptor",
+          "retorno": 64763,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D13",
+          "consulta": "descriptor:\"Instructional Design\"",
+          "mede": "campo descriptor",
+          "retorno": 20978,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D14",
+          "consulta": "descriptor:\"Learning Analytics\"",
+          "mede": "campo descriptor",
+          "retorno": 2035,
+          "evidencia": "interface"
+        },
+        {
+          "id": "D15",
+          "consulta": "descriptor:\"Educational Objectives\"",
+          "mede": "campo descriptor",
+          "retorno": 45025,
+          "evidencia": "interface"
+        }
+      ],
+      "execucoes": [
+        {
+          "id": "EX1",
+          "expressao": "EB4",
+          "forma": "consulta 4a, artefato no título",
+          "caracteres": 553,
+          "retorno": 951,
+          "data": "2026-11-08",
+          "mede": "4a sem title:ontological",
+          "estado": "vencido",
+          "motivo_do_vencimento": "o desdobramento morfológico acrescentou title:ontological ao grupo: é outra consulta",
+          "origem": "interface"
+        },
+        {
+          "id": "EX2",
+          "expressao": "EB4",
+          "forma": "consulta 4a, artefato no título",
+          "caracteres": 662,
+          "retorno": null,
+          "mede": "EB4, parte 4a",
+          "estado": "nao_executado",
+          "origem": "interface"
+        },
+        {
+          "id": "EX3",
+          "expressao": "EB4",
+          "forma": "consulta 4b, termo específico no resumo",
+          "caracteres": 292,
+          "retorno": null,
+          "mede": "EB4, parte 4b",
+          "estado": "nao_executado",
+          "origem": "interface"
+        },
+        {
+          "id": "EX4",
+          "expressao": "EB2",
+          "forma": "consultas 2a-i, 2a-ii e 2b, partidas pelo teto",
+          "retorno": null,
+          "mede": "EB2",
+          "estado": "nao_executado",
+          "origem": "interface"
+        },
+        {
+          "id": "EX5",
+          "expressao": "EB3",
+          "forma": "consultas 3a-i, 3a-ii e 3b, partidas pelo teto",
+          "retorno": null,
+          "mede": "EB3",
+          "estado": "nao_executado",
+          "origem": "interface"
+        }
+      ],
+      "calibracao": [
+        {
+          "forma": "camada 3, cinco descritores de artefato com âncora de domínio no resumo",
+          "caracteres": 265,
+          "retorno": 6032,
+          "estado": "soma bruta dos cinco descritores, antes da âncora e da deduplicação: teto da camada",
+          "origem": "derivacao"
+        }
+      ],
+      "conferencias": {
+        "contencao": [],
+        "fidelidade_da_derivacao": {
+          "estado": "pendente"
+        },
+        "nota": "não há conferência de contenção a registrar: as consultas da forma vigente não foram executadas"
+      },
+      "aderencia": {
+        "limiar": 0.8,
+        "esperadas": [
+          "SE6",
+          "SE7",
+          "SE8"
+        ],
+        "recuperadas": [],
+        "ausentes": [],
+        "estado": "nao_medido",
+        "nota": "os títulos das três trazem ontology, ontology e conceptual model com ontology: nenhuma perde a âncora pela restrição ao título",
+        "origem": "exportacao"
+      },
+      "pendencias": [
+        "Reexecutar as consultas 4a e 4b na forma vigente e exportar em arquivos separados, eric_4a.ris e eric_4b.ris.",
+        "Deduplicar 4a e 4b e anotar a sobreposição; o retorno da base é a união, nunca a soma.",
+        "Aplicar o filtro de data da página e anotar o retorno antes e depois, com o rótulo exato.",
+        "Registrar as duas execuções e rodar a derivação e a aderência."
+      ],
+      "edicao_nota": "versão ou atualização da base não registrada na captura; anotar na próxima execução"
+    },
+    "BD4": {
+      "slug": "brapci",
+      "base": "BRAPCI",
+      "acesso": "Interface pública, sem credencial",
+      "edicao": null,
+      "interface": {
+        "local_de_pesquisa": "Todos os campos",
+        "filtros": [
+          "ano inicial e ano final: 2017 e 2026",
+          "tipo de publicação: não se usa"
+        ],
+        "metodo_de_busca": "ponderado; os métodos anterior (2024) e atual (2026) devolveram o mesmo volume",
+        "limite_de_resultados": "1.000 a 5.000; teto de exibição de 1.000 confirmado",
+        "origem": "captura"
+      },
+      "sondagens": [
+        {
+          "id": "S1",
+          "consulta": "ontologia",
+          "mede": "linha de base",
+          "retorno": 545,
+          "evidencia": "interface"
+        },
+        {
+          "id": "S2",
+          "consulta": "representação do conhecimento",
+          "mede": "frase sem aspas",
+          "retorno": 1000,
+          "veredito": "não é frase; número redondo é teto",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S3",
+          "consulta": "\"representação do conhecimento\"",
+          "mede": "aspas como frase",
+          "retorno": 659,
+          "veredito": "aspas funcionam",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S4",
+          "consulta": "ontologia AND educação",
+          "mede": "conjunção",
+          "retorno": 13,
+          "veredito": "AND funciona",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S5",
+          "consulta": "ontologia and educação",
+          "mede": "caixa do operador",
+          "retorno": 13,
+          "veredito": "insensível à caixa",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S6",
+          "consulta": "ontologia OR tesauro",
+          "mede": "disjunção",
+          "retorno": 840,
+          "veredito": "OR funciona",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S7",
+          "consulta": "(ontologia OR tesauro) AND educação",
+          "mede": "agrupamento",
+          "retorno": 20,
+          "veredito": "parênteses funcionam",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S8",
+          "consulta": "ontolog*",
+          "mede": "truncamento",
+          "retorno": 984,
+          "veredito": "curinga funciona",
+          "evidencia": "interface"
+        },
+        {
+          "id": "S9",
+          "consulta": "inspeção da interface",
+          "mede": "campos e filtros",
+          "retorno": null,
+          "veredito": "há filtros de ano e de tipo e há seletor de Local de pesquisa",
+          "evidencia": "captura"
+        }
+      ],
+      "medicoes_de_campo": [
+        {
+          "id": "A1",
+          "local": "Todos os campos",
+          "filtro_de_ano": null,
+          "retorno": 545,
+          "fracao_da_linha_de_base": 1.0
+        },
+        {
+          "id": "A2",
+          "local": "Título",
+          "filtro_de_ano": null,
+          "retorno": 151,
+          "fracao_da_linha_de_base": 0.277
+        },
+        {
+          "id": "A3",
+          "local": "Resumo",
+          "filtro_de_ano": null,
+          "retorno": 373,
+          "fracao_da_linha_de_base": 0.684
+        },
+        {
+          "id": "A4",
+          "local": "Palavras-chave",
+          "filtro_de_ano": null,
+          "retorno": 358,
+          "fracao_da_linha_de_base": 0.657
+        },
+        {
+          "id": "A5",
+          "local": "Autor",
+          "filtro_de_ano": null,
+          "retorno": 0,
+          "fracao_da_linha_de_base": 0.0
+        },
+        {
+          "id": "B1",
+          "local": "Todos os campos",
+          "filtro_de_ano": "2017-2026",
+          "retorno": 280,
+          "fracao_da_linha_de_base": 0.514
+        },
+        {
+          "id": "B2",
+          "local": "Título",
+          "filtro_de_ano": "2017-2026",
+          "retorno": 74,
+          "fracao_da_linha_de_base": 0.264
+        }
+      ],
+      "execucoes": [
+        {
+          "id": "EX1",
+          "expressao": "EB1",
+          "forma": "expressão registrada não aplicada: vocabulário do núcleo",
+          "retorno": 0,
+          "data": null,
+          "mede": "o núcleo das facetas, e não EB1",
+          "estado": "vencido",
+          "motivo_do_vencimento": "a expressão executada não é a registrada",
+          "origem": "captura"
+        },
+        {
+          "id": "EX2",
+          "expressao": "EB2",
+          "forma": "vocabulário do núcleo",
+          "retorno": 5,
+          "data": null,
+          "mede": "o núcleo das facetas, e não EB2",
+          "estado": "vencido",
+          "motivo_do_vencimento": "a expressão executada não é a registrada",
+          "origem": "captura"
+        },
+        {
+          "id": "EX3",
+          "expressao": "EB3",
+          "forma": "vocabulário do núcleo",
+          "retorno": 1,
+          "data": null,
+          "mede": "o núcleo das facetas, e não EB3",
+          "estado": "vencido",
+          "motivo_do_vencimento": "a expressão executada não é a registrada",
+          "origem": "captura"
+        },
+        {
+          "id": "EX4",
+          "expressao": "EB4",
+          "forma": "vocabulário do núcleo: 7 termos na faceta de artefatos, 15 na de domínio, 5 na de práticas, 7 na de fatores",
+          "retorno": 64,
+          "data": null,
+          "mede": "o alcance do núcleo, e não o do vocabulário registrado",
+          "estado": "vencido",
+          "motivo_do_vencimento": "a expressão executada não é a registrada",
+          "nota": "os 64 registros medem o piso, e não podem ser lançados no IO 2 como retorno de EB4",
+          "exportacao": {
+            "registros_lidos": 64,
+            "distintos": 64,
+            "fora_do_recorte": 0,
+            "conformes_com_as_duas_ancoras": 63,
+            "registro_discrepante": "381891, em espanhol, sem termo da faceta de artefatos no texto exportado",
+            "keywords_vazias": 4,
+            "nota": "o registro discrepante é um dos quatro com KEYWORDS vazia: a base indexa mais do que exporta",
+            "origem": "exportacao"
+          },
+          "origem": "exportacao"
+        }
+      ],
+      "conferencias": {
+        "contencao": [
+          {
+            "relacao": "EB1 <= EB2",
+            "valores": [
+              0,
+              5
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB1 <= EB3",
+            "valores": [
+              0,
+              1
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB2 <= EB4",
+            "valores": [
+              5,
+              64
+            ],
+            "passa": true
+          },
+          {
+            "relacao": "EB3 <= EB4",
+            "valores": [
+              1,
+              64
+            ],
+            "passa": true
+          }
+        ],
+        "particao_EB4": null,
+        "fidelidade_da_derivacao": {
+          "estado": "pendente"
+        },
+        "nota": "coerência de contagem passou; contagem coerente não prova identidade de conjuntos"
+      },
+      "aderencia": {
+        "limiar": 0.8,
+        "esperadas": [
+          "SE1",
+          "SE5"
+        ],
+        "recuperadas": [
+          {
+            "semente": "SE1",
+            "casamento": "palavra-chave \"Representação do conhecimento\", e não título"
+          }
+        ],
+        "ausentes": [
+          "SE5"
+        ],
+        "estado": "pendente",
+        "nota": "a ausência da SE5 separa-se em duas causas por uma consulta: Duque em Local de pesquisa = Autor. Zero significa base não indexa, e a semente sai do denominador; registro encontrado significa indexa, e a falha é da busca",
+        "origem": "exportacao"
+      },
+      "pendencias": [
+        "Reexecutar as quatro expressões com a expressão registrada, e não com o núcleo.",
+        "Consultar Duque em Local de pesquisa = Autor e ler resumo e palavras-chave do registro: encerra o caso-teste da SE5 e controla a opção Autor.",
+        "Fechar P6 antes da nova execução: substituição de termo autorizado vence busca executada antes dela.",
+        "Registrar as execuções com `src/derivar_expressoes.py --registrar`, com a justificativa do teto de 1.000 quando for o caso."
+      ],
+      "edicao_nota": "versão ou atualização da base não registrada na captura; anotar na próxima execução"
+    }
+  }
+}

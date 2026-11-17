@@ -1,35 +1,37 @@
 {
-  "_leia": "DERIVADO de docs/2_protocolo/03_protocolo_estrategia_pesquisa.md por src/protocolo.py --gerar. Não editar: regerar.",
+  "_leia": "DERIVADO de docs/03_protocolo_estrategia_pesquisa.md por src/protocolo.py --gerar. Não editar: regerar.",
   "fonte": {
-    "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
+    "arquivo": "docs/03_protocolo_estrategia_pesquisa.md",
+    "sha256": "7da9135dd02c7c0a9ea909d00413d37a75ccca992f26b0abe3c2e915c34c94c9"
   },
   "derivado": {
-    "sha256": "bc2e3190f8ce1ce8e0ab36b0699f7a3739dc077f25c914ea1475a06db534e42e",
+    "sha256": "1e2133ace7a4ec726c2937b76c82340b9a0e4ace9bb3716f473fe2e0fe542c5c",
     "chaves": [
       "estrutura_pico",
+      "id",
       "questao_principal",
       "questoes_especificas[].id",
       "questoes_especificas[].texto"
     ]
   },
+  "id": "QGR",
   "questao_principal": "Como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento (P), propostos, especificados, aplicados ou avaliados na literatura científica e técnica internacional, representam formalmente, no domínio educacional (Co), as práticas do processo de ensino-aprendizagem e os fatores situacionais que condicionam a sua aplicação (I), e com que cobertura conceitual, granularidade e grau de formalização (O)?",
-  "estrutura_pico": "Estrutura da questão: o protocolo adota o mnemônico PICo — População (P), Fenômeno de Interesse (I) e Contexto (Co) —, ACRESCIDO DE DESFECHO (O), em ADAPTAÇÃO DECLARADA: nesta revisão P não designa população de participantes, e sim os ARTEFATOS DE REPRESENTAÇÃO que são o objeto de interesse. A adaptação é necessária porque o objeto não é efeito de intervenção sobre pessoas, e fica registrada para que a estrutura não seja lida como o PICo clínico. Co designa o domínio educacional, que é o recorte da revisão; a situação específica de uso, descrita pelos fatores situacionais, integra o fenômeno de interesse (I), e não o Co. Estando a instanciação fora do recorte, o desfecho não é a operacionalização computacional, e sim a qualidade da formalização alcançada — cobertura, granularidade e grau de formalização. A QS1 CARACTERIZA DIRETAMENTE essas três dimensões; a QS4 COMPLEMENTA a caracterização pela análise de avaliação, alinhamento, reuso, manutenção e lacunas. As QS2 e QS3 descrevem o que os artefatos representam, e não o desfecho.",
+  "estrutura_pico": "Estrutura da questão: o protocolo adota o mnemônico PICo — População (P), Fenômeno de Interesse (I) e Contexto (Co) —, ACRESCIDO DE DESFECHO (O), em ADAPTAÇÃO DECLARADA: nesta revisão P não designa população de participantes, e sim os ARTEFATOS DE REPRESENTAÇÃO que são o objeto de interesse. A adaptação é necessária porque o objeto não é efeito de intervenção sobre pessoas, e fica registrada para que a estrutura não seja lida como o PICo clínico. Co designa o domínio educacional, que é o recorte da revisão; a situação específica de uso, descrita pelos fatores situacionais, integra o fenômeno de interesse (I), e não o Co. Estando a instanciação fora do recorte, o desfecho não é a operacionalização computacional, e sim a qualidade da formalização alcançada — cobertura, granularidade e grau de formalização.",
   "questoes_especificas": [
     {
-      "id": "QS1",
+      "id": "QER1",
       "texto": "Que tipos de artefatos de representação são propostos para representar práticas educacionais e quais são o seu escopo, a sua granularidade e o seu grau de formalização?"
     },
     {
-      "id": "QS2",
+      "id": "QER2",
       "texto": "Como esses artefatos representam as práticas do processo de ensino-aprendizagem, como distinguem e relacionam entre si prática, estratégia, método, técnica, atividade, intervenção e abordagem pedagógica, e que definições adotam para cada uma?"
     },
     {
-      "id": "QS3",
+      "id": "QER3",
       "texto": "Que fatores situacionais do domínio educacional são formalizados e de que modo se vinculam às práticas, inclusive sob a forma de regras, dependências e restrições?"
     },
     {
-      "id": "QS4",
+      "id": "QER4",
       "texto": "Como essas soluções são avaliadas, alinhadas, reutilizadas e mantidas, e que capacidades, limitações, incompatibilidades e lacunas de representação são reportadas no domínio educacional?"
     }
   ]

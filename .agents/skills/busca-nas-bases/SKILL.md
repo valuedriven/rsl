@@ -26,10 +26,11 @@ pesquisador. Não há exceção, não há urgência que justifique.
 
 ## O que executar
 
-As expressões vivem nas quatro fichas, uma por base, em `docs/2_protocolo/`, com nome
-`03_N_Strings_Busca_N_<Base>.md` (N = 1 a 4). **Nunca ditar uma expressão de memória
-nem reescrevê-la na conversa.** Se a ficha estiver defasada, corrigi-la e registrar a
-correção no Anexo A.
+As expressões vivem nas quatro fichas, uma por base, em `docs/`:
+`strings_busca_1_Web_of_Science.md`, `strings_busca_2_Scopus.md`,
+`strings_busca_3_ERIC.md` e `strings_busca_4_BRAPCI.md`. **Nunca ditar uma expressão de
+memória nem reescrevê-la na conversa.** Se a ficha estiver defasada, corrigi-la e registrar
+a correção no Anexo A.
 
 Só **E4** é busca definitiva nas bases. E1, E2 e E3 têm a pertinência calculada localmente
 sobre os registros exportados, e vão à base apenas no teste de fidelidade da derivação.
@@ -80,9 +81,10 @@ O que vem depois não é desta skill:
 
 ## Registrar
 
-Contagens, data, base, edição da base, texto submetido e capturas vão para o registro de
-execução da base. Troca de vínculo institucional vai para o **IO 2**, por poder alterar o
-que a base entrega.
+Contagens, data, base, edição da base, texto submetido e capturas vão para
+`data/registro_execucao.json`, na base correspondente. Troca de vínculo institucional vai
+para o **IO 2**, por poder alterar o que a base entrega. As fichas de `docs/` não carregam
+mais o registro: carregam a sintaxe verificada, as strings, as expressões e as variantes.
 
 Medida nova que entre em documento é **calculada a partir dos dados**, nunca transcrita da
 conversa — ver `AGENTS.md` §7. Retenção de proximidade medida em par mínimo é **limite inferior**:

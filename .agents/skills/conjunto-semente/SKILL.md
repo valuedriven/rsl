@@ -76,7 +76,7 @@ Produz, em `data/saida/semente/`, `Conjunto_Semente.md` com a composição, o pr
 o estado de conferência e o ensaio, e `semente_aderencia.csv` para preencher. As
 referências e o mapa por base vêm do protocolo; os metadados que o documento não guarda
 (verificação, escopo, tipo, alinhamento, nota) estão em `data/sementes.json`. Ver
-`README.md`, seção Scripts, e `src/README.md`.
+`README.md`, seção Scripts.
 
 ## 6. Limiar e consequência
 

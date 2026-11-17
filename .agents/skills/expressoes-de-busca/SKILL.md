@@ -55,7 +55,7 @@ filtragem exige pelo menos uma das duas dimensões.
 ## Parte 2 — a sintaxe, por base
 
 **Medida, não documentada.** A tabela completa está nas fichas por base, em
-`docs/2_protocolo/`; o que não se pode esquecer:
+`docs/`; o que não se pode esquecer:
 
 | Base | Medido |
 | --- | --- |
@@ -78,8 +78,9 @@ Três regras que saíram de defeito real:
 
 ## Depois de compor
 
-As fichas, uma por base, ficam em `docs/2_protocolo/` com a expressão executável, o
-estado de verificação da sintaxe e o registro de execução. **Nunca ditar uma expressão
+As fichas, uma por base, ficam em `docs/` com a expressão executável e o
+estado de verificação da sintaxe. O **registro de execução** fica em
+`data/registro_execucao.json`, uma entrada por base. **Nunca ditar uma expressão
 de memória nem reescrevê-la na conversa** — se a ficha estiver defasada, corrigi-la.
 
 Alteração de expressão é emenda **de busca**: exige reexecução e novo teste de

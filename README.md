@@ -15,8 +15,8 @@ repete o conteúdo dos documentos.
 | Onde | O que é |
 | --- | --- |
 | `docs/` | conteúdo da revisão: IO 0 e IO 1, o Anexo A e as fichas de busca |
-| `data/` | dados do projeto: os nove JSON, as exportações, as saídas dos scripts e o arquivo |
-| `src/` | quatro scripts de execução e o `README.md` que os explica |
+| `data/` | dados do projeto: os dez JSON, as exportações, as saídas dos scripts e o arquivo |
+| `src/` | quatro scripts de execução |
 | `.agents/skills/` | 19 competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
 
@@ -27,16 +27,16 @@ IO 2 a IO 7 e o portfólio não integram este repositório.
 
 | Caminho | O que contém | Consultar quando |
 | --- | --- | --- |
-| `docs/1_gestao/01_plano.md` | IO 0: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
-| `docs/1_gestao/historico.md` | Anexo A: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
-| `docs/2_protocolo/02_protocolo_aspectos_preliminares.md` | IO 1, direcionamento da revisão: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
-| `docs/2_protocolo/03_protocolo_estrategia_pesquisa.md` | IO 1, estratégias de pesquisa: questão de revisão, QS1–QS4, facetas, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única dos JSON | montar ou conferir a busca |
-| `docs/2_protocolo/strings_busca_1_Web_of_Science.md` | ficha da Web of Science: sintaxe, strings nativas, execução, aderência e ressalvas | executar ou auditar esta base |
-| `docs/2_protocolo/strings_busca_2_Scopus.md` | ficha da Scopus, mesma estrutura | idem |
-| `docs/2_protocolo/strings_busca_3_ERIC.md` | ficha da ERIC, mesma estrutura | idem |
-| `docs/2_protocolo/strings_busca_4_BRAPCI.md` | ficha da BRAPCI, mesma estrutura | idem |
+| `docs/01_plano.md` | IO 0: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
+| `docs/historico.md` | Anexo A: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
+| `docs/02_protocolo_informacoes_gerais.md` | IO 1, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
+| `docs/03_protocolo_estrategia_pesquisa.md` | IO 1, estratégias de pesquisa: questão de revisão (QGR, QER1–QER4), facetas, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única dos JSON | montar ou conferir a busca |
+| `docs/strings_busca_1_Web_of_Science.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
+| `docs/strings_busca_2_Scopus.md` | ficha da Scopus, mesma estrutura | idem |
+| `docs/strings_busca_3_ERIC.md` | ficha da ERIC, mesma estrutura | idem |
+| `docs/strings_busca_4_BRAPCI.md` | ficha da BRAPCI, mesma estrutura | idem |
 | `src/protocolo.py` | leitor do protocolo: confere e deriva os JSON de `data/` | antes de executar qualquer script, e após alterar o protocolo |
-| `src/derivar_expressoes.py` | registro das consultas, derivação local de E1 a E3, aderência e fidelidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
+| `src/derivar_expressoes.py` | registro das consultas, derivação local das expressões não executadas, aderência e fidelidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/validar_termos.py` | validação assistida no TBCI e no UNESCO Thesaurus | conferir o estatuto de cada termo |
 | `src/gen_semente.py` | geração do instrumento de aderência a partir do conjunto-semente | montar a planilha de aferição de uma base |
 
@@ -44,14 +44,15 @@ Em `data/`, a procedência de cada arquivo:
 
 | Caminho | O que contém | Quem escreve |
 | --- | --- | --- |
-| `data/questoes.json` | questão principal, QS1–QS4 e estrutura PICo | `--gerar` |
+| `data/questoes.json` | questão geral (QGR), QER1–QER4 e estrutura PICo | `--gerar` |
 | `data/facetas.json` | palavras significativas: nome, cor e âncora de cada faceta | `--gerar` |
 | `data/descritores.json` | controle terminológico por faceta e estatuto de validação de cada termo | `--gerar` + validação |
-| `data/strings.json` | string de cada faceta e composição das expressões E1–E4 | `--gerar` |
+| `data/strings.json` | string de cada faceta e composição das quatro expressões | `--gerar` |
 | `data/criterios.json` | critérios de inclusão e de exclusão e recorte temporal | `--gerar` |
 | `data/fontes.json` | bases, ordem de execução, via de acesso, acervos e ferramenta | `--gerar` |
 | `data/sementes.json` | conjunto-semente e metadados de conferência de cada referência | `--gerar` + pesquisador |
 | `data/consultas.json` | registro das execuções: base, expressão, data e hora, retorno | `--registrar` |
+| `data/registro_execucao.json` | sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base | pesquisador |
 | `data/pendencias.json` | estado das tarefas e pendências abertas | pesquisador |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
 | `data/saida/` | planilhas, CSVs e instrumentos gerados pelos scripts | scripts |
@@ -60,7 +61,32 @@ Em `data/`, a procedência de cada arquivo:
 
 As pastas de dados brutos e de arquivo — `execucoes/`, `evidencia/` e `arquivo/` — são
 criadas quando o primeiro arquivo chega e não existem hoje. O conteúdo atual de `data/` são
-os nove JSON e `saida/`.
+os dez JSON e `saida/`.
+
+### Scripts
+
+Os quatro scripts leem o documento do protocolo e os JSON de `data/`; nenhum decide
+conteúdo — conferem e derivam. Três invariantes valem para todos:
+
+- **Uma fonte.** `src/protocolo.py --gerar` lê `docs/03_protocolo_estrategia_pesquisa.md` e
+  grava os sete JSON. Alterado o documento, os derivados ficam defasados e todo consumidor
+  recusa rodar até a regeração.
+- **Duas assinaturas por JSON.** `fonte.sha256` detecta documento alterado sem regerar;
+  `derivado.sha256` cobre o subconjunto derivado e detecta campo editado à mão. O que é
+  autoral — o estatuto de validação em `descritores.json` e os metadados de conferência em
+  `sementes.json` — pode ser editado livremente, e `--gerar` o preserva.
+- **Nada se apaga por geração.** Termo ou semente retirado do protocolo fica com
+  `no_protocolo=false` e é reportado por `--pendencias`, para decisão.
+- **O identificador é a chave.** Os itens dos JSON são identificados pelo código do
+  protocolo — `QGR`/`QERn`, `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn` —, e não por número
+  de posição; a composição das expressões é dada em `STRn`.
+
+`--conferir` reprova documento fora da forma esperada — seções, identificadores, camadas de
+vocabulário, strings, composição das expressões, critérios, bases e distribuição do
+conjunto-semente. `--conferir-dados` reprova JSON ausente, derivado defasado, campo
+adulterado e divergência entre arquivos. `--autoteste` injeta defeitos numa cópia e exige
+que as conferências os reprovem, inclusive a prova de que edição de campo autoral é
+aprovada. `--pendencias` relata sem escrever. Os comandos estão no fluxo de trabalho, em M3.
 
 ## Fluxo de trabalho — RS Banyan
 
@@ -94,7 +120,7 @@ Decide a **exequibilidade** da revisão.
 5. **E5 — cronograma.** Compromete os marcos quinzenais e a data-limite dos revisores,
    anterior à execução das buscas definitivas.
 
-**Fonte:** `docs/1_gestao/01_plano.md` (IO 0), seções 1 a 3; equipe e cronograma detalhados
+**Fonte:** `docs/01_plano.md` (IO 0), seções 1 a 3; equipe e cronograma detalhados
 nos IO 6 e IO 7, fora deste pacote. **Scripts:** nenhum — o produto é decisão registrada.
 
 ### M2 — Questão de revisão (E1–E2)
@@ -106,11 +132,11 @@ Decide **o que se pergunta** e **o que fica fora**.
    foram lidos como fundamentação, e o conjunto-semente existe para aferir a busca, não
    para confirmá-la.
 2. **E2 — delimitação do assunto.** Fixa a temática, a abordagem, o objeto e o recorte; na
-   estratégia, converte tudo em questão principal pelo PICo com desfecho acrescido e em
-   QS1–QS4.
+   estratégia, converte tudo em questão geral pelo PICo com desfecho acrescido e em
+   QER1–QER4.
 
-**Fonte:** `docs/2_protocolo/02_protocolo_aspectos_preliminares.md`, Etapas 1 e 2; questão e
-questões secundárias em `docs/2_protocolo/03_protocolo_estrategia_pesquisa.md`. **Scripts:**
+**Fonte:** `docs/02_protocolo_informacoes_gerais.md`, Etapas 1 e 2; questão e
+questões secundárias em `docs/03_protocolo_estrategia_pesquisa.md`. **Scripts:**
 nenhum nesta etapa; a questão entra em `data/questoes.json` na primeira geração de M3/E1.
 Skill: `questao-e-objetivos`; os critérios de elegibilidade derivam dela e são formalizados
 em M3/E1, com a skill `criterios-de-elegibilidade`.
@@ -134,7 +160,7 @@ existir.
    consulta registrada é termo livre e não pode ser apresentado como descritor autorizado.
 3. **Strings por faceta.** Qualificação do vocabulário: substituição de palavra isolada pela
    forma composta, desdobramento da notação compacta e inclusão das formas morfológicas.
-4. **Expressões E1–E4.** E4 é a de cobertura e a **única executada**; E1, E2 e E3 são
+4. **As quatro expressões.** A de cobertura é a **única executada**; as outras três são
    subconjuntos estritos dela, calculados localmente em M3/E2.
 5. **Critérios de elegibilidade.** Quatro critérios de inclusão e cinco de exclusão, com a
    regra única de inclusão — práticas **e/ou** fatores situacionais — e a regra de borda.
@@ -165,7 +191,7 @@ python3 src/validar_termos.py --importar
 python3 src/gen_semente.py
 ```
 
-**Arquivos.** A fonte é `docs/2_protocolo/03_protocolo_estrategia_pesquisa.md`; `--gerar`
+**Arquivos.** A fonte é `docs/03_protocolo_estrategia_pesquisa.md`; `--gerar`
 deriva os sete JSON de `data/` — `questoes.json`, `facetas.json`, `descritores.json`,
 `strings.json`, `criterios.json`, `fontes.json` e `sementes.json` — e cria os auxiliares
 `consultas.json` e `pendencias.json` só se ausentes. A validação grava o estatuto em
@@ -193,45 +219,46 @@ Executa a busca e transforma a exportação em conjunto verificável.
 1. **Sondagem de sintaxe.** Obrigatória na ERIC e na BRAPCI antes de qualquer execução; o
    procedimento e as ressalvas estão na ficha da base. Automação de interface só depois de
    conferidos os termos de uso, e a autenticação federada é feita pelo pesquisador.
-2. **Execução.** Executa-se **E4 uma vez por base** — e não as quatro expressões —, com o
-   recorte temporal aplicado na busca na WoS, na Scopus e na BRAPCI e pelo filtro da página
-   de resultados na ERIC. Na ERIC, a expressão se desdobra em duas consultas de campo único,
-   unidas na derivação.
+2. **Execução.** Executa-se **a expressão de cobertura uma vez por base** — e não as
+   quatro —, com o recorte temporal aplicado na busca na WoS, na Scopus e na BRAPCI e pelo
+   filtro da página de resultados na ERIC. Na ERIC, a expressão se desdobra em duas
+   consultas de campo único, unidas na derivação.
 3. **Registro e exportação.** A exportação fica intacta em `data/execucoes/<base>/`; cada
    consulta é registrada com o retorno que a base exibiu.
-4. **Derivação local.** E1, E2 e E3 são calculadas sobre a exportação de E4, com
+4. **Derivação local.** As outras três são calculadas sobre a exportação da de cobertura, com
    deduplicação dentro da base — a segunda ocorrência é marcada em `duplicata_de`, e nada é
    apagado.
 5. **Aderência.** Mede o recall contra o conjunto-semente; o denominador é o que cada base
    indexa, conferido à mão, e o limiar é **80% sobre a união das bases**.
-6. **Fidelidade.** Executa E2 e E3 diretamente na WoS e na Scopus e compara com a derivação;
-   divergência acima de **10%** reprova o método.
-7. **Coerência e cobertura.** Confere as quatro relações de continência — E1 ⊂ E2, E1 ⊂ E3,
-   E2 ⊂ E4, E3 ⊂ E4 — e a cobertura de campo da exportação. A conferência é condição
-   necessária e não suficiente: o que garante a coerência é a construção — expressões
-   uniformes e execução única de E4 —, não a verificação.
+6. **Fidelidade.** Executa as duas específicas diretamente na WoS e na Scopus e compara com a
+   derivação; divergência acima de **10%** reprova o método.
+7. **Coerência e cobertura.** Confere as quatro relações de continência entre as expressões —
+   a geral contida em cada específica, cada específica contida na de cobertura — e a
+   cobertura de campo da exportação. A conferência é condição necessária e não suficiente:
+   o que garante a coerência é a construção — expressões uniformes e execução única da de
+   cobertura —, não a verificação.
 8. **Calibração da triagem assistida.** Antes do primeiro uso, o ASReview passa por estudo
    de viabilidade e calibração, com sensibilidade aferida em **95% ou mais**. A ferramenta
    ordena a fila; não decide inclusão.
 
 ```bash
 # registra a consulta; a ERIC tem mais de um arquivo (eric_4a.ris, eric_4b.ris)
-python3 src/derivar_expressoes.py --registrar wos E4 data/execucoes/wos/e4.ris --retorno 18432
+python3 src/derivar_expressoes.py --registrar wos <expressão> data/execucoes/wos/<arquivo>.ris --retorno 18432
 
-# deriva E1 a E3, conta únicos e grava a ordem de triagem
+# deriva as expressões não executadas, conta únicos e grava a ordem de triagem
 python3 src/derivar_expressoes.py --derivar
 
 # aderência ao conjunto-semente
 python3 src/derivar_expressoes.py --aderencia
 
 # fidelidade da derivação, exigida na WoS e na Scopus
-python3 src/derivar_expressoes.py --fidelidade E2 data/execucoes/wos/e2_conferencia.ris
+python3 src/derivar_expressoes.py --fidelidade <expressão> data/execucoes/wos/<arquivo>.ris
 ```
 
 **Arquivos.** `data/consultas.json` é o registro das execuções; `--derivar` lê o registro,
 não a pasta de exportações. As saídas ficam em `data/saida/derivacao/`: `registros.csv`,
-`io2_contagens.csv`, `ordem_triagem.csv` e `fidelidade_E<n>.csv`. A aderência usa
-`data/sementes.json` e `data/saida/semente/semente_aderencia.csv`.
+`io2_contagens.csv`, `ordem_triagem.csv` e um CSV de fidelidade por expressão conferida. A
+aderência usa `data/sementes.json` e `data/saida/semente/semente_aderencia.csv`.
 
 **Recusas e marcas.** `--registrar` confere o retorno declarado contra os registros do
 arquivo e **recusa registrar quando divergem**, salvo justificativa explícita — o caso do
@@ -306,14 +333,14 @@ Skill: `fichamento`.
    `conferir-referencia`.
 
 **Arquivos:** relatório e apêndices, fora deste pacote; regras de uso de IA em
-`docs/1_gestao/01_plano.md`, seção 8. **Scripts:** nenhum.
+`docs/01_plano.md`, seção 8. **Scripts:** nenhum.
 
 ### Atividades transversais
 
 - **Toda decisão que altere questão, facetas, critérios ou busca é emenda.** Altera-se o
   documento-fonte — o IO 0, o IO 1 ou a ficha da base — e, quando o dado é derivado,
   regera-se com `--gerar`; a decisão se registra no Anexo A,
-  `docs/1_gestao/historico.md`. Não se edita JSON derivado nem planilha de saída. Skill:
+  `docs/historico.md`. Não se edita JSON derivado nem planilha de saída. Skill:
   `registrar-decisao`.
 - **Rastreabilidade.** Questão, objetivos, facetas, quadro terminológico, strings e
   critérios precisam concordar; `--conferir` e `--conferir-dados` são a trava, e
@@ -328,7 +355,7 @@ Skill: `fichamento`.
 
 ## Precedência
 
-- O **IO 1** — `02_protocolo_aspectos_preliminares.md` e `03_protocolo_estrategia_pesquisa.md` —
+- O **IO 1** — `02_protocolo_informacoes_gerais.md` e `03_protocolo_estrategia_pesquisa.md` —
   prevalece sobre qualquer formulação feita em outro documento; o IO 0 remete a ele.
 - O **Anexo A** é o único lugar do histórico.
 - A data **oficial** de execução consta **exclusivamente do IO 7**, que não integra este
@@ -349,4 +376,4 @@ Skill: `fichamento`.
 
 A assistência de inteligência artificial é declarada e registrada ação a ação no LOG_IA,
 apêndice do IO 1. A IA **não é autora**, conforme ICMJE e COPE. As regras de uso estão em
-`docs/1_gestao/01_plano.md`, seção 8.
+`docs/01_plano.md`, seção 8.

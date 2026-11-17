@@ -1,39 +1,39 @@
 {
   "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. Palavras significativas: nome, cor e âncora de cada faceta. Termos e strings ficam em descritores.json e strings.json.",
   "fonte": {
-    "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
+    "arquivo": "docs/03_protocolo_estrategia_pesquisa.md",
+    "sha256": "7da9135dd02c7c0a9ea909d00413d37a75ccca992f26b0abe3c2e915c34c94c9"
   },
   "derivado": {
-    "sha256": "a23bad65eaaa67cd5dc42b272e312a40720d3999d2eb5cd5e1c9e5de7bffed82",
+    "sha256": "da8552d690f795bbef60cfbb0977e5d316a046e3cd03fa45d0004ad64a576819",
     "chaves": [
       "facetas[].ancora",
       "facetas[].cor",
-      "facetas[].n",
+      "facetas[].id",
       "facetas[].nome"
     ]
   },
   "facetas": [
     {
-      "n": 1,
+      "id": "FCT1",
       "nome": "Artefatos de representação e organização do conhecimento",
       "cor": "AZUL",
       "ancora": true
     },
     {
-      "n": 2,
+      "id": "FCT2",
       "nome": "Domínio educacional",
       "cor": "AMARELO/OCRE",
       "ancora": true
     },
     {
-      "n": 3,
+      "id": "FCT3",
       "nome": "Práticas do processo de ensino-aprendizagem",
       "cor": "VERMELHO",
       "ancora": false
     },
     {
-      "n": 4,
+      "id": "FCT4",
       "nome": "Fatores situacionais",
       "cor": "LARANJA",
       "ancora": false

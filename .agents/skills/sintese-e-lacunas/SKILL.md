@@ -25,9 +25,9 @@ O desfecho da revisão é a **qualidade da formalização alcançada**:
 | **Granularidade** | em que nível de detalhe? |
 | **Grau de formalização** | taxonomia, tesauro, modelo conceitual, ontologia axiomatizada? |
 
-A QS1 caracteriza directamente as três; a QS4 complementa pela análise de avaliação,
-alinhamento, reuso, manutenção e lacunas. As QS2 e QS3 descrevem **o que** os
-artefatos representam, e não o desfecho.
+A questão de caracterização cobre directamente as três; a de avaliação complementa pela
+análise de avaliação, alinhamento, reuso, manutenção e lacunas. As questões de
+representação descrevem **o que** os artefatos representam, e não o desfecho.
 
 ## 3. A análise da distribuição é achado, não metadado
 

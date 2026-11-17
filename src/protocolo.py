@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 """O protocolo como fonte: lê o documento e deriva os artefatos de máquina.
 
-O documento `docs/2_protocolo/03_protocolo_estrategia_pesquisa.md` é a fonte única
+O documento `docs/03_protocolo_estrategia_pesquisa.md` é a fonte única
 da questão, das facetas, do vocabulário, das strings, das expressões, dos critérios,
 das fontes e do conjunto-semente. Este script lê as seções e grava, em `data/`:
 
-  questoes.json      questão principal, questões específicas e estrutura PICo
+  questoes.json      questão geral (QGR), questões específicas (QER1 a QER4) e PICo
   facetas.json       palavras significativas: nome, cor e âncora de cada faceta
   descritores.json   controle terminológico por faceta; MISTO — as tabelas são
                      derivadas, o estatuto de validação de cada termo é autoral
@@ -50,7 +50,7 @@ import sys
 import unicodedata
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-DOC = RAIZ / "docs" / "2_protocolo" / "03_protocolo_estrategia_pesquisa.md"
+DOC = RAIZ / "docs" / "03_protocolo_estrategia_pesquisa.md"
 DATA = RAIZ / "data"
 
 ARQ = {
@@ -100,7 +100,7 @@ CAMPOS_AUTORAIS = ("verificacao", "escopo", "tipo", "alinhamento", "nota",
                    "veiculo_conferido", "eric")
 
 LEIA = {
-    "questoes": "DERIVADO de docs/2_protocolo/03_protocolo_estrategia_pesquisa.md por "
+    "questoes": "DERIVADO de docs/03_protocolo_estrategia_pesquisa.md por "
                 "src/protocolo.py --gerar. Não editar: regerar.",
     "facetas": "DERIVADO do protocolo por src/protocolo.py --gerar. Palavras significativas: "
                "nome, cor e âncora de cada faceta. Termos e strings ficam em "
@@ -111,8 +111,9 @@ LEIA = {
                    "preserva o estatuto e só acrescenta termo novo. Termo retirado do "
                    "protocolo permanece com no_protocolo=false.",
     "strings": "DERIVADO do protocolo por src/protocolo.py --gerar. String executada de cada "
-               "faceta, composição de E1 a E4 e qual delas é a executada. É deste arquivo "
-               "que a derivação local lê a lista de termos executados.",
+               "faceta (identificada por STRn), composição das expressões EB1 a EB4 com os "
+               "seus identificadores e qual delas é a executada. É deste arquivo que a "
+               "derivação local lê a lista de termos executados.",
     "criterios": "DERIVADO do protocolo por src/protocolo.py --gerar. Critérios de inclusão e "
                  "de exclusão por dimensão e recorte temporal. Regra de borda, regra de "
                  "exceção e regra única de inclusão vivem no IO 1, não aqui.",
@@ -135,7 +136,7 @@ LEIA_AUX = {
         "OPERACIONAIS: a data oficial de execução continua sendo a do IO 7."),
     "pendencias": (
         "Estado das tarefas e pendências abertas do projeto. Escrito pelo pesquisador. Não é "
-        "histórico: o histórico é o Anexo A, docs/1_gestao/historico.md. src/protocolo.py "
+        "histórico: o histórico é o Anexo A, docs/historico.md. src/protocolo.py "
         "--pendencias apenas relata o que encontra, sem escrever aqui."),
 }
 
@@ -214,11 +215,14 @@ def caminhos(obj, prefixo=""):
 # ------------------------------------------------------------------------ questões
 def questoes(t):
     bloco = secao(t, "Questão de revisão")
-    principal = secao(bloco, "Questão principal de revisão")
-    paras = paragrafos(principal)
+    geral = secao(bloco, "Questão geral de revisão")
+    paras = paragrafos(geral)
     if not paras:
-        raise ProtocoloInvalido("questão principal de revisão vazia")
-    pergunta = paras[0]
+        raise ProtocoloInvalido("questão geral de revisão vazia")
+    m = re.match(r"^-\s*QGR:\s*(.+)$", paras[0])
+    if not m:
+        raise ProtocoloInvalido("questão geral sem o identificador QGR")
+    pergunta = m.group(1).strip()
     estrutura = ""
     for p in paras[1:]:
         if p.startswith("Estrutura da questão"):
@@ -227,15 +231,15 @@ def questoes(t):
         raise ProtocoloInvalido("estrutura PICo da questão não declarada")
 
     especificas = []
-    for m in re.finditer(r"^-\s*(QS\d+):\s*(.+)$", secao(bloco, "Questões específicas de revisão"),
+    for m in re.finditer(r"^-\s*(QER\d+):\s*(.+)$", secao(bloco, "Questões específicas de revisão"),
                          re.M):
         especificas.append({"id": m.group(1), "texto": m.group(2).strip()})
     if len(especificas) != 4:
-        raise ProtocoloInvalido(f"esperava QS1 a QS4, achei {len(especificas)}")
-    if [e["id"] for e in especificas] != ["QS1", "QS2", "QS3", "QS4"]:
+        raise ProtocoloInvalido(f"esperava QER1 a QER4, achei {len(especificas)}")
+    if [e["id"] for e in especificas] != ["QER1", "QER2", "QER3", "QER4"]:
         raise ProtocoloInvalido(f"questões específicas fora de ordem: "
                                 f"{[e['id'] for e in especificas]}")
-    return {"questao_principal": pergunta, "estrutura_pico": estrutura,
+    return {"id": "QGR", "questao_principal": pergunta, "estrutura_pico": estrutura,
             "questoes_especificas": especificas}
 
 
@@ -244,20 +248,26 @@ def palavras(t):
     """Nome, cor e papel de cada faceta, da lista de palavras significativas."""
     bloco = secao(t, "Palavras significativas da questão de revisão")
     saida = []
-    for m in re.finditer(r"^-\s*Faceta\s+(\d+):\s*(.+)$", bloco, re.M):
+    for m in re.finditer(r"^-\s*Faceta\s+(\d+)\s*(?:\((FCT\d+)\))?\s*:\s*(.+)$", bloco, re.M):
         n = int(m.group(1))
-        corpo = m.group(2)
+        codigo = m.group(2) or ""
+        if codigo != f"FCT{n}":
+            achado = codigo if codigo else "ausente"
+            raise ProtocoloInvalido(
+                f"faceta {n}: identificador {achado!r} não corresponde a FCT{n}")
+        corpo = m.group(3)
         partes = [p.strip() for p in corpo.split("—")]
         if len(partes) < 2:
             raise ProtocoloInvalido(f"faceta {n}: nome e cor não separados por travessão")
         saida.append({
-            "n": n, "nome": partes[0], "cor": partes[1],
+            "id": f"FCT{n}", "nome": partes[0], "cor": partes[1],
             "ancora": bool(re.search(r"âncora obrigatória\s+" + str(n), corpo)),
         })
     if len(saida) != 4:
         raise ProtocoloInvalido(f"esperava 4 facetas, achei {len(saida)}")
-    if [f["n"] for f in saida] != [1, 2, 3, 4]:
-        raise ProtocoloInvalido(f"facetas fora de numeração: {[f['n'] for f in saida]}")
+    ids = [f["id"] for f in saida]
+    if ids != ["FCT1", "FCT2", "FCT3", "FCT4"]:
+        raise ProtocoloInvalido(f"facetas fora da numeração FCT1 a FCT4: {ids}")
     return saida
 
 
@@ -279,19 +289,20 @@ def _sem_repeticao(seq):
 
 def tabelas(t):
     """As quatro tabelas do controle terminológico, com camadas e instrumentos."""
-    nomes = {f["n"]: f for f in palavras(t)}
+    nomes = {f["id"]: f for f in palavras(t)}
     bloco = secao(t, "Controle terminológico")
     linhas = bloco.splitlines()
 
     saida, atual = [], None
     for linha in linhas:
-        cab = re.match(r"^\|\s*Faceta\s+n[º°]?\s*(\d+)\s*\|", linha)
+        cab = re.match(r"^\|\s*FCT(\d+)\s*\|", linha)
         if cab:
-            n = int(cab.group(1))
-            if n not in nomes:
-                raise ProtocoloInvalido(f"tabela da faceta {n} sem palavra significativa")
-            atual = {"n": n, "nome": nomes[n]["nome"], "ancora": nomes[n]["ancora"],
-                     "cor": nomes[n]["cor"], "instrumentos": "",
+            ident = f"FCT{int(cab.group(1))}"
+            if ident not in nomes:
+                raise ProtocoloInvalido(f"tabela da faceta {ident} sem palavra significativa")
+            atual = {"id": ident, "nome": nomes[ident]["nome"],
+                     "ancora": nomes[ident]["ancora"], "cor": nomes[ident]["cor"],
+                     "instrumentos": "",
                      "camadas": {i: {c: [] for c in CAMADAS} for i in IDIOMAS}}
             saida.append(atual)
             continue
@@ -323,13 +334,25 @@ def tabelas(t):
 def strings(t):
     """Termos executados de cada faceta, extraídos das strings entre aspas."""
     bloco = secao(t, "Strings de busca por faceta")
+    ids_faceta = {f["id"] for f in palavras(t)}
     saida = {}
     for linha in bloco.splitlines():
-        m = re.match(r"^\|\s*String faceta\s+(\d+)\b", linha)
-        if not m:
+        if not linha.lstrip().startswith("|"):
             continue
-        n = int(m.group(1))
-        celula = linha.split(" | ", 1)[1].strip().rstrip("|").strip() if " | " in linha else linha
+        cels = celulas(linha)
+        if len(cels) < 3:
+            continue
+        mi, mf = re.match(r"^STR(\d+)$", cels[0]), re.match(r"^FCT(\d+)$", cels[1])
+        if not (mi and mf):
+            continue
+        n, nf = int(mi.group(1)), int(mf.group(1))
+        if n != nf:
+            raise ProtocoloInvalido(
+                f"{cels[0]} está declarada como {cels[1]}: identificadores não casam")
+        id_faceta = f"FCT{n}"
+        if id_faceta not in ids_faceta:
+            raise ProtocoloInvalido(f"STR{n} sem faceta {id_faceta} nas palavras significativas")
+        celula = cels[2]
         termos = re.findall(r'"([^"]+)"', celula)
         if not termos:
             raise ProtocoloInvalido(f"string da faceta {n} sem termos entre aspas")
@@ -339,33 +362,39 @@ def strings(t):
             raise ProtocoloInvalido(
                 f"string da faceta {n} tem conteúdo fora do padrão \"termo\" OR ...: "
                 f"{residuo.strip()[:60]!r}")
-        saida[n] = {"texto": celula, "termos": termos}
-    if len(saida) != 4:
-        raise ProtocoloInvalido(f"esperava 4 strings de faceta, achei {len(saida)}")
+        saida[id_faceta] = {"id": f"STR{n}", "texto": celula, "termos": termos}
+    if sorted(saida) != ["FCT1", "FCT2", "FCT3", "FCT4"]:
+        raise ProtocoloInvalido(f"esperava uma string por faceta, achei {sorted(saida)}")
     return saida
 
 
 # ---------------------------------------------------------------------- expressões
-ORDINAIS = {"primeira": 1, "segunda": 2, "terceira": 3, "quarta": 4}
-
-
 def expressoes(t):
     """Composição de E1 a E4 e qual delas é a executada."""
     bloco = secao(t, "Expressões de busca")
     composicao, executada = {}, set()
     for linha in bloco.splitlines():
-        m = re.match(r"^\|\s*(Primeira|Segunda|Terceira|Quarta)\s+expressão", linha, re.I)
+        if not linha.lstrip().startswith("|"):
+            continue
+        cels = celulas(linha)
+        if len(cels) < 4:
+            continue
+        m = re.match(r"^EB(\d+)$", cels[0])
         if not m:
             continue
-        n = ORDINAIS[m.group(1).lower()]
-        comp = re.search(r"strings\s+((?:\d\s*(?:\\?\+)?\s*)+)", linha)
-        if not comp:
-            raise ProtocoloInvalido(f"expressão {n} sem composição legível")
-        composicao[n] = [int(x) for x in re.findall(r"\d", comp.group(1))]
-        if "NÃO É EXECUTADA" not in linha:
-            executada.add(n)
-    if sorted(composicao) != [1, 2, 3, 4]:
-        raise ProtocoloInvalido(f"esperava E1 a E4, achei {sorted(composicao)}")
+        ident = cels[0]
+        comb = desescapa(cels[2]).replace("\\", " ").strip()
+        partes = [f"STR{x}" for x in re.findall(r"STR(\d+)", comb)]
+        if not partes:
+            raise ProtocoloInvalido(f"expressão {ident} sem composição legível")
+        if re.sub(r"STR\d+", " ", comb).strip(" +"):
+            raise ProtocoloInvalido(
+                f"expressão {ident}: composição fora do padrão STRn + STRn: {cels[2]!r}")
+        composicao[ident] = partes
+        if "NÃO É EXECUTADA" not in desescapa(cels[3]):
+            executada.add(ident)
+    if sorted(composicao) != ["EB1", "EB2", "EB3", "EB4"]:
+        raise ProtocoloInvalido(f"esperava EB1 a EB4, achei {sorted(composicao)}")
     if len(executada) != 1:
         raise ProtocoloInvalido(f"esperava exatamente uma expressão executada, achei {executada}")
     return composicao, executada.pop()
@@ -374,24 +403,30 @@ def expressoes(t):
 # ---------------------------------------------------------------------- critérios
 def criterios(t):
     bloco = secao(t, "Critérios de elegibilidade")
-    saida, dimensao = [], ""
+    saida, dimensao, ids = [], "", []
     for linha in bloco.splitlines():
         if not linha.strip().startswith("|"):
             continue
         cels = celulas(linha)
-        if len(cels) < 5:
+        if len(cels) < 6:
             continue
-        acao = desescapa(cels[1]).strip()
+        m = re.match(r"^CE(\d+)$", cels[0])
+        if not m:
+            continue
+        acao = desescapa(cels[2]).strip()
         if acao not in ("Incluir", "Excluir"):
-            continue
-        rotulo = desescapa(cels[0].strip("* ")).strip()
+            raise ProtocoloInvalido(f"{cels[0]}: ação {acao!r} não é Incluir nem Excluir")
+        rotulo = desescapa(cels[1].strip("* ")).strip()
         if rotulo:
             dimensao = rotulo
-        saida.append({"dimensao": dimensao, "acao": acao,
-                      "criterio": desescapa(cels[2]).strip(),
-                      "justificativa": desescapa(cels[4]).strip()})
+        ids.append(int(m.group(1)))
+        saida.append({"id": f"CE{int(m.group(1))}", "dimensao": dimensao, "acao": acao,
+                      "criterio": desescapa(cels[3]).strip(),
+                      "justificativa": desescapa(cels[5]).strip()})
     if len(saida) != 9:
         raise ProtocoloInvalido(f"esperava 9 critérios, achei {len(saida)}")
+    if ids != list(range(1, len(saida) + 1)):
+        raise ProtocoloInvalido(f"critérios fora da numeração CE1 a CE9: {ids}")
     if not any(c["dimensao"] == "Intervalo temporal" and c["acao"] == "Incluir"
                for c in saida):
         raise ProtocoloInvalido("critério de recorte temporal não declarado")
@@ -405,7 +440,9 @@ def recorte(t):
             m = re.search(r"após o ano\s+(\d{4})", c["criterio"])
             if not m:
                 raise ProtocoloInvalido("recorte temporal sem ano legível")
-            # "após o ano 2016" é inclusivo a partir de 2017; o protocolo não declara teto.
+            # "após o ano 2016" é inclusivo a partir de 2017. O teto é a data de execução
+            # da busca, e por isso fica em None: o consumidor o resolve pelo ano corrente,
+            # que é o ano em que a revisão executa.
             return {"ano_min": int(m.group(1)) + 1, "ano_max": None, "texto": c["criterio"]}
     raise ProtocoloInvalido("recorte temporal não declarado")
 
@@ -423,13 +460,24 @@ def fontes(t):
     bloco = secao(t, "Fontes de informação")
     bases_bloco = secao(bloco, "Bases de dados")
 
-    bases = []
-    for m in re.finditer(r"^- \((\d+)\)\s*(.+?)\s+—\s+(.+)$", bases_bloco, re.M):
-        bases.append({"n": int(m.group(1)),
-                      "nome": desescapa(m.group(2)).strip(),
-                      "papel": desescapa(m.group(3)).strip()})
+    bases, ids = [], []
+    for linha in bases_bloco.splitlines():
+        if not linha.lstrip().startswith("|"):
+            continue
+        cels = celulas(linha)
+        if len(cels) < 3:
+            continue
+        m = re.match(r"^BD(\d+)$", cels[0])
+        if not m:
+            continue
+        ids.append(int(m.group(1)))
+        bases.append({"id": f"BD{int(m.group(1))}",
+                      "nome": desescapa(cels[1]).strip(),
+                      "papel": desescapa(cels[2]).strip()})
     if len(bases) != 4:
         raise ProtocoloInvalido(f"esperava 4 bases de dados, achei {len(bases)}")
+    if ids != [1, 2, 3, 4]:
+        raise ProtocoloInvalido(f"bases fora da numeração BD1 a BD4: {ids}")
 
     acesso = next((p for p in paragrafos(bases_bloco)
                    if p.startswith("Ordem de execução")), "")
@@ -491,14 +539,14 @@ def _mapa(bloco):
 def sementes(t):
     """Referências, bases esperadas e distribuição declarada do conjunto-semente."""
     bloco = secao(t, "Acervos pessoais")
-    refs = re.findall(r"^- (\d+)\\?\.\s+(.+)$", bloco, re.M)
+    refs = re.findall(r"^- (SE\d+):\s+(.+)$", bloco, re.M)
     if not refs:
-        raise ProtocoloInvalido("nenhuma referência numerada em Acervos pessoais")
+        raise ProtocoloInvalido("nenhuma referência identificada em Acervos pessoais")
 
     mapa = {n: (aut, ano, bases) for n, aut, ano, bases in _mapa(bloco)}
     estudos = []
-    for n, bruto in refs:
-        n = int(n)
+    for ident, bruto in refs:
+        n = int(ident[2:])
         ref = desescapa(bruto).strip()
         m = re.match(r"^(.*?)\s*\((\d{4})\)\.\s*(.*)$", ref)
         if not m:
@@ -512,12 +560,13 @@ def sementes(t):
         if ano_mapa and int(ano) != ano_mapa:
             raise ProtocoloInvalido(f"referência {n}: mapa diz {ano_mapa}, lista diz {ano}")
         estudos.append({
-            "n": n, "autores": autores.strip(), "ano": int(ano),
+            "id": ident, "autores": autores.strip(), "ano": int(ano),
             "titulo": _titulo(resto), "doi": _doi(ref),
             "bases": bases, "chave": f"{primeiro} {ano}",
         })
-    if [e["n"] for e in estudos] != list(range(1, len(estudos) + 1)):
-        raise ProtocoloInvalido("referências fora de numeração sequencial")
+    ids = [e["id"] for e in estudos]
+    if ids != [f"SE{k}" for k in range(1, len(estudos) + 1)]:
+        raise ProtocoloInvalido(f"referências fora da numeração SE1 a SE{len(estudos)}: {ids}")
     return estudos
 
 
@@ -528,7 +577,7 @@ def distribuicao(t, estudos):
     for e in estudos:
         for b in e["bases"]:
             if b not in por_base:
-                raise ProtocoloInvalido(f"semente {e['n']}: base desconhecida {b!r}")
+                raise ProtocoloInvalido(f"semente {e['id']}: base desconhecida {b!r}")
             por_base[b] += 1
     incidencias = sum(por_base.values())
     multi = sum(1 for e in estudos if len(e["bases"]) > 1)
@@ -599,7 +648,7 @@ def conferir(t=None):
         for i in IDIOMAS:
             for c in CAMADAS:
                 if not f["camadas"][i][c]:
-                    problemas.append(f"faceta {f['n']}: camada {c} vazia em {i}")
+                    problemas.append(f"faceta {f['id']}: camada {c} vazia em {i}")
         # Repetição entre camadas é legítima e existe no documento (o mesmo termo
         # aparece em núcleo e em relacionados); a lista final é deduplicada. Dentro
         # da mesma camada, é defeito.
@@ -610,15 +659,15 @@ def conferir(t=None):
                     k = normaliza(termo)
                     if k in vistos:
                         problemas.append(
-                            f"faceta {f['n']} {i}/{c}: {termo!r} repetido na mesma camada")
+                            f"faceta {f['id']} {i}/{c}: {termo!r} repetido na mesma camada")
                     vistos.add(k)
 
     for f in d["facetas"]:
         if not f["cor"]:
-            problemas.append(f"faceta {f['n']}: cor não declarada")
-    ancoras = sorted(f["n"] for f in d["facetas"] if f["ancora"])
-    if ancoras != [1, 2]:
-        problemas.append(f"âncoras deveriam ser as facetas 1 e 2, são {ancoras}")
+            problemas.append(f"faceta {f['id']}: cor não declarada")
+    ancoras = sorted(f["id"] for f in d["facetas"] if f["ancora"])
+    if ancoras != ["FCT1", "FCT2"]:
+        problemas.append(f"âncoras deveriam ser FCT1 e FCT2, são {ancoras}")
 
     # A string só pode usar termo que a tabela do controle terminológico contém.
     # É a remissão que impede string e vocabulário de divergirem em silêncio.
@@ -633,15 +682,19 @@ def conferir(t=None):
                 problemas.append(f"faceta {n}: termo {termo!r} da string não consta da tabela")
 
     comp, exec_ = d["expressoes"], d["executada"]
-    if comp != {1: [1, 2, 3, 4], 2: [1, 2, 3], 3: [1, 2, 4], 4: [1, 2]}:
+    previsto = {"EB1": ["STR1", "STR2", "STR3", "STR4"],
+                "EB2": ["STR1", "STR2", "STR3"],
+                "EB3": ["STR1", "STR2", "STR4"],
+                "EB4": ["STR1", "STR2"]}
+    if comp != previsto:
         problemas.append(f"composição das expressões fora do previsto: {comp}")
-    if exec_ != 4:
-        problemas.append(f"a expressão executada deveria ser E4, é E{exec_}")
-    for a in (2, 3):
-        if not set(comp[4]) < set(comp[a]):
-            problemas.append(f"E4 não é subconjunto estrito de E{a}")
-    if set(comp[4]) != set(comp[2]) & set(comp[3]):
-        problemas.append("E4 não é a interseção de E2 com E3")
+    if exec_ != "EB4":
+        problemas.append(f"a expressão executada deveria ser EB4, é {exec_}")
+    for a in ("EB2", "EB3"):
+        if not set(previsto["EB4"]) < set(previsto[a]):
+            problemas.append(f"EB4 não é subconjunto estrito de {a}")
+    if set(previsto["EB4"]) != set(previsto["EB2"]) & set(previsto["EB3"]):
+        problemas.append("EB4 não é a interseção de EB2 com EB3")
 
     dimensoes = {c["dimensao"] for c in d["criterios"]}
     for esperada in ("Intervalo temporal", "Idioma(s)", "Tipo documental",
@@ -658,7 +711,7 @@ def conferir(t=None):
         problemas.append(f"ordem de execução fora do previsto: {d['fontes']['ordem_execucao']}")
 
     if not d["questoes"]["questao_principal"]:
-        problemas.append("questão principal vazia")
+        problemas.append("questão geral vazia")
     if len(d["questoes"]["questoes_especificas"]) != 4:
         problemas.append("questões específicas não são quatro")
 
@@ -666,9 +719,9 @@ def conferir(t=None):
         problemas.append(f"{len(d['sementes'])} sementes; a faixa do protocolo é 8 a 10")
     for e in d["sementes"]:
         if not e["titulo"] or len(e["titulo"]) < 12:
-            problemas.append(f"semente {e['n']}: título não legível ({e['titulo']!r})")
+            problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
         if not e["bases"]:
-            problemas.append(f"semente {e['n']}: sem base esperada no mapa")
+            problemas.append(f"semente {e['id']}: sem base esperada no mapa")
 
     dist = d["distribuicao"]
     dec = dist["declarado"]
@@ -697,11 +750,11 @@ def conferir(t=None):
 
 def relatorio(d):
     L = []
-    L.append(f"  questão: 1 principal, {len(d['questoes']['questoes_especificas'])} específicas")
+    L.append(f"  questão: 1 geral, {len(d['questoes']['questoes_especificas'])} específicas")
     for f in d["tabelas"]:
-        n_string = len(d["strings"][f["n"]]["termos"])
+        n_string = len(d["strings"][f["id"]]["termos"])
         n_bruto = sum(len(f["termos"][i]) for i in IDIOMAS)
-        L.append(f"  faceta {f['n']} — {f['nome'][:52]:<54} "
+        L.append(f"  faceta {f['id']} — {f['nome'][:52]:<54} "
                  f"tabela {n_bruto:>3} formas / string {n_string:>3} termos   "
                  f"instrumento: {f['instrumentos'][:36]}")
     crit = d["criterios"]
@@ -715,15 +768,20 @@ def relatorio(d):
              f"incidências: {dist['incidencias']}  "
              f"por base: " + ", ".join(f"{b} {v}" for b, v in dist["por_base"].items()))
     L.append(f"  expressões: " + ", ".join(
-        f"E{n}=" + "+".join(map(str, c)) for n, c in sorted(d["expressoes"].items())) +
-        f"   executada: E{d['executada']}")
-    L.append(f"  recorte: {d['recorte']['ano_min']} em diante   limiar: {d['limiar']:.0%}")
+        f"{n}=" + "+".join(x[3:] for x in c)
+        for n, c in sorted(d["expressoes"].items())) +
+        f"   executada: {d['executada']}")
+    recorte = (f"{d['recorte']['ano_min']} a {d['recorte']['ano_max']}"
+               if d["recorte"]["ano_max"]
+               else f"{d['recorte']['ano_min']} até a data de execução")
+    L.append(f"  recorte: {recorte}   limiar: {d['limiar']:.0%}")
     return "\n".join(L)
 
 
 # -------------------------------------------------------------------- assinaturas
 def _sub_questoes(d):
-    return {k: d[k] for k in ("questao_principal", "estrutura_pico", "questoes_especificas")}
+    return {k: d[k] for k in ("id", "questao_principal", "estrutura_pico",
+                              "questoes_especificas")}
 
 
 def _sub_facetas(d):
@@ -841,9 +899,9 @@ def conferir_dados():
 
     doc = analisa()
     conjuntos = {
-        "facetas": {f["n"] for f in dados["facetas"]["facetas"]},
-        "descritores": {f["n"] for f in dados["descritores"]["facetas"]},
-        "strings": {f["n"] for f in dados["strings"]["facetas"]},
+        "facetas": {f["id"] for f in dados["facetas"]["facetas"]},
+        "descritores": {f["id"] for f in dados["descritores"]["facetas"]},
+        "strings": {f["faceta"] for f in dados["strings"]["facetas"]},
     }
     if len({tuple(sorted(v)) for v in conjuntos.values()}) != 1:
         problemas.append(f"facetas divergem entre arquivos: {conjuntos}")
@@ -853,12 +911,12 @@ def conferir_dados():
     for f in dados["strings"]["facetas"]:
         for termo in f["termos"]:
             if normaliza(termo) not in tabelados:
-                problemas.append(f"strings: termo {termo!r} da faceta {f['n']} não consta "
+                problemas.append(f"strings: termo {termo!r} da faceta {f['id']} não consta "
                                  f"de descritores.json")
 
-    protocolo_n = [e["n"] for e in dados["sementes"]["estudos"] if "n" in e]
-    if len(protocolo_n) != len(doc["sementes"]):
-        avisos.append(f"sementes.json tem {len(protocolo_n)} estudos e o protocolo "
+    protocolo_ids = [e["id"] for e in dados["sementes"]["estudos"] if "id" in e]
+    if len(protocolo_ids) != len(doc["sementes"]):
+        avisos.append(f"sementes.json tem {len(protocolo_ids)} estudos e o protocolo "
                       f"{len(doc['sementes'])}; ver no_protocolo=false")
 
     # Estatuto: termo do protocolo sem bloco de validação seria termo silenciosamente
@@ -869,7 +927,7 @@ def conferir_dados():
                 k = normaliza(termo)
                 e = f.get("estatuto", {}).get(idioma, {}).get(k)
                 if e is None:
-                    problemas.append(f"descritores: faceta {f['n']} {idioma} {termo!r} "
+                    problemas.append(f"descritores: faceta {f['id']} {idioma} {termo!r} "
                                      f"sem bloco de estatuto")
     if AUX["consultas"].exists():
         for c in json.loads(AUX["consultas"].read_text(encoding="utf-8")).get("consultas", []):
@@ -950,10 +1008,10 @@ def _garante_validacoes(validacoes, idioma, livre):
 
 def _merge_descritores(facetas_novas, existente):
     """Preserva o estatuto por (faceta, idioma, termo normalizado)."""
-    anterior = {f["n"]: f for f in existente.get("facetas", [])}
+    anterior = {f["id"]: f for f in existente.get("facetas", []) if "id" in f}
     facetas = []
     for f in facetas_novas:
-        est_ant = anterior.get(f["n"], {}).get("estatuto", {})
+        est_ant = anterior.get(f["id"], {}).get("estatuto", {})
         f = {k: v for k, v in f.items()}
         f["estatuto"] = {}
         for idioma in IDIOMAS:
@@ -1041,10 +1099,11 @@ def gerar(t=None):
            {"recorte": d["recorte"], "criterios": d["criterios"]}, fonte)
     _grava(ARQ["fontes"], "fontes", d["fontes"], fonte)
     _grava(ARQ["strings"], "strings",
-           {"facetas": [{"n": f["n"], "string": d["strings"][f["n"]]["texto"],
-                         "termos": _sem_repeticao(d["strings"][f["n"]]["termos"])}
+           {"facetas": [{"id": d["strings"][f["id"]]["id"], "faceta": f["id"],
+                         "string": d["strings"][f["id"]]["texto"],
+                         "termos": _sem_repeticao(d["strings"][f["id"]]["termos"])}
                         for f in d["facetas"]],
-            "expressoes": {str(n): c for n, c in sorted(d["expressoes"].items())},
+            "expressoes": {k: d["expressoes"][k] for k in sorted(d["expressoes"])},
             "executada": d["executada"]}, fonte)
 
     existentes = _existente(ARQ["descritores"])
@@ -1091,7 +1150,7 @@ def pendencias_relatorio():
         s = carrega(ARQ["sementes"])
         for e in s["estudos"]:
             if e.get("no_protocolo") is False:
-                linhas.append(f"[semente fora do protocolo] {e.get('n')} {e.get('chave','')} "
+                linhas.append(f"[semente fora do protocolo] {e.get('id')} {e.get('chave','')} "
                               f"— decidir: remover com registro ou reincluir no protocolo")
                 continue
             vazios = []
@@ -1100,7 +1159,7 @@ def pendencias_relatorio():
                 if not v or v.startswith(("A CONFERIR", "a conferir")) or "PENDÊNCIA" in v:
                     vazios.append(rotulo)
             if vazios:
-                linhas.append(f"[semente {e['n']} {e.get('chave','')}] pendente: "
+                linhas.append(f"[semente {e['id']} {e.get('chave','')}] pendente: "
                               f"{', '.join(vazios)}")
     if ARQ["descritores"].exists():
         d = carrega(ARQ["descritores"])
@@ -1114,7 +1173,7 @@ def pendencias_relatorio():
         if sem_estatuto:
             linhas.append(f"[descritores] {sem_estatuto} termo(s) sem estatuto de validação "
                           f"— rodar src/validar_termos.py --validar")
-        orfaos = [f"{f['n']}/{i}:{e.get('termo')}" for f in d["facetas"]
+        orfaos = [f"{f['id']}/{i}:{e.get('termo')}" for f in d["facetas"]
                   for i, termos in f.get("estatuto", {}).items()
                   for e in termos.values() if e.get("no_protocolo") is False]
         if orfaos:
@@ -1144,11 +1203,11 @@ def _mutacoes(t):
                  if l.startswith("| *Termos relacionados") and "modelo conceitual" in l)
     sem_linha = linhas[:i_rel] + linhas[i_rel + 1:]
 
-    i_str = next(i for i, l in enumerate(linhas) if l.startswith("| String faceta 2"))
+    i_str = next(i for i, l in enumerate(linhas) if l.startswith("| STR2 |"))
     string_quebrada = list(linhas)
     string_quebrada[i_str] = string_quebrada[i_str].replace(" OR ", ", ", 1)
 
-    sem_semente = [l for l in linhas if not l.startswith("- 10\\.")]
+    sem_semente = [l for l in linhas if not l.startswith("- SE10:")]
 
     dist_errada = [l.replace("Scopus, 6;", "Scopus, 7;", 1) for l in linhas]
 
@@ -1160,10 +1219,20 @@ def _mutacoes(t):
         "\\- representação do conhecimento \\- representação do conhecimento "
         "\\- organização do conhecimento", 1)
 
-    sem_principal = [l for l in linhas if l.strip() != "### Questão principal de revisão"]
-    sem_qs4 = [l for l in linhas if not l.startswith("- QS4:")]
+    sem_geral = [l for l in linhas if l.strip() != "### Questão geral de revisão"]
+    sem_qs4 = [l for l in linhas if not l.startswith("- QER4:")]
     sem_idioma = [l for l in linhas if "| **Idioma(s)** |" not in l]
-    sem_brapci = [l for l in linhas if not l.startswith("- (4) BRAPCI")]
+    sem_brapci = [l for l in linhas if not l.startswith("| BD4 |")]
+
+    # Defeitos que só os identificadores novos denunciam.
+    sem_qgr = [l.replace("- QGR:", "", 1) for l in linhas]
+    faceta_trocada = [l.replace("Faceta 2 (FCT2)", "Faceta 2 (FCT3)", 1) for l in linhas]
+    str_trocada = [l.replace("| STR2 | FCT2", "| STR2 | FCT3", 1) for l in linhas]
+    criterio_repetido = [l.replace("| CE3 |", "| CE2 |", 1) for l in linhas]
+    base_repetida = [l.replace("| BD3 |", "| BD2 |", 1) for l in linhas]
+    semente_fora_de_ordem = [l.replace("- SE10:", "- SE11:", 1) for l in linhas]
+    comp_trocada = [l.replace("STR3", "STR4", 1) if l.startswith("| EB2 |") else l
+                    for l in linhas]
 
     return {
         "linha de faceta removida": "\n".join(sem_linha),
@@ -1171,10 +1240,17 @@ def _mutacoes(t):
         "semente ausente": "\n".join(sem_semente),
         "distribuição contradita": "\n".join(dist_errada),
         "termo duplicado na faceta": "\n".join(duplicada),
-        "questão principal removida": "\n".join(sem_principal),
-        "QS4 removida": "\n".join(sem_qs4),
+        "questão geral removida": "\n".join(sem_geral),
+        "QER4 removida": "\n".join(sem_qs4),
         "critério de idioma removido": "\n".join(sem_idioma),
         "base BRAPCI removida": "\n".join(sem_brapci),
+        "questão geral sem QGR": "\n".join(sem_qgr),
+        "faceta com identificador trocado": "\n".join(faceta_trocada),
+        "string apontando para outra faceta": "\n".join(str_trocada),
+        "critério com identificador repetido": "\n".join(criterio_repetido),
+        "base com identificador repetido": "\n".join(base_repetida),
+        "semente fora de numeração": "\n".join(semente_fora_de_ordem),
+        "expressão com composição trocada": "\n".join(comp_trocada),
     }
 
 
@@ -1204,6 +1280,14 @@ def _autoteste_dados():
         print("  [FALHA] reprovou indevidamente: campo autoral em descritores.json")
         falhas += 1
 
+    ident = json.loads(ARQ["facetas"].read_text(encoding="utf-8"))
+    ident["facetas"][0]["id"] = "FCT9"
+    if verifica_dado(ARQ["facetas"], ident):
+        print("  [ok] reprovou: identificador adulterado em facetas.json")
+    else:
+        print("  [FALHA] aprovou: identificador adulterado em facetas.json")
+        falhas += 1
+
     defasado = json.loads(ARQ["strings"].read_text(encoding="utf-8"))
     defasado["fonte"]["sha256"] = "0" * 64
     if verifica_dado(ARQ["strings"], defasado):
@@ -1231,7 +1315,7 @@ def autoteste(t=None):
     falhas += _autoteste_dados()
     if falhas:
         return 1
-    print(f"\n{len(mut)} defeitos injetados no documento e 3 nas assinaturas, "
+    print(f"\n{len(mut)} defeitos injetados no documento e 4 nas assinaturas, "
           f"todos com o resultado esperado.")
     return 0
 

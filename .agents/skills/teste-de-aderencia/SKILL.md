@@ -22,7 +22,7 @@ o denominador são as sementes que cada base indexa.
 
 O conjunto-semente é derivado do documento do protocolo. As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
-`--registrar` antes do teste; ver `README.md`, seção Scripts, e `src/README.md`.
+`--registrar` antes do teste; ver `README.md`, seção Scripts.
 
 ## 2. Limiar e consequência
 

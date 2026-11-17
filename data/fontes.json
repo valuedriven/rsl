@@ -1,14 +1,14 @@
 {
   "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. Bases, ordem de execução, via de acesso, acervos especiais e ferramenta de gestão. O conjunto-semente fica em sementes.json.",
   "fonte": {
-    "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
-    "sha256": "3b6e611540e57ba8162b882454701c1bcf39943f8eb7c6d2c95aebc0969f8da8"
+    "arquivo": "docs/03_protocolo_estrategia_pesquisa.md",
+    "sha256": "7da9135dd02c7c0a9ea909d00413d37a75ccca992f26b0abe3c2e915c34c94c9"
   },
   "derivado": {
-    "sha256": "d9e6002d98e2c158c88339f260f4992fbc483b580417967d88e23f6dd9fb53a5",
+    "sha256": "dc0adedd7afe8f6aab04ed65f9f6b66ac5e58349b422a7dde9b295c4c7dd1d8a",
     "chaves": [
       "acervos_especiais",
-      "bases[].n",
+      "bases[].id",
       "bases[].nome",
       "bases[].papel",
       "ferramenta_gestao[].tema",
@@ -19,24 +19,24 @@
   },
   "bases": [
     {
-      "n": 1,
+      "id": "BD1",
       "nome": "Web of Science (Core Collection)",
-      "papel": "cobertura multidisciplinar consolidada e indexação de citações, que viabiliza as pesquisas backward e forward e a análise bibliométrica do Módulo 4."
+      "papel": "Cobertura multidisciplinar consolidada e indexação de citações, que viabiliza as pesquisas backward e forward e a análise bibliométrica do Módulo 4."
     },
     {
-      "n": 2,
+      "id": "BD2",
       "nome": "Scopus",
-      "papel": "maior cobertura de anais de computação e engenharia (LNCS/LNAI, IEEE, ACM), absorvendo as fontes de Web Semântica e Engenharia de Ontologias não consultadas isoladamente."
+      "papel": "Maior cobertura de anais de computação e engenharia (LNCS/LNAI, IEEE, ACM), absorvendo as fontes de Web Semântica e Engenharia de Ontologias não consultadas isoladamente."
     },
     {
-      "n": 3,
+      "id": "BD3",
       "nome": "ERIC",
-      "papel": "base de referência do domínio educacional, com vocabulário controlado próprio (ERIC Thesaurus), tomado como referência documental dos descritores do domínio educacional nos termos da regra única de validação terminológica do Item 2."
+      "papel": "Base de referência do domínio educacional, com vocabulário controlado próprio (ERIC Thesaurus), tomado como referência documental dos descritores do domínio educacional nos termos da regra única de validação terminológica do Item 2."
     },
     {
-      "n": 4,
+      "id": "BD4",
       "nome": "BRAPCI",
-      "papel": "produção nacional em Ciência da Informação, pouco indexada nas bases internacionais; assegura a literatura em português sobre organização do conhecimento."
+      "papel": "Produção nacional em Ciência da Informação, pouco indexada nas bases internacionais; assegura a literatura em português sobre organização do conhecimento."
     }
   ],
   "ordem_execucao": [

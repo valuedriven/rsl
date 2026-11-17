@@ -28,7 +28,7 @@ restringe. "Geral" nomeia a composição, não o alcance: a expressão das quatr
 ## 2. Três camadas, três idiomas
 
 `nucleo` · `proximos` · `relacionados`, em `pt`, `en`, `es`, nas tabelas de controle
-terminológico de `docs/2_protocolo/03_protocolo_estrategia_pesquisa.md`.
+terminológico de `docs/03_protocolo_estrategia_pesquisa.md`.
 
 A camada não é grau de confiança: é **distância conceitual ao termo livre**. Ela
 decide o que se corta primeiro quando uma consulta encosta no teto de caracteres de
