@@ -1,0 +1,42 @@
+{
+  "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. Palavras significativas: nome, cor e âncora de cada faceta. Termos e strings ficam em descritores.json e strings.json.",
+  "fonte": {
+    "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
+    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+  },
+  "derivado": {
+    "sha256": "a23bad65eaaa67cd5dc42b272e312a40720d3999d2eb5cd5e1c9e5de7bffed82",
+    "chaves": [
+      "facetas[].ancora",
+      "facetas[].cor",
+      "facetas[].n",
+      "facetas[].nome"
+    ]
+  },
+  "facetas": [
+    {
+      "n": 1,
+      "nome": "Artefatos de representação e organização do conhecimento",
+      "cor": "AZUL",
+      "ancora": true
+    },
+    {
+      "n": 2,
+      "nome": "Domínio educacional",
+      "cor": "AMARELO/OCRE",
+      "ancora": true
+    },
+    {
+      "n": 3,
+      "nome": "Práticas do processo de ensino-aprendizagem",
+      "cor": "VERMELHO",
+      "ancora": false
+    },
+    {
+      "n": 4,
+      "nome": "Fatores situacionais",
+      "cor": "LARANJA",
+      "ancora": false
+    }
+  ]
+}

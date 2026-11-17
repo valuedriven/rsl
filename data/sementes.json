@@ -1,0 +1,259 @@
+{
+  "_leia": "MISTO. Referências, mapa por base, distribuição e limiar são DERIVADOS do protocolo por src/protocolo.py --gerar. Os campos de conferência (verificação, escopo, tipo, alinhamento, nota, veículo, eric) são AUTORAIS e nunca são sobrescritos. Semente retirada do protocolo permanece com no_protocolo=false.",
+  "fonte": {
+    "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
+    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+  },
+  "derivado": {
+    "sha256": "eddb4e2044ce31915690832b3d07f4c3b9600c4ccfa085266bfec1a5944ac109",
+    "chaves": [
+      "distribuicao.declarado.em_mais_de_uma_base",
+      "distribuicao.declarado.em_uma_so",
+      "distribuicao.declarado.incidencias",
+      "distribuicao.declarado.por_base.BRAPCI",
+      "distribuicao.declarado.por_base.ERIC",
+      "distribuicao.declarado.por_base.Scopus",
+      "distribuicao.declarado.por_base.WoS",
+      "distribuicao.declarado.registros",
+      "distribuicao.em_mais_de_uma_base",
+      "distribuicao.em_uma_so",
+      "distribuicao.incidencias",
+      "distribuicao.por_base.BRAPCI",
+      "distribuicao.por_base.ERIC",
+      "distribuicao.por_base.Scopus",
+      "distribuicao.por_base.WoS",
+      "distribuicao.registros",
+      "estudos[].ano",
+      "estudos[].autores",
+      "estudos[].bases[]",
+      "estudos[].chave",
+      "estudos[].doi",
+      "estudos[].n",
+      "estudos[].no_protocolo",
+      "estudos[].titulo",
+      "limiar"
+    ]
+  },
+  "limiar": 0.8,
+  "distribuicao": {
+    "por_base": {
+      "WoS": 4,
+      "Scopus": 6,
+      "ERIC": 3,
+      "BRAPCI": 2
+    },
+    "incidencias": 15,
+    "registros": 10,
+    "em_mais_de_uma_base": 4,
+    "em_uma_so": 6,
+    "declarado": {
+      "por_base": {
+        "Scopus": 6,
+        "WoS": 4,
+        "ERIC": 3,
+        "BRAPCI": 2
+      },
+      "incidencias": 15,
+      "registros": 10,
+      "em_mais_de_uma_base": 4,
+      "em_uma_so": 6
+    }
+  },
+  "estudos": [
+    {
+      "n": 1,
+      "autores": "Alvarenga, V. B. L., & Cristovão, H. M.",
+      "ano": 2023,
+      "titulo": "Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica.",
+      "doi": "",
+      "bases": [
+        "BRAPCI"
+      ],
+      "chave": "Alvarenga 2023",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão); sem DOI, conferida na RICI.",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023",
+      "eric": "",
+      "no_protocolo": true
+    },
+    {
+      "n": 2,
+      "autores": "Das, S., Naskar, D., & Roy, S.",
+      "ano": 2022,
+      "titulo": "Reorganizing Educational Institutional Domain using Faceted Ontological Principles.",
+      "doi": "10.5771/0943-7444-2022-1-6",
+      "bases": [
+        "WoS",
+        "Scopus"
+      ],
+      "chave": "Das 2022",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Knowledge Organization, 49(1), 6-21, 2022",
+      "eric": "",
+      "no_protocolo": true
+    },
+    {
+      "n": 3,
+      "autores": "Chi, Y.-L., Chen, T.-Y., & Hung, C.",
+      "ano": 2018,
+      "titulo": "Learning adaptivity in support of flipped learning: An ontological problem-solving approach.",
+      "doi": "10.1111/exsy.12246",
+      "bases": [
+        "Scopus"
+      ],
+      "chave": "Chi 2018",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Expert Systems, 2018",
+      "eric": "",
+      "no_protocolo": true
+    },
+    {
+      "n": 4,
+      "autores": "Shvets, O., Murtazin, K., Meeter, M., & Piho, G.",
+      "ano": 2024,
+      "titulo": "Towards a Domain Model for Learning and Teaching.",
+      "doi": "10.5220/0012471400003645",
+      "bases": [
+        "Scopus"
+      ],
+      "chave": "Shvets 2024",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "MODELSWARD 2024, SciTePress",
+      "eric": "",
+      "no_protocolo": true
+    },
+    {
+      "n": 5,
+      "autores": "Sousa, E. E. de, & Duque, C.",
+      "ano": 2018,
+      "titulo": "Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade.",
+      "doi": "10.5433/1981-8920.2018v23n1p271",
+      "bases": [
+        "BRAPCI"
+      ],
+      "chave": "Sousa 2018",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Informação & Informação, 23(1), 271-289, 2018 (UEL)",
+      "eric": "",
+      "no_protocolo": true
+    },
+    {
+      "n": 6,
+      "autores": "Iatrellis, O., Kameas, A., & Fitsilis, P.",
+      "ano": 2019,
+      "titulo": "EDUC8 ontology: semantic modeling of multi-facet learning pathways.",
+      "doi": "10.1007/s10639-019-09872-9",
+      "bases": [
+        "ERIC"
+      ],
+      "chave": "Iatrellis 2019",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão); PENDÊNCIA: volume, número e páginas não conferidos.",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "Ressalva de escopo: o alinhamento informado termina em apoiar a personalização do ensino, dimensão retirada do recorte em 07/11; a contribuição declarada é representacional — ontologia que conceitualiza o domínio dos percursos de aprendizagem —, e a personalização é aplicação do artefato, não o artefato. Decisão na triagem, com o texto completo.",
+      "veiculo_conferido": "Education and Information Technologies, 2019 (Springer)",
+      "eric": "a conferir",
+      "no_protocolo": true
+    },
+    {
+      "n": 7,
+      "autores": "Chimalakonda, S., & Nori, K. V.",
+      "ano": 2020,
+      "titulo": "An ontology based modeling framework for design of educational technologies.",
+      "doi": "10.1186/s40561-020-00135-6",
+      "bases": [
+        "ERIC",
+        "WoS",
+        "Scopus"
+      ],
+      "chave": "Chimalakonda 2020",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão); PENDÊNCIA: número de artigo (1 ou 28) não conferido.",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "Pendência bibliográfica: número de artigo informado como 1 na quinta versão e 28 na sexta.",
+      "veiculo_conferido": "Smart Learning Environments, 7, 2020",
+      "eric": "a conferir",
+      "no_protocolo": true
+    },
+    {
+      "n": 8,
+      "autores": "Cenka, B. A. N., Santoso, H. B., & Junus, K.",
+      "ano": 2023,
+      "titulo": "Personal learning environment toward lifelong learning: an ontology-driven conceptual model.",
+      "doi": "10.1080/10494820.2022.2039947",
+      "bases": [
+        "ERIC",
+        "Scopus"
+      ],
+      "chave": "Cenka 2023",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Interactive Learning Environments, 31(10), 6445-6461, 2023",
+      "eric": "a conferir",
+      "no_protocolo": true
+    },
+    {
+      "n": 9,
+      "autores": "Piriyapongpipat, P., Goldin, S., & Ditcharoen, N.",
+      "ano": 2024,
+      "titulo": "An alternative approach to ontology-based curriculum development in higher education.",
+      "doi": "10.1186/s40561-024-00307-8",
+      "bases": [
+        "WoS",
+        "Scopus"
+      ],
+      "chave": "Piriyapongpipat 2024",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Smart Learning Environments, 11(1), 2024, p. 1-19",
+      "eric": "",
+      "no_protocolo": true
+    },
+    {
+      "n": 10,
+      "autores": "Khoo, C. S. G., & Kan, R. Y. P.",
+      "ano": 2020,
+      "titulo": "An ontology for conceptual analysis of signature pedagogies.",
+      "doi": "10.5771/9783956507762",
+      "bases": [
+        "WoS"
+      ],
+      "chave": "Khoo 2020",
+      "verificacao": "CONFIRMADA em fonte em 08/11/2026 (Anexo A, 6ª versão).",
+      "escopo": "DENTRO",
+      "tipo": "primário",
+      "alinhamento": "A CONFERIR no texto completo (P–Co–I–O não registrado)",
+      "nota": "",
+      "veiculo_conferido": "Lykke et al. (Eds.), Knowledge Organization at the Interface: Proceedings of the 16th ISKO Conference, 2020, Aalborg; Ergon Verlag, p. 484-488",
+      "eric": "",
+      "no_protocolo": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "_leia": "Estado das tarefas e pendências abertas do projeto. Escrito pelo pesquisador. Não é histórico: o histórico é o Anexo A, docs/1_gestao/log.md. src/protocolo.py --pendencias apenas relata o que encontra, sem escrever aqui.",
+  "versao": 1,
+  "tarefas": []
+}

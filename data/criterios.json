@@ -1,0 +1,80 @@
+{
+  "_leia": "DERIVADO do protocolo por src/protocolo.py --gerar. Critérios de inclusão e de exclusão por dimensão e recorte temporal. Regra de borda, regra de exceção e regra única de inclusão vivem no IO 1, não aqui.",
+  "fonte": {
+    "arquivo": "docs/2_protocolo/03_protocolo_estrategia_pesquisa.md",
+    "sha256": "cc370b5edeed0d42346e24721422ee0ef2639e20b2bb02a68c38d34c78105a00"
+  },
+  "derivado": {
+    "sha256": "f2f7c85b1058e701bd9505a2552e3de5d655de6cf35794ae3e3244a98e1725f3",
+    "chaves": [
+      "criterios[].acao",
+      "criterios[].criterio",
+      "criterios[].dimensao",
+      "criterios[].justificativa",
+      "recorte.ano_max",
+      "recorte.ano_min",
+      "recorte.texto"
+    ]
+  },
+  "recorte": {
+    "ano_min": 2017,
+    "ano_max": null,
+    "texto": "Documentos publicados após o ano 2016 — isto é, de 2017 em diante."
+  },
+  "criterios": [
+    {
+      "dimensao": "Intervalo temporal",
+      "acao": "Incluir",
+      "criterio": "Documentos publicados após o ano 2016 — isto é, de 2017 em diante.",
+      "justificativa": "Decisão de projeto, por restrição de prazo e de equipe, que fixa o início pela capacidade de triagem no prazo disponível. Não é marco técnico-conceitual: o marco anterior, 2012, apoiava-se na difusão da noção de knowledge graph e na maturidade dos padrões da Web Semântica, razão que sai do protocolo com a faceta de instanciação."
+    },
+    {
+      "dimensao": "Intervalo temporal",
+      "acao": "Excluir",
+      "criterio": "Documentos publicados antes do ano 2017.",
+      "justificativa": "Decisão de projeto, e não por mérito. A perda é declarada como limitação no relatório: os documentos de 2012 a 2016 — e as obras seminais anteriores, incluindo as especificações fundadoras de metadados educacionais — são recuperados exclusivamente por backward search sobre os estudos incluídos e utilizados como fundamentação teórica, sem integrar o cômputo do portfólio."
+    },
+    {
+      "dimensao": "Idioma(s)",
+      "acao": "Incluir",
+      "criterio": "Documentos publicados nos idiomas português, inglês e espanhol.",
+      "justificativa": "idiomas de domínio da equipe de revisão, que cobrem a produção internacional dominante do campo e a produção nacional e ibero-americana em Ciência da Informação e em Informática na Educação, dispensando tradução automática e o risco de erro interpretativo dela decorrente."
+    },
+    {
+      "dimensao": "Tipo documental",
+      "acao": "Incluir",
+      "criterio": "Artigos de periódicos revisados por pares; trabalhos completos em anais de eventos; teses e dissertações; capítulos de livro; relatórios técnicos e especificações de ontologias e vocabulários (literatura cinzenta controlada); revisões sistemáticas e de escopo.",
+      "justificativa": "A literatura sobre artefatos de representação circula de modo relevante em anais de eventos (FOIS, ESWC, ISKO, AIED) e em especificações técnicas, de sorte que a restrição a periódicos produziria viés de disseminação. Revisões anteriores são incluídas como fonte de backward search, não como evidência primária."
+    },
+    {
+      "dimensao": "Localização de itens",
+      "acao": "Excluir",
+      "criterio": "Documentos não localizados em texto completo na segunda filtragem do processo, referente à leitura seletiva.",
+      "justificativa": ""
+    },
+    {
+      "dimensao": "Adequação temática",
+      "acao": "Excluir",
+      "criterio": "Documentos não pertinentes ao escopo temático da questão de revisão estabelecida.",
+      "justificativa": ""
+    },
+    {
+      "dimensao": "Domínio de aplicação",
+      "acao": "Incluir",
+      "criterio": "Artefatos propostos para, aplicados a ou avaliados no domínio educacional, em qualquer nível ou modalidade de ensino — educação básica, superior, profissional e tecnológica, educação a distância e aprendizagem em ambientes digitais.",
+      "justificativa": "As lacunas a serem enunciadas ao final endereçam esse domínio e precisam ser constatadas por comparação entre as soluções nele existentes, e não inferidas por ausência."
+    },
+    {
+      "dimensao": "Domínio de aplicação",
+      "acao": "Excluir",
+      "criterio": "Artefatos de domínios diversos do educacional.",
+      "justificativa": "Preserva-se a densidade probatória do portfólio e a comensurabilidade entre os itens analisados. Soluções de outros domínios, quando citadas pelos estudos incluídos como modelos reutilizados, alinhados ou estendidos, são registradas no fichamento como referência de reuso, sem integrar o portfólio."
+    },
+    {
+      "dimensao": "Outros critérios",
+      "acao": "Excluir",
+      "criterio": "Editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos simples e expandidos sem texto completo, e versões preliminares quando houver versão posterior do mesmo trabalho — mantém-se a mais completa.",
+      "justificativa": "Documentos sem conteúdo analítico suficiente para o fichamento."
+    }
+  ]
+}
