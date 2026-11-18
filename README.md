@@ -14,21 +14,20 @@ repete o conteúdo dos documentos.
 
 | Onde | O que é |
 | --- | --- |
-| `docs/` | conteúdo da revisão: IO 0 e IO 1, o Anexo A e as fichas de busca; os arquivos do pesquisador e os que o agente mantém |
-| `data/` | o que é alimentado — os dois JSON e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
+| `docs/` | conteúdo da revisão: IO 0, IO 1 e as fichas de busca; os arquivos do pesquisador e os que o agente mantém |
+| `data/` | o que é alimentado — os dois JSON, o Anexo A e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
 | `src/` | quatro scripts de execução |
 | `.agents/skills/` | 21 competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
 
-Este pacote reúne o **IO 0**, o **IO 1**, o **Anexo A** e as quatro **fichas de busca**. Os
-IO 2 a IO 7 e o portfólio não integram este repositório.
+Este pacote reúne o **IO 0**, o **IO 1**, as quatro **fichas de busca** e o **Anexo A**,
+em `data/historico.md`. Os IO 2 a IO 7 e o portfólio não integram este repositório.
 
 ## Mapa
 
 | Caminho | O que contém | Consultar quando |
 | --- | --- | --- |
 | `docs/01_plano.md` | IO 0: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
-| `docs/historico.md` | Anexo A: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
 | `docs/02_protocolo_informacoes_gerais.md` | IO 1, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
 | `docs/03_protocolo_estrategia_pesquisa.md` | IO 1, estratégias de pesquisa: questão de revisão (QGR, QER1–QER4), facetas, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única do vocabulário | montar ou conferir a busca |
 | `docs/busca_base_1_web_of_science.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
@@ -39,6 +38,7 @@ IO 2 a IO 7 e o portfólio não integram este repositório.
 | `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/validar_termos.py` | validação assistida no TBCI e no UNESCO Thesaurus, com a planilha como registro | conferir o estatuto de cada termo |
 | `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
+| `data/historico.md` | Anexo A: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
 
 Em `data/`, a procedência de cada arquivo:
 
@@ -46,6 +46,7 @@ Em `data/`, a procedência de cada arquivo:
 | --- | --- | --- |
 | `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `--sincronizar` |
 | `data/registro_execucao.json` | sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `--registrar` |
+| `data/historico.md` | Anexo A: o único lugar do histórico — decisões, verificações, emendas e pendências, com data e alcance | pesquisador |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
 | `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `io2_contagens.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
 | `data/evidencia/` | resposta bruta de cada consulta terminológica | `validar_termos.py` |
@@ -54,8 +55,8 @@ Em `data/`, a procedência de cada arquivo:
 As pastas de dados brutos e de arquivo — `execucoes/`, `evidencia/` e `arquivo/` — são
 criadas quando o primeiro arquivo chega e não existem hoje. Na raiz de `data/` estão hoje
 os dois JSON e as duas planilhas geradas, `validacao_termologica.csv` e
-`semente_aderencia.csv`; não há `descritores.json`, `consultas.json` nem
-`pendencias.json`.
+`semente_aderencia.csv`; é também onde o Anexo A se registra, em `historico.md`. Não há
+`descritores.json`, `consultas.json` nem `pendencias.json`.
 
 O que é **derivado do documento não vira arquivo**: questão, facetas, strings, expressões,
 critérios e fontes são lidos de `docs/03_protocolo_estrategia_pesquisa.md` a cada execução.
@@ -365,7 +366,7 @@ Skill: `fichamento`.
 - **Toda decisão que altere questão, facetas, critérios ou busca é emenda.** Altera-se o
   documento-fonte — o IO 0, o IO 1 ou a ficha da base — e, quando o dado é o metadado das
   sementes, reconcilia-se com `--sincronizar`; a decisão se registra no Anexo A,
-  `docs/historico.md`. Não se edita planilha de saída nem se corrige o produto à mão:
+  `data/historico.md`. Não se edita planilha de saída nem se corrige o produto à mão:
   corrige-se a fonte e confere-se de novo — a exceção é a planilha de validação, que é o
   registro do estatuto dos termos. Skill: `registrar-decisao`.
 - **Rastreabilidade.** Questão, objetivos, facetas, quadro terminológico, strings e

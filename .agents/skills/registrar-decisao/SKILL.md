@@ -42,7 +42,7 @@ decidida, não esquecida.
 - **O instrumento guarda a última definição.** Sem histórico, sem data.
 - **O Anexo A guarda o percurso**: linha do tempo, decisões revogadas, emendas,
   verificações. É o único lugar com datas, além do cronograma.
-- **A pendência** vive no Anexo A, em `docs/historico.md`. Pendência fechada
+- **A pendência** vive no Anexo A, em `data/historico.md`. Pendência fechada
   registra-se com o que a fechou — não se apaga.
 
 ## 4. O ciclo, depois do julgamento
