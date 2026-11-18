@@ -58,7 +58,7 @@ o que o derivador aplica.
 executadas uma a uma, com o custo de execução que isso traz.
 
 O retorno da execução experimental **não compõe o corpus** e descarta-se após a
-comparação. Pendência **P5**, por fazer.
+comparação.
 
 ## 3. Cobertura de campo nas exportações
 

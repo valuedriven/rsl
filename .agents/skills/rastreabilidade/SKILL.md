@@ -75,4 +75,4 @@ Todas tinham a mesma forma: **a mesma informação escrita em dois lugares**.
 1. Percorrer as correspondências da §1 e apontar, para cada uma, o documento que é
    fonte.
 2. Medir a divergência corrente, com número.
-3. Registrar no histórico (`data/historico.md`) o que se conferiu e o que ficou pendente.
+3. Registrar no histórico (`data/historico.md`) a decisão que a conferência motivar.

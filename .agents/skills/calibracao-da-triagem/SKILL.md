@@ -70,7 +70,7 @@ O revisor **não vê a classificação da IA** nem a decisão do outro revisor a
 registrar a sua. A saída da IA abre-se depois do desbloqueio da rodada e serve à
 conferência das divergências, não à formação da decisão. Ver `filtragens`.
 
-## 6. Estado
+## 6. Sem calibração
 
-Pendência **P13**, aberta: o estudo de viabilidade nunca foi feito. Até que seja, a
-triagem é integralmente humana por omissão — que é o estado seguro.
+Enquanto o estudo de viabilidade não for feito, a triagem é integralmente humana por
+omissão — que é o estado seguro.

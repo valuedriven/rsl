@@ -1,0 +1,184 @@
+{
+  "levantamento": {
+    "data": "2026-11-18",
+    "procedimento": "python3 src/protocolo.py --pendencias (só relata); leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status",
+    "limitacao": "A busca por termos pode não pegar ressalvas escritas de outra forma. Os números de linha indicam onde cada item estava em 2026-11-18.",
+    "estado_possivel": "aberta | resolvida | descartada"
+  },
+  "pendencias": [
+    {
+      "id": "PD01",
+      "categoria": "dados",
+      "descricao": "data/sementes.json ausente: o metadado de conferência das 10 sementes do protocolo não existe no repositório.",
+      "origem": "python3 src/protocolo.py --pendencias",
+      "bloqueia": "--conferir-dados; teste de aderência (M3/E2)",
+      "acao_sugerida": "rodar python3 src/protocolo.py --sincronizar e preencher o metadado de conferência",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD02",
+      "categoria": "dados",
+      "descricao": "data/registro_execucao.json ausente. As fichas citam esse arquivo como evidência das medições de sintaxe (BD1 a BD4), então o 'verificado por medição' delas está hoje sem a evidência no repositório.",
+      "origem": "python3 src/protocolo.py --pendencias; docs/busca_base_1_web_of_science.md:17; docs/busca_base_2_scopus.md:15; docs/busca_base_3_eric.md:5; docs/busca_base_4_brapci.md:5",
+      "bloqueia": "--conferir-dados; --registrar, --derivar, --aderencia, --sensibilidade",
+      "acao_sugerida": "reconstituir o registro a partir das fichas e do que cada base exibiu; nenhum script o gera",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD03",
+      "categoria": "validacao-terminologica",
+      "descricao": "data/validacao_termologica.csv ausente: nenhum termo tem consulta registrada, e pela regra do protocolo todos são termos livres até a validação.",
+      "origem": "python3 src/protocolo.py --pendencias",
+      "bloqueia": "validação terminológica (M3/E1, passo 2)",
+      "acao_sugerida": "python3 src/validar_termos.py --sonda, depois --exportar, --validar tbci e --validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD04",
+      "categoria": "validacao-terminologica",
+      "descricao": "TBCI: falta verificar se o servidor TemaTres consultado traz os equivalentes em inglês e espanhol. Até lá, o TBCI vale só para o português.",
+      "origem": "config.toml:115-117 ([instrumentos] TBCI). Evidência da edição de 2014: descrição do IBICT reproduzida em edisciplinas.usp.br (id=1597195), edição de 2014 (Pinheiro & Ferrez), cerca de 1.800 termos, a maioria com versão em inglês e espanhol",
+      "bloqueia": "uso do TBCI em en/es",
+      "acao_sugerida": "consultar o servidor TemaTres e, se ele expuser os equivalentes, atualizar idiomas em [instrumentos] do config.toml",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD05",
+      "categoria": "validacao-terminologica",
+      "descricao": "Brased/INEP: cobertura de idiomas (pt) inferida, não conferida; a busca de 2026-11-18 não encontrou descrição.",
+      "origem": "config.toml:134-135 ([instrumentos] Brased); a busca de 2026-11-18 não encontrou descrição da cobertura de idiomas",
+      "bloqueia": "estatuto da cobertura de idiomas em config.toml",
+      "acao_sugerida": "conferir na fonte do instrumento e atualizar o comentário e os idiomas no config.toml",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD06",
+      "categoria": "validacao-terminologica",
+      "descricao": "ERIC Thesaurus: cobertura de idiomas (en) inferida, não conferida na fonte.",
+      "origem": "config.toml:128-129 ([instrumentos] ERIC Thesaurus)",
+      "bloqueia": "estatuto da cobertura de idiomas em config.toml",
+      "acao_sugerida": "conferir na fonte do instrumento e atualizar o comentário e os idiomas no config.toml",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD07",
+      "categoria": "sintaxe-base",
+      "base": "BD1 — Web of Science",
+      "descricao": "Não verificados: valores exatos admitidos em DT= e LA=; distância padrão de NEAR sem número; NEAR entre referências de conjunto e conjunto combinado com PY=/DT= na mesma linha; tratamento de diacríticos; teto de retorno exibido e de exportação por lote.",
+      "origem": "docs/busca_base_1_web_of_science.md:16, 18-21",
+      "bloqueia": "execução definitiva na WoS (M3/E2)",
+      "acao_sugerida": "conferir na interface e medir na primeira execução, conforme a ficha",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD08",
+      "categoria": "sintaxe-base",
+      "base": "BD2 — Scopus",
+      "descricao": "Não verificados: consultas do histórico (#n) combinadas com filtros na mesma linha; lematização do plural; tratamento de diacríticos; teto de retorno exibido e de exportação por lote.",
+      "origem": "docs/busca_base_2_scopus.md:19-22",
+      "bloqueia": "execução definitiva na Scopus (M3/E2)",
+      "acao_sugerida": "conferir na interface antes de exportar, conforme a ficha",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD09",
+      "categoria": "sintaxe-base",
+      "base": "BD3 — ERIC",
+      "descricao": "Teto de retorno exibido e de exportação por lote não verificados. Comportamento não medido: campos de casamento exato e prefixo +; negação com prefixo -; hífen como separador de palavras; lematização do plural irregular não confirmada.",
+      "origem": "docs/busca_base_3_eric.md:10, 18, 22-24",
+      "bloqueia": "execução definitiva na ERIC (M3/E2); a sondagem de sintaxe é obrigatória",
+      "acao_sugerida": "sondagem de sintaxe com as contagens registradas",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD10",
+      "categoria": "sintaxe-base",
+      "base": "BD4 — BRAPCI",
+      "descricao": "Não verificados: comprimento máximo da consulta (a EB4 expandida tem cerca de 4.100 caracteres); combinação de conjuntos de busca; proximidade; formatos e lote de exportação. Lematização não medida.",
+      "origem": "docs/busca_base_4_brapci.md:12-16",
+      "bloqueia": "execução definitiva na BRAPCI (M3/E2); a sondagem de sintaxe é obrigatória",
+      "acao_sugerida": "sondar o comprimento antes da primeira execução, conforme a ficha",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD11",
+      "categoria": "equipe",
+      "descricao": "Revisores 1 e 2 a definir. O plano trata isso como dependência crítica: os nomes precisam ser confirmados até a data-limite do cronograma, antes da calibração da triagem e das buscas definitivas. Sem eles, as três filtragens ficam travadas.",
+      "origem": "docs/01_plano.md:145-146, 149, 227",
+      "bloqueia": "M3/E3 — as três filtragens (kappa)",
+      "acao_sugerida": "confirmar os nomes até a 1ª quinzena de dezembro; se não houver confirmação, decidir no marco, como o plano prevê",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD12",
+      "categoria": "equipe",
+      "descricao": "RTG (mentoria), VT (bibliotecário(a) de referência, atendimento a agendar na 1ª semana) e APB a definir.",
+      "origem": "docs/01_plano.md:142-144",
+      "bloqueia": "VT: arbitragem das divergências da 3ª filtragem (M3/E3)",
+      "acao_sugerida": "definir os nomes e agendar o atendimento do VT",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD13",
+      "categoria": "tecnica",
+      "descricao": "A change OpenSpec parametros-scripts-e-autoteste tem as 11 tarefas pendentes: papéis das expressões, remoção de identificadores fixados, novos casos de autoteste e integração. Depois de revisada, falta arquivá-la.",
+      "origem": "openspec/changes/parametros-scripts-e-autoteste/tasks.md",
+      "bloqueia": "nada da revisão; reduz o risco de defeito nos scripts",
+      "acao_sugerida": "implementar, rodar a verificação, revisar e arquivar",
+      "responsavel": "pesquisador / agente",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD14",
+      "categoria": "tecnica",
+      "descricao": "O arquivamento da change protocolo-fonte-unica (movida para openspec/changes/archive/2026-11-18-protocolo-fonte-unica/, specs promovidas para openspec/specs/) não foi commitado.",
+      "origem": "git status, 2026-11-18",
+      "bloqueia": "nada",
+      "acao_sugerida": "fazer commit do arquivamento",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD15",
+      "categoria": "triagem-assistida",
+      "descricao": "O estudo de viabilidade e a calibração do ASReview não foram feitos. Até que sejam, a triagem é integralmente humana.",
+      "origem": "README.md, M3/E2 passo 9 (calibração antes do primeiro uso, limiar calibracao_triagem); afirmação que constava de .agents/skills/calibracao-da-triagem/SKILL.md §6, removida em 2026-11-18",
+      "bloqueia": "uso do ASReview na 1ª filtragem (M3/E3)",
+      "acao_sugerida": "fazer o estudo de viabilidade e a calibração conforme a skill calibracao-da-triagem",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD16",
+      "categoria": "conferencias-da-busca",
+      "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
+      "origem": "README.md, M3/E2 passo 6; .agents/skills/conferencias-da-busca/SKILL.md §2 (a marca 'P5, por fazer' foi removida em 2026-11-18)",
+      "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
+      "acao_sugerida": "python3 src/derivar_expressoes.py --fidelidade, depois de registrada a execução de cobertura",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD17",
+      "categoria": "aderencia",
+      "descricao": "NÃO VERIFICADO. A skill teste-de-aderencia dizia que a Scopus não atingiu o limiar, que a Web of Science estava suspensa e que a anatomia da perda estava por correr para a semente 10 da WoS e as sementes 3 e 4 da Scopus. Esse resultado não tem registro no repositório, porque data/registro_execucao.json está ausente (PD02). Também não se sabe se é anterior à emenda de 2026-11-17.",
+      "origem": ".agents/skills/teste-de-aderencia/SKILL.md §5, texto removido em 2026-11-18",
+      "bloqueia": "condição de passagem de M3/E2 (aderência)",
+      "acao_sugerida": "conferir se o resultado existe e vale para a versão vigente das strings; se valer, registrá-lo em registro_execucao.json e correr a anatomia da perda; se não, descartar esta pendência",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    }
+  ]
+}

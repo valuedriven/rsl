@@ -1,6 +1,6 @@
 # Histórico
 
-Linha do tempo das decisões, verificações, emendas e pendências do protocolo, com data e alcance. Entradas mais recentes ao final.
+Linha do tempo das decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento. Entradas mais recentes ao final. As ações por fazer ficam em `data/pendencias.json`; os resultados das consultas nas bases, em `data/registro_execucao.json`.
 
 ## 2026-11-17 — Emenda de busca (versão 2 do protocolo)
 
@@ -25,17 +25,6 @@ As strings passaram a incluir os termos do controle terminológico que a emenda 
 ## 2026-11-18 — Protocolo reduzido à forma vigente
 
 Saíram do protocolo o aviso de versão, o resumo "em relação à versão 1" das strings e a Nota de emenda (transcrita acima). A regra de operadores de proximidade e restrição por campo (item 7 da Nota) permanece em vigor, em "Expressões de busca"; a triagem estratificada (item 6) permanece na seção da ferramenta de triagem. Explicações resumidas; colunas "Justificativa" de CE1–CE9 e BD1–BD4 preservadas sem alteração. Alcance: redação.
-
-## 2026-11-18 — Verificação dos idiomas dos instrumentos de controle terminológico
-
-Registro para o `config.toml` (`[instrumentos]`), que guarda os idiomas cobertos por cada instrumento declarado na seção "Instrumentos para controle terminológico" do protocolo.
-
-| Instrumento | Idiomas em uso | Estatuto | Evidência |
-| --- | --- | --- | --- |
-| UNESCO Thesaurus | en, es | informado pelo pesquisador | — |
-| TBCI (IBICT) | pt | conferido para o português (cliente consulta em português) | Descrição do IBICT reproduzida em edisciplinas.usp.br (id=1597195): edição de 2014 (Pinheiro & Ferrez), cerca de 1.800 termos, a maioria com versão em inglês e espanhol. **Pendência:** não verificado se o servidor TemaTres consultado expõe os equivalentes; enquanto não verificado, en/es não são planejados no TBCI. |
-| ERIC Thesaurus | en | inferido, não conferido | — |
-| Brased/INEP | pt | inferido, não conferido | Busca de 2026-11-18 não encontrou descrição da cobertura de idiomas. **Pendência.** |
 
 ## 2026-11-18 — Instrumentos de controle terminológico por faceta (decisão do ReT)
 

@@ -68,11 +68,7 @@ devolver zero nomeia a causa.
   pode ser aferido por vocabulário. Conferir a cobertura de campo antes de concluir —
   ver `conferencias-da-busca`.
 
-## 5. Estado corrente
-
-Pendência aberta e **reprovada**: a Scopus não atingiu o limiar, e a Web of Science
-está suspensa. A anatomia da perda está desenhada e por correr para a semente 10 da
-Web of Science e as sementes 3 e 4 da Scopus.
+## 5. Reprovação
 
 Reprovação não se contorna baixando o limiar. Ou o vocabulário melhora, ou a
 reprovação é declarada como limitação com emenda registrada.

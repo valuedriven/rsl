@@ -61,8 +61,8 @@ ancoram na mesma sugestão e concordam por contaminação, não por juízo.
 
 ## 5. O gargalo real
 
-Pendência **P11, aberta**: os dois revisores independentes não estão confirmados.
-Sem eles as três filtragens travam, e com elas o portfólio inteiro.
+Sem os dois revisores independentes confirmados, as três filtragens travam, e com elas o
+portfólio inteiro.
 
 A confirmação tem data-limite no cronograma, **anterior à execução das buscas definitivas**
 — e não quando a 3ª filtragem estiver próxima. Replanejar depois das buscas custa a

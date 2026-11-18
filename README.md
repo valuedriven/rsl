@@ -39,7 +39,8 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/validar_termos.py` | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (TBCI, UNESCO Thesaurus) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
 | `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
-| `data/historico.md` | Histórico: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
+| `data/historico.md` | Histórico: decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento | saber o que já foi decidido e por quê |
+| `data/pendencias.json` | Pendências: ações ainda a executar, cada uma com origem, o que bloqueia, ação sugerida, responsável e estado | saber o que falta fazer |
 | `config.toml` | caminho do protocolo, padrões dos parâmetros, fichas, arquivos de dados, instrumentos e campos das planilhas | mudar o arquivo do protocolo, um padrão ou um instrumento |
 
 Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arquivo:
@@ -47,8 +48,9 @@ Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arqu
 | Caminho | O que contém | Quem escreve |
 | --- | --- | --- |
 | `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `--sincronizar` |
-| `data/registro_execucao.json` | sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `--registrar` |
-| `data/historico.md` | Histórico: o único lugar do registro — decisões, verificações, emendas e pendências, com data e alcance | pesquisador |
+| `data/registro_execucao.json` | resultados da execução das consultas nas bases: sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `--registrar` |
+| `data/historico.md` | Histórico: decisões relevantes sobre a revisão, com data, alcance e fundamento | pesquisador |
+| `data/pendencias.json` | ações ainda a executar, identificadas por `PDnn` | pesquisador e agente, a pedido |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
 | `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
 | `data/evidencia/` | resposta bruta de cada consulta terminológica | `validar_termos.py` |
@@ -61,6 +63,22 @@ strings, expressões, critérios e fontes são lidos do protocolo a cada execuç
 cada base, da ficha correspondente. Em `data/` guarda-se o que alguém **alimenta** — o
 metadado das sementes e o registro das execuções — e a planilha de validação, registro do
 estatuto dos termos, lida e regravada por `validar_termos.py`.
+
+### Três registros, três finalidades
+
+Cada registro guarda um tipo de informação, e nenhum repete o outro:
+
+| Registro | Guarda | Não guarda |
+| --- | --- | --- |
+| `data/historico.md` | **decisões** relevantes sobre a revisão — emendas, escolhas de método, de escopo e de instrumento —, com data, alcance e fundamento | ação por fazer; resultado de consulta |
+| `data/pendencias.json` | **ações ainda a executar**, cada uma com `id`, `origem`, o que bloqueia, ação sugerida, responsável e `estado` (`aberta`, `resolvida` ou `descartada`) | decisão; resultado de consulta |
+| `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens, retornos, exportações e conferências | decisão; ação por fazer |
+
+- Pendência resolvida muda de `estado` e ganha `resolucao`, com o que a fechou; não é
+  apagada. Se a resolução envolveu decisão, a
+  decisão vai para o histórico, e o resultado de consulta, para o registro de execução.
+- A pendência remete à sua `origem` (ficha, protocolo, plano, comando) em vez de copiar o
+  conteúdo dela: a ressalva "não verificado" continua na ficha, e a pendência aponta para ela.
 
 ### Configuração e parâmetros
 
@@ -402,8 +420,9 @@ Skill: `fichamento`.
   registra-se o estado da conferência. Skill: `conferir-referencia`.
 - **Parecer externo.** Cada achado é conferido contra o texto corrente antes de aceito; o
   parecer é hipótese sobre o documento, não constatação. Skill: `parecer-sobre-protocolo`.
-- **Pendências.** `python3 src/protocolo.py --pendencias` relata o que encontra nos
-  artefatos, sem escrever; promover um achado a pendência registrada é decisão do
+- **Pendências.** As ações por fazer ficam em `data/pendencias.json`.
+  `python3 src/protocolo.py --pendencias` relata o que encontra nos artefatos, sem escrever
+  e sem ler esse arquivo; promover um achado a pendência registrada é decisão do
   pesquisador.
 
 ## Precedência
@@ -411,7 +430,8 @@ Skill: `fichamento`.
 - O **protocolo** — `02_protocolo_informacoes_gerais.md` e `03_protocolo_estrategia_pesquisa.md` —
   prevalece sobre qualquer formulação feita em outro documento; o plano remete a ele. Sobre
   o `config.toml`, o protocolo prevalece em todo parâmetro que declara.
-- O **histórico** é o único lugar das decisões, verificações e pendências.
+- O **histórico** é o único lugar das decisões; `data/pendencias.json`, das ações por
+  fazer; `data/registro_execucao.json`, dos resultados das consultas nas bases.
 - A data **oficial** de execução consta **exclusivamente do cronograma**, que não integra este
   pacote; `data/registro_execucao.json` registra data e hora operacionais de cada execução,
   como rastro técnico do registro.

@@ -66,7 +66,7 @@
 | Entrega | Descrição |
 | :---- | :---- |
 | Instrumentos do RS Banyan | Protocolo, tabela de composição, fluxograma, formulário de fichamento, glossário, planilha de competências e cronograma, preenchidos e versionados: o registro auditável da execução |
-| Histórico — registro de decisões, verificações e cronologia | Documento de apoio aos instrumentos: linha do tempo das decisões, verificação dos instrumentos terminológicos, calibração das buscas, emendas e pendências |
+| Histórico — registro de decisões | Documento de apoio aos instrumentos: linha do tempo das decisões relevantes sobre a revisão, inclusive as emendas |
 | Relatório da revisão, em conformidade com o PRISMA | Texto completo com a lista de verificação respondida e o diagrama de fluxo, destinado a submissão a periódico |
 | Apresentação (.pptx) | Síntese do percurso e dos achados, para a qualificação e para a divulgação do resultado |
 | Estratégias de busca por fonte | Uma ficha por base, com as expressões executáveis e o estado de verificação da sintaxe; o registro de execução de cada base fica em `data/registro_execucao.json` |

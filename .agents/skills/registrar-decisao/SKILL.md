@@ -40,10 +40,8 @@ decidida, não esquecida.
 ## 3. Onde vive cada coisa
 
 - **O instrumento guarda a última definição.** Sem histórico, sem data.
-- **O histórico (`data/historico.md`) guarda o percurso**: linha do tempo, decisões revogadas, emendas,
-  verificações. É o único lugar com datas, além do cronograma.
-- **A pendência** vive no histórico, em `data/historico.md`. Pendência fechada
-  registra-se com o que a fechou — não se apaga.
+- **O histórico (`data/historico.md`) guarda as decisões**: linha do tempo, decisões
+  revogadas, emendas. O que mais se registra, e onde, está no `README.md`.
 
 ## 4. O ciclo, depois do julgamento
 
