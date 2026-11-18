@@ -21,13 +21,13 @@ aprendizado ativo, por ser anterior e independente.
 
 **Não é a leitura exploratória.** O 3º passo do RS Banyan pede os estudos
 inicialmente consultados acerca do tema — a leitura que precede a delimitação. São
-outro conjunto, de outra função, no IO 1, Item 1, 3º passo:
+outro conjunto, de outra função, em `docs/02`, seção Estudos inicialmente consultados:
 
 | | Conjunto-semente | Leitura exploratória |
 | --- | --- | --- |
 | Função | aferir recall | situar o tema, fixar fronteiras |
-| Fonte | IO 1, Item 2, 5º passo | IO 1, Item 1, 3º passo |
-| Vive no | IO 1, Item 2, 5º passo, acervos pessoais | IO 1, Item 1, 3º passo |
+| Fonte | protocolo (`docs/03`), Acervos pessoais | `docs/02`, Estudos inicialmente consultados |
+| Vive no | protocolo (`docs/03`), Acervos pessoais | `docs/02`, Estudos inicialmente consultados |
 | Recorte temporal | obrigatório | **dispensado** — leitura de fundamentação pode ser anterior |
 
 Confundi-los já aconteceu: o conjunto-semente ocupou o 3º passo e a leitura

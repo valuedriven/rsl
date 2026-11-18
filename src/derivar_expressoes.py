@@ -11,7 +11,7 @@ registro às demais é calculada aqui.
 
 O que este script NÃO faz: não exclui registro algum, não decide inclusão e não
 substitui o teste de fidelidade. As contagens que produz são DERIVADAS e devem ser
-declaradas como tal no IO 2 e no relatório.
+declaradas como tal nas contagens da busca e no relatório.
 
 Entradas
   docs/03_protocolo_estrategia_pesquisa.md   vocabulário, composição e recorte (lido por src/protocolo.py)
@@ -25,14 +25,14 @@ O protocolo é lido diretamente: não há derivado intermediário a manter em di
 Saídas na raiz de data/
   registros.csv        um registro por linha, com as facetas e expressões atingidas,
                        a chave de ordenação de leitura e a marca de duplicata
-  io2_contagens.csv    base x expressão, para alimentar o IO 2
+  contagens_busca.csv  base x expressão, para o registro das contagens
   ordem_triagem.csv    a fila da 1ª filtragem já ordenada (Medida 4)
   fidelidade_EB<n>.csv as divergências do teste, item a item
   sensibilidade_<base>.csv  a fração de EB5 fora de EB4, com a amostra a classificar
 
 Deduplicação: dentro da mesma base, registro com o mesmo DOI — ou, na falta dele, o
 mesmo título normalizado — é marcado em `duplicata_de` com o identificador da primeira
-ocorrência. Nada é apagado; as contagens do IO 2 usam os registros únicos e o número
+ocorrência. Nada é apagado; as contagens da busca usam os registros únicos e o número
 bruto sai ao lado. É o que faz a exportação da ERIC em vários arquivos não contar duas
 vezes o mesmo registro.
 
@@ -532,7 +532,7 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
           f"  retorno declarado {retorno}, registros lidos {lidos} — {status}")
     if status != "valida":
         print(f"  divergência justificada: {just}")
-    print("  A data oficial de execução continua sendo a do IO 7.")
+    print("  A data oficial de execução continua sendo a do cronograma.")
     return 0
 
 
@@ -614,7 +614,7 @@ def aplica_recorte(regs):
         print("  pelo filtro da página. Esta linha deveria ser zero: registro fora da janela")
         print("  indica divergência entre o declarado e o devolvido. Investigar antes de")
         print("  prosseguir, e não apenas registrar.")
-    print("  Registrar os três números no IO 2.")
+    print("  Registrar os três números nas contagens da busca.")
     return dentro + sem_ano, fora
 
 
@@ -724,7 +724,7 @@ def derivar():
                         "ordem": ordem.get(r["registro"], "")})
 
     bases = sorted({r["base"] for r in regs})
-    with (SAIDA / "io2_contagens.csv").open("w", encoding="utf-8-sig", newline="") as fh:
+    with (SAIDA / "contagens_busca.csv").open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh, delimiter=";")
         w.writerow(["base", "expressao", "facetas_exigidas", "registros",
                     "registros_com_duplicatas", "procedencia"])
@@ -752,7 +752,7 @@ def derivar():
                         " ".join(sorted(exprs)), r["titulo"], r["doi"]])
 
     print(f"\n{len(linhas)} registros processados, {len(unicos)} únicos.")
-    print(f"{_mostra(SAIDA)}/registros.csv, io2_contagens.csv e ordem_triagem.csv "
+    print(f"{_mostra(SAIDA)}/registros.csv, contagens_busca.csv e ordem_triagem.csv "
           f"gravados.")
     sem_ancora = sum(1 for r in unicos if not (ANCORAS <= por_registro[r["registro"]][0]))
     if sem_ancora:
@@ -762,7 +762,7 @@ def derivar():
               "lematização. Nenhum registro foi descartado. Se esse percentual for alto, o teste "
               "de fidelidade tende a reprovar.")
     print("\nAs contagens das expressões não executadas são DERIVADAS. Declará-las como tal "
-          "no IO 2 e no relatório, "
+          "nas contagens da busca e no relatório, "
           "e só aceitá-las após o teste de fidelidade (--fidelidade).")
 
 

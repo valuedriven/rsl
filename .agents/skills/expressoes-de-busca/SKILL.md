@@ -33,7 +33,7 @@ de critério de exclusão.
 ### Os três estados de execução
 
 Dizer que uma expressão "não se executa" é ambíguo, e o parecer externo apanhou isso.
-São três estados, e o quadro do IO 1 os distingue:
+São três estados, e o quadro terminológico do protocolo (`docs/03`) os distingue:
 
 1. **Busca definitiva nas bases** — a execução cujo retorno compõe o corpus. Só EB4.
 2. **Execução experimental de aferição** — execução direta na base só para medir a
@@ -89,4 +89,5 @@ estado de verificação da sintaxe. O **registro de execução** fica em
 de memória nem reescrevê-la na conversa** — se a ficha estiver defasada, corrigi-la.
 
 Alteração de expressão é emenda **de busca**: exige reexecução e novo teste de
-aderência. `busca-nas-bases` para executar, `registrar-decisao` para o Anexo A.
+aderência. `busca-nas-bases` para executar, `registrar-decisao` para o histórico
+(`data/historico.md`).

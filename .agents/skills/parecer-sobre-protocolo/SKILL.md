@@ -42,8 +42,9 @@ operações".
 Achado confirmado nem sempre é trabalho igual. Vale distinguir:
 
 - **conserto unilateral** — um instrumento já traz a regra certa e o outro ficou
-  defasado. Foi o caso de três dos quatro achados de um bloco: o IO 1 estava correto
-  e só o IO 0 precisava mudar. Num deles o IO 1 chegava a declarar que resolvia a
+  defasado. Foi o caso de três dos quatro achados de um bloco: o protocolo (`docs/02` e
+  `docs/03`) estava correto e só o plano (`docs/01`) precisava mudar. Num deles o protocolo
+  chegava a declarar que resolvia a
   divergência, sem que a harmonização tivesse descido ao outro lado.
 - **decisão do ReT** — o parecer aponta, mas a escolha é de método ou escopo.
 - **alteração de código**, não de texto.

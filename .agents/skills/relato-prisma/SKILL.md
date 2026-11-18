@@ -1,6 +1,6 @@
 ---
 name: relato-prisma
-description: Prepara o relato da revisão em conformidade com o PRISMA — lista de verificação respondida item a item, diagrama de fluxo, declaração das adaptações e das limitações. Use ao redigir o relatório, ao montar o fluxograma do IO 3, ao responder a lista do PRISMA, e ao declarar uso de IA, limitações ou não aplicabilidade de itens.
+description: Prepara o relato da revisão em conformidade com o PRISMA — lista de verificação respondida item a item, diagrama de fluxo, declaração das adaptações e das limitações. Use ao redigir o relatório, ao montar o fluxograma PRISMA, ao responder a lista do PRISMA, e ao declarar uso de IA, limitações ou não aplicabilidade de itens.
 ---
 
 # Relato em conformidade com o PRISMA
@@ -31,11 +31,11 @@ e aqui não há estimador de efeito. Por isso a declaração de não aplicabilid
 itens de risco de viés fica **separada** da avaliação dos artefatos, e **não é
 substituída por ela**.
 
-## 3. O diagrama de fluxo é o IO 3
+## 3. O diagrama de fluxo
 
 Identificação, triagem, elegibilidade e inclusão, com as exclusões **justificadas e
-quantificadas em cada passagem**. As contagens vêm do IO 2, alimentado por
-`deduplicacao` e `filtragens`.
+quantificadas em cada passagem**. As contagens vêm do registro das contagens da busca,
+alimentado por `deduplicacao` e `filtragens`.
 
 O fluxograma não é ilustração: é a prestação de contas de cada registro que entrou e
 não saiu.

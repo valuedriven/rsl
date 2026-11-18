@@ -47,7 +47,7 @@ A distinção mais importante desta skill.
 | --- | --- | --- |
 | O que é | variante de forma do mesmo conceito — plural, grafia, ordem das palavras | conceito que o vocabulário não cobria |
 | Reversível | sim | não |
-| Exige emenda no Anexo A | não | **sim** |
+| Exige emenda no histórico (`data/historico.md`) | não | **sim** |
 | Exige novo teste de aderência | não | **sim** |
 
 Tratar ampliação como desdobramento é alterar o recorte sem registrar.
@@ -71,6 +71,6 @@ Tratar ampliação como desdobramento é alterar o recorte sem registrar.
 1. Conferir, termo a termo, que todo termo da string tem contrapartida no quadro da
    sua faceta. **A conferência é manual**: não há guarda automática neste repositório.
 2. Conferir o comprimento das consultas da ERIC, que não trunca e tem teto medido.
-3. Atualizar o quadro do IO 1 e as quatro fichas a partir do vocabulário corrigido.
+3. Atualizar o quadro terminológico do protocolo (`docs/03`) e as quatro fichas a partir do vocabulário corrigido.
 
-Depois, `expressoes-de-busca` para recompor, e `registrar-decisao` para o Anexo A.
+Depois, `expressoes-de-busca` para recompor, e `registrar-decisao` para o histórico.

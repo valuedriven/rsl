@@ -14,22 +14,22 @@ repete o conteúdo dos documentos.
 
 | Onde | O que é |
 | --- | --- |
-| `docs/` | conteúdo da revisão: IO 0, IO 1 e as fichas de busca; os arquivos do pesquisador e os que o agente mantém |
-| `data/` | o que é alimentado — os dois JSON, o Anexo A e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
+| `docs/` | conteúdo da revisão: plano, protocolo e fichas de busca; os arquivos do pesquisador e os que o agente mantém |
+| `data/` | o que é alimentado — os dois JSON, o histórico e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
 | `src/` | quatro scripts de execução |
 | `.agents/skills/` | 21 competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
 
-Este pacote reúne o **IO 0**, o **IO 1**, as quatro **fichas de busca** e o **Anexo A**,
-em `data/historico.md`. Os IO 2 a IO 7 e o portfólio não integram este repositório.
+Este pacote reúne o **plano**, o **protocolo**, as quatro **fichas de busca** e o **histórico**,
+em `data/historico.md`. Os demais instrumentos e o portfólio não integram este repositório.
 
 ## Mapa
 
 | Caminho | O que contém | Consultar quando |
 | --- | --- | --- |
-| `docs/01_plano.md` | IO 0: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
-| `docs/02_protocolo_informacoes_gerais.md` | IO 1, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
-| `docs/03_protocolo_estrategia_pesquisa.md` | IO 1, estratégias de pesquisa: questão de revisão (QGR, QER1–QER4), facetas, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única do vocabulário | montar ou conferir a busca |
+| `docs/01_plano.md` | Plano: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
+| `docs/02_protocolo_informacoes_gerais.md` | Protocolo, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
+| `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QER1–QER4), facetas, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única do vocabulário | montar ou conferir a busca |
 | `docs/busca_base_1_web_of_science.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
 | `docs/busca_base_2_scopus.md` | ficha da Scopus, mesma estrutura | idem |
 | `docs/busca_base_3_eric.md` | ficha da ERIC, mesma estrutura | idem |
@@ -38,7 +38,7 @@ em `data/historico.md`. Os IO 2 a IO 7 e o portfólio não integram este reposit
 | `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/validar_termos.py` | validação assistida no TBCI e no UNESCO Thesaurus, com a planilha como registro | conferir o estatuto de cada termo |
 | `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
-| `data/historico.md` | Anexo A: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
+| `data/historico.md` | Histórico: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
 
 Em `data/`, a procedência de cada arquivo:
 
@@ -46,16 +46,16 @@ Em `data/`, a procedência de cada arquivo:
 | --- | --- | --- |
 | `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `--sincronizar` |
 | `data/registro_execucao.json` | sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `--registrar` |
-| `data/historico.md` | Anexo A: o único lugar do histórico — decisões, verificações, emendas e pendências, com data e alcance | pesquisador |
+| `data/historico.md` | Histórico: o único lugar do registro — decisões, verificações, emendas e pendências, com data e alcance | pesquisador |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
-| `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `io2_contagens.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
+| `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
 | `data/evidencia/` | resposta bruta de cada consulta terminológica | `validar_termos.py` |
 | `data/arquivo/` | cópias anteriores, com `SHA256` — sem conteúdo no momento: o arquivo do estado anterior à migração (16/11) foi descartado em 17/11 | migrações |
 
 As pastas de dados brutos e de arquivo — `execucoes/`, `evidencia/` e `arquivo/` — são
-criadas quando o primeiro arquivo chega e não existem hoje. Na raiz de `data/` estão hoje
+criadas quando o primeiro arquivo chega e não existem hoje. A raiz de `data/` recebe
 os dois JSON e as duas planilhas geradas, `validacao_termologica.csv` e
-`semente_aderencia.csv`; é também onde o Anexo A se registra, em `historico.md`. Não há
+`semente_aderencia.csv`; é também onde o histórico se registra, em `historico.md`. Não há
 `descritores.json`, `consultas.json` nem `pendencias.json`.
 
 O que é **derivado do documento não vira arquivo**: questão, facetas, strings, expressões,
@@ -82,9 +82,11 @@ conteúdo — conferem, derivam e registram. Quatro invariantes valem para todos
 - **Nada se apaga por sincronização.** Semente retirada do protocolo permanece no arquivo
   com o seu metadado e é reportada por `--conferir-dados` e por `--pendencias`, para decisão;
   termo retirado do protocolo permanece na planilha de validação como linha fora do
-  protocolo. Termo do protocolo ausente da string de uma base só passa se a ficha o declarar
-  na redução; sem declaração, a conferência daquela base reprova — e só daquela: a forma de
-  uma base não congela as outras.
+  protocolo. Termo vigente do protocolo ausente da string de uma base só passa se a ficha o
+  declarar na redução; sem declaração, a conferência daquela base reprova — e só daquela: a
+  forma de uma base não congela as outras. Termo retirado por emenda não se declara: o
+  leitor o desconta por construção. As fichas são operacionais — forma vigente, sem
+  cabeçalho, histórico nem justificativa.
 - **O identificador é a chave.** Tudo se identifica pelo código do protocolo — `QGR`/`QERn`,
   `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn` —, e não por posição. Na semente, a ligação com
   o protocolo é feita por DOI ou título, de modo que o rótulo pode mudar sem perder o
@@ -104,9 +106,9 @@ trabalho, em M3.
 ## Fluxo de trabalho — RS Banyan
 
 O RS Banyan organiza a revisão em **quatro módulos, catorze etapas e sessenta e três
-passos**, sustentados por sete Instrumentos Operacionais. O **PRISMA** não conduz a
+passos**, sustentados por sete instrumentos próprios. O **PRISMA** não conduz a
 execução: é a diretriz de apresentação do relato. A sequência abaixo segue os módulos e as
-etapas; os passos detalhados, com responsável e data, estão no IO 7.
+etapas; os passos detalhados, com responsável e data, estão no cronograma.
 
 | Módulo | Etapas | O que decide |
 | --- | --- | --- |
@@ -117,7 +119,7 @@ etapas; os passos detalhados, com responsável e data, estão no IO 7.
 
 **M1 e M2 correm em paralelo**, com o controle terminológico iniciado no primeiro mês. Cada
 marco é de **passa ou não passa**: reprovado, a correção se faz na fonte, a geração se
-refaz e a decisão se registra no Anexo A. Nenhuma etapa é suprimida por prazo.
+refaz e a decisão se registra no histórico. Nenhuma etapa é suprimida por prazo.
 
 ### M1 — Planejamento (E1–E5)
 
@@ -127,14 +129,13 @@ Decide a **exequibilidade** da revisão.
    específico por questão secundária.
 2. **E2 — necessidade.** Justifica a revisão, delimita o escopo e o contra-escopo e
    distribui os cinco problemas representacionais entre esta revisão e as autônomas.
-3. **E3 — instrumentos operacionais.** Viabiliza os sete Instrumentos Operacionais, IO 1 a
-   IO 7; neste pacote estão o IO 0, que organiza o planejamento, e o IO 1.
+3. **E3 — instrumentos operacionais.** Viabiliza os sete instrumentos do RS Banyan; neste pacote estão o plano, o protocolo e as fichas de busca.
 4. **E4 — equipe.** Define os papéis: ReT, RTG, VT, APB, Revisores 1 e 2 e RE.
 5. **E5 — cronograma.** Compromete os marcos quinzenais e a data-limite dos revisores,
    anterior à execução das buscas definitivas.
 
-**Fonte:** `docs/01_plano.md` (IO 0), seções 1 a 3; equipe e cronograma detalhados
-nos IO 6 e IO 7, fora deste pacote. **Scripts:** nenhum — o produto é decisão registrada.
+**Fonte:** `docs/01_plano.md`, seções 1 a 3; equipe e cronograma detalhados
+na planilha de competências e no cronograma, fora deste pacote. **Scripts:** nenhum — o produto é decisão registrada.
 
 ### M2 — Questão de revisão (E1–E2)
 
@@ -187,7 +188,7 @@ existir.
    Scopus, WoS, ERIC e BRAPCI. É instrumento de aferição, não lista de incluídos.
 8. **Ferramentas e registro de uso de IA.** Zotero para gestão e deduplicação, Rayyan para
    triagem cega e ASReview para priorização; o uso de IA é registrado ação a ação no LOG_IA,
-   apêndice do IO 1.
+   apêndice do protocolo.
 
 ```bash
 # confere documento, dados e guardas
@@ -223,8 +224,8 @@ presente. `--sincronizar` não apaga
 semente retirada do protocolo: ela permanece e é reportada, para decisão. `--autoteste` injeta
 defeitos numa cópia e exige que as conferências os reprovem.
 
-**Condição de passagem:** viabilidade das strings e IO 1 validado por revisor expert.
-Reprovado, volta-se ao vocabulário e registra-se a emenda no Anexo A.
+**Condição de passagem:** viabilidade das strings e protocolo validado por revisor expert.
+Reprovado, volta-se ao vocabulário e registra-se a emenda no histórico.
 Skills: `facetacao-e-termos-livres`, `validacao-vocabulario-controlado`,
 `expressoes-de-busca`, `ficha-de-busca-por-base` e `conjunto-semente`.
 
@@ -279,7 +280,7 @@ python3 src/derivar_expressoes.py --sensibilidade wos
 
 **Arquivos.** `data/registro_execucao.json` é o registro documental e o rastro técnico das
 execuções; `--derivar` lê as execuções registradas, não a pasta de exportações. As saídas
-ficam na raiz de `data/`: `registros.csv`, `io2_contagens.csv`, `ordem_triagem.csv`,
+ficam na raiz de `data/`: `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`,
 um CSV de fidelidade por expressão conferida e um de sensibilidade por base sondada. A
 aderência usa `data/sementes.json` e `data/semente_aderencia.csv`.
 
@@ -288,7 +289,7 @@ arquivo e **recusa registrar quando divergem**, salvo justificativa explícita �
 teto de 1.000 da BRAPCI. A execução aceita é gravada na base correspondente do
 `registro_execucao.json`, com `arquivo`, `registros_lidos` e `status`; é essa entrada que
 `--derivar`, `--aderencia` e `--sensibilidade` leem. `--derivar` reconfere a contagem e para
-se o arquivo mudou. As contagens do IO 2 usam os registros únicos, com o número bruto ao
+se o arquivo mudou. As contagens da busca usam os registros únicos, com o número bruto ao
 lado. O recorte temporal é apenas conferido aqui, e a linha "fora" deve ser zero em todas as
 bases.
 
@@ -317,11 +318,11 @@ calibração da triagem assistida aprovada em E2.
 5. **Backward search.** Uma geração, apenas sobre os estudos incluídos. Revisões
    sistemáticas permanecem elegíveis, mas vão para **conjunto suplementar** com contagem
    própria.
-6. **Registro do fluxo.** O IO 3 recebe o diagrama PRISMA com as exclusões justificadas e
+6. **Registro do fluxo.** O fluxograma PRISMA registra as exclusões justificadas e
    quantificadas em cada passagem.
 
 **Arquivos e ferramentas.** `data/ordem_triagem.csv` ordena a 1ª filtragem;
-Zotero, Rayyan e ASReview executam a etapa; o IO 3 é produzido fora deste pacote.
+Zotero, Rayyan e ASReview executam a etapa; o fluxograma PRISMA é produzido fora deste pacote.
 **Scripts:** nenhum — a decisão de inclusão é humana. Skills: `calibracao-da-triagem` e
 `filtragens`.
 
@@ -331,14 +332,14 @@ Zotero, Rayyan e ASReview executam a etapa; o IO 3 é produzido fora deste pacot
 
 Transforma cada estudo incluído em dado comparável.
 
-1. **Fichamento.** Cada estudo incluído preenche o IO 4; o pré-preenchimento assistido por
+1. **Fichamento.** Cada estudo incluído preenche o formulário de fichamento; o pré-preenchimento assistido por
    IA é conferido campo a campo no texto-fonte. As cinco categorias de Fink são o **esquema
    de codificação**, e não um enquadramento obrigatório: fator não previsto nelas é
    registrado em "outros fatores" e constitui achado.
-2. **Glossário.** O IO 5 reúne as definições e as fontes de cada conceito, validadas pelo
+2. **Glossário.** O glossário reúne as definições e as fontes de cada conceito, validadas pelo
    pesquisador.
 
-**Arquivos:** IO 4 e IO 5, fora deste pacote. **Scripts:** nenhum — a extração é leitura.
+**Arquivos:** formulário de fichamento e glossário, fora deste pacote. **Scripts:** nenhum — a extração é leitura.
 Skill: `fichamento`.
 
 **Condição de passagem:** conclusão dos fichamentos.
@@ -351,7 +352,7 @@ Skill: `fichamento`.
    `sintese-e-lacunas`.
 2. **E2 — registro e validação do conteúdo.** Redação do relatório com a lista do PRISMA
    respondida item a item, cada item classificado como aplicável sem adaptação, não
-   aplicável com justificativa ou adaptado ao objeto. O fluxograma vem do IO 3; as
+   aplicável com justificativa ou adaptado ao objeto. O fluxograma PRISMA vem das contagens da busca; as
    limitações, das decisões registradas; a declaração de uso de IA, do LOG_IA. Skill:
    `relato-prisma`.
 3. **E3 — preparação textual e divulgação.** Revisão de língua, tradução do resumo,
@@ -364,8 +365,8 @@ Skill: `fichamento`.
 ### Atividades transversais
 
 - **Toda decisão que altere questão, facetas, critérios ou busca é emenda.** Altera-se o
-  documento-fonte — o IO 0, o IO 1 ou a ficha da base — e, quando o dado é o metadado das
-  sementes, reconcilia-se com `--sincronizar`; a decisão se registra no Anexo A,
+  documento-fonte — o plano, o protocolo ou a ficha da base — e, quando o dado é o metadado das
+  sementes, reconcilia-se com `--sincronizar`; a decisão se registra no histórico,
   `data/historico.md`. Não se edita planilha de saída nem se corrige o produto à mão:
   corrige-se a fonte e confere-se de novo — a exceção é a planilha de validação, que é o
   registro do estatuto dos termos. Skill: `registrar-decisao`.
@@ -382,10 +383,10 @@ Skill: `fichamento`.
 
 ## Precedência
 
-- O **IO 1** — `02_protocolo_informacoes_gerais.md` e `03_protocolo_estrategia_pesquisa.md` —
-  prevalece sobre qualquer formulação feita em outro documento; o IO 0 remete a ele.
-- O **Anexo A** é o único lugar do histórico.
-- A data **oficial** de execução consta **exclusivamente do IO 7**, que não integra este
+- O **protocolo** — `02_protocolo_informacoes_gerais.md` e `03_protocolo_estrategia_pesquisa.md` —
+  prevalece sobre qualquer formulação feita em outro documento; o plano remete a ele.
+- O **histórico** é o único lugar das decisões, verificações e pendências.
+- A data **oficial** de execução consta **exclusivamente do cronograma**, que não integra este
   pacote; `data/registro_execucao.json` registra data e hora operacionais de cada execução,
   como rastro técnico do registro.
 
@@ -393,7 +394,7 @@ Skill: `fichamento`.
 
 - **Português do Brasil**, redação formal, objetiva e enxuta.
 - Referências normalizadas pela **ABNT NBR 6023**, cada uma com o seu estado de conferência.
-- Datas de execução no **IO 7**; histórico no **Anexo A**.
+- Datas de execução no **cronograma**; histórico em `data/historico.md`.
 - Nomeação dos arquivos de estudo: `Ano_DuasPrimeirasPalavras_TIPO_UltimoSobrenomeAutor`,
   com sufixo `_FICHA` para fichamentos.
 
@@ -402,5 +403,5 @@ Skill: `fichamento`.
 **Junilson Pereira Souza** — responsabilidade técnica.
 
 A assistência de inteligência artificial é declarada e registrada ação a ação no LOG_IA,
-apêndice do IO 1. A IA **não é autora**, conforme ICMJE e COPE. As regras de uso estão em
+apêndice do protocolo. A IA **não é autora**, conforme ICMJE e COPE. As regras de uso estão em
 `docs/01_plano.md`, seção 8.

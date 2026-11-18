@@ -74,7 +74,7 @@ risco de viés. Ver `relato-prisma`.
 
 ## 7. Produto
 
-Interpretação, agrupamento conceitual que alimenta o glossário (IO 5), coocorrência de
+Interpretação, agrupamento conceitual que alimenta o glossário, coocorrência de
 termos, e o enunciado das lacunas. Agrupamento preliminar pode ser assistido por IA;
 **definições e fontes são validadas pelo pesquisador**, e o texto e os argumentos são
 de autoria humana.

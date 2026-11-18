@@ -14,12 +14,12 @@ Esta skill tem um princípio e o princípio é a skill:
 
 | De | Para | Garantida por |
 | --- | --- | --- |
-| questão secundária | objetivo específico | objetivo nomeia o tema da questão, conferido contra o IO 1 |
+| questão secundária | objetivo específico | objetivo nomeia o tema da questão, conferido contra o protocolo (`docs/03`) |
 | objeto | questão principal | as mesmas operações nomeadas |
 | regra de inclusão | elegibilidade e 1ª filtragem | a mesma regra escrita nos três lugares |
 | quadro terminológico | strings executadas | o mesmo vocabulário qualificado |
 | facetas | expressões de busca | composição, não escrita à mão |
-| seção do IO 0 | remissão de outro instrumento | citação por chave, conferida ao alterar a seção |
+| seção do plano (`docs/01`) | remissão de outro instrumento | citação por chave, conferida ao alterar a seção |
 | contra-escopo | critérios de exclusão | cada revisão autônoma com o seu critério |
 
 ## 2. O método, em quatro passos
@@ -39,9 +39,9 @@ Esta skill tem um princípio e o princípio é a skill:
 - **Regra de inclusão** — problema que seja objeto desta revisão e carregue critério de
   exclusão; numeração descontínua; exclusão sem critério; recorte invertido; regra de
   inclusão que deixe de ser disjuntiva ou de alcançar a 1ª filtragem.
-- **Quadro × strings** — quadro do IO 1 montado a partir de vocabulário diferente do
+- **Quadro × strings** — quadro do protocolo montado a partir de vocabulário diferente do
   das strings.
-- **Remissão de seção** — numeração do IO 0 descontínua ou repetida; qualquer documento
+- **Remissão de seção** — numeração do plano descontínua ou repetida; qualquer documento
   remetendo a seção extinta.
 - **Notação compacta** — termo em notação de variante, com barra ou parêntese, sem
   desdobramento.
@@ -62,7 +62,7 @@ virar resultado. Corrigir a fonte, nunca afrouxar a conferência.
   lista registrada e as strings da qualificada. Conserto: o quadro passa a usar o mesmo
   vocabulário que as strings, com a redução ao singular aplicada depois e só na
   exibição.
-- **Remissão a seção errada, dois meses sem detecção.** O IO 1 apontava as fronteiras
+- **Remissão a seção errada, dois meses sem detecção.** O protocolo apontava as fronteiras
   de uso da IA para a seção das pessoas da equipe. Conserto: citação por chave e
   conferência das remissões ao alterar a seção.
 - **Objeto × questão, duas operações perdidas.** Conserto: harmonização e, para o
@@ -75,4 +75,4 @@ Todas tinham a mesma forma: **a mesma informação escrita em dois lugares**.
 1. Percorrer as correspondências da §1 e apontar, para cada uma, o documento que é
    fonte.
 2. Medir a divergência corrente, com número.
-3. Registrar no Anexo A o que se conferiu e o que ficou pendente.
+3. Registrar no histórico (`data/historico.md`) o que se conferiu e o que ficou pendente.

@@ -51,7 +51,7 @@ linha por termo e instrumento. Ela é construída a partir das tabelas do protoc
 guarda o estatuto de cada termo: `--exportar` reconstrói a planilha e `--importar` a
 reconcilia com o protocolo, preservando as colunas `decisao_ReT`, `justificativa_ReT` e
 `data_decisao` e as linhas de termo retirado. Não há JSON intermediário. É ela o
-instrumento de controlo, e **não se duplica em documento algum** — o IO 1 declara a
+instrumento de controlo, e **não se duplica em documento algum** — o protocolo (`docs/03`) declara a
 regra e aponta para ela.
 
 ## 5. Geração e execução
@@ -78,7 +78,7 @@ específicos são do ReT com a Validação Temática — a ferramenta recupera e
 
 Estado corrente: as linhas da faceta de fatores situacionais saem pré-classificadas
 como termo livre; as demais aguardam consulta. **A validação nunca foi executada**, e
-o IO 1 declara isso em vez de insinuar o contrário.
+o protocolo declara isso em vez de insinuar o contrário.
 
 ## 6. Antes do primeiro uso de um instrumento
 
@@ -91,4 +91,4 @@ em duas bases deste projeto.
 Termo que passe a descritor autorizado muda o que se pode **afirmar**, não
 necessariamente o que a busca recupera. Se a forma autorizada diferir da usada e for
 incorporada à string, a alteração é **de busca**: exige reexecução e novo teste de
-aderência. Registrar o alcance no Anexo A — `registrar-decisao`.
+aderência. Registrar o alcance no histórico (`data/historico.md`) — `registrar-decisao`.

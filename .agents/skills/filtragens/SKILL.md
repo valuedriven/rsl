@@ -64,12 +64,12 @@ ancoram na mesma sugestão e concordam por contaminação, não por juízo.
 Pendência **P11, aberta**: os dois revisores independentes não estão confirmados.
 Sem eles as três filtragens travam, e com elas o portfólio inteiro.
 
-A confirmação tem data-limite no IO 7, **anterior à execução das buscas definitivas**
+A confirmação tem data-limite no cronograma, **anterior à execução das buscas definitivas**
 — e não quando a 3ª filtragem estiver próxima. Replanejar depois das buscas custa a
 execução inteira.
 
 ## 6. Registrar
 
-Contagens de entrada e saída de cada filtragem, que alimentam o fluxograma do IO 3 —
+Contagens de entrada e saída de cada filtragem, que alimentam o fluxograma PRISMA —
 ver `relato-prisma`. Exclusões justificadas e quantificadas em cada passagem. Kappa
 de cada rodada. Decisões de divergência, com quem decidiu.

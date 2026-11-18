@@ -45,22 +45,23 @@ fica ao lado dele e muda à medida que a consulta ocorra.
 
 ## Procedimento
 
-1. Verificar se o item já tem estado registrado — conjunto-semente no IO 1, Item 2,
-   5º passo; leitura exploratória no IO 1, Item 1, 3º passo; obras de referência no
-   IO 1, Item 1, Etapa 1.
+1. Verificar se o item já tem estado registrado — conjunto-semente no protocolo
+   (`docs/03`, seção Acervos pessoais); leitura exploratória em `docs/02`, seção Estudos
+   inicialmente consultados; obras de referência em `docs/02`, seção Obras de referência
+   a consultar.
 2. Não tendo, consultar a fonte. Havendo busca na web disponível, usá-la e **resolver até o
    registro do item**; não havendo, dizer que não se pode conferir aqui e deixar o item como
    designado — **não preencher**.
 3. Registrar na fonte única: os dados conferidos, o estado e onde se conferiu.
 4. Atualizar o instrumento correspondente e conferir o texto final nele.
 5. Havendo divergência com o que estava escrito, **retificar explicitamente** e registrar a
-   emenda no Anexo A. Não corrigir em silêncio.
+   emenda no histórico (`data/historico.md`). Não corrigir em silêncio.
 
 ## Casos que já ocorreram, e o que ensinaram
 
-- **Remédio impossível.** Um parecer externo mandou "uniformizar com a referência do IO 1".
-  O IO 1 não tinha referência alguma àquela obra. Conferir que o alvo da correção existe
-  antes de aplicá-la.
+- **Remédio impossível.** Um parecer externo mandou "uniformizar com a referência do
+  protocolo". O protocolo não tinha referência alguma àquela obra. Conferir que o alvo da
+  correção existe antes de aplicá-la.
 - **Iniciais certas, ano ausente.** Só o ano faltava. Conferir campo a campo, não a
   referência como bloco.
 - **Duas edições vigentes.** Norma com edição superada e edição ativa: registram-se as duas

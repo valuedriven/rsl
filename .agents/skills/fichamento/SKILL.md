@@ -1,11 +1,11 @@
 ---
 name: fichamento
-description: Extrai dados de cada estudo incluído para o formulário de fichamento, com pré-preenchimento assistido e conferência campo a campo no texto-fonte. Use ao fichar estudo, ao extrair dados do portfólio, ao preencher o IO 4, e ao decidir como registrar achado que não cabe nas categorias previstas.
+description: Extrai dados de cada estudo incluído para o formulário de fichamento, com pré-preenchimento assistido e conferência campo a campo no texto-fonte. Use ao fichar estudo, ao extrair dados do portfólio, ao preencher o formulário de fichamento, e ao decidir como registrar achado que não cabe nas categorias previstas.
 ---
 
 # Fichamento
 
-Extração dos dados de cada estudo incluído para o IO 4. É aqui que o portfólio vira
+Extração dos dados de cada estudo incluído para o formulário de fichamento. É aqui que o portfólio vira
 material analisável — e é aqui que um erro se propaga para toda a síntese sem deixar
 rastro.
 
@@ -66,7 +66,7 @@ O estudo chama de "estratégia" o que outro chama de "método". **Registrar os d
 o termo do autor, literal, e o termo da revisão a que se mapeia. O mapeamento é
 achado da questão da representação, não ruído a normalizar.
 
-Termo novo que apareça com frequência vai ao glossário (IO 5) — e se for conceito que
+Termo novo que apareça com frequência vai ao glossário — e se for conceito que
 o vocabulário de busca não cobria, é **ampliação conceitual**, com as consequências
 que `facetacao-e-termos-livres` descreve.
 

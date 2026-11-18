@@ -22,11 +22,19 @@ Não há `descritores.json`, `consultas.json` nem `pendencias.json`: o estatuto 
 validação vive na planilha `data/validacao_termologica.csv`, as execuções vivem no
 `registro_execucao.json` e as pendências, nas fichas e no próprio registro.
 
-A cobertura de cada base é medida contra o vocabulário que a ficha declara usar
-(`idiomas`, `camadas`, `derivações`) e contra a redução que ela declara termo a termo:
-termo do protocolo ausente e não declarado reprova, e termo na string que não derive do
-protocolo também. A conferência é medida, não aprovação: a cobertura por faceta sai como
-número, porque é ela que mede o preço da forma de cada base.
+A cobertura de cada base é medida contra o vocabulário vigente que a ficha declara usar
+(`idiomas`, `camadas`, `derivações`) e contra a redução própria da base, declarada termo a
+termo: termo vigente ausente e não declarado reprova, e termo na string que não derive do
+protocolo também. Termo retirado por emenda sai do esperado por construção, a partir de
+`RETIRADOS_V2`, e não se declara na ficha.
+
+A ficha é documento OPERACIONAL: diz como executar a busca naquela base, na forma vigente.
+Não carrega cabeçalho, histórico, datas de decisão, estado de execução, lista de termos
+retirados nem justificativa de decisão — o histórico vai para `data/historico.md`, o estado ao registro de
+execução, e o vocabulário retirado ao protocolo e a este script.
+
+A conferência é medida, não aprovação: a cobertura por faceta sai como número, porque é ela
+que mede o preço da forma de cada base.
 
 Uso
   python3 src/protocolo.py --conferir              # confere o documento
@@ -53,6 +61,7 @@ DOC = RAIZ / "docs" / "03_protocolo_estrategia_pesquisa.md"
 DATA = RAIZ / "data"
 
 # A forma de busca é de cada base e vive na ficha da base; o vocabulário é do protocolo.
+# A ficha é operacional: forma vigente e instruções de execução, sem histórico nem racional.
 # O script lê as duas fontes e não conhece sintaxe de base alguma: campo, tag e operador
 # saem do texto da ficha.
 FICHAS = {
@@ -1034,6 +1043,16 @@ def _radical_sem_alcance(base):
     return saida
 
 
+def _vigente(fid, termo):
+    """Termo do quadro que a string pode executar: não foi retirado por emenda, nem em flexão.
+
+    O retirado continua no quadro — é registro do vocabulário —, mas não é esperado em string
+    alguma. Descontá-lo aqui, e não pedir à ficha que o liste, mantém a ficha operacional e
+    impede que uma lista copiada em quatro fichas defase da decisão.
+    """
+    return not any(_mesmo_termo(termo, r) for r in RETIRADOS_V2.get(fid, ()))
+
+
 def cobertura_base(slug, base, facetas_vocab):
     """Problemas de forma da base: vocabulário, âncoras, composição, execução."""
     problemas = []
@@ -1049,7 +1068,7 @@ def cobertura_base(slug, base, facetas_vocab):
             idiomas = list(IDIOMAS)
         camadas = CAMADAS if decl.get("camadas") == "todas" else ("nucleo",)
         tabela = [x for i in idiomas for c in camadas for x in f["camadas"][i][c]]
-        esperados = _sem_repeticao(tabela)
+        esperados = [x for x in _sem_repeticao(tabela) if _vigente(fid, x)]
         unidade = [s for s in base["facetas"] if s["faceta"] == fid]
         achados = [x for s in unidade for x in s["termos"]]
         excluidos = [e["termo"] for e in decl.get("exclusoes", []) if e["faceta"] == fid]
@@ -1125,8 +1144,9 @@ def cobertura_por_faceta(slug, base, facetas_vocab):
     for fid in sorted(por_faceta):
         idiomas = decl.get("idiomas", {}).get(fid) or list(IDIOMAS)
         camadas = CAMADAS if decl.get("camadas") == "todas" else ("nucleo",)
-        tabela = _sem_repeticao([x for i in idiomas for c in camadas
-                                 for x in por_faceta[fid]["camadas"][i][c]])
+        tabela = [x for x in _sem_repeticao([x for i in idiomas for c in camadas
+                                             for x in por_faceta[fid]["camadas"][i][c]])
+                  if _vigente(fid, x)]
         achados = [x for s in base["facetas"] if s["faceta"] == fid for x in s["termos"]]
         excluidos = [e["termo"] for e in decl.get("exclusoes", []) if e["faceta"] == fid]
         cobertos = sum(1 for t in tabela if any(_mesmo_termo(t, a) for a in achados))
@@ -1916,9 +1936,12 @@ def _autoteste_bases(d):
                            'title:"ontology mapping"', 1), "eric", controle,
           "'ontology mapping' está na string")
     # Motivo radical em ficha que não declara a derivação radical.
+    # A ficha operacional não lista o que a forma radical alcança; a linha é injetada.
+    m2 = re.sub(r"^(\| FCT1 \|)", "| FCT1 | domain ontology | alcançado pela forma radical "
+                "declarada |\n\\1", controle, count=1, flags=re.M)
     testa("motivo radical sem derivação radical declarada",
-          controle.replace("| derivações | morfologia e radical |",
-                           "| derivações | morfologia |", 1), "eric", controle,
+          m2.replace("| derivações | morfologia e radical |",
+                     "| derivações | morfologia |", 1), "eric", controle,
           "não declara a derivação radical")
     return falhas, n
 

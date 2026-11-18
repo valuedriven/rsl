@@ -18,6 +18,28 @@ sintaxe de uma com o vocabulário suposto de outra.
 > ficha da base. Mudar uma sem revisitar a outra é defeito que só aparece depois de a busca
 > já ter sido executada.
 
+## A ficha é operacional
+
+A ficha diz **como executar a busca naquela base, na forma vigente** — e nada além disso.
+Quem a abre para executar não deve ter de separar a instrução do racional.
+
+- **Só a decisão final.** Nada de histórico: sem datas de decisão, sem "vigente desde", sem
+  "retirado em", sem forma anterior, sem retornos vencidos, sem numeração explicada por
+  consulta removida. O histórico vai a `data/historico.md`; o estado da execução, ao
+  registro de execução.
+- **Sem cabeçalho.** O arquivo começa pelo título `# Strings de busca — <base>` e segue
+  direto para a seção 1.
+- **Sem informação de exclusão.** Termo retirado por emenda **não se lista** na ficha: o
+  leitor o desconta por construção, a partir da lista de retirados mantida no script. Termo
+  alcançado pela forma radical também não se lista: o leitor calcula o alcance. A tabela de
+  redução só existe quando a **própria base** deixa fora da string um termo vigente, uma
+  linha por termo, motivo curto.
+- **Sem justificativa.** Regra, disparo, forma e limiar — não o porquê. O racional de uma
+  decisão está no protocolo ou no histórico; a ficha não o repete. Uma frase de contexto só
+  entra quando sem ela a instrução seria executada errado.
+- **Número em prosa não entra** se o leitor o calcula (quantos termos, quantas consultas):
+  a cópia defasa.
+
 Esta skill cuida da **ficha inteira**: o que pesquisar, o que registrar, em que ordem montar,
 o que a forma da base pode mudar no vocabulário e como conferir. A lógica das cinco
 expressões é de `expressoes-de-busca`; a execução e o registro dos retornos, de
@@ -39,7 +61,7 @@ expressões é de `expressoes-de-busca`; a execução e o registro dos retornos,
   de aderência: é emenda de busca;
 - **só a declaração** → conferir; não há execução a repetir, mas há decisão a registrar.
 
-Nos dois casos, registrar no Anexo A. Divergência fechada em silêncio volta na execução
+Nos dois casos, registrar no histórico (`data/historico.md`). Divergência fechada em silêncio volta na execução
 seguinte.
 
 **Base nova é decisão de escopo** — fontes de informação são do protocolo, e o pesquisador
@@ -56,7 +78,7 @@ desde a última leitura, e essa edição é o ponto de partida:
    idioma, strings, expressões e a sua natureza, critérios de elegibilidade, fontes e
    conjunto-semente. **É a fonte do vocabulário**; nada dele se reescreve de memória.
 3. O protocolo de informações gerais: recorte e objeto, para os critérios de domínio.
-4. O Anexo A: decisões já tomadas sobre esta base — reduções, variantes adotadas, defeitos
+4. O histórico: decisões já tomadas sobre esta base — reduções, variantes adotadas, defeitos
    que já ocorreram.
 5. O registro de execução da base: sondagens medidas, estado da interface, retornos.
 6. A ficha atual da base, se existir, e **uma ficha de outra base** como referência de
@@ -71,7 +93,7 @@ que se registra:
 
 | Estado | Evidência exigida |
 | --- | --- |
-| **Verificado em fonte oficial** | página de ajuda ou documentação do provedor; registrar título da página e data da consulta |
+| **Verificado em fonte oficial** | página de ajuda ou documentação do provedor; na ficha, o título da página; a data da consulta, no registro de execução |
 | **Verificado em fonte secundária** | material de terceiro — treinamento, guia de biblioteca; declarar como secundário |
 | **Verificado por medição** | sondagem registrada com consulta, retorno e captura, no registro de execução |
 | **Não verificado** | escreve-se assim; nunca se presume pela documentação de outra base |
@@ -112,7 +134,8 @@ que não abriu é pendência registrada, nunca "a base não tem".
 ## Passo 2 — levar cada critério de elegibilidade à base
 
 A seção 2 é uma tabela com **todos** os critérios do protocolo, inclusive os que a base não
-aplica. Para cada um, um de quatro destinos, com o *como* e a razão:
+aplica. Para cada um, um de quatro destinos e o *como*; a razão, quando houver, vai ao
+histórico, não à ficha:
 
 | Destino | Quando | Exemplo de razão |
 | --- | --- | --- |
@@ -128,8 +151,9 @@ Três regras:
   implementação do critério. Se parecer necessário, é recomendação ao pesquisador.
 - **Critério de domínio vai por âncora**, não por filtro de categoria; categoria de assunto
   é camada de precisão, último recurso, declarada no relatório.
-- **Dispensar um critério ou movê-lo para a interface é decisão registrada**, com o que se
-  perde. Onde há filtro de ano na consulta e na página, o ano confere-se no **retorno**.
+- **Dispensar um critério ou movê-lo para a interface é decisão registrada** no histórico,
+  com o que se perde; na ficha fica só o destino e o *como*. Onde há filtro de ano na
+  consulta e na página, o ano confere-se no **retorno**.
 
 ## Passo 3 — strings por faceta e declaração de cobertura
 
@@ -155,23 +179,25 @@ ou lista curada executada consulta a consulta.
 - **termo que não derive do protocolo** — palavra nova só com decisão registrada, e isso vale
   também para variantes, contingências e camadas.
 
-**A declaração de cobertura** transforma "a string é menor" em "a string é menor **por
-isto**". É tabela legível por máquina, com quatro parâmetros: **idiomas** por faceta,
-**camadas** (integral ou núcleo), **derivações** e **redução** termo a termo.
+**A declaração de cobertura** é tabela legível por máquina, com três parâmetros —
+**idiomas** por faceta, **camadas** (integral ou núcleo) e **derivações** — e, só quando a
+base deixa fora da string um termo vigente, a **redução** termo a termo. Termo retirado por
+emenda e termo alcançado pela forma radical não entram na redução: o leitor os trata.
 
 - `morfologia` reconhece flexão de número e gênero, não lematização.
 - `radical` declara que um termo da string alcança os termos do protocolo que o **contêm**
   por inteiro e na mesma ordem: `ontology` alcança `domain ontology`, mas
   `"ontology engineering"` não alcança `ontological engineering`. É regra declarada, não
   equivalência, e vale só onde o comportamento medido da base a sustenta.
-- **Toda linha da redução tem motivo verdadeiro**, e motivo que ainda não é decisão se
-  escreve como lacuna pendente: é o que permite reabrir o assunto.
+- **Toda linha da redução tem motivo verdadeiro e curto** — "redução desta base" basta;
+  motivo que ainda não é decisão se escreve com a palavra "pendente", que o relato de
+  pendências lê. O argumento da redução vai ao histórico.
 
 **Compor por construção, não por digitação.** Strings de dezenas de termos copiadas à mão
 perdem termo sem aviso. Montá-las a partir do quadro terminológico lido do protocolo — com o
 leitor do projeto, num roteiro descartável no diretório temporário, ou com conferência termo
-a termo — e só depois aplicar a forma da base. O que se acrescenta (flexão sobre termo que
-já consta) e o que se retira (redução declarada) fica visível na própria ficha.
+a termo — e só depois aplicar a forma da base. O que se retira por decisão da
+base fica na redução declarada; o resto se confere pelo leitor, não pela prosa.
 
 **Decisões metodológicas desta seção são do pesquisador**: usar só o núcleo, restringir
 idiomas, reduzir a radicais, mover parte da faceta para outro campo. O agente propõe com a
@@ -193,17 +219,19 @@ esperado em recall, e pede a decisão.
 - **Como executar**: passos numerados, do controle da sessão ao registro, com o comando do
   projeto para registrar a execução.
 - **Variantes previstas**: cada uma com o **disparo** (o que se observa para adotá-la), a
-  forma, e a regra de medida — nenhuma variante se adota por reduzir o número; mede-se
-  contra o conjunto-semente.
+  **forma** e, quando houver, o limiar ou a exigência de emenda — em uma ou duas frases.
+  Nenhuma variante se adota por reduzir o número; mede-se contra o conjunto-semente.
+  Consulta removida sai da tabela sem nota; os identificadores das demais não mudam.
 
 ## Passo 5 — conjunto-semente e ressalvas
 
 - **Conjunto-semente**: as sementes que o protocolo atribui a esta base, com identificador,
   DOI ou outro identificador **conferido na fonte**, e o procedimento em duas etapas —
-  indexação primeiro, recuperação depois. A contagem esperada por base **lê-se do
-  protocolo**, não se transcreve de outra ficha.
-- **Ressalvas**: estatuto dos termos (livres ou validados), o que foi verificado só em fonte
-  secundária, o que a base não cobre e quem cobre, e o que a forma desta base custa.
+  indexação primeiro, recuperação depois. Contagens **não se transcrevem**: leem-se do
+  protocolo. O **estado** da aderência não entra na ficha: está no registro de execução.
+- **Ressalvas**: só o que muda a execução ou o relato — estatuto dos termos, o que foi
+  verificado só em fonte secundária, o que a base não cobre e quem cobre —, um item curto
+  cada.
 
 ## Contrato de forma — o que a conferência lê
 
@@ -215,7 +243,7 @@ alterar, conferir no leitor se o contrato ainda é este.
 | --- | --- |
 | seções lidas | cabeçalhos exatos `## 3. Strings por faceta`, `## 4. Expressões de busca` e `### Declaração de cobertura` |
 | declaração | tabela com as linhas `idiomas` (`FCTn: pt, en, es;` …), `camadas` (`todas` ou `nucleo`) e `derivações` (`morfologia` e/ou `radical`) |
-| redução termo a termo | linhas `\| FCTn \| termo \| motivo \|` dentro da seção da declaração |
+| redução termo a termo | só para termo vigente que a base deixa fora; linhas `\| FCTn \| termo \| motivo \|` dentro da seção da declaração. Termo retirado por emenda e termo alcançado pela forma radical não se declaram |
 | string por faceta | `### \`STRn\` — conjunto \`#n\` — <cor> FCTn — <nome>`, com **um único** bloco cercado |
 | campo da string | lido do texto: início `TS=` ou `TITLE-ABS-KEY`, ou prefixo `title:`, `abstract:`, `descriptor:`; campo de outra forma é lido como "todos os campos", e prefixos diferentes na mesma string, como "misto" |
 | termo da string | entre aspas, separado por `OR`; sem proximidade nem aspas aninhadas dentro da string da faceta |
@@ -233,26 +261,24 @@ técnica a propor e a provar com o autoteste, não algo que a ficha resolva sozi
 ## Estrutura da ficha
 
 ```
-# Strings de busca — <base>
-cabeçalho: protocolo · posição no modelo · fonte (interface) · responsáveis ·
-           vigente desde · registro de execução (base BDn) · histórico: Anexo A
-## 1. Estado de verificação da sintaxe     elemento · situação; fonte; nota do que a expressão usa
+# Strings de busca — <base>                sem cabeçalho: direto para a seção 1
+## 1. Estado de verificação da sintaxe     elemento · situação; fonte
 ## 2. Critérios de elegibilidade           todos os CE · na consulta? · como
-## 3. Strings por faceta                   fidelidade ao protocolo; mapa das facetas
-### Declaração de cobertura                tabela; redução termo a termo
+## 3. Strings por faceta                   mapa das facetas; forma da base em uma frase
+### Declaração de cobertura                tabela; redução própria da base, se houver
 ### `STRn` — conjunto `#n` — …             uma por faceta, um bloco cada
-## 4. Expressões de busca                  composição, contenção, estatuto, leitura de zero
+## 4. Expressões de busca                  composição, execução de cada EB, limiares, leitura de zero
 ### (âncoras em proximidade | forma curada | como esta base exige a montagem)
 ### EB1 … EB5                              facetas, estatuto, forma por conjuntos
 ### Como executar
 ### Variantes previstas                    disparo · forma · regra de medida
-## 5. Conjunto-semente                     sementes da base; procedimento; estado
-## 6. Ressalvas
+## 5. Conjunto-semente                     sementes da base; procedimento; limiar
+## 6. Ressalvas                            itens curtos, só o que muda execução ou relato
 ```
 
-O texto metodológico que se repete entre fichas — composição, estatuto, leitura de zero —
-pode ser o mesmo; o que **não** se repete é qualquer afirmação sobre sintaxe, que é sempre
-desta base e com a sua fonte.
+O texto que se repete entre fichas — composição, execução de cada expressão, leitura de
+zero — pode ser o mesmo, e é curto; o que **não** se repete é qualquer afirmação sobre
+sintaxe, que é sempre desta base e com a sua fonte.
 
 ## Conferir e registrar
 
@@ -276,14 +302,19 @@ desta base e com a sua fonte.
      emenda? A relação que afirmam com a forma executada (subconjunto, partição exata)
      vale de fato, pela lógica da consulta?
    - **número escrito em prosa** — quantos termos, quantas palavras-raiz, quantas
-     consultas — recalcula-se a partir das strings da própria ficha;
+     consultas — não deveria existir; se for indispensável, recalcula-se a partir das
+     strings da própria ficha;
    - **propagação entre seções**: mudança na forma de execução (partição, nomes das
      consultas, arquivos de exportação) chega a "Como executar", às ressalvas e ao registro
      de execução, e não só à seção 4;
    - que cada critério tem destino, que cada elemento de sintaxe usado nas expressões tem
      estado e fonte, e que as variantes têm disparo.
-4. Registrar no Anexo A o que mudou e por quê (`registrar-decisao`). Mudança que altere a
-   recuperação torna vencidos os retornos anteriores daquela base, e a ficha diz isso.
+4. Registrar no histórico o que mudou e por quê (`registrar-decisao`). Mudança que altere a
+   recuperação torna vencidos os retornos anteriores daquela base: isso se registra no
+   histórico e no registro de execução, **não na ficha**, que passa a mostrar só a forma
+   nova.
+5. Reler a ficha procurando o que não é operacional — data, "antes", "passou a", "retirado
+   em", justificativa, estado — e levar ao histórico o que ainda não estiver lá.
 
 ## Ao entregar
 

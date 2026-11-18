@@ -1,13 +1,13 @@
 # Protocolo - Informações gerais
 
-| Revisão Sistemática Banyan[^1] \| Versão Piloto – 2026 PROTOCOLO PARA REVISÃO SISTEMÁTICA EM ÁREAS MULTIDISCIPLINARES Instrumento Operacional (IO) 01 |  |
+| Revisão Sistemática Banyan[^1] \| Versão Piloto – 2026 PROTOCOLO PARA REVISÃO SISTEMÁTICA EM ÁREAS MULTIDISCIPLINARES |  |
 | ----- | :---: |
 | **Título da revisão** | Representação do conhecimento sobre práticas educacionais e seus fatores situacionais: revisão sistemática de modelos conceituais, ontologias e outros sistemas de organização do conhecimento |
 | **Vínculo institucional** | Programa de Pós-Graduação em Gestão & Organização do Conhecimento (PPGGOC) — Escola de Ciência da Informação (ECI), Universidade Federal de Minas Gerais (UFMG) |
 | **Agência(s) de fomento** | Não aplicável. |
 | **Projeto de pesquisa** | Um framework informacional fundamentado na Organização do Conhecimento e na Engenharia de Ontologias para representar formalmente as práticas que influenciam a efetividade do processo de ensino-aprendizagem (PEA). Esta revisão atende aos Objetivos Específicos OE1 (parcial), OE2 e OE3, e subsidia o OE4. |
 | **Código interno** | RSL-01/2026 — Representação (primeira de um conjunto de revisões do projeto) |
-| **Equipe executiva** | ReT — Junilson Pereira Souza (proponente, doutorando PPGGOC/UFMG); RE — Profa. Dra. Elisângela Cristina Aganette (orientadora); RTG, VT, APB e Revisores 1 e 2\. Composição, atribuições e contatos: IO 6\. |
+| **Equipe executiva** | ReT — Junilson Pereira Souza (proponente, doutorando PPGGOC/UFMG); RE — Profa. Dra. Elisângela Cristina Aganette (orientadora); RTG, VT, APB e Revisores 1 e 2\. Composição, atribuições e contatos: planilha de competências. |
 
 ## Etapa 1 - Identificação de tópicos preliminares
 

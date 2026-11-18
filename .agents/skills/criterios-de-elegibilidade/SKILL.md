@@ -17,11 +17,12 @@ sua aplicação. Representar apenas uma das duas **basta** — é da comparaçã
 soluções parciais que se enunciam as lacunas de integração.
 
 **Por que a regra é uma só, escrita nos três lugares.** O parecer externo achou
-duas formulações divergentes, uma conjuntiva no IO 0 e uma disjuntiva no IO 1; a
-conferência achou uma **terceira**, mais larga que as duas, no critério da 1ª
-filtragem, que não exigia nenhuma das duas dimensões. Hoje os três lugares — a
-declaração de escopo do IO 0, o critério de elegibilidade do IO 1 e o critério da 1ª
-filtragem — dizem a mesma coisa; divergência entre eles é defeito a corrigir no
+duas formulações divergentes, uma conjuntiva no plano (`docs/01`) e uma disjuntiva no
+protocolo (`docs/03`); a conferência achou uma **terceira**, mais larga que as duas, no
+critério da 1ª filtragem, que não exigia nenhuma das duas dimensões. Hoje os três
+lugares — a declaração de escopo do plano, o critério de elegibilidade do protocolo e o
+critério da 1ª filtragem — dizem a mesma coisa; divergência entre eles é defeito a
+corrigir no
 documento.
 
 Ser artefato de representação não basta. Ser artefato do domínio educacional não
@@ -74,7 +75,7 @@ evita.
 - **revisão autônoma** — problema que fica para outra revisão do projeto, com critério
   de exclusão próprio;
 - **fora do escopo do projeto** — problema que saiu do projeto de pesquisa; suprime-se
-  do quadro e do contra-escopo, e o histórico vai ao Anexo A.
+  do quadro e do contra-escopo, e o caso vai para o histórico (`data/historico.md`).
 
 Conferir que nenhum problema seja ao mesmo tempo objeto desta revisão e objeto de
 critério de exclusão, e que cada revisão autônoma tenha o seu critério.
@@ -83,4 +84,4 @@ critério de exclusão, e que cada revisão autônoma tenha o seu critério.
 
 Alteração de critério é **emenda de elegibilidade** — altera o que entra sem alterar
 a busca. Se alterar os termos, é emenda **de busca**, e então exige reexecução e novo
-teste de aderência. Registrar o alcance no Anexo A: `registrar-decisao`.
+teste de aderência. Registrar o alcance no histórico: `registrar-decisao`.

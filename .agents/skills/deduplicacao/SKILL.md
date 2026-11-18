@@ -6,7 +6,7 @@ description: Deduplica os registros exportados das bases em duas passagens, por 
 # Deduplicação
 
 Quatro bases trazem o mesmo estudo com metadados diferentes. A deduplicação decide
-quantos estudos **distintos** existem — número que depois entra no fluxograma do IO 3
+quantos estudos **distintos** existem — número que depois entra no fluxograma PRISMA
 e em toda contagem do relato.
 
 ## 1. Duas passagens, nesta ordem
@@ -60,4 +60,4 @@ Por base: registros exportados. Após a 1ª passagem: duplicatas por `UT`, por `
 por título. Após a 2ª: pares marcados, fundidos e mantidos como distintos, com o
 motivo. E o total de registros únicos, que é o número que segue para a 1ª filtragem.
 
-Tudo isso vai para o IO 2 e alimenta o fluxograma do IO 3.
+Tudo isso vai para as contagens da busca e alimenta o fluxograma PRISMA.

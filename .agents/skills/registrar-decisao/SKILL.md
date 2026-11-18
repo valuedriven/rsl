@@ -1,6 +1,6 @@
 ---
 name: registrar-decisao
-description: Registra uma decisão ou emenda do protocolo, julgando o seu alcance — de redação, de escopo, de elegibilidade ou de busca — e propagando-a às fontes e ao Anexo A. Use ao tomar, alterar ou reverter qualquer decisão metodológica da revisão, e ao fechar ou abrir pendência.
+description: Registra uma decisão ou emenda do protocolo, julgando o seu alcance — de redação, de escopo, de elegibilidade ou de busca — e propagando-a às fontes e ao histórico. Use ao tomar, alterar ou reverter qualquer decisão metodológica da revisão, e ao fechar ou abrir pendência.
 ---
 
 # Registrar uma decisão
@@ -40,16 +40,16 @@ decidida, não esquecida.
 ## 3. Onde vive cada coisa
 
 - **O instrumento guarda a última definição.** Sem histórico, sem data.
-- **O Anexo A guarda o percurso**: linha do tempo, decisões revogadas, emendas,
+- **O histórico (`data/historico.md`) guarda o percurso**: linha do tempo, decisões revogadas, emendas,
   verificações. É o único lugar com datas, além do cronograma.
-- **A pendência** vive no Anexo A, em `data/historico.md`. Pendência fechada
+- **A pendência** vive no histórico, em `data/historico.md`. Pendência fechada
   registra-se com o que a fechou — não se apaga.
 
 ## 4. O ciclo, depois do julgamento
 
 1. alterar o documento de `docs/` que guarda a definição;
 2. conferir as remissões afetadas nos demais instrumentos;
-3. acrescentar a linha ao Anexo A, com data, alcance e o que não se alterou.
+3. acrescentar a linha ao histórico, com data, alcance e o que não se alterou.
 
 ## 5. Quando perguntar em vez de decidir
 

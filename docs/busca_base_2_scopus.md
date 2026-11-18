@@ -1,13 +1,5 @@
 # Strings de busca — Scopus
 
-**Protocolo:** Representação do conhecimento sobre práticas educacionais e seus fatores situacionais — revisão sistemática conduzida pelo modelo RS Banyan.  
-**Posição no modelo:** Módulo 3, Etapa 1, 3º e 4º passos (strings e expressões de busca) e Etapa 2, 1º passo (execução).  
-**Fonte:** Scopus — *Advanced search*.  
-**Responsável técnico:** Junilson Pereira Souza. **Validação temática:** VT.  
-**Vigente desde:** 18/11/2026 (alinhamento à v2 do protocolo, com as âncoras em `W/5`). **Registro de execução:** `data/registro_execucao.json`, base `BD2`. **Histórico das decisões:** Anexo A.
-
----
-
 ## 1. Estado de verificação da sintaxe
 
 | Elemento | Situação | Fonte |
@@ -18,32 +10,32 @@
 | `DOCTYPE()` com os códigos `ar`, `re`, `cp`, `ch`, `bk`, `ed`, `le`, `no`, `sh` | Verificados | idem |
 | `SRCTYPE()` com `j`, `b`, `k`, `p`, `r`, `d` | Verificado | idem |
 | `OPENACCESS(0` ou `1)` | Verificado | idem |
-| `AND`, `OR`, `AND NOT`; precedência `OR` → `AND` → `AND NOT` | Verificado | idem, com a advertência de que a precedência muda em 2026 |
+| `AND`, `OR`, `AND NOT`; precedência `OR` → `AND` → `AND NOT` | Verificado; a precedência muda em 2026 | idem |
 | Truncamento `*` e `?`, mínimo de 3 caracteres antes do curinga | Verificado | idem |
-| Proximidade `W/n` e `PRE/n` | Verificados; `W/5` **medido** entre termos simples e entre grupos pequenos de frases (sondagens S2 e S4) | idem e `data/registro_execucao.json` (BD2) |
-| `W/5` entre os grupos inteiros de `#5` | **Não medido** nesse tamanho | medir na primeira execução; recusa leva à redução da seção 4 |
+| Proximidade `W/n` e `PRE/n` | Verificados; `W/5` **medido** entre termos simples e entre grupos pequenos de frases | idem e `data/registro_execucao.json` (BD2) |
+| `W/5` entre os grupos inteiros de `#5` | **Não medido** | medir na primeira execução; recusa leva à variante "Redução por recusa da interface" |
 | `{}` frase exata *versus* `""` frase aproximada | Verificado | idem |
-| Limite de operadores por consulta | **Não documentado** | se a interface recusar, aplicar a redução da seção 4 |
+| Limite de operadores por consulta | **Não documentado** | — |
 | Combinação de consultas do histórico (`#n`) com filtros na mesma linha | **Não verificada** | ver "Como executar" |
-| Lematização do plural | **Não verificada**; presumida para o inglês | — |
-| Tratamento de diacríticos | **Não verificado** | as strings trazem as duas grafias, de modo que nada depende dele |
+| Lematização do plural | **Não verificada** | — |
+| Tratamento de diacríticos | **Não verificado** | as strings trazem as duas grafias |
 | Teto de retorno exibido e de exportação por lote | **Não verificados** | conferir na interface antes de exportar |
 
-> Todas as facetas vão entre parênteses explícitos e nenhuma expressão depende da ordem implícita de avaliação. As expressões usam `TITLE-ABS-KEY()`, `W/5`, `PUBYEAR`, `LANGUAGE()` e `DOCTYPE()`, todos verificados em fonte oficial; o `W/5` entre grupos do tamanho de `#5` ainda é a medir.
+Todas as facetas vão entre parênteses explícitos; nenhuma expressão depende da ordem implícita de avaliação.
 
 ---
 
 ## 2. Critérios de elegibilidade
 
-| Critério | ID | Expresso na string? | Como |
+| Critério | ID | Na consulta? | Como |
 | :--- | :---: | :--- | :--- |
-| Intervalo temporal — de 2017 até a data de execução, 2026 parcialmente coberto | CE1 / CE2 | **Sim** | `AND PUBYEAR > 2016 AND PUBYEAR < 2027`: a cota superior fecha o ano da execução; 2026 entra conforme a data de consulta e a atualização da base, e 2027 fica fora |
+| Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Sim** | `AND PUBYEAR > 2016 AND PUBYEAR < 2027` |
 | Idiomas — português, inglês e espanhol | CE3 | **Sim** | `AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish))` |
-| Tipo documental | CE4 | **Sim** | `AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))`. Teses e dissertações não são tipo documental da Scopus. Revisões sistemáticas e de escopo permanecem elegíveis |
-| Disponibilidade de texto completo | CE5 | **Não como tal** | `OPENACCESS(1)` restringe a acesso aberto, que não equivale a texto completo pela via institucional. Só como contingência, nunca na busca principal |
+| Tipo documental | CE4 | **Sim** | `AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` |
+| Disponibilidade de texto completo | CE5 | **Não** | 2ª filtragem; `OPENACCESS(1)` só como contingência |
 | Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | a âncora 🟨 (FCT2) entra em todas as expressões, e a 🟦 (FCT1) é obrigatória |
-| Outros tipos documentais — editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos sem texto completo e versões preliminares | CE9 | **Não** | decisão de leitura, na 2ª filtragem |
+| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
+| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
 
 ---
 
@@ -51,79 +43,15 @@
 
 `STRn` é o identificador do protocolo e `#n` o conjunto correspondente. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
 
-**Fidelidade ao protocolo.** As strings desta ficha são `STR1`–`STR4` da versão 2 do protocolo, literalmente e nos três idiomas, acrescidas apenas de flexões de número sobre termo que já consta delas, nos termos da ressalva 2. O que o quadro terminológico registra e a STR v2 não executa está declarado termo a termo abaixo.
-
 ### Declaração de cobertura
 
-O que esta busca alcança do vocabulário do protocolo. `src/protocolo.py` lê esta tabela para conferir a string contra o protocolo; termo ausente e não declarado reprova a conferência desta base.
+Lida por `src/protocolo.py`.
 
 | Parâmetro | Valor |
 | :--- | :--- |
 | idiomas | FCT1: pt, en, es; FCT2: pt, en, es; FCT3: pt, en, es; FCT4: pt, en, es |
 | camadas | todas |
 | derivações | morfologia |
-
-**Redução declarada.** A única redução é a da v2: os termos que a emenda retirou, termo a termo na tabela seguinte. Os acréscimos em relação à STR v2 são flexão de número sobre termo que já consta dela.
-
-**Redução declarada, termo a termo.** Os termos abaixo permanecem no quadro terminológico e no estatuto de validação; a string desta base não os executa. As razões estão na Nota de emenda e o efeito é medido no teste de aderência e na sonda de sensibilidade.
-
-| Faceta | Termo retirado da string | Motivo |
-| :--- | :--- | :--- |
-| FCT1 | taxonomia | retirado na emenda v2 |
-| FCT1 | ontológico | retirado na emenda v2 |
-| FCT1 | ontológica | retirado na emenda v2 |
-| FCT1 | análise facetada | retirado na emenda v2 |
-| FCT1 | análise de facetas | retirado na emenda v2 |
-| FCT1 | modelo conceitual | retirado na emenda v2 |
-| FCT1 | modelagem conceitual | retirado na emenda v2 |
-| FCT1 | esquema conceitual | retirado na emenda v2 |
-| FCT1 | modelo semântico | retirado na emenda v2 |
-| FCT1 | representação formal | retirado na emenda v2 |
-| FCT1 | ontological | retirado na emenda v2 |
-| FCT1 | facet analysis | retirado na emenda v2 |
-| FCT1 | conceptual model | retirado na emenda v2 |
-| FCT1 | conceptual modeling | retirado na emenda v2 |
-| FCT1 | conceptual modelling | retirado na emenda v2 |
-| FCT1 | conceptual schema | retirado na emenda v2 |
-| FCT1 | semantic model | retirado na emenda v2 |
-| FCT1 | formal representation | retirado na emenda v2 |
-| FCT1 | análisis facetado | retirado na emenda v2 |
-| FCT1 | análisis de facetas | retirado na emenda v2 |
-| FCT1 | modelo conceptual | retirado na emenda v2 |
-| FCT1 | modelado conceptual | retirado na emenda v2 |
-| FCT1 | esquema conceptual | retirado na emenda v2 |
-| FCT1 | modelo semántico | retirado na emenda v2 |
-| FCT1 | representación formal | retirado na emenda v2 |
-| FCT2 | educativo | retirado na emenda v2 |
-| FCT2 | currículo | retirado na emenda v2 |
-| FCT2 | estudante | retirado na emenda v2 |
-| FCT2 | aluno | retirado na emenda v2 |
-| FCT2 | professor | retirado na emenda v2 |
-| FCT2 | docente | retirado na emenda v2 |
-| FCT2 | instituição de ensino | retirado na emenda v2 |
-| FCT2 | nível de ensino | retirado na emenda v2 |
-| FCT2 | modalidade de ensino | retirado na emenda v2 |
-| FCT2 | curriculum | retirado na emenda v2 |
-| FCT2 | learner | retirado na emenda v2 |
-| FCT2 | student | retirado na emenda v2 |
-| FCT2 | teacher | retirado na emenda v2 |
-| FCT2 | instructor | retirado na emenda v2 |
-| FCT2 | educational institution | retirado na emenda v2 |
-| FCT2 | educational level | retirado na emenda v2 |
-| FCT2 | education modality | retirado na emenda v2 |
-| FCT2 | estudiante | retirado na emenda v2 |
-| FCT2 | alumno | retirado na emenda v2 |
-| FCT2 | institución educativa | retirado na emenda v2 |
-| FCT2 | nivel educativo | retirado na emenda v2 |
-| FCT2 | modalidad educativa | retirado na emenda v2 |
-| FCT4 | contexto de aplicação | retirado na emenda v2 |
-| FCT4 | contexto de uso | retirado na emenda v2 |
-| FCT4 | ambiente de aprendizagem | retirado na emenda v2 |
-| FCT4 | application context | retirado na emenda v2 |
-| FCT4 | context of use | retirado na emenda v2 |
-| FCT4 | learning environment | retirado na emenda v2 |
-| FCT4 | contexto de aplicación | retirado na emenda v2 |
-| FCT4 | entorno de aprendizaje | retirado na emenda v2 |
 
 ### `STR1` — conjunto `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
@@ -153,7 +81,6 @@ TITLE-ABS-KEY("fator situacional" OR "fatores situacionais" OR "situação de us
 
 ## 4. Expressões de busca
 
-
 ```
 EB1 = #1 + #2 + #3 + #4
 EB2 = #1 + #2 + #3
@@ -162,32 +89,20 @@ EB4 = #1 + #2 + (#3 OR #4)     (executada)
 EB5 = #1 + #2                  (sonda de sensibilidade)
 ```
 
-As facetas combinam-se por `AND`, e acrescentar faceta **restringe**. Daí **EB1 ⊂ EB2 ⊂ EB4**, **EB1 ⊂ EB3 ⊂ EB4** e **EB4 = EB2 ∪ EB3**: EB4 exige as duas âncoras e **ao menos uma** das facetas temáticas. **EB5 ⊃ EB4**: retira a exigência temática e mede o que EB4 deixa de fora. *Geral* qualifica a composição, não o alcance: EB1 é a mais restritiva das expressões.
+| Expressão | Execução |
+| :--- | :--- |
+| **EB4** | executar e exportar: é o corpus desta base |
+| **EB5** | executar uma única vez, na mesma data; não compõe o corpus |
+| **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
+| **EB1** | não executar; derivação local |
 
-Registro que não satisfaça EB1 **não é excluído**: permanece se satisfizer EB4. As facetas temáticas são dimensões combináveis, não requisitos cumulativos de recuperação. EB1 **caracteriza** — quem reúne as quatro facetas tende a ser central à questão —, e é a primeira chave da ordem de leitura.
-
-**Estatuto de cada expressão.**
-
-| | Executar na base? | Como quê | O que se perde ao pular |
-| :--- | :--- | :--- | :--- |
-| **EB4** (cobertura restrita) | **sim, sempre** | é o portfólio: define o que a revisão recuperou nesta base | tudo — a base não participa da revisão |
-| **EB5** (sonda) | **sim, uma única vez** | sonda de sensibilidade: mede o que EB4 perde | a medida do custo em recall da mudança de EB4 |
-| **EB2** | sim | teste de fidelidade da derivação | a auditabilidade das contagens derivadas |
-| **EB3** | sim | teste de fidelidade da derivação | idem |
-| **EB1** (geral) | não | caracterização, por derivação local | nada, desde que a derivação rode |
-
-**Execução única.** Executa-se **EB4**, com exportação única. **EB5** é executada **uma única vez, na mesma base e data**, e **não compõe o corpus**: o retorno é a sonda de sensibilidade. A pertinência de cada registro a EB1, EB2 e EB3 é calculada localmente por `derivar_expressoes.py`, e essas contagens são **derivadas**, não reconsultadas.
-
-**Fidelidade da derivação.** Antes de aceitar contagem derivada, executar **EB2 e EB3** e comparar com o conjunto derivado: divergência acima de **10%** reprova o método e obriga a voltar às execuções separadas, com emenda registrada.
-
-**Sensibilidade.** Mede-se a fração de registros recuperados por EB5 que **não** são recuperados por EB4, e amostra-se essa fração para classificação manual de elegibilidade. Se a fração elegível for **< 5%**, a mudança está justificada; se **> 15%**, reconsiderar — possivelmente retornar a EB5 como busca definitiva. O resultado é registrado como emenda ao protocolo.
-
-**Leitura de retorno vazio.** Zero só é achado depois de provada a execução válida. **EB4 = 0** é quase sempre defeito; **EB5 = 0** é defeito de execução, porque EB5 contém EB4; **EB2 = 0** com EB4 > 0 é achado — há artefatos, nenhum representa práticas; **EB3 = 0** é achado forte, porque a representação de fatores situacionais é a parte menos consolidada; **EB1 = 0** é o enunciado mais nítido da lacuna. Contagem derivada próxima de zero obriga à execução direta antes de ser relatada.
-
+- **Fidelidade:** divergência acima de **10%** entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` **< 5%** mantém EB4; **> 15%** leva à reconsideração, com emenda.
+- **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### `#5` — as duas âncoras em proximidade
 
-Definir **uma vez** e reusar em todas as expressões, como manda o item 7 da Nota de emenda (v2). A proximidade de cinco palavras exclui o registro em que artefato e domínio aparecem sem relação entre si. **A proximidade e os filtros aplicam-se às cinco**, e é isso que faz a contenção valer por construção: cada expressão é `#5` com zero, uma ou duas facetas a mais. É a mesma forma da Web of Science (`NEAR/5`), o que torna comparáveis as duas bases.
+Definir uma vez e reusar nas cinco expressões.
 
 ```
 TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "ontologia" OR "ontologias" OR "ontologia de domínio" OR "ontologias de domínio" OR "ontologia de aplicação" OR "ontologia de topo" OR "vocabulário controlado" OR "tesauro" OR "taxonomia facetada" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "ontologia facetada" OR "ontologia educacional" OR "ontologia de aprendizagem" OR "ontologia de ensino" OR "modelo ontológico educacional" OR "ontologia de prática educacional" OR "ontologia de design instrucional" OR "ontologia de currículo" OR "modelo de domínio" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "representação do conhecimento baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems" OR "ontology" OR "ontologies" OR "domain ontology" OR "domain ontologies" OR "application ontology" OR "upper ontology" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "faceted taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "faceted ontology" OR "educational ontology" OR "learning ontology" OR "teaching ontology" OR "educational ontological model" OR "educational practice ontology" OR "instructional design ontology" OR "curriculum ontology" OR "domain model" OR "ontology engineering" OR "ontology development" OR "ontology design pattern" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontology-based knowledge representation" OR "ontological engineering" OR "representación del conocimiento" OR "organización del conocimiento" OR "sistema de organización del conocimiento" OR "sistemas de organización del conocimiento" OR "ontología" OR "ontología de dominio" OR "ontología de aplicación" OR "ontología de alto nivel" OR "vocabulario controlado" OR "taxonomía facetada" OR "esquema de clasificación" OR "esquema de metadatos" OR "clasificación facetada" OR "ontología facetada" OR "ontología educativa" OR "ontología de aprendizaje" OR "ontología de enseñanza" OR "modelo ontológico educativo" OR "ontología de práctica educativa" OR "ontología de diseño instruccional" OR "ontología de currículo" OR "modelo de dominio" OR "ingeniería de ontologías" OR "desarrollo de ontologías" OR "patrón de diseño ontológico" OR "modelado basado en ontologías" OR "representación del conocimiento basada en ontologías") W/5 ("educação" OR "educacional" OR "educacionais" OR "educacionales" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educação básica" OR "ensino fundamental" OR "ensino médio" OR "educação profissional e tecnológica" OR "educação a distância" OR "educação online" OR "educação digital" OR "educação formal" OR "educação não formal" OR "tecnologia educacional" OR "ambiente virtual de aprendizagem" OR "recurso educacional aberto" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "education" OR "educational" OR "teaching practice" OR "teaching method" OR "teaching strategy" OR "classroom teaching" OR "teaching-learning" OR "teaching and learning" OR "learning process" OR "learning environment" OR "learning design" OR "learning object" OR "learning analytics" OR "learning outcome" OR "learning path" OR "student learning" OR "blended learning" OR "online learning" OR "lifelong learning" OR "learning management system" OR "teaching-learning process" OR "basic education" OR "primary education" OR "secondary education" OR "higher education" OR "vocational and technical education" OR "distance education" OR "online education" OR "digital education" OR "formal education" OR "non-formal education" OR "educational technology" OR "virtual learning environment" OR "open educational resource" OR "e-learning" OR "massive open online course" OR "educación" OR "proceso de enseñanza-aprendizaje" OR "método de enseñanza" OR "estrategia de enseñanza" OR "enseñanza superior" OR "entorno de aprendizaje" OR "objeto de aprendizaje" OR "situación de aprendizaje" OR "resultado de aprendizaje" OR "educación básica" OR "educación primaria" OR "educación secundaria" OR "educación superior" OR "educación profesional y técnica" OR "educación a distancia" OR "educación en línea" OR "educación digital" OR "educación formal" OR "educación no formal" OR "tecnología educativa" OR "entorno virtual de aprendizaje" OR "recurso educativo abierto" OR "aprendizaje electrónico" OR "curso en línea masivo y abierto" OR "aprendiz"))
@@ -233,43 +148,44 @@ TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimen
 #5 AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
 ```
 
-A **forma expandida** de qualquer expressão obtém-se substituindo `#5`, `#3` e `#4` pelos blocos desta ficha — `#5` acima, `#3` e `#4` da seção 3. Ela não é mantida em duplicidade aqui: cópia em segundo lugar defasa na primeira alteração da string.
+Forma expandida: substituir `#5`, `#3` e `#4` pelos blocos desta ficha, num arquivo.
 
 ### Como executar
 
-1. Conferir a sessão contra a seção 1, se for a primeira execução do dia.
-2. Definir `#3`, `#4` e `#5` na sessão com os blocos desta ficha e submeter a **forma por conjuntos de EB4**. A combinação de consultas do histórico com filtros na mesma linha **não está verificada** nesta base; se recusada, montar a forma expandida por substituição, num arquivo, e não por digitação. Anotar no registro qual das duas formas foi aceita.
-3. Submeter sempre a partir de arquivo, e não recuperando o texto da interface — as formas diferem em poucos caracteres e são visualmente indistinguíveis.
+1. Conferir a sessão contra a seção 1, na primeira execução do dia.
+2. Definir `#3`, `#4` e `#5` com os blocos desta ficha e submeter a forma por conjuntos de EB4. Se a interface recusar consulta do histórico combinada com filtros, submeter a forma expandida, montada em arquivo. Anotar no registro a forma aceita.
+3. Submeter sempre a partir de arquivo, nunca recuperando o texto da interface.
 4. Exportar em RIS, com todos os campos.
-5. Conferir o retorno da exportação contra o da tela e o recorte por dentro do arquivo: registro fora da janela indica filtro mal fechado.
-6. Registrar **EB4** e **EB5** (`python3 src/derivar_expressoes.py --registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`); rodar `--derivar` e `--sensibilidade`.
-7. Medir a aderência. Se uma semente esperada não aparecer, seguir a anatomia da perda da seção 5, que pode reverter a proximidade, com emenda. A sonda EB5 não entra no corpus: o que ela mede é a sensibilidade.
+5. Conferir o retorno da exportação contra o da tela e o recorte temporal dentro do arquivo.
+6. Registrar EB4 e EB5: `python3 src/derivar_expressoes.py --registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `--derivar` e `--sensibilidade`.
+7. Medir a aderência (seção 5). Semente esperada não recuperada: aplicar a anatomia da perda.
+8. Na primeira execução, conferir se o retorno de EB4 tem a mesma ordem de grandeza do da Web of Science; discrepância indica problema de agrupamento.
 
 ### Variantes previstas
 
 #### Forma ampla, sem proximidade
 
-Disparo: a anatomia da perda (seção 5) atribuir à proximidade a perda de semente, ou a interface recusar `W/5` entre grupos deste tamanho. Forma: `#1 AND #2` no lugar de `#5`, nas cinco expressões. É superconjunto da forma vigente; adotá-la é emenda, medida contra o conjunto-semente e pela sonda de sensibilidade.
+Disparo: a anatomia da perda atribui a perda à proximidade, ou a interface recusa `W/5` entre grupos deste tamanho. Forma: `#1 AND #2` no lugar de `#5`, nas cinco expressões. Adoção exige emenda.
 
 #### Sem limite de tipo documental
 
-Para medir o peso da restrição documental, executar EB4 suprimindo a cláusula `DOCTYPE` e comparar os retornos. A diferença é reportada como efeito do critério.
+Disparo: medir o efeito do critério CE4. Forma: EB4 sem a cláusula `DOCTYPE`; reportar a diferença de retorno.
 
 #### Redução por recusa da interface
 
-Se a expressão for recusada por extensão, partir o grupo 🟨 de `#5` em duas metades — a primeira com os termos de educação formal, a segunda com os de tecnologia educacional e aprendizagem digital —, mantendo o grupo 🟦 e as demais facetas idênticos, e somar com deduplicação. A partição é exata: `A W/5 (B1 OR B2)` equivale a `(A W/5 B1) OR (A W/5 B2)`. Registrar a divisão como adaptação.
+Disparo: expressão recusada por extensão. Forma: partir o grupo 🟨 de `#5` em duas metades — educação formal; tecnologia educacional e aprendizagem digital —, mantendo o resto idêntico, e unir por deduplicação. Registrar a partição como adaptação.
 
 #### Acesso aberto — contingência
+
+Disparo: obtenção de textos completos inviável na 2ª filtragem. Forma: anexar a cláusula abaixo e declarar o viés de acesso como limitação.
 
 ```
 AND OPENACCESS(1)
 ```
 
-Usar **apenas** se a obtenção de textos completos se mostrar inviável na 2ª filtragem, e declarar o viés de acesso como limitação da revisão.
-
 #### Truncamento
 
-A Scopus admite `*` e `?`. Nenhum truncamento foi aplicado nas strings, para manter a equivalência com a Web of Science. Variante a testar, se o *recall* ficar abaixo do limiar — `ontolog*` alcança `ontological`, que a emenda v2 retirou, e por isso a adoção é emenda:
+Não usar curinga. Disparo: aderência abaixo de 80%. Forma: testar a consulta abaixo; a adoção exige emenda.
 
 ```
 TITLE-ABS-KEY(ontolog* W/5 educat*)
@@ -277,13 +193,13 @@ TITLE-ABS-KEY(ontolog* W/5 educat*)
 
 #### Camada de precisão
 
-A proximidade entre as âncoras já está incorporada pelo `#5`. Se o retorno permanecer alto, a camada seguinte é restringir a área temática com `SUBJAREA`, conferindo os códigos na documentação. Vale a mesma regra: toda camada é medida contra o conjunto-semente, e recuperação inferior a 80% a reprova.
+Disparo: retorno alto demais para a triagem. Forma: restringir por `SUBJAREA`, com os códigos conferidos na documentação. Camada com aderência abaixo de 80% é reprovada.
 
 ---
 
 ## 5. Conjunto-semente
 
-O conjunto-semente tem **10 estudos**. O estado de conferência de cada um está em `data/sementes.json` — hoje, as dez com verificação, escopo, tipo e alinhamento pendentes (`python3 src/protocolo.py --pendencias`). Pela indicação do ReT, **6 são esperados nesta base**. Planilha de aferição, uma linha por semente e por base: `data/semente_aderencia.csv`.
+Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/sementes.json`; aferição em `data/semente_aderencia.csv`.
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |
@@ -294,35 +210,22 @@ O conjunto-semente tem **10 estudos**. O estado de conferência de cada um está
 | SE8 | Cenka et al. (2023) | `10.1080/10494820.2022.2039947` | — |
 | SE9 | Piriyapongpipat et al. (2024) | `10.1186/s40561-024-00307-8` | — |
 
-**Procedimento, em duas etapas.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões, para saber se a base indexa a semente. Semente não indexada **sai do denominador** e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, **sem reexecutar a busca**.
+**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de 80%.** Decide o número **global**, sobre a união das bases. A aderência por base diagnostica **qual** base e **qual** faceta falharam.
+**Limiar de 80%**, sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
-**Lematização.** Presumida para o inglês, **não medida**; o alcance sobre português e espanhol não foi medido. A **derivação adjetival** não é alcançada por lematização alguma, e é por isso que as formas adjetivais estão no vocabulário.
-
-**Cobertura.** A cobertura de anais é ampla e seletiva por conferência: retorno vazio na etapa 1 significa **não indexada**, e isso tira a semente do denominador.
-
-**Conferência cruzada com a Web of Science.** As duas bases usam o mesmo vocabulário, as âncoras em proximidade de cinco palavras e campos próximos — `TITLE-ABS-KEY` e `TS=`, que inclui também *Keywords Plus*. A equivalência entre `W/5` e `NEAR/5` é presumida, não medida. Aderência discrepante entre as duas, sobre as mesmas sementes indexadas, aponta primeiro para agrupamento ou sintaxe, e só depois para cobertura.
-
-**Se a semente não aparecer — anatomia da perda.** Quatro consultas, uma por hipótese; a primeira que devolver zero é a causa. Substituir `<DOI>` pelo DOI da semente.
+**Anatomia da perda.** Executar em ordem, com o DOI da semente; a primeira que devolver zero é a causa.
 
 | # | Consulta | Se devolver zero |
 | :---: | :--- | :--- |
 | 1 | `DOI(<DOI>)` | a base não indexa o estudo: sai do denominador |
-| 2 | `DOI(<DOI>) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` | um filtro a exclui: é exclusão deliberada, e o quadro de critérios tem de dizer qual |
+| 2 | `DOI(<DOI>) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` | um filtro a exclui: identificar qual critério |
 | 3 | `DOI(<DOI>) AND TITLE-ABS-KEY(🟦) AND TITLE-ABS-KEY(🟨)` | o vocabulário não a alcança: emenda de termo |
-| 4 | `DOI(<DOI>) AND TITLE-ABS-KEY((🟦) W/5 (🟨))` | a proximidade a exclui: a forma da busca está em causa |
-
-**Estado atual.** A aderência está **reprovada**: duas sementes esperadas não foram recuperadas, e ambas trariam as duas âncoras no título, a duas palavras de distância — portanto a perda não é da proximidade. Em 18/11/2026 a forma vigente passou a ter as âncoras em `W/5`, pelo item 7 da v2; a anatomia da perda das duas sementes continua obrigatória antes da execução e, se atribuir a perda à proximidade, leva à variante "Forma ampla", com emenda. Estado, exportação e números em `data/registro_execucao.json`. Todos os retornos anteriores a 18/11/2026 são **vencidos**: precedem a v2, a proximidade e a STR v2 literal — sete formas em espanhol da `STR1` e `pedagogía` acrescentadas, e `ontological engineering`, `teaching practice` e `aprendiz` incluídos na STR v2 por decisão do ReT; três repetições eliminadas.
+| 4 | `DOI(<DOI>) AND TITLE-ABS-KEY((🟦) W/5 (🟨))` | a proximidade a exclui: variante "Forma ampla" |
 
 ---
 
 ## 6. Ressalvas
 
-1. **Estatuto dos termos.** Todos os termos desta ficha são **termos livres**: nenhum foi confrontado com instrumento de controle terminológico. A validação do 2º passo corre no TBCI, para o português, e no UNESCO Thesaurus, para inglês e espanhol. ERIC Thesaurus, Brased/INEP, ACM CCS, LISTA, W3C e IEEE LOM ficam sem consulta. A ausência de validação não retira o termo da expressão; retira-lhe a qualidade de descritor autorizado.
-
-2. **Termos qualificados para busca.** **Substituição** de palavra isolada de uso geral pelas formas compostas correspondentes, ou sua retirada da expressão permanecendo no quadro. **Desdobramento** de termo em notação compacta em alternativas explícitas ligadas por `OR`. **Desdobramento morfológico** de formas adjetivais e plurais, porque o plural regular a base alcança e a derivação adjetival, não. Substituição e retirada casam a **forma, não o lema**.
-
-3. **Precedência de operadores.** A alteração anunciada para 2026 obriga a conferir, na primeira execução, se o retorno de EB4 é compatível, em ordem de grandeza, com o da mesma expressão na Web of Science. Discrepância de ordem de grandeza indica problema de agrupamento, não de cobertura.
-
-4. **`OPENACCESS(1)`** não é filtro de texto completo institucional; confundir os dois introduz viés de acesso no portfólio.
+1. Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.
+2. **`OPENACCESS(1)`** não é filtro de texto completo institucional.

@@ -30,7 +30,7 @@ As expressões vivem nas quatro fichas, uma por base, em `docs/`:
 `busca_base_1_web_of_science.md`, `busca_base_2_scopus.md`,
 `busca_base_3_eric.md` e `busca_base_4_brapci.md`. **Nunca ditar uma expressão de
 memória nem reescrevê-la na conversa.** Se a ficha estiver defasada, corrigi-la e registrar
-a correção no Anexo A.
+a correção no histórico (`data/historico.md`).
 
 Só **EB4** é busca definitiva nas bases. EB1 tem a pertinência calculada localmente sobre os
 registros exportados; EB2 e EB3 vão à base apenas no teste de fidelidade da derivação; e
@@ -84,8 +84,9 @@ O que vem depois não é desta skill:
 
 Contagens, data, base, edição da base, texto submetido e capturas vão para
 `data/registro_execucao.json`, na base correspondente. Troca de vínculo institucional vai
-para o **IO 2**, por poder alterar o que a base entrega. As fichas de `docs/` não carregam
-mais o registro: carregam a sintaxe verificada, as strings, as expressões e as variantes.
+para as **contagens da busca**, por poder alterar o que a base entrega. As fichas de `docs/` são
+operacionais: carregam a sintaxe verificada, as strings, as expressões, a forma de execução
+e as variantes vigentes — sem registro, estado, histórico nem justificativa de decisão.
 
 Medida nova que entre em documento é **calculada a partir dos dados**, nunca transcrita da
 conversa — ver `AGENTS.md` §7. Retenção de proximidade medida em par mínimo é **limite inferior**:
