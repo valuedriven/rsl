@@ -95,8 +95,8 @@ EB5 = #1 + #2                  (sonda de sensibilidade)
 | **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
 | **EB1** | não executar; derivação local |
 
-- **Fidelidade:** divergência acima de **10%** entre EB2/EB3 executadas e derivadas reprova a derivação.
-- **Sensibilidade:** fração elegível de `EB5 \ EB4` **< 5%** mantém EB4; **> 15%** leva à reconsideração, com emenda.
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`--mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`--mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### `#5` — as duas âncoras em proximidade
@@ -181,7 +181,7 @@ AND LA=(English OR Portuguese OR Spanish)
 
 #### Truncamento
 
-Não usar curinga. Disparo: aderência abaixo de 80%. Forma: testar `ontolog*`, `educat*`, `contextualiz*`; a adoção exige emenda.
+Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`). Forma: testar `ontolog*`, `educat*`, `contextualiz*`; a adoção exige emenda.
 
 #### Camada de precisão
 
@@ -200,7 +200,7 @@ TS=(<faceta 1>) AND AK=(<faceta 2>) AND PY=(2017-2026)
 AND WC=("Education & Educational Research" OR "Education, Scientific Disciplines" OR "Information Science & Library Science" OR "Computer Science, Artificial Intelligence" OR "Computer Science, Information Systems" OR "Computer Science, Interdisciplinary Applications" OR "Computer Science, Theory & Methods")
 ```
 
-Regra: camada com aderência abaixo de 80% é reprovada. Não acrescentar facetas a EB4 para reduzir o retorno.
+Regra: camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`) é reprovada. Não acrescentar facetas a EB4 para reduzir o retorno.
 
 ---
 
@@ -217,7 +217,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador desta base e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de 80%**, sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `--mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **SE10.** O domínio está fora do título; anotar no registro se EB4 a recupera.
 

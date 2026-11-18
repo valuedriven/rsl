@@ -3,8 +3,8 @@
 """
 Derivação local das expressões não executadas (EB4 é a executada; EB5 é a sonda) — RS Banyan, Módulo 3, Etapa 2.
 
-Protocolo v2. Cinco expressões, montadas como AND de grupos de facetas, em que um grupo
-pode ser uma disjunção: EB1 = 1+2+3+4; EB2 = 1+2+3; EB3 = 1+2+4; EB4 = 1+2+(3 OR 4);
+Composição lida do protocolo por src/protocolo.py: expressões montadas como AND de grupos
+de facetas, em que um grupo pode ser uma disjunção. Na composição atual: EB1 = 1+2+3+4; EB2 = 1+2+3; EB3 = 1+2+4; EB4 = 1+2+(3 OR 4);
 EB5 = 1+2. Daí EB4 = EB2 ∪ EB3, e EB5 ⊃ EB4. Executa-se EB4, a de cobertura, uma vez
 por base; EB5 roda uma única vez como sonda de sensibilidade. A pertinência de cada
 registro às demais é calculada aqui.
@@ -14,7 +14,8 @@ substitui o teste de fidelidade. As contagens que produz são DERIVADAS e devem 
 declaradas como tal nas contagens da busca e no relatório.
 
 Entradas
-  docs/03_protocolo_estrategia_pesquisa.md   vocabulário, composição e recorte (lido por src/protocolo.py)
+  protocolo (chave `protocolo` do config.toml)   vocabulário, composição, recorte e
+                               limiares (lidos por src/protocolo.py)
   data/registro_execucao.json  registro documental e rastro técnico das execuções,
                                escrito por --registrar
   data/sementes.json       metadados autorais das sementes, ligados por DOI ou título
@@ -93,8 +94,11 @@ ANCORAS = {f["id"] for f in _D["facetas"] if f.get("ancora")}
 ANO_MIN = int(_D["recorte"]["ano_min"])
 # O protocolo diz "de 2017 em diante", sem teto: o limite superior é o ano corrente.
 ANO_MAX = int(_D["recorte"]["ano_max"] or datetime.date.today().year)
-LIMITE_DIVERGENCIA = 0.10     # 10% — acima disso o método é reprovado
-LIMITE_SENSIBILIDADE = (0.05, 0.15)   # faixa da fração ELEGÍVEL entre os perdidos
+# Limiares resolvidos por src/protocolo.py: o do protocolo, se declarado; senão, o padrão
+# do config.toml. Acima da divergência o método é reprovado; a faixa é a da fração
+# ELEGÍVEL entre os perdidos pela executada.
+LIMITE_DIVERGENCIA = float(_D["divergencia"])
+LIMITE_SENSIBILIDADE = tuple(_D["sensibilidade"])
 
 STATUS_VALIDOS = ("valida", "divergente_justificada")
 BASE_CANONICA = {"wos": "WoS", "scopus": "Scopus", "eric": "ERIC", "brapci": "BRAPCI"}

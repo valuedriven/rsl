@@ -165,7 +165,7 @@ Disparo: consulta recusada ou truncada pelo comprimento, ou retorno de exatament
 
 #### Varredura da faceta 🟦 isolada — fora do corpus
 
-Disparo: medir o custo da âncora 🟨 nesta base. Forma: `#1` sozinho, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros de `#1` fora de EB5; fração elegível acima de 15% leva a emenda.
+Disparo: medir o custo da âncora 🟨 nesta base. Forma: `#1` sozinho, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros de `#1` fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`--mostrar`) leva a emenda.
 
 #### Partição por *Título*
 
@@ -184,7 +184,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de 80%**, sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `--mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **Se a SE5 não aparecer.** Consultar `Duque` em *Local de pesquisa* = **Autor**, abrir o registro e ler resumo e palavras-chave.
 

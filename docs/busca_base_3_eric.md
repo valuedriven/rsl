@@ -129,7 +129,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 | **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
 | **EB1** | não executar; derivação local |
 
-- **Fidelidade:** divergência acima de **10%** entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`--mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### EB1 (geral) — as quatro facetas
@@ -220,7 +220,7 @@ Executar as quatro consultas abaixo e unir por deduplicação.
 2. Aplicar o filtro de data da página e anotar o retorno antes e depois, com o rótulo exato do filtro.
 3. Registrar as quatro execuções, uma por arquivo: `python3 src/derivar_expressoes.py --registrar eric EB4 <arquivo> --retorno <n>`; rodar `--derivar`. O retorno da base é a união deduplicada, nunca a soma: o número que vai às contagens da busca é o dos únicos, com o bruto ao lado.
 4. Executar EB5 (5a e 5b) uma única vez e registrar com `EB5`.
-5. Medir a aderência (seção 5). Abaixo de 80%, passar à contingência das variantes.
+5. Medir a aderência (seção 5). Abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`), passar à contingência das variantes.
 
 ### Variantes previstas
 
@@ -288,7 +288,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de 80%**, sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `--mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 ---
 

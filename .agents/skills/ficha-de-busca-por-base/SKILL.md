@@ -30,7 +30,8 @@ Quem a abre para executar não deve ter de separar a instrução do racional.
 - **Sem cabeçalho.** O arquivo começa pelo título `# Strings de busca — <base>` e segue
   direto para a seção 1.
 - **Sem informação de exclusão.** Termo retirado por emenda **não se lista** na ficha: o
-  leitor o desconta por construção, a partir da lista de retirados mantida no script. Termo
+  leitor o desconta por construção, porque o vigente é a string (STR) do protocolo e o termo
+  que só consta do quadro terminológico não é esperado na base. Termo
   alcançado pela forma radical também não se lista: o leitor calcula o alcance. A tabela de
   redução só existe quando a **própria base** deixa fora da string um termo vigente, uma
   linha por termo, motivo curto.
@@ -181,8 +182,9 @@ ou lista curada executada consulta a consulta.
 
 **A declaração de cobertura** é tabela legível por máquina, com três parâmetros —
 **idiomas** por faceta, **camadas** (integral ou núcleo) e **derivações** — e, só quando a
-base deixa fora da string um termo vigente, a **redução** termo a termo. Termo retirado por
-emenda e termo alcançado pela forma radical não entram na redução: o leitor os trata.
+base deixa fora da string um termo vigente (da STR do protocolo), a **redução** termo a
+termo. Termo fora da STR e termo alcançado pela forma radical não entram na redução: o
+leitor os trata.
 
 - `morfologia` reconhece flexão de número e gênero, não lematização.
 - `radical` declara que um termo da string alcança os termos do protocolo que o **contêm**
@@ -298,8 +300,8 @@ sintaxe, que é sempre desta base e com a sua fonte.
      inteira, lematização não alcança derivação adjetival, e o hífen como separador é
      suposição do leitor, a medir em cada base;
    - **as variantes, a contingência e as camadas** — o leitor salta as subseções
-     "Variantes" e "Como executar". Usam só termos do protocolo, sem termo retirado por
-     emenda? A relação que afirmam com a forma executada (subconjunto, partição exata)
+     "Variantes" e "Como executar". Usam só termos da STR do protocolo, sem termo que
+     só conste do quadro? A relação que afirmam com a forma executada (subconjunto, partição exata)
      vale de fato, pela lógica da consulta?
    - **número escrito em prosa** — quantos termos, quantas palavras-raiz, quantas
      consultas — não deveria existir; se for indispensável, recalcula-se a partir das

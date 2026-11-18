@@ -96,8 +96,8 @@ EB5 = #1 + #2                  (sonda de sensibilidade)
 | **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
 | **EB1** | não executar; derivação local |
 
-- **Fidelidade:** divergência acima de **10%** entre EB2/EB3 executadas e derivadas reprova a derivação.
-- **Sensibilidade:** fração elegível de `EB5 \ EB4` **< 5%** mantém EB4; **> 15%** leva à reconsideração, com emenda.
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`--mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`--mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### `#5` — as duas âncoras em proximidade
@@ -185,7 +185,7 @@ AND OPENACCESS(1)
 
 #### Truncamento
 
-Não usar curinga. Disparo: aderência abaixo de 80%. Forma: testar a consulta abaixo; a adoção exige emenda.
+Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`). Forma: testar a consulta abaixo; a adoção exige emenda.
 
 ```
 TITLE-ABS-KEY(ontolog* W/5 educat*)
@@ -193,7 +193,7 @@ TITLE-ABS-KEY(ontolog* W/5 educat*)
 
 #### Camada de precisão
 
-Disparo: retorno alto demais para a triagem. Forma: restringir por `SUBJAREA`, com os códigos conferidos na documentação. Camada com aderência abaixo de 80% é reprovada.
+Disparo: retorno alto demais para a triagem. Forma: restringir por `SUBJAREA`, com os códigos conferidos na documentação. Camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`) é reprovada.
 
 ---
 
@@ -212,7 +212,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de 80%**, sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `--mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **Anatomia da perda.** Executar em ordem, com o DOI da semente; a primeira que devolver zero é a causa.
 

@@ -3,7 +3,7 @@
 """Gera o instrumento do teste de aderência a partir do protocolo.
 
 Entradas
-  docs/03_protocolo_estrategia_pesquisa.md   referências, mapa por base e facetas
+  protocolo (chave `protocolo` do config.toml)   referências, mapa por base e facetas
   data/sementes.json   metadados de conferência autorais, ligados por DOI ou título
 
 As referências vêm do protocolo, lido por src/protocolo.py; `sementes.json` guarda só o

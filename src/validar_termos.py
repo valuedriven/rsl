@@ -3,23 +3,24 @@
 """
 Validação terminológica assistida — RS Banyan, Módulo 3, Etapa 1, 2º passo.
 
-Confronta os termos livres das quatro facetas com DOIS instrumentos legíveis por máquina:
+Confronta os termos do quadro terminológico com os instrumentos que o protocolo declara,
+por faceta, na seção "Instrumentos para controle terminológico". O que é propriedade de
+cada instrumento — sigla, idiomas cobertos e modo de consulta — está em `[instrumentos]`
+do `config.toml`. Um termo é planejado para cada instrumento da sua faceta que cubra o
+seu idioma.
+
+Clientes automatizados (modo `tbci` e `unesco`):
 
   TBCI    Tesauro Brasileiro de Ciência da Informação (IBICT), servidor TemaTres 3.5.2
           API REST documentada em https://vocabularyserver.com/tbci/br/services.php
-          sem chave de acesso. Termos em PORTUGUÊS.
+          sem chave de acesso.
 
   UNESCO  UNESCO Thesaurus, endpoint SPARQL https://vocabularies.unesco.org/sparql
           grafo nomeado <http://vocabularies.unesco.org/thesaurus/>, GET ou POST.
-          Idiomas a confirmar pela sondagem (tarefa `idiomas`).
 
-Estes dois são os ÚNICOS instrumentos de consulta sistemática do protocolo, e valem
-para as quatro facetas. Os demais obras designadas — ERIC Thesaurus, Brased/INEP,
-ACM CCS, LISTA, W3C, IEEE LOM — são REFERÊNCIA DOCUMENTAL pela regra única de
-validação terminológica: não são percorridas termo a termo e não figuram como
-instrumento de linha alguma da planilha. A faceta de fatores situacionais é
-declarada de TERMO LIVRE por decisão de protocolo, e as suas linhas saem
-pré-classificadas, com a decisão como procedência.
+Instrumento de modo `manual` não tem cliente: as suas linhas nascem com o estatuto
+"pendente de validação manual" e são consultadas e registradas à mão — nunca como termo
+não encontrado.
 
 FRONTEIRA DE USO (protocolo): este script RECUPERA e REGISTRA. Não decide.
   - nenhum termo é excluído, reescrito ou incorporado automaticamente;
@@ -27,14 +28,14 @@ FRONTEIRA DE USO (protocolo): este script RECUPERA e REGISTRA. Não decide.
   - TR e TE revelados pela consulta entram como CANDIDATOS, nunca nas strings;
   - a coluna `decisao_ReT` sai em branco: a decisão é do pesquisador, com o VT.
 
-O REGISTRO é a própria planilha `data/validacao_termologica.csv`.
+O REGISTRO é a própria planilha de validação (`[dados]` do `config.toml`).
 Não há JSON intermediário: a planilha guarda o estatuto de cada termo e instrumento,
 e `--validar` e `--importar` a regravam. Toda resposta bruta é gravada em
 `data/evidencia/<instrumento>/<arquivo>.json`. Linha sem evidência correspondente é
 linha inválida — foi esse o defeito que originou a ressalva de procedência do protocolo.
 
 Os termos NÃO são digitados aqui: vêm das tabelas do controle terminológico do
-documento do protocolo, lidas por `src/protocolo.py`. Termo retirado do protocolo
+protocolo, lidas por `src/protocolo.py`. Termo retirado do protocolo
 permanece na planilha como linha fora do protocolo, preservada e reportada.
 
 USO
@@ -45,7 +46,7 @@ USO
   python3 src/validar_termos.py --validar ambos --faceta 1
   python3 src/validar_termos.py --importar          # reconcilia a planilha com o protocolo
 
-Requer apenas a biblioteca padrão do Python 3.9+.
+Requer apenas a biblioteca padrão do Python 3.11+.
 """
 
 import argparse
@@ -67,7 +68,9 @@ import protocolo                                                    # noqa: E402
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data"
 EVID = DATA / "evidencia"
-CSV_SAIDA = DATA / "validacao_termologica.csv"
+CSV_SAIDA = protocolo.CSV_VALIDACAO
+# Sigla do instrumento (coluna `instrumento`) → modo de consulta, do config.toml.
+MODO_DE = {i["sigla"]: i["modo"] for i in protocolo.CFG["instrumentos"].values()}
 
 TBCI_SERV = "https://vocabularyserver.com/tbci/br/services.php"
 UNESCO_SPARQL = "https://vocabularies.unesco.org/sparql"
@@ -305,8 +308,8 @@ def sonda():
                       "?c skos:prefLabel ?l } }" % UNESCO_GRAFO)
     print(f"\n  idiomas dos prefLabel -> HTTP {cod}")
     print("  " + json.dumps(res, ensure_ascii=False)[:800])
-    print("\n  >> Decisivo: se o português NÃO constar, os termos em pt não são consultáveis")
-    print("     neste instrumento e permanecem termos livres — registre essa constatação.")
+    print("\n  >> Confira contra `idiomas` do UNESCO Thesaurus em [instrumentos] do config.toml;")
+    print("     divergência se registra no histórico e se corrige na configuração.")
     for t in ("teaching methods", "educational technology"):
         time.sleep(PAUSA)
         reg, status, dados, obs = unesco_valida(t)
@@ -320,8 +323,8 @@ def sonda():
 def carrega():
     """Reconstrói o registro a partir do protocolo e da planilha existente.
 
-    A planilha é o registro: não há JSON intermediário. Termo novo nasce com o estatuto
-    inicial que o protocolo declara; linha já registrada é preservada campo a campo,
+    A planilha é o registro: não há JSON intermediário. Termo novo nasce aguardando
+    consulta, ou pendente de validação manual se o instrumento não tem cliente; linha já registrada é preservada campo a campo,
     inclusive decisão do ReT e evidência.
     """
     d = protocolo.analisa()
@@ -331,18 +334,19 @@ def carrega():
         est = {}
         for idioma in protocolo.IDIOMAS:
             bloco = {}
+            insts = protocolo.instrumentos_do_termo(d, f["id"], idioma)
             for termo in f["termos"][idioma]:
                 validacoes = []
-                for inst in protocolo.INSTRUMENTO_POR_IDIOMA[idioma]:
+                for i in insts:
+                    inst = i["sigla"]
                     r = existente.get(_chave_linha(f["id"], idioma, termo, inst))
                     v = {c: ((r.get(c) or "").strip() if r else "")
                          for c in protocolo.CAMPOS_VALIDACAO}
                     v["instrumento"] = inst
                     if r is None:
-                        if f["livre"]:
-                            v["status_proposto"] = protocolo.STATUS_LIVRE_DECISAO
-                            v["observacao_tecnica"] = "não consultado: decisão de protocolo"
-                            v["justificativa_ReT"] = protocolo.JUSTIFICATIVA_LIVRE
+                        if i["modo"] == "manual":
+                            v["status_proposto"] = protocolo.STATUS_MANUAL
+                            v["observacao_tecnica"] = protocolo.OBS_MANUAL
                         else:
                             v["observacao_tecnica"] = "aguardando consulta"
                     validacoes.append(v)
@@ -398,11 +402,10 @@ def grava_planilha(dados):
         w.writerows(linhas)
         for r in orfaos:
             w.writerow({c: r.get(c, "") for c in COLUNAS})
-    livres = sum(1 for l in linhas
-                 if l["status_proposto"] == protocolo.STATUS_LIVRE_DECISAO)
+    manuais = sum(1 for l in linhas if l["status_proposto"] == protocolo.STATUS_MANUAL)
     a_validar = sum(1 for l in linhas if not l["status_proposto"])
-    print(f"{CSV_SAIDA.relative_to(RAIZ)}: {len(linhas)} linhas — {a_validar} a validar, "
-          f"{livres} já classificadas como termo livre por decisão de protocolo.")
+    print(f"{CSV_SAIDA.relative_to(RAIZ)}: {len(linhas)} linhas — {a_validar} a validar por "
+          f"cliente automatizado, {manuais} {protocolo.STATUS_MANUAL}.")
     if orfaos:
         print(f"  {len(orfaos)} linha(s) fora do protocolo preservada(s) na planilha — "
               f"decidir: manter com registro ou retirar à mão.")
@@ -455,10 +458,6 @@ def importar():
 
 
 # ------------------------------------------------------------------- execução
-def instrumentos_do(idioma):
-    return list(protocolo.INSTRUMENTO_POR_IDIOMA[idioma])
-
-
 def validar(quais, faceta=None):
     dados = carrega()
     feitos = 0
@@ -470,11 +469,12 @@ def validar(quais, faceta=None):
         if faceta and str(ln["faceta"]) != str(faceta):
             continue
         inst = v.get("instrumento")
-        if inst not in quais:
+        modo = MODO_DE.get(inst)
+        if modo not in quais:
             continue
 
         termo = ln["termo"]
-        if inst == "TBCI":
+        if modo == "tbci":
             reg, status, dados_inst, obs = tbci_valida(termo)
             v["url_consultada"] = reg.get("url_consultada", "")
             v["versao_instrumento"] = "TemaTres 3.5.2 — conferir data na sonda"
@@ -540,8 +540,8 @@ def main():
     elif a.importar:
         return importar()
     elif a.validar:
-        quais = {"tbci": ["TBCI"], "unesco": ["UNESCO"],
-                 "ambos": ["TBCI", "UNESCO"]}[a.validar]
+        quais = {"tbci": ["tbci"], "unesco": ["unesco"],
+                 "ambos": ["tbci", "unesco"]}[a.validar]
         validar(quais, a.faceta)
     else:
         ap.print_help()

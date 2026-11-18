@@ -15,12 +15,13 @@ repete o conteúdo dos documentos.
 | Onde | O que é |
 | --- | --- |
 | `docs/` | conteúdo da revisão: plano, protocolo e fichas de busca; os arquivos do pesquisador e os que o agente mantém |
-| `data/` | o que é alimentado — os dois JSON, o histórico e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
-| `src/` | quatro scripts de execução |
-| `.agents/skills/` | 21 competências metodológicas e operacionais do agente |
+| `data/` | o que é alimentado — os JSON, o histórico e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
+| `src/` | scripts de execução |
+| `config.toml` | configuração dos scripts: caminho do protocolo, valores padrão dos parâmetros, fichas, arquivos de dados e instrumentos |
+| `.agents/skills/` | competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
 
-Este pacote reúne o **plano**, o **protocolo**, as quatro **fichas de busca** e o **histórico**,
+Este pacote reúne o **plano**, o **protocolo**, as **fichas de busca** e o **histórico**,
 em `data/historico.md`. Os demais instrumentos e o portfólio não integram este repositório.
 
 ## Mapa
@@ -29,18 +30,19 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | --- | --- | --- |
 | `docs/01_plano.md` | Plano: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
 | `docs/02_protocolo_informacoes_gerais.md` | Protocolo, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
-| `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QER1–QER4), facetas, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única do vocabulário | montar ou conferir a busca |
+| `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QERn), facetas, instrumentos de controle terminológico, vocabulário, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única desses dados e dos parâmetros que declara | montar ou conferir a busca |
 | `docs/busca_base_1_web_of_science.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
 | `docs/busca_base_2_scopus.md` | ficha da Scopus, mesma estrutura | idem |
 | `docs/busca_base_3_eric.md` | ficha da ERIC, mesma estrutura | idem |
 | `docs/busca_base_4_brapci.md` | ficha da BRAPCI, mesma estrutura | idem |
 | `src/protocolo.py` | leitor do protocolo: confere documento e arquivos alimentados, e reconcilia o metadado das sementes | antes de executar qualquer script, e após alterar o protocolo |
 | `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
-| `src/validar_termos.py` | validação assistida no TBCI e no UNESCO Thesaurus, com a planilha como registro | conferir o estatuto de cada termo |
+| `src/validar_termos.py` | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (TBCI, UNESCO Thesaurus) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
 | `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 | `data/historico.md` | Histórico: linha do tempo das decisões, verificações, calibração das buscas, emendas e pendências | saber o que já foi decidido, verificado ou está em aberto |
+| `config.toml` | caminho do protocolo, padrões dos parâmetros, fichas, arquivos de dados, instrumentos e campos das planilhas | mudar o arquivo do protocolo, um padrão ou um instrumento |
 
-Em `data/`, a procedência de cada arquivo:
+Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arquivo:
 
 | Caminho | O que contém | Quem escreve |
 | --- | --- | --- |
@@ -50,30 +52,47 @@ Em `data/`, a procedência de cada arquivo:
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
 | `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
 | `data/evidencia/` | resposta bruta de cada consulta terminológica | `validar_termos.py` |
-| `data/arquivo/` | cópias anteriores, com `SHA256` — sem conteúdo no momento: o arquivo do estado anterior à migração (16/11) foi descartado em 17/11 | migrações |
+| `data/arquivo/` | cópias anteriores, com `SHA256` | migrações |
 
-As pastas de dados brutos e de arquivo — `execucoes/`, `evidencia/` e `arquivo/` — são
-criadas quando o primeiro arquivo chega e não existem hoje. A raiz de `data/` recebe
-os dois JSON e as duas planilhas geradas, `validacao_termologica.csv` e
-`semente_aderencia.csv`; é também onde o histórico se registra, em `historico.md`. Não há
-`descritores.json`, `consultas.json` nem `pendencias.json`.
+As pastas `execucoes/`, `evidencia/` e `arquivo/` são criadas quando o primeiro arquivo chega.
 
-O que é **derivado do documento não vira arquivo**: questão, facetas, strings, expressões,
-critérios e fontes são lidos de `docs/03_protocolo_estrategia_pesquisa.md` a cada execução.
-A forma de cada base é lida da ficha correspondente. Guardar cópia em JSON criava uma segunda
-fonte para o mesmo dado e a obrigação de mantê-la em dia; o que se guarda em `data/` é o que
-alguém **alimenta** — o metadado das sementes e o registro das execuções. O estatuto da
-validação terminológica vive na planilha `data/validacao_termologica.csv`,
-que é lida e regravada por `validar_termos.py`.
+O que é **derivado do documento não vira arquivo**: questão, facetas, instrumentos,
+strings, expressões, critérios e fontes são lidos do protocolo a cada execução, e a forma de
+cada base, da ficha correspondente. Em `data/` guarda-se o que alguém **alimenta** — o
+metadado das sementes e o registro das execuções — e a planilha de validação, registro do
+estatuto dos termos, lida e regravada por `validar_termos.py`.
+
+### Configuração e parâmetros
+
+`config.toml`, na raiz, é lido por `src/protocolo.py` com `tomllib` (**Python 3.11+**, só
+biblioteca padrão). Ele traz:
+
+- `protocolo` — o arquivo do protocolo a ser lido; é o único parâmetro que o protocolo não
+  sobrescreve;
+- `[padroes]` — valor padrão de cada parâmetro que o protocolo pode declarar: recorte, limiar
+  de aderência, faixa de sensibilidade, âncoras, expressão executada, sonda, composição das
+  expressões, limiar de divergência da fidelidade e sensibilidade mínima da calibração da
+  triagem assistida;
+- os parâmetros que o protocolo não declara: dimensões obrigatórias dos critérios, mínimo de
+  termos por string, natureza que identifica a executada e a sonda, fichas das bases,
+  arquivos de dados, cores das facetas, campos das planilhas;
+- `[instrumentos]` — sigla, idiomas cobertos e modo de consulta (`tbci`, `unesco` ou
+  `manual`) de cada instrumento; quais instrumentos valem para cada faceta vem do protocolo.
+
+**Precedência:** o valor declarado no protocolo prevalece sobre o padrão; o padrão vale só
+quando o protocolo não declara o parâmetro. Trecho do protocolo presente e ilegível reprova a
+conferência, sem cair no padrão. `python3 src/protocolo.py --mostrar` exibe o valor em uso e
+a origem de cada parâmetro. Configuração ausente, inválida ou incompleta faz os scripts
+pararem com mensagem que nomeia a chave.
 
 ### Scripts
 
-Os quatro scripts leem o documento do protocolo e os artefatos de `data/`; nenhum decide
-conteúdo — conferem, derivam e registram. Quatro invariantes valem para todos:
+Os scripts leem o protocolo e os artefatos de `data/`; nenhum decide conteúdo — conferem,
+derivam e registram. Quatro invariantes valem para todos:
 
-- **Uma fonte por dado.** O vocabulário, as expressões e os critérios vêm de
-  `docs/03_protocolo_estrategia_pesquisa.md`; a forma da busca, da ficha da base em `docs/`.
-  Não há cópia intermediária a manter em dia: o leitor lê o documento.
+- **Uma fonte por dado.** O vocabulário, as expressões, os critérios e os parâmetros que
+  declara vêm do protocolo; a forma da busca, da ficha da base; o resto, do `config.toml`.
+  Não há cópia intermediária nem valor de parâmetro no código.
 - **O que é autoral se preserva.** Os metadados de conferência em `sementes.json`, as
   execuções em `registro_execucao.json` e a declaração de cobertura nas fichas são editados
   pelo pesquisador; `--sincronizar` só reconcilia sementes, `--registrar` só acrescenta ou
@@ -83,22 +102,25 @@ conteúdo — conferem, derivam e registram. Quatro invariantes valem para todos
   com o seu metadado e é reportada por `--conferir-dados` e por `--pendencias`, para decisão;
   termo retirado do protocolo permanece na planilha de validação como linha fora do
   protocolo. Termo vigente do protocolo ausente da string de uma base só passa se a ficha o
-  declarar na redução; sem declaração, a conferência daquela base reprova — e só daquela: a
-  forma de uma base não congela as outras. Termo retirado por emenda não se declara: o
-  leitor o desconta por construção. As fichas são operacionais — forma vigente, sem
-  cabeçalho, histórico nem justificativa.
+  declarar na redução; sem declaração, a conferência daquela base reprova — e só daquela.
+  O vigente é a string (STR) do protocolo: termo que só consta do quadro terminológico não é
+  esperado na base e, se aparecer nela, reprova. As fichas são operacionais — forma vigente,
+  sem cabeçalho, histórico nem justificativa.
 - **O identificador é a chave.** Tudo se identifica pelo código do protocolo — `QGR`/`QERn`,
   `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn` —, e não por posição. Na semente, a ligação com
   o protocolo é feita por DOI ou título, de modo que o rótulo pode mudar sem perder o
-  metadado; na composição, `EB4 = EB2 ∪ EB3` e `EB5` é a sonda.
+  metadado.
 
-`--conferir` reprova documento fora da forma esperada — seções, identificadores, camadas de
-vocabulário, strings, composição das expressões, critérios, bases e distribuição do
-conjunto-semente. `--conferir-dados` reprova arquivo alimentado ausente ou fora do protocolo,
-a execução que declara exportação inexistente e, por base, termo do protocolo fora da string
-sem redução declarada, e termo retirado na emenda v2 dentro da string, mesmo em flexão.
-`--autoteste` injeta defeitos numa cópia e exige que as conferências
-os reprovem — inclusive a prova de que ficha divergente do protocolo é recusada.
+`--conferir` verifica a **coerência interna** do protocolo, não valores esperados: numeração
+dos identificadores, camadas do vocabulário, string contida no quadro da sua faceta,
+âncoras em todas as expressões, sonda igual à conjunção das âncoras, executada igual à
+união das específicas, dimensões obrigatórias dos critérios, faixa de sensibilidade,
+instrumentos resolvidos pela configuração, fichas ligadas às bases e distribuição do
+conjunto-semente. `--conferir-dados` reprova arquivo alimentado ausente ou fora do
+protocolo, a execução que declara exportação inexistente e, por base, termo vigente fora da
+string sem redução declarada e termo fora da STR dentro dela, mesmo em flexão.
+`--autoteste` injeta defeitos numa cópia e exige que cada conferência reprove pelo motivo
+esperado — inclusive configuração inválida, precedência e ficha divergente do protocolo.
 `--sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido; rodar
 duas vezes não muda nada. `--pendencias` relata sem escrever. Os comandos estão no fluxo de
 trabalho, em M3.
@@ -169,23 +191,24 @@ existir.
 1. **Facetação.** Quatro facetas, com duas âncoras obrigatórias — artefatos de representação
    e domínio educacional —, vocabulário nos três idiomas e camadas núcleo, próximos e
    relacionados.
-2. **Validação terminológica.** Consulta sistemática restrita ao TBCI, para o português, e
-   ao UNESCO Thesaurus, para inglês e espanhol. O ERIC Thesaurus e o Brased são referência
-   documental; a faceta de fatores situacionais é **termo livre por decisão**. Termo sem
-   consulta registrada é termo livre e não pode ser apresentado como descritor autorizado.
+2. **Validação terminológica.** Nos instrumentos que o protocolo declara para cada faceta
+   ("Instrumentos para controle terminológico"), nos idiomas que cada um cobre
+   (`config.toml`). Instrumento sem cliente automatizado gera linha pendente de validação
+   manual. Termo sem consulta registrada é termo livre e não pode ser apresentado como
+   descritor autorizado.
 3. **Strings por faceta.** Qualificação do vocabulário: substituição de palavra isolada pela
    forma composta, desdobramento da notação compacta e inclusão das formas morfológicas.
 4. **As cinco expressões.** A de cobertura — `EB4 = STR1 + STR2 + (STR3 OR STR4)` — é a
    **única executada como busca definitiva**; as demais são calculadas localmente em M3/E2.
    `EB4` equivale a `EB2 ∪ EB3`, e `EB5 = STR1 + STR2` é a **sonda de sensibilidade**,
    executada uma única vez e fora do corpus.
-5. **Critérios de elegibilidade.** Quatro critérios de inclusão e cinco de exclusão, com a
-   regra única de inclusão — práticas **e/ou** fatores situacionais — e a regra de borda.
+5. **Critérios de elegibilidade.** Inclusão e exclusão, com a regra única de inclusão —
+   práticas **e/ou** fatores situacionais — e a regra de borda.
 6. **Fontes.** Web of Science, Scopus, ERIC e BRAPCI, nessa ordem; acesso pelo Portal da
    CAPES com CAFe nas duas primeiras. A ausência de busca direta nos acervos especiais é
    limitação declarada, mitigada por backward search.
-7. **Conjunto-semente.** Dez estudos, quinze incidências e distribuição 6/4/3/2 por base
-   Scopus, WoS, ERIC e BRAPCI. É instrumento de aferição, não lista de incluídos.
+7. **Conjunto-semente.** Estudos e incidências esperadas por base, no protocolo. É
+   instrumento de aferição, não lista de incluídos.
 8. **Ferramentas e registro de uso de IA.** Zotero para gestão e deduplicação, Rayyan para
    triagem cega e ASReview para priorização; o uso de IA é registrado ação a ação no LOG_IA,
    apêndice do protocolo.
@@ -194,7 +217,8 @@ existir.
 # confere documento, dados e guardas
 python3 src/protocolo.py --conferir
 python3 src/protocolo.py --conferir-dados
-python3 src/protocolo.py --autoteste
+python3 src/protocolo.py --conferir --autoteste
+python3 src/protocolo.py --mostrar      # parâmetros em uso e a origem de cada um
 
 # validação terminológica: sonda obrigatória antes de validar
 python3 src/validar_termos.py --sonda
@@ -207,20 +231,20 @@ python3 src/validar_termos.py --importar
 python3 src/gen_semente.py
 ```
 
-**Arquivos.** O vocabulário vem de `docs/03_protocolo_estrategia_pesquisa.md`, lido a cada
-execução; não há JSON derivado a regerar. `--sincronizar` mexe apenas no metadado das
+**Arquivos.** O vocabulário vem do protocolo, lido a cada execução; não há JSON derivado a
+regerar. `--sincronizar` mexe apenas no metadado das
 sementes: religa a semente de `sementes.json` por DOI ou título, preservando o que já foi
 conferido. A validação grava o estatuto na própria planilha
 `data/validacao_termologica.csv` e a resposta bruta em
-`data/evidencia/{tbci,unesco}/`; `--importar` reconcilia a planilha com o protocolo,
+`data/evidencia/<instrumento>/`; `--importar` reconcilia a planilha com o protocolo,
 preservando decisões e linhas fora do protocolo. O conjunto-semente gera
 `data/semente_aderencia.csv` — uma linha por semente e por base — e imprime o ensaio seco
 no terminal; não grava guia em arquivo.
 
 **Garantias.** `--conferir` reprova o documento fora da forma; `--conferir-dados` reprova
 arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente
-e, por base, termo do protocolo ausente sem redução declarada ou termo retirado na v2
-presente. `--sincronizar` não apaga
+e, por base, termo vigente ausente sem redução declarada ou termo fora da STR presente.
+`--sincronizar` não apaga
 semente retirada do protocolo: ela permanece e é reportada, para decisão. `--autoteste` injeta
 defeitos numa cópia e exige que as conferências os reprovem.
 
@@ -247,23 +271,24 @@ Executa a busca e transforma a exportação em conjunto verificável.
    deduplicação dentro da base — a segunda ocorrência é marcada em `duplicata_de`, e nada é
    apagado.
 5. **Aderência.** Mede o recall contra o conjunto-semente; o denominador é o que cada base
-   indexa, conferido à mão, e o limiar é **80% sobre a união das bases**.
+   indexa, conferido à mão, e o limiar (regra de ajuste do protocolo) vale **sobre a união
+   das bases**.
 6. **Fidelidade.** Executa as duas específicas diretamente na WoS e na Scopus e compara com a
-   derivação; divergência acima de **10%** reprova o método.
+   derivação; divergência acima do limiar (`divergencia_fidelidade`) reprova o método.
 7. **Coerência e cobertura.** Confere as relações de continência entre as expressões —
    `EB4 = EB2 ∪ EB3` e `EB5 ⊃ EB4` — e a cobertura de campo da exportação. A conferência é
    condição necessária e não suficiente: o que garante a coerência é a construção —
    expressões uniformes e execução única da de cobertura —, não a verificação.
 8. **Sensibilidade.** `--sensibilidade` mede quanto `EB5` recupera que `EB4` não, e grava
    a amostra a classificar. O que decide é a fração **elegível** dessa amostra, classificada
-   à mão: abaixo de 5% a restrição está justificada, acima de 15% pede reconsideração.
+   à mão, contra a faixa de sensibilidade do protocolo (detalhamento de EB5).
 9. **Calibração da triagem assistida.** Antes do primeiro uso, o ASReview passa por estudo
-   de viabilidade e calibração, com sensibilidade aferida em **95% ou mais**. A ferramenta
-   ordena a fila; não decide inclusão.
+   de viabilidade e calibração, com o limiar `calibracao_triagem` do `config.toml`. A
+   ferramenta ordena a fila; não decide inclusão.
 
 ```bash
-# registra a consulta; a ERIC tem quatro arquivos (eric_4a.ris a eric_4d.ris)
-python3 src/derivar_expressoes.py --registrar wos <expressão> data/execucoes/wos/<arquivo>.ris --retorno 18432
+# registra a consulta; na ERIC, um arquivo por consulta da forma particionada
+python3 src/derivar_expressoes.py --registrar wos <expressão> data/execucoes/wos/<arquivo>.ris --retorno <n>
 
 # deriva as expressões não executadas, conta únicos e grava a ordem de triagem
 python3 src/derivar_expressoes.py --derivar
@@ -286,15 +311,15 @@ aderência usa `data/sementes.json` e `data/semente_aderencia.csv`.
 
 **Recusas e marcas.** `--registrar` confere o retorno declarado contra os registros do
 arquivo e **recusa registrar quando divergem**, salvo justificativa explícita — o caso do
-teto de 1.000 da BRAPCI. A execução aceita é gravada na base correspondente do
+teto de retorno da BRAPCI (ficha da base). A execução aceita é gravada na base correspondente do
 `registro_execucao.json`, com `arquivo`, `registros_lidos` e `status`; é essa entrada que
 `--derivar`, `--aderencia` e `--sensibilidade` leem. `--derivar` reconfere a contagem e para
 se o arquivo mudou. As contagens da busca usam os registros únicos, com o número bruto ao
 lado. O recorte temporal é apenas conferido aqui, e a linha "fora" deve ser zero em todas as
 bases.
 
-**Condição de passagem:** suficiência do portfólio — aderência de 80% ou mais e fidelidade
-dentro de 10%. Fora disso, revisa-se o controle terminológico antes de prosseguir, com
+**Condição de passagem:** suficiência do portfólio — aderência e fidelidade dentro dos
+limiares (`--mostrar`). Fora disso, revisa-se o controle terminológico antes de prosseguir, com
 emenda registrada. Skills: `busca-nas-bases`, `deduplicacao`, `teste-de-aderencia` e
 `conferencias-da-busca`.
 
@@ -312,7 +337,7 @@ calibração da triagem assistida aprovada em E2.
    `data/ordem_triagem.csv` registra a ordem por pertinência e recência.
 3. **2ª filtragem — título e resumo.** Aplica os critérios decidíveis sem o texto completo:
    recorte, idioma, tipo documental e exclusões temáticas manifestas, com kappa.
-4. **3ª filtragem — texto completo.** Aplica integralmente o critério 5, com a regra de
+4. **3ª filtragem — texto completo.** Aplica integralmente o CE6, com a regra de
    exceção e a regra de borda, e justifica cada exclusão. Dois revisores independentes, sem
    IA na decisão, com kappa. Divergência remanescente vai ao VT.
 5. **Backward search.** Uma geração, apenas sobre os estudos incluídos. Revisões
@@ -384,7 +409,8 @@ Skill: `fichamento`.
 ## Precedência
 
 - O **protocolo** — `02_protocolo_informacoes_gerais.md` e `03_protocolo_estrategia_pesquisa.md` —
-  prevalece sobre qualquer formulação feita em outro documento; o plano remete a ele.
+  prevalece sobre qualquer formulação feita em outro documento; o plano remete a ele. Sobre
+  o `config.toml`, o protocolo prevalece em todo parâmetro que declara.
 - O **histórico** é o único lugar das decisões, verificações e pendências.
 - A data **oficial** de execução consta **exclusivamente do cronograma**, que não integra este
   pacote; `data/registro_execucao.json` registra data e hora operacionais de cada execução,

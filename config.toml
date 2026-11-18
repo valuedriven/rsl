@@ -1,0 +1,150 @@
+# Configuração dos scripts de src/ — lida por src/protocolo.py com tomllib (Python 3.11+).
+#
+# Regra de precedência: o PROTOCOLO é a fonte. Todo parâmetro tem aqui um valor padrão;
+# quando o protocolo declara o parâmetro, vale o valor do protocolo. Trecho do protocolo
+# presente e ilegível reprova a conferência — não cai no padrão. `--mostrar` exibe o valor
+# em uso e a origem de cada parâmetro.
+#
+# Este arquivo é editado pelo pesquisador; nenhum script o grava.
+
+# Documento do protocolo a ser lido. Único parâmetro que o protocolo não sobrescreve:
+# é ele que localiza o protocolo. Caminho relativo à raiz do projeto.
+protocolo = "docs/03_protocolo_estrategia_pesquisa.md"
+
+# Colunas de idioma do quadro do controle terminológico, na ordem das colunas
+# ("Idioma Língua Materna", "Idioma 2", "Idioma 3"). O protocolo não nomeia os idiomas.
+idiomas = ["pt", "en", "es"]
+
+# ------------------------------------------------------------------ padrões sobrescritos
+# Valores usados só quando o protocolo não declara o parâmetro.
+[padroes]
+# CE de "Intervalo temporal" com ação Incluir ("após o ano AAAA").
+recorte_ano_min = 2017
+# Regra de ajuste do conjunto-semente ("recuperação inferior a N%").
+limiar_aderencia = 0.80
+# Faixa da fração elegível de sonda \ executada (EB5: "< N%" e "> M%").
+sensibilidade = [0.05, 0.15]
+# Facetas marcadas "âncora obrigatória" nas palavras significativas.
+ancoras = ["FCT1", "FCT2"]
+# Expressão executada e sonda de sensibilidade (coluna Natureza, ver [expressoes]).
+executada = "EB4"
+sonda = "EB5"
+# Divergência simétrica máxima no teste de fidelidade da derivação: acima dela a derivação
+# local é reprovada (o protocolo não a declara hoje).
+divergencia_fidelidade = 0.10
+# Sensibilidade mínima da triagem assistida (ASReview), aferida em conjunto disjunto do de
+# ajuste; abaixo dela a triagem permanece integralmente humana (o protocolo não a declara).
+calibracao_triagem = 0.95
+
+# Composição das expressões (tabela "Expressões de busca"). Cada lista é um grupo; o
+# registro satisfaz a expressão se satisfaz todos os grupos, e um grupo se satisfaz com
+# qualquer uma das strings dele.
+[padroes.composicao]
+EB1 = [["STR1"], ["STR2"], ["STR3"], ["STR4"]]
+EB2 = [["STR1"], ["STR2"], ["STR3"]]
+EB3 = [["STR1"], ["STR2"], ["STR4"]]
+EB4 = [["STR1"], ["STR2"], ["STR3", "STR4"]]
+EB5 = [["STR1"], ["STR2"]]
+
+# ------------------------------------------------------- parâmetros só desta configuração
+[expressoes]
+# Texto da coluna Natureza que identifica o papel da expressão no protocolo.
+natureza_executada = "Cobertura restrita"
+natureza_sonda = "Controle de sensibilidade"
+
+[conferencia]
+# Mínimo de termos distintos por string de faceta.
+minimo_termos_string = 20
+# Dimensões que a tabela de critérios de elegibilidade tem de declarar, com a grafia do
+# protocolo (coluna Dimensão).
+dimensoes_criterio = [
+    "Intervalo temporal", "Idioma", "Tipo documental", "Localização de itens",
+    "Adequação temática", "Domínio de aplicação", "Outros critérios",
+]
+
+[dados]
+sementes = "data/sementes.json"
+registro = "data/registro_execucao.json"
+validacao = "data/validacao_termologica.csv"
+
+# Ficha de busca de cada base. `bd` liga a ficha à tabela "Bases de dados" do protocolo;
+# `sigla` é o nome curto usado no mapa do conjunto-semente; `execucao` é a forma da
+# consulta executada ("unica" ou "particionada"; a forma curada é lida da ficha).
+[fichas.wos]
+bd = "BD1"
+sigla = "WoS"
+arquivo = "docs/busca_base_1_web_of_science.md"
+execucao = "unica"
+
+[fichas.scopus]
+bd = "BD2"
+sigla = "Scopus"
+arquivo = "docs/busca_base_2_scopus.md"
+execucao = "unica"
+
+[fichas.eric]
+bd = "BD3"
+sigla = "ERIC"
+arquivo = "docs/busca_base_3_eric.md"
+execucao = "particionada"
+
+[fichas.brapci]
+bd = "BD4"
+sigla = "BRAPCI"
+arquivo = "docs/busca_base_4_brapci.md"
+execucao = "unica"
+
+# Emoji de faceta usado nas fichas (consultas curadas).
+[cores]
+"🟦" = "FCT1"
+"🟨" = "FCT2"
+"🟥" = "FCT3"
+"🟧" = "FCT4"
+
+# ----------------------------------------------------------------- instrumentos
+# Os instrumentos de cada faceta vêm da seção "Instrumentos para controle terminológico"
+# do protocolo; não há padrão por faceta. Aqui fica o que é propriedade do instrumento.
+# A chave é o nome procurado (sem acento nem caixa) em cada item da linha da faceta.
+#   sigla   valor da coluna `instrumento` da planilha de validação
+#   modo    "tbci" ou "unesco" (cliente de validar_termos.py) ou "manual" (sem cliente:
+#           a linha nasce pendente de validação manual)
+#   idiomas idiomas dos termos que o instrumento cobre
+[instrumentos."Tesauro Brasileiro de Ciência da Informação"]
+sigla = "TBCI"
+modo = "tbci"
+# Português conferido (o cliente consulta em português). Há evidência de equivalentes em
+# inglês e espanhol na edição de 2014; NÃO verificado que o servidor online os exponha.
+idiomas = ["pt"]
+
+[instrumentos."UNESCO Thesaurus"]
+sigla = "UNESCO"
+modo = "unesco"
+# Inglês e espanhol: informado pelo pesquisador (2026-11-18).
+idiomas = ["en", "es"]
+
+[instrumentos."ERIC Thesaurus"]
+sigla = "ERIC"
+modo = "manual"
+# Inglês: inferido (vocabulário da base ERIC); NÃO conferido na fonte.
+idiomas = ["en"]
+
+[instrumentos."Brased"]
+sigla = "BRASED"
+modo = "manual"
+# Português: inferido (instrumento do INEP); NÃO conferido na fonte.
+idiomas = ["pt"]
+
+# ----------------------------------------------------------------- planilhas e JSON
+[planilha]
+# Colunas da planilha de validação, na ordem em que é escrita.
+campos_validacao = [
+    "instrumento", "consultado_em", "versao_instrumento", "url_consultada",
+    "status_proposto", "rotulo_autorizado", "uri_conceito",
+    "equivalentes_USE_UP", "termos_genericos_TG", "termos_especificos_TE",
+    "termos_relacionados_TR", "nota_de_escopo",
+    "arquivo_evidencia", "observacao_tecnica",
+    "decisao_ReT", "justificativa_ReT", "data_decisao",
+]
+# Metadados de cada semente em sementes.json que a sincronização nunca sobrescreve.
+campos_autorais = ["verificacao", "escopo", "tipo", "alinhamento", "nota",
+                   "veiculo_conferido", "eric"]

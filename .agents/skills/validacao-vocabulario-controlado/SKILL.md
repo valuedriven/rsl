@@ -11,15 +11,15 @@ sistemática isso contamina o registro e destrói a reprodutibilidade.
 
 ## 1. A regra única, para as quatro facetas
 
-- **Instrumentos de consulta sistemática: o TBCI (IBICT) e o UNESCO Thesaurus**, e
-  somente eles. Valem para as quatro facetas — cada termo é consultado nos dois.
-- **O ERIC Thesaurus e o Brased/INEP são REFERÊNCIA DOCUMENTAL**, não instrumento:
-  não são percorridos termo a termo e não figuram como instrumento de linha alguma da
-  planilha. Era a mistura de três estatutos — disponível, pendente de atendimento,
-  dispensado — que o parecer externo apontou.
-- A **faceta de fatores situacionais é de termo livre por decisão de protocolo**, por
-  não ter correspondência de vocabulário controlado nos dois instrumentos adotados.
-  As suas linhas entram na planilha já com esse estatuto e não aguardam consulta.
+- **Os instrumentos de cada faceta são os que o protocolo declara** na seção
+  "Instrumentos para controle terminológico". Não se presume instrumento por idioma nem
+  por faceta: o que não está na seção não é instrumento de linha alguma da planilha.
+- **O que é propriedade do instrumento** — sigla, idiomas que cobre e modo de consulta —
+  está em `[instrumentos]` do `config.toml` (ver `README.md`). Cada termo é planejado para
+  cada instrumento da sua faceta que cubra o seu idioma.
+- **Instrumento sem cliente automatizado** (modo `manual`) gera linha com o estatuto
+  "pendente de validação manual": consulta-se à mão e registra-se a evidência como em
+  qualquer outra linha. Pendente não é "não encontrado".
 
 ## 2. A distinção que a regra preserva
 
@@ -76,9 +76,8 @@ Campos que decidem: `instrumento`, `consultado_em`, `status_proposto`,
 `justificativa_ReT`. A decisão final e a incorporação de termos relacionados e
 específicos são do ReT com a Validação Temática — a ferramenta recupera e registra.
 
-Estado corrente: as linhas da faceta de fatores situacionais saem pré-classificadas
-como termo livre; as demais aguardam consulta. **A validação nunca foi executada**, e
-o protocolo declara isso em vez de insinuar o contrário.
+Estado corrente: verificar na planilha e em `python3 src/protocolo.py --pendencias`;
+não presumir que a validação foi executada.
 
 ## 6. Antes do primeiro uso de um instrumento
 
