@@ -15,13 +15,14 @@ declaradas como tal no IO 2 e no relatório.
 
 Entradas
   docs/03_protocolo_estrategia_pesquisa.md   vocabulário, composição e recorte (lido por src/protocolo.py)
-  data/consultas.json      registro das execuções, escrito por --registrar
+  data/registro_execucao.json  registro documental e rastro técnico das execuções,
+                               escrito por --registrar
   data/sementes.json       metadados autorais das sementes, ligados por DOI ou título
   <arquivo> de cada consulta registrada, intacto, onde estiver
 
 O protocolo é lido diretamente: não há derivado intermediário a manter em dia.
 
-Saídas em data/saida/derivacao/
+Saídas na raiz de data/
   registros.csv        um registro por linha, com as facetas e expressões atingidas,
                        a chave de ordenação de leitura e a marca de duplicata
   io2_contagens.csv    base x expressão, para alimentar o IO 2
@@ -59,8 +60,8 @@ import protocolo                                                    # noqa: E402
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data"
-CONSULTAS_JSON = DATA / "consultas.json"
-SAIDA = DATA / "saida" / "derivacao"
+REGISTRO = DATA / "registro_execucao.json"
+SAIDA = DATA
 
 
 def _mostra(caminho):
@@ -97,6 +98,22 @@ LIMITE_SENSIBILIDADE = (0.05, 0.15)   # faixa da fração ELEGÍVEL entre os per
 
 STATUS_VALIDOS = ("valida", "divergente_justificada")
 BASE_CANONICA = {"wos": "WoS", "scopus": "Scopus", "eric": "ERIC", "brapci": "BRAPCI"}
+BD_DE = {BASE_CANONICA[slug]: info["bd"] for slug, info in protocolo.FICHAS.items()}
+SLUG_DE_BD = {info["bd"]: slug for slug, info in protocolo.FICHAS.items()}
+
+
+def _base_canonica(base):
+    s = str(base or "").strip()
+    return BASE_CANONICA.get(s.lower(), s)
+
+
+def _bd_de(base):
+    s = str(base or "").strip()
+    if s.upper() in SLUG_DE_BD:
+        bd = s.upper()
+        return bd, BASE_CANONICA[SLUG_DE_BD[bd]]
+    nome = _base_canonica(s)
+    return BD_DE.get(nome), nome
 
 
 # ------------------------------------------------------------------ normalização
@@ -352,18 +369,50 @@ def _caminho_do_arquivo(c):
     return p if p.is_absolute() else RAIZ / p
 
 
+def _consultas_do_registro(dado):
+    """Execuções com exportação declarada, lidas do registro documental por base."""
+    consultas = []
+    for bd, base in (dado.get("bases") or {}).items():
+        if not isinstance(base, dict):
+            continue
+        slug = base.get("slug") or SLUG_DE_BD.get(bd, "")
+        nome = BASE_CANONICA.get(slug, base.get("base") or bd)
+        for e in base.get("execucoes") or []:
+            arq = str(e.get("arquivo") or "").strip()
+            if not arq:
+                continue
+            if normaliza(e.get("estado")) in ("vencido", "nao executado"):
+                continue
+            status = e.get("status") or "valida"
+            if status not in STATUS_VALIDOS:
+                continue
+            consultas.append({
+                "id": f"{nome}-{e.get('expressao')}-{pathlib.Path(arq).stem}",
+                "base": nome,
+                "expressao": e.get("expressao"),
+                "data_hora": e.get("data_hora") or e.get("data") or "",
+                "retorno_declarado": e.get("retorno"),
+                "registros_lidos": e.get("registros_lidos"),
+                "arquivo": arq,
+                "status": status,
+                "justificativa_divergencia": e.get("justificativa_divergencia", ""),
+            })
+    return consultas
+
+
 def carrega_consultas(exigir=True):
-    if not CONSULTAS_JSON.exists():
-        raise SystemExit("data/consultas.json não encontrado: registre cada execução com "
-                         "--registrar antes de derivar")
+    if not REGISTRO.exists():
+        raise SystemExit("data/registro_execucao.json não encontrado: registre cada execução "
+                         "com --registrar antes de derivar")
     try:
-        dado = json.loads(CONSULTAS_JSON.read_text(encoding="utf-8"))
+        dado = json.loads(REGISTRO.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:
-        raise SystemExit(f"data/consultas.json ilegível: {e}")
-    validas = [c for c in dado.get("consultas", []) if c.get("status") in STATUS_VALIDOS]
+        raise SystemExit(f"data/registro_execucao.json ilegível: {e}")
+    validas = [c for c in _consultas_do_registro(dado)
+               if c.get("status") in STATUS_VALIDOS]
     if exigir and not validas:
         raise SystemExit(
-            "nenhuma consulta válida em data/consultas.json.\n"
+            "nenhuma execução com exportação registrada em data/registro_execucao.json.\n"
             "  Registre a execução primeiro:\n"
             "  python3 src/derivar_expressoes.py --registrar <base> <expressao> "
             "<arquivo> --retorno <n>")
@@ -384,7 +433,7 @@ def _id_expressao(expr):
 
 
 def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
-    """Registra uma execução e confere o retorno declarado contra o arquivo."""
+    """Registra uma execução no registro por base e confere o retorno contra o arquivo."""
     caminho = pathlib.Path(arquivo)
     if not caminho.is_absolute():
         caminho = (pathlib.Path.cwd() / caminho)
@@ -401,6 +450,11 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
         print(f"Expressão inválida: {expressao!r}. Use EB1 a EB5.")
         return 1
 
+    bd, nome = _bd_de(base)
+    if bd is None:
+        print(f"Base inválida: {base!r}. Use wos, scopus, eric, brapci ou BD1 a BD4.")
+        return 1
+
     lidos = len(regs)
     status, just = "valida", ""
     if retorno is None:
@@ -414,41 +468,67 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
             return 1
         status, just = "divergente_justificada", justificar.strip()
 
-    base = BASE_CANONICA.get(base.strip().lower(), base.strip())
     try:
         rel = str(caminho.resolve().relative_to(RAIZ))
     except ValueError:
         rel = str(caminho.resolve())
 
-    _, validas = carrega_consultas(exigir=False)
-    dado = json.loads(CONSULTAS_JSON.read_text(encoding="utf-8"))
-    consultas = dado.setdefault("consultas", [])
-    ident = f"{base}-{id_expr}-{pathlib.Path(arquivo).stem}"
-    entrada = {
-        "id": ident,
-        "base": base,
-        "expressao": id_expr,
-        "data_hora": data_hora or datetime.datetime.now().astimezone().isoformat(
-            timespec="seconds"),
-        "retorno_declarado": int(retorno),
-        "registros_lidos": lidos,
-        "arquivo": rel,
-        "status": status,
-        "justificativa_divergencia": just,
-    }
-    for i, c in enumerate(consultas):
-        if (c.get("base"), c.get("expressao"), c.get("arquivo")) == \
-                (entrada["base"], entrada["expressao"], entrada["arquivo"]):
-            consultas[i] = entrada
-            break
-    else:
-        consultas.append(entrada)
-    CONSULTAS_JSON.write_text(json.dumps(dado, ensure_ascii=False, indent=2) + "\n",
-                              encoding="utf-8")
+    if not REGISTRO.exists():
+        print("data/registro_execucao.json não encontrado. Nada foi registrado.")
+        return 1
+    try:
+        dado = json.loads(REGISTRO.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        print(f"data/registro_execucao.json ilegível: {e}")
+        return 1
+    item = (dado.get("bases") or {}).get(bd)
+    if not isinstance(item, dict):
+        print(f"data/registro_execucao.json sem a base {bd}.")
+        return 1
+    execucoes = item.setdefault("execucoes", [])
+    agora = data_hora or datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    dia = agora[:10]
 
-    print(f"Consulta registrada em data/consultas.json:\n"
-          f"  {ident}\n"
-          f"  {entrada['base']} {entrada['expressao']} em {entrada['data_hora']}\n"
+    achado = next((e for e in execucoes
+                   if e.get("arquivo") == rel and e.get("expressao") == id_expr
+                   and normaliza(e.get("estado")) not in ("vencido", "nao executado")), None)
+    if achado is None:
+        ids = {e.get("id") for e in execucoes}
+        n = 1
+        while f"EX{n}" in ids:
+            n += 1
+        achado = {
+            "id": f"EX{n}",
+            "expressao": id_expr,
+            "forma": "registrada por --registrar",
+            "retorno": int(retorno),
+            "data": dia,
+            "data_hora": agora,
+            "mede": f"{id_expr}, execução registrada",
+            "estado": "registrada",
+            "origem": "exportacao",
+            "arquivo": rel,
+            "registros_lidos": lidos,
+            "status": status,
+            "justificativa_divergencia": just,
+        }
+        execucoes.append(achado)
+    else:
+        achado.update({
+            "retorno": int(retorno),
+            "data": dia,
+            "data_hora": agora,
+            "arquivo": rel,
+            "registros_lidos": lidos,
+            "status": status,
+            "justificativa_divergencia": just,
+        })
+
+    REGISTRO.write_text(json.dumps(dado, ensure_ascii=False, indent=2) + "\n",
+                        encoding="utf-8")
+
+    print(f"Consulta registrada em data/registro_execucao.json:\n"
+          f"  {bd} {achado['id']} — {nome} {id_expr} em {agora}\n"
           f"  retorno declarado {retorno}, registros lidos {lidos} — {status}")
     if status != "valida":
         print(f"  divergência justificada: {just}")

@@ -15,7 +15,7 @@ repete o conteúdo dos documentos.
 | Onde | O que é |
 | --- | --- |
 | `docs/` | conteúdo da revisão: IO 0 e IO 1, o Anexo A e as fichas de busca; os arquivos do pesquisador e os que o agente mantém |
-| `data/` | o que é alimentado — os cinco JSON autorais e as exportações — e o que dele se produz: `saida/` e `arquivo/` |
+| `data/` | o que é alimentado — os dois JSON e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
 | `src/` | quatro scripts de execução |
 | `.agents/skills/` | 21 competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
@@ -35,52 +35,55 @@ IO 2 a IO 7 e o portfólio não integram este repositório.
 | `docs/busca_base_2_scopus.md` | ficha da Scopus, mesma estrutura | idem |
 | `docs/busca_base_3_eric.md` | ficha da ERIC, mesma estrutura | idem |
 | `docs/busca_base_4_brapci.md` | ficha da BRAPCI, mesma estrutura | idem |
-| `src/protocolo.py` | leitor do protocolo: confere documento e arquivos alimentados, e reconcilia o que é autoral | antes de executar qualquer script, e após alterar o protocolo |
-| `src/derivar_expressoes.py` | registro das consultas, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
-| `src/validar_termos.py` | validação assistida no TBCI e no UNESCO Thesaurus | conferir o estatuto de cada termo |
-| `src/gen_semente.py` | geração do instrumento de aderência a partir do conjunto-semente | montar a planilha de aferição de uma base |
+| `src/protocolo.py` | leitor do protocolo: confere documento e arquivos alimentados, e reconcilia o metadado das sementes | antes de executar qualquer script, e após alterar o protocolo |
+| `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
+| `src/validar_termos.py` | validação assistida no TBCI e no UNESCO Thesaurus, com a planilha como registro | conferir o estatuto de cada termo |
+| `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 
 Em `data/`, a procedência de cada arquivo:
 
 | Caminho | O que contém | Quem escreve |
 | --- | --- | --- |
-| `data/descritores.json` | estatuto de validação de cada termo, por faceta e idioma | `validar_termos.py`, preservado por `--sincronizar` |
-| `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, preservado por `--sincronizar` |
-| `data/consultas.json` | registro das execuções: base, expressão, data e hora, retorno | `--registrar` |
-| `data/registro_execucao.json` | sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base | pesquisador |
-| `data/pendencias.json` | estado das tarefas e pendências abertas | pesquisador |
+| `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `--sincronizar` |
+| `data/registro_execucao.json` | sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `--registrar` |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
-| `data/saida/` | planilhas, CSVs e instrumentos gerados pelos scripts | scripts |
+| `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `io2_contagens.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
 | `data/evidencia/` | resposta bruta de cada consulta terminológica | `validar_termos.py` |
 | `data/arquivo/` | cópias anteriores, com `SHA256` — sem conteúdo no momento: o arquivo do estado anterior à migração (16/11) foi descartado em 17/11 | migrações |
 
 As pastas de dados brutos e de arquivo — `execucoes/`, `evidencia/` e `arquivo/` — são
-criadas quando o primeiro arquivo chega e não existem hoje. O conteúdo atual de `data/` são
-os cinco JSON e `saida/`.
+criadas quando o primeiro arquivo chega e não existem hoje. Na raiz de `data/` estão hoje
+os dois JSON e as duas planilhas geradas, `validacao_termologica.csv` e
+`semente_aderencia.csv`; não há `descritores.json`, `consultas.json` nem
+`pendencias.json`.
 
 O que é **derivado do documento não vira arquivo**: questão, facetas, strings, expressões,
 critérios e fontes são lidos de `docs/03_protocolo_estrategia_pesquisa.md` a cada execução.
 A forma de cada base é lida da ficha correspondente. Guardar cópia em JSON criava uma segunda
 fonte para o mesmo dado e a obrigação de mantê-la em dia; o que se guarda em `data/` é o que
-alguém **alimenta** — o estatuto da validação, o metadado das sementes e o registro das
-execuções.
+alguém **alimenta** — o metadado das sementes e o registro das execuções. O estatuto da
+validação terminológica vive na planilha `data/validacao_termologica.csv`,
+que é lida e regravada por `validar_termos.py`.
 
 ### Scripts
 
-Os quatro scripts leem o documento do protocolo e os arquivos alimentados de `data/`; nenhum
-decide conteúdo — conferem, derivam e registram. Quatro invariantes valem para todos:
+Os quatro scripts leem o documento do protocolo e os artefatos de `data/`; nenhum decide
+conteúdo — conferem, derivam e registram. Quatro invariantes valem para todos:
 
 - **Uma fonte por dado.** O vocabulário, as expressões e os critérios vêm de
   `docs/03_protocolo_estrategia_pesquisa.md`; a forma da busca, da ficha da base em `docs/`.
   Não há cópia intermediária a manter em dia: o leitor lê o documento.
-- **O que é autoral se preserva.** O estatuto de validação em `descritores.json`, os
-  metadados de conferência em `sementes.json` e a declaração de cobertura nas fichas são
-  editados pelo pesquisador, e `--sincronizar` nunca os sobrescreve.
-- **Nada se apaga por sincronização.** Termo ou semente retirado do protocolo permanece no
-  arquivo com o seu estatuto e é reportado por `--conferir-dados` e por `--pendencias`, para
-  decisão. Termo do protocolo ausente da string de uma base só passa se a ficha o declarar na
-  redução; sem declaração, a conferência daquela base reprova — e só daquela: a forma de uma
-  base não congela as outras.
+- **O que é autoral se preserva.** Os metadados de conferência em `sementes.json`, as
+  execuções em `registro_execucao.json` e a declaração de cobertura nas fichas são editados
+  pelo pesquisador; `--sincronizar` só reconcilia sementes, `--registrar` só acrescenta ou
+  atualiza a execução que ele mesmo confere e `--importar` preserva as decisões da
+  validação na planilha.
+- **Nada se apaga por sincronização.** Semente retirada do protocolo permanece no arquivo
+  com o seu metadado e é reportada por `--conferir-dados` e por `--pendencias`, para decisão;
+  termo retirado do protocolo permanece na planilha de validação como linha fora do
+  protocolo. Termo do protocolo ausente da string de uma base só passa se a ficha o declarar
+  na redução; sem declaração, a conferência daquela base reprova — e só daquela: a forma de
+  uma base não congela as outras.
 - **O identificador é a chave.** Tudo se identifica pelo código do protocolo — `QGR`/`QERn`,
   `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn` —, e não por posição. Na semente, a ligação com
   o protocolo é feita por DOI ou título, de modo que o rótulo pode mudar sem perder o
@@ -89,12 +92,13 @@ decide conteúdo — conferem, derivam e registram. Quatro invariantes valem par
 `--conferir` reprova documento fora da forma esperada — seções, identificadores, camadas de
 vocabulário, strings, composição das expressões, critérios, bases e distribuição do
 conjunto-semente. `--conferir-dados` reprova arquivo alimentado ausente ou fora do protocolo,
-e, por base, termo do protocolo fora da string sem redução declarada. `--autoteste` injeta
-defeitos numa cópia e exige que as conferências os reprovem — inclusive a prova de que edição
-de campo autoral é aprovada e a de que ficha divergente do protocolo é recusada.
-`--sincronizar` acrescenta ao estatuto o termo novo do protocolo e religa a semente por DOI
-ou título, sem tocar no que já foi conferido; rodar duas vezes não muda nada. `--pendencias`
-relata sem escrever. Os comandos estão no fluxo de trabalho, em M3.
+a execução que declara exportação inexistente e, por base, termo do protocolo fora da string
+sem redução declarada, e termo retirado na emenda v2 dentro da string, mesmo em flexão.
+`--autoteste` injeta defeitos numa cópia e exige que as conferências
+os reprovem — inclusive a prova de que ficha divergente do protocolo é recusada.
+`--sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido; rodar
+duas vezes não muda nada. `--pendencias` relata sem escrever. Os comandos estão no fluxo de
+trabalho, em M3.
 
 ## Fluxo de trabalho — RS Banyan
 
@@ -197,30 +201,31 @@ python3 src/validar_termos.py --validar tbci
 python3 src/validar_termos.py --validar unesco
 python3 src/validar_termos.py --importar
 
-# instrumento de aderência: guia e planilha por semente e por base
+# instrumento de aderência: planilha por semente e por base, e ensaio seco no terminal
 python3 src/gen_semente.py
 ```
 
 **Arquivos.** O vocabulário vem de `docs/03_protocolo_estrategia_pesquisa.md`, lido a cada
-execução; não há JSON derivado a regerar. `--sincronizar` mexe apenas no que é alimentado:
-acrescenta a `descritores.json` o estatuto do termo novo do protocolo e religa a semente de
-`sementes.json` por DOI ou título, preservando o que já foi conferido, e cria os auxiliares
-`consultas.json` e `pendencias.json` só se ausentes. A validação grava o estatuto em
-`descritores.json` e a resposta bruta em `data/evidencia/{tbci,unesco}/`; a planilha em
-`data/saida/validacao/validacao_termologica.csv` é exportação, e as decisões voltam por
-`--importar`. O conjunto-semente gera `data/saida/semente/Conjunto_Semente.md` e
-`semente_aderencia.csv`.
+execução; não há JSON derivado a regerar. `--sincronizar` mexe apenas no metadado das
+sementes: religa a semente de `sementes.json` por DOI ou título, preservando o que já foi
+conferido. A validação grava o estatuto na própria planilha
+`data/validacao_termologica.csv` e a resposta bruta em
+`data/evidencia/{tbci,unesco}/`; `--importar` reconcilia a planilha com o protocolo,
+preservando decisões e linhas fora do protocolo. O conjunto-semente gera
+`data/semente_aderencia.csv` — uma linha por semente e por base — e imprime o ensaio seco
+no terminal; não grava guia em arquivo.
 
 **Garantias.** `--conferir` reprova o documento fora da forma; `--conferir-dados` reprova
-arquivo alimentado ausente ou fora do protocolo e, por base, termo do protocolo ausente sem
-redução declarada. `--sincronizar` não apaga termo nem semente retirado do protocolo: ambos
-permanecem e são reportados, para decisão. `--autoteste` injeta defeitos numa cópia e exige
-que as conferências os reprovem.
+arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente
+e, por base, termo do protocolo ausente sem redução declarada ou termo retirado na v2
+presente. `--sincronizar` não apaga
+semente retirada do protocolo: ela permanece e é reportada, para decisão. `--autoteste` injeta
+defeitos numa cópia e exige que as conferências os reprovem.
 
 **Condição de passagem:** viabilidade das strings e IO 1 validado por revisor expert.
 Reprovado, volta-se ao vocabulário e registra-se a emenda no Anexo A.
 Skills: `facetacao-e-termos-livres`, `validacao-vocabulario-controlado`,
-`expressoes-de-busca`, `strings-por-base` e `conjunto-semente`.
+`expressoes-de-busca`, `ficha-de-busca-por-base` e `conjunto-semente`.
 
 #### E2 — Localização dos estudos
 
@@ -271,17 +276,20 @@ python3 src/derivar_expressoes.py --fidelidade <expressão> data/execucoes/wos/<
 python3 src/derivar_expressoes.py --sensibilidade wos
 ```
 
-**Arquivos.** `data/consultas.json` é o registro das execuções; `--derivar` lê o registro,
-não a pasta de exportações. As saídas ficam em `data/saida/derivacao/`: `registros.csv`,
-`io2_contagens.csv`, `ordem_triagem.csv`, um CSV de fidelidade por expressão conferida e um
-de sensibilidade por base sondada. A
-aderência usa `data/sementes.json` e `data/saida/semente/semente_aderencia.csv`.
+**Arquivos.** `data/registro_execucao.json` é o registro documental e o rastro técnico das
+execuções; `--derivar` lê as execuções registradas, não a pasta de exportações. As saídas
+ficam na raiz de `data/`: `registros.csv`, `io2_contagens.csv`, `ordem_triagem.csv`,
+um CSV de fidelidade por expressão conferida e um de sensibilidade por base sondada. A
+aderência usa `data/sementes.json` e `data/semente_aderencia.csv`.
 
 **Recusas e marcas.** `--registrar` confere o retorno declarado contra os registros do
 arquivo e **recusa registrar quando divergem**, salvo justificativa explícita — o caso do
-teto de 1.000 da BRAPCI. `--derivar` reconfere a contagem e para se o arquivo mudou. As
-contagens do IO 2 usam os registros únicos, com o número bruto ao lado. O recorte temporal
-é apenas conferido aqui, e a linha "fora" deve ser zero em todas as bases.
+teto de 1.000 da BRAPCI. A execução aceita é gravada na base correspondente do
+`registro_execucao.json`, com `arquivo`, `registros_lidos` e `status`; é essa entrada que
+`--derivar`, `--aderencia` e `--sensibilidade` leem. `--derivar` reconfere a contagem e para
+se o arquivo mudou. As contagens do IO 2 usam os registros únicos, com o número bruto ao
+lado. O recorte temporal é apenas conferido aqui, e a linha "fora" deve ser zero em todas as
+bases.
 
 **Condição de passagem:** suficiência do portfólio — aderência de 80% ou mais e fidelidade
 dentro de 10%. Fora disso, revisa-se o controle terminológico antes de prosseguir, com
@@ -299,7 +307,7 @@ calibração da triagem assistida aprovada em E2.
    classificação assistida por LLM corre em paralelo e **não exclui**; o revisor não vê a
    saída da IA antes de registrar a sua decisão. A fila é percorrida integralmente — a
    priorização altera a ordem de leitura, nunca o conjunto lido —, e
-   `data/saida/derivacao/ordem_triagem.csv` registra a ordem por pertinência e recência.
+   `data/ordem_triagem.csv` registra a ordem por pertinência e recência.
 3. **2ª filtragem — título e resumo.** Aplica os critérios decidíveis sem o texto completo:
    recorte, idioma, tipo documental e exclusões temáticas manifestas, com kappa.
 4. **3ª filtragem — texto completo.** Aplica integralmente o critério 5, com a regra de
@@ -311,7 +319,7 @@ calibração da triagem assistida aprovada em E2.
 6. **Registro do fluxo.** O IO 3 recebe o diagrama PRISMA com as exclusões justificadas e
    quantificadas em cada passagem.
 
-**Arquivos e ferramentas.** `data/saida/derivacao/ordem_triagem.csv` ordena a 1ª filtragem;
+**Arquivos e ferramentas.** `data/ordem_triagem.csv` ordena a 1ª filtragem;
 Zotero, Rayyan e ASReview executam a etapa; o IO 3 é produzido fora deste pacote.
 **Scripts:** nenhum — a decisão de inclusão é humana. Skills: `calibracao-da-triagem` e
 `filtragens`.
@@ -355,10 +363,11 @@ Skill: `fichamento`.
 ### Atividades transversais
 
 - **Toda decisão que altere questão, facetas, critérios ou busca é emenda.** Altera-se o
-  documento-fonte — o IO 0, o IO 1 ou a ficha da base — e, quando o dado é alimentado,
-  reconcilia-se com `--sincronizar`; a decisão se registra no Anexo A,
+  documento-fonte — o IO 0, o IO 1 ou a ficha da base — e, quando o dado é o metadado das
+  sementes, reconcilia-se com `--sincronizar`; a decisão se registra no Anexo A,
   `docs/historico.md`. Não se edita planilha de saída nem se corrige o produto à mão:
-  corrige-se a fonte e confere-se de novo. Skill: `registrar-decisao`.
+  corrige-se a fonte e confere-se de novo — a exceção é a planilha de validação, que é o
+  registro do estatuto dos termos. Skill: `registrar-decisao`.
 - **Rastreabilidade.** Questão, objetivos, facetas, quadro terminológico, strings e
   critérios precisam concordar; `--conferir` e `--conferir-dados` são a trava, e
   `--autoteste` prova que as conferências reprovam. Skill: `rastreabilidade`.
@@ -376,8 +385,8 @@ Skill: `fichamento`.
   prevalece sobre qualquer formulação feita em outro documento; o IO 0 remete a ele.
 - O **Anexo A** é o único lugar do histórico.
 - A data **oficial** de execução consta **exclusivamente do IO 7**, que não integra este
-  pacote; `data/consultas.json` registra data e hora operacionais de cada consulta, como
-  rastro técnico do registro.
+  pacote; `data/registro_execucao.json` registra data e hora operacionais de cada execução,
+  como rastro técnico do registro.
 
 ## Convenções
 

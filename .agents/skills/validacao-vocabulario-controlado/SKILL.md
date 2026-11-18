@@ -46,13 +46,30 @@ validação.
 
 ## 4. O registro é o instrumento
 
-O registro é o bloco `estatuto` de `data/descritores.json`, um por termo e instrumento,
-criado pelo gerador a partir das tabelas do protocolo. A planilha
-`data/saida/validacao/validacao_termologica.csv`, 22 colunas, é **exportação** para leitura
-e para registrar decisões: `--exportar` a gera a partir do JSON, `--importar` traz de volta
-as colunas `decisao_ReT`, `justificativa_ReT` e `data_decisao`. É ela o instrumento de
-controlo, e **não se duplica em documento algum** — o IO 1 declara a regra e aponta para
-ela. `--sincronizar` reconcilia o estatuto com o protocolo preservando status e evidência.
+O registro é a própria planilha `data/validacao_termologica.csv`, com 22 colunas e uma
+linha por termo e instrumento. Ela é construída a partir das tabelas do protocolo e
+guarda o estatuto de cada termo: `--exportar` reconstrói a planilha e `--importar` a
+reconcilia com o protocolo, preservando as colunas `decisao_ReT`, `justificativa_ReT` e
+`data_decisao` e as linhas de termo retirado. Não há JSON intermediário. É ela o
+instrumento de controlo, e **não se duplica em documento algum** — o IO 1 declara a
+regra e aponta para ela.
+
+## 5. Geração e execução
+
+Os comandos, nesta ordem:
+
+| Comando | O que faz |
+| --- | --- |
+| `python3 src/validar_termos.py --sonda` | mede o que cada instrumento aceita, com contagem e captura. **Obrigatório antes de tudo** |
+| `python3 src/validar_termos.py --exportar` | reconstrói a planilha a partir do protocolo, sem rede; não decide nada |
+| `python3 src/validar_termos.py --validar tbci` | consulta o TBCI, grava a evidência e propõe o estatuto |
+| `python3 src/validar_termos.py --validar unesco` | idem para o UNESCO Thesaurus; `--validar ambos --faceta 1` restringe a uma faceta |
+| `python3 src/validar_termos.py --importar` | reconcilia a planilha com o protocolo, preservando decisões e linhas fora do protocolo |
+
+A resposta bruta de cada consulta é gravada em
+`data/evidencia/<instrumento>/<hash>.json`, e `arquivo_evidencia` na planilha aponta
+para ela: **linha sem evidência correspondente é linha inválida**. O script recupera e
+registra; não exclui, não reescreve termo e não preenche `decisao_ReT`.
 
 Campos que decidem: `instrumento`, `consultado_em`, `status_proposto`,
 `rotulo_autorizado`, `arquivo_evidencia`, `url_consultada`, `decisao_ReT`,
@@ -63,13 +80,13 @@ Estado corrente: as linhas da faceta de fatores situacionais saem pré-classific
 como termo livre; as demais aguardam consulta. **A validação nunca foi executada**, e
 o IO 1 declara isso em vez de insinuar o contrário.
 
-## 5. Antes do primeiro uso de um instrumento
+## 6. Antes do primeiro uso de um instrumento
 
 **Sondagem de sintaxe obrigatória**, com contagem e captura. Nunca supor que o
 instrumento aceita o que a documentação diz — a medição já contradisse a documentação
 em duas bases deste projeto.
 
-## 6. Ao concluir
+## 7. Ao concluir
 
 Termo que passe a descritor autorizado muda o que se pode **afirmar**, não
 necessariamente o que a busca recupera. Se a forma autorizada diferir da usada e for

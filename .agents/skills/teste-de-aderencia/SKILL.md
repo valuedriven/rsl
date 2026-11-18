@@ -14,7 +14,7 @@ Mede uma coisa só: **a busca recupera os estudos que tinha obrigação de recup
 python3 src/derivar_expressoes.py --aderencia
 ```
 
-Lê o conjunto-semente e as consultas registradas em `data/consultas.json`, casa por título
+Lê o conjunto-semente e as execuções registradas em `data/registro_execucao.json`, casa por título
 normalizado e, na falta dele, por prefixo, e imprime recuperados/informados. **Prefixo é
 indício, nunca acerto** — exige conferência humana. A razão impressa **não é a aderência**:
 o denominador são as sementes que cada base indexa.
@@ -22,6 +22,11 @@ o denominador são as sementes que cada base indexa.
 O conjunto-semente é lido do documento do protocolo. As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
 `--registrar` antes do teste; ver `README.md`, seção Scripts.
+
+O instrumento de campo é `data/semente_aderencia.csv` — uma linha por semente e por
+base, gerado por `python3 src/gen_semente.py`. O preenchimento das etapas 1 e 2 e o
+significado de cada coluna estão em `conjunto-semente`, §6. A linha de comando não
+substitui esse registro: ela mede, o instrumento documenta.
 
 ## 2. Limiar e consequência
 

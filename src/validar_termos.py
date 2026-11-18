@@ -27,24 +27,23 @@ FRONTEIRA DE USO (protocolo): este script RECUPERA e REGISTRA. Não decide.
   - TR e TE revelados pela consulta entram como CANDIDATOS, nunca nas strings;
   - a coluna `decisao_ReT` sai em branco: a decisão é do pesquisador, com o VT.
 
-O REGISTRO é `data/descritores.json`, no bloco `estatuto` de cada termo. A planilha
-`data/saida/validacao/validacao_termologica.csv` é EXPORTAÇÃO: serve para ler em
-planilha e para registrar decisões, que voltam ao JSON por `--importar`. Toda
-resposta bruta é gravada em `data/evidencia/<instrumento>/<arquivo>.json`. Linha sem
-evidência correspondente é linha inválida — foi esse o defeito que originou a ressalva
-de procedência do protocolo.
+O REGISTRO é a própria planilha `data/validacao_termologica.csv`.
+Não há JSON intermediário: a planilha guarda o estatuto de cada termo e instrumento,
+e `--validar` e `--importar` a regravam. Toda resposta bruta é gravada em
+`data/evidencia/<instrumento>/<arquivo>.json`. Linha sem evidência correspondente é
+linha inválida — foi esse o defeito que originou a ressalva de procedência do protocolo.
 
 Os termos NÃO são digitados aqui: vêm das tabelas do controle terminológico do
-documento do protocolo, lidas por `src/protocolo.py`.
+documento do protocolo, lidas por `src/protocolo.py`. Termo retirado do protocolo
+permanece na planilha como linha fora do protocolo, preservada e reportada.
 
 USO
-  python3 src/protocolo.py --sincronizar            # após alterar o protocolo
   python3 src/validar_termos.py --sonda             # obrigatório antes de tudo
-  python3 src/validar_termos.py --exportar          # planilha a partir do JSON, sem rede
+  python3 src/validar_termos.py --exportar          # reconstrói a planilha, sem rede
   python3 src/validar_termos.py --validar tbci      # executa a validação no TBCI
   python3 src/validar_termos.py --validar unesco
   python3 src/validar_termos.py --validar ambos --faceta 1
-  python3 src/validar_termos.py --importar          # traz as decisões da planilha
+  python3 src/validar_termos.py --importar          # reconcilia a planilha com o protocolo
 
 Requer apenas a biblioteca padrão do Python 3.9+.
 """
@@ -67,9 +66,8 @@ import protocolo                                                    # noqa: E402
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data"
-DESCRITORES = DATA / "descritores.json"
 EVID = DATA / "evidencia"
-CSV_SAIDA = DATA / "saida" / "validacao" / "validacao_termologica.csv"
+CSV_SAIDA = DATA / "validacao_termologica.csv"
 
 TBCI_SERV = "https://vocabularyserver.com/tbci/br/services.php"
 UNESCO_SPARQL = "https://vocabularies.unesco.org/sparql"
@@ -91,9 +89,18 @@ def agora():
     return datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 
 
-def grava_json(dados):
-    DESCRITORES.write_text(json.dumps(dados, ensure_ascii=False, indent=2) + "\n",
-                           encoding="utf-8")
+def _chave_linha(faceta, idioma, termo, instrumento):
+    return (str(faceta), idioma, protocolo.normaliza(termo), instrumento)
+
+
+def _planilha_existente():
+    """Linhas já registradas, por faceta, idioma, termo normalizado e instrumento."""
+    if not CSV_SAIDA.exists():
+        return {}
+    with CSV_SAIDA.open(encoding="utf-8-sig", newline="") as fh:
+        return {_chave_linha(r.get("faceta", ""), r.get("idioma", ""), r.get("termo", ""),
+                             r.get("instrumento", "")): r
+                for r in csv.DictReader(fh, delimiter=";")}
 
 
 def grava_evidencia(instrumento, chave, payload):
@@ -311,15 +318,46 @@ def sonda():
 
 # ------------------------------------------------------------------- leitura/escrita
 def carrega():
-    """O registro autoral, ligado ao protocolo por faceta, idioma e termo normalizado."""
-    return json.loads(DESCRITORES.read_text(encoding="utf-8"))
+    """Reconstrói o registro a partir do protocolo e da planilha existente.
+
+    A planilha é o registro: não há JSON intermediário. Termo novo nasce com o estatuto
+    inicial que o protocolo declara; linha já registrada é preservada campo a campo,
+    inclusive decisão do ReT e evidência.
+    """
+    d = protocolo.analisa()
+    existente = _planilha_existente()
+    dados = {"facetas": []}
+    for f in d["tabelas"]:
+        est = {}
+        for idioma in protocolo.IDIOMAS:
+            bloco = {}
+            for termo in f["termos"][idioma]:
+                validacoes = []
+                for inst in protocolo.INSTRUMENTO_POR_IDIOMA[idioma]:
+                    r = existente.get(_chave_linha(f["id"], idioma, termo, inst))
+                    v = {c: ((r.get(c) or "").strip() if r else "")
+                         for c in protocolo.CAMPOS_VALIDACAO}
+                    v["instrumento"] = inst
+                    if r is None:
+                        if f["livre"]:
+                            v["status_proposto"] = protocolo.STATUS_LIVRE_DECISAO
+                            v["observacao_tecnica"] = "não consultado: decisão de protocolo"
+                            v["justificativa_ReT"] = protocolo.JUSTIFICATIVA_LIVRE
+                        else:
+                            v["observacao_tecnica"] = "aguardando consulta"
+                    validacoes.append(v)
+                bloco[protocolo.normaliza(termo)] = {"termo": termo,
+                                                     "validacoes": validacoes}
+            est[idioma] = bloco
+        dados["facetas"].append({"id": f["id"], "estatuto": est})
+    return dados
 
 
 def linhas_de(dados):
     """Uma linha por termo e instrumento, ligada ao bloco de estatuto que a origina.
 
-    Os termos vêm do protocolo — a lista que se valida é a dele, não a do JSON. O JSON
-    guarda o estatuto; termo do protocolo sem estatuto é defeito de sincronização."""
+    Os termos vêm do protocolo — a lista que se valida é a dele. O estatuto vem da
+    planilha; termo do protocolo sem bloco no estado interno é defeito de construção."""
     d = protocolo.analisa()
     info = {f["id"]: f for f in d["facetas"]}
     est = {f["id"]: f.get("estatuto", {}) for f in dados.get("facetas", [])}
@@ -330,8 +368,8 @@ def linhas_de(dados):
                 e = est.get(f["id"], {}).get(idioma, {}).get(protocolo.normaliza(termo))
                 if e is None:
                     raise SystemExit(
-                        f"descritores.json: termo {termo!r} da faceta {f['id']} sem bloco de "
-                        f"estatuto; rode  python3 src/protocolo.py --sincronizar")
+                        f"estado interno sem bloco para {termo!r} da faceta {f['id']}; "
+                        f"rode  python3 src/validar_termos.py --exportar")
                 for v in e.get("validacoes", []):
                     yield {"faceta": f["id"], "faceta_nome": meta.get("nome", ""),
                            "ancora": "sim" if meta.get("ancora") else "não",
@@ -347,36 +385,49 @@ def _linha_csv(ln):
     return row
 
 
-def exporta_csv(dados=None):
-    dados = carrega() if dados is None else dados
+def grava_planilha(dados):
+    """Grava o registro na planilha, preservando as linhas fora do protocolo."""
     CSV_SAIDA.parent.mkdir(parents=True, exist_ok=True)
     linhas = [_linha_csv(ln) for ln in linhas_de(dados)]
+    chaves = {_chave_linha(l["faceta"], l["idioma"], l["termo"], l["instrumento"])
+              for l in linhas}
+    orfaos = [r for k, r in _planilha_existente().items() if k not in chaves]
     with CSV_SAIDA.open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=COLUNAS, delimiter=";")
         w.writeheader()
         w.writerows(linhas)
+        for r in orfaos:
+            w.writerow({c: r.get(c, "") for c in COLUNAS})
     livres = sum(1 for l in linhas
                  if l["status_proposto"] == protocolo.STATUS_LIVRE_DECISAO)
     a_validar = sum(1 for l in linhas if not l["status_proposto"])
     print(f"{CSV_SAIDA.relative_to(RAIZ)}: {len(linhas)} linhas — {a_validar} a validar, "
           f"{livres} já classificadas como termo livre por decisão de protocolo.")
+    if orfaos:
+        print(f"  {len(orfaos)} linha(s) fora do protocolo preservada(s) na planilha — "
+              f"decidir: manter com registro ou retirar à mão.")
+
+
+def exporta_csv(dados=None):
+    grava_planilha(carrega() if dados is None else dados)
     return 0
 
 
 def importar():
-    """Traz da planilha as colunas de decisão, casando por termo e instrumento."""
+    """Reconcilia a planilha com o protocolo, preservando decisões e linhas órfãs."""
     if not CSV_SAIDA.exists():
         print(f"{CSV_SAIDA.name} não existe. Rode --exportar antes.")
         return 1
     dados = carrega()
-    idx = {(str(ln["faceta"]), ln["idioma"], protocolo.normaliza(ln["termo"]),
-            ln["_v"].get("instrumento")): ln["_v"] for ln in linhas_de(dados)}
+    idx = {_chave_linha(ln["faceta"], ln["idioma"], ln["termo"],
+                        ln["_v"].get("instrumento")): ln["_v"]
+           for ln in linhas_de(dados)}
     with CSV_SAIDA.open(encoding="utf-8-sig", newline="") as fh:
         linhas = list(csv.DictReader(fh, delimiter=";"))
     casadas, sem_casa, com_decisao = 0, [], 0
     for r in linhas:
-        k = (str(r.get("faceta", "")).strip(), r.get("idioma", "").strip(),
-             protocolo.normaliza(r.get("termo", "")), r.get("instrumento", "").strip())
+        k = _chave_linha(r.get("faceta", ""), r.get("idioma", ""), r.get("termo", ""),
+                         r.get("instrumento", ""))
         v = idx.get(k)
         if v is None:
             sem_casa.append(k)
@@ -388,9 +439,9 @@ def importar():
                 v[c] = valor
                 if c == "decisao_ReT":
                     com_decisao += 1
-    grava_json(dados)
-    print(f"{casadas} linha(s) casada(s), {com_decisao} decisão(ões) importada(s), "
-          f"{len(sem_casa)} sem correspondência no protocolo.")
+    grava_planilha(dados)
+    print(f"{casadas} linha(s) casada(s), {com_decisao} decisão(ões) preservada(s), "
+          f"{len(sem_casa)} fora do protocolo (preservadas).")
     import collections
     duplas = [k for k, n in collections.Counter(
         (r.get("faceta"), r.get("idioma"), protocolo.normaliza(r.get("termo")))
@@ -399,7 +450,7 @@ def importar():
         print(f"AVISO: {len(duplas)} termo(s) aparecem mais de uma vez na planilha; a última "
               "linha lida prevalece.")
     for k in sem_casa[:10]:
-        print(f"  sem correspondência: {k}")
+        print(f"  fora do protocolo: {k}")
     return 0 if not sem_casa else 1
 
 
@@ -436,13 +487,12 @@ def validar(quais, faceta=None):
             v["observacao_tecnica"] = obs
             v["arquivo_evidencia"] = grava_evidencia(inst.lower(), f"{inst}|{termo}|falha", reg)
             falhas += 1
-            grava_json(dados)
+            grava_planilha(dados)
             print(f"[   ] {inst:<7} {termo[:48]:<50} {obs}")
             if falhas >= 5:
                 print("\n5 falhas consecutivas: execução interrompida para não insistir "
                       "contra um serviço indisponível. Nenhum termo foi classificado por "
                       "falta de resposta. Rode --sonda e tente mais tarde.")
-                exporta_csv(dados)
                 return
             time.sleep(PAUSA * 3)
             continue
@@ -461,13 +511,12 @@ def validar(quais, faceta=None):
         time.sleep(PAUSA)
 
         if feitos % 20 == 0:
-            grava_json(dados)
+            grava_planilha(dados)
 
-    grava_json(dados)
+    grava_planilha(dados)
     print(f"\n{feitos} termos consultados. Evidência bruta em {EVID.relative_to(RAIZ)}/.")
     print("As colunas decisao_ReT, justificativa_ReT e data_decisao ficam em branco: "
           "a classificação final e a incorporação de TR/TE são do pesquisador, com o VT.")
-    exporta_csv(dados)
 
 
 def main():
@@ -476,9 +525,9 @@ def main():
     ap.add_argument("--sonda", action="store_true",
                     help="testa os dois serviços e imprime as respostas; não grava nada")
     ap.add_argument("--exportar", action="store_true",
-                    help="grava a planilha a partir de descritores.json, sem rede")
+                    help="reconstrói a planilha a partir do protocolo, sem rede")
     ap.add_argument("--importar", action="store_true",
-                    help="traz para o JSON as decisões registradas na planilha")
+                    help="reconcilia a planilha com o protocolo, preservando as decisões")
     ap.add_argument("--validar", choices=["tbci", "unesco", "ambos"],
                     help="executa a validação no instrumento indicado")
     ap.add_argument("--faceta", type=int, help="restringe a uma faceta")

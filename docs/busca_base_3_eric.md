@@ -4,7 +4,7 @@
 **Posição no modelo:** Módulo 3, Etapa 1, 3º e 4º passos (strings e expressões de busca) e Etapa 2, 1º passo (execução).  
 **Fonte:** ERIC — interface pública `eric.ed.gov`.  
 **Responsável técnico:** Junilson Pereira Souza. **Validação temática:** VT.  
-**Vigente desde:** 17/11/2026. **Registro de execução:** `data/registro_execucao.json`, base `BD3`. **Histórico das decisões:** Anexo A.
+**Vigente desde:** 18/11/2026 (alinhamento à v2 do protocolo). **Registro de execução:** `data/registro_execucao.json`, base `BD3`. **Histórico das decisões:** Anexo A.
 
 ---
 
@@ -15,18 +15,22 @@
 | Elemento | Situação |
 | :--- | :--- |
 | Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`) | **Verificados em fonte oficial** |
+| Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` para termo obrigatório | **Verificados em fonte oficial**, comportamento **não medido**. Nenhuma expressão os usa; `descriptorx` está previsto para sondagem na Camada 3 |
 | Prefixo de campo restringe de fato | **Verificado por medição** |
 | Parênteses para agrupamento | **Suportados**, com uma condição: o grupo **não funciona sozinho** e precisa de condição externa |
 | Condição externa a um grupo | **Verificada** em qualquer forma: campo, texto livre ou outro grupo, antes ou depois |
 | Campos diferentes num mesmo grupo | **Não suportados**: devolvem zero, sem mensagem de erro |
 | `pubyearmin`/`pubyearmax` junto a um grupo | **Não suportados**: zeram o retorno; funcionam em consulta sem parênteses |
+| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | **Verificado por medição** na sondagem de 08/11, registrada no Anexo A, e é a forma das variantes desta ficha. O painel oficial afirma que os filtros *“cannot be used with AND/OR/+/-”*; prevalece a forma medida |
 | Truncamento com `*` | **Não suportado**: `ontolog*` devolve zero |
 | Lematização | **Verificada** para plural regular; **não** para irregular |
 | Aspas como frase | **Verificadas** dentro e fora do campo; palavra solta não forma frase, e o operador implícito entre duas palavras é conjunção |
 | Campo `descriptor` | **Medido**: é campo controlado, e casa apenas formas autorizadas |
 | Comprimento máximo da consulta | **Teto entre 1.502 e 1.799 caracteres brutos**; regra de bolso: manter abaixo de **1.400** |
 | Negação com prefixo `-` | **Verificada em fonte oficial**, não medida |
-| Controles `Include Synonyms` e `Include Dead terms` | **Não localizados** na interface; nenhuma expressão depende deles |
+| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | **Não medido**. Dele dependem cinco alcances declarados na redução e a âncora de artefato da SE8 |
+| Teto de retorno exibido e de exportação por lote | **Não verificados** |
+| Controles `Include Synonyms` e `Include Dead terms` | **Não localizados** na interface, na conferência do ReT de 08/11. O painel *Advanced Search Tips* os lista apenas como rótulos sob *Thesaurus*, sem descrever comportamento, e a menção não os torna controle disponível na busca. Nenhuma expressão depende deles |
 
 ---
 
@@ -39,7 +43,7 @@
 | Tipo documental e revisão por pares | CE4 | **Não**, por decisão | caixa `Peer reviewed only` desmarcada e campo `publicationtype` não usado: o protocolo admite artigo, anais, capítulo, relatório técnico, e revisões sistemáticas e de escopo |
 | Texto completo | CE5 | **Não** | caixa `Full text available on ERIC` desmarcada: marcada, suprime os artigos de periódico EJ, cujo texto está no editor |
 | Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, em forma radical | a faceta 🟨 (FCT2) entra como grupo de seis palavras-raiz, que é também a condição externa exigida pela sintaxe |
+| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, em forma radical | a faceta 🟨 (FCT2) entra como grupo de quatro palavras-raiz, que é também a condição externa exigida pela sintaxe |
 | Outros tipos documentais — editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos sem texto completo e versões preliminares | CE9 | **Não** | decisão de leitura, na 2ª filtragem |
 
 ---
@@ -50,7 +54,7 @@ Cada string corresponde a um quadro de controle terminológico do 2º passo. Sob
 
 `STRn` é o identificador do protocolo e `#n` a consulta correspondente. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
 
-**Redução declarada em relação ao protocolo.** Esta base não usa a lista integral: `STR1` é reduzida aos termos que nomeiam artefato no título, e os cinco termos específicos que não têm acepção corrente fora da Organização do Conhecimento nem do domínio educacional vão ao resumo, na `STR1b`; `STR2` é reduzida a seis palavras-raiz, que por casamento de palavra alcançam as expressões da faceta; `STR3` e `STR4` vão integralmente ao resumo. As formas plurais regulares são retiradas onde a lematização medida as torna redundantes. A lista do que fica de fora de `STR1` está na ressalva 7.
+**Redução declarada em relação ao protocolo.** Esta base não usa a lista integral: `STR1` é reduzida aos termos que nomeiam artefato no título, e os cinco termos específicos que não têm acepção corrente fora da Organização do Conhecimento nem do domínio educacional vão ao resumo, na `STR1b`; `STR2` é reduzida a quatro palavras-raiz, que por casamento de palavra alcançam as expressões da faceta; `STR3` e `STR4` vão integralmente ao resumo. As formas plurais regulares são retiradas onde a lematização medida as torna redundantes. A lista do que fica de fora de `STR1` está na ressalva 7.
 
 ### Declaração de cobertura
 
@@ -78,7 +82,7 @@ a forma radical alcança está declarado como tal; o resto é redução desta ba
 | FCT1 | educational ontology | alcançado pela forma radical declarada |
 | FCT1 | learning ontology | alcançado pela forma radical declarada |
 | FCT1 | teaching ontology | alcançado pela forma radical declarada |
-| FCT1 | educational ontological model | alcançado pela forma radical declarada |
+| FCT1 | educational ontological model | fora da string desta base — redução declarada: traz a forma adjetival `ontological`, que `title:ontology` não alcança, e não está literalmente em `STR1` |
 | FCT1 | educational practice ontology | alcançado pela forma radical declarada |
 | FCT1 | instructional design ontology | alcançado pela forma radical declarada |
 | FCT1 | curriculum ontology | alcançado pela forma radical declarada |
@@ -92,15 +96,14 @@ a forma radical alcança está declarado como tal; o resto é redução desta ba
 | FCT1 | semantic model | retirado na emenda v2 |
 | FCT1 | formal representation | retirado na emenda v2 |
 | FCT1 | ontology development | alcançado pela forma radical declarada |
-| FCT1 | ontology-based modeling | alcançado pela forma radical declarada |
-| FCT1 | ontology-based modelling | alcançado pela forma radical declarada |
+| FCT1 | ontology-based modeling | alcançado pela forma radical declarada se o hífen separar palavras — tokenização do hífen não medida, sondagem pendente |
+| FCT1 | ontology-based modelling | alcançado pela forma radical declarada se o hífen separar palavras — tokenização do hífen não medida, sondagem pendente |
 | FCT1 | ontology-based knowledge representation | alcançado pela forma radical declarada |
-| FCT1 | ontological engineering | alcançado pela forma radical declarada |
 | FCT2 | teaching practice | alcançado pela forma radical declarada |
 | FCT2 | teaching method | alcançado pela forma radical declarada |
 | FCT2 | teaching strategy | alcançado pela forma radical declarada |
 | FCT2 | classroom teaching | alcançado pela forma radical declarada |
-| FCT2 | teaching-learning | alcançado pela forma radical declarada |
+| FCT2 | teaching-learning | alcançado pela forma radical declarada se o hífen separar palavras — tokenização do hífen não medida, sondagem pendente |
 | FCT2 | teaching and learning | alcançado pela forma radical declarada |
 | FCT2 | learning process | alcançado pela forma radical declarada |
 | FCT2 | learning environment | alcançado pela forma radical declarada |
@@ -114,7 +117,8 @@ a forma radical alcança está declarado como tal; o resto é redução desta ba
 | FCT2 | online learning | alcançado pela forma radical declarada |
 | FCT2 | lifelong learning | alcançado pela forma radical declarada |
 | FCT2 | learning management system | alcançado pela forma radical declarada |
-| FCT2 | teaching-learning process | alcançado pela forma radical declarada |
+| FCT2 | teaching-learning process | alcançado pela forma radical declarada se o hífen separar palavras — tokenização do hífen não medida, sondagem pendente |
+| FCT2 | e-learning | alcançado pela forma radical declarada se o hífen separar palavras — tokenização do hífen não medida, sondagem pendente |
 | FCT2 | basic education | alcançado pela forma radical declarada |
 | FCT2 | primary education | alcançado pela forma radical declarada |
 | FCT2 | secondary education | alcançado pela forma radical declarada |
@@ -150,7 +154,7 @@ a forma radical alcança está declarado como tal; o resto é redução desta ba
 *Vai ao título; cinco termos específicos vão também ao resumo, em string própria.*
 
 ```
-(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model")
+(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering")
 ```
 
 ### `STR1b` — conjunto `#1b` — 🟦 FCT1 — Artefatos, subconjunto específico, no resumo
@@ -261,7 +265,7 @@ contagem é derivada de EB4. **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (
 **Consulta 2a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:practice OR abstract:"teaching strategy" OR abstract:"instructional strategy" OR abstract:"teaching method" OR abstract:"instructional method" OR abstract:"teaching technique" OR abstract:"learning activity" OR abstract:"learning task" OR abstract:"educational intervention" OR abstract:"instructional intervention" OR abstract:"teaching sequence" OR abstract:"instructional sequence" OR abstract:pedagogy OR abstract:"best practices" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"instructional approach" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"pedagogical pattern" OR abstract:"pedagogical design pattern" OR abstract:"active learning method" OR abstract:"teaching methodology")
+(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:practice OR abstract:"teaching strategy" OR abstract:"instructional strategy" OR abstract:"teaching method" OR abstract:"instructional method" OR abstract:"teaching technique" OR abstract:"learning activity" OR abstract:"learning task" OR abstract:"educational intervention" OR abstract:"instructional intervention" OR abstract:"teaching sequence" OR abstract:"instructional sequence" OR abstract:pedagogy OR abstract:"best practices" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"instructional approach" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"pedagogical pattern" OR abstract:"pedagogical design pattern" OR abstract:"active learning method" OR abstract:"teaching methodology")
 ```
 
 **Consulta 2b — termo específico no resumo**
@@ -277,7 +281,7 @@ contagem é derivada de EB4. **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (
 **Consulta 3a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:"situational factor" OR abstract:"situation of use" OR abstract:"educational context" OR abstract:"learning context" OR abstract:"contextual factors" OR abstract:"context factors" OR abstract:"application conditions" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"educational setting" OR abstract:"institutional context" OR abstract:"sociocultural context" OR abstract:"target population" OR abstract:"class profile" OR abstract:"learner characteristics" OR abstract:"educational level" OR abstract:"education modality" OR abstract:"educational institution" OR abstract:"educational infrastructure" OR abstract:"learning infrastructure" OR abstract:"available resources" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:"situational factor" OR abstract:"situation of use" OR abstract:"educational context" OR abstract:"learning context" OR abstract:"contextual factors" OR abstract:"context factors" OR abstract:"application conditions" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"educational setting" OR abstract:"institutional context" OR abstract:"sociocultural context" OR abstract:"target population" OR abstract:"class profile" OR abstract:"learner characteristics" OR abstract:"educational level" OR abstract:"education modality" OR abstract:"educational institution" OR abstract:"educational infrastructure" OR abstract:"learning infrastructure" OR abstract:"available resources" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
 ```
 
 **Consulta 3b — termo específico no resumo**
@@ -297,13 +301,13 @@ não altera o conjunto.
 **Consulta 4a — título × prática**
 
 ```
-(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:practice OR abstract:"teaching strategy" OR abstract:"instructional strategy" OR abstract:"teaching method" OR abstract:"instructional method" OR abstract:"teaching technique" OR abstract:"learning activity" OR abstract:"learning task" OR abstract:"educational intervention" OR abstract:"instructional intervention" OR abstract:"teaching sequence" OR abstract:"instructional sequence" OR abstract:pedagogy OR abstract:"best practices" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"instructional approach" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"pedagogical pattern" OR abstract:"pedagogical design pattern" OR abstract:"active learning method" OR abstract:"teaching methodology")
+(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:practice OR abstract:"teaching strategy" OR abstract:"instructional strategy" OR abstract:"teaching method" OR abstract:"instructional method" OR abstract:"teaching technique" OR abstract:"learning activity" OR abstract:"learning task" OR abstract:"educational intervention" OR abstract:"instructional intervention" OR abstract:"teaching sequence" OR abstract:"instructional sequence" OR abstract:pedagogy OR abstract:"best practices" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"instructional approach" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"pedagogical pattern" OR abstract:"pedagogical design pattern" OR abstract:"active learning method" OR abstract:"teaching methodology")
 ```
 
 **Consulta 4b — título × fator situacional**
 
 ```
-(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:"situational factor" OR abstract:"situation of use" OR abstract:"educational context" OR abstract:"learning context" OR abstract:"contextual factors" OR abstract:"context factors" OR abstract:"application conditions" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"educational setting" OR abstract:"institutional context" OR abstract:"sociocultural context" OR abstract:"target population" OR abstract:"class profile" OR abstract:"learner characteristics" OR abstract:"educational level" OR abstract:"education modality" OR abstract:"educational institution" OR abstract:"educational infrastructure" OR abstract:"learning infrastructure" OR abstract:"available resources" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching) AND (abstract:"situational factor" OR abstract:"situation of use" OR abstract:"educational context" OR abstract:"learning context" OR abstract:"contextual factors" OR abstract:"context factors" OR abstract:"application conditions" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"educational setting" OR abstract:"institutional context" OR abstract:"sociocultural context" OR abstract:"target population" OR abstract:"class profile" OR abstract:"learner characteristics" OR abstract:"educational level" OR abstract:"education modality" OR abstract:"educational institution" OR abstract:"educational infrastructure" OR abstract:"learning infrastructure" OR abstract:"available resources" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
 ```
 
 **Consulta 4c — termo específico × prática**
@@ -329,7 +333,7 @@ não altera o conjunto.
 **Consulta 5a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching)
+(title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching)
 ```
 
 **Consulta 5b — termo específico no resumo**
@@ -340,12 +344,12 @@ não altera o conjunto.
 
 ### Como executar
 
-1. **Deduplicar 4a e 4b.** O retorno da base é a união deduplicada, **nunca a soma dos dois números**; anotar a sobreposição. O script também marca os repetidos e conta os únicos; o número que vai ao IO 2 é o dos únicos, com o bruto ao lado.
+1. **Deduplicar 4a, 4b, 4c e 4d.** O retorno da base é a união deduplicada, **nunca a soma dos quatro números**; anotar a sobreposição. O script também marca os repetidos e conta os únicos; o número que vai ao IO 2 é o dos únicos, com o bruto ao lado.
 2. **Aplicar o filtro de data da página** e anotar o retorno antes e depois, com o rótulo exato do filtro.
-3. **Registrar as duas execuções** com `python3 src/derivar_expressoes.py --registrar eric EB4 <arquivo> --retorno <n>` e rodar `--derivar`. O registro confere o retorno declarado contra cada arquivo e recusa registrar quando divergem; a derivação confere o recorte, marca duplicatas e calcula a pertinência a EB1, EB2 e EB3.
+3. **Registrar as quatro execuções**, uma por arquivo, com `python3 src/derivar_expressoes.py --registrar eric EB4 <arquivo> --retorno <n>` e rodar `--derivar`. O registro confere o retorno declarado contra cada arquivo e recusa registrar quando divergem; a derivação confere o recorte, marca duplicatas e calcula a pertinência a EB1, EB2 e EB3.
 4. **Conferir a aderência.** Abaixo de 80%, a busca por campo está restritiva demais, e passa-se à contingência das variantes.
 
-**Quando o retorno não couber na triagem.** As consultas de refinamento das variantes são *subconjuntos* da 4a: executá-las por cima não acrescenta registro algum. Servem para **substituir** a 4a quando o retorno exceder o limite de triagem fixado pelo ReT — sugere-se **300 registros** como ponto de partida, e o número adotado consta do IO 2. É restrição de recall, não ampliação: registrar o retorno antes e depois.
+**Quando o retorno não couber na triagem.** As consultas de refinamento das variantes **não são subconjuntos** da 4a nem reproduzem a composição da EB4: cruzam um termo de artefato no título com um único termo do resumo, sem a âncora 🟨 completa, e substituí-la por elas muda o conjunto recuperado. Servem para **substituir** a 4a quando o retorno exceder o limite de triagem fixado pelo ReT — sugere-se **300 registros** como ponto de partida, e o número adotado consta do IO 2. É restrição de recall, não ampliação: registrar o retorno antes e depois.
 
 ### Variantes previstas
 
@@ -353,46 +357,39 @@ não altera o conjunto.
 
 Para substituir a 4a quando o retorno exceder o limite de triagem. Nestas, o sufixo de ano é admissível, porque não há grupo entre parênteses.
 
+Retiradas em 18/11, por usarem termo que a emenda v2 tirou do vocabulário (`conceptual model`, `semantic model`, `formal representation`, e `curriculum` da faceta 🟨): X1, X5, X9, X10, X11, X12, X13, X17, X18, X19, X20, X21, X22, X23, X24. A numeração das demais se mantém, para que o registro continue a remeter à mesma consulta.
+
 | # | Consulta |
 | :---: | :--- |
-| X1 | `title:ontology AND abstract:curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
 | X2 | `title:ontology AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
 | X3 | `title:ontology AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
 | X4 | `title:ontology AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X5 | `title:ontologies AND abstract:curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
 | X6 | `title:ontologies AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
 | X7 | `title:ontologies AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
 | X8 | `title:ontologies AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X9 | `title:"conceptual model" AND abstract:curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
-| X10 | `title:"conceptual model" AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X11 | `title:"conceptual model" AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X12 | `title:"conceptual model" AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X13 | `title:"domain model" AND abstract:curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
 | X14 | `title:"domain model" AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
 | X15 | `title:"domain model" AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
 | X16 | `title:"domain model" AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X17 | `title:"semantic model" AND abstract:curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
-| X18 | `title:"semantic model" AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X19 | `title:"semantic model" AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X20 | `title:"semantic model" AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X21 | `title:"formal representation" AND abstract:curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
-| X22 | `title:"formal representation" AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X23 | `title:"formal representation" AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X24 | `title:"formal representation" AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
 
 #### Camada 3 — descritores de artefato
 
-Existe para o estudo que trata do artefato **sem o nomear no título nem no resumo**. Monta-se com os descritores de artefato de volume baixo — **teto de 2.000 registros** —, porque acima disso o descritor é polissêmico numa base de educação: `Vocabulary` é aprendizado de palavras e `Classification` é categorização de alunos e de conteúdo. Ficam de fora, por esse critério, `Classification`, `Semantics`, `Vocabulary` e `Information Retrieval`.
+Existe para o estudo que trata do artefato **sem o nomear no título nem no resumo**. Monta-se com os descritores de artefato de volume baixo — **teto de 2.000 registros** —, porque acima disso o descritor é polissêmico numa base de educação: `Vocabulary` é aprendizado de palavras e `Classification` é categorização de alunos e de conteúdo. Ficam de fora, por esse critério, `Classification`, `Semantics`, `Vocabulary` e `Information Retrieval`; e fica de fora `Taxonomy` (1.628), porque a emenda v2 retirou `taxonomy` isolada do vocabulário. Os descritores não são termos do protocolo: a camada só se adota por emenda.
 
 ```
-(descriptor:Thesauri OR descriptor:Indexing OR descriptor:Metadata OR descriptor:Taxonomy OR descriptor:"Knowledge Representation") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:student OR abstract:curriculum)
+(descriptor:Thesauri OR descriptor:Indexing OR descriptor:Metadata OR descriptor:"Knowledge Representation") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching)
 ```
 
-> **Esta camada não se valida pelo conjunto-semente, e isso tem de estar escrito.** As três sementes esperadas nesta base já são recuperadas pelo título, de modo que a camada não as melhora; e as sementes que a justificariam — cujo artefato não está no título — esta base não indexa. A camada justifica-se pela medição do campo e pelo exame qualitativo do que devolver, e a adoção depende de emenda aprovada com a VT.
+**Sondagem prevista — `descriptorx`.** O painel oficial lista `descriptorx` como variante de casamento exato de `descriptor`; o comportamento **não foi medido**. Antes de qualquer uso, sondar cada um dos quatro descritores nas duas formas — `descriptor:Thesauri` e `descriptorx:Thesauri`, e assim por diante —, registrando os retornos no registro de execução. Até a sondagem, a camada usa `descriptor`, e nada se conclui sobre o que a diferença entre as duas formas significa.
+
+> **Esta camada não se valida pelo conjunto-semente, e isso tem de estar escrito.** As três sementes esperadas nesta base trazem o termo de artefato no título — leitura dos títulos, não recuperação medida, e na SE8 dependente do hífen —, de modo que a camada não as melhora; e as sementes que a justificariam — cujo artefato não está no título — esta base não indexa. A camada justifica-se pela medição do campo e pelo exame qualitativo do que devolver, e a adoção depende de emenda aprovada com a VT.
 
 #### Contingência — consultas curtas, sem agrupamento
 
 Para o caso de a aderência reprovar a busca por campo. Uma linha por consulta, todas exportadas e deduplicadas em conjunto.
+
+**Estas consultas não reproduzem a EB4.** As de 1 a 16 têm só a faceta 🟦, sem a âncora 🟨 e sem faceta temática; as demais cruzam 🟦 com um único termo de outra faceta. São outra busca, mais ampla que a EB5, e só se adotam por emenda, com a perda de precisão medida. Pela v2, a forma adotada no lugar da 4a–4d tem de recompor FCT1 AND FCT2 AND (FCT3 OR FCT4); em consulta sem parênteses, isso se faz com `AND` entre um termo de cada faceta, partindo pelos termos.
+
+Retiradas em 18/11, pelo mesmo motivo do refinamento: 17, 19, 27, 31, 32, 33, 34, 36, 37, 38. A numeração das demais se mantém.
 
 | # | Consulta | # | Consulta |
 | :---: | :--- | :---: | :--- |
@@ -404,31 +401,27 @@ Para o caso de a aderência reprovar a busca por campo. Uma linha por consulta, 
 | 11 | `"metadata schema" AND pubyearmin:2017 AND pubyearmax:2026` | 12 | `"metadata schemas" AND pubyearmin:2017 AND pubyearmax:2026` |
 | 13 | `"ontology engineering" AND pubyearmin:2017 AND pubyearmax:2026` | 14 | `"ontology development" AND pubyearmin:2017 AND pubyearmax:2026` |
 | 15 | `"ontology design pattern" AND pubyearmin:2017 AND pubyearmax:2026` | 16 | `"ontology-based knowledge representation" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 17 | `"conceptual schema" AND pubyearmin:2017 AND pubyearmax:2026` | 18 | `ontology AND "learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 19 | `ontology AND curriculum AND pubyearmin:2017 AND pubyearmax:2026` | 20 | `ontology AND "learning analytics" AND pubyearmin:2017 AND pubyearmax:2026` |
+| 18 | `ontology AND "learning object" AND pubyearmin:2017 AND pubyearmax:2026` | 20 | `ontology AND "learning analytics" AND pubyearmin:2017 AND pubyearmax:2026` |
 | 21 | `ontology AND "learning design" AND pubyearmin:2017 AND pubyearmax:2026` | 22 | `ontology AND "instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
 | 23 | `ontology AND "teaching methods" AND pubyearmin:2017 AND pubyearmax:2026` | 24 | `ontology AND "situational factors" AND pubyearmin:2017 AND pubyearmax:2026` |
 | 25 | `ontology AND "educational context" AND pubyearmin:2017 AND pubyearmax:2026` | 26 | `ontologies AND "learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 27 | `ontologies AND curriculum AND pubyearmin:2017 AND pubyearmax:2026` | 28 | `ontologies AND "learning analytics" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 29 | `ontologies AND "learning design" AND pubyearmin:2017 AND pubyearmax:2026` | 30 | `ontologies AND "instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 31 | `"conceptual model" AND curriculum AND pubyearmin:2017 AND pubyearmax:2026` | 32 | `"conceptual model" AND "learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 33 | `"conceptual model" AND "teaching methods" AND pubyearmin:2017 AND pubyearmax:2026` | 34 | `"conceptual model" AND "educational context" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 35 | `"domain model" AND education AND pubyearmin:2017 AND pubyearmax:2026` | 36 | `"semantic model" AND education AND pubyearmin:2017 AND pubyearmax:2026` |
-| 37 | `"formal representation" AND education AND pubyearmin:2017 AND pubyearmax:2026` | 38 | `"conceptual models" AND curriculum AND pubyearmin:2017 AND pubyearmax:2026` |
+| 28 | `ontologies AND "learning analytics" AND pubyearmin:2017 AND pubyearmax:2026` | 29 | `ontologies AND "learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
+| 30 | `ontologies AND "instructional design" AND pubyearmin:2017 AND pubyearmax:2026` | 35 | `"domain model" AND education AND pubyearmin:2017 AND pubyearmax:2026` |
+| 39 | `"ontological engineering" AND pubyearmin:2017 AND pubyearmax:2026` | | |
 
 #### Negação do ruído por descritor
 
-A negação `-descriptor:"…"` está documentada no painel oficial e **não foi medida**. Permitiria devolver ao resumo os quatro termos homônimos retirados, negando os descritores da literatura cognitiva e metodológica em lugar de evitá-los pelo campo. Candidatos a testar, um a um, antes de usar: `Educational Research`, `Research Methodology`, `Epistemology`, `Qualitative Research`. Negar descritor inexistente não faz nada; negar descritor largo retira estudo elegível.
+A negação `-descriptor:"…"` está documentada no painel oficial e **não foi medida**. Permitiria levar ao resumo os termos de `STR1` hoje restritos ao título por homonímia, negando os descritores da literatura cognitiva e metodológica em lugar de evitá-los pelo campo. Candidatos a testar, um a um, antes de usar: `Educational Research`, `Research Methodology`, `Epistemology`, `Qualitative Research`. Negar descritor inexistente não faz nada; negar descritor largo retira estudo elegível.
 
 ---
 
 ## 5. Conjunto-semente
 
-O conjunto-semente tem **10 estudos**, todos conferidos em fonte e dentro do escopo. Pela indicação do ReT, **3 são esperados nesta base**. Instrumento completo: `data/saida/semente/Conjunto_Semente.md`.
+O conjunto-semente tem **10 estudos**. O estado de conferência de cada um está em `data/sementes.json` — hoje, as dez com verificação, escopo, tipo e alinhamento pendentes (`python3 src/protocolo.py --pendencias`). Pela indicação do ReT, **3 são esperados nesta base**. Planilha de aferição, uma linha por semente e por base: `data/semente_aderencia.csv`.
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |
-| SE6 | Iatrellis et al. (2019) | `10.1007/s10639-019-09872-9` | ressalva de escopo — `Conjunto_Semente.md`, 3.1 |
+| SE6 | Iatrellis et al. (2019) | `10.1007/s10639-019-09872-9` | — |
 | SE7 | Chimalakonda & Nori (2020) | `10.1186/s40561-020-00135-6` | — |
 | SE8 | Cenka et al. (2023) | `10.1080/10494820.2022.2039947` | — |
 
@@ -436,9 +429,9 @@ O conjunto-semente tem **10 estudos**, todos conferidos em fonte e dentro do esc
 
 **Limiar de 80%.** Decide o número **global**, sobre a união das bases. A aderência por base diagnostica **qual** base e **qual** faceta falharam.
 
-**Lematização.** **Medida nesta base**: alcança o plural regular e não o irregular. É o que permite retirar `ontologies`, `domain ontologies` e `pedagogies` da consulta, e é por isso que o efeito do desdobramento morfológico aqui é o menor das quatro bases. A **derivação adjetival** não é alcançada por lematização alguma, e `title:ontological` permanece.
+**Lematização.** **Medida nesta base**: alcança o plural regular e não o irregular. É o que permite retirar `ontologies`, `domain ontologies` e `pedagogies` da consulta, e é por isso que o efeito do desdobramento morfológico aqui é o menor das quatro bases. A **derivação adjetival** não é alcançada por lematização alguma, e `ontological`, retirado na emenda v2, não está na consulta: os termos que só o contêm ficam fora, como redução declarada — ressalva 7.
 
-**Restrição ao título — perda medida.** A camada 1 restringe os termos da faceta 🟦 ao título, o que é perda de recall assumida em troca de precisão. Nas três sementes esperadas, **nenhuma perde a âncora de artefato** por essa restrição. Três sementes não medem uma base, mas invertem o ônus: a hipótese de que o título é restritivo demais passa a precisar de evidência.
+**Restrição ao título — perda medida.** A camada 1 restringe os termos da faceta 🟦 ao título, o que é perda de recall assumida em troca de precisão. Pela leitura dos títulos, **nenhuma das três sementes esperadas perde a âncora de artefato** por essa restrição: SE6 e SE7 trazem `ontology`; a SE8 traz `ontology-driven`, e o alcance depende de o hífen separar palavras, o que não foi medido. É inferência, não recuperação medida — o registro marca a aderência como não medida. Três sementes não medem uma base, mas invertem o ônus: a hipótese de que o título é restritivo demais passa a precisar de evidência.
 
 **Cobertura.** As sementes cujo artefato não está no título não são indexadas por esta base. A camada 3 existe para esse caso e depende de emenda aprovada.
 
@@ -448,14 +441,14 @@ O conjunto-semente tem **10 estudos**, todos conferidos em fonte e dentro do esc
 
 1. **Todos os termos têm estatuto de termo livre**: nenhum foi confrontado com instrumento de controle terminológico. As expressões desta base **não devem ser apresentadas como compostas de descritores ERIC**. Procedimento e estado da validação: IO 1 e Anexo A.
 
-2. **A precisão vem do campo.** Dez termos da faceta 🟦 ficam restritos ao título. Perde-se o estudo que os mencione apenas no resumo, e é o teste de aderência que mede essa perda — reprova abaixo de 80%.
+2. **A precisão vem do campo.** Nove dos doze termos de `STR1` ficam restritos ao título; os outros três — `controlled vocabulary`, `metadata schema` e `thesauri` — vão também ao resumo, em `STR1b`. Perde-se o estudo que os mencione apenas no resumo, e é o teste de aderência que mede essa perda — reprova abaixo de 80%.
 
-3. **A faceta 🟨 entra em forma radical**, com seis palavras-raiz que alcançam as expressões registradas por casamento de palavra. Redução declarada, e também a condição externa sem a qual a base devolve zero.
+3. **A faceta 🟨 entra em forma radical**, com quatro palavras-raiz que alcançam as expressões registradas por casamento de palavra. Redução declarada, e também a condição externa sem a qual a base devolve zero.
 
-4. **Assimetria de campo em relação à Scopus**, a declarar no relato. Lá, `TITLE-ABS-KEY()` alcança título, resumo e palavras-chave de todos os termos. Aqui, a parcela de palavras-chave corresponde ao campo `descriptor`, que casa apenas formas autorizadas, e dez termos ficam só no título.
+4. **Assimetria de campo em relação à Scopus**, a declarar no relato. Lá, `TITLE-ABS-KEY()` alcança título, resumo e palavras-chave de todos os termos. Aqui, a parcela de palavras-chave corresponde ao campo `descriptor`, que casa apenas formas autorizadas, e oito termos ficam só no título.
 
-5. **O retorno da base é a união deduplicada de 4a e 4b, depois do filtro de data.**
+5. **O retorno da base é a união deduplicada de 4a, 4b, 4c e 4d, depois do filtro de data.**
 
 6. **A sintaxe desta base foi apurada por medição, não por documentação.** Alterar as expressões sem repetir as sondagens pertinentes arrisca retorno zero silencioso.
 
-7. **Redução de `STR1` — o que fica de fora e por quê.** A consulta de título lista 19 dos 30 termos ingleses da faceta. Não estão literalmente nela: `knowledge organization system(s)`, `domain ontology`, `application ontology`, `upper ontology`, `ontologies`, `domain ontologies`, `ontology development`, `ontology-based modeling`, `ontology-based modelling`, `ontology-based knowledge representation` e `ontological engineering`. Desses, todos são alcançados por **casamento de palavra** no título — comportamento medido na sondagem 8, em que `education` alcança `"higher education"` —: `title:ontology` alcança `domain ontology` e `ontology development`; `title:ontological`, `ontological engineering`; `title:"knowledge organization"`, `knowledge organization systems`; `title:"knowledge representation"`, `ontology-based knowledge representation`. A exceção são as formas hifenizadas **`ontology-based modeling` e `ontology-based modelling`**, cujo casamento depende da tokenização do hífen e não foi medido. É a única omissão declarada desta faceta, e o teste de aderência é o que a mede.
+7. **Redução de `STR1` — o que fica de fora e por quê.** A faceta tem 30 termos ingleses vigentes — os 38 do quadro terminológico menos os 8 que a emenda v2 retirou. A consulta de título traz 12 deles literalmente — `ontological engineering` entrou em 18/11, por decisão do ReT —; `STR1b` traz, no resumo, mais 2 — `ontology engineering` e `ontology design pattern`. Dos 16 que não estão literalmente em consulta alguma, **15 são alcançados por casamento de palavra** no título — comportamento medido na sondagem 8, em que `education` alcança `"higher education"` —: `title:ontology` alcança os onze compostos com `ontology` (`domain ontology`, `application ontology`, `upper ontology`, `educational ontology`, `learning ontology`, `teaching ontology`, `educational practice ontology`, `instructional design ontology`, `curriculum ontology`, `faceted ontology` e `ontology development`) e, se o hífen separar palavras, as duas formas hifenizadas; `title:"knowledge organization"`, `knowledge organization system`; `title:"knowledge representation"`, `ontology-based knowledge representation`. Desses 15, **2 — `ontology-based modeling` e `ontology-based modelling` — dependem da tokenização do hífen**, que não foi medida, e assim estão declarados na redução. **O 1 restante não é alcançado**: `educational ontological model` traz a forma adjetival `ontological`, que lematização alguma alcança a partir de `ontology`, e não está literalmente em `STR1`. É redução declarada desta base, e o teste de aderência é o que mede o seu custo.

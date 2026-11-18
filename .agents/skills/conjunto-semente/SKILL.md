@@ -71,13 +71,53 @@ como aprovação é erro.
 python3 src/gen_semente.py
 ```
 
-Produz, em `data/saida/semente/`, `Conjunto_Semente.md` com a composição, o procedimento,
-o estado de conferência e o ensaio, e `semente_aderencia.csv` para preencher. As
-referências e o mapa por base vêm do protocolo; os metadados que o documento não guarda
-(verificação, escopo, tipo, alinhamento, nota) estão em `data/sementes.json`. Ver
-`README.md`, seção Scripts.
+O comando lê as referências e o mapa por base do protocolo e os metadados autorais de
+`data/sementes.json` (verificação, escopo, tipo, alinhamento, nota), gera a planilha
+`data/semente_aderencia.csv` e **imprime no terminal** a composição, o estado de
+conferência e o ensaio seco — quantas sementes o título entrega às facetas e quantas
+satisfazem as duas âncoras e uma faceta temática. Não grava guia em arquivo: o
+instrumento é a planilha.
 
-## 6. Limiar e consequência
+## 6. O instrumento: a planilha e o procedimento
+
+`semente_aderencia.csv` tem uma linha por semente e por base — com 10 sementes e 4
+bases, 40 linhas. Preencher **durante** a execução, não depois: as colunas de registro
+são a evidência do teste.
+
+| Coluna | O que registrar |
+| --- | --- |
+| `id` | identificador da semente (SEn), conforme o protocolo |
+| `autores_ano` | autoria abreviada e ano |
+| `titulo` | título, como consta na referência do protocolo |
+| `tipo` | primário ou secundário — preencher em `sementes.json` |
+| `escopo` | DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher em `sementes.json` |
+| `verificacao` | estado de conferência da referência — preencher em `sementes.json` |
+| `base` | WoS, Scopus, ERIC ou BRAPCI |
+| `esperada_na_base` | sim se o mapa do protocolo indica esta base |
+| `indexada` | etapa 1: sim ou não, por busca de título. **obrigatório** |
+| `data_etapa1` | data da busca de título |
+| `recuperada` | etapa 2: sim ou não, por busca na exportação de EB4 |
+| `como_localizada` | DOI, título ou não localizada |
+| `data_etapa2` | data da conferência na exportação |
+| `observacao` | o que explica o não: termo ausente, campo não indexado, recorte |
+
+O preenchimento segue duas etapas, e a ordem importa:
+
+- **Etapa 1 — indexação.** Buscar o título entre aspas, sem recorte temporal e sem as
+  expressões da revisão. Semente que a base não indexa **sai do denominador daquela
+  base** e se registra como cobertura, não como falha da busca.
+- **Etapa 2 — recuperação.** Procurar a semente na exportação de EB4, por DOI e depois
+  por título, **sem reexecutar a busca**.
+
+> `indexada` em branco impede o cálculo: sem ela não há denominador. `recuperada` só se
+> preenche onde `indexada` = sim.
+
+Semente com metadado pendente — `verificacao`, `escopo`, `tipo` ou `alinhamento` em
+branco, marcado `A CONFERIR` ou `PENDÊNCIA` — sai com a coluna em branco. O instrumento
+pode ser executado; o que falta é registro, não dado de busca, e a pendência se reporta
+em vez de se esconder.
+
+## 7. Limiar e consequência
 
 O teste de aderência exige **80%** sobre a união das bases. Abaixo disso, revisão
 obrigatória do controlo terminológico antes de prosseguir, com emenda ao protocolo.

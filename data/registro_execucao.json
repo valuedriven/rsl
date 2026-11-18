@@ -1,5 +1,5 @@
 {
-  "_leia": "Registro de execução das buscas, por base. AUTORAL: escrito a partir do que a base exibiu e do que a exportação contém — não é derivado do protocolo e não se regenera com `--gerar`. Guarda o que a ficha de busca deixou de carregar: sondagens, retornos, estado da interface, exportações, conferências e aderência. A data e a hora aqui são OPERACIONAIS; a data oficial de execução continua sendo a do IO 7. Divisão de responsabilidade: `data/consultas.json` é o rastro técnico que `src/derivar_expressoes.py --registrar` escreve ao conferir uma exportação; este arquivo é o registro documental, e um número aqui nunca substitui o registro técnico quando a consulta for registrada. Todo número declara `origem` (interface, exportacao, captura, derivacao) e toda execução declara `mede` e `estado`, para que retorno que mediu forma reduzida não seja lido como retorno da expressão. `data` e `edicao` nulas significam, respectivamente, data e versão da base não declaradas no registro de origem.",
+  "_leia": "Registro de execução das buscas, por base. AUTORAL: escrito a partir do que a base exibiu e do que a exportação contém — não é derivado do protocolo. Guarda o que a ficha de busca deixou de carregar: sondagens, retornos, estado da interface, exportações, conferências e aderência. A data e a hora aqui são OPERACIONAIS; a data oficial de execução continua sendo a do IO 7. `src/derivar_expressoes.py --registrar` acrescenta ou atualiza a execução nesta base, com `arquivo`, `registros_lidos` e `status`, de modo que o registro documental e o rastro técnico vivem no mesmo arquivo, e é essa execução registrada que `--derivar`, `--aderencia` e `--sensibilidade` leem. Todo número declara `origem` (interface, exportacao, captura, derivacao) e toda execução declara `mede` e `estado`, para que retorno que mediu forma reduzida não seja lido como retorno da expressão. `data` e `edicao` nulas significam, respectivamente, data e versão da base não declaradas no registro de origem.",
   "versao": 1,
   "bases": {
     "BD1": {
@@ -500,7 +500,7 @@
       },
       "pendencias": [
         "Anatomia da perda das sementes 3 e 4: DOI, depois DOI com filtros, depois DOI com as âncoras, depois DOI com as âncoras em W/5.",
-        "Exportar EB4 na forma adotada, depois de a anatomia da perda indicar se a forma é a de proximidade ou a ampla.",
+        "Exportar EB4 na forma vigente desde 18/11, com as âncoras em W/5 (item 7 da v2); se a anatomia da perda atribuir a perda à proximidade, passar à forma ampla, com emenda.",
         "Registrar a execução de EB4 com `src/derivar_expressoes.py --registrar`."
       ],
       "edicao_nota": "versão ou atualização da base não registrada na captura; anotar na próxima execução"
@@ -758,10 +758,11 @@
         "origem": "exportacao"
       },
       "pendencias": [
-        "Reexecutar as consultas 4a e 4b na forma vigente e exportar em arquivos separados, eric_4a.ris e eric_4b.ris.",
-        "Deduplicar 4a e 4b e anotar a sobreposição; o retorno da base é a união, nunca a soma.",
+        "Sondar o hífen como separador de palavras (por exemplo, title:ontology contra title:\"ontology-driven\" e abstract:learning contra abstract:\"e-learning\"): dele dependem cinco alcances declarados na redução e a âncora da SE8.",
+        "Executar as consultas 4a, 4b, 4c e 4d na forma vigente e exportar em arquivos separados, eric_4a.ris a eric_4d.ris.",
+        "Deduplicar 4a a 4d e anotar a sobreposição; o retorno da base é a união, nunca a soma.",
         "Aplicar o filtro de data da página e anotar o retorno antes e depois, com o rótulo exato.",
-        "Registrar as duas execuções e rodar a derivação e a aderência."
+        "Registrar as quatro execuções e rodar a derivação e a aderência."
       ],
       "edicao_nota": "versão ou atualização da base não registrada na captura; anotar na próxima execução"
     },
@@ -1022,7 +1023,8 @@
         "origem": "exportacao"
       },
       "pendencias": [
-        "Reexecutar as quatro expressões com a expressão registrada, e não com o núcleo.",
+        "Sondar o comprimento máximo da consulta: a EB4 expandida da v2 tem cerca de 4.100 caracteres.",
+        "Executar a EB4 da v2 por grupos, a EB5 uma única vez e a varredura da faceta FCT1 isolada, as duas últimas fora do corpus.",
         "Consultar Duque em Local de pesquisa = Autor e ler resumo e palavras-chave do registro: encerra o caso-teste da SE5 e controla a opção Autor.",
         "Fechar P6 antes da nova execução: substituição de termo autorizado vence busca executada antes dela.",
         "Registrar as execuções com `src/derivar_expressoes.py --registrar`, com a justificativa do teto de 1.000 quando for o caso."

@@ -1,5 +1,0 @@
-{
-  "_leia": "Registro das execuções. Escrito por src/derivar_expressoes.py --registrar, que lê a exportação, conta os registros e recusa registrar quando o retorno declarado pela base diverge do que o arquivo contém, salvo justificativa explícita. `--derivar` só processa consulta válida ou divergente justificada. A data e a hora aqui são OPERACIONAIS: a data oficial de execução continua sendo a do IO 7.",
-  "versao": 1,
-  "consultas": []
-}
