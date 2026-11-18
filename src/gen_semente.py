@@ -34,8 +34,15 @@ DATA = RAIZ / "data"
 PLANILHA = DATA / "semente_aderencia.csv"
 SEMENTES = DATA / "sementes.json"
 
-BASES = ["WoS", "Scopus", "ERIC", "BRAPCI"]
-FACETAS = ["FCT1", "FCT2", "FCT3", "FCT4"]
+# Siglas das bases, na ordem de [fichas] do config.toml (ordem das colunas da planilha).
+BASES = list(protocolo.BASES)
+_D = protocolo.analisa()
+EXECUTADA = _D["executada"]
+# Facetas do protocolo, na ordem declarada nas palavras significativas.
+FACETAS = [f["id"] for f in _D["facetas"]]
+# Composição da executada em facetas: AND de grupos, cada grupo uma disjunção.
+_FACETA_DE = {v["id"]: fid for fid, v in _D["strings"].items()}
+GRUPOS_EXECUTADA = [[_FACETA_DE[x] for x in g] for g in _D["expressoes"][EXECUTADA]]
 
 COLS = [
     ("id", "identificador da semente (SEn), conforme o protocolo"),
@@ -44,11 +51,11 @@ COLS = [
     ("tipo", "primário ou secundário — preencher em sementes.json"),
     ("escopo", "DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher em sementes.json"),
     ("verificacao", "estado de conferência da referência — preencher em sementes.json"),
-    ("base", "WoS, Scopus, ERIC ou BRAPCI"),
+    ("base", " ou ".join(filter(None, [", ".join(BASES[:-1]), BASES[-1]]))),
     ("esperada_na_base", "sim se o mapa do protocolo indica esta base"),
     ("indexada", "etapa 1: sim ou não, por busca de título. **obrigatório**"),
     ("data_etapa1", "data da busca de título"),
-    ("recuperada", "etapa 2: sim ou não, por busca na exportação de EB4"),
+    ("recuperada", f"etapa 2: sim ou não, por busca na exportação de {EXECUTADA}"),
     ("como_localizada", "DOI, título ou não localizada"),
     ("data_etapa2", "data da conferência na exportação"),
     ("observacao", "o que explica o não: termo ausente, campo não indexado, recorte"),
@@ -109,9 +116,9 @@ def relata_ensaio(estudos, facetas):
         achados = "  ".join(f"{f}: " + (", ".join(pf[f]) if pf[f] else "—")
                             for f in FACETAS)
         print(f"  {e['id']:>4} {e['chave']}: {achados}")
-    n_e4 = sum(1 for _, pf in ens if pf.get("FCT1") and pf.get("FCT2")
-               and (pf.get("FCT3") or pf.get("FCT4")))
-    print(f"\n{n_e4} de {len(estudos)} satisfazem as duas âncoras e uma faceta temática pelo "
+    n_e4 = sum(1 for _, pf in ens
+               if all(any(pf.get(f) for f in grupo) for grupo in GRUPOS_EXECUTADA))
+    print(f"\n{n_e4} de {len(estudos)} satisfazem a composição de {EXECUTADA} pelo "
           "título. É ensaio, não execução: a busca alcança resumo e palavras-chave, de modo "
           "que a semente sem termo no título ainda pode ser recuperada.")
 

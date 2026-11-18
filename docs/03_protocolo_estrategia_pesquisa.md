@@ -68,13 +68,13 @@ Estrutura da questão: PICo acrescido de desfecho (O), em adaptação declarada:
 
 ## Expressões de busca
 
-| ID expressão | Natureza | Combinação de Strings | Detalhamento | 
+| ID expressão | Natureza | Expressão de busca | Detalhamento | 
 | :---- | :---- | :---- | :---- |
-| EB1 | Geral | STR1 \+ STR2 \+ STR3 \+ STR4\ | Não executada nas bases: calculada localmente sobre a exportação de EB4. Estrato **E1** da triagem, em que se calibram os critérios. Sonda de precisão, nunca critério de exclusão. |
-| EB2 | Específica | STR1 \+ STR2 \+ STR3\ | Não executada nas bases: subconjunto de EB4, calculada localmente. Estrato **E2** da triagem e análise de sensibilidade. Executada na base só no teste de fidelidade da derivação, com EB3 e EB5, fora do corpus. |
-| EB3 | Específica | STR1 \+ STR2 \+ STR4\ | Não executada nas bases: subconjunto de EB4, calculada localmente. Estrato **E2** da triagem e análise de sensibilidade. Executada na base só no teste de fidelidade da derivação, com EB2 e EB5, fora do corpus. |
-| EB4 | Cobertura restrita | STR1 \+ STR2 \+ (STR3 OR STR4)\ | **Única executada como busca definitiva nas bases.** Equivale a EB2 ∪ EB3: exige termo de prática (STR3) ou de fator situacional (STR4), sem o qual o registro não responde a QER2 nem a QER3. O custo em recall é medido pela sonda EB5. |
-| EB5 | Controle de sensibilidade | STR1 \+ STR2\ | Executada uma única vez, na mesma base e data de EB4, fora do corpus. Mede a fração de EB5 não recuperada por EB4 e a amostra para classificação de elegibilidade: fração elegível **< 5%** mantém EB4; **> 15%** leva à reconsideração da expressão executada, com emenda. |
+| EB1 | Geral | STR1 AND STR2 AND STR3 AND STR4\ | Não executada nas bases: calculada localmente sobre a exportação de EB4. Estrato **E1** da triagem, em que se calibram os critérios. Sonda de precisão, nunca critério de exclusão. |
+| EB2 | Específica | STR1 AND STR2 AND STR3\ | Não executada nas bases: subconjunto de EB4, calculada localmente. Estrato **E2** da triagem e análise de sensibilidade. Executada na base só no teste de fidelidade da derivação, com EB3 e EB5, fora do corpus. |
+| EB3 | Específica | STR1 AND STR2 AND STR4\ | Não executada nas bases: subconjunto de EB4, calculada localmente. Estrato **E2** da triagem e análise de sensibilidade. Executada na base só no teste de fidelidade da derivação, com EB2 e EB5, fora do corpus. |
+| EB4 | Cobertura restrita | STR1 AND STR2 AND (STR3 OR STR4)\ | **Única executada como busca definitiva nas bases.** Equivale a EB2 ∪ EB3: exige termo de prática (STR3) ou de fator situacional (STR4), sem o qual o registro não responde a QER2 nem a QER3. O custo em recall é medido pela sonda EB5. |
+| EB5 | Controle de sensibilidade | STR1 AND STR2\ | Executada uma única vez, na mesma base e data de EB4, fora do corpus. Mede a fração de EB5 não recuperada por EB4 e a amostra para classificação de elegibilidade: fração elegível **< 5%** mantém EB4; **> 15%** leva à reconsideração da expressão executada, com emenda. |
 
 **Operadores de proximidade e restrição por campo:** onde a base suportar (WoS: `TS=` e `NEAR/n`; Scopus: `TITLE-ABS-KEY()` e `W/n`; ERIC: `TI,AB,KW`; BRAPCI: verificar sintaxe), aplicam-se para reduzir falsos positivos de termos que aparecem em trechos sem conexão temática.
 

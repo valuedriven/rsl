@@ -16,8 +16,8 @@ lógica que a governa.
 Com duas facetas-âncora (1 e 2) e duas temáticas (3 e 4):
 
 ```
-EB1 = 1+2+3+4     EB2 = 1+2+3     EB3 = 1+2+4
-EB4 = 1+2+(3 OR 4)                  EB5 = 1+2
+EB1 = 1 AND 2 AND 3 AND 4     EB2 = 1 AND 2 AND 3     EB3 = 1 AND 2 AND 4
+EB4 = 1 AND 2 AND (3 OR 4)                            EB5 = 1 AND 2
 EB1 ⊆ EB2 ⊆ EB4     EB1 ⊆ EB3 ⊆ EB4     EB4 = EB2 ∪ EB3     EB5 ⊃ EB4
 ```
 

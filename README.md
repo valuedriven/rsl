@@ -138,7 +138,9 @@ conjunto-semente. `--conferir-dados` reprova arquivo alimentado ausente ou fora 
 protocolo, a execução que declara exportação inexistente e, por base, termo vigente fora da
 string sem redução declarada e termo fora da STR dentro dela, mesmo em flexão.
 `--autoteste` injeta defeitos numa cópia e exige que cada conferência reprove pelo motivo
-esperado — inclusive configuração inválida, precedência e ficha divergente do protocolo.
+esperado — inclusive configuração inválida, precedência, ficha divergente do protocolo e
+composição das expressões que quebra as relações entre executada, específicas, geral e sonda
+(esta também por `src/derivar_expressoes.py --autoteste`).
 `--sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido; rodar
 duas vezes não muda nada. `--pendencias` relata sem escrever. Os comandos estão no fluxo de
 trabalho, em M3.
@@ -216,9 +218,9 @@ existir.
    descritor autorizado.
 3. **Strings por faceta.** Qualificação do vocabulário: substituição de palavra isolada pela
    forma composta, desdobramento da notação compacta e inclusão das formas morfológicas.
-4. **As cinco expressões.** A de cobertura — `EB4 = STR1 + STR2 + (STR3 OR STR4)` — é a
+4. **As cinco expressões.** A de cobertura — `EB4 = STR1 AND STR2 AND (STR3 OR STR4)` — é a
    **única executada como busca definitiva**; as demais são calculadas localmente em M3/E2.
-   `EB4` equivale a `EB2 ∪ EB3`, e `EB5 = STR1 + STR2` é a **sonda de sensibilidade**,
+   `EB4` equivale a `EB2 ∪ EB3`, e `EB5 = STR1 AND STR2` é a **sonda de sensibilidade**,
    executada uma única vez e fora do corpus.
 5. **Critérios de elegibilidade.** Inclusão e exclusão, com a regra única de inclusão —
    práticas **e/ou** fatores situacionais — e a regra de borda.

@@ -4,8 +4,10 @@
 Derivação local das expressões não executadas (EB4 é a executada; EB5 é a sonda) — RS Banyan, Módulo 3, Etapa 2.
 
 Composição lida do protocolo por src/protocolo.py: expressões montadas como AND de grupos
-de facetas, em que um grupo pode ser uma disjunção. Na composição atual: EB1 = 1+2+3+4; EB2 = 1+2+3; EB3 = 1+2+4; EB4 = 1+2+(3 OR 4);
-EB5 = 1+2. Daí EB4 = EB2 ∪ EB3, e EB5 ⊃ EB4. Executa-se EB4, a de cobertura, uma vez
+de facetas, em que um grupo pode ser uma disjunção. Na composição atual:
+EB1 = STR1 AND STR2 AND STR3 AND STR4; EB2 = STR1 AND STR2 AND STR3;
+EB3 = STR1 AND STR2 AND STR4; EB4 = STR1 AND STR2 AND (STR3 OR STR4);
+EB5 = STR1 AND STR2. Daí EB4 = EB2 ∪ EB3, e EB5 ⊃ EB4. Executa-se EB4, a de cobertura, uma vez
 por base; EB5 roda uma única vez como sonda de sensibilidade. A pertinência de cada
 registro às demais é calculada aqui.
 
@@ -44,6 +46,7 @@ Uso
   python3 src/derivar_expressoes.py --aderencia
   python3 src/derivar_expressoes.py --fidelidade EB2 data/execucoes/wos/e2_conferencia.ris
   python3 src/derivar_expressoes.py --sensibilidade wos
+  python3 src/derivar_expressoes.py --autoteste
 """
 
 import argparse
@@ -101,7 +104,8 @@ LIMITE_DIVERGENCIA = float(_D["divergencia"])
 LIMITE_SENSIBILIDADE = tuple(_D["sensibilidade"])
 
 STATUS_VALIDOS = ("valida", "divergente_justificada")
-BASE_CANONICA = {"wos": "WoS", "scopus": "Scopus", "eric": "ERIC", "brapci": "BRAPCI"}
+# Siglas das bases: `sigla` de cada ficha em [fichas] do config.toml, por slug.
+BASE_CANONICA = {slug: f["sigla"] for slug, f in protocolo.FICHAS.items()}
 BD_DE = {BASE_CANONICA[slug]: info["bd"] for slug, info in protocolo.FICHAS.items()}
 SLUG_DE_BD = {info["bd"]: slug for slug, info in protocolo.FICHAS.items()}
 
@@ -281,7 +285,7 @@ def facetas_atingidas(reg, facetas):
 
 def satisfaz(ident, fac):
     """Pertinência a uma expressão: todo grupo satisfeito, cada grupo por uma faceta."""
-    return all(any(f in fac for f in grupo) for grupo in GRUPOS[ident])
+    return _satisfaz_em(GRUPOS, ident, fac)
 
 
 def expressoes_de(fac):
@@ -293,57 +297,96 @@ def expressoes_de(fac):
     return [n for n in GRUPOS if n != SONDA and satisfaz(n, fac)]
 
 
-def _derivaveis():
-    """Expressões cujo conjunto está contido na executada, provado sobre as 16 combinações.
+def _combinacoes():
+    """Todas as combinações de facetas com string (2^n)."""
+    facetas = sorted(set(FACETA_DE.values()))
+    return [set(c) for r in range(len(facetas) + 1)
+            for c in itertools.combinations(facetas, r)]
 
-    EB5 é superconjunto de EB4: a pertinência a ela NÃO se calcula sobre a exportação da
-    de cobertura, porque os registros que só EB5 recupera não estão nesse arquivo. Ela
-    entra pela sonda, com execução própria, e por isso fica fora desta lista.
+
+def _satisfaz_em(grupos, ident, fac):
+    return all(any(f in fac for f in grupo) for grupo in grupos[ident])
+
+
+def _derivaveis(grupos=None, executada=None):
+    """Expressões cujo conjunto está contido na executada, provado sobre as combinações.
+
+    A sonda é superconjunto da executada: a pertinência a ela NÃO se calcula sobre a
+    exportação de cobertura, porque os registros que só a sonda recupera não estão nesse
+    arquivo. Ela entra com execução própria, e por isso fica fora desta lista.
     """
-    todas = sorted(set(FACETA_DE.values()))
-    conjuntos = {eb: set() for eb in GRUPOS}
-    for r in range(len(todas) + 1):
-        for combo in itertools.combinations(todas, r):
-            fac = set(combo)
-            for eb in GRUPOS:
-                if satisfaz(eb, fac):
-                    conjuntos[eb].add(frozenset(combo))
-    alvo = conjuntos[SUPERCONJUNTO]
-    return {eb for eb, s in conjuntos.items() if eb != SUPERCONJUNTO and s <= alvo}
+    grupos = GRUPOS if grupos is None else grupos
+    executada = SUPERCONJUNTO if executada is None else executada
+    conjuntos = {eb: set() for eb in grupos}
+    for fac in _combinacoes():
+        for eb in grupos:
+            if _satisfaz_em(grupos, eb, fac):
+                conjuntos[eb].add(frozenset(fac))
+    alvo = conjuntos[executada]
+    return {eb for eb, s in conjuntos.items() if eb != executada and s <= alvo}
 
 
 DERIVAVEIS = _derivaveis()
 
 
-def _prova_da_composicao():
-    """Confere a álgebra das expressões sobre as 16 combinações de faceta.
+def _expressoes_validas():
+    """`EB1 a EB5` — primeira e última da composição lida, na ordem declarada."""
+    ids = list(GRUPOS)
+    return f"{ids[0]} a {ids[-1]}" if len(ids) > 1 else ids[0]
+
+
+def _prova_da_composicao(grupos=None, papeis=None):
+    """Confere a álgebra das expressões sobre todas as combinações de faceta.
+
+    As relações vêm dos papéis calculados por `protocolo.papeis()`, não de identificadores
+    fixados: a executada é a união das específicas; a sonda contém toda expressão; cada
+    geral está contida em cada específica cuja string distintiva ela exige; as deriváveis
+    são a composição menos executada e sonda.
 
     A prova existe porque o caso degenerado passa em silêncio: com a lista de facetas
-    errada, as 16 combinações dão todas falsas, `EB4 = EB2 ∪ EB3` vale trivialmente e o
-    erro só aparece quando a busca roda. Por isso toda expressão precisa ser satisfeita
-    por ao menos uma combinação, além das contenções.
+    errada, todas as combinações dão falso, a união vale trivialmente e o erro só aparece
+    quando a busca roda. Por isso toda expressão precisa ser satisfeita por ao menos uma
+    combinação, além das contenções.
+
+    `grupos` e `papeis` permitem provar uma composição alterada em memória; por omissão,
+    a do protocolo.
     """
-    facetas = sorted(set(FACETA_DE.values()))
-    combos = [set(c) for r in range(len(facetas) + 1)
-              for c in itertools.combinations(facetas, r)]
+    grupos = GRUPOS if grupos is None else grupos
+    papeis = _D["papeis"] if papeis is None else papeis
+    exec_, sonda = papeis["executada"], papeis["sonda"]
+    especificas = {eb: FACETA_DE[s] for eb, s in papeis["especificas"].items()}
+    gerais = {eb: {FACETA_DE[g[0]] for g in alem if len(g) == 1}
+              for eb, alem in papeis["gerais"].items()}
+    combos = _combinacoes()
     problemas = []
-    if {"EB1", "EB2", "EB3", "EB4", "EB5"} - set(GRUPOS):
-        return [f"expressões esperadas ausentes: {sorted(set(GRUPOS))}"]
-    for eb in GRUPOS:
-        if not any(satisfaz(eb, f) for f in combos):
+    faltam = sorted(({exec_, sonda} | set(especificas) | set(gerais)) - set(grupos))
+    if faltam:
+        return [f"expressões dos papéis ausentes da composição: {faltam}"]
+    if not especificas:
+        problemas.append(f"nenhuma expressão específica: a executada {exec_} não tem de "
+                         f"que ser a união")
+    for eb in grupos:
+        if not any(_satisfaz_em(grupos, eb, f) for f in combos):
             problemas.append(f"{eb} não é satisfeita por nenhuma combinação de facetas — "
                              f"mapeamento de faceta provavelmente errado")
     for f in combos:
-        s = {eb: satisfaz(eb, f) for eb in GRUPOS}
-        if s["EB4"] != (s["EB2"] or s["EB3"]):
-            problemas.append(f"EB4 ≠ EB2 ∪ EB3 em {sorted(f)}")
-        if s["EB4"] and not s["EB5"]:
-            problemas.append(f"EB5 não contém EB4 em {sorted(f)}")
-        if s["EB1"] and not (s["EB2"] and s["EB3"]):
-            problemas.append(f"EB1 não está contida em EB2 e EB3 em {sorted(f)}")
-    if DERIVAVEIS != {"EB1", "EB2", "EB3"}:
-        problemas.append(f"deriváveis de EB4 deveriam ser EB1, EB2 e EB3, não "
-                         f"{sorted(DERIVAVEIS)}")
+        s = {eb: _satisfaz_em(grupos, eb, f) for eb in grupos}
+        uniao = any(s[e] for e in especificas)
+        if especificas and s[exec_] != uniao:
+            problemas.append(f"{exec_} ≠ {' ∪ '.join(sorted(especificas))} em {sorted(f)}")
+        for eb in grupos:
+            if eb != sonda and s[eb] and not s[sonda]:
+                problemas.append(f"{sonda} não contém {eb} em {sorted(f)}")
+        for g, exige in gerais.items():
+            contem = [e for e, fac in especificas.items() if fac in exige]
+            if s[g] and not all(s[e] for e in contem):
+                problemas.append(f"{g} não está contida em {' e '.join(sorted(contem))} "
+                                 f"em {sorted(f)}")
+    esperadas = set(grupos) - {exec_, sonda}
+    derivaveis = _derivaveis(grupos, exec_)
+    if derivaveis != esperadas:
+        problemas.append(f"deriváveis de {exec_} deveriam ser {sorted(esperadas)} "
+                         f"(composição menos executada e sonda), não {sorted(derivaveis)}")
     return problemas
 
 
@@ -351,6 +394,90 @@ _PROBLEMAS_DA_COMPOSICAO = _prova_da_composicao()
 if _PROBLEMAS_DA_COMPOSICAO:
     raise AssertionError("composição das expressões incoerente: "
                          + "; ".join(_PROBLEMAS_DA_COMPOSICAO))
+
+
+def _autoteste_composicao():
+    """Prova que `_prova_da_composicao` reprova cada relação de D2 quebrada.
+
+    Cada defeito é injetado numa cópia em memória da composição lida (em STRn, como no
+    protocolo); os papéis são recalculados por `protocolo.papeis()` sobre a cópia, como a
+    leitura faria, e a prova tem de reprovar pelo motivo esperado. Os identificadores vêm
+    dos papéis do protocolo, não do código. Devolve (falhas, casos).
+    """
+    import copy
+    falhas, n = 0, 0
+    p = _D["papeis"]
+    exec_, sonda = p["executada"], p["sonda"]
+    ancoras = p["ancoras"]
+
+    def prova(expressoes):
+        dm = copy.deepcopy(_D)
+        dm["expressoes"] = expressoes
+        pm = protocolo.papeis(dm)
+        grupos = {eb: [[FACETA_DE[s] for s in g] for g in gs] for eb, gs in expressoes.items()}
+        return _prova_da_composicao(grupos, pm)
+
+    def testa(nome, expressoes, espera):
+        nonlocal falhas, n
+        n += 1
+        if expressoes == _D["expressoes"]:
+            print(f"  [FALHA] mutação não aplicada: {nome}")
+            falhas += 1
+            return
+        problemas = [x for x in prova(expressoes) if espera in x]
+        if problemas:
+            print(f"  [ok] reprovou: {nome} — {problemas[0][:88]}")
+        else:
+            print(f"  [FALHA] não reprovou pelo motivo esperado ({espera!r}): {nome}")
+            falhas += 1
+
+    n += 1
+    controle = prova(copy.deepcopy(_D["expressoes"]))
+    if controle:
+        print(f"  [FALHA] composição do protocolo reprovada pela prova: {controle[0][:80]}")
+        falhas += 1
+    else:
+        print("  [ok] composição do protocolo aprovada pela prova")
+    if not p["especificas"] or not p["gerais"]:
+        print(f"  [FALHA] o protocolo não tem específica e geral para mutar: {p}")
+        return falhas + 1, n + 1
+
+    uma = sorted(p["especificas"].values())[0]
+    geral = sorted(p["gerais"])[0]
+
+    m = copy.deepcopy(_D["expressoes"])
+    m[exec_] = ancoras + [[uma]]
+    testa(f"executada {exec_} reduzida a uma só específica ({uma})", m, f"{exec_} ≠ ")
+    # A falha nomeia a combinação de facetas em que a relação não vale.
+    n += 1
+    if any(" em [" in x for x in prova(m) if f"{exec_} ≠ " in x):
+        print("  [ok] a reprovação da executada nomeia a combinação de facetas")
+    else:
+        print("  [FALHA] a reprovação da executada não nomeia a combinação de facetas")
+        falhas += 1
+
+    m = copy.deepcopy(_D["expressoes"])
+    m[sonda] = ancoras + [[uma]]
+    testa(f"sonda {sonda} restrita por {uma}", m, f"{sonda} não contém")
+
+    m = copy.deepcopy(_D["expressoes"])
+    m[geral] = [g for g in m[geral] if g != ancoras[-1]]
+    testa(f"geral {geral} sem a âncora {ancoras[-1][0]}", m, "não está contida")
+
+    m = copy.deepcopy(_D["expressoes"])
+    m["MUT1"] = copy.deepcopy(ancoras)
+    testa("expressão a mais fora da executada", m, "deriváveis de")
+    return falhas, n
+
+
+def autoteste():
+    print("Prova da composição das expressões:")
+    falhas, n = _autoteste_composicao()
+    if falhas:
+        print(f"\n{falhas} de {n} caso(s) do autoteste da composição falharam.")
+        return 1
+    print(f"\nOs {n} casos do autoteste da composição tiveram o resultado esperado.")
+    return 0
 
 
 def chave_ordem(reg, exprs):
@@ -451,12 +578,14 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
 
     id_expr = _id_expressao(expressao)
     if id_expr is None:
-        print(f"Expressão inválida: {expressao!r}. Use EB1 a EB5.")
+        print(f"Expressão inválida: {expressao!r}. Use {_expressoes_validas()}.")
         return 1
 
     bd, nome = _bd_de(base)
     if bd is None:
-        print(f"Base inválida: {base!r}. Use wos, scopus, eric, brapci ou BD1 a BD4.")
+        bds = [f["bd"] for f in protocolo.FICHAS.values()]
+        print(f"Base inválida: {base!r}. Use {', '.join(protocolo.FICHAS)} ou "
+              f"{bds[0]} a {bds[-1]}.")
         return 1
 
     lidos = len(regs)
@@ -734,8 +863,8 @@ def derivar():
                     "registros_com_duplicatas", "procedencia"])
         for b in bases:
             for n in sorted(GRUPOS):
-                composicao = "+".join(
-                    grupo[0] if len(grupo) == 1 else "(" + "|".join(grupo) + ")"
+                composicao = " AND ".join(
+                    grupo[0] if len(grupo) == 1 else "(" + " OR ".join(grupo) + ")"
                     for grupo in GRUPOS[n])
                 if n == SONDA:
                     w.writerow([b, n, composicao, "", "",
@@ -779,7 +908,7 @@ def chave(reg):
 def fidelidade(expr, caminho):
     ident = _id_expressao(expr)
     if ident is None:
-        print(f"Expressão {expr!r} não existe. Use EB1 a EB5."); sys.exit(1)
+        print(f"Expressão {expr!r} não existe. Use {_expressoes_validas()}."); sys.exit(1)
     if ident == SONDA:
         print(f"{SONDA} é a sonda de sensibilidade, não expressão de conferência: o conjunto "
               f"dela é superconjunto de {SUPERCONJUNTO} e não se deriva da exportação da de "
@@ -960,7 +1089,11 @@ def main():
                     help="mede a perda de EB5 para EB4 e escreve a amostra a classificar; "
                          "decide pela fração elegível (sem BASE, todas as bases com EB4 e "
                          "EB5 registradas)")
+    ap.add_argument("--autoteste", action="store_true",
+                    help="prova que a conferência da composição reprova cada relação quebrada")
     a = ap.parse_args()
+    if a.autoteste:
+        return autoteste()
     if a.registrar:
         return registrar(*a.registrar, a.retorno, a.data_hora, a.justificar)
     if a.aderencia:

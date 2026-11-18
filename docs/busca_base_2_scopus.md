@@ -82,11 +82,11 @@ TITLE-ABS-KEY("fator situacional" OR "fatores situacionais" OR "situação de us
 ## 4. Expressões de busca
 
 ```
-EB1 = #1 + #2 + #3 + #4
-EB2 = #1 + #2 + #3
-EB3 = #1 + #2 + #4
-EB4 = #1 + #2 + (#3 OR #4)     (executada)
-EB5 = #1 + #2                  (sonda de sensibilidade)
+EB1 = #1 AND #2 AND #3 AND #4
+EB2 = #1 AND #2 AND #3
+EB3 = #1 AND #2 AND #4
+EB4 = #1 AND #2 AND (#3 OR #4)     (executada)
+EB5 = #1 AND #2                    (sonda de sensibilidade)
 ```
 
 | Expressão | Execução |

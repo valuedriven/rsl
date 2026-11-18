@@ -344,11 +344,7 @@ def carrega():
                          for c in protocolo.CAMPOS_VALIDACAO}
                     v["instrumento"] = inst
                     if r is None:
-                        if i["modo"] == "manual":
-                            v["status_proposto"] = protocolo.STATUS_MANUAL
-                            v["observacao_tecnica"] = protocolo.OBS_MANUAL
-                        else:
-                            v["observacao_tecnica"] = "aguardando consulta"
+                        v.update(protocolo.estado_inicial(i))
                     validacoes.append(v)
                 bloco[protocolo.normaliza(termo)] = {"termo": termo,
                                                      "validacoes": validacoes}

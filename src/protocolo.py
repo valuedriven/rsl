@@ -65,7 +65,7 @@ CHAVES_CONFIG = (
     "padroes.recorte_ano_min", "padroes.limiar_aderencia", "padroes.sensibilidade",
     "padroes.ancoras", "padroes.executada", "padroes.sonda",
     "padroes.divergencia_fidelidade", "padroes.calibracao_triagem", "padroes.composicao",
-    "expressoes.natureza_executada", "expressoes.natureza_sonda",
+    "expressoes.natureza_executada", "expressoes.natureza_sonda", "expressoes.colunas",
     "conferencia.minimo_termos_string", "conferencia.dimensoes_criterio",
     "dados.sementes", "dados.registro", "dados.validacao",
     "fichas", "cores", "instrumentos",
@@ -408,6 +408,17 @@ def instrumentos_do_termo(d, fid, idioma):
     return [i for i in d["instrumentos"][fid] if idioma in i["idiomas"]]
 
 
+def estado_inicial(instrumento):
+    """Campos com que nasce a linha de um termo ainda não registrado na planilha.
+
+    Instrumento sem cliente automatizado (modo `manual`) nasce pendente de validação
+    manual; os demais, aguardando consulta.
+    """
+    if instrumento["modo"] == "manual":
+        return {"status_proposto": STATUS_MANUAL, "observacao_tecnica": OBS_MANUAL}
+    return {"observacao_tecnica": "aguardando consulta"}
+
+
 # ------------------------------------------------------------------------- strings
 def strings(t):
     """Termos executados de cada faceta, extraídos das strings entre aspas."""
@@ -448,26 +459,43 @@ def strings(t):
 
 
 # ---------------------------------------------------------------------- expressões
+FORMA_COMPOSICAO = "STRn AND STRn AND (STRn OR STRn)"
+
+
 def _grupos_de_composicao(comb, ident):
-    """Composição como AND de ORs: `STR1 + STR2 + (STR3 OR STR4)`.
+    """Composição na forma estrita `STR1 AND STR2 AND (STR3 OR STR4)`.
 
     A forma devolvida é uma lista de grupos; todo grupo tem de ser satisfeito e, dentro do
-    grupo, basta um dos STRn. A composição puramente conjuntiva é o caso particular em que
-    todo grupo tem um único elemento.
+    grupo, basta um dos STRn. `AND`, em maiúsculas, é a única conjunção; `OR`, em
+    maiúsculas, só aparece dentro de parênteses, sem aninhamento. Qualquer outra forma —
+    `+`, operador em minúscula, `OR` fora de parênteses — reprova: a expressão do protocolo
+    é a que se executa, e leitura tolerante esconderia a divergência.
     """
+    comb = " ".join(comb.split())
+    if "+" in comb:
+        raise ProtocoloInvalido(f"expressão {ident}: `+` não é conjunção da forma estrita "
+                                f"{FORMA_COMPOSICAO}; use AND: {comb!r}")
+    minusculas = sorted({m.group(0) for m in re.finditer(r"\b(?:and|or|not)\b", comb,
+                                                          re.I)} - {"AND", "OR"})
+    if minusculas:
+        raise ProtocoloInvalido(f"expressão {ident}: operador fora da forma estrita "
+                                f"{FORMA_COMPOSICAO} {minusculas}: {comb!r}")
     partes, profundidade, atual = [], 0, ""
-    for ch in comb:
-        if ch == "(":
+    for tok in re.split(r"(\(|\)|\bAND\b)", comb):
+        if tok == "(":
             profundidade += 1
-        elif ch == ")":
+            if profundidade > 1:
+                raise ProtocoloInvalido(f"expressão {ident}: parênteses aninhados fora da "
+                                        f"forma estrita {FORMA_COMPOSICAO}: {comb!r}")
+        elif tok == ")":
             profundidade -= 1
             if profundidade < 0:
                 raise ProtocoloInvalido(f"expressão {ident}: parêntese fechado sem abrir")
-        if ch == "+" and profundidade == 0:
+        if tok == "AND" and profundidade == 0:
             partes.append(atual)
             atual = ""
         else:
-            atual += ch
+            atual += tok
     partes.append(atual)
     if profundidade:
         raise ProtocoloInvalido(f"expressão {ident}: parêntese aberto sem fechar")
@@ -476,7 +504,7 @@ def _grupos_de_composicao(comb, ident):
     for parte in partes:
         p = parte.strip()
         if not p:
-            raise ProtocoloInvalido(f"expressão {ident}: operador `+` sem operando")
+            raise ProtocoloInvalido(f"expressão {ident}: operador AND sem operando")
         m = re.fullmatch(r"\(\s*(STR\d+(?:\s+OR\s+STR\d+)+)\s*\)", p)
         if m:
             membros = [x.strip() for x in m.group(1).split("OR")]
@@ -484,8 +512,8 @@ def _grupos_de_composicao(comb, ident):
             membros = [p]
         else:
             raise ProtocoloInvalido(
-                f"expressão {ident}: composição fora do padrão STRn + STRn ou "
-                f"(STRn OR STRn): {comb!r}")
+                f"expressão {ident}: composição fora da forma estrita "
+                f"{FORMA_COMPOSICAO}: {comb!r}")
         grupos.append(membros)
     return grupos
 
@@ -505,9 +533,17 @@ def expressoes(t, params):
         bloco = None
     composicao, natureza, detalhe = {}, {}, {}
     if bloco is not None:
-        for linha in bloco.splitlines():
-            if not linha.lstrip().startswith("|"):
-                continue
+        linhas_tabela = [l for l in bloco.splitlines() if l.lstrip().startswith("|")]
+        if linhas_tabela:
+            # O cabeçalho diz o que cada coluna é: lido por posição, um cabeçalho trocado
+            # faria a natureza ou a expressão vir de outra coluna, em silêncio.
+            esperado = list(CFG["expressoes"]["colunas"])
+            lido = [desescapa(c).strip() for c in celulas(linhas_tabela[0])]
+            if lido != esperado:
+                raise ProtocoloInvalido(
+                    f"tabela 'Expressões de busca': cabeçalho {lido} difere do esperado "
+                    f"{esperado} ([expressoes] colunas do {CONFIG.name})")
+        for linha in linhas_tabela:
             cels = celulas(linha)
             if len(cels) < 4 or not re.match(r"^EB\d+$", cels[0]):
                 continue
@@ -1315,20 +1351,56 @@ def analisa(t=None):
     _parametro(params, "minimo_termos_string", None, "conferencia.minimo_termos_string")
     _parametro(params, "dimensoes_criterio", None, "conferencia.dimensoes_criterio")
     d["parametros"] = params
+    d["papeis"] = papeis(d)
     return d
 
 
 # ---------------------------------------------------------------------- conferência
+def papeis(d):
+    """Papéis das expressões, calculados uma única vez a partir da composição e das âncoras.
+
+    Função pura sobre o resultado de `analisa()` (precisa de `expressoes`, `executada`,
+    `sonda`, `ancoras` e `strings`). Devolve:
+      ancoras             grupos unitários das STR das facetas-âncora, na ordem declarada
+      ancoras_sem_string  âncoras que não são faceta com string (a conferência reprova)
+      especificas         {expressão: STR distintiva} — exceto executada e sonda, com
+                          exatamente um grupo unitário além das âncoras
+      gerais              {expressão: grupos além das âncoras} — exceto executada e sonda,
+                          com mais de um grupo além das âncoras
+      executada, sonda    os identificadores declarados
+    É este cálculo que a conferência de coerência e a derivação usam; não se recalcula.
+    """
+    comp, exec_, sonda = d["expressoes"], d["executada"], d["sonda"]
+    str_de = {fid: s["id"] for fid, s in d["strings"].items()}
+    ancora = [[str_de[a]] for a in d["ancoras"] if a in str_de]
+    especificas, gerais = {}, {}
+    for k, v in comp.items():
+        if k in (exec_, sonda):
+            continue
+        alem = [g for g in v if g not in ancora]
+        if len(alem) == 1 and len(alem[0]) == 1:
+            especificas[k] = alem[0][0]
+        elif len(alem) > 1:
+            gerais[k] = alem
+    return {
+        "ancoras": ancora,
+        "ancoras_sem_string": [a for a in d["ancoras"] if a not in str_de],
+        "especificas": especificas,
+        "gerais": gerais,
+        "executada": exec_,
+        "sonda": sonda,
+    }
+
+
 def _coerencia_expressoes(d):
     """Relações entre as expressões, sem valor esperado: âncoras, sonda e executada."""
     problemas = []
-    comp, exec_, sonda = d["expressoes"], d["executada"], d["sonda"]
-    str_de = {fid: s["id"] for fid, s in d["strings"].items()}
-    existentes = set(str_de.values())
-    ausentes = [a for a in d["ancoras"] if a not in str_de]
-    if ausentes:
-        return [f"âncoras {ausentes} não são facetas com string no protocolo"]
-    ancora = [[str_de[a]] for a in d["ancoras"]]
+    p = d.get("papeis") or papeis(d)
+    comp, exec_, sonda = d["expressoes"], p["executada"], p["sonda"]
+    existentes = {s["id"] for s in d["strings"].values()}
+    if p["ancoras_sem_string"]:
+        return [f"âncoras {p['ancoras_sem_string']} não são facetas com string no protocolo"]
+    ancora = p["ancoras"]
 
     for ident, grupos in sorted(comp.items()):
         fora = sorted({x for g in grupos for x in g} - existentes)
@@ -1339,11 +1411,9 @@ def _coerencia_expressoes(d):
                 problemas.append(f"{ident}: falta a âncora obrigatória {g[0]}")
     if sorted(comp.get(sonda, [])) != sorted(ancora):
         problemas.append(f"a sonda {sonda} não é a conjunção das âncoras "
-                         f"({' + '.join(g[0] for g in ancora)})")
+                         f"({' AND '.join(g[0] for g in ancora)})")
     resto = [g for g in comp.get(exec_, []) if g not in ancora]
-    especificas = {k: [g for g in v if g not in ancora] for k, v in comp.items()
-                   if k not in (exec_, sonda)}
-    especificas = {k: v[0][0] for k, v in especificas.items() if len(v) == 1 and len(v[0]) == 1}
+    especificas = p["especificas"]
     uniao = sorted(set(especificas.values()))
     if len(resto) != 1 or not uniao or sorted(resto[0]) != uniao:
         problemas.append(f"a executada {exec_} não é a união das específicas "
@@ -1445,12 +1515,13 @@ def conferir(t=None):
 
 
 def _composicao_legivel(grupos):
-    """`[["STR1"],["STR2"],["STR3","STR4"]]` como `1+2+(3|4)`."""
+    """`[["STR1"],["STR2"],["STR3","STR4"]]` como `1 AND 2 AND (3 OR 4)`: a forma estrita
+    do protocolo, com o número da STR."""
     partes = []
     for g in grupos:
         nomes = [x[3:] for x in g]
-        partes.append(nomes[0] if len(nomes) == 1 else "(" + "|".join(nomes) + ")")
-    return "+".join(partes)
+        partes.append(nomes[0] if len(nomes) == 1 else "(" + " OR ".join(nomes) + ")")
+    return " AND ".join(partes)
 
 
 def _legivel(valor):
@@ -1917,11 +1988,30 @@ def _mutacoes(t):
         ("executada que não é a união das específicas",
          _troca_linha(linhas, "| EB4 |", "(STR3 OR STR4)", "STR3"), "não é a união"),
         ("sonda que não é a conjunção das âncoras",
-         _troca_linha(linhas, "| EB5 |", "STR1 \\+ STR2\\ |", "STR1 \\+ STR2 \\+ STR3\\ |"),
+         _troca_linha(linhas, "| EB5 |", "STR1 AND STR2\\ |", "STR1 AND STR2 AND STR3\\ |"),
          "conjunção das âncoras"),
         ("expressão sem âncora",
-         _troca_linha(linhas, "| EB2 |", "STR1 \\+ STR2 \\+ STR3", "STR1 \\+ STR3"),
+         _troca_linha(linhas, "| EB2 |", "STR1 AND STR2 AND STR3", "STR1 AND STR3"),
          "falta a âncora"),
+        # Forma estrita da composição: só AND como conjunção, OR só entre parênteses.
+        ("cabeçalho da tabela de expressões renomeado",
+         _troca_linha(linhas, "| ID expressão |", "| Expressão de busca |",
+                      "| Combinação de Strings |"), "difere do esperado"),
+        ("cabeçalho da tabela de expressões com colunas trocadas",
+         _troca_linha(linhas, "| ID expressão |", "| Natureza | Expressão de busca |",
+                      "| Expressão de busca | Natureza |"), "difere do esperado"),
+        ("composição com `+` como conjunção",
+         _troca_linha(linhas, "| EB2 |", "STR1 AND STR2 AND STR3", "STR1 + STR2 + STR3"),
+         "não é conjunção da forma estrita"),
+        ("composição com operador em minúscula",
+         _troca_linha(linhas, "| EB2 |", "STR1 AND STR2 AND STR3", "STR1 and STR2 AND STR3"),
+         "operador fora da forma estrita"),
+        ("composição com OR fora de parênteses",
+         _troca_linha(linhas, "| EB4 |", "(STR3 OR STR4)", "STR3 OR STR4"),
+         "fora da forma estrita"),
+        ("composição com parênteses aninhados",
+         _troca_linha(linhas, "| EB4 |", "(STR3 OR STR4)", "((STR3 OR STR4))"),
+         "aninhados"),
         ("duas expressões executadas",
          _troca_linha(linhas, "| EB2 |", "| Específica |", "| Cobertura restrita |"),
          "mais de uma expressão"),
@@ -2038,14 +2128,106 @@ def _autoteste_config():
     return falhas, n
 
 
+def _autoteste_validacao(t, d):
+    """Prova o planejamento da validação terminológica por instrumento.
+
+    Sobre o protocolo e cópias alteradas em memória: todos os instrumentos da faceta são
+    planejados, instrumento retirado da linha não é, só nos idiomas que o instrumento
+    cobre, e o modo manual faz a linha nascer pendente de validação manual.
+    """
+    falhas, n = 0, 0
+
+    def testa(nome, condicao, detalhe=""):
+        nonlocal falhas, n
+        n += 1
+        if condicao:
+            print(f"  [ok] {nome}")
+        else:
+            print(f"  [FALHA] {nome}{' — ' + detalhe if detalhe else ''}")
+            falhas += 1
+
+    def planejados(dd, fid):
+        return {i["sigla"] for idioma in IDIOMAS for i in instrumentos_do_termo(dd, fid, idioma)}
+
+    # Vários instrumentos: a faceta com mais instrumentos tem todos planejados. Sem faceta
+    # com mais de um, o caso não prova nada e falha.
+    fid = max(d["instrumentos"], key=lambda f: len(d["instrumentos"][f]))
+    declarados = {i["sigla"] for i in d["instrumentos"][fid] if set(i["idiomas"]) & set(IDIOMAS)}
+    testa(f"faceta com vários instrumentos ({fid}) planeja todos",
+          len(declarados) > 1 and planejados(d, fid) == declarados,
+          f"declarados {sorted(declarados)}, planejados {sorted(planejados(d, fid))}")
+
+    # Instrumento retirado da linha da faceta, na cópia do texto.
+    linha = re.search(rf"^-\s*{fid}\s*:\s*(.*)$", t, re.M)
+    itens = [x.strip() for x in linha.group(1).split(",") if x.strip()] if linha else []
+    if len(itens) < 2:
+        testa(f"instrumento retirado da linha de {fid}", False,
+              "a linha não tem dois instrumentos para retirar um")
+    else:
+        retirado = _resolve_instrumento(itens[-1], fid)
+        sigla = CFG["instrumentos"][retirado]["sigla"]
+        mutante = t.replace(linha.group(0), linha.group(0).replace(
+            linha.group(1), ", ".join(itens[:-1])), 1)
+        dm = analisa(mutante)
+        testa(f"instrumento retirado da linha de {fid} ({sigla}) não é planejado",
+              mutante != t and sigla not in planejados(dm, fid)
+              and planejados(dm, fid) == planejados(d, fid) - {sigla},
+              f"planejados {sorted(planejados(dm, fid))}")
+
+    # Filtro por idioma: um instrumento passa a cobrir só um dos idiomas.
+    dm = copy.deepcopy(d)
+    inst = dm["instrumentos"][fid][0]
+    so = inst["idiomas"][0]
+    inst["idiomas"] = [so]
+    fora = [i for i in IDIOMAS if i != so]
+    testa(f"{inst['sigla']} restrito a {so} só é planejado em {so}",
+          bool(fora)
+          and inst["sigla"] in {i["sigla"] for i in instrumentos_do_termo(dm, fid, so)}
+          and all(inst["sigla"] not in {i["sigla"] for i in instrumentos_do_termo(dm, fid, x)}
+                  for x in fora))
+
+    # Modo manual: um instrumento automatizado declarado manual nasce pendente; um manual
+    # declarado automatizado deixa de nascer pendente.
+    dm = copy.deepcopy(d)
+    autos = [i for i in dm["instrumentos"][fid] if i["modo"] != "manual"]
+    if not autos:
+        testa(f"instrumento manual em {fid}", False, "nenhum instrumento automatizado")
+    else:
+        autos[0]["modo"] = "manual"
+        plano = [i for idioma in IDIOMAS for i in instrumentos_do_termo(dm, fid, idioma)
+                 if i["sigla"] == autos[0]["sigla"]]
+        testa(f"{autos[0]['sigla']} declarado manual nasce pendente de validação manual",
+              bool(plano) and all(i["modo"] == "manual" and
+                                  estado_inicial(i).get("status_proposto") == STATUS_MANUAL
+                                  for i in plano))
+    manuais = [i for f in d["instrumentos"].values() for i in f if i["modo"] == "manual"]
+    testa("instrumento manual do protocolo nasce pendente e o automatizado não",
+          bool(manuais)
+          and all(estado_inicial(i).get("status_proposto") == STATUS_MANUAL for i in manuais)
+          and all(estado_inicial(i).get("status_proposto") != STATUS_MANUAL
+                  for f in d["instrumentos"].values() for i in f if i["modo"] != "manual"))
+    return falhas, n
+
+
+# Casos de `_autoteste_dados`, para relatar quantos deixaram de rodar quando os arquivos
+# alimentados faltam. Teste novo em `_autoteste_dados` atualiza este número; o autoteste
+# reprova se divergirem.
+CASOS_DADOS = 6
+
+
 def _autoteste_dados(d):
-    """Prova que a conferência dos arquivos alimentados reprova cada defeito esperado."""
+    """Prova que a conferência dos arquivos alimentados reprova cada defeito esperado.
+
+    Devolve (falhas, executados, não executados, motivo). Sem os arquivos, nenhum caso
+    roda: eles são contados como não executados, nunca como aprovados.
+    """
     sem, erro_s = _le_json(SEMENTES)
     reg, erro_r = _le_json(REGISTRO)
     if erro_s or erro_r:
-        print("  [--] arquivos alimentados ausentes: o teste das conferências não foi "
-              "executado")
-        return 0, 0
+        motivo = "; ".join(e for e in (erro_s, erro_r) if e)
+        print(f"  [--] {CASOS_DADOS} caso(s) das conferências dos arquivos alimentados NÃO "
+              f"executados: {motivo}")
+        return 0, 0, CASOS_DADOS, motivo
     falhas, n = 0, 0
 
     def testa(nome, condicao):
@@ -2097,7 +2279,10 @@ def _autoteste_dados(d):
         "registros_lidos": "um", "status": "valida"})
     testa("execução com `registros_lidos` que não é inteiro",
           bool(_problemas_registro(copia)))
-    return falhas, n
+    if n != CASOS_DADOS:
+        print(f"  [FALHA] {n} casos executados, CASOS_DADOS declara {CASOS_DADOS}")
+        falhas += 1
+    return falhas, n, 0, ""
 
 
 def _autoteste_bases(d):
@@ -2107,6 +2292,15 @@ def _autoteste_bases(d):
     Defeito que a conferência não pega é defeito que passa em silêncio na fonte.
     """
     falhas, n = 0, 0
+    # As mutações abaixo reescrevem trechos do texto de fichas específicas; os slugs são os
+    # dessas fichas. Ficha renomeada ou retirada de [fichas] falha aqui, nomeada, em vez de
+    # derrubar o autoteste com KeyError.
+    usados = ("wos", "brapci", "eric")
+    ausentes = [s for s in usados if s not in FICHAS]
+    if ausentes:
+        print(f"  [FALHA] fichas usadas pelo autoteste das bases ausentes de [fichas] do "
+              f"{CONFIG.name}: {ausentes}; atualizar as mutações de _autoteste_bases")
+        return 1, 1
     slug = "wos"
     original = ficha(slug)
 
@@ -2152,6 +2346,20 @@ def _autoteste_bases(d):
     testa("termo só do quadro, em flexão, na string da BRAPCI",
           brapci.replace('("educação" OR ', '("educação" OR "educativos" OR ', 1),
           "brapci", brapci, "não está na string do protocolo")
+    # Reprovação por base: o mesmo defeito, só na ficha da BRAPCI, reprova a BRAPCI e
+    # nenhuma outra base.
+    n += 1
+    mutante = brapci.replace('("educação" OR ', '("educação" OR "educativos" OR ', 1)
+    por_base = {s: problemas_de(s, mutante if s == "brapci" else ficha(s)) for s in FICHAS}
+    outras = {s: p for s, p in por_base.items() if s != "brapci" and p}
+    if mutante != brapci and por_base["brapci"] and not outras:
+        print(f"  [ok] defeito só na BRAPCI reprova só a BRAPCI — "
+              f"{', '.join(s for s in FICHAS if s != 'brapci')} passam")
+    else:
+        print(f"  [FALHA] defeito só na BRAPCI: BRAPCI "
+              f"{'reprovou' if por_base['brapci'] else 'passou'}, outras reprovadas "
+              f"{sorted(outras)}")
+        falhas += 1
     testa("expressão com faceta trocada",
           original.replace("**Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)",
                            "**Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)", 1),
@@ -2199,6 +2407,24 @@ def _autoteste_bases(d):
     return falhas, n
 
 
+def _autoteste_composicao():
+    """Prova da composição da derivação, que vive em `derivar_expressoes.py`.
+
+    Importada aqui para que o autoteste do projeto seja um só comando. Falha de importação
+    é falha do caso, não caso não executado: o script é parte do projeto.
+    """
+    import importlib.util
+    caminho = pathlib.Path(__file__).resolve().parent / "derivar_expressoes.py"
+    try:
+        spec = importlib.util.spec_from_file_location("derivar_expressoes", caminho)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    except Exception as e:                                          # noqa: BLE001
+        print(f"  [FALHA] {caminho.name} não carregou: {e}")
+        return 1, 1
+    return mod._autoteste_composicao()
+
+
 def autoteste(t=None):
     t = texto() if t is None else t
     if conferir(t):
@@ -2221,15 +2447,33 @@ def autoteste(t=None):
     d = analisa(t)
     f_p, n_p = _autoteste_precedencia(t)
     f_c, n_c = _autoteste_config()
-    f_d, n_d = _autoteste_dados(d)
+    f_v, n_v = _autoteste_validacao(t, d)
+    f_d, n_d, x_d, motivo_d = _autoteste_dados(d)
     f_b, n_b = _autoteste_bases(d)
-    falhas += f_p + f_c + f_d + f_b
+    f_e, n_e = _autoteste_composicao()
+    falhas += f_p + f_c + f_v + f_d + f_b + f_e
+    executados = len(mut) + n_p + n_c + n_v + n_d + n_b + n_e
+    parcial = ""
+    if x_d:
+        parcial = (
+            f"\n\nAUTOTESTE PARCIAL: {x_d} de {executados + x_d} casos NÃO foram "
+            f"executados — os das conferências dos arquivos alimentados ({motivo_d}).\n"
+            f"Esses casos não foram aprovados nem reprovados: não se sabe se a conferência "
+            f"dos arquivos alimentados reprova os defeitos que deveria.\n"
+            f"O código de saída {1 if falhas else 0} se refere apenas aos {executados} casos "
+            f"executados.\n"
+            f"Para executá-los: gerar {SEMENTES.relative_to(RAIZ)} (src/protocolo.py "
+            f"--sincronizar) e {REGISTRO.relative_to(RAIZ)} (src/derivar_expressoes.py "
+            f"--registrar) e rodar de novo.")
     if falhas:
-        print(f"\n{falhas} caso(s) do autoteste falharam.")
+        print(f"\n{falhas} caso(s) do autoteste falharam.{parcial}")
         return 1
-    print(f"\n{len(mut)} defeitos injetados no documento, {n_p} casos de precedência, "
-          f"{n_c} de configuração, {n_d} nas conferências dos arquivos alimentados e {n_b} "
-          f"nas fichas das bases, todos com o resultado esperado.")
+    dados = f"{n_d} nas conferências dos arquivos alimentados, " if n_d else ""
+    print(f"\n{'Todos os' if not x_d else 'Os'} {executados} casos executados tiveram o "
+          f"resultado esperado: {len(mut)} defeitos injetados no documento, {n_p} casos de "
+          f"precedência, {n_c} de configuração, {n_v} de planejamento da validação, "
+          f"{dados}{n_b} nas fichas das bases, {n_e} da prova da composição da "
+          f"derivação.{parcial}")
     return 0
 
 

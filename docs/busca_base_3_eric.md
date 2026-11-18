@@ -120,7 +120,7 @@ Regras medidas; violá-las devolve **zero sem mensagem de erro**:
 
 Toda expressão é executada como duas consultas de campo único — `STR1` no título e `STR1b` no resumo —, ambas com a faceta 🟨 como grupo externo, unidas por deduplicação.
 
-**Composição.** `EB1 = #1 + #2 + #3 + #4`; `EB2 = #1 + #2 + #3`; `EB3 = #1 + #2 + #4`; `EB4 = #1 + #2 + (#3 OR #4)`; `EB5 = #1 + #2`.
+**Composição.** `EB1 = #1 AND #2 AND #3 AND #4`; `EB2 = #1 AND #2 AND #3`; `EB3 = #1 AND #2 AND #4`; `EB4 = #1 AND #2 AND (#3 OR #4)`; `EB5 = #1 AND #2`.
 
 | Expressão | Execução |
 | :--- | :--- |

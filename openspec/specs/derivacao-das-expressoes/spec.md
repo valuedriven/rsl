@@ -1,4 +1,4 @@
-# Spec Delta
+# derivacao-das-expressoes Specification
 
 ## Purpose
 
@@ -6,7 +6,7 @@ Derivar localmente as expressões não executadas e montar o instrumento de ader
 partir do que o protocolo e a configuração declaram, sem composição, papéis nem bases
 fixados no código.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Prova da composição pelas relações do protocolo
 A prova da composição da derivação SHALL verificar, sobre todas as combinações de facetas,
@@ -39,9 +39,19 @@ As siglas das bases usadas na derivação e no instrumento de aderência SHALL v
 - **WHEN** `[fichas]` declara uma ficha com `sigla` e `bd`
 - **THEN** a derivação e o instrumento de aderência usam essa sigla para a base
 
+### Requirement: Facetas do instrumento de aderência vêm do protocolo
+As facetas usadas por `gen_semente.py` SHALL vir das facetas lidas do protocolo, na ordem
+declarada; o código MUST NOT fixar a lista de facetas.
+
+#### Scenario: Facetas lidas
+- **WHEN** o protocolo declara FCT1 a FCT4
+- **THEN** o instrumento usa FCT1 a FCT4, nessa ordem
+
 ### Requirement: Saídas preservadas
 Para o protocolo e a configuração atuais, as saídas da derivação, da aderência, da
-fidelidade e da sensibilidade MUST ser idênticas às anteriores à mudança.
+fidelidade e da sensibilidade MUST ser idênticas às anteriores à mudança, exceto a redação
+da coluna `facetas_exigidas` de `contagens_busca.csv`, que passa à forma estrita
+(`FCT1 AND FCT2 AND (FCT3 OR FCT4)`) por decisão do pesquisador.
 
 #### Scenario: Mesmo resultado
 - **WHEN** a prova da composição, as deriváveis e o mapa de bases são calculados antes e

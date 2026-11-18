@@ -51,6 +51,9 @@ EB5 = [["STR1"], ["STR2"]]
 # Texto da coluna Natureza que identifica o papel da expressão no protocolo.
 natureza_executada = "Cobertura restrita"
 natureza_sonda = "Controle de sensibilidade"
+# Cabeçalho da tabela "Expressões de busca", exatamente e na ordem. Cabeçalho diferente
+# reprova a leitura: as colunas são lidas por posição.
+colunas = ["ID expressão", "Natureza", "Expressão de busca", "Detalhamento"]
 
 [conferencia]
 # Mínimo de termos distintos por string de faceta.
