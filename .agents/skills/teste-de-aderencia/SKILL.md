@@ -11,7 +11,6 @@ Mede uma coisa só: **a busca recupera os estudos que tinha obrigação de recup
 ## 1. Executar
 
 ```
-python3 src/protocolo.py --gerar
 python3 src/derivar_expressoes.py --aderencia
 ```
 
@@ -20,7 +19,7 @@ normalizado e, na falta dele, por prefixo, e imprime recuperados/informados. **P
 indício, nunca acerto** — exige conferência humana. A razão impressa **não é a aderência**:
 o denominador são as sementes que cada base indexa.
 
-O conjunto-semente é derivado do documento do protocolo. As exportações das bases são a
+O conjunto-semente é lido do documento do protocolo. As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
 `--registrar` antes do teste; ver `README.md`, seção Scripts.
 

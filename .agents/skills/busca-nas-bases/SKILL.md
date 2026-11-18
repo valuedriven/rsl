@@ -27,13 +27,14 @@ pesquisador. Não há exceção, não há urgência que justifique.
 ## O que executar
 
 As expressões vivem nas quatro fichas, uma por base, em `docs/`:
-`strings_busca_1_Web_of_Science.md`, `strings_busca_2_Scopus.md`,
-`strings_busca_3_ERIC.md` e `strings_busca_4_BRAPCI.md`. **Nunca ditar uma expressão de
+`busca_base_1_web_of_science.md`, `busca_base_2_scopus.md`,
+`busca_base_3_eric.md` e `busca_base_4_brapci.md`. **Nunca ditar uma expressão de
 memória nem reescrevê-la na conversa.** Se a ficha estiver defasada, corrigi-la e registrar
 a correção no Anexo A.
 
-Só **E4** é busca definitiva nas bases. E1, E2 e E3 têm a pertinência calculada localmente
-sobre os registros exportados, e vão à base apenas no teste de fidelidade da derivação.
+Só **EB4** é busca definitiva nas bases. EB1 tem a pertinência calculada localmente sobre os
+registros exportados; EB2 e EB3 vão à base apenas no teste de fidelidade da derivação; e
+**EB5** roda uma única vez como sonda de sensibilidade, fora do corpus.
 
 ## Antes da primeira execução numa base
 

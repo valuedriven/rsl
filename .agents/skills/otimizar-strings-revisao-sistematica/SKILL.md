@@ -1,0 +1,246 @@
+---
+name: "otimizar-strings-revisao-sistematica"
+description: "Diagnostica e otimiza o controle terminológico e as strings de busca de protocolos de revisão sistemática ou de escopo organizados por facetas, com auditoria de redundância, polissemia e lacunas."
+---
+
+# Otimização de controle terminológico e strings de busca
+
+## Quando usar
+
+Quando houver protocolo de revisão sistemática, integrativa ou de escopo com facetas e strings booleanas a ajustar — por pedido de "otimizar as strings", "melhorar a recuperação", "ajustar os descritores" ou por diagnóstico de volume excessivo ou de sementes perdidas. Serve também a construir o controle terminológico de um protocolo novo, usando os mesmos critérios em ordem direta.
+
+Não serve a busca pontual na literatura nem a revisão de texto do protocolo.
+
+## Princípio que governa tudo
+
+**O ruído de um termo não se julga nele mesmo, e sim no produto com as outras âncoras da expressão.** `learn*` é inofensivo numa busca educacional; sob conjunção com `"knowledge representation"` e `"semantic model"`, arrasta a literatura inteira de aprendizado de máquina. `taxonom*` com âncora educacional traz taxonomia de Bloom em volume industrial. `"concept map"` no domínio educacional designa técnica de ensino, não artefato documentário. Nenhum desses termos é ruim; são ruins ali. Todo juízo sobre termo isolado é provisório até se examinar a conjunção em que ele vai operar.
+
+Corolário: **sensibilidade e precisão não se trocam termo a termo.** A maior parte do ganho vem de reescrever a forma, não de cortar alcance — truncamento, não subsunção, estratificação por campo e atribuição única rendem precisão sem custo de recall. Só depois disso se discute o que remover.
+
+## Procedimento
+
+### 1. Extrair a arquitetura antes de olhar os termos
+
+Ler o protocolo e registrar: quantas facetas; quais são âncoras obrigatórias; qual expressão é de fato executada em base e quais são calculadas localmente ou por derivação; quais bases, em que ordem; qual o conjunto-semente; qual a regra de ajuste. Essa arquitetura decide o que cada critério pode e não pode mudar.
+
+Atenção particular a protocolos que **executam uma expressão e derivam as outras localmente**. Neles, a qualidade das facetas não executadas afeta a classificação, não a recuperação — e por isso erros ali passam despercebidos e são os mais graves.
+
+### 2. Rodar o diagnóstico mecânico
+
+Escrever o script da seção *Script de auditoria* num diretório próprio, separado de qualquer arquivo enviado, e rodá-lo sobre o protocolo:
+
+```
+python3 -I auditar_strings.py protocolo.md
+```
+
+Reporta redundância por subsunção, duplicação entre facetas, desbalanceamento de parênteses e aspas, e extensão em caracteres. Faz em segundos o que a leitura não pega: um protocolo real tinha 75 termos redundantes em 356 e 22 termos em duas facetas ao mesmo tempo, nenhum deles visível a olho.
+
+Rodar o mesmo script sobre o resultado, ao fim, e comparar as duas saídas. É o que transforma afirmação em medida.
+
+### 3. Aplicar os onze critérios
+
+Na ordem das quatro ordens abaixo. Os de forma primeiro, porque liberam espaço; os de validação por último, porque dependem dos demais.
+
+### 4. Conferir contra o conjunto-semente, termo a termo
+
+Montar tabela com uma linha por semente e uma coluna por faceta, anotando **qual termo ancora cada faceta naquela semente**, sobre título, resumo e palavras-chave publicados. É o teste que revela falha de sensibilidade real: num caso, uma semente dependia exclusivamente de `pedagog*` para a âncora de domínio, e esse termo estava apenas numa faceta que não compõe a expressão executada.
+
+Se o protocolo propuser expressão alternativa ou contingência, rodar o mesmo teste contra ela e **relatar a perda em número de sementes**, não em impressão.
+
+### 5. Declarar a adaptação por base
+
+Sem código de campo declarado por base, a busca não é reprodutível, e a omissão é comum. Produzir tabela com: campo e sintaxe da expressão por base, filtros de interface, e particularidades verificadas. Ver *Fatos de sintaxe por base*.
+
+### 6. Registrar as emendas
+
+Uma linha por alteração, com quatro colunas: **emenda, razão, efeito esperado e risco**. A coluna de risco não é opcional: emenda sem custo declarado não é auditável, e é ela que se defende em banca. Toda alteração de protocolo é emenda e precisa constar do relato.
+
+### 7. Separar o que não se resolve em gabinete
+
+Listar as pendências de verificação na execução, com o que fazer em cada desfecho. Nunca afirmar comportamento de interface que não se confirmou. Se a documentação pública de uma base não disser o que se precisa saber, dizer isso e prescrever teste-piloto — não presumir.
+
+## Os onze critérios
+
+### Forma — como escrever o que já se queria dizer
+
+**1. Não subsunção.** Termo cujo recall esteja contido no de outro da mesma string não se repete nela. `ontology` já recupera `domain ontology`, `upper ontology` e `ontology design pattern`; `education` já recupera `higher education` e `distance education`. Registrar o subsumido na tabela e tirá-lo da string.
+
+**2. Separação entre inventário conceitual e expressão executável.** A tabela de controle terminológico registra o espaço conceitual completo, subsumidos inclusive, porque é dela que se defende a cobertura. A string é artefato operacional e segue economia própria. Confundir os dois produz strings de 90 operadores que recuperam o que 45 recuperariam.
+
+**3. Truncamento sobre enumeração, com variante ortográfica explícita.** Truncar o radical no ponto que une as três línguas quando possível: `educa*` absorve education, educational, educación, educativo, educacional e educação. Enumerar à parte os pares que o truncamento não une: `organization`/`organisation`, `modeling`/`modelling`, `thesaur*`/`tesaur*`.
+
+### Arquitetura — o que cada faceta pode conter
+
+**4. Atribuição única.** Cada termo pertence a uma faceta só. Em protocolo que calcula pertinência localmente, termo em duas facetas faz uma implicar a outra e a expressão deixa de discriminar: uma "sonda de precisão máxima" passa a medir a si mesma. A regra incide sobre o termo, não sobre a cadeia de caracteres — que `"educational setting"` contenha `educa` não a torna termo da faceta de domínio.
+
+**5. Distinção entre termo de recuperação e variável de extração.** Nível de ensino, modalidade, instituição, população-alvo, recurso disponível não são termos de busca: são coisas que se extraem do estudo incluído. Todo documento do recorte as satisfaz trivialmente, logo não discriminam. Migram para o instrumento de fichamento.
+
+**6. Correspondência faceta ↔ questão.** Cada questão específica precisa de vocabulário que a sustente. Conferir uma a uma. Questões sobre avaliação, reúso, manutenção, granularidade ou grau de formalização costumam ficar sem faceta alguma. A solução é **faceta auxiliar de uso exclusivamente local**, que não entra em expressão executada: ordena a fila da leitura integral e alimenta a extração, sem alterar o conjunto recuperado — e por isso pode conter termos ambíguos sem custo, já que nunca filtra nada.
+
+### Rendimento — o que cada termo faz na prática
+
+**7. Polissemia sob a conjunção.** O critério central, enunciado acima. Testar mentalmente cada termo contra as outras âncoras antes de mantê-lo.
+
+**8. Poder discriminante.** Dois modos de falha opostos. O termo quase universal — `practice`, `prática`, `práctica` isolados, presentes em todo texto acadêmico — satisfaz tudo. O de rendimento esperado nulo — `"available resource"`, `"contextualização"` — não acrescenta nada. Ambos destroem a informação da faceta.
+
+**9. Estratificação por campo.** Termo de alta ambiguidade fora do domínio vai para título e palavras-chave; termo específico vai para o campo tópico inteiro. A hipótese é empírica: quem faz um modelo de domínio ou uma taxonomia declara-o no título ou nas palavras-chave, e a ocorrência apenas no corpo do resumo é menção incidental. Replicar a mesma estratificação no cálculo local, se houver, ou os dois deixam de coincidir.
+
+### Validação — como se sabe que ficou certo
+
+**10. Simetria multilíngue.** Todo conceito presente em todas as línguas do protocolo, ou a ausência declarada. Conferir coluna por coluna: um protocolo real tinha "taxonomia" em português e "faceted taxonomy" em inglês, sem "taxonomy" nem "taxonomía" — falha que nenhuma leitura corrida pega.
+
+**11. Confronto com instrumento de controle, e proveniência quando não há.** Validar descritores contra tesauro da área, preferindo os multilíngues quando o protocolo tem mais de uma língua. Onde a validação estiver dispensada por serem termos livres, exigir **registro de origem** de cada um: semente, busca-piloto ou literatura de referência. Dispensar descritor autorizado é legítimo; dispensar rastreabilidade não.
+
+Nenhum dos onze é conclusivo antes da execução. Por isso prescrever sempre **auditoria de rendimento por termo** a posteriori: quantos registros cada termo recuperou sozinho e quantos deles sobreviveram à primeira filtragem. Termo de rendimento único nulo e volume alto é candidato à poda; termo de rendimento único positivo fica, mesmo com volume alto. A poda só se efetiva por emenda registrada e com reexecução.
+
+## Fatos de sintaxe por base
+
+Verificados em documentação oficial. Reconferir quando a interface mudar.
+
+**Web of Science Core Collection.** Aspas desligam a lematização e o localizador interno de sinônimos; curingas também desligam a lematização, de modo que `color*` recupera color e colors, mas não colour — daí a enumeração explícita dos pares ortográficos. Não há limite de operadores booleanos numa consulta, **exceto na busca em All Fields (AF), restrita a 49** — razão para nunca usar AF em revisão sistemática. Campos: `TS=` tópico, `TI=` título, `AK=` palavras-chave de autor, `KP=` KeyWords Plus. Executar por histórico de busca, combinando conjuntos numerados.
+
+**Scopus.** Aspas duplas formam locução aproximada, que já inclui plurais e admite truncamento dentro dela; chaves formam locução exata, que não admite truncamento. A precedência processa OR antes de AND, o que torna **obrigatório o parêntese em torno de cada faceta**. Campos: `TITLE-ABS-KEY`, `TITLE`, `KEY`. Filtros: `PUBYEAR >`, `LIMIT-TO(LANGUAGE,...)`, `DOCTYPE`.
+
+**ERIC, interface livre eric.ed.gov.** A derivação automática de radicais está desativada, de modo que a correspondência exata dispensa aspas, e o curinga asterisco exige no mínimo três letras antes dele. Há API pública para exportação reprodutível; conferir os parâmetros na documentação vigente.
+
+**Bases monodomínio — inversão de âncora.** Em base integralmente dedicada a um domínio, exigir a faceta correspondente a esse domínio não acrescenta precisão e só subtrai sensibilidade, ao excluir o registro que não repete no resumo um vocabulário que a base pressupõe. Executar nelas a outra âncora isolada. A heterogeneidade entre bases não compromete a comparabilidade **desde que todas as facetas sejam reaplicadas uniformemente a todos os registros exportados no cálculo local** — a base decide o que é recuperado, o cálculo local decide o que é pertinente a cada expressão. É essa separação que autoriza a adaptação.
+
+**Bases regionais e de nicho.** Capacidade booleana em geral não documentada. Prescrever teste-piloto de sintaxe antes da execução definitiva: parênteses aninhados, aspas, truncamento e comprimento máximo da consulta. Não suportada a expressão completa, decompor em consultas curtas e unir no gerenciador de referências, registrando cada consulta e cada retorno.
+
+**Sempre verificar na execução, nunca presumir:** aceitação de curinga dentro de locução entre aspas; limite de caracteres da caixa de busca; e **comportamento quanto a diacríticos** — não presumir que `ontolog*` recupere `ontología`, nem que `prática` e `pratica` sejam equivalentes. Testar com semente conhecida em cada língua.
+
+## Regras duras
+
+- **Nunca retirar termo da expressão executada para reduzir volume.** É a forma mais comum de perder sensibilidade sem registro. Ordem para tratar excesso: filtros de elegibilidade na interface; refinamento reversível por categoria temática da base, com contagem antes e depois; expressão de contingência mais restrita, com revalidação pelo conjunto-semente e reversão obrigatória em caso de perda. Não há quarto passo.
+- **Termo que resgata semente sozinho fica**, qualquer que seja o volume que traga.
+- **Termos de desfecho não entram na string.** São escassos em título e resumo e derrubam a sensibilidade sem ganho de precisão. Vão para faceta auxiliar local e para a extração.
+- **Declarar teto de triagem com a aritmética que o sustenta** quando o protocolo depender de triagem humana: registros por revisor, segundos por registro, horas resultantes. Teto sem conta é arbítrio; conta sem teto é omissão. Aferir o tempo por registro na rodada-piloto e substituir o estimado pelo observado.
+- **Expansão terminológica assistida por IA exige validação humana** contra os instrumentos de controle declarados, antes de entrar no protocolo. E IA não decide inclusão nem exclusão em filtragem alguma.
+- **Limiar de recuperação do conjunho-semente informa quando revisar, não o que revisar.** Exigir diagnóstico individual de cada semente perdida, mesmo que o limiar global seja atingido: qual faceta falhou, qual termo a teria recuperado, se é caso isolado ou classe de termos.
+- **Conjunto-semente usado para construir as strings é medida não independente.** Prescrever ampliação por backward e forward search de uma geração e retenção de parte dos estudos fora da construção, para aferição. Relatar as duas medidas em separado.
+
+## Entregáveis
+
+1. Protocolo revisado, **no mesmo layout do original** — mesmos títulos de seção, mesma ordem, mesmo formato de tabela. Conferir por comparação automática dos títulos, não a olho.
+2. Tabela de emendas com razão, efeito esperado e risco.
+3. Saída do script antes e depois.
+4. Lista de pendências de verificação na execução.
+
+Perguntar antes de produzir só se a arquitetura do protocolo for ambígua quanto a **qual expressão é executada em base**, porque disso depende todo o resto. As demais dúvidas resolvem-se propondo com a justificativa à vista e marcando o ponto para decisão.
+
+Se for pedida versão enxuta, retirar a camada de justificativa — preâmbulo de versão, marcadores de alteração, linhas explicativas acrescentadas às tabelas, tabelas comparativas, teste de mesa e anexo de emendas — e preservar as otimizações no texto. Dizer depois, na resposta, o que a fidelidade ao layout original obrigou a descartar.
+
+## Script de auditoria
+
+```python
+#!/usr/bin/env python3
+"""Audita strings de busca facetadas em protocolo de revisao sistematica.
+
+Uso:  python3 -I auditar_strings.py <protocolo.md>
+
+Espera tabelas markdown cujas linhas sejam  | STRn | FCTn | (string) |
+com coluna intermediaria opcional. Reporta: redundancia por subsuncao,
+duplicacao entre facetas, desbalanceamento sintatico e extensao.
+Serve ao diagnostico do protocolo de entrada e a verificacao do de saida.
+"""
+import re
+import sys
+import itertools
+import collections
+
+
+def extrair(txt):
+    pat = r'\|\s*\**(STR\d[ab]?)\**\s*\|\s*\**(FCT\d)\**\s*\|(?:[^|()]*\|)?\s*(\(.*?\))\s*\|'
+    out = {}
+    for sid, fct, body in re.findall(pat, txt, re.S):
+        out[sid] = (fct, body.replace('\\*', '*').replace('\\_', '_'))
+    return out
+
+
+def tokenizar(body):
+    corpo = body[1:-1]
+    frases = re.findall(r'"([^"]+)"', corpo)
+    resto = re.sub(r'"[^"]+"', ' ', corpo)
+    soltos = [w.strip('()') for w in re.split(r'\s+OR\s+|\s+', resto)
+              if w.strip('()') and w != 'OR']
+    return [t.lower() for t in frases + soltos]
+
+
+def subsumidos(termos):
+    pares = []
+    for a in termos:
+        if a.endswith('*'):
+            pref = a[:-1]
+            pares += [(a, b) for b in termos if b != a and b.startswith(pref)]
+        else:
+            pares += [(a, b) for b in termos
+                      if a != b and (b.startswith(a + ' ') or b.endswith(' ' + a)
+                                     or f' {a} ' in b)]
+    return sorted(set(pares))
+
+
+def main():
+    if len(sys.argv) < 2:
+        sys.exit(__doc__)
+    txt = open(sys.argv[1], encoding='utf-8').read()
+    strs = extrair(txt)
+    if not strs:
+        sys.exit('Nenhuma string encontrada. Confira o formato das linhas da tabela.')
+
+    falhas = 0
+    tok = {sid: tokenizar(b) for sid, (f, b) in strs.items()}
+
+    print('== sintaxe e extensao ==')
+    for sid, (fct, body) in strs.items():
+        par = body.count('(') - body.count(')')
+        aspas = body.count('"') % 2
+        anom = re.findall(r'OR\s+OR|\(\s*OR|OR\s*\)|""|\s+AND\s+', body)
+        c = collections.Counter(tok[sid])
+        dup = [t for t, n in c.items() if n > 1]
+        ok = par == 0 and aspas == 0 and not anom and not dup
+        falhas += 0 if ok else 1
+        print(f'  {sid} ({fct}): {len(tok[sid])} termos, {len(set(tok[sid]))} unicos, '
+              f'{len(body)} chars, parenteses={par}, aspas_impares={aspas}')
+        if anom:
+            print(f'      anomalias: {anom}')
+        if dup:
+            print(f'      duplicatas internas: {dup}')
+
+    facetas = collections.defaultdict(set)
+    for sid, (fct, _) in strs.items():
+        facetas[fct] |= set(tok[sid])
+
+    print('\n== duplicacao entre facetas ==')
+    viol = 0
+    for a, b in itertools.combinations(sorted(facetas), 2):
+        inter = sorted(facetas[a] & facetas[b])
+        if inter:
+            viol += len(inter)
+            print(f'  {a} ^ {b} ({len(inter)}): {inter}')
+    print('  nenhuma' if not viol else f'  TOTAL: {viol} termos em mais de uma faceta')
+    falhas += 1 if viol else 0
+
+    print('\n== redundancia por subsuncao ==')
+    tot = 0
+    for fct in sorted(facetas):
+        pares = subsumidos(facetas[fct])
+        tot += len(pares)
+        if pares:
+            print(f'  {fct}: {len(pares)} pares')
+            for a, b in pares:
+                print(f'      "{b}" ja recuperado por "{a}"')
+        else:
+            print(f'  {fct}: nenhum')
+    print(f'  TOTAL: {tot} termos redundantes de {sum(len(t) for t in tok.values())}')
+    falhas += 1 if tot else 0
+
+    exec_chars = sum(len(b) for sid, (f, b) in strs.items() if f in ('FCT1', 'FCT2'))
+    print(f'\n== expressao executada (FCT1 + FCT2): ~{exec_chars} caracteres ==')
+    print('\nRESULTADO:', 'limpo' if falhas == 0 else f'{falhas} categorias com achados')
+
+
+if __name__ == '__main__':
+    main()
+```
+
+Ajustar os prefixos `STR` e `FCT` e o par de facetas da expressão executada à nomenclatura do protocolo em mãos. Resíduo de subsunção pode ser exceção deliberada — locução hifenizada cuja tokenização varia por base, por exemplo — e nesse caso declara-se a exceção em vez de corrigi-la.

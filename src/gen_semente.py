@@ -3,22 +3,24 @@
 """Gera o instrumento do teste de aderência a partir do protocolo.
 
 Entradas
-  data/strings.json    DERIVADO do protocolo (termos executados das quatro facetas)
-  data/sementes.json   MISTO — referências e mapa por base derivados do protocolo, com
-                       os metadados de conferência autorais preservados por --gerar
+  docs/03_protocolo_estrategia_pesquisa.md   referências, mapa por base e facetas
+  data/sementes.json   metadados de conferência autorais, ligados por DOI ou título
+
+As referências vêm do protocolo, lido por src/protocolo.py; `sementes.json` guarda só o
+que é autoral — verificação, escopo, tipo, alinhamento, nota. A ligação é feita por DOI
+ou título, de modo que o rótulo `id` pode mudar sem perder o metadado.
 
 Saídas em data/saida/semente/
   Conjunto_Semente.md     guia de execução do teste
   semente_aderencia.csv   planilha a preencher durante a execução
 
-Semente marcada com no_protocolo=false — retirada do documento sem ser apagada — fica
-fora do instrumento e é reportada, para decisão.
+Entrada de `sementes.json` sem correspondência no protocolo é reportada, para decisão.
 
 Uso
-  python3 src/protocolo.py --gerar
   python3 src/gen_semente.py
 """
 import csv
+import json
 import pathlib
 import sys
 
@@ -29,7 +31,6 @@ RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data"
 SAIDA = DATA / "saida" / "semente"
 SEMENTES = DATA / "sementes.json"
-STRINGS = DATA / "strings.json"
 
 BASES = ["WoS", "Scopus", "ERIC", "BRAPCI"]
 FACETAS = ["FCT1", "FCT2", "FCT3", "FCT4"]
@@ -55,27 +56,34 @@ COLS = [
 
 
 def carrega():
-    if not SEMENTES.exists():
-        raise SystemExit("sementes.json não encontrado: rode  python3 src/protocolo.py --gerar")
-    facetas = protocolo.carrega(STRINGS)
-    dados = protocolo.carrega(SEMENTES)
+    d = protocolo.analisa()
+    facetas = {"facetas": [{"faceta": fid, "termos": v["termos"]}
+                           for fid, v in d["strings"].items()]}
+    meta = {}
+    if SEMENTES.exists():
+        for e in json.loads(SEMENTES.read_text(encoding="utf-8")).get("estudos", []):
+            if e.get("ligacao"):
+                meta[e["ligacao"]] = e
+    else:
+        raise SystemExit("data/sementes.json não encontrado: é onde vive o metadado autoral "
+                         "das sementes")
 
     estudos = []
-    for ref in dados["estudos"]:
-        if ref.get("no_protocolo") is False:
-            continue
+    for ref in d["sementes"]:
         e = dict(ref)
-        e["_meta"] = any(str(ref.get(c) or "").strip() for c in protocolo.CAMPOS_AUTORAIS)
+        # A ligação é por DOI ou título: o `id` é rótulo e pode mudar sem perder o metadado.
+        m = meta.get(protocolo.ligacao_semente(ref), {})
+        for c in protocolo.CAMPOS_AUTORAIS:
+            e[c] = m.get(c, "")
+        e["_meta"] = any(str(e.get(c) or "").strip() for c in protocolo.CAMPOS_AUTORAIS)
         estudos.append(e)
 
-    orfas = [e for e in dados["estudos"] if e.get("no_protocolo") is False]
+    atuais = {protocolo.ligacao_semente(s) for s in d["sementes"]}
+    orfas = [k for k in meta if k not in atuais]
     if orfas:
-        print(f"AVISO: {len(orfas)} semente(s) fora do protocolo em sementes.json, "
-              f"fora do instrumento:")
-        for e in orfas:
-            print(f"  {e.get('n')}. {e.get('chave', '')} — decidir: remover com registro "
-                  f"ou reincluir no protocolo")
-    return facetas, dados, estudos
+        print(f"AVISO: {len(orfas)} entrada(s) de sementes.json sem semente no protocolo: "
+              f"{len(orfas)} — decidir: remover com registro ou reincluir no protocolo")
+    return facetas, d, estudos
 
 
 # ------------------------------------------------------------------------ ensaio
@@ -170,15 +178,18 @@ def md(facetas, sementes, estudos):
       "palavras-chave, de modo que a semente sem termo no título ainda pode ser "
       "recuperada pelo resumo.\n")
     A("| id | " + " | ".join(f"{CORES[f]} {f}" for f in FACETAS) +
-      " | EB4 (FCT1+FCT2) pelo título |")
+      " | EB4 pelo título (duas âncoras e uma temática) |")
     A("| :---: | " + " | ".join(":---" for _ in FACETAS) + " | :--- |")
     for e, pf in ens:
         cels = ["`" + "`, `".join(pf[f]) + "`" if pf[f] else "—" for f in FACETAS]
-        e4 = "**sim**" if pf.get("FCT1") and pf.get("FCT2") else "**não**"
+        e4 = ("**sim**" if pf.get("FCT1") and pf.get("FCT2")
+              and (pf.get("FCT3") or pf.get("FCT4")) else "**não**")
         A(f"| {e['id']} | " + " | ".join(cels) + f" | {e4} |")
     A("")
-    n_e4 = sum(1 for _, pf in ens if pf.get("FCT1") and pf.get("FCT2"))
-    A(f"**{n_e4} de {len(estudos)} satisfazem as duas âncoras pelo título.** Nas demais, a "
+    n_e4 = sum(1 for _, pf in ens if pf.get("FCT1") and pf.get("FCT2")
+               and (pf.get("FCT3") or pf.get("FCT4")))
+    A(f"**{n_e4} de {len(estudos)} satisfazem as duas âncoras e uma faceta temática pelo "
+      "título.** Nas demais, a "
       "recuperação depende do resumo — e é nelas que a etapa 2 do procedimento exige "
       "cuidado: ausência na exportação pode ser falha da busca ou ausência do termo em "
       "todos os campos indexados.\n")
@@ -257,7 +268,7 @@ def main():
     alinhadas = sum(1 for e in estudos
                     if e.get("alinhamento")
                     and not str(e["alinhamento"]).startswith(("A CONFERIR", "a conferir")))
-    print(f"metadados: {com_entrada}/{len(estudos)} com entrada em sementes.json; "
+    print(f"metadados: {com_entrada}/{len(estudos)} com campo autoral preenchido; "
           f"{confirmadas} com verificação confirmada; {alinhadas} com alinhamento conferido")
     pendentes = _pendentes(estudos)
     if pendentes:

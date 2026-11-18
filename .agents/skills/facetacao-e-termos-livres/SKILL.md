@@ -21,9 +21,10 @@ Nesta revisão são quatro, e a sua natureza decide a arquitetura de busca:
 | 4 | Fatores situacionais | temática |
 
 **Âncora é obrigatória em toda expressão.** As temáticas compõem as demais. Daí a
-arquitetura de contenção `E1 ⊆ E2 ⊆ E4` e `E1 ⊆ E3 ⊆ E4` — exigir mais facetas
-restringe. "Geral" nomeia a composição, não o alcance: a expressão das quatro facetas
-é a **mais restritiva**, e serve de sonda de precisão, nunca de critério de exclusão.
+arquitetura de contenção `EB1 ⊆ EB2 ⊆ EB4`, `EB1 ⊆ EB3 ⊆ EB4` e `EB4 ⊆ EB5` — exigir
+mais facetas restringe. "Geral" nomeia a composição, não o alcance: a expressão das
+quatro facetas é a **mais restritiva**, e serve de sonda de precisão, nunca de critério
+de exclusão.
 
 ## 2. Três camadas, três idiomas
 

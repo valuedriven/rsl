@@ -19,8 +19,8 @@ E uma advertência que vale para as três, e que este projeto aprendeu da pior m
 A arquitetura de contenção é consequência da composição das facetas:
 
 ```
-E1 ⊆ E2 ⊆ E4     E1 ⊆ E3 ⊆ E4     E1 = E2 ∩ E3
-|E2| ≤ |E4|      |E3| ≤ |E4|      |E1| ≤ min(|E2|, |E3|)
+EB1 ⊆ EB2 ⊆ EB4     EB1 ⊆ EB3 ⊆ EB4     EB4 = EB2 ∪ EB3     EB4 ⊂ EB5
+|EB1| ≤ min(|EB2|, |EB3|) ≤ |EB4| ≤ |EB5|
 ```
 
 **Limiar:** as desigualdades verificam-se. **Consequência:** reexecução na base e
@@ -31,8 +31,8 @@ Quatro regras de diagnóstico:
 - **Incoerência não se explica por hipótese.** Perguntar ao pesquisador o que foi
   efectivamente submetido, com o texto da consulta. Hipóteses operacionais inventadas
   custaram uma rodada inteira; quatro respostas dele eliminaram todas.
-- **O defeito costuma estar na ficha, não no motor.** `E2 > E4` veio de operador de
-  proximidade e filtro de tipo de documento aplicados a E4 e não a E2 — assimetria
+- **O defeito costuma estar na ficha, não no motor.** `EB2 > EB4` veio de operador de
+  proximidade e filtro de tipo de documento aplicados a EB4 e não a EB2 — assimetria
   gerada por quem escreveu a ficha.
 - **Nunca afirmar o que uma execução não pode ter feito.** Um argumento de teoria dos
   conjuntos vale sob a premissa, **não medida**, de que o motor aplica o operador como
@@ -42,11 +42,13 @@ Quatro regras de diagnóstico:
 
 ## 2. Fidelidade da derivação
 
-E1, E2 e E3 têm a pertinência **calculada localmente** sobre os registros exportados.
+EB1 tem a pertinência **calculada localmente** sobre os registros exportados; EB2 e EB3
+se executam apenas no teste de fidelidade, e EB5 é a sonda de sensibilidade.
 O teste afere se o cálculo reproduz a base.
 
-Procedimento: executar E2 e E3 **directamente** na base (estado 2 de execução, o
-experimental), e comparar com a contagem derivada localmente dos mesmos registros.
+Procedimento: executar EB2 e EB3 **directamente** na base (estado 2 de execução, o
+experimental), e comparar com a contagem derivada localmente dos mesmos registros. A
+sonda de EB5 se mede à parte, por `--sensibilidade`, e não se confunde com fidelidade.
 
 **Limiar: coincidência exacta das contagens.** Não aproximada — a derivação é
 determinística e qualquer diferença denuncia divergência entre o que a base entende e

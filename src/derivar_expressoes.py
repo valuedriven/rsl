@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Derivação local das expressões não executadas (EB4, de cobertura, é a executada) — RS Banyan, Módulo 3, Etapa 2.
+Derivação local das expressões não executadas (EB4 é a executada; EB5 é a sonda) — RS Banyan, Módulo 3, Etapa 2.
 
-Emenda ao protocolo de 06/11/2026. Todas as quatro expressões começam por strings
-1 + 2 e apenas acrescentam facetas: EB1, EB2 e EB3 são subconjuntos estritos de EB4, e a
-união das quatro é exatamente EB4. Executa-se EB4, a de cobertura, uma vez por base,
-exporta-se o resultado, e a pertinência de cada registro às demais é calculada aqui.
+Protocolo v2. Cinco expressões, montadas como AND de grupos de facetas, em que um grupo
+pode ser uma disjunção: EB1 = 1+2+3+4; EB2 = 1+2+3; EB3 = 1+2+4; EB4 = 1+2+(3 OR 4);
+EB5 = 1+2. Daí EB4 = EB2 ∪ EB3, e EB5 ⊃ EB4. Executa-se EB4, a de cobertura, uma vez
+por base; EB5 roda uma única vez como sonda de sensibilidade. A pertinência de cada
+registro às demais é calculada aqui.
 
 O que este script NÃO faz: não exclui registro algum, não decide inclusão e não
 substitui o teste de fidelidade. As contagens que produz são DERIVADAS e devem ser
 declaradas como tal no IO 2 e no relatório.
 
 Entradas
+  docs/03_protocolo_estrategia_pesquisa.md   vocabulário, composição e recorte (lido por src/protocolo.py)
   data/consultas.json      registro das execuções, escrito por --registrar
-  data/strings.json        DERIVADO do protocolo: termos, strings e expressões
-  data/criterios.json      DERIVADO do protocolo: recorte temporal
-  data/sementes.json       DERIVADO do protocolo: conjunto-semente
+  data/sementes.json       metadados autorais das sementes, ligados por DOI ou título
   <arquivo> de cada consulta registrada, intacto, onde estiver
 
-Nenhuma entrada é digitada à mão: o vocabulário e as expressões vêm do documento do
-protocolo por src/protocolo.py --gerar, e o script recusa rodar com derivado defasado.
+O protocolo é lido diretamente: não há derivado intermediário a manter em dia.
 
 Saídas em data/saida/derivacao/
   registros.csv        um registro por linha, com as facetas e expressões atingidas,
@@ -28,6 +27,7 @@ Saídas em data/saida/derivacao/
   io2_contagens.csv    base x expressão, para alimentar o IO 2
   ordem_triagem.csv    a fila da 1ª filtragem já ordenada (Medida 4)
   fidelidade_EB<n>.csv as divergências do teste, item a item
+  sensibilidade_<base>.csv  a fração de EB5 fora de EB4, com a amostra a classificar
 
 Deduplicação: dentro da mesma base, registro com o mesmo DOI — ou, na falta dele, o
 mesmo título normalizado — é marcado em `duplicata_de` com o identificador da primeira
@@ -36,15 +36,17 @@ bruto sai ao lado. É o que faz a exportação da ERIC em vários arquivos não 
 vezes o mesmo registro.
 
 Uso
-  python3 src/protocolo.py --gerar                    # antes de tudo, e após alterar o protocolo
   python3 src/derivar_expressoes.py --registrar wos EB4 data/execucoes/wos/e4.ris --retorno 18432
+  python3 src/derivar_expressoes.py --registrar wos EB5 data/execucoes/wos/e5_sonda.ris --retorno 22014
   python3 src/derivar_expressoes.py --derivar
   python3 src/derivar_expressoes.py --aderencia
   python3 src/derivar_expressoes.py --fidelidade EB2 data/execucoes/wos/e2_conferencia.ris
+  python3 src/derivar_expressoes.py --sensibilidade wos
 """
 
 import argparse
 import csv
+import itertools
 import datetime
 import json
 import pathlib
@@ -57,20 +59,27 @@ import protocolo                                                    # noqa: E402
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data"
-STRINGS_JSON = DATA / "strings.json"
-CRITERIOS_JSON = DATA / "criterios.json"
-SEMENTES_JSON = DATA / "sementes.json"
 CONSULTAS_JSON = DATA / "consultas.json"
 SAIDA = DATA / "saida" / "derivacao"
 
-_STRINGS = protocolo.carrega(STRINGS_JSON)
-_CRITERIOS = protocolo.carrega(CRITERIOS_JSON)
-_FACETAS = protocolo.carrega(protocolo.ARQ["facetas"])
-# A composição do protocolo vem em strings (STRn); a derivação casa facetas (FCTn).
-EXPRESSOES = {e: [f"FCT{s[3:]}" for s in comps]
-              for e, comps in _STRINGS["expressoes"].items()}
-SUPERCONJUNTO = _STRINGS["executada"]
-ANCORAS = {f["id"] for f in _FACETAS["facetas"] if f.get("ancora")}
+
+def _mostra(caminho):
+    """Caminho relativo ao repositório quando possível; absoluto quando não."""
+    try:
+        return str(pathlib.Path(caminho).relative_to(RAIZ))
+    except ValueError:
+        return str(caminho)
+
+# O documento é a única fonte: vocabulário, composição e recorte vêm de lá.
+_D = protocolo.analisa()
+_STR = _D["strings"]
+FACETA_DE = {v["id"]: fid for fid, v in _STR.items()}
+# Composição em grupos: cada EB é um AND de grupos; cada grupo é uma disjunção de facetas.
+GRUPOS = {eb: [[FACETA_DE[s] for s in grupo] for grupo in grupos]
+          for eb, grupos in _D["expressoes"].items()}
+SUPERCONJUNTO = _D["executada"]
+SONDA = _D["sonda"]
+ANCORAS = {f["id"] for f in _D["facetas"] if f.get("ancora")}
 
 # Recorte temporal do protocolo, aplicado como CONFERÊNCIA em todas as bases. Na
 # Web of Science, na Scopus e na BRAPCI o filtro de ano vai na própria consulta;
@@ -80,10 +89,11 @@ ANCORAS = {f["id"] for f in _FACETAS["facetas"] if f.get("ancora")}
 # o filtro declararam e o que a base devolveu, e isso se investiga.
 # Registro sem ano legível NÃO é descartado: fica com ano = 0 e sai marcado,
 # porque descartar por ausência de metadado seria corte cego.
-ANO_MIN = int(_CRITERIOS["recorte"]["ano_min"])
+ANO_MIN = int(_D["recorte"]["ano_min"])
 # O protocolo diz "de 2017 em diante", sem teto: o limite superior é o ano corrente.
-ANO_MAX = int(_CRITERIOS["recorte"]["ano_max"] or datetime.date.today().year)
+ANO_MAX = int(_D["recorte"]["ano_max"] or datetime.date.today().year)
 LIMITE_DIVERGENCIA = 0.10     # 10% — acima disso o método é reprovado
+LIMITE_SENSIBILIDADE = (0.05, 0.15)   # faixa da fração ELEGÍVEL entre os perdidos
 
 STATUS_VALIDOS = ("valida", "divergente_justificada")
 BASE_CANONICA = {"wos": "WoS", "scopus": "Scopus", "eric": "ERIC", "brapci": "BRAPCI"}
@@ -114,20 +124,18 @@ def padrao(termo):
 
 
 def carrega_facetas():
-    """Facetas e padrões de casamento, da lista EXECUTADA em strings.json."""
+    """Facetas e padrões de casamento, da lista executada de cada faceta no protocolo."""
     facetas = {}
-    for f in _STRINGS["facetas"]:
+    for fid, v in _STR.items():
         vistos, limpos = set(), []
-        for t in f["termos"]:
+        for t in v["termos"]:
             k = t.lower()
             if k not in vistos:
                 vistos.add(k)
                 limpos.append(t)
-        facetas[f["faceta"]] = {"nome": "", "termos": limpos,
-                                "padroes": [padrao(t) for t in limpos]}
-    for f in _FACETAS["facetas"]:
-        if f["id"] in facetas:
-            facetas[f["id"]]["nome"] = f["nome"]
+        nome = next((f["nome"] for f in _D["facetas"] if f["id"] == fid), "")
+        facetas[fid] = {"nome": nome, "termos": limpos,
+                        "padroes": [padrao(t) for t in limpos]}
     return facetas
 
 
@@ -250,13 +258,86 @@ def facetas_atingidas(reg, facetas):
     return {n for n, f in facetas.items() if any(p.search(alvo) for p in f["padroes"])}
 
 
+def satisfaz(ident, fac):
+    """Pertinência a uma expressão: todo grupo satisfeito, cada grupo por uma faceta."""
+    return all(any(f in fac for f in grupo) for grupo in GRUPOS[ident])
+
+
 def expressoes_de(fac):
-    return [n for n, exig in EXPRESSOES.items() if set(exig) <= fac]
+    """Expressões do corpus a que o registro pertence — a sonda fica de fora.
+
+    EB5 não compõe o corpus e só se mede contra a exportação própria; listá-la aqui diria
+    que todo registro de EB4 pertence a EB5, o que é verdade e não informa nada.
+    """
+    return [n for n in GRUPOS if n != SONDA and satisfaz(n, fac)]
+
+
+def _derivaveis():
+    """Expressões cujo conjunto está contido na executada, provado sobre as 16 combinações.
+
+    EB5 é superconjunto de EB4: a pertinência a ela NÃO se calcula sobre a exportação da
+    de cobertura, porque os registros que só EB5 recupera não estão nesse arquivo. Ela
+    entra pela sonda, com execução própria, e por isso fica fora desta lista.
+    """
+    todas = sorted(set(FACETA_DE.values()))
+    conjuntos = {eb: set() for eb in GRUPOS}
+    for r in range(len(todas) + 1):
+        for combo in itertools.combinations(todas, r):
+            fac = set(combo)
+            for eb in GRUPOS:
+                if satisfaz(eb, fac):
+                    conjuntos[eb].add(frozenset(combo))
+    alvo = conjuntos[SUPERCONJUNTO]
+    return {eb for eb, s in conjuntos.items() if eb != SUPERCONJUNTO and s <= alvo}
+
+
+DERIVAVEIS = _derivaveis()
+
+
+def _prova_da_composicao():
+    """Confere a álgebra das expressões sobre as 16 combinações de faceta.
+
+    A prova existe porque o caso degenerado passa em silêncio: com a lista de facetas
+    errada, as 16 combinações dão todas falsas, `EB4 = EB2 ∪ EB3` vale trivialmente e o
+    erro só aparece quando a busca roda. Por isso toda expressão precisa ser satisfeita
+    por ao menos uma combinação, além das contenções.
+    """
+    facetas = sorted(set(FACETA_DE.values()))
+    combos = [set(c) for r in range(len(facetas) + 1)
+              for c in itertools.combinations(facetas, r)]
+    problemas = []
+    if {"EB1", "EB2", "EB3", "EB4", "EB5"} - set(GRUPOS):
+        return [f"expressões esperadas ausentes: {sorted(set(GRUPOS))}"]
+    for eb in GRUPOS:
+        if not any(satisfaz(eb, f) for f in combos):
+            problemas.append(f"{eb} não é satisfeita por nenhuma combinação de facetas — "
+                             f"mapeamento de faceta provavelmente errado")
+    for f in combos:
+        s = {eb: satisfaz(eb, f) for eb in GRUPOS}
+        if s["EB4"] != (s["EB2"] or s["EB3"]):
+            problemas.append(f"EB4 ≠ EB2 ∪ EB3 em {sorted(f)}")
+        if s["EB4"] and not s["EB5"]:
+            problemas.append(f"EB5 não contém EB4 em {sorted(f)}")
+        if s["EB1"] and not (s["EB2"] and s["EB3"]):
+            problemas.append(f"EB1 não está contida em EB2 e EB3 em {sorted(f)}")
+    if DERIVAVEIS != {"EB1", "EB2", "EB3"}:
+        problemas.append(f"deriváveis de EB4 deveriam ser EB1, EB2 e EB3, não "
+                         f"{sorted(DERIVAVEIS)}")
+    return problemas
+
+
+_PROBLEMAS_DA_COMPOSICAO = _prova_da_composicao()
+if _PROBLEMAS_DA_COMPOSICAO:
+    raise AssertionError("composição das expressões incoerente: "
+                         + "; ".join(_PROBLEMAS_DA_COMPOSICAO))
 
 
 def chave_ordem(reg, exprs):
-    """Medida 4: pertinência às expressões ricas primeiro, depois recência."""
-    riqueza = max((len(EXPRESSOES[e]) for e in exprs), default=0)
+    """Medida 4: pertinência às expressões ricas primeiro, depois recência.
+
+    Riqueza é o número de grupos de facetas exigidos — EB1 exige quatro, EB4 três.
+    É a ordem de leitura, não critério de elegibilidade."""
+    riqueza = max((len(GRUPOS[e]) for e in exprs), default=0)
     try:
         ano = int(re.search(r"(19|20)\d{2}", reg["ano"] or "").group(0))
     except Exception:
@@ -299,7 +380,7 @@ def _id_expressao(expr):
     if not s.isdigit():
         return None
     ident = f"EB{int(s)}"
-    return ident if ident in EXPRESSOES else None
+    return ident if ident in GRUPOS else None
 
 
 def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
@@ -317,7 +398,7 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
 
     id_expr = _id_expressao(expressao)
     if id_expr is None:
-        print(f"Expressão inválida: {expressao!r}. Use EB1 a EB4.")
+        print(f"Expressão inválida: {expressao!r}. Use EB1 a EB5.")
         return 1
 
     lidos = len(regs)
@@ -464,19 +545,12 @@ def aderencia():
     exportação. NÃO aplica o recorte temporal — o conjunto-semente valida o
     desenho da busca, não os critérios de elegibilidade.
 
-    As referências vêm do protocolo, por `src/protocolo.py --gerar`; a coluna
+    As referências vêm do protocolo, seção do conjunto-semente; a coluna
     `indexado` da planilha é o denominador e precisa ser preenchida à mão, base
     por base, buscando cada semente pelo título: ausência por falta de indexação
     não é falha da string.
     """
-    if not SEMENTES_JSON.exists():
-        raise SystemExit("data/sementes.json não encontrado: rode  python3 src/protocolo.py --gerar")
-    dados = protocolo.carrega(SEMENTES_JSON)
-    sementes = [e for e in dados["estudos"] if e.get("no_protocolo") is not False]
-    orfas = [e for e in dados["estudos"] if e.get("no_protocolo") is False]
-    if orfas:
-        print(f"AVISO: {len(orfas)} semente(s) fora do protocolo em sementes.json, "
-              f"ignorada(s) no teste.")
+    sementes = _D["sementes"]
     _, validas = carrega_consultas()
     regs = [r for r in identifica(coleta(validas)) if not r["duplicata_de"]]
     if not regs:
@@ -575,10 +649,19 @@ def derivar():
         w.writerow(["base", "expressao", "facetas_exigidas", "registros",
                     "registros_com_duplicatas", "procedencia"])
         for b in bases:
-            for n in sorted(EXPRESSOES):
-                w.writerow([b, n, "+".join(EXPRESSOES[n]),
-                            contagens.get((b, n), 0), brutas.get((b, n), 0),
-                            "EXECUTADA" if n == SUPERCONJUNTO else "DERIVADA"])
+            for n in sorted(GRUPOS):
+                composicao = "+".join(
+                    grupo[0] if len(grupo) == 1 else "(" + "|".join(grupo) + ")"
+                    for grupo in GRUPOS[n])
+                if n == SONDA:
+                    w.writerow([b, n, composicao, "", "",
+                                "SONDA — fora do corpus, executada à parte"])
+                elif n == SUPERCONJUNTO:
+                    w.writerow([b, n, composicao, contagens.get((b, n), 0),
+                                brutas.get((b, n), 0), "EXECUTADA"])
+                else:
+                    w.writerow([b, n, composicao, contagens.get((b, n), 0),
+                                brutas.get((b, n), 0), "DERIVADA"])
 
     with (SAIDA / "ordem_triagem.csv").open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh, delimiter=";")
@@ -589,7 +672,7 @@ def derivar():
                         " ".join(sorted(exprs)), r["titulo"], r["doi"]])
 
     print(f"\n{len(linhas)} registros processados, {len(unicos)} únicos.")
-    print(f"{SAIDA.relative_to(RAIZ)}/registros.csv, io2_contagens.csv e ordem_triagem.csv "
+    print(f"{_mostra(SAIDA)}/registros.csv, io2_contagens.csv e ordem_triagem.csv "
           f"gravados.")
     sem_ancora = sum(1 for r in unicos if not (ANCORAS <= por_registro[r["registro"]][0]))
     if sem_ancora:
@@ -612,7 +695,12 @@ def chave(reg):
 def fidelidade(expr, caminho):
     ident = _id_expressao(expr)
     if ident is None:
-        print(f"Expressão {expr!r} não existe. Use EB1 a EB4."); sys.exit(1)
+        print(f"Expressão {expr!r} não existe. Use EB1 a EB5."); sys.exit(1)
+    if ident == SONDA:
+        print(f"{SONDA} é a sonda de sensibilidade, não expressão de conferência: o conjunto "
+              f"dela é superconjunto de {SUPERCONJUNTO} e não se deriva da exportação da de "
+              f"cobertura. Use  --sensibilidade <base>.")
+        sys.exit(1)
     arq = pathlib.Path(caminho)
     if not arq.exists():
         print(f"Arquivo não encontrado: {arq}"); sys.exit(1)
@@ -628,7 +716,7 @@ def fidelidade(expr, caminho):
         if r["duplicata_de"]:
             continue
         fac = facetas_atingidas(r, facetas)
-        if set(EXPRESSOES[ident]) <= fac:
+        if satisfaz(ident, fac):
             derivado.add(chave(r))
 
     so_direto = direto - derivado
@@ -651,7 +739,7 @@ def fidelidade(expr, caminho):
             w.writerow([k, "só na execução direta"])
         for k in sorted(so_derivado):
             w.writerow([k, "só no conjunto derivado"])
-    print(f"  divergências listadas em {rel.relative_to(RAIZ)}")
+    print(f"  divergências listadas em {_mostra(rel)}")
     if div > LIMITE_DIVERGENCIA:
         print("\n  REPROVADO. A derivação não pode ser aceita: volte às execuções separadas "
               "por expressão e registre emenda ao protocolo.")
@@ -659,6 +747,113 @@ def fidelidade(expr, caminho):
     print("\n  APROVADO para esta expressão. Repita para a outra expressão de conferência "
           "antes de aceitar as contagens derivadas.")
     return 0
+
+
+# ------------------------------------------------------------------ sensibilidade
+def _registros_da_expressao(base, ident, validas):
+    """Chaves de deduplicação dos registros de uma expressão, numa base."""
+    consultas = [c for c in validas
+                 if c.get("base") == base and c.get("expressao") == ident]
+    if not consultas:
+        return None
+    chaves, registros = set(), []
+    for c in consultas:
+        caminho = _caminho_do_arquivo(c)
+        if not caminho.exists():
+            raise SystemExit(f"consulta {c.get('id')}: arquivo ausente {c.get('arquivo')}")
+        for r in le_arquivo(caminho):
+            k = chave_dedup(r)
+            if k not in chaves:
+                chaves.add(k)
+                registros.append(r)
+    return registros
+
+
+def sensibilidade(base=None):
+    """Fração de EB5 que EB4 não recupera — a sonda de sensibilidade do protocolo.
+
+    A perda é a diferença de conjuntos, chaveada por DOI ou título. O arquivo gerado
+    é a amostra a classificar à mão: a decisão do protocolo olha a fração ELEGÍVEL
+    entre os perdidos, não o tamanho da perda. Sem essa classificação, o número
+    impresso é limite superior do custo em recall, não estimativa dele.
+    """
+    _, validas = carrega_consultas()
+    existentes = sorted({c.get("base") for c in validas})
+    if base:
+        canonica = BASE_CANONICA.get(base.strip().lower(), base.strip())
+        if canonica not in existentes:
+            raise SystemExit(f"base {base!r} sem consulta registrada; registradas: "
+                             f"{', '.join(existentes) or 'nenhuma'}")
+        alvos = [canonica]
+    else:
+        alvos = existentes
+
+    SAIDA.mkdir(parents=True, exist_ok=True)
+    saida = 0
+    for b in alvos:
+        e4 = _registros_da_expressao(b, SUPERCONJUNTO, validas)
+        e5 = _registros_da_expressao(b, SONDA, validas)
+        if e4 is None or e5 is None:
+            falta = SUPERCONJUNTO if e4 is None else SONDA
+            print(f"{b}: sem {falta} registrada — a sonda exige {SUPERCONJUNTO} e {SONDA} "
+                  f"registradas na mesma base. Pulada.")
+            saida = 1
+            continue
+        chaves4 = {chave_dedup(r) for r in e4}
+        perdidos = [r for r in e5 if chave_dedup(r) not in chaves4]
+        total5 = len({chave_dedup(r) for r in e5})
+        fracao_perda = len(perdidos) / total5 if total5 else 0.0
+
+        print(f"\nSONDA DE SENSIBILIDADE — {b}")
+        print(f"  {SONDA} recupera .......... {total5}")
+        print(f"  {SUPERCONJUNTO} recupera ...... {len(chaves4)}")
+        print(f"  só em {SONDA} (perda) .... {len(perdidos)}  "
+              f"({fracao_perda:.1%} de {SONDA})")
+        print("  Este é o TAMANHO da perda, não a fração que decide: o protocolo decide pela "
+              "fração ELEGÍVEL da amostra, classificada à mão.")
+
+        rel = SAIDA / f"sensibilidade_{b.lower()}.csv"
+        passo = max(1, len(perdidos) // 50)
+        ordenados = sorted(perdidos, key=lambda x: normaliza(x["titulo"]))
+        # Preserva o que o pesquisador já classificou: a amostra é dele, não do script.
+        anterior = {}
+        if rel.exists():
+            with rel.open(encoding="utf-8-sig", newline="") as fh:
+                for linha in csv.DictReader(fh, delimiter=";"):
+                    anterior[linha.get("chave", "")] = linha.get("elegivel", "") or ""
+        amostra = {chave_dedup(r) for i, r in enumerate(ordenados) if i % passo == 0}
+        with rel.open("w", encoding="utf-8-sig", newline="") as fh:
+            w = csv.writer(fh, delimiter=";")
+            w.writerow(["chave", "ano", "titulo", "doi", "amostra", "elegivel"])
+            for i, r in enumerate(ordenados):
+                k = chave_dedup(r)
+                w.writerow([k, r["ano"], r["titulo"], r["doi"],
+                            "sim" if k in amostra else "", anterior.get(k, "")])
+        onde = _mostra(rel)
+
+        baixo, alto = LIMITE_SENSIBILIDADE
+        if not amostra:
+            print(f"  amostra em {onde}: nenhuma perda a classificar.")
+        else:
+            respondidos = [anterior.get(k, "").strip() for k in amostra
+                           if anterior.get(k, "").strip()]
+            if len(respondidos) < len(amostra):
+                print(f"  amostra em {onde}: {len(respondidos)} de {len(amostra)} "
+                      f"classificados — a decisão exige a amostra inteira.")
+            else:
+                sim = sum(1 for v in respondidos if v.lower() in ("sim", "s", "1", "true"))
+                frac_eleg = sim / len(amostra)
+                print(f"  fração ELEGÍVEL na amostra: {sim}/{len(amostra)} = {frac_eleg:.1%}")
+                if frac_eleg < baixo:
+                    print(f"  {frac_eleg:.1%} < {baixo:.0%}: a restrição está justificada.")
+                elif frac_eleg > alto:
+                    print(f"  {frac_eleg:.1%} > {alto:.0%}: reconsiderar, possivelmente "
+                          f"retornar a {SONDA} como busca definitiva.")
+                else:
+                    print(f"  {frac_eleg:.1%} na faixa {baixo:.0%}–{alto:.0%}: decisão de "
+                          f"mérito do pesquisador, a registrar como emenda.")
+        print("  A decisão se registra como emenda ao protocolo.")
+    return saida
 
 
 def main():
@@ -677,6 +872,10 @@ def main():
                          "e a ordem de triagem")
     ap.add_argument("--fidelidade", nargs=2, metavar=("EXPRESSAO", "ARQUIVO"),
                     help="compara o conjunto derivado com a execução direta (ex.: EB2 arq.ris)")
+    ap.add_argument("--sensibilidade", nargs="?", const="", metavar="BASE",
+                    help="mede a perda de EB5 para EB4 e escreve a amostra a classificar; "
+                         "decide pela fração elegível (sem BASE, todas as bases com EB4 e "
+                         "EB5 registradas)")
     a = ap.parse_args()
     if a.registrar:
         return registrar(*a.registrar, a.retorno, a.data_hora, a.justificar)
@@ -686,6 +885,8 @@ def main():
         derivar(); return 0
     if a.fidelidade:
         return fidelidade(*a.fidelidade)
+    if a.sensibilidade is not None:
+        return sensibilidade(a.sensibilidade or None)
     ap.print_help(); return 1
 
 

@@ -16,15 +16,18 @@ lógica que a governa.
 Com duas facetas-âncora (1 e 2) e duas temáticas (3 e 4):
 
 ```
-E1 = 1+2+3+4     E2 = 1+2+3     E3 = 1+2+4     E4 = 1+2
-E1 ⊆ E2 ⊆ E4     E1 ⊆ E3 ⊆ E4     E1 = E2 ∩ E3
+EB1 = 1+2+3+4     EB2 = 1+2+3     EB3 = 1+2+4
+EB4 = 1+2+(3 OR 4)                  EB5 = 1+2
+EB1 ⊆ EB2 ⊆ EB4     EB1 ⊆ EB3 ⊆ EB4     EB4 = EB2 ∪ EB3     EB5 ⊃ EB4
 ```
 
-Logo `|E2| ≤ |E4|`, `|E3| ≤ |E4|` e `|E1| ≤ min(|E2|, |E3|)`. A contenção não é
-observação: é **consequência da composição**, e é por isso que serve de conferência.
+Logo `|EB1| ≤ min(|EB2|, |EB3|) ≤ |EB4| ≤ |EB5|`. A contenção não é observação: é
+**consequência da composição**, e é por isso que serve de conferência. A união das
+específicas é igual à de cobertura porque o grupo temático é uma disjunção — é a
+álgebra que faz a derivação local valer a execução.
 
-**"Geral" nomeia a composição, não o alcance.** E1 exige as quatro facetas e é a mais
-restritiva — o menor dos quatro conjuntos. Serve de sonda de precisão máxima, nunca
+**"Geral" nomeia a composição, não o alcance.** EB1 exige as quatro facetas e é a mais
+restritiva — o menor dos cinco conjuntos. Serve de sonda de precisão máxima, nunca
 de critério de exclusão.
 
 ### Os três estados de execução
@@ -32,22 +35,24 @@ de critério de exclusão.
 Dizer que uma expressão "não se executa" é ambíguo, e o parecer externo apanhou isso.
 São três estados, e o quadro do IO 1 os distingue:
 
-1. **Busca definitiva nas bases** — a execução cujo retorno compõe o corpus. Só E4.
+1. **Busca definitiva nas bases** — a execução cujo retorno compõe o corpus. Só EB4.
 2. **Execução experimental de aferição** — execução direta na base só para medir a
-   fidelidade da derivação; o retorno é descartado após a comparação. E2 e E3, no
+   fidelidade da derivação; o retorno é descartado após a comparação. EB2 e EB3, no
    teste de fidelidade.
-3. **Pertinência calculada localmente** — a expressão não vai à base; a contagem sai
+3. **Sonda de sensibilidade** — EB5 vai à base uma vez, fora do corpus, para medir
+   quanto a restrição de EB4 custa em alcance. A fração elegível da perda decide.
+4. **Pertinência calculada localmente** — a expressão não vai à base; a contagem sai
    da aplicação dos seus termos aos registros já exportados, por
    `src/derivar_expressoes.py`.
 
-### Por que só E4 vai à base
+### Por que só EB4 vai à base
 
-E4 é a expressão de **cobertura**: a mais larga, e a única cujo retorno é o corpus.
-As demais derivam-se dela localmente, o que poupa execuções e torna a contagem
-reprodutível. O preço é que a derivação precisa ser aferida — ver
-`conferencias-da-busca`.
+EB4 é a expressão de **cobertura**: a mais larga da busca definitiva, e a única cujo
+retorno é o corpus. As demais derivam-se dela localmente, o que poupa execuções e
+torna a contagem reprodutível. O preço é que a derivação precisa ser aferida — ver
+`conferencias-da-busca` —, e a decisão de restringir EB5 a EB4 se mede pela sonda.
 
-E o preço de E4 ser larga está medido: **56,0% dos registros únicos da Web of Science
+E o preço de EB4 ser larga está medido: **56,0% dos registros únicos da Web of Science
 e 57,5% da Scopus não trazem termo algum das facetas de práticas e de fatores
 situacionais** em título, resumo ou palavras-chave. É por isso que o critério da 1ª
 filtragem exige pelo menos uma das duas dimensões.
@@ -70,7 +75,7 @@ Três regras que saíram de defeito real:
   trouxe 8 registros de 2027 sob filtro que se supunha fechado — `PUBYEAR > 2016` sem
   o limite superior.
 - **Simetria entre expressões.** Operador de proximidade e filtro de tipo de documento
-  aplicados a E4 e não a E2 produziram `E2 > E4`, que é impossível. Era defeito da
+  aplicados a EB4 e não a EB2 produziram `EB2 > EB4`, que é impossível. Era defeito da
   ficha, não do motor.
 - **Partição por teto tem de ser exacta**: âncoras idênticas nas duas partes, termos
   temáticos disjuntos, união igual à expressão original. A exactidão verifica-se à

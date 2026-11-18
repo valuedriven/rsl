@@ -1,39 +1,39 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""O protocolo como fonte: lê o documento e deriva os artefatos de máquina.
+"""O protocolo como fonte: lê o documento, confere e sincroniza o que é alimentado.
 
-O documento `docs/03_protocolo_estrategia_pesquisa.md` é a fonte única
-da questão, das facetas, do vocabulário, das strings, das expressões, dos critérios,
-das fontes e do conjunto-semente. Este script lê as seções e grava, em `data/`:
+O documento `docs/03_protocolo_estrategia_pesquisa.md` é a fonte única da questão, das
+facetas, do vocabulário, das strings, das expressões, dos critérios, das fontes e do
+conjunto-semente. A forma de cada base está na respectiva ficha, em
+`docs/busca_base_N_*.md`. Este script lê as duas fontes em memória e NÃO grava derivado
+algum: os documentos markdown são a fonte, e um JSON que apenas os repetisse seria uma
+segunda cópia a defasar.
 
-  questoes.json      questão geral (QGR), questões específicas (QER1 a QER4) e PICo
-  facetas.json       palavras significativas: nome, cor e âncora de cada faceta
-  descritores.json   controle terminológico por faceta; MISTO — as tabelas são
-                     derivadas, o estatuto de validação de cada termo é autoral
-  strings.json       string de cada faceta e composição das quatro expressões
-  criterios.json     critérios de inclusão e de exclusão e recorte temporal
-  fontes.json        bases, ordem de execução, acervos especiais, ferramenta
-  sementes.json      conjunto-semente; MISTO — referências e mapa por base são
-                     derivados, a conferência de cada referência é autoral
+Em `data/` vivem só os arquivos que são alimentados:
 
-Arquivos auxiliares, criados só se ausentes e nunca reescritos:
+  descritores.json       AUTORAL — estatuto de validação de cada termo, por faceta,
+                         idioma e termo normalizado. Vocabulário e camadas vêm do
+                         protocolo. `--sincronizar` acrescenta o termo novo e preserva
+                         o que já foi decidido; termo retirado não é apagado.
+  sementes.json          AUTORAL — metadados de conferência de cada semente. Referências,
+                         ano, DOI, bases e chave de citação vêm do protocolo.
+                         `--sincronizar` casa por DOI ou título e preserva o conferido.
+  registro_execucao.json AUTORAL — registro documental das execuções, por base.
+  consultas.json         rastro técnico das execuções, escrito por
+                         `derivar_expressoes.py --registrar`.
+  pendencias.json        estado das pendências abertas, escrito pelo pesquisador.
 
-  consultas.json     registros de execução, escritos por
-                     `derivar_expressoes.py --registrar`
-  pendencias.json    estado das pendências abertas, escrito pelo pesquisador
-
-Garantia contra defasagem, em dois níveis:
-
-  fonte.sha256       detecta documento alterado sem `--gerar` (como antes)
-  derivado.sha256    detecta campo DERIVADO editado à mão; cobre exatamente o
-                     subconjunto que cada arquivo declara em `SUBSETS`. Campo
-                     autoral pode ser editado livremente.
+A cobertura de cada base é medida contra o vocabulário que a ficha declara usar
+(`idiomas`, `camadas`, `derivações`) e contra a redução que ela declara termo a termo:
+termo do protocolo ausente e não declarado reprova, e termo na string que não derive do
+protocolo também. A conferência é medida, não aprovação: a cobertura por faceta sai como
+número, porque é ela que mede o preço da forma de cada base.
 
 Uso
   python3 src/protocolo.py --conferir              # confere o documento
-  python3 src/protocolo.py --conferir-dados        # confere os JSON de data/
+  python3 src/protocolo.py --conferir-dados        # confere os arquivos alimentados
   python3 src/protocolo.py --conferir --autoteste  # prova que as conferências reprovam
-  python3 src/protocolo.py --gerar                 # deriva os JSON
+  python3 src/protocolo.py --sincronizar           # reconcilia os arquivos alimentados
   python3 src/protocolo.py --mostrar               # resume o que leu
   python3 src/protocolo.py --pendencias            # relata pendências, sem escrever
 
@@ -42,7 +42,6 @@ Só biblioteca padrão.
 
 import argparse
 import copy
-import hashlib
 import json
 import pathlib
 import re
@@ -53,15 +52,20 @@ RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DOC = RAIZ / "docs" / "03_protocolo_estrategia_pesquisa.md"
 DATA = RAIZ / "data"
 
-ARQ = {
-    "questoes": DATA / "questoes.json",
-    "facetas": DATA / "facetas.json",
-    "descritores": DATA / "descritores.json",
-    "strings": DATA / "strings.json",
-    "criterios": DATA / "criterios.json",
-    "fontes": DATA / "fontes.json",
-    "sementes": DATA / "sementes.json",
+# A forma de busca é de cada base e vive na ficha da base; o vocabulário é do protocolo.
+# O script lê as duas fontes e não conhece sintaxe de base alguma: campo, tag e operador
+# saem do texto da ficha.
+FICHAS = {
+    "wos": {"bd": "BD1", "arquivo": "docs/busca_base_1_web_of_science.md"},
+    "scopus": {"bd": "BD2", "arquivo": "docs/busca_base_2_scopus.md"},
+    "eric": {"bd": "BD3", "arquivo": "docs/busca_base_3_eric.md"},
+    "brapci": {"bd": "BD4", "arquivo": "docs/busca_base_4_brapci.md"},
 }
+
+# Arquivos alimentados: não são derivados de markdown e não se regeram.
+DESCRITORES = DATA / "descritores.json"
+SEMENTES = DATA / "sementes.json"
+REGISTRO = DATA / "registro_execucao.json"
 AUX = {
     "consultas": DATA / "consultas.json",
     "pendencias": DATA / "pendencias.json",
@@ -95,36 +99,73 @@ CAMPOS_VALIDACAO = (
     "decisao_ReT", "justificativa_ReT", "data_decisao",
 )
 
-# Metadados que o documento não guarda e que a geração NUNCA sobrescreve.
+# Campos que marcam uma validação já tocada. Linha intocada recebe "aguardando consulta";
+# linha com qualquer registro — inclusive decisão do pesquisador — não é tocada.
+OCUPADO = ("status_proposto", "consultado_em", "arquivo_evidencia", "decisao_ReT")
+
+# Metadados que o documento não guarda e que a sincronização NUNCA sobrescreve.
 CAMPOS_AUTORAIS = ("verificacao", "escopo", "tipo", "alinhamento", "nota",
                    "veiculo_conferido", "eric")
 
+# Emenda v2 (17/11/2026). As listas são a decisão registrada na Nota de emenda: o termo
+# retirado não pode voltar à string, e o composto acrescentado não pode sumir. Elas são
+# por string (FCT), porque o mesmo conceito pode ter sido retirado de uma faceta e mantido
+# em outra — `nível de ensino`, por exemplo, saiu de STR2 e permanece em STR4.
+RETIRADOS_V2 = {
+    "FCT1": (
+        "ontológico", "ontológica", "ontological", "taxonomia",
+        "modelo conceitual", "modelagem conceitual", "esquema conceitual",
+        "modelo semântico", "representação formal", "análise facetada",
+        "conceptual model", "conceptual modeling", "conceptual modelling",
+        "conceptual schema", "semantic model", "formal representation", "facet analysis",
+        "modelo conceptual", "modelado conceptual", "esquema conceptual",
+        "modelo semántico", "representación formal", "análisis facetado",
+        "análisis de facetas",
+    ),
+    "FCT2": (
+        "estudante", "aluno", "professor", "docente", "currículo",
+        "instituição de ensino", "nível de ensino", "modalidade de ensino", "educativo",
+        "student", "learner", "teacher", "instructor", "curriculum",
+        "educational institution", "educational level", "education modality",
+        "estudiante", "alumno", "currículo", "institución educativa",
+        "nivel educativo", "modalidad educativa",
+    ),
+    "FCT4": (
+        "contexto de aplicação", "contexto de uso", "ambiente de aprendizagem",
+        "application context", "context of use", "learning environment",
+        "contexto de aplicación", "contexto de uso", "ambiente de aprendizaje",
+    ),
+}
+ACRESCENTADOS_V2 = {
+    "FCT1": (
+        "ontologia educacional", "ontologia de aprendizagem", "ontologia de ensino",
+        "modelo ontológico educacional", "ontologia de prática educacional",
+        "ontologia de design instrucional", "ontologia de currículo", "ontologia facetada",
+        "educational ontology", "learning ontology", "teaching ontology",
+        "educational ontological model", "educational practice ontology",
+        "instructional design ontology", "curriculum ontology", "faceted ontology",
+        "ontología educativa", "ontología de aprendizaje", "ontología de enseñanza",
+        "modelo ontológico educativo", "ontología de práctica educativa",
+        "ontología de diseño instruccional", "ontología de currículo",
+        "ontología facetada",
+    ),
+}
+
 LEIA = {
-    "questoes": "DERIVADO de docs/03_protocolo_estrategia_pesquisa.md por "
-                "src/protocolo.py --gerar. Não editar: regerar.",
-    "facetas": "DERIVADO do protocolo por src/protocolo.py --gerar. Palavras significativas: "
-               "nome, cor e âncora de cada faceta. Termos e strings ficam em "
-               "descritores.json e strings.json.",
-    "descritores": "MISTO. As tabelas (camadas, termos, instrumentos, livre) são DERIVADAS "
-                   "do protocolo por src/protocolo.py --gerar. O bloco `estatuto` é AUTORAL: "
-                   "guarda a validação de cada termo e a decisão do pesquisador. --gerar "
-                   "preserva o estatuto e só acrescenta termo novo. Termo retirado do "
-                   "protocolo permanece com no_protocolo=false.",
-    "strings": "DERIVADO do protocolo por src/protocolo.py --gerar. String executada de cada "
-               "faceta (identificada por STRn), composição das expressões EB1 a EB4 com os "
-               "seus identificadores e qual delas é a executada. É deste arquivo que a "
-               "derivação local lê a lista de termos executados.",
-    "criterios": "DERIVADO do protocolo por src/protocolo.py --gerar. Critérios de inclusão e "
-                 "de exclusão por dimensão e recorte temporal. Regra de borda, regra de "
-                 "exceção e regra única de inclusão vivem no IO 1, não aqui.",
-    "fontes": "DERIVADO do protocolo por src/protocolo.py --gerar. Bases, ordem de execução, "
-              "via de acesso, acervos especiais e ferramenta de gestão. O conjunto-semente "
-              "fica em sementes.json.",
-    "sementes": "MISTO. Referências, mapa por base, distribuição e limiar são DERIVADOS do "
-                "protocolo por src/protocolo.py --gerar. Os campos de conferência "
-                "(verificação, escopo, tipo, alinhamento, nota, veículo, eric) são AUTORAIS "
-                "e nunca são sobrescritos. Semente retirada do protocolo permanece com "
-                "no_protocolo=false.",
+    "descritores": "AUTORAL. Estatuto de validação de cada termo, por faceta, idioma e termo "
+                   "normalizado. O vocabulário e as camadas vêm de "
+                   "docs/03_protocolo_estrategia_pesquisa.md; aqui fica só o que foi "
+                   "decidido ou está pendente. `src/protocolo.py --sincronizar` acrescenta "
+                   "termo novo e completa instrumento faltante sem tocar no que já foi "
+                   "registrado. Termo retirado do protocolo permanece, e `--pendencias` o "
+                   "reporta para decisão; não se apaga automaticamente.",
+    "sementes": "AUTORAL. Metadados de conferência de cada semente. As referências, o ano, o "
+                "DOI, as bases esperadas e a chave de citação vêm de "
+                "docs/03_protocolo_estrategia_pesquisa.md. `ligacao` é a ligação com o "
+                "protocolo, por DOI ou título — não é conteúdo bibliográfico e não se edita; "
+                "`id` é rótulo e pode mudar sem perder o metadado. "
+                "`--sincronizar` casa por DOI ou título e preserva o que foi conferido. "
+                "Semente retirada do protocolo permanece, e `--pendencias` a reporta.",
 }
 
 LEIA_AUX = {
@@ -148,14 +189,6 @@ class ProtocoloInvalido(Exception):
 # --------------------------------------------------------------------- utilidades
 def texto(caminho=DOC):
     return pathlib.Path(caminho).read_text(encoding="utf-8")
-
-
-def sha256(t):
-    return hashlib.sha256(t.encode("utf-8")).hexdigest()
-
-
-def canonico(obj):
-    return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
 def desescapa(s):
@@ -192,24 +225,6 @@ def secao(t, titulo):
 def paragrafos(bloco):
     return [re.sub(r"\s+", " ", p).strip()
             for p in re.split(r"\n\s*\n", bloco) if p.strip()]
-
-
-def caminhos(obj, prefixo=""):
-    """Caminhos das folhas, para declarar exatamente o que a assinatura cobre."""
-    saida = set()
-    if isinstance(obj, dict):
-        if not obj:
-            saida.add(prefixo + "{}")
-        for k, v in obj.items():
-            saida |= caminhos(v, f"{prefixo}.{k}" if prefixo else k)
-    elif isinstance(obj, list):
-        if not obj:
-            saida.add(prefixo + "[]")
-        for v in obj:
-            saida |= caminhos(v, prefixo + "[]")
-    else:
-        saida.add(prefixo)
-    return saida
 
 
 # ------------------------------------------------------------------------ questões
@@ -369,35 +384,77 @@ def strings(t):
 
 
 # ---------------------------------------------------------------------- expressões
+def _grupos_de_composicao(comb, ident):
+    """Composição como AND de ORs: `STR1 + STR2 + (STR3 OR STR4)`.
+
+    A forma devolvida é uma lista de grupos; todo grupo tem de ser satisfeito e, dentro do
+    grupo, basta um dos STRn. A composição puramente conjuntiva é o caso particular em que
+    todo grupo tem um único elemento.
+    """
+    partes, profundidade, atual = [], 0, ""
+    for ch in comb:
+        if ch == "(":
+            profundidade += 1
+        elif ch == ")":
+            profundidade -= 1
+            if profundidade < 0:
+                raise ProtocoloInvalido(f"expressão {ident}: parêntese fechado sem abrir")
+        if ch == "+" and profundidade == 0:
+            partes.append(atual)
+            atual = ""
+        else:
+            atual += ch
+    partes.append(atual)
+    if profundidade:
+        raise ProtocoloInvalido(f"expressão {ident}: parêntese aberto sem fechar")
+
+    grupos = []
+    for parte in partes:
+        p = parte.strip()
+        if not p:
+            raise ProtocoloInvalido(f"expressão {ident}: operador `+` sem operando")
+        m = re.fullmatch(r"\(\s*(STR\d+(?:\s+OR\s+STR\d+)+)\s*\)", p)
+        if m:
+            membros = [x.strip() for x in m.group(1).split("OR")]
+        elif re.fullmatch(r"STR\d+", p):
+            membros = [p]
+        else:
+            raise ProtocoloInvalido(
+                f"expressão {ident}: composição fora do padrão STRn + STRn ou "
+                f"(STRn OR STRn): {comb!r}")
+        grupos.append(membros)
+    return grupos
+
+
 def expressoes(t):
-    """Composição de E1 a E4 e qual delas é a executada."""
+    """Composição de EB1 a EB5, qual se executa e qual é sonda de sensibilidade."""
     bloco = secao(t, "Expressões de busca")
-    composicao, executada = {}, set()
+    composicao, executada, sonda = {}, set(), set()
     for linha in bloco.splitlines():
         if not linha.lstrip().startswith("|"):
             continue
         cels = celulas(linha)
         if len(cels) < 4:
             continue
-        m = re.match(r"^EB(\d+)$", cels[0])
-        if not m:
+        if not re.match(r"^EB\d+$", cels[0]):
             continue
         ident = cels[0]
         comb = desescapa(cels[2]).replace("\\", " ").strip()
-        partes = [f"STR{x}" for x in re.findall(r"STR(\d+)", comb)]
-        if not partes:
+        if not re.search(r"STR\d+", comb):
             raise ProtocoloInvalido(f"expressão {ident} sem composição legível")
-        if re.sub(r"STR\d+", " ", comb).strip(" +"):
-            raise ProtocoloInvalido(
-                f"expressão {ident}: composição fora do padrão STRn + STRn: {cels[2]!r}")
-        composicao[ident] = partes
-        if "NÃO É EXECUTADA" not in desescapa(cels[3]):
+        composicao[ident] = _grupos_de_composicao(comb, ident)
+        natureza = normaliza(cels[1])
+        if natureza == "cobertura restrita":
             executada.add(ident)
-    if sorted(composicao) != ["EB1", "EB2", "EB3", "EB4"]:
-        raise ProtocoloInvalido(f"esperava EB1 a EB4, achei {sorted(composicao)}")
+        elif natureza == "controle de sensibilidade":
+            sonda.add(ident)
+    if sorted(composicao) != ["EB1", "EB2", "EB3", "EB4", "EB5"]:
+        raise ProtocoloInvalido(f"esperava EB1 a EB5, achei {sorted(composicao)}")
     if len(executada) != 1:
         raise ProtocoloInvalido(f"esperava exatamente uma expressão executada, achei {executada}")
-    return composicao, executada.pop()
+    if len(sonda) != 1:
+        raise ProtocoloInvalido(f"esperava exatamente uma sonda de sensibilidade, achei {sonda}")
+    return composicao, executada.pop(), sonda.pop()
 
 
 # ---------------------------------------------------------------------- critérios
@@ -605,6 +662,473 @@ def distribuicao(t, estudos):
     }
 
 
+# ------------------------------------------------------------------- fichas por base
+# A ficha da base é a fonte da FORMA; o protocolo é a fonte do VOCABULÁRIO. O script não
+# conhece sintaxe de base: campo, tag e operador são lidos do texto da ficha. O que ele
+# conhece é o contrato de extração — onde a string está e como o termo se separa.
+
+COR_FACETA = {"🟦": "FCT1", "🟨": "FCT2", "🟥": "FCT3", "🟧": "FCT4"}
+OPERADORES = {"OR", "AND", "NOT"}
+CAMPOS_STRING = ("title", "abstract", "descriptor", "TS", "TI", "AB", "AK")
+SECOES_FICHA = ("3. Strings por faceta", "4. Expressões de busca",
+                "Declaração de cobertura")
+MODOS_DERIVACAO = ("morfologia", "radical")
+
+
+def ficha(slug):
+    return (RAIZ / FICHAS[slug]["arquivo"]).read_text(encoding="utf-8")
+
+
+def _rotulo(linha):
+    """Rótulo legível: desfaz ênfase do Markdown, corta a lista de facetas e a pontuação."""
+    s = re.sub(r"[*`_]", "", (linha or "")).strip()
+    s = re.split(r"\s*Facetas:", s)[0]
+    return re.sub(r"\s+", " ", s).rstrip(":;.").strip()
+
+
+def _cercados(bloco):
+    """Blocos ```...``` do trecho, cada um com o rótulo da última linha que o precede."""
+    saida, ultimo = [], ""
+    linhas = bloco.splitlines()
+    i = 0
+    while i < len(linhas):
+        linha = linhas[i]
+        if linha.strip().startswith("```"):
+            i += 1
+            corpo = []
+            while i < len(linhas) and not linhas[i].strip().startswith("```"):
+                corpo.append(linhas[i])
+                i += 1
+            texto_bloco = "\n".join(corpo).strip()
+            if texto_bloco:
+                saida.append({"rotulo": _rotulo(ultimo), "texto": texto_bloco})
+            ultimo = ""
+        elif linha.strip():
+            ultimo = linha.strip()
+        i += 1
+    return saida
+
+
+def _campo_string(texto):
+    """Campo em que a string é buscada. Lido do próprio texto, não de tabela do script."""
+    t = texto.strip()
+    if re.match(r"^TS\s*=", t, re.I):
+        return "TS"
+    if re.match(r"^TITLE-ABS-KEY", t, re.I):
+        return "TITLE-ABS-KEY"
+    prefixos = {p.lower() for p in re.findall(r"(?<![\w-])([A-Za-z]+)\s*:", t)}
+    campos = {p for p in prefixos if p in CAMPOS_STRING}
+    if len(campos) == 1:
+        return campos.pop()
+    if len(campos) > 1:
+        return "misto"
+    return "todos os campos"
+
+
+def _termos_string(texto):
+    """Termos de uma string de base: separados por OR e AND, sem operador nem campo."""
+    t = re.sub(r"^\s*(?:TS|TITLE-ABS-KEY)\s*[=(]\s*", "", texto.strip(), flags=re.I)
+    if t.endswith(")"):
+        t = t[:-1]
+    saida = []
+    for parte in re.split(r"\s+(?:OR|AND|NOT)\s+", t):
+        p = re.sub(r"^[()\s]+", "", parte)
+        p = re.sub(r"[()\s]+$", "", p)
+        p = re.sub(r"^(?:title|abstract|descriptor|TS|TI|AB|AK)\s*:\s*", "", p, flags=re.I)
+        p = p.strip().strip('"').strip()
+        p = re.sub(r"^[()\s]+|[()\s]+$", "", p).strip(" .;")
+        if not p or p.upper() in OPERADORES:
+            continue
+        if '"' in p or "(" in p or " NEAR/" in p.upper() or " W/" in p.upper():
+            raise ProtocoloInvalido(f"termo fora do padrão esperado na ficha: {p!r}")
+        saida.append(p)
+    if not saida:
+        raise ProtocoloInvalido("string sem termo legível")
+    return _sem_repeticao(saida)
+
+
+def _facetas_do_texto(resto):
+    m = re.search(r"Facetas:\s*\**\s*(.+)", resto)
+    if not m:
+        return []
+    return sorted({f"FCT{n}" for n in re.findall(r"FCT(\d)", m.group(1))})
+
+
+def _estatuto_do_texto(resto):
+    baixo = normaliza(resto[:1600])
+    if "sonda de sensibilidade" in baixo or "controle de sensibilidade" in baixo:
+        return "sonda"
+    if "nao se executa" in baixo or "derivada localmente" in baixo:
+        return "derivada"
+    if "executada e exportada" in baixo or "esta que se executa" in baixo:
+        return "executada"
+    if "teste de fidelidade" in baixo:
+        return "fidelidade"
+    return "nao declarado"
+
+
+def facetas_base(t):
+    """As strings por faceta da ficha: STRn, faceta, conjunto, campo, termos."""
+    bloco = secao(t, SECOES_FICHA[0])
+    saida = []
+    for parte in re.split(r"^###\s+", bloco, flags=re.M)[1:]:
+        cab, _, resto = parte.partition("\n")
+        m = re.match(r"`(STR\d+[a-z]?)`", cab.strip())
+        if not m:
+            continue
+        ident = m.group(1)
+        mf = re.search(r"FCT(\d)", cab)
+        if not mf:
+            raise ProtocoloInvalido(f"{ident}: seção da string não declara a faceta")
+        blocos = _cercados(resto)
+        if len(blocos) != 1:
+            raise ProtocoloInvalido(
+                f"{ident}: esperava um bloco de string, achei {len(blocos)}")
+        texto_string = blocos[0]["texto"]
+        mc = re.search(r"conjunto\s+`(#\w+)`", cab)
+        saida.append({
+            "id": ident, "faceta": f"FCT{int(mf.group(1))}",
+            "conjunto": mc.group(1) if mc else "",
+            "campo": _campo_string(texto_string),
+            "texto": texto_string,
+            "termos": _termos_string(texto_string),
+        })
+    if not saida:
+        raise ProtocoloInvalido("ficha sem strings por faceta legíveis")
+    return saida
+
+
+def _expressoes_em_negrito(resto):
+    """Expressões rotuladas em negrito, com o bloco que as segue (forma longa da BRAPCI)."""
+    saida = {}
+    for m in re.finditer(r"\*\*(EB\d)\*\*(.*?)(?=\n\*\*EB\d\*\*|\Z)", resto, re.S):
+        ident, corpo = m.group(1), m.group(2)
+        facetas = sorted({f"FCT{n}" for n in re.findall(r"FCT(\d)", corpo.split("```")[0])})
+        cabeca = _rotulo(corpo.split("\n")[0])
+        saida[ident] = {"id": ident, "titulo": f"{ident} {cabeca}".strip(),
+                        "estatuto": "derivada", "facetas": facetas,
+                        "blocos": _cercados(corpo)}
+    return saida
+
+
+def consultas_curadas(bloco):
+    """Forma curada: uma consulta por linha de tabela, agrupada pelo subtítulo."""
+    saida = []
+    for parte in re.split(r"^####\s+", bloco, flags=re.M)[1:]:
+        cab, _, resto = parte.partition("\n")
+        grupo = _rotulo(cab)
+        for linha in resto.splitlines():
+            if not linha.strip().startswith("|"):
+                continue
+            cels = celulas(linha)
+            if len(cels) < 2 or not re.match(r"^\d+$", cels[0]):
+                continue
+            mc = re.search(r"`([^`]+)`", cels[1])
+            consulta = (mc.group(1) if mc else desescapa(cels[1])).strip()
+            item = {"grupo": grupo, "n": int(cels[0]),
+                    "rotulo": f"{grupo} — consulta {int(cels[0])}",
+                    "consulta": consulta}
+            facetas = {f"FCT{n}" for n in re.findall(r"FCT(\d)", cels[2] if len(cels) > 2 else "")}
+            for cor, fid in COR_FACETA.items():
+                if len(cels) > 2 and cor in cels[2]:
+                    facetas.add(fid)
+            if facetas:
+                item["facetas"] = sorted(facetas)
+            saida.append(item)
+    if not saida:
+        raise ProtocoloInvalido("forma curada declarada sem consulta legível")
+    return saida
+
+
+def expressoes_base(t, slug):
+    """As cinco expressões na forma desta base, a forma curada e a âncora em proximidade."""
+    bloco = secao(t, SECOES_FICHA[1])
+    expressoes, curadas, ancoras = {}, [], None
+    for parte in re.split(r"^###\s+", bloco, flags=re.M)[1:]:
+        cab, _, resto = parte.partition("\n")
+        titulo = _rotulo(cab)
+        baixo = titulo.lower()
+        if baixo.startswith(("como executar", "variantes", "como esta base")):
+            continue
+        if re.match(r"EB\d", titulo):
+            ident = re.match(r"(EB\d)", titulo).group(1)
+            expressoes[ident] = {"id": ident, "titulo": titulo,
+                                 "estatuto": _estatuto_do_texto(resto),
+                                 "facetas": _facetas_do_texto(resto),
+                                 "blocos": _cercados(resto)}
+            continue
+        if "proximidade" in baixo:
+            # O conjunto das duas âncoras é definido uma vez e reusado pelas expressões;
+            # sem ele, a forma por conjuntos cita um conjunto que o derivado não define.
+            blocos = _cercados(resto)
+            if blocos:
+                ancoras = {"rotulo": titulo, "formas": blocos}
+            continue
+        if "curadas" in baixo:
+            curadas = consultas_curadas(resto)
+            continue
+        if "forma longa" in baixo:
+            expressoes.update(_expressoes_em_negrito(resto))
+            continue
+    return expressoes, curadas, ancoras
+
+
+def execucao_base(slug, expressoes, curadas):
+    """O que se executa nesta base: uma, particionada em subconsultas ou curada."""
+    if curadas:
+        modo = "curada"
+    elif slug == "eric":
+        modo = "particionada"
+    else:
+        modo = "unica"
+    if modo == "curada":
+        itens = curadas
+        expressao = "EB4"
+    else:
+        ex = expressoes["EB4"]
+        expressao = "EB4"
+        itens = [{"rotulo": b["rotulo"], "consulta": b["texto"]} for b in ex["blocos"]
+                 if "nao e a forma executada" not in normaliza(b["rotulo"])]
+        if not itens:
+            itens = [{"rotulo": b["rotulo"], "consulta": b["texto"]} for b in ex["blocos"]]
+    return {"modo": modo, "expressao": expressao, "itens": itens}
+
+
+def filtros_base(execucao):
+    """Filtros que a consulta carrega — e, por omissão, o que ficou na interface."""
+    texto_consultas = " ".join(i.get("consulta", "") for i in execucao["itens"])
+    def achado(padrao):
+        return sorted({x.strip() for x in re.findall(padrao, texto_consultas) if x.strip()})
+    ano = achado(r"PY=\(([^)]*)\)") + achado(r"PUBYEAR\s*[<>]=?\s*\d{4}")
+    idioma = achado(r"(?:LA|LANGUAGE)=?\(([^)]*)\)")
+    tipo = achado(r"(?:DT|DOCTYPE)=?\(([^)]*)\)")
+    return {"ano": ano, "idioma": idioma, "tipo": tipo,
+            "onde": "consulta" if (ano or idioma or tipo) else "interface"}
+
+
+def declaracao_base(t):
+    """Idiomas, camadas, derivações e redução declarada — o que a string pode deixar de fora."""
+    bloco = secao(t, SECOES_FICHA[2])
+    idiomas, camadas, derivacoes, exclusoes = {}, "", "", []
+    for linha in bloco.splitlines():
+        if not linha.strip().startswith("|"):
+            continue
+        cels = celulas(linha)
+        if len(cels) < 2:
+            continue
+        rot = normaliza(cels[0])
+        if rot == "idiomas":
+            for par in cels[1].split(";"):
+                m = re.match(r"\s*(FCT\d)\s*:\s*(.+)$", par.strip())
+                if not m:
+                    raise ProtocoloInvalido(f"declaração de idiomas ilegível: {par!r}")
+                idiomas[m.group(1)] = [x.strip() for x in m.group(2).split(",") if x.strip()]
+        elif rot == "camadas":
+            camadas = normaliza(cels[1])
+        elif rot.startswith("derivacoes"):
+            derivacoes = normaliza(cels[1])
+    for linha in bloco.splitlines():
+        if not linha.strip().startswith("|"):
+            continue
+        cels = celulas(linha)
+        if len(cels) >= 3 and re.match(r"^FCT\d$", cels[0].strip()):
+            exclusoes.append({"faceta": cels[0].strip(),
+                              "termo": desescapa(cels[1]).strip(),
+                              "motivo": desescapa(cels[2]).strip()})
+    if not idiomas:
+        raise ProtocoloInvalido("declaração de cobertura sem idiomas por faceta")
+    if camadas not in ("todas", "nucleo"):
+        raise ProtocoloInvalido(f"camadas {camadas!r} não é 'todas' nem 'nucleo'")
+    for fid in idiomas:
+        for i in idiomas[fid]:
+            if i not in IDIOMAS:
+                raise ProtocoloInvalido(f"declaração de {fid}: idioma {i!r} desconhecido")
+    modos = [m.strip() for m in re.split(r"\s*(?:,|;| e )\s*", derivacoes) if m.strip()]
+    for m in modos:
+        if m not in MODOS_DERIVACAO:
+            raise ProtocoloInvalido(f"derivação declarada desconhecida: {m!r}; "
+                                    f"admitidas: {MODOS_DERIVACAO}")
+    return {"idiomas": idiomas, "camadas": camadas, "derivacoes": modos,
+            "exclusoes": exclusoes}
+
+
+def base_derivada(slug, d, t_ficha=None):
+    """O derivado de uma base. A forma vem da ficha; o vocabulário, do protocolo."""
+    t = ficha(slug) if t_ficha is None else t_ficha
+    nome = next((b["nome"] for b in d["fontes"]["bases"]
+                 if b["id"] == FICHAS[slug]["bd"]), FICHAS[slug]["bd"])
+    expressoes, curadas, ancoras = expressoes_base(t, slug)
+    execucao = execucao_base(slug, expressoes, curadas)
+    return {
+        "base": {"id": FICHAS[slug]["bd"], "slug": slug, "nome": nome,
+                 "ficha": FICHAS[slug]["arquivo"]},
+        "facetas": facetas_base(t),
+        "ancoras": ancoras,
+        "expressoes": {k: expressoes[k] for k in sorted(expressoes)},
+        "execucao": execucao,
+        "filtros": filtros_base(execucao),
+        "declaracao": declaracao_base(t),
+    }
+
+
+# ------------------------------------------------------------------ cobertura da base
+COMPOSICAO = {
+    "EB1": ["FCT1", "FCT2", "FCT3", "FCT4"],
+    "EB2": ["FCT1", "FCT2", "FCT3"],
+    "EB3": ["FCT1", "FCT2", "FCT4"],
+    "EB4": ["FCT1", "FCT2", "FCT3", "FCT4"],
+    "EB5": ["FCT1", "FCT2"],
+}
+
+# Palavras de ligação não distinguem termo de termo: "característica do aluno" e
+# "características dos alunos" são o mesmo termo qualificado, não dois.
+FUNCIONAIS = {"de", "do", "da", "dos", "das", "del", "de", "los", "las", "el", "la",
+              "of", "and", "the", "in", "for", "to", "a", "e", "o", "os", "as", "no",
+              "na", "nos", "nas", "em", "en", "y", "con", "com", "por", "para"}
+
+
+def _tokens(s):
+    return normaliza(s).split()
+
+
+def _conteudo(s):
+    """Tokens de conteúdo: a palavra de ligação sai, o termo fica."""
+    return [t for t in _tokens(s) if t not in FUNCIONAIS]
+
+
+def _candidatos(tok):
+    """Formas de singular do token; duas palavras casam se as formas se tocam.
+
+    Não é lematização: é reconhecimento de flexão de número e de gênero sobre a forma
+    já sem acento — plural em -s, -es, -ies, -ais, -eis e -coes —, que é o que as fichas
+    declaram como desdobramento morfológico.
+    """
+    c = {tok}
+    for sufixo, troca in (("ies", "y"), ("coes", "cao"), ("ais", "al"), ("eis", "el")):
+        if tok.endswith(sufixo) and len(tok) > len(sufixo) + 1:
+            c.add(tok[:-len(sufixo)] + troca)
+    if tok.endswith("s") and len(tok) > 3:
+        c.add(tok[:-1])
+    if tok.endswith("es") and len(tok) > 4:
+        c.add(tok[:-2])
+    return c
+
+
+def _mesmo_termo(a, b):
+    """Mesmo termo, admitida a flexão de número e gênero e a palavra de ligação."""
+    ta, tb = _conteudo(a), _conteudo(b)
+    if not ta or not tb:
+        return False
+    def cobre(xs, ys):
+        return all(any(_candidatos(x) & _candidatos(y) for y in ys) for x in xs)
+    return cobre(ta, tb) and cobre(tb, ta)
+
+
+def _radical_alcanca(a, b):
+    """Algum token de conteúdo de `a` casa com o de `b`. É o que a forma radical faz."""
+    ta, tb = _conteudo(a), _conteudo(b)
+    return any(_candidatos(x) & _candidatos(y) for x in ta for y in tb)
+
+
+def cobertura_base(slug, base, facetas_vocab):
+    """Problemas de forma da base: vocabulário, âncoras, composição, execução."""
+    problemas = []
+    por_faceta = {f["id"]: f for f in facetas_vocab}
+    decl = base.get("declaracao") or {}
+    modos = set(decl.get("derivacoes") or [])
+
+    for fid in sorted(por_faceta):
+        f = por_faceta[fid]
+        idiomas = decl.get("idiomas", {}).get(fid)
+        if not idiomas:
+            problemas.append(f"{fid}: a declaração de cobertura não declara idiomas")
+            idiomas = list(IDIOMAS)
+        camadas = CAMADAS if decl.get("camadas") == "todas" else ("nucleo",)
+        tabela = [x for i in idiomas for c in camadas for x in f["camadas"][i][c]]
+        esperados = _sem_repeticao(tabela)
+        unidade = [s for s in base["facetas"] if s["faceta"] == fid]
+        achados = [x for s in unidade for x in s["termos"]]
+        excluidos = [e["termo"] for e in decl.get("exclusoes", []) if e["faceta"] == fid]
+        for termo in esperados:
+            if any(_mesmo_termo(termo, a) for a in achados):
+                continue
+            # A forma radical declara que uma palavra-raiz presente alcança a expressão
+            # inteira. É declaração da ficha, não omissão silenciosa: a cobertura literal
+            # continua sendo reportada, e o que a regra não alcança tem de estar na tabela.
+            if "radical" in modos and any(_radical_alcanca(termo, a) for a in achados):
+                continue
+            if any(_mesmo_termo(termo, e) for e in excluidos):
+                continue
+            problemas.append(f"{fid}: {termo!r} está no protocolo, não está na string desta "
+                             f"base e não consta da redução declarada")
+        for termo in achados:
+            if any(_mesmo_termo(termo, p) for p in tabela):
+                continue
+            if "radical" in modos and any(_radical_alcanca(termo, p) for p in tabela):
+                continue
+            problemas.append(f"{fid}: {termo!r} está na string desta base e não deriva do "
+                             f"protocolo")
+
+    if sorted(base["expressoes"]) != ["EB1", "EB2", "EB3", "EB4", "EB5"]:
+        problemas.append(f"expressões fora de EB1 a EB5: {sorted(base['expressoes'])}")
+    for ident, expr in sorted(base["expressoes"].items()):
+        if ident not in COMPOSICAO:
+            continue
+        if expr["facetas"] != COMPOSICAO[ident]:
+            problemas.append(f"{ident}: facetas {expr['facetas']} não são "
+                             f"{COMPOSICAO[ident]} do protocolo")
+        if not {"FCT1", "FCT2"} <= set(expr["facetas"]):
+            problemas.append(f"{ident}: falta âncora obrigatória (FCT1 ou FCT2)")
+        # Expressão derivada e não materializada nesta base — a sonda da ERIC — não
+        # precisa de forma: o que se executa ou se confere tem de ter.
+        precisa_forma = expr["estatuto"] in ("executada", "fidelidade", "sonda")
+        if precisa_forma and not expr["blocos"]:
+            problemas.append(f"{ident}: expressão sem forma legível nesta base")
+
+    execucao = base["execucao"]
+    if execucao["expressao"] != "EB4":
+        problemas.append(f"a base executa {execucao['expressao']}, esperado EB4")
+    if execucao["modo"] not in ("unica", "particionada", "curada"):
+        problemas.append(f"modo de execução desconhecido: {execucao['modo']!r}")
+    if not execucao["itens"]:
+        problemas.append("execução sem consulta legível")
+    return problemas
+
+
+def cobertura_por_faceta(slug, base, facetas_vocab):
+    """Números de cobertura por faceta. É medida, não aprovação.
+
+    Separa o que está literalmente na string do que só é alcançado pela forma radical
+    declarada: a diferença é o preço de recall que a base assume.
+    """
+    por_faceta = {f["id"]: f for f in facetas_vocab}
+    decl = base.get("declaracao") or {}
+    modos = set(decl.get("derivacoes") or [])
+    saida = {}
+    for fid in sorted(por_faceta):
+        idiomas = decl.get("idiomas", {}).get(fid) or list(IDIOMAS)
+        camadas = CAMADAS if decl.get("camadas") == "todas" else ("nucleo",)
+        tabela = _sem_repeticao([x for i in idiomas for c in camadas
+                                 for x in por_faceta[fid]["camadas"][i][c]])
+        achados = [x for s in base["facetas"] if s["faceta"] == fid for x in s["termos"]]
+        excluidos = [e["termo"] for e in decl.get("exclusoes", []) if e["faceta"] == fid]
+        cobertos = sum(1 for t in tabela if any(_mesmo_termo(t, a) for a in achados))
+        por_radical = sum(1 for t in tabela
+                          if not any(_mesmo_termo(t, a) for a in achados)
+                          and "radical" in modos
+                          and any(_radical_alcanca(t, a) for a in achados))
+        declarados = sum(1 for t in tabela
+                         if not any(_mesmo_termo(t, a) for a in achados)
+                         and not ("radical" in modos
+                                  and any(_radical_alcanca(t, a) for a in achados))
+                         and any(_mesmo_termo(t, e) for e in excluidos))
+        saida[fid] = {"esperados": len(tabela), "na_string": len(achados),
+                      "cobertos": cobertos, "por_radical": por_radical,
+                      "declarados": declarados,
+                      "descobertos": len(tabela) - cobertos - por_radical - declarados}
+    return saida
+
+
 # -------------------------------------------------------------------------- análise
 def analisa(t=None):
     t = texto() if t is None else t
@@ -615,7 +1139,7 @@ def analisa(t=None):
         # A string repete termo entre camadas; a lista executada é deduplicada. É ela
         # que a derivação local usa, e é ela que o relatório conta.
         st[n]["termos"] = _sem_repeticao(st[n]["termos"])
-    comp, exec_ = expressoes(t)
+    comp, exec_, sonda = expressoes(t)
     crit = criterios(t)
     est = sementes(t)
     return {
@@ -625,6 +1149,7 @@ def analisa(t=None):
         "strings": st,
         "expressoes": comp,
         "executada": exec_,
+        "sonda": sonda,
         "criterios": crit,
         "recorte": recorte(t),
         "fontes": fontes(t),
@@ -681,20 +1206,32 @@ def conferir(t=None):
             if normaliza(termo) not in tabelados:
                 problemas.append(f"faceta {n}: termo {termo!r} da string não consta da tabela")
 
-    comp, exec_ = d["expressoes"], d["executada"]
-    previsto = {"EB1": ["STR1", "STR2", "STR3", "STR4"],
-                "EB2": ["STR1", "STR2", "STR3"],
-                "EB3": ["STR1", "STR2", "STR4"],
-                "EB4": ["STR1", "STR2"]}
+    comp, exec_, sonda = d["expressoes"], d["executada"], d["sonda"]
+    previsto = {
+        "EB1": [["STR1"], ["STR2"], ["STR3"], ["STR4"]],
+        "EB2": [["STR1"], ["STR2"], ["STR3"]],
+        "EB3": [["STR1"], ["STR2"], ["STR4"]],
+        "EB4": [["STR1"], ["STR2"], ["STR3", "STR4"]],
+        "EB5": [["STR1"], ["STR2"]],
+    }
     if comp != previsto:
         problemas.append(f"composição das expressões fora do previsto: {comp}")
     if exec_ != "EB4":
         problemas.append(f"a expressão executada deveria ser EB4, é {exec_}")
-    for a in ("EB2", "EB3"):
-        if not set(previsto["EB4"]) < set(previsto[a]):
-            problemas.append(f"EB4 não é subconjunto estrito de {a}")
-    if set(previsto["EB4"]) != set(previsto["EB2"]) & set(previsto["EB3"]):
-        problemas.append("EB4 não é a interseção de EB2 com EB3")
+    if sonda != "EB5":
+        problemas.append(f"a sonda de sensibilidade deveria ser EB5, é {sonda}")
+    # EB4 = EB2 ∪ EB3: mesmas duas primeiras facetas, e a terceira é a união das que
+    # distinguem as duas específicas. EB5 = STR1 + STR2 contém EB4.
+    if comp.get("EB2", [])[:2] != comp.get("EB3", [])[:2] or \
+            comp.get("EB2", [])[:2] != comp.get("EB4", [])[:2]:
+        problemas.append("EB2, EB3 e EB4 não partilham as duas primeiras facetas")
+    else:
+        uniao = sorted(set(comp["EB2"][2]) | set(comp["EB3"][2]))
+        if comp.get("EB4", [])[2:] != [uniao]:
+            problemas.append(f"EB4 não é EB2 ∪ EB3: terceiro grupo {comp.get('EB4')} "
+                             f"não é {uniao}")
+    if comp.get("EB5") != comp.get("EB4", [])[:2]:
+        problemas.append("EB5 não é a conjunção das duas âncoras (STR1 + STR2)")
 
     dimensoes = {c["dimensao"] for c in d["criterios"]}
     for esperada in ("Intervalo temporal", "Idioma(s)", "Tipo documental",
@@ -735,17 +1272,29 @@ def conferir(t=None):
         if dec[campo] is not None and dist[campo] != dec[campo]:
             problemas.append(f"{rotulo}: prosa diz {dec[campo]}, mapa dá {dist[campo]}")
 
-    # Decisões registradas que se podem codificar como teste. `taxonomy` e o plural
-    # saíram da expressão por RETIRA; `taxonomia` em português permanece, por decisão.
-    termos = {normaliza(x) for f in d["strings"].values() for x in f["termos"]}
-    for proibido in ("taxonomy", "taxonomies"):
-        if proibido in termos:
-            problemas.append(f"RETIRA violado: {proibido!r} presente nas strings")
-    if "taxonomia" not in termos:
-        problemas.append("a forma portuguesa 'taxonomia' sumiu das strings, "
-                         "contra a decisão registrada")
+    # Emenda v2: o que foi retirado não pode voltar à string, e o composto acrescentado
+    # não pode sumir. O teste é por faceta, porque o mesmo conceito pode ter saído de uma
+    # e permanecido em outra.
+    norm = {fid: {normaliza(x) for x in s["termos"]} for fid, s in d["strings"].items()}
+    for fid, retirados in RETIRADOS_V2.items():
+        for termo in retirados:
+            if normaliza(termo) in norm[fid]:
+                problemas.append(f"emenda v2 violada: {termo!r} voltou à string de {fid}")
+    for fid, acrescentados in ACRESCENTADOS_V2.items():
+        for termo in acrescentados:
+            if normaliza(termo) not in norm[fid]:
+                problemas.append(f"emenda v2 violada: {termo!r} sumiu da string de {fid}")
 
     return problemas
+
+
+def _composicao_legivel(grupos):
+    """`[["STR1"],["STR2"],["STR3","STR4"]]` como `1+2+(3|4)`."""
+    partes = []
+    for g in grupos:
+        nomes = [x[3:] for x in g]
+        partes.append(nomes[0] if len(nomes) == 1 else "(" + "|".join(nomes) + ")")
+    return "+".join(partes)
 
 
 def relatorio(d):
@@ -768,9 +1317,9 @@ def relatorio(d):
              f"incidências: {dist['incidencias']}  "
              f"por base: " + ", ".join(f"{b} {v}" for b, v in dist["por_base"].items()))
     L.append(f"  expressões: " + ", ".join(
-        f"{n}=" + "+".join(x[3:] for x in c)
+        f"{n}=" + _composicao_legivel(c)
         for n, c in sorted(d["expressoes"].items())) +
-        f"   executada: {d['executada']}")
+        f"   executada: {d['executada']}   sonda: {d['sonda']}")
     recorte = (f"{d['recorte']['ano_min']} a {d['recorte']['ano_max']}"
                if d["recorte"]["ano_max"]
                else f"{d['recorte']['ano_min']} até a data de execução")
@@ -778,199 +1327,209 @@ def relatorio(d):
     return "\n".join(L)
 
 
-# -------------------------------------------------------------------- assinaturas
-def _sub_questoes(d):
-    return {k: d[k] for k in ("id", "questao_principal", "estrutura_pico",
-                              "questoes_especificas")}
+def relatorio_bases(bases, d):
+    """Uma linha por base. Cobertura é número, não aprovação: mede o preço de cada forma."""
+    L = ["", "  Bases — forma lida da ficha; cobertura medida contra o vocabulário declarado:"]
+    for slug, base in bases:
+        cob = cobertura_por_faceta(slug, base, d["tabelas"])
+        total_e = sum(v["esperados"] for v in cob.values())
+        total_c = sum(v["cobertos"] for v in cob.values())
+        total_r = sum(v["por_radical"] for v in cob.values())
+        total_d = sum(v["declarados"] for v in cob.values())
+        total_x = sum(v["descobertos"] for v in cob.values())
+        strings = " ".join(s["id"] for s in base["facetas"])
+        decl = base["declaracao"]
+        ressalva = f" +{total_r} radical +{total_d} declarados" if (total_r or total_d) else ""
+        if total_x:
+            ressalva += f" · {total_x} DESCOBERTOS"
+        L.append(f"  {base['base']['id']} {slug:<8} {base['base']['nome'][:34]:<36} "
+                 f"execução: {base['execucao']['modo']:<12} "
+                 f"literal {total_c}/{total_e}{ressalva}")
+        L.append(f"      strings: {strings}   camadas: {decl['camadas']}   "
+                 f"idiomas: " + ", ".join(f"{k[3:]}:{'/'.join(v)}"
+                                          for k, v in sorted(decl["idiomas"].items())))
+        L.append("      " + "  ".join(
+            f"{k} {v['cobertos']}/{v['esperados']}" for k, v in sorted(cob.items())))
+    return "\n".join(L)
 
 
-def _sub_facetas(d):
-    return {"facetas": d["facetas"]}
+# ------------------------------------------------------------ arquivos alimentados
+# Nada aqui é derivado de markdown. São arquivos que se alimentam: o estatuto de cada
+# termo, os metadados de cada semente, o registro documental e o rastro das execuções.
+# O que o protocolo já diz não se copia para JSON — lê-se do documento.
 
-
-def _sub_descritores(d):
-    """Tudo é derivado, exceto `estatuto[].validacoes`; a chave e o termo ficam."""
-    saida = {"facetas": []}
-    for f in d["facetas"]:
-        g = {k: v for k, v in f.items() if k != "estatuto"}
-        g["estatuto"] = {
-            idioma: {k: {"termo": e.get("termo", ""),
-                         "no_protocolo": bool(e.get("no_protocolo", True))}
-                     for k, e in termos.items()}
-            for idioma, termos in f.get("estatuto", {}).items()}
-        saida["facetas"].append(g)
-    return saida
-
-
-def _sub_strings(d):
-    return {k: d[k] for k in ("facetas", "expressoes", "executada")}
-
-
-def _sub_criterios(d):
-    return {k: d[k] for k in ("recorte", "criterios")}
-
-
-def _sub_fontes(d):
-    return {k: d[k] for k in ("bases", "ordem_execucao", "via_de_acesso",
-                              "acervos_especiais", "ferramenta_gestao")}
-
-
-def _sub_sementes(d):
-    saida = {"limiar": d["limiar"], "distribuicao": d["distribuicao"], "estudos": []}
-    for e in d["estudos"]:
-        g = {k: v for k, v in e.items()
-             if k not in CAMPOS_AUTORAIS}
-        saida["estudos"].append(g)
-    return saida
-
-
-SUBSETS = {
-    "questoes.json": _sub_questoes,
-    "facetas.json": _sub_facetas,
-    "descritores.json": _sub_descritores,
-    "strings.json": _sub_strings,
-    "criterios.json": _sub_criterios,
-    "fontes.json": _sub_fontes,
-    "sementes.json": _sub_sementes,
-}
-
-
-def assina(nome, dado):
-    chave = nome if nome.endswith(".json") else nome + ".json"
-    sub = SUBSETS[chave](dado)
-    return {"sha256": hashlib.sha256(canonico(sub).encode("utf-8")).hexdigest(),
-            "chaves": sorted(caminhos(sub))}
-
-
-def verifica_dado(caminho, dado, doc=DOC):
-    """Problemas de procedência de um JSON já carregado. Lista vazia = íntegro."""
-    nome = pathlib.Path(caminho).name
-    problemas = []
-    esperado = (dado.get("fonte") or {}).get("sha256")
-    if not esperado:
-        problemas.append("sem bloco `fonte`")
-    elif esperado != sha256(texto(doc)):
-        problemas.append("documento do protocolo mudou depois da última derivação; "
-                         "rode  python3 src/protocolo.py --gerar")
-    sub = SUBSETS.get(nome)
-    if sub is None:
-        problemas.append(f"arquivo sem definição de subconjunto derivado: {nome}")
-        return problemas
-    calculado = hashlib.sha256(canonico(sub(dado)).encode("utf-8")).hexdigest()
-    if calculado != (dado.get("derivado") or {}).get("sha256"):
-        problemas.append("campo DERIVADO editado à mão; rode  python3 src/protocolo.py "
-                         "--gerar  para regerar sem tocar no que é autoral")
-    return problemas
-
-
-def carrega(caminho):
-    """Carrega um JSON de data/ e recusa seguir se estiver defasado ou adulterado."""
+def _le_json(caminho):
+    """Carrega um JSON alimentado. Devolve (dado, erro); erro None quando legível."""
     caminho = pathlib.Path(caminho)
     if not caminho.exists():
-        raise SystemExit(f"{caminho.name} não encontrado: rode  python3 src/protocolo.py --gerar")
+        return None, f"{caminho.relative_to(RAIZ)} ausente"
     try:
-        dado = json.loads(caminho.read_text(encoding="utf-8"))
+        return json.loads(caminho.read_text(encoding="utf-8")), None
     except json.JSONDecodeError as e:
-        raise SystemExit(f"{caminho.name} ilegível: {e}. Regenere com --gerar.")
-    problemas = verifica_dado(caminho, dado)
-    if problemas:
-        raise SystemExit("\n".join(f"{caminho.name}: {p}" for p in problemas))
-    return dado
+        return None, f"{caminho.relative_to(RAIZ)} ilegível: {e}"
 
 
-def conferir_dados():
-    """Confere os JSON de data/ entre si e contra o documento. Devolve (problemas, avisos)."""
+def _indice_estatuto(dado):
+    """{faceta: {idioma: {termo_normalizado: entrada}}}."""
+    idx = {}
+    for f in (dado or {}).get("facetas", []):
+        fid = f.get("id")
+        if fid:
+            idx[fid] = f.get("estatuto") or {}
+    return idx
+
+
+def _chave_semente(e):
+    """Ligação com o protocolo: DOI quando houver; senão, título normalizado."""
+    doi = (e.get("doi") or "").strip().lower()
+    return ("doi:" + doi) if doi else ("ti:" + normaliza(e.get("titulo", ""))[:120])
+
+
+def ligacao_semente(e):
+    """Ligação pública de uma semente: DOI quando houver; senão, título normalizado.
+
+    É a chave que `--sincronizar` usa e que os consumidores devem usar: o `id` é rótulo,
+    não identidade, e pode mudar sem que o metadado autoral se perca.
+    """
+    return _chave_semente(e)
+
+
+def _indice_sementes(dado):
+    return {e.get("id"): e for e in (dado or {}).get("estudos", []) if e.get("id")}
+
+
+def _problemas_estatuto(dado, d):
     problemas, avisos = [], []
-    dados = {}
-    for nome, caminho in ARQ.items():
-        if not caminho.exists():
-            problemas.append(f"{nome}: ausente — rode  --gerar")
-            continue
-        try:
-            dado = json.loads(caminho.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as e:
-            problemas.append(f"{nome}: ilegível ({e})")
-            continue
-        dados[nome] = dado
-        problemas += [f"{nome}: {p}" for p in verifica_dado(caminho, dado)]
-
-    if len(dados) != len(ARQ):
-        return problemas, avisos
-
-    doc = analisa()
-    conjuntos = {
-        "facetas": {f["id"] for f in dados["facetas"]["facetas"]},
-        "descritores": {f["id"] for f in dados["descritores"]["facetas"]},
-        "strings": {f["faceta"] for f in dados["strings"]["facetas"]},
-    }
-    if len({tuple(sorted(v)) for v in conjuntos.values()}) != 1:
-        problemas.append(f"facetas divergem entre arquivos: {conjuntos}")
-
-    tabelados = {normaliza(x) for f in dados["descritores"]["facetas"]
-                 for i in IDIOMAS for x in f["termos"][i]}
-    for f in dados["strings"]["facetas"]:
-        for termo in f["termos"]:
-            if normaliza(termo) not in tabelados:
-                problemas.append(f"strings: termo {termo!r} da faceta {f['id']} não consta "
-                                 f"de descritores.json")
-
-    protocolo_ids = [e["id"] for e in dados["sementes"]["estudos"] if "id" in e]
-    if len(protocolo_ids) != len(doc["sementes"]):
-        avisos.append(f"sementes.json tem {len(protocolo_ids)} estudos e o protocolo "
-                      f"{len(doc['sementes'])}; ver no_protocolo=false")
-
-    # Estatuto: termo do protocolo sem bloco de validação seria termo silenciosamente
-    # não validado. O bloco pode estar vazio de conteúdo, mas tem de existir.
-    for f in dados["descritores"]["facetas"]:
+    if not isinstance(dado, dict) or "facetas" not in dado:
+        return ["descritores.json sem a chave `facetas`"], []
+    idx = _indice_estatuto(dado)
+    esperadas = {f["id"] for f in d["tabelas"]}
+    if set(idx) != esperadas:
+        problemas.append(f"descritores.json: facetas {sorted(idx)} não são {sorted(esperadas)}")
+    for f in d["tabelas"]:
+        bloco = idx.get(f["id"], {})
         for idioma in IDIOMAS:
-            for termo in f["termos"][idioma]:
-                k = normaliza(termo)
-                e = f.get("estatuto", {}).get(idioma, {}).get(k)
+            if idioma not in bloco:
+                problemas.append(f"descritores: faceta {f['id']} sem bloco do idioma {idioma}")
+                continue
+            tabelados = {normaliza(t): t for t in f["termos"][idioma]}
+            for k, termo in tabelados.items():
+                e = bloco[idioma].get(k)
                 if e is None:
-                    problemas.append(f"descritores: faceta {f['id']} {idioma} {termo!r} "
-                                     f"sem bloco de estatuto")
-    if AUX["consultas"].exists():
-        for c in json.loads(AUX["consultas"].read_text(encoding="utf-8")).get("consultas", []):
-            arq = RAIZ / c.get("arquivo", "")
-            if not c.get("arquivo") or not arq.exists():
-                problemas.append(f"consultas: {c.get('id')} aponta arquivo ausente "
-                                 f"{c.get('arquivo')!r}")
+                    problemas.append(f"descritores: {f['id']} {idioma} {termo!r} sem bloco "
+                                     f"de estatuto")
+                elif not e.get("validacoes"):
+                    problemas.append(f"descritores: {f['id']} {idioma} {termo!r} sem "
+                                     f"validação registrada")
+            for k, e in bloco[idioma].items():
+                if k not in tabelados:
+                    avisos.append(f"descritores: {f['id']} {idioma} "
+                                  f"{e.get('termo') or k!r} fora do protocolo, estatuto "
+                                  f"preservado — decidir")
     return problemas, avisos
 
 
-# --------------------------------------------------------------------------- gerar
-def _fonte(t):
-    return {"arquivo": str(DOC.relative_to(RAIZ)), "sha256": sha256(t)}
+def _problemas_sementes(dado, d):
+    problemas, avisos = [], []
+    if not isinstance(dado, dict) or "estudos" not in dado:
+        return ["sementes.json sem a chave `estudos`"], []
+    idx = _indice_sementes(dado)
+    protocolo = {e["id"]: e for e in d["sementes"]}
+    for ident, e in protocolo.items():
+        meta = idx.get(ident)
+        if meta is None:
+            problemas.append(f"sementes: {ident} ({_chave_semente(e)}) sem metadados")
+            continue
+        if meta.get("ligacao") and meta["ligacao"] != _chave_semente(e):
+            avisos.append(f"sementes: {ident} tem ligação {meta['ligacao']!r} e o protocolo "
+                          f"{_chave_semente(e)!r} — conferir")
+        for campo in CAMPOS_AUTORAIS:
+            if campo not in meta:
+                problemas.append(f"sementes: {ident} sem o campo {campo!r}")
+    for ident, meta in idx.items():
+        if ident not in protocolo:
+            avisos.append(f"sementes: {ident} fora do protocolo, metadados preservados — "
+                          f"decidir")
+    return problemas, avisos
 
 
-def _grava(caminho, nome, conteudo, fonte):
-    dado = {"_leia": LEIA[nome], "fonte": fonte,
-            "derivado": assina(nome, conteudo)}
-    dado.update(conteudo)
-    caminho.parent.mkdir(parents=True, exist_ok=True)
-    caminho.write_text(json.dumps(dado, ensure_ascii=False, indent=2) + "\n",
-                       encoding="utf-8")
+def _problemas_registro(dado):
+    if not isinstance(dado, dict):
+        return ["registro_execucao.json não é um objeto"]
+    bases = dado.get("bases")
+    if not isinstance(bases, dict):
+        return ["registro_execucao.json sem a chave `bases`"]
+    faltam = [b for b in ("BD1", "BD2", "BD3", "BD4") if b not in bases]
+    if faltam:
+        return [f"registro_execucao.json sem as bases {faltam}"]
+    return []
 
 
-def _existente(caminho):
-    if not caminho.exists():
-        return {}
+def _problemas_consultas(dado):
+    problemas = []
+    for c in (dado or {}).get("consultas", []):
+        arq = RAIZ / (c.get("arquivo") or "")
+        if not c.get("arquivo") or not arq.exists():
+            problemas.append(f"consultas: {c.get('id')} aponta arquivo ausente "
+                             f"{c.get('arquivo')!r}")
+    return problemas
+
+
+def _problemas_bases(d):
+    problemas = []
+    for slug in FICHAS:
+        try:
+            base = base_derivada(slug, d)
+            problemas += [f"{slug}: {p}" for p in cobertura_base(slug, base, d["tabelas"])]
+        except ProtocoloInvalido as e:
+            problemas.append(f"{slug}: {e}")
+    return problemas
+
+
+def conferir_dados():
+    """Confere os arquivos alimentados contra o documento. Devolve (problemas, avisos)."""
+    problemas, avisos = [], []
     try:
-        return json.loads(caminho.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as e:
-        raise SystemExit(f"{caminho} ilegível: {e}. Corrija ou remova antes de gerar.")
+        d = analisa()
+    except ProtocoloInvalido as e:
+        return [f"documento ilegível: {e}"], []
+
+    dado, erro = _le_json(DESCRITORES)
+    if erro:
+        problemas.append(erro + " — rode  --sincronizar")
+    else:
+        p, a = _problemas_estatuto(dado, d)
+        problemas += p
+        avisos += a
+
+    dado, erro = _le_json(SEMENTES)
+    if erro:
+        problemas.append(erro + " — rode  --sincronizar")
+    else:
+        p, a = _problemas_sementes(dado, d)
+        problemas += p
+        avisos += a
+
+    dado, erro = _le_json(REGISTRO)
+    if erro:
+        problemas.append(erro)
+    else:
+        problemas += _problemas_registro(dado)
+
+    dado, erro = _le_json(AUX["consultas"])
+    if erro:
+        problemas.append(erro + " — rode  --sincronizar")
+    else:
+        problemas += _problemas_consultas(dado)
+
+    problemas += _problemas_bases(d)
+    return problemas, avisos
 
 
-def _instrumentos(idioma):
-    return INSTRUMENTO_POR_IDIOMA[idioma]
-
-
-OCUPADO = ("status_proposto", "consultado_em", "arquivo_evidencia", "decisao_ReT")
-
-
+# ------------------------------------------------------------------- sincronização
 def _estatuto_novo(termo, idioma, livre):
     validacoes = []
-    for inst in _instrumentos(idioma):
+    for inst in INSTRUMENTO_POR_IDIOMA[idioma]:
         v = {"instrumento": inst}
         if livre:
             v.update(status_proposto=STATUS_LIVRE_DECISAO,
@@ -979,13 +1538,14 @@ def _estatuto_novo(termo, idioma, livre):
         else:
             v["observacao_tecnica"] = "aguardando consulta"
         validacoes.append(v)
-    return {"termo": termo, "no_protocolo": True, "validacoes": validacoes}
+    return {"termo": termo,
+            "validacoes": _completa_validacoes(validacoes, idioma, livre)}
 
 
-def _garante_validacoes(validacoes, idioma, livre):
+def _completa_validacoes(validacoes, idioma, livre):
     """Completa o instrumento que faltar, sem tocar no que já foi registrado."""
     vistos = {v.get("instrumento") for v in validacoes}
-    for inst in _instrumentos(idioma):
+    for inst in INSTRUMENTO_POR_IDIOMA[idioma]:
         if inst in vistos:
             continue
         novo = {"instrumento": inst}
@@ -999,139 +1559,150 @@ def _garante_validacoes(validacoes, idioma, livre):
     for v in validacoes:
         for c in CAMPOS_VALIDACAO:
             v.setdefault(c, "")
-        # Linha intocada recebe o marcador que a planilha sempre teve. Linha com
-        # qualquer registro — inclusive decisão do pesquisador — não é tocada.
         if not any(v.get(c) for c in OCUPADO) and not v.get("observacao_tecnica"):
             v["observacao_tecnica"] = "aguardando consulta"
     return validacoes
 
 
-def _merge_descritores(facetas_novas, existente):
-    """Preserva o estatuto por (faceta, idioma, termo normalizado)."""
-    anterior = {f["id"]: f for f in existente.get("facetas", []) if "id" in f}
-    facetas = []
-    for f in facetas_novas:
-        est_ant = anterior.get(f["id"], {}).get("estatuto", {})
-        f = {k: v for k, v in f.items()}
-        f["estatuto"] = {}
+def _sincroniza_estatuto(d, existente):
+    """Acrescenta o termo novo e preserva o estatuto; o retirado fica e é reportado."""
+    idx = _indice_estatuto(existente)
+    facetas, novos, retirados = [], [], []
+    for f in d["tabelas"]:
+        atual = {}
         for idioma in IDIOMAS:
-            atual = {}
+            bloco = {}
+            antigo = idx.get(f["id"], {}).get(idioma, {})
             for termo in f["termos"][idioma]:
                 k = normaliza(termo)
-                e = copy.deepcopy(est_ant.get(idioma, {}).get(k))
+                e = copy.deepcopy(antigo.get(k))
                 if e is None:
                     e = _estatuto_novo(termo, idioma, f["livre"])
+                    novos.append(f"{f['id']}/{idioma}: {termo}")
                 else:
                     e["termo"] = termo
-                    e["no_protocolo"] = True
-                    e["validacoes"] = _garante_validacoes(e.get("validacoes", []),
-                                                          idioma, f["livre"])
-                atual[k] = e
-            # Termo retirado do protocolo não apaga o estatuto: fica marcado e é
-            # reportado por --pendencias, para decisão, não para descarte automático.
-            for k, e in est_ant.get(idioma, {}).items():
-                if k in atual:
-                    continue
-                e = copy.deepcopy(e)
-                e["no_protocolo"] = False
-                atual[k] = e
-            f["estatuto"][idioma] = atual
-        facetas.append(f)
-    return facetas
+                    e["validacoes"] = _completa_validacoes(
+                        e.get("validacoes", []), idioma, f["livre"])
+                bloco[k] = e
+            for k, e in antigo.items():
+                if k not in bloco:
+                    bloco[k] = copy.deepcopy(e)
+                    retirados.append(f"{f['id']}/{idioma}: {e.get('termo') or k}")
+            atual[idioma] = bloco
+        facetas.append({"id": f["id"], "estatuto": atual})
+    return ({"_leia": LEIA["descritores"], "versao": 2, "facetas": facetas},
+            novos, retirados)
 
 
-def _chaves_semente(e):
-    d = (e.get("doi") or "").strip().lower()
-    return ("doi:" + d if d else "ti:" + normaliza(e.get("titulo", ""))[:80],
-            "ti:" + normaliza(e.get("titulo", ""))[:80])
-
-
-def _merge_sementes(estudos_novos, existente):
-    """Preserva os campos autorais por DOI ou, na falta dele, por título normalizado."""
-    antigos = existente.get("estudos", [])
-    usados = set()
-    saida = []
-    for e in estudos_novos:
-        k_doi, k_tit = _chaves_semente(e)
+def _sincroniza_sementes(d, existente):
+    """Casa por DOI ou título, com o id como último recurso; preserva o conferido."""
+    antigos = (existente or {}).get("estudos", [])
+    por_ligacao = {}
+    for e in antigos:
+        por_ligacao.setdefault(e.get("ligacao"), []).append(e)
+    usados, estudos, novos, religados = set(), [], [], []
+    for e in d["sementes"]:
+        ligacao = _chave_semente(e)
         escolhido = None
-        if k_doi.startswith("doi:"):
-            escolhido = next((i for i, a in enumerate(antigos)
-                              if i not in usados and _chaves_semente(a)[0] == k_doi), None)
+        for cand in por_ligacao.get(ligacao, []):
+            if id(cand) not in usados:
+                escolhido = cand
+                break
         if escolhido is None:
-            escolhido = next((i for i, a in enumerate(antigos)
-                              if i not in usados and _chaves_semente(a)[1] == k_tit), None)
-        ant = antigos[escolhido] if escolhido is not None else {}
-        if escolhido is not None:
-            usados.add(escolhido)
-        novo = dict(e)
-        for c in CAMPOS_AUTORAIS:
-            novo[c] = ant.get(c, "")
-        novo["no_protocolo"] = True
-        saida.append(novo)
-
-    # Semente que saiu do protocolo não é apagada: o metadado conferido é evidência.
-    for i, ant in enumerate(antigos):
-        if i in usados:
+            for cand in antigos:
+                if id(cand) in usados or cand.get("id") != e["id"]:
+                    continue
+                escolhido = cand
+                religados.append(f"{e['id']}: ligação atualizada de "
+                                 f"{cand.get('ligacao')!r} para {ligacao!r}")
+                break
+        if escolhido is None:
+            meta = {"id": e["id"], "ligacao": ligacao}
+            meta.update({campo: "" for campo in CAMPOS_AUTORAIS})
+            novos.append(e["id"])
+            estudos.append(meta)
             continue
-        novo = copy.deepcopy(ant)
-        for c in CAMPOS_AUTORAIS:
-            novo.setdefault(c, "")
-        novo["no_protocolo"] = False
-        saida.append(novo)
-    return saida
+        usados.add(id(escolhido))
+        meta = {"id": e["id"], "ligacao": ligacao}
+        for campo in CAMPOS_AUTORAIS:
+            meta[campo] = escolhido.get(campo, "")
+        estudos.append(meta)
+    orfaos = [x for x in antigos if id(x) not in usados]
+    return ({"_leia": LEIA["sementes"], "versao": 2, "estudos": estudos},
+            novos, religados, orfaos)
 
 
-def gerar(t=None):
+def _escreve(caminho, dado):
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    caminho.write_text(json.dumps(dado, ensure_ascii=False, indent=2) + "\n",
+                       encoding="utf-8")
+
+
+def sincronizar(t=None):
+    """Reconcilia os arquivos alimentados com o protocolo. Não grava derivado algum."""
     t = texto() if t is None else t
     problemas = conferir(t)
     if problemas:
-        print("Documento fora da forma esperada; nada foi gerado:")
+        print("Documento fora da forma esperada; nada foi sincronizado:")
         for p in problemas:
             print("  -", p)
         return 1
-
     d = analisa(t)
-    fonte = _fonte(t)
 
-    _grava(ARQ["questoes"], "questoes", d["questoes"], fonte)
-    _grava(ARQ["facetas"], "facetas", {"facetas": d["facetas"]}, fonte)
-    _grava(ARQ["criterios"], "criterios",
-           {"recorte": d["recorte"], "criterios": d["criterios"]}, fonte)
-    _grava(ARQ["fontes"], "fontes", d["fontes"], fonte)
-    _grava(ARQ["strings"], "strings",
-           {"facetas": [{"id": d["strings"][f["id"]]["id"], "faceta": f["id"],
-                         "string": d["strings"][f["id"]]["texto"],
-                         "termos": _sem_repeticao(d["strings"][f["id"]]["termos"])}
-                        for f in d["facetas"]],
-            "expressoes": {k: d["expressoes"][k] for k in sorted(d["expressoes"])},
-            "executada": d["executada"]}, fonte)
+    estat, erro = _le_json(DESCRITORES)
+    if erro and "ausente" not in erro:
+        print(erro)
+        return 1
+    dados_d, novos_d, retirados_d = _sincroniza_estatuto(d, estat or {})
 
-    existentes = _existente(ARQ["descritores"])
-    _grava(ARQ["descritores"], "descritores",
-           {"facetas": _merge_descritores(d["tabelas"], existentes)}, fonte)
+    sem, erro = _le_json(SEMENTES)
+    if erro and "ausente" not in erro:
+        print(erro)
+        return 1
+    dados_s, novos_s, religados, orfaos = _sincroniza_sementes(d, sem or {})
 
-    existentes_s = _existente(ARQ["sementes"])
-    _grava(ARQ["sementes"], "sementes",
-           {"limiar": d["limiar"], "distribuicao": d["distribuicao"],
-            "estudos": _merge_sementes(d["sementes"], existentes_s)}, fonte)
+    mudou = False
+    for caminho, dado, rotulo in ((DESCRITORES, dados_d, "descritores.json"),
+                                  (SEMENTES, dados_s, "sementes.json")):
+        atual, _ = _le_json(caminho)
+        if atual == dado:
+            print(f"  {rotulo}: sem mudança")
+            continue
+        _escreve(caminho, dado)
+        print(f"  {rotulo}: gravado")
+        mudou = True
 
-    criados = []
     for nome, caminho in AUX.items():
-        if not caminho.exists():
-            caminho.parent.mkdir(parents=True, exist_ok=True)
-            chave = "consultas" if nome == "consultas" else "tarefas"
-            caminho.write_text(json.dumps(
-                {"_leia": LEIA_AUX[nome], "versao": 1, chave: []},
-                ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            criados.append(caminho)
+        if caminho.exists():
+            continue
+        chave = "consultas" if nome == "consultas" else "tarefas"
+        _escreve(caminho, {"_leia": LEIA_AUX[nome], "versao": 1, chave: []})
+        print(f"  {caminho.relative_to(RAIZ)}: auxiliar criado")
+        mudou = True
 
-    print("Derivados gravados:")
-    for nome, caminho in ARQ.items():
-        print(f"  {caminho.relative_to(RAIZ)}")
-    if criados:
-        for c in criados:
-            print(f"  {c.relative_to(RAIZ)}  (auxiliar criado; não é regerado)")
-    print(relatorio(d))
+    if novos_d:
+        print(f"\n  termo(s) acrescentado(s) ao estatuto: {len(novos_d)}")
+        for x in novos_d[:12]:
+            print("    +", x)
+        if len(novos_d) > 12:
+            print(f"    ... e mais {len(novos_d) - 12}")
+    if retirados_d:
+        print(f"\n  termo(s) fora do protocolo, estatuto preservado: {len(retirados_d)}")
+        for x in retirados_d[:12]:
+            print("    -", x)
+        if len(retirados_d) > 12:
+            print(f"    ... e mais {len(retirados_d) - 12}")
+    if novos_s:
+        print(f"\n  semente(s) acrescentada(s): {', '.join(novos_s)}")
+    if religados:
+        print("\n  ligação de semente refeita:")
+        for x in religados:
+            print("    ~", x)
+    if orfaos:
+        print(f"\n  semente(s) fora do protocolo, metadados preservados: "
+              f"{', '.join(x.get('id', '?') for x in orfaos)}")
+    if not mudou:
+        print("\nNada a gravar: os arquivos alimentados já refletem o protocolo.")
     return 0
 
 
@@ -1143,49 +1714,91 @@ CAMPOS_PENDENTES = (("verificacao", "verificação"), ("escopo", "escopo"),
 def pendencias_relatorio():
     """Relata o que está aberto, sem escrever. O destino é data/pendencias.json."""
     linhas = []
-    for nome, caminho in ARQ.items():
+    try:
+        d = analisa()
+    except ProtocoloInvalido as e:
+        print(f"Documento ilegível: {e}")
+        return 1
+
+    for caminho in (DESCRITORES, SEMENTES, REGISTRO, AUX["consultas"]):
         if not caminho.exists():
-            linhas.append(f"[ausente] {caminho.relative_to(RAIZ)} — rode --gerar")
-    if ARQ["sementes"].exists():
-        s = carrega(ARQ["sementes"])
-        for e in s["estudos"]:
-            if e.get("no_protocolo") is False:
-                linhas.append(f"[semente fora do protocolo] {e.get('id')} {e.get('chave','')} "
-                              f"— decidir: remover com registro ou reincluir no protocolo")
+            linhas.append(f"[ausente] {caminho.relative_to(RAIZ)} — rode --sincronizar")
+
+    s, erro = _le_json(SEMENTES)
+    if erro is None:
+        protocolo = {e["id"]: e for e in d["sementes"]}
+        for ident, meta in _indice_sementes(s).items():
+            if ident not in protocolo:
+                linhas.append(f"[semente fora do protocolo] {ident} — decidir: remover com "
+                              f"registro ou reincluir no protocolo")
                 continue
             vazios = []
             for campo, rotulo in CAMPOS_PENDENTES:
-                v = str(e.get(campo) or "")
+                v = str(meta.get(campo) or "")
                 if not v or v.startswith(("A CONFERIR", "a conferir")) or "PENDÊNCIA" in v:
                     vazios.append(rotulo)
             if vazios:
-                linhas.append(f"[semente {e['id']} {e.get('chave','')}] pendente: "
-                              f"{', '.join(vazios)}")
-    if ARQ["descritores"].exists():
-        d = carrega(ARQ["descritores"])
+                chave = protocolo[ident]["chave"]
+                linhas.append(f"[semente {ident} {chave}] pendente: {', '.join(vazios)}")
+        faltam = [e["id"] for e in d["sementes"] if e["id"] not in _indice_sementes(s)]
+        if faltam:
+            linhas.append(f"[sementes] {len(faltam)} sem metadados: {', '.join(faltam)} — "
+                          f"rodar --sincronizar")
+
+    est, erro = _le_json(DESCRITORES)
+    if erro is None:
+        idx = _indice_estatuto(est)
         sem_estatuto = 0
-        for f in d["facetas"]:
+        for f in d["tabelas"]:
+            bloco = idx.get(f["id"], {})
             for idioma in IDIOMAS:
                 for termo in f["termos"][idioma]:
-                    e = f.get("estatuto", {}).get(idioma, {}).get(normaliza(termo), {})
+                    e = bloco.get(idioma, {}).get(normaliza(termo), {})
                     if not any(v.get("status_proposto") for v in e.get("validacoes", [])):
                         sem_estatuto += 1
         if sem_estatuto:
             linhas.append(f"[descritores] {sem_estatuto} termo(s) sem estatuto de validação "
                           f"— rodar src/validar_termos.py --validar")
-        orfaos = [f"{f['id']}/{i}:{e.get('termo')}" for f in d["facetas"]
-                  for i, termos in f.get("estatuto", {}).items()
-                  for e in termos.values() if e.get("no_protocolo") is False]
+        orfaos = [f"{fid}/{idioma}:{e.get('termo') or k}"
+                  for fid, idiomas in idx.items()
+                  for idioma, termos in idiomas.items()
+                  for k, e in termos.items()
+                  if fid in {f["id"] for f in d["tabelas"]}
+                  and k not in {normaliza(t) for t in
+                                next(f for f in d["tabelas"] if f["id"] == fid)["termos"][idioma]}]
         if orfaos:
             linhas.append(f"[descritores] {len(orfaos)} termo(s) fora do protocolo com "
                           f"estatuto preservado — decidir: {', '.join(orfaos[:6])}")
+        facetas_fora = set(idx) - {f["id"] for f in d["tabelas"]}
+        if facetas_fora:
+            linhas.append(f"[descritores] faceta(s) fora do protocolo: "
+                          f"{', '.join(sorted(facetas_fora))} — decidir")
+
     if AUX["consultas"].exists():
-        c = json.loads(AUX["consultas"].read_text(encoding="utf-8"))
-        if not c.get("consultas"):
-            linhas.append("[consultas] nenhuma execução registrada")
-        for x in c.get("consultas", []):
-            if x.get("status") not in ("valida", "divergente_justificada"):
-                linhas.append(f"[consulta {x.get('id')}] status {x.get('status')!r}")
+        c, erro = _le_json(AUX["consultas"])
+        if erro is None:
+            if not c.get("consultas"):
+                linhas.append("[consultas] nenhuma execução registrada")
+            for x in c.get("consultas", []):
+                if x.get("status") not in ("valida", "divergente_justificada"):
+                    linhas.append(f"[consulta {x.get('id')}] status {x.get('status')!r}")
+
+    # Lacuna que a própria ficha declara e deixa em aberto. A decisão é do pesquisador:
+    # acrescentar o termo à string, com nova execução e novo teste de aderência, ou manter
+    # a perda e declará-la no relatório.
+    for slug in FICHAS:
+        try:
+            b = base_derivada(slug, d)
+        except ProtocoloInvalido as e:
+            linhas.append(f"[{slug}] ficha ilegível: {e}")
+            continue
+        pendentes = [e for e in b["declaracao"]["exclusoes"]
+                     if "pendente" in normaliza(e["motivo"])]
+        if pendentes:
+            linhas.append(
+                f"[{b['base']['nome']}] {len(pendentes)} termo(s) declarado(s) como lacuna, "
+                f"com decisão pendente: " +
+                ", ".join(f"{e['termo']} ({e['faceta']})" for e in pendentes[:6]))
     if not linhas:
         print("Nenhuma pendência detectada nos artefatos de data/.")
     else:
@@ -1254,47 +1867,102 @@ def _mutacoes(t):
     }
 
 
-def _autoteste_dados():
-    """Prova que a assinatura reprova edição de campo derivado e aprova a autoral."""
-    if not all(p.exists() for p in ARQ.values()):
-        print("  [--] sem data/ completo: o teste das assinaturas não foi executado")
+def _autoteste_dados(d):
+    """Prova que a conferência dos arquivos alimentados reprova cada defeito esperado."""
+    est, erro_e = _le_json(DESCRITORES)
+    sem, erro_s = _le_json(SEMENTES)
+    if erro_e or erro_s:
+        print("  [--] arquivos alimentados ausentes: o teste das conferências não foi "
+              "executado")
         return 0
     falhas = 0
 
-    adulterado = json.loads(ARQ["facetas"].read_text(encoding="utf-8"))
-    adulterado["facetas"][0]["nome"] = "nome adulterado à mão"
-    if verifica_dado(ARQ["facetas"], adulterado):
-        print("  [ok] reprovou: campo derivado adulterado em facetas.json")
-    else:
-        print("  [FALHA] aprovou: campo derivado adulterado em facetas.json")
+    def testa(nome, condicao):
+        nonlocal falhas
+        if condicao:
+            print(f"  [ok] reprovou: {nome}")
+        else:
+            print(f"  [FALHA] aprovou indevidamente: {nome}")
+            falhas += 1
+
+    base_p, base_a = _problemas_estatuto(est, d)
+    base_ps, base_as = _problemas_sementes(sem, d)
+    if base_p or base_ps:
+        print(f"  [FALHA] o arquivo corrente já está reprovado: "
+              f"{(base_p or base_ps)[0]}")
         falhas += 1
 
-    autoral = json.loads(ARQ["descritores"].read_text(encoding="utf-8"))
-    idioma = next(i for i in IDIOMAS if autoral["facetas"][0]["estatuto"].get(i))
-    chave = next(iter(autoral["facetas"][0]["estatuto"][idioma]))
-    autoral["facetas"][0]["estatuto"][idioma][chave]["validacoes"][0]["decisao_ReT"] = \
-        "decisão do pesquisador"
-    if not verifica_dado(ARQ["descritores"], autoral):
-        print("  [ok] aprovou: campo autoral editado em descritores.json")
-    else:
-        print("  [FALHA] reprovou indevidamente: campo autoral em descritores.json")
-        falhas += 1
+    copia = copy.deepcopy(est)
+    f0 = copia["facetas"][0]
+    idioma = next(i for i in IDIOMAS if f0["estatuto"].get(i))
+    chave = next(iter(f0["estatuto"][idioma]))
+    del copia["facetas"][0]["estatuto"][idioma][chave]
+    p, _ = _problemas_estatuto(copia, d)
+    testa("termo do protocolo sem bloco de estatuto", bool(p))
 
-    ident = json.loads(ARQ["facetas"].read_text(encoding="utf-8"))
-    ident["facetas"][0]["id"] = "FCT9"
-    if verifica_dado(ARQ["facetas"], ident):
-        print("  [ok] reprovou: identificador adulterado em facetas.json")
-    else:
-        print("  [FALHA] aprovou: identificador adulterado em facetas.json")
-        falhas += 1
+    copia = copy.deepcopy(est)
+    copia["facetas"][0]["estatuto"][idioma][chave]["validacoes"] = []
+    p, _ = _problemas_estatuto(copia, d)
+    testa("termo sem validação registrada", bool(p))
 
-    defasado = json.loads(ARQ["strings"].read_text(encoding="utf-8"))
-    defasado["fonte"]["sha256"] = "0" * 64
-    if verifica_dado(ARQ["strings"], defasado):
-        print("  [ok] reprovou: fonte defasada em strings.json")
-    else:
-        print("  [FALHA] aprovou: fonte defasada em strings.json")
-        falhas += 1
+    copia = copy.deepcopy(est)
+    copia["facetas"][0]["estatuto"][idioma]["termo inventado"] = {
+        "termo": "termo inventado", "validacoes": [{"instrumento": "TBCI"}]}
+    _, a = _problemas_estatuto(copia, d)
+    testa("termo fora do protocolo com estatuto preservado", bool(a))
+
+    copia = copy.deepcopy(sem)
+    copia["estudos"] = copia["estudos"][1:]
+    p, _ = _problemas_sementes(copia, d)
+    testa("semente do protocolo sem metadados", bool(p))
+
+    copia = copy.deepcopy(sem)
+    copia["estudos"][0].pop("verificacao", None)
+    p, _ = _problemas_sementes(copia, d)
+    testa("semente sem campo de conferência", bool(p))
+
+    copia = copy.deepcopy(sem)
+    copia["estudos"].append({"id": "SE99", "ligacao": "ti:semente inventada",
+                             **{c: "" for c in CAMPOS_AUTORAIS}})
+    _, a = _problemas_sementes(copia, d)
+    testa("semente fora do protocolo com metadados preservados", bool(a))
+    return falhas
+
+
+def _autoteste_bases(d):
+    """Prova que a cobertura da base reprova ficha divergente do protocolo.
+
+    Cada defeito é injetado numa cópia do texto da ficha e a conferência tem de recusá-lo.
+    Defeito que a conferência não pega é defeito que passa em silêncio na fonte.
+    """
+    falhas = 0
+    slug = "wos"
+    original = ficha(slug)
+
+    def testa(nome, t_ficha):
+        nonlocal falhas
+        try:
+            base = base_derivada(slug, d, t_ficha)
+            problemas = cobertura_base(slug, base, d["tabelas"])
+        except ProtocoloInvalido as e:
+            problemas = [str(e)]
+        if problemas:
+            print(f"  [ok] reprovou: {nome} — {problemas[0][:88]}")
+        else:
+            print(f"  [FALHA] aprovou indevidamente: {nome}")
+            falhas += 1
+
+    testa("termo do protocolo retirado da string da base",
+          original.replace('TS=("representação do conhecimento" OR ', 'TS=(', 1))
+    testa("termo inventado acrescentado à string da base",
+          original.replace('TS=("representação do conhecimento" OR ',
+                           'TS=("invented search term" OR "representação do conhecimento" OR ',
+                           1))
+    testa("expressão com faceta trocada",
+          original.replace("**Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)",
+                           "**Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)", 1))
+    testa("declaração de cobertura restringindo as camadas",
+          original.replace("| camadas | todas |", "| camadas | nucleo |", 1))
     return falhas
 
 
@@ -1312,11 +1980,12 @@ def autoteste(t=None):
         else:
             print(f"  [FALHA] aprovou indevidamente: {nome}")
             falhas += 1
-    falhas += _autoteste_dados()
+    falhas += _autoteste_dados(analisa(t))
+    falhas += _autoteste_bases(analisa(t))
     if falhas:
         return 1
-    print(f"\n{len(mut)} defeitos injetados no documento e 4 nas assinaturas, "
-          f"todos com o resultado esperado.")
+    print(f"\n{len(mut)} defeitos injetados no documento, 8 nas conferências dos arquivos "
+          f"alimentados e 4 nas fichas das bases, todos com o resultado esperado.")
     return 0
 
 
@@ -1325,17 +1994,18 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--conferir", action="store_true", help="lê o documento e relata problemas")
     ap.add_argument("--conferir-dados", action="store_true",
-                    help="confere os JSON de data/ entre si e contra o documento")
+                    help="confere os arquivos alimentados de data/ contra o documento")
     ap.add_argument("--autoteste", action="store_true",
                     help="injeta defeitos em cópias e exige que as conferências os reprovem")
-    ap.add_argument("--gerar", action="store_true", help="deriva os JSON a partir do documento")
+    ap.add_argument("--sincronizar", action="store_true",
+                    help="reconcilia descritores.json e sementes.json com o documento")
     ap.add_argument("--mostrar", action="store_true", help="resume o que foi lido")
     ap.add_argument("--pendencias", action="store_true",
                     help="relata pendências encontradas nos artefatos, sem escrever")
     a = ap.parse_args()
 
-    if a.gerar:
-        return gerar()
+    if a.sincronizar:
+        return sincronizar()
     if a.pendencias:
         return pendencias_relatorio()
     if a.conferir_dados:
@@ -1347,7 +2017,7 @@ def main():
             for p in problemas:
                 print("  -", p)
             return 1
-        print("Artefatos de data/ na forma esperada.")
+        print("Arquivos alimentados de data/ na forma esperada.")
         return 0
     if a.conferir or a.autoteste:
         problemas = conferir()

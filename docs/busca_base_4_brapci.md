@@ -1,7 +1,7 @@
 # Strings de busca — BRAPCI
 
 **Protocolo:** Representação do conhecimento sobre práticas educacionais e seus fatores situacionais — revisão sistemática conduzida pelo modelo RS Banyan.  
-**Posição no modelo:** Módulo 3, Etapa 1, 3º passo (expressões de busca) e Etapa 2, 1º passo (execução).  
+**Posição no modelo:** Módulo 3, Etapa 1, 3º e 4º passos (strings e expressões de busca) e Etapa 2, 1º passo (execução).  
 **Fonte:** BRAPCI — Base de Dados Referencial de Artigos de Periódicos em Ciência da Informação.  
 **Responsável técnico:** Junilson Pereira Souza. **Validação temática:** VT.  
 **Vigente desde:** 17/11/2026. **Registro de execução:** `data/registro_execucao.json`, base `BD4`. **Histórico das decisões:** Anexo A.
@@ -44,40 +44,55 @@
 
 ## 2. Critérios de elegibilidade
 
-| Critério | Na consulta? | Como |
-| :--- | :--- | :--- |
-| Intervalo temporal — de 2017 até a data de execução, 2026 parcialmente coberto | **Sim, pelo filtro de ano** | aplicar ano inicial e final na interface, antes de exportar: 2017 e 2026, com o ano em curso conforme a data de consulta |
-| Idiomas | **Dispensado** | a base é de produção brasileira em Ciência da Informação; as strings usam os termos em português, com os equivalentes em inglês apenas na faceta 🟦 |
-| Tipo documental | **Dispensado** | a base é referencial de artigos de periódicos, o que corresponde a um dos tipos admitidos pelo protocolo |
-| Texto completo | **Não** | verificação individual na 2ª filtragem |
-| Domínio educacional | **Sim**, por âncora | faceta 🟨 nas consultas combinadas; ver a ressalva sobre o seu efeito nesta base |
-| Adequação temática | **Não** | filtragens do Módulo 3, Etapa 3 |
+| Critério | ID | Na consulta? | Como |
+| :--- | :---: | :--- | :--- |
+| Intervalo temporal — de 2017 até a data de execução, 2026 parcialmente coberto | CE1 / CE2 | **Sim, pelo filtro de ano** | aplicar ano inicial e final na interface, antes de exportar: 2017 e 2026, com o ano em curso conforme a data de consulta |
+| Idiomas — português, inglês e espanhol | CE3 | **Dispensado** | a base é de produção brasileira em Ciência da Informação; as strings usam os termos em português, com os equivalentes em inglês apenas na faceta 🟦 |
+| Tipo documental | CE4 | **Dispensado** | a base é referencial de artigos de periódicos, o que corresponde a um dos tipos admitidos pelo protocolo; revisões sistemáticas e de escopo permanecem elegíveis |
+| Texto completo | CE5 | **Não** | verificação individual na 2ª filtragem |
+| Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
+| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | a faceta 🟨 (FCT2) nas consultas combinadas; ver a ressalva sobre o seu efeito nesta base |
+| Outros tipos documentais — editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos sem texto completo e versões preliminares | CE9 | **Não** | decisão de leitura, na 2ª filtragem |
 
 ---
 
 ## 3. Strings por faceta
 
-Strings montadas sobre o **núcleo** de cada quadro terminológico, em português e, na faceta de artefatos, também em inglês. Elas alimentam a forma longa da seção 4 e **não são a forma executada** nesta base: a execução usa as consultas curadas.
+Strings montadas sobre o **núcleo** de cada quadro terminológico, em português e, na faceta de artefatos, também em inglês. Elas alimentam a forma longa da seção 4 e **não são a forma executada** nesta base: a execução usa as consultas curadas. `STRn` é o identificador do protocolo e `#n` a string correspondente. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
 
-### `#1` — 🟦 Artefatos de representação e organização do conhecimento — **âncora obrigatória**
+**Redução declarada em relação ao protocolo.** A forma longa usa **apenas o núcleo** de `STR1`–`STR4` e as suas formas morfológicas, e não a lista integral: os termos de *próximos* e de *relacionados* ficam de fora dela e entram, por seleção, nas consultas curadas da seção 4. A redução é decisão desta base — o núcleo é o que as duas sementes exigem e o que o teto de 1.000 registros comporta —, e a consequência é que **todo acréscimo ao vocabulário obriga a revisitar a lista curada**, que não lê as facetas.
+
+### Declaração de cobertura
+
+O que esta busca alcança do vocabulário do protocolo. `src/protocolo.py` lê esta tabela para conferir a string contra o protocolo; termo ausente e não declarado reprova a geração do derivado desta base.
+
+| Parâmetro | Valor |
+| :--- | :--- |
+| idiomas | FCT1: pt, en; FCT2: pt; FCT3: pt; FCT4: pt |
+| camadas | nucleo |
+| derivações | morfologia |
+
+**Redução declarada.** Núcleo e idioma da produção nacional, acima. A faceta de artefatos entra também em inglês porque parte da produção nacional sobre o tema é publicada nessa língua.
+
+### `STR1` — conjunto `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
 ```
 ("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems")
 ```
 
-### `#2` — 🟨 Domínio educacional — **âncora obrigatória**
+### `STR2` — conjunto `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
 
 ```
 ("educação" OR "educacional" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educacionais" OR "educativo" OR "educativos")
 ```
 
-### `#3` — 🟥 Práticas do processo de ensino-aprendizagem
+### `STR3` — conjunto `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
 ```
 ("prática" OR "práticas educacionais" OR "prática educacional" OR "prática pedagógica" OR "prática docente")
 ```
 
-### `#4` — 🟧 Fatores situacionais
+### `STR4` — conjunto `#4` — 🟧 FCT4 — Fatores situacionais
 
 ```
 ("fatores situacionais" OR "fator situacional" OR "situação de uso educacional" OR "contexto de aplicação" OR "contexto de uso" OR "contexto educacional" OR "contexto de aprendizagem")
@@ -92,7 +107,7 @@ Esta base tem **duas formas**, e só uma se executa.
 | Forma | Composição | Situação |
 | :--- | :--- | :--- |
 | **Curada** — consultas curtas, de uma e de duas facetas | termos escolhidos um a um | **é a forma de execução** |
-| **Longa** — expressões EB1 a EB4 | strings da seção 3 | **não se executa**; fica como registro e como ponto de partida de uma forma intermediária |
+| **Longa** — expressões EB1 a EB5 | strings da seção 3 | **não se executa**; fica como registro e como ponto de partida de uma forma intermediária |
 
 As consultas curadas não leem as facetas: **acréscimo de termo ao vocabulário exige revisitar esta lista**, ao contrário das expressões longas.
 
@@ -102,7 +117,7 @@ Todas as consultas abaixo devem ser executadas, uma a uma, com o filtro de ano e
 
 > **Onde a lista traz variantes de um mesmo radical, preferir o truncamento.** `ontolog*` substitui `ontologia`, `ontologias` e as formas adjetivais numa só consulta. As consultas abaixo mantêm as formas explícitas porque são o registro do vocabulário; ao executar, pode-se usar o radical e anotar a substituição.
 
-#### Faceta 🟦 isolada — varredura da representação do conhecimento na produção nacional
+#### Faceta FCT1 (🟦) isolada — varredura da representação do conhecimento na produção nacional
 
 | # | Consulta |
 | :---: | :--- |
@@ -124,7 +139,7 @@ Todas as consultas abaixo devem ser executadas, uma a uma, com o filtro de ano e
 
 A faceta 🟦 isolada é executada na íntegra porque, nesta base, o conjunto de artigos sobre representação do conhecimento é da ordem de grandeza que a leitura de títulos comporta, e porque o cruzamento com 🟨 pode falhar quando o vínculo educacional está no corpo do texto e não nos metadados. O resultado é a **rede de segurança** desta base.
 
-#### Pares 🟦 + 🟨 — representação no domínio educacional
+#### Pares FCT1 (🟦) + FCT2 (🟨) — representação no domínio educacional
 
 | # | Consulta |
 | :---: | :--- |
@@ -176,29 +191,39 @@ A faceta 🟦 isolada é executada na íntegra porque, nesta base, o conjunto de
 
 As expressões abaixo usam o núcleo das facetas, e não a lista integral. Confrontadas com o conjunto-semente, **não recuperam nenhuma das duas sementes desta base**: o núcleo da faceta 🟦 não ocorre nos dois títulos, que dizem `ontologia` e `modelo de sistema da informação`. Ficam registradas por rastreabilidade e para um uso residual: se o teto de 1.000 atrapalhar consulta a consulta, são o ponto de partida de uma forma intermediária, acrescentando ao núcleo os termos de *próximos* que as sementes exigem — `ontologia` à frente de todos —, com emenda registrada.
 
-**EB1** (geral) — as quatro facetas · 🟦 AND 🟨 AND 🟥 AND 🟧 · **derivada**
+**EB1** (geral) — as quatro facetas · FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧) · **derivada**
 
 ```
 ("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems") AND ("educação" OR "educacional" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educacionais" OR "educativo" OR "educativos") AND ("prática" OR "práticas educacionais" OR "prática educacional" OR "prática pedagógica" OR "prática docente") AND ("fatores situacionais" OR "fator situacional" OR "situação de uso educacional" OR "contexto de aplicação" OR "contexto de uso" OR "contexto educacional" OR "contexto de aprendizagem")
 ```
 
-**EB2** (específica) — modelos e ontologias que representam práticas · 🟦 AND 🟨 AND 🟥 · **derivada**
+**EB2** (específica) — modelos e ontologias que representam práticas · FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) · **derivada**
 
 ```
 ("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems") AND ("educação" OR "educacional" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educacionais" OR "educativo" OR "educativos") AND ("prática" OR "práticas educacionais" OR "prática educacional" OR "prática pedagógica" OR "prática docente")
 ```
 
-**EB3** (específica) — artefatos que formalizam fatores situacionais · 🟦 AND 🟨 AND 🟧 · **derivada**
+**EB3** (específica) — artefatos que formalizam fatores situacionais · FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧) · **derivada**
 
 ```
 ("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems") AND ("educação" OR "educacional" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educacionais" OR "educativo" OR "educativos") AND ("fatores situacionais" OR "fator situacional" OR "situação de uso educacional" OR "contexto de aplicação" OR "contexto de uso" OR "contexto educacional" OR "contexto de aprendizagem")
 ```
 
-**EB4** (de cobertura) — artefatos de representação no domínio educacional · 🟦 AND 🟨
+**EB4** (de cobertura restrita) — artefatos no domínio educacional que mencionam prática ou fator situacional · FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧)) · **derivada**
+
+```
+("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems") AND ("educação" OR "educacional" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educacionais" OR "educativo" OR "educativos") AND (("prática" OR "práticas educacionais" OR "prática educacional" OR "prática pedagógica" OR "prática docente") OR ("fatores situacionais" OR "fator situacional" OR "situação de uso educacional" OR "contexto de aplicação" OR "contexto de uso" OR "contexto educacional" OR "contexto de aprendizagem"))
+```
+
+**EB5** (sonda de sensibilidade) — as duas âncoras, sem exigir prática nem fator situacional · FCT1 (🟦) AND FCT2 (🟨) · **sonda**
 
 ```
 ("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems") AND ("educação" OR "educacional" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educacionais" OR "educativo" OR "educativos")
 ```
+
+A forma longa não se executa nesta base: **a execução é a curada**, e é ela que define o
+portfólio. `EB4 = EB2 ∪ EB3` vale também aqui, e `EB5` é a antiga expressão de cobertura de
+duas facetas, mantida como sonda de sensibilidade.
 
 Expressões de três facetas ou mais tendem, nesta base, a retorno nulo ou próximo de zero. O retorno nulo **é informação**: registra-se e constitui indício para a enunciação da lacuna na produção nacional. Não se deve, por causa dele, relaxar a âncora 🟦.
 

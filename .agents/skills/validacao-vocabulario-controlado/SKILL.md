@@ -52,7 +52,7 @@ criado pelo gerador a partir das tabelas do protocolo. A planilha
 e para registrar decisões: `--exportar` a gera a partir do JSON, `--importar` traz de volta
 as colunas `decisao_ReT`, `justificativa_ReT` e `data_decisao`. É ela o instrumento de
 controlo, e **não se duplica em documento algum** — o IO 1 declara a regra e aponta para
-ela. `--gerar` reconcilia o estatuto com o protocolo preservando status e evidência.
+ela. `--sincronizar` reconcilia o estatuto com o protocolo preservando status e evidência.
 
 Campos que decidem: `instrumento`, `consultado_em`, `status_proposto`,
 `rotulo_autorizado`, `arquivo_evidencia`, `url_consultada`, `decisao_ReT`,

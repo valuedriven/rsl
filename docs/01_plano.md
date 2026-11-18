@@ -113,7 +113,7 @@
 | \# | Decisão | Efeito sobre o prazo |
 | :---- | :---- | :---- |
 | 1 | Escopo estreitado: quatro questões secundárias, com os demais problemas representacionais transferidos a revisões autônomas | Reduz o volume de fichamento e a heterogeneidade do portfólio |
-| 2 | Quatro facetas e quatro expressões de busca, contra o desenho inicial de maior número | Reduz a Etapa 2 do Módulo 3 em cerca de um terço |
+| 2 | Quatro facetas e cinco expressões de busca — EB1 a EB5, com EB4 executada e EB5 como sonda de sensibilidade —, contra o desenho inicial de maior número | Reduz a Etapa 2 do Módulo 3 em cerca de um terço |
 | 3 | Quatro bases, suprimindo aquelas cuja cobertura é absorvida pelas remanescentes | Reduz execuções, exportações e deduplicação |
 | 4 | Módulos 1 e 2 executados em paralelo, com o controle terminológico iniciado já na Etapa 1 do Módulo 1 | Comprime o primeiro mês |
 | 5a | Classificação assistida por LLM na 1ª filtragem, em paralelo ao avaliador humano. A IA não exclui estudo algum e não é avaliador independente: produz classificação auxiliar, que o humano confirma ou descarta | Reduz a 1ª filtragem sem dispensar decisão humana |
@@ -202,8 +202,8 @@
 | Índice kappa entre os dois revisores humanos | Concordância da decisão de triagem, sempre antes do desbloqueio do modo cego | Calculado nas TRÊS filtragens; nunca com a IA | Divergência vai a discussão e, remanescendo, ao VT, com a decisão registrada |
 | Calibração da triagem assistida | Sensibilidade do ASReview, aferida em conjunto DISJUNTO do de ajuste | 95% | Triagem permanece integralmente humana |
 | Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Coincidência exata das contagens | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
-| Conferência de coerência entre as quatro expressões | Se a arquitetura de contenção se verifica no retorno de cada base | A geral está contida nas duas específicas, e ambas na de cobertura; a geral é exatamente a interseção das duas específicas | Reexecução na base, e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE — ver a lição no preâmbulo desta seção |
-| Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A geração dos instrumentos é RECUSADA pela guarda, e não há saída a conferir |
+| Conferência de coerência entre as cinco expressões | Se a arquitetura de contenção se verifica no retorno de cada base | A geral está contida nas duas específicas; ambas estão contidas na de cobertura, que é a sua união; e a sonda contém a de cobertura. A geral é exatamente a interseção das duas específicas | Reexecução na base, e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE — ver a lição no preâmbulo desta seção |
+| Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A conferência da ficha é RECUSADA pela guarda, e não há saída a conferir |
 | Dupla passagem de deduplicação | Duplicatas remanescentes após DOI e título, e depois por semelhança semântica | Par duvidoso NÃO é fundido | O par permanece como dois registros e a decisão é registrada |
 | Cobertura de campo nas exportações | Registros sem palavras-chave ou sem resumo, que cegam a aferição de aderência | Fração declarada por base | A fração cega é reportada como limitação daquela base, e não silenciada |
 

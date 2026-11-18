@@ -35,10 +35,10 @@ evidência correspondente é linha inválida — foi esse o defeito que originou
 de procedência do protocolo.
 
 Os termos NÃO são digitados aqui: vêm das tabelas do controle terminológico do
-documento do protocolo, derivadas por `src/protocolo.py --gerar`.
+documento do protocolo, lidas por `src/protocolo.py`.
 
 USO
-  python3 src/protocolo.py --gerar                  # antes de tudo
+  python3 src/protocolo.py --sincronizar            # após alterar o protocolo
   python3 src/validar_termos.py --sonda             # obrigatório antes de tudo
   python3 src/validar_termos.py --exportar          # planilha a partir do JSON, sem rede
   python3 src/validar_termos.py --validar tbci      # executa a validação no TBCI
@@ -311,22 +311,30 @@ def sonda():
 
 # ------------------------------------------------------------------- leitura/escrita
 def carrega():
-    """O registro derivado+autoral, recusando seguir com derivado defasado."""
-    return protocolo.carrega(DESCRITORES)
+    """O registro autoral, ligado ao protocolo por faceta, idioma e termo normalizado."""
+    return json.loads(DESCRITORES.read_text(encoding="utf-8"))
 
 
 def linhas_de(dados):
-    """Uma linha por termo e instrumento, ligada ao bloco de estatuto que a origina."""
-    for f in dados["facetas"]:
+    """Uma linha por termo e instrumento, ligada ao bloco de estatuto que a origina.
+
+    Os termos vêm do protocolo — a lista que se valida é a dele, não a do JSON. O JSON
+    guarda o estatuto; termo do protocolo sem estatuto é defeito de sincronização."""
+    d = protocolo.analisa()
+    info = {f["id"]: f for f in d["facetas"]}
+    est = {f["id"]: f.get("estatuto", {}) for f in dados.get("facetas", [])}
+    for f in d["tabelas"]:
+        meta = info.get(f["id"], {})
         for idioma in protocolo.IDIOMAS:
             for termo in f["termos"][idioma]:
-                e = f.get("estatuto", {}).get(idioma, {}).get(protocolo.normaliza(termo))
+                e = est.get(f["id"], {}).get(idioma, {}).get(protocolo.normaliza(termo))
                 if e is None:
-                    raise SystemExit(f"descritores.json: termo {termo!r} da faceta {f['id']} "
-                                     f"sem bloco de estatuto; rode  src/protocolo.py --gerar")
+                    raise SystemExit(
+                        f"descritores.json: termo {termo!r} da faceta {f['id']} sem bloco de "
+                        f"estatuto; rode  python3 src/protocolo.py --sincronizar")
                 for v in e.get("validacoes", []):
-                    yield {"faceta": f["id"], "faceta_nome": f["nome"],
-                           "ancora": "sim" if f["ancora"] else "não",
+                    yield {"faceta": f["id"], "faceta_nome": meta.get("nome", ""),
+                           "ancora": "sim" if meta.get("ancora") else "não",
                            "idioma": idioma, "termo": termo, "_v": v}
 
 
