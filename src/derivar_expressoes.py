@@ -76,7 +76,7 @@ def _mostra(caminho):
         return str(caminho)
 
 # O documento é a única fonte: vocabulário, composição e recorte vêm de lá.
-_D = protocolo.analisa()
+_D = protocolo.dados()
 _STR = _D["strings"]
 FACETA_DE = {v["id"]: fid for fid, v in _STR.items()}
 # Composição em grupos: cada EB é um AND de grupos; cada grupo é uma disjunção de facetas.
@@ -104,24 +104,26 @@ LIMITE_DIVERGENCIA = float(_D["divergencia"])
 LIMITE_SENSIBILIDADE = tuple(_D["sensibilidade"])
 
 STATUS_VALIDOS = ("valida", "divergente_justificada")
-# Siglas das bases: `sigla` de cada ficha em [fichas] do config.toml, por slug.
-BASE_CANONICA = {slug: f["sigla"] for slug, f in protocolo.FICHAS.items()}
-BD_DE = {BASE_CANONICA[slug]: info["bd"] for slug, info in protocolo.FICHAS.items()}
-SLUG_DE_BD = {info["bd"]: slug for slug, info in protocolo.FICHAS.items()}
-
-
-def _base_canonica(base):
-    s = str(base or "").strip()
-    return BASE_CANONICA.get(s.lower(), s)
+# Bases da tabela "Bases de dados" do protocolo: a sigla é a chave de linha de comando e o
+# nome da base nas saídas; o identificador BDn é a chave do registro de execuções.
+SIGLA_DE_BD = {b["id"]: b["sigla"] for b in _D["bases"]}
+BD_DE = {b["sigla"]: b["id"] for b in _D["bases"]}
 
 
 def _bd_de(base):
+    """(BDn, sigla) da base pedida pela sigla ou pelo identificador; (None, texto) se não
+    for nenhum dos dois."""
     s = str(base or "").strip()
-    if s.upper() in SLUG_DE_BD:
-        bd = s.upper()
-        return bd, BASE_CANONICA[SLUG_DE_BD[bd]]
-    nome = _base_canonica(s)
-    return BD_DE.get(nome), nome
+    if s in BD_DE:
+        return BD_DE[s], s
+    if s.upper() in SIGLA_DE_BD:
+        return s.upper(), SIGLA_DE_BD[s.upper()]
+    return None, s
+
+
+def _bases_validas():
+    return (f"siglas {', '.join(BD_DE)} ou identificadores "
+            f"{', '.join(SIGLA_DE_BD)}")
 
 
 # ------------------------------------------------------------------ normalização
@@ -506,8 +508,7 @@ def _consultas_do_registro(dado):
     for bd, base in (dado.get("bases") or {}).items():
         if not isinstance(base, dict):
             continue
-        slug = base.get("slug") or SLUG_DE_BD.get(bd, "")
-        nome = BASE_CANONICA.get(slug, base.get("base") or bd)
+        nome = SIGLA_DE_BD.get(bd, base.get("base") or bd)
         for e in base.get("execucoes") or []:
             arq = str(e.get("arquivo") or "").strip()
             if not arq:
@@ -565,6 +566,17 @@ def _id_expressao(expr):
 
 def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
     """Registra uma execução no registro por base e confere o retorno contra o arquivo."""
+    id_expr = _id_expressao(expressao)
+    if id_expr is None:
+        print(f"Expressão inválida: {expressao!r}. Use {_expressoes_validas()}.")
+        return 1
+
+    bd, nome = _bd_de(base)
+    if bd is None:
+        print(f"Base inválida: {base!r}. Use {_bases_validas()} (tabela 'Bases de dados' "
+              f"do protocolo).")
+        return 1
+
     caminho = pathlib.Path(arquivo)
     if not caminho.is_absolute():
         caminho = (pathlib.Path.cwd() / caminho)
@@ -574,18 +586,6 @@ def registrar(base, expressao, arquivo, retorno, data_hora=None, justificar=""):
     regs = le_arquivo(caminho)
     if not regs:
         print(f"Nenhum registro legível em {arquivo}. Nada foi registrado.")
-        return 1
-
-    id_expr = _id_expressao(expressao)
-    if id_expr is None:
-        print(f"Expressão inválida: {expressao!r}. Use {_expressoes_validas()}.")
-        return 1
-
-    bd, nome = _bd_de(base)
-    if bd is None:
-        bds = [f["bd"] for f in protocolo.FICHAS.values()]
-        print(f"Base inválida: {base!r}. Use {', '.join(protocolo.FICHAS)} ou "
-              f"{bds[0]} a {bds[-1]}.")
         return 1
 
     lidos = len(regs)
@@ -993,7 +993,10 @@ def sensibilidade(base=None):
     _, validas = carrega_consultas()
     existentes = sorted({c.get("base") for c in validas})
     if base:
-        canonica = BASE_CANONICA.get(base.strip().lower(), base.strip())
+        bd, canonica = _bd_de(base)
+        if bd is None:
+            raise SystemExit(f"base inválida: {base!r}. Use {_bases_validas()} (tabela "
+                             f"'Bases de dados' do protocolo).")
         if canonica not in existentes:
             raise SystemExit(f"base {base!r} sem consulta registrada; registradas: "
                              f"{', '.join(existentes) or 'nenhuma'}")

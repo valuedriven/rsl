@@ -3,13 +3,15 @@
 """
 Validação terminológica assistida — RS Banyan, Módulo 3, Etapa 1, 2º passo.
 
-Confronta os termos do quadro terminológico com os instrumentos que o protocolo declara,
-por faceta, na seção "Instrumentos para controle terminológico". O que é propriedade de
-cada instrumento — sigla, idiomas cobertos e modo de consulta — está em `[instrumentos]`
-do `config.toml`. Um termo é planejado para cada instrumento da sua faceta que cubra o
-seu idioma.
+Confronta os termos do quadro terminológico com os instrumentos que o protocolo declara
+na tabela da seção "Instrumentos para controle terminológico" (`Sigla | Instrumento | Modo
+| Caminho | Idiomas | FCTs`). Sigla, modo, idiomas e facetas de cada instrumento vêm de lá,
+lidos por src/protocolo.py. Um termo é planejado para cada instrumento da sua faceta que
+cubra o seu idioma.
 
-Clientes automatizados (modo `tbci` e `unesco`):
+Clientes automatizados — registro `CLIENTES`, pela sigla do instrumento. Instrumento de
+modo `Automático` é consultado pelo cliente da sua sigla; sem cliente com esse nome, a
+leitura do protocolo reprova. O endereço de consulta é do cliente, não da coluna Caminho:
 
   TBCI    Tesauro Brasileiro de Ciência da Informação (IBICT), servidor TemaTres 3.5.2
           API REST documentada em https://vocabularyserver.com/tbci/br/services.php
@@ -18,7 +20,7 @@ Clientes automatizados (modo `tbci` e `unesco`):
   UNESCO  UNESCO Thesaurus, endpoint SPARQL https://vocabularies.unesco.org/sparql
           grafo nomeado <http://vocabularies.unesco.org/thesaurus/>, GET ou POST.
 
-Instrumento de modo `manual` não tem cliente: as suas linhas nascem com o estatuto
+Instrumento de modo `Manual` não tem cliente: as suas linhas nascem com o estatuto
 "pendente de validação manual" e são consultadas e registradas à mão — nunca como termo
 não encontrado.
 
@@ -43,7 +45,7 @@ USO
   python3 src/validar_termos.py --exportar          # reconstrói a planilha, sem rede
   python3 src/validar_termos.py --validar tbci      # executa a validação no TBCI
   python3 src/validar_termos.py --validar unesco
-  python3 src/validar_termos.py --validar ambos --faceta 1
+  python3 src/validar_termos.py --validar todos --faceta 1   # todos os automáticos
   python3 src/validar_termos.py --importar          # reconcilia a planilha com o protocolo
 
 Requer apenas a biblioteca padrão do Python 3.11+.
@@ -69,8 +71,6 @@ RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data"
 EVID = DATA / "evidencia"
 CSV_SAIDA = protocolo.CSV_VALIDACAO
-# Sigla do instrumento (coluna `instrumento`) → modo de consulta, do config.toml.
-MODO_DE = {i["sigla"]: i["modo"] for i in protocolo.CFG["instrumentos"].values()}
 
 TBCI_SERV = "https://vocabularyserver.com/tbci/br/services.php"
 UNESCO_SPARQL = "https://vocabularies.unesco.org/sparql"
@@ -283,6 +283,29 @@ def unesco_valida(termo):
     return reg, status, dados, ""
 
 
+# ----------------------------------------------------------------------- clientes
+def _cliente_tbci(termo):
+    reg, status, dados, obs = tbci_valida(termo)
+    return (reg, status, dados, obs, reg.get("url_consultada", ""),
+            "TemaTres 3.5.2 — conferir data na sonda")
+
+
+def _cliente_unesco(termo):
+    reg, status, dados, obs = unesco_valida(termo)
+    return reg, status, dados, obs, UNESCO_SPARQL, "UNESCO Thesaurus — grafo " + UNESCO_GRAFO
+
+
+# Sigla do instrumento no protocolo → cliente. É conhecimento da ferramenta, não parâmetro
+# do projeto: src/protocolo.py confere que todo instrumento `Automático` tem cliente aqui.
+# Cada cliente devolve (registro bruto, status, campos, observação, url, versão).
+CLIENTES = {"tbci": _cliente_tbci, "unesco": _cliente_unesco}
+
+
+def automaticos(d):
+    """Siglas dos instrumentos `Automático` do protocolo, na ordem da tabela."""
+    return [s for s, i in d["instrumentos"].items() if i["modo"] == protocolo.MODO_AUTOMATICO]
+
+
 # -------------------------------------------------------------------------- sonda
 def sonda():
     print("SONDAGEM — nada é gravado. Confira cada resposta antes de validar.\n")
@@ -308,8 +331,8 @@ def sonda():
                       "?c skos:prefLabel ?l } }" % UNESCO_GRAFO)
     print(f"\n  idiomas dos prefLabel -> HTTP {cod}")
     print("  " + json.dumps(res, ensure_ascii=False)[:800])
-    print("\n  >> Confira contra `idiomas` do UNESCO Thesaurus em [instrumentos] do config.toml;")
-    print("     divergência se registra no histórico e se corrige na configuração.")
+    print("\n  >> Confira contra a coluna Idiomas de `unesco` na tabela de instrumentos do")
+    print("     protocolo; divergência se registra no histórico e se corrige no protocolo.")
     for t in ("teaching methods", "educational technology"):
         time.sleep(PAUSA)
         reg, status, dados, obs = unesco_valida(t)
@@ -327,12 +350,12 @@ def carrega():
     consulta, ou pendente de validação manual se o instrumento não tem cliente; linha já registrada é preservada campo a campo,
     inclusive decisão do ReT e evidência.
     """
-    d = protocolo.analisa()
+    d = protocolo.dados()
     existente = _planilha_existente()
     dados = {"facetas": []}
     for f in d["tabelas"]:
         est = {}
-        for idioma in protocolo.IDIOMAS:
+        for idioma in d["idiomas"]:
             bloco = {}
             insts = protocolo.instrumentos_do_termo(d, f["id"], idioma)
             for termo in f["termos"][idioma]:
@@ -358,12 +381,12 @@ def linhas_de(dados):
 
     Os termos vêm do protocolo — a lista que se valida é a dele. O estatuto vem da
     planilha; termo do protocolo sem bloco no estado interno é defeito de construção."""
-    d = protocolo.analisa()
+    d = protocolo.dados()
     info = {f["id"]: f for f in d["facetas"]}
     est = {f["id"]: f.get("estatuto", {}) for f in dados.get("facetas", [])}
     for f in d["tabelas"]:
         meta = info.get(f["id"], {})
-        for idioma in protocolo.IDIOMAS:
+        for idioma in d["idiomas"]:
             for termo in f["termos"][idioma]:
                 e = est.get(f["id"], {}).get(idioma, {}).get(protocolo.normaliza(termo))
                 if e is None:
@@ -455,6 +478,7 @@ def importar():
 
 # ------------------------------------------------------------------- execução
 def validar(quais, faceta=None):
+    """Consulta os termos ainda sem estatuto nos instrumentos de sigla em `quais`."""
     dados = carrega()
     feitos = 0
     falhas = 0
@@ -465,19 +489,13 @@ def validar(quais, faceta=None):
         if faceta and str(ln["faceta"]) != str(faceta):
             continue
         inst = v.get("instrumento")
-        modo = MODO_DE.get(inst)
-        if modo not in quais:
+        if inst not in quais:
             continue
 
         termo = ln["termo"]
-        if modo == "tbci":
-            reg, status, dados_inst, obs = tbci_valida(termo)
-            v["url_consultada"] = reg.get("url_consultada", "")
-            v["versao_instrumento"] = "TemaTres 3.5.2 — conferir data na sonda"
-        else:
-            reg, status, dados_inst, obs = unesco_valida(termo)
-            v["url_consultada"] = UNESCO_SPARQL
-            v["versao_instrumento"] = "UNESCO Thesaurus — grafo " + UNESCO_GRAFO
+        reg, status, dados_inst, obs, url, versao = CLIENTES[inst](termo)
+        v["url_consultada"] = url
+        v["versao_instrumento"] = versao
 
         if status is None:                       # serviço fora do ar ou recusando
             v["observacao_tecnica"] = obs
@@ -524,8 +542,9 @@ def main():
                     help="reconstrói a planilha a partir do protocolo, sem rede")
     ap.add_argument("--importar", action="store_true",
                     help="reconcilia a planilha com o protocolo, preservando as decisões")
-    ap.add_argument("--validar", choices=["tbci", "unesco", "ambos"],
-                    help="executa a validação no instrumento indicado")
+    ap.add_argument("--validar", metavar="SIGLA",
+                    help="executa a validação no instrumento `Automático` de sigla SIGLA, "
+                         "como declarada no protocolo, ou em todos eles (`todos`)")
     ap.add_argument("--faceta", type=int, help="restringe a uma faceta")
     a = ap.parse_args()
 
@@ -536,8 +555,16 @@ def main():
     elif a.importar:
         return importar()
     elif a.validar:
-        quais = {"tbci": ["tbci"], "unesco": ["unesco"],
-                 "ambos": ["tbci", "unesco"]}[a.validar]
+        admitidos = automaticos(protocolo.dados())
+        if a.validar == "todos":
+            quais = admitidos
+        elif a.validar in admitidos:
+            quais = [a.validar]
+        else:
+            print(f"--validar {a.validar!r}: não é sigla de instrumento "
+                  f"{protocolo.MODO_AUTOMATICO} do protocolo. Use {', '.join(admitidos)} "
+                  f"ou todos.")
+            return 2
         validar(quais, a.faceta)
     else:
         ap.print_help()

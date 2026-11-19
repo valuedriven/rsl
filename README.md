@@ -17,7 +17,7 @@ repete o conteúdo dos documentos.
 | `docs/` | conteúdo da revisão: plano, protocolo e fichas de busca; os arquivos do pesquisador e os que o agente mantém |
 | `data/` | o que é alimentado — os JSON, o histórico e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
 | `src/` | scripts de execução |
-| `config.toml` | configuração dos scripts: caminho do protocolo, valores padrão dos parâmetros, fichas, arquivos de dados e instrumentos |
+| `config.toml` | configuração dos scripts: caminho do protocolo, valores padrão dos parâmetros não estruturais, padrão de caminho das fichas e arquivos de dados |
 | `.agents/skills/` | competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
 
@@ -31,17 +31,17 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `docs/01_plano.md` | Plano: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
 | `docs/02_protocolo_informacoes_gerais.md` | Protocolo, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
 | `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QERn), facetas, instrumentos de controle terminológico, vocabulário, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única desses dados e dos parâmetros que declara | montar ou conferir a busca |
-| `docs/busca_base_1_web_of_science.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
-| `docs/busca_base_2_scopus.md` | ficha da Scopus, mesma estrutura | idem |
-| `docs/busca_base_3_eric.md` | ficha da ERIC, mesma estrutura | idem |
-| `docs/busca_base_4_brapci.md` | ficha da BRAPCI, mesma estrutura | idem |
+| `docs/busca_base_wos.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
+| `docs/busca_base_scopus.md` | ficha da Scopus, mesma estrutura | idem |
+| `docs/busca_base_eric.md` | ficha da ERIC, mesma estrutura | idem |
+| `docs/busca_base_brapci.md` | ficha da BRAPCI, mesma estrutura | idem |
 | `src/protocolo.py` | leitor do protocolo: confere documento e arquivos alimentados, e reconcilia o metadado das sementes | antes de executar qualquer script, e após alterar o protocolo |
 | `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/validar_termos.py` | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (TBCI, UNESCO Thesaurus) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
 | `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento | saber o que já foi decidido e por quê |
 | `data/pendencias.json` | Pendências: ações ainda a executar, cada uma com origem, o que bloqueia, ação sugerida, responsável e estado | saber o que falta fazer |
-| `config.toml` | caminho do protocolo, padrões dos parâmetros, fichas, arquivos de dados, instrumentos e campos das planilhas | mudar o arquivo do protocolo, um padrão ou um instrumento |
+| `config.toml` | caminho do protocolo, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados e campos das planilhas | mudar o arquivo do protocolo, um padrão ou o local das fichas |
 
 Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arquivo:
 
@@ -87,18 +87,30 @@ biblioteca padrão). Ele traz:
 
 - `protocolo` — o arquivo do protocolo a ser lido; é o único parâmetro que o protocolo não
   sobrescreve;
-- `[padroes]` — valor padrão de cada parâmetro que o protocolo pode declarar: recorte, limiar
-  de aderência, faixa de sensibilidade, âncoras, expressão executada, sonda, composição das
-  expressões, limiar de divergência da fidelidade e sensibilidade mínima da calibração da
-  triagem assistida;
+- `[padroes]` — valor padrão de cada parâmetro não estrutural que o protocolo pode declarar:
+  recorte, limiar de aderência, faixa de sensibilidade, âncoras, expressão executada, sonda,
+  limiar de divergência da fidelidade e sensibilidade mínima da calibração da triagem
+  assistida;
 - os parâmetros que o protocolo não declara: dimensões obrigatórias dos critérios, mínimo de
-  termos por string, natureza que identifica a executada e a sonda, fichas das bases,
-  arquivos de dados, cores das facetas, campos das planilhas;
-- `[instrumentos]` — sigla, idiomas cobertos e modo de consulta (`tbci`, `unesco` ou
-  `manual`) de cada instrumento; quais instrumentos valem para cada faceta vem do protocolo.
+  termos por string, natureza que identifica a executada e a sonda, arquivos de dados,
+  campos das planilhas;
+- `[documentos] ficha` — padrão de caminho da ficha de cada base, com `{sigla}`
+  (`docs/busca_base_{sigla}.md`).
 
-**Precedência:** o valor declarado no protocolo prevalece sobre o padrão; o padrão vale só
-quando o protocolo não declara o parâmetro. Trecho do protocolo presente e ilegível reprova a
+**Parâmetros estruturais** não têm padrão e não constam do `config.toml`: são lidos só do
+protocolo, e a ausência ou o valor inválido reprova a leitura, nomeando tabela, linha e
+campo. São a composição das expressões; os instrumentos de controle terminológico (tabela
+`Sigla | Instrumento | Modo | Caminho | Idiomas | FCTs`, com `Modo` `Manual` ou
+`Automático` — este exige cliente de mesma sigla em `src/validar_termos.py`); as bases
+(tabela "Bases de dados": `ID Base`, `Sigla`, `Nome da base`), cuja ficha se localiza pela
+sigla; o conjunto-semente (tabela `ID Semente | Semente | Bases`, com as siglas da tabela de
+bases); e os idiomas do quadro terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`.
+A forma de execução de cada base (`- Execução: única` ou `particionada`) é declarada na
+própria ficha. As chaves antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`,
+`idiomas`) reprovam a configuração se voltarem a ela.
+
+**Precedência (parâmetros não estruturais):** o valor declarado no protocolo prevalece sobre
+o padrão; o padrão vale só quando o protocolo não declara o parâmetro. Trecho do protocolo presente e ilegível reprova a
 conferência, sem cair no padrão. `python3 src/protocolo.py --mostrar` exibe o valor em uso e
 a origem de cada parâmetro. Configuração ausente, inválida ou incompleta faz os scripts
 pararem com mensagem que nomeia a chave.
@@ -133,12 +145,14 @@ derivam e registram. Quatro invariantes valem para todos:
 dos identificadores, camadas do vocabulário, string contida no quadro da sua faceta,
 âncoras em todas as expressões, sonda igual à conjunção das âncoras, executada igual à
 união das específicas, dimensões obrigatórias dos critérios, faixa de sensibilidade,
-instrumentos resolvidos pela configuração, fichas ligadas às bases e distribuição do
-conjunto-semente. `--conferir-dados` reprova arquivo alimentado ausente ou fora do
+instrumentos com idiomas e facetas do protocolo, ficha existente para cada sigla de base e
+sementes citando só siglas da tabela de bases; a distribuição das sementes por base é
+calculada da tabela. `--conferir-dados` reprova arquivo alimentado ausente ou fora do
 protocolo, a execução que declara exportação inexistente e, por base, termo vigente fora da
 string sem redução declarada e termo fora da STR dentro dela, mesmo em flexão.
 `--autoteste` injeta defeitos numa cópia e exige que cada conferência reprove pelo motivo
-esperado — inclusive configuração inválida, precedência, ficha divergente do protocolo e
+esperado — inclusive configuração inválida, precedência, parâmetro estrutural ausente ou
+inválido, ficha divergente do protocolo e
 composição das expressões que quebra as relações entre executada, específicas, geral e sonda
 (esta também por `src/derivar_expressoes.py --autoteste`).
 `--sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido; rodar
@@ -212,8 +226,8 @@ existir.
    e domínio educacional —, vocabulário nos três idiomas e camadas núcleo, próximos e
    relacionados.
 2. **Validação terminológica.** Nos instrumentos que o protocolo declara para cada faceta
-   ("Instrumentos para controle terminológico"), nos idiomas que cada um cobre
-   (`config.toml`). Instrumento sem cliente automatizado gera linha pendente de validação
+   ("Instrumentos para controle terminológico"), nos idiomas que cada um cobre (coluna
+   `Idiomas` da mesma tabela). Instrumento `Manual` gera linha pendente de validação
    manual. Termo sem consulta registrada é termo livre e não pode ser apresentado como
    descritor autorizado.
 3. **Strings por faceta.** Qualificação do vocabulário: substituição de palavra isolada pela
@@ -431,7 +445,8 @@ Skill: `fichamento`.
 
 - O **protocolo** — `02_protocolo_informacoes_gerais.md` e `03_protocolo_estrategia_pesquisa.md` —
   prevalece sobre qualquer formulação feita em outro documento; o plano remete a ele. Sobre
-  o `config.toml`, o protocolo prevalece em todo parâmetro que declara.
+  o `config.toml`, o protocolo prevalece em todo parâmetro que declara; os parâmetros
+  estruturais só existem no protocolo.
 - O **histórico** é o único lugar das decisões; `data/pendencias.json`, das ações por
   fazer; `data/registro_execucao.json`, dos resultados das consultas nas bases.
 - A data **oficial** de execução consta **exclusivamente do cronograma**, que não integra este

@@ -3,7 +3,8 @@
 """Gera o instrumento do teste de aderência a partir do protocolo.
 
 Entradas
-  protocolo (chave `protocolo` do config.toml)   referências, mapa por base e facetas
+  protocolo (chave `protocolo` do config.toml)   referências, bases de cada semente (tabela
+                                                 do conjunto-semente) e facetas
   data/sementes.json   metadados de conferência autorais, ligados por DOI ou título
 
 As referências vêm do protocolo, lido por src/protocolo.py; `sementes.json` guarda só o
@@ -21,6 +22,7 @@ Entrada de `sementes.json` sem correspondência no protocolo é reportada, para 
 Uso
   python3 src/gen_semente.py
 """
+import argparse
 import csv
 import json
 import pathlib
@@ -34,9 +36,9 @@ DATA = RAIZ / "data"
 PLANILHA = DATA / "semente_aderencia.csv"
 SEMENTES = DATA / "sementes.json"
 
-# Siglas das bases, na ordem de [fichas] do config.toml (ordem das colunas da planilha).
-BASES = list(protocolo.BASES)
-_D = protocolo.analisa()
+_D = protocolo.dados()
+# Siglas das bases, na ordem da tabela "Bases de dados" do protocolo.
+BASES = [b["sigla"] for b in _D["bases"]]
 EXECUTADA = _D["executada"]
 # Facetas do protocolo, na ordem declarada nas palavras significativas.
 FACETAS = [f["id"] for f in _D["facetas"]]
@@ -52,7 +54,7 @@ COLS = [
     ("escopo", "DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher em sementes.json"),
     ("verificacao", "estado de conferência da referência — preencher em sementes.json"),
     ("base", " ou ".join(filter(None, [", ".join(BASES[:-1]), BASES[-1]]))),
-    ("esperada_na_base", "sim se o mapa do protocolo indica esta base"),
+    ("esperada_na_base", "sim se a tabela do conjunto-semente do protocolo cita esta base"),
     ("indexada", "etapa 1: sim ou não, por busca de título. **obrigatório**"),
     ("data_etapa1", "data da busca de título"),
     ("recuperada", f"etapa 2: sim ou não, por busca na exportação de {EXECUTADA}"),
@@ -63,7 +65,7 @@ COLS = [
 
 
 def carrega():
-    d = protocolo.analisa()
+    d = protocolo.dados()
     facetas = {"facetas": [{"faceta": fid, "termos": v["termos"]}
                            for fid, v in d["strings"].items()]}
     meta = {}
@@ -163,6 +165,9 @@ def csv_out(estudos):
 
 
 def main():
+    argparse.ArgumentParser(description=__doc__,
+                            formatter_class=argparse.RawDescriptionHelpFormatter
+                            ).parse_args()
     facetas, estudos = carrega()
 
     linhas = csv_out(estudos)

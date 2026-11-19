@@ -5,11 +5,15 @@
 O documento do protocolo (caminho na chave `protocolo` do `config.toml`) é a fonte única
 da questão, das facetas, do vocabulário, das strings, das expressões, dos critérios, das
 fontes, dos instrumentos de controle terminológico e do conjunto-semente. A forma de cada
-base está na respectiva ficha (`[fichas]` do `config.toml`). Este script lê as fontes em
-memória e NÃO grava derivado algum.
+base está na respectiva ficha, localizada pela sigla da tabela "Bases de dados" e pelo
+padrão `[documentos] ficha` do `config.toml`. Este script lê as fontes em memória e NÃO
+grava derivado algum.
 
-Parâmetros: todo parâmetro tem valor padrão no `config.toml`; o que o protocolo declara
-prevalece. Trecho do protocolo presente e ilegível reprova, sem cair no padrão.
+Parâmetros estruturais — composição das expressões, instrumentos, bases, conjunto-semente
+e idiomas do quadro — vêm só do protocolo, e a forma de execução, só da ficha: sem padrão,
+a ausência ou o valor inválido reprova. As tabelas estruturais são lidas pelo nome da
+coluna, não pela posição. Os demais parâmetros têm valor padrão no `config.toml`; o que o
+protocolo declara prevalece, e trecho presente e ilegível reprova, sem cair no padrão.
 `--mostrar` exibe o valor em uso e a origem de cada parâmetro.
 
 Em `data/` vivem só os arquivos alimentados (`[dados]` do `config.toml`):
@@ -49,6 +53,7 @@ import pathlib
 import re
 import sys
 import unicodedata
+import urllib.parse
 
 if sys.version_info < (3, 11):
     raise SystemExit("src/protocolo.py exige Python 3.11 ou superior (tomllib, para ler "
@@ -61,20 +66,21 @@ CONFIG = RAIZ / "config.toml"
 
 # Chaves exigidas do config.toml. É o esquema do arquivo, não parâmetro do projeto.
 CHAVES_CONFIG = (
-    "protocolo", "idiomas",
+    "protocolo",
     "padroes.recorte_ano_min", "padroes.limiar_aderencia", "padroes.sensibilidade",
     "padroes.ancoras", "padroes.executada", "padroes.sonda",
-    "padroes.divergencia_fidelidade", "padroes.calibracao_triagem", "padroes.composicao",
+    "padroes.divergencia_fidelidade", "padroes.calibracao_triagem",
     "expressoes.natureza_executada", "expressoes.natureza_sonda", "expressoes.colunas",
     "conferencia.minimo_termos_string", "conferencia.dimensoes_criterio",
     "dados.sementes", "dados.registro", "dados.validacao",
-    "fichas", "cores", "instrumentos",
+    "documentos.ficha",
     "planilha.campos_validacao", "planilha.campos_autorais",
 )
-CHAVES_FICHA = ("bd", "sigla", "arquivo", "execucao")
-CHAVES_INSTRUMENTO = ("sigla", "modo", "idiomas")
-MODOS_INSTRUMENTO = ("tbci", "unesco", "manual")
-MODOS_EXECUCAO = ("unica", "particionada")
+# Parâmetros estruturais: lidos só do protocolo (ou da ficha), sem padrão. A presença de
+# qualquer um no config.toml reprova, para que não haja segunda fonte que divirja em
+# silêncio.
+CHAVES_RETIRADAS = ("padroes.composicao", "cores", "fichas", "instrumentos", "idiomas")
+MARCA_SIGLA = "{sigla}"
 
 
 class ConfiguracaoInvalida(Exception):
@@ -90,30 +96,27 @@ def _valor(cfg, chave):
     return atual
 
 
+def _tem(cfg, chave):
+    try:
+        _valor(cfg, chave)
+        return True
+    except ConfiguracaoInvalida:
+        return False
+
+
 def valida_config(cfg):
     """Confere o esquema da configuração; levanta ConfiguracaoInvalida no primeiro defeito."""
+    for chave in CHAVES_RETIRADAS:
+        if _tem(cfg, chave):
+            raise ConfiguracaoInvalida(
+                f"{CONFIG.name}: a chave `{chave}` não pertence mais à configuração — o "
+                f"valor vem do protocolo (parâmetro estrutural, sem padrão); retirá-la")
     for chave in CHAVES_CONFIG:
         _valor(cfg, chave)
-    if not cfg["fichas"]:
-        raise ConfiguracaoInvalida(f"{CONFIG.name}: `fichas` vazio")
-    for slug, f in cfg["fichas"].items():
-        for k in CHAVES_FICHA:
-            _valor(cfg, f"fichas.{slug}.{k}")
-        if f["execucao"] not in MODOS_EXECUCAO:
-            raise ConfiguracaoInvalida(f"{CONFIG.name}: `fichas.{slug}.execucao` "
-                                       f"{f['execucao']!r} não é {MODOS_EXECUCAO}")
-    for nome, inst in cfg["instrumentos"].items():
-        for k in CHAVES_INSTRUMENTO:
-            if k not in inst:
-                raise ConfiguracaoInvalida(f"{CONFIG.name}: falta a chave `{k}` do "
-                                           f"instrumento {nome!r}")
-        if inst["modo"] not in MODOS_INSTRUMENTO:
-            raise ConfiguracaoInvalida(f"{CONFIG.name}: instrumento {nome!r} com modo "
-                                       f"{inst['modo']!r}; admitidos: {MODOS_INSTRUMENTO}")
-        fora = [i for i in inst["idiomas"] if i not in cfg["idiomas"]]
-        if fora:
-            raise ConfiguracaoInvalida(f"{CONFIG.name}: instrumento {nome!r} com idioma "
-                                       f"fora de `idiomas`: {fora}")
+    padrao_ficha = cfg["documentos"]["ficha"]
+    if not isinstance(padrao_ficha, str) or MARCA_SIGLA not in padrao_ficha:
+        raise ConfiguracaoInvalida(f"{CONFIG.name}: `documentos.ficha` {padrao_ficha!r} não "
+                                   f"contém {MARCA_SIGLA}: a ficha é localizada pela sigla")
     lo, hi = cfg["padroes"]["sensibilidade"]
     if not lo < hi:
         raise ConfiguracaoInvalida(f"{CONFIG.name}: `padroes.sensibilidade` com inferior "
@@ -144,17 +147,11 @@ if not DOC.exists():
                      f"{CFG['protocolo']!r}, que não existe")
 DATA = RAIZ / "data"
 
-# A forma de busca é de cada base e vive na ficha da base; o vocabulário é do protocolo.
-FICHAS = {slug: dict(f) for slug, f in CFG["fichas"].items()}
-BASES = tuple(f["sigla"] for f in FICHAS.values())
-BDS = tuple(sorted(f["bd"] for f in FICHAS.values()))
-
 # Arquivos alimentados: não são derivados de markdown e não se regeram.
 SEMENTES = RAIZ / CFG["dados"]["sementes"]
 REGISTRO = RAIZ / CFG["dados"]["registro"]
 CSV_VALIDACAO = RAIZ / CFG["dados"]["validacao"]
 
-IDIOMAS = tuple(CFG["idiomas"])
 CAMADAS = ("nucleo", "proximos", "relacionados")
 
 # Rótulos das linhas do quadro: gramática do leitor, não parâmetro do projeto.
@@ -163,6 +160,17 @@ ROTULO_CAMADA = {
     "Descritores potenciais": "proximos",
     "Termos relacionados": "relacionados",
 }
+
+# Cabeçalhos exigidos das tabelas estruturais: contrato de formato do leitor, como
+# ROTULO_CAMADA. Coluna extra (ex.: Justificativa) é ignorada.
+COLUNAS_BASES = ("ID Base", "Sigla", "Nome da base")
+COLUNAS_INSTRUMENTOS = ("Sigla", "Instrumento", "Modo", "Caminho", "Idiomas", "FCTs")
+COLUNAS_SEMENTES = ("ID Semente", "Semente", "Bases")
+MODO_MANUAL, MODO_AUTOMATICO = "Manual", "Automático"
+MODOS_INSTRUMENTO = (MODO_MANUAL, MODO_AUTOMATICO)
+# Forma de execução declarada na ficha (`- Execução: ...`) → valor interno.
+FORMAS_EXECUCAO = {"única": "unica", "particionada": "particionada"}
+MODOS_EXECUCAO = tuple(FORMAS_EXECUCAO.values())
 
 CAMPOS_VALIDACAO = tuple(CFG["planilha"]["campos_validacao"])
 CAMPOS_AUTORAIS = tuple(CFG["planilha"]["campos_autorais"])
@@ -229,6 +237,67 @@ def paragrafos(bloco):
             for p in re.split(r"\n\s*\n", bloco) if p.strip()]
 
 
+# ------------------------------------------------------------------- tabelas
+def blocos_de_tabela(bloco):
+    """Tabelas Markdown de um trecho: cada uma, a lista das suas linhas consecutivas."""
+    saida, atual = [], []
+    for linha in bloco.splitlines():
+        if linha.lstrip().startswith("|"):
+            atual.append(linha)
+        elif atual:
+            saida.append(atual)
+            atual = []
+    if atual:
+        saida.append(atual)
+    return saida
+
+
+def _separador(cels):
+    return bool(cels) and all(re.fullmatch(r":?-+:?", c) for c in cels)
+
+
+def le_tabela(linhas, exigidas, onde):
+    """Linhas de uma tabela como dicionários indexados pelo nome da coluna.
+
+    Devolve (cabeçalho, linhas). Coluna exigida ausente ou coluna repetida reprova; coluna
+    extra é ignorada. Os valores são as células brutas: o escape do Markdown fica para
+    quem lê cada coluna.
+    """
+    cab = [desescapa(c).strip() for c in celulas(linhas[0])]
+    repetidas = sorted({c for c in cab if c and cab.count(c) > 1})
+    if repetidas:
+        raise ProtocoloInvalido(f"{onde}: coluna repetida {repetidas}")
+    faltam = [c for c in exigidas if c not in cab]
+    if faltam:
+        raise ProtocoloInvalido(f"{onde}: falta a coluna {faltam}; cabeçalho lido {cab}")
+    corpo = linhas[1:]
+    if corpo and _separador(celulas(corpo[0])):
+        corpo = corpo[1:]
+    saida = []
+    for linha in corpo:
+        cels = celulas(linha)
+        sobra = [c for c in cels[len(cab):] if c]
+        if sobra:
+            raise ProtocoloInvalido(f"{onde}: linha com mais células que o cabeçalho: "
+                                    f"{linha.strip()[:60]!r}")
+        saida.append({c: (cels[i] if i < len(cels) else "")
+                      for i, c in enumerate(cab) if c})
+    return cab, saida
+
+
+def tabela_da_secao(t, titulo, exigidas):
+    """A tabela de uma seção do protocolo, lida pelo cabeçalho."""
+    tabelas_ = blocos_de_tabela(secao(t, titulo))
+    if not tabelas_:
+        raise ProtocoloInvalido(f"tabela '{titulo}' ausente")
+    return le_tabela(tabelas_[0], exigidas, f"tabela '{titulo}'")[1]
+
+
+def _lista(celula):
+    """Itens de uma célula separados por vírgula."""
+    return [x.strip() for x in desescapa(celula).split(",") if x.strip()]
+
+
 # ------------------------------------------------------------------------ parâmetros
 def _parametro(params, nome, valor_protocolo, chave_padrao):
     """Resolve um parâmetro: o do protocolo, se declarado (não None); senão, o padrão.
@@ -241,6 +310,12 @@ def _parametro(params, nome, valor_protocolo, chave_padrao):
     else:
         valor, origem = copy.deepcopy(_valor(CFG, chave_padrao)), ORIGEM_PADRAO
     params[nome] = {"valor": valor, "origem": origem}
+    return valor
+
+
+def _estrutural(params, nome, valor):
+    """Parâmetro estrutural: só do protocolo. O leitor já reprovou a ausência."""
+    params[nome] = {"valor": valor, "origem": ORIGEM_PROTOCOLO}
     return valor
 
 
@@ -283,7 +358,12 @@ def questoes(t):
 
 # ------------------------------------------------------------------------ facetas
 def palavras(t):
-    """Nome, cor e papel de cada faceta, da lista de palavras significativas."""
+    """Nome e papel de cada faceta: `Faceta n (FCTn): nome [(âncora obrigatória k)]`.
+
+    O nome é todo o resto da linha, hífens incluídos; o sufixo de âncora, entre parênteses,
+    é opcional. Travessão residual (forma antiga, com cor) e parêntese de âncora mal formado
+    reprovam: leitura tolerante faria a cor ou o sufixo entrarem no nome em silêncio.
+    """
     bloco = secao(t, "Palavras significativas da questão de revisão")
     saida = []
     for m in re.finditer(r"^-\s*Faceta\s+(\d+)\s*(?:\((FCT\d+)\))?\s*:\s*(.+)$", bloco, re.M):
@@ -293,14 +373,18 @@ def palavras(t):
             achado = codigo if codigo else "ausente"
             raise ProtocoloInvalido(
                 f"faceta {n}: identificador {achado!r} não corresponde a FCT{n}")
-        corpo = m.group(3)
-        partes = [p.strip() for p in corpo.split("—")]
-        if len(partes) < 2:
-            raise ProtocoloInvalido(f"faceta {n}: nome e cor não separados por travessão")
-        saida.append({
-            "id": f"FCT{n}", "nome": partes[0], "cor": partes[1],
-            "ancora": bool(re.search(r"âncora obrigatória", corpo)),
-        })
+        corpo = desescapa(m.group(3)).strip()
+        if "—" in corpo:
+            raise ProtocoloInvalido(f"faceta FCT{n}: travessão na linha ({corpo!r}); a forma é "
+                                    f"`Faceta {n} (FCT{n}): nome (âncora obrigatória k)`")
+        ma = re.search(r"\s*\(\s*âncora obrigatória\s+(\d+)\s*\)\s*$", corpo)
+        nome = corpo[:ma.start()].strip() if ma else corpo
+        if re.search(r"âncora", nome, re.I):
+            raise ProtocoloInvalido(f"faceta FCT{n}: âncora fora da forma "
+                                    f"`(âncora obrigatória k)` no fim da linha: {corpo!r}")
+        if not nome:
+            raise ProtocoloInvalido(f"faceta FCT{n}: sem nome")
+        saida.append({"id": f"FCT{n}", "nome": nome, "ancora": bool(ma)})
     _numeracao([f["id"] for f in saida], "FCT", "facetas")
     return saida
 
@@ -322,99 +406,146 @@ def _sem_repeticao(seq):
 
 
 def tabelas(t):
-    """As tabelas do controle terminológico, uma por faceta, com as camadas por idioma."""
+    """As tabelas do controle terminológico, uma por faceta, com as camadas por idioma.
+
+    O cabeçalho `| FCTn | pt | en | es |` dá a faceta e os idiomas: o idioma de cada coluna
+    é o nome no cabeçalho, não a posição. O primeiro quadro fixa a ordem dos idiomas do
+    projeto; os demais têm de ter o mesmo conjunto, em qualquer ordem.
+
+    Devolve (tabelas, idiomas).
+    """
     nomes = {f["id"]: f for f in palavras(t)}
     bloco = secao(t, "Controle terminológico")
-    linhas = bloco.splitlines()
 
-    saida, atual = [], None
-    for linha in linhas:
-        cab = re.match(r"^\|\s*FCT(\d+)\s*\|", linha)
-        if cab:
-            ident = f"FCT{int(cab.group(1))}"
-            if ident not in nomes:
-                raise ProtocoloInvalido(f"tabela da faceta {ident} sem palavra significativa")
-            atual = {"id": ident, "nome": nomes[ident]["nome"],
-                     "ancora": nomes[ident]["ancora"], "cor": nomes[ident]["cor"],
-                     "camadas": {i: {c: [] for c in CAMADAS} for i in IDIOMAS}}
-            saida.append(atual)
+    saida, idiomas = [], None
+    for linhas in blocos_de_tabela(bloco):
+        m = re.match(r"^FCT(\d+)$", celulas(linhas[0])[0])
+        if not m:
             continue
-        if atual is None or not linha.startswith("|"):
-            continue
-        cels = celulas(linha)
-        if len(cels) < 1 + len(IDIOMAS):
-            continue
-        rotulo = cels[0].strip("* ").strip()
-        camada = next((v for k, v in ROTULO_CAMADA.items() if rotulo.startswith(k)), None)
-        if camada is None:
-            continue
-        for idioma, cel in zip(IDIOMAS, cels[1:1 + len(IDIOMAS)]):
-            atual["camadas"][idioma][camada] = _termos_celula(cel)
+        ident = f"FCT{int(m.group(1))}"
+        if ident not in nomes:
+            raise ProtocoloInvalido(f"tabela da faceta {ident} sem palavra significativa")
+        cab, linhas_ = le_tabela(linhas, (), f"quadro de {ident}")
+        proprios = cab[1:]
+        if not proprios or any(not i for i in proprios):
+            raise ProtocoloInvalido(f"quadro de {ident}: coluna de idioma sem nome no "
+                                    f"cabeçalho {cab}")
+        if idiomas is None:
+            idiomas = tuple(proprios)
+        elif set(proprios) != set(idiomas):
+            raise ProtocoloInvalido(
+                f"quadro de {ident}: idiomas {sorted(proprios)} diferem dos idiomas "
+                f"{sorted(idiomas)} do quadro de {saida[0]['id']} — faltam "
+                f"{sorted(set(idiomas) - set(proprios))}, sobram "
+                f"{sorted(set(proprios) - set(idiomas))}")
+        atual = {"id": ident, "nome": nomes[ident]["nome"], "ancora": nomes[ident]["ancora"],
+                 "camadas": {i: {c: [] for c in CAMADAS} for i in idiomas}}
+        saida.append(atual)
+        for linha in linhas_:
+            rotulo = linha[cab[0]].strip("* ").strip()
+            camada = next((v for k, v in ROTULO_CAMADA.items() if rotulo.startswith(k)), None)
+            if camada is None:
+                continue
+            for idioma in idiomas:
+                atual["camadas"][idioma][camada] = _termos_celula(linha[idioma])
 
     ids = [f["id"] for f in saida]
-    if sorted(ids) != sorted(nomes):
+    if sorted(ids) != sorted(nomes) or len(set(ids)) != len(ids):
         raise ProtocoloInvalido(f"esperava uma tabela por faceta ({sorted(nomes)}), "
                                 f"achei {ids}")
     for f in saida:
         f["termos"] = {i: _sem_repeticao(
-            [x for c in CAMADAS for x in f["camadas"][i][c]]) for i in IDIOMAS}
-    return saida
+            [x for c in CAMADAS for x in f["camadas"][i][c]]) for i in idiomas}
+    return saida, idiomas
 
 
 # -------------------------------------------------------------------- instrumentos
-def _resolve_instrumento(item, fid):
-    """Chave do `config.toml` cujo nome está contido no item lido do protocolo."""
-    alvo = f" {normaliza(item)} "
-    achados = [nome for nome in CFG["instrumentos"] if f" {normaliza(nome)} " in alvo]
-    if not achados:
-        raise ProtocoloInvalido(f"instrumento de {fid}: {item!r} não consta de "
-                                f"[instrumentos] do {CONFIG.name}")
-    if len(achados) > 1:
-        raise ProtocoloInvalido(f"instrumento de {fid}: {item!r} casa com mais de um "
-                                f"instrumento do {CONFIG.name}: {achados}")
-    return achados[0]
+SECAO_INSTRUMENTOS = "Instrumentos para controle terminológico"
 
 
-def instrumentos(t):
-    """Instrumentos de cada faceta, da seção dedicada do protocolo. Sem padrão por faceta."""
-    ids = [f["id"] for f in palavras(t)]
-    bloco = secao(t, "Instrumentos para controle terminológico")
-    saida = {}
-    for m in re.finditer(r"^-\s*(FCT\d+)\s*:\s*(.*)$", bloco, re.M):
-        fid = m.group(1)
-        if fid not in ids:
-            raise ProtocoloInvalido(f"instrumentos: {fid} não é faceta do protocolo")
-        if fid in saida:
-            raise ProtocoloInvalido(f"instrumentos: {fid} declarada mais de uma vez")
-        itens = [x.strip() for x in desescapa(m.group(2)).split(",") if x.strip()]
-        if not itens:
-            raise ProtocoloInvalido(f"instrumentos: {fid} sem instrumento declarado")
-        lista = []
-        for item in itens:
-            nome = _resolve_instrumento(item, fid)
-            inst = CFG["instrumentos"][nome]
-            lista.append({"nome": nome, "texto": item, "sigla": inst["sigla"],
-                          "modo": inst["modo"], "idiomas": list(inst["idiomas"])})
-        saida[fid] = lista
-    faltam = [f for f in ids if f not in saida]
+def clientes_automaticos():
+    """Siglas com cliente automatizado, do registro `CLIENTES` de validar_termos.py.
+
+    Importação tardia: validar_termos importa este módulo na carga, e o registro de
+    clientes é conhecimento da ferramenta, não parâmetro do projeto.
+    """
+    pasta = str(pathlib.Path(__file__).resolve().parent)
+    if pasta not in sys.path:
+        sys.path.insert(0, pasta)
+    import validar_termos                                           # noqa: PLC0415
+    return sorted(validar_termos.CLIENTES)
+
+
+def instrumentos(t, ids_facetas, idiomas):
+    """Instrumentos da tabela `Sigla | Instrumento | Modo | Caminho | Idiomas | FCTs`.
+
+    Devolve (por sigla, por faceta). Sem padrão: toda faceta do quadro tem de constar da
+    coluna FCTs de algum instrumento, e instrumento `Automático` tem de ter cliente com o
+    nome da sua sigla.
+    """
+    onde = f"tabela '{SECAO_INSTRUMENTOS}'"
+    por_sigla = {}
+    for linha in tabela_da_secao(t, SECAO_INSTRUMENTOS, COLUNAS_INSTRUMENTOS):
+        valores = {c: desescapa(linha[c]).strip() for c in COLUNAS_INSTRUMENTOS}
+        sigla = valores["Sigla"] or "?"
+        vazios = [c for c, v in valores.items() if not v]
+        if vazios:
+            raise ProtocoloInvalido(f"{onde}, linha {sigla}: campo vazio {vazios}")
+        if sigla in por_sigla:
+            raise ProtocoloInvalido(f"{onde}: sigla repetida {sigla!r}")
+        if valores["Modo"] not in MODOS_INSTRUMENTO:
+            raise ProtocoloInvalido(f"{onde}, linha {sigla}: Modo {valores['Modo']!r} fora "
+                                    f"dos admitidos {list(MODOS_INSTRUMENTO)}")
+        url = urllib.parse.urlparse(valores["Caminho"])
+        if url.scheme not in ("http", "https") or not url.netloc:
+            raise ProtocoloInvalido(f"{onde}, linha {sigla}: Caminho {valores['Caminho']!r} "
+                                    f"não é URL http(s) bem formada")
+        langs, fcts = _lista(linha["Idiomas"]), _lista(linha["FCTs"])
+        for campo, itens in (("Idiomas", langs), ("FCTs", fcts)):
+            repetidos = sorted({x for x in itens if itens.count(x) > 1})
+            if repetidos:
+                raise ProtocoloInvalido(f"{onde}, linha {sigla}: {campo} com valor repetido "
+                                        f"{repetidos}")
+        fora = [i for i in langs if i not in idiomas]
+        if fora:
+            raise ProtocoloInvalido(f"{onde}, linha {sigla}: idioma {fora} fora dos idiomas "
+                                    f"do quadro terminológico {list(idiomas)}")
+        fora = [f for f in fcts if f not in ids_facetas]
+        if fora:
+            raise ProtocoloInvalido(f"{onde}, linha {sigla}: FCTs {fora} não é faceta do "
+                                    f"protocolo {list(ids_facetas)}")
+        por_sigla[sigla] = {"sigla": sigla, "nome": valores["Instrumento"],
+                            "modo": valores["Modo"], "caminho": valores["Caminho"],
+                            "idiomas": langs, "facetas": fcts}
+    if not por_sigla:
+        raise ProtocoloInvalido(f"{onde} sem instrumento")
+    automaticos = [s for s, i in por_sigla.items() if i["modo"] == MODO_AUTOMATICO]
+    if automaticos:
+        clientes = clientes_automaticos()
+        sem = [s for s in automaticos if s not in clientes]
+        if sem:
+            raise ProtocoloInvalido(f"{onde}: instrumento {MODO_AUTOMATICO} sem cliente "
+                                    f"automatizado: {sem}; clientes existentes: {clientes}")
+    por_faceta = {fid: [i for i in por_sigla.values() if fid in i["facetas"]]
+                  for fid in ids_facetas}
+    faltam = [f for f, lista in por_faceta.items() if not lista]
     if faltam:
-        raise ProtocoloInvalido(f"instrumentos: faceta(s) sem linha na seção "
-                                f"'Instrumentos para controle terminológico': {faltam}")
-    return saida
+        raise ProtocoloInvalido(f"{onde}: faceta(s) sem instrumento na coluna FCTs: {faltam}")
+    return por_sigla, por_faceta
 
 
 def instrumentos_do_termo(d, fid, idioma):
     """Instrumentos em que se valida um termo da faceta `fid` no `idioma`."""
-    return [i for i in d["instrumentos"][fid] if idioma in i["idiomas"]]
+    return [i for i in d["instrumentos_por_faceta"][fid] if idioma in i["idiomas"]]
 
 
 def estado_inicial(instrumento):
     """Campos com que nasce a linha de um termo ainda não registrado na planilha.
 
-    Instrumento sem cliente automatizado (modo `manual`) nasce pendente de validação
+    Instrumento sem cliente automatizado (modo `Manual`) nasce pendente de validação
     manual; os demais, aguardando consulta.
     """
-    if instrumento["modo"] == "manual":
+    if instrumento["modo"] == MODO_MANUAL:
         return {"status_proposto": STATUS_MANUAL, "observacao_tecnica": OBS_MANUAL}
     return {"observacao_tecnica": "aguardando consulta"}
 
@@ -525,37 +656,35 @@ def _percentual(s):
 def expressoes(t, params):
     """Composição das expressões, a executada, a sonda e a faixa de sensibilidade.
 
-    Devolve (composição, executada, sonda, sensibilidade), já resolvidos pela precedência.
+    Devolve (composição, executada, sonda, sensibilidade). A composição é estrutural: sem a
+    tabela, a leitura reprova; executada, sonda e faixa seguem a precedência.
     """
-    try:
-        bloco = secao(t, "Expressões de busca")
-    except ProtocoloInvalido:
-        bloco = None
+    bloco = secao(t, "Expressões de busca")
     composicao, natureza, detalhe = {}, {}, {}
-    if bloco is not None:
-        linhas_tabela = [l for l in bloco.splitlines() if l.lstrip().startswith("|")]
-        if linhas_tabela:
-            # O cabeçalho diz o que cada coluna é: lido por posição, um cabeçalho trocado
-            # faria a natureza ou a expressão vir de outra coluna, em silêncio.
-            esperado = list(CFG["expressoes"]["colunas"])
-            lido = [desescapa(c).strip() for c in celulas(linhas_tabela[0])]
-            if lido != esperado:
-                raise ProtocoloInvalido(
-                    f"tabela 'Expressões de busca': cabeçalho {lido} difere do esperado "
-                    f"{esperado} ([expressoes] colunas do {CONFIG.name})")
-        for linha in linhas_tabela:
-            cels = celulas(linha)
-            if len(cels) < 4 or not re.match(r"^EB\d+$", cels[0]):
-                continue
-            ident = cels[0]
-            comb = desescapa(cels[2]).replace("\\", " ").strip()
-            if not re.search(r"STR\d+", comb):
-                raise ProtocoloInvalido(f"expressão {ident} sem composição legível")
-            composicao[ident] = _grupos_de_composicao(comb, ident)
-            natureza[ident] = normaliza(cels[1])
-            detalhe[ident] = desescapa(cels[3])
-        _numeracao(list(composicao), "EB", "expressões")
-    comp = _parametro(params, "composicao", composicao or None, "padroes.composicao")
+    linhas_tabela = [l for l in bloco.splitlines() if l.lstrip().startswith("|")]
+    if not linhas_tabela:
+        raise ProtocoloInvalido("tabela 'Expressões de busca' ausente")
+    # O cabeçalho diz o que cada coluna é: lido por posição, um cabeçalho trocado
+    # faria a natureza ou a expressão vir de outra coluna, em silêncio.
+    esperado = list(CFG["expressoes"]["colunas"])
+    lido = [desescapa(c).strip() for c in celulas(linhas_tabela[0])]
+    if lido != esperado:
+        raise ProtocoloInvalido(
+            f"tabela 'Expressões de busca': cabeçalho {lido} difere do esperado "
+            f"{esperado} ([expressoes] colunas do {CONFIG.name})")
+    for linha in linhas_tabela:
+        cels = celulas(linha)
+        if len(cels) < 4 or not re.match(r"^EB\d+$", cels[0]):
+            continue
+        ident = cels[0]
+        comb = desescapa(cels[2]).replace("\\", " ").strip()
+        if not re.search(r"STR\d+", comb):
+            raise ProtocoloInvalido(f"expressão {ident} sem composição legível")
+        composicao[ident] = _grupos_de_composicao(comb, ident)
+        natureza[ident] = normaliza(cels[1])
+        detalhe[ident] = desescapa(cels[3])
+    _numeracao(list(composicao), "EB", "expressões")
+    comp = _estrutural(params, "composicao", composicao)
 
     def papel(nome, chave_natureza):
         alvo = normaliza(CFG["expressoes"][chave_natureza])
@@ -628,8 +757,11 @@ def recorte(t, params):
             "texto": declarado["criterio"] if declarado else ""}
 
 
+SECAO_SEMENTES = "Conjunto-semente"
+
+
 def limiar(t, params):
-    bloco = secao(t, "Acervos pessoais")
+    bloco = secao(t, SECAO_SEMENTES)
     valor = None
     if re.search(r"Regra de ajuste", bloco):
         m = re.search(r"recuperação inferior a\s+(\d+(?:[.,]\d+)?)\s*%", bloco)
@@ -646,24 +778,48 @@ def ancoras(pal, params):
 
 
 # ------------------------------------------------------------------------- fontes
+def caminho_ficha(sigla):
+    """Caminho da ficha de uma base, relativo à raiz, pelo padrão `[documentos] ficha`."""
+    return CFG["documentos"]["ficha"].replace(MARCA_SIGLA, sigla)
+
+
+def bases_de_dados(bloco_fontes):
+    """Bases da tabela "Bases de dados": identificador, sigla, nome e ficha."""
+    onde = "tabela 'Bases de dados'"
+    tabelas_ = blocos_de_tabela(secao(bloco_fontes, "Bases de dados"))
+    if not tabelas_:
+        raise ProtocoloInvalido(f"{onde} ausente")
+    bases = []
+    for linha in le_tabela(tabelas_[0], COLUNAS_BASES, onde)[1]:
+        valores = {c: desescapa(linha[c]).strip() for c in COLUNAS_BASES}
+        ident = valores["ID Base"] or "?"
+        vazios = [c for c, v in valores.items() if not v]
+        if vazios:
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: campo vazio {vazios}")
+        m = re.fullmatch(r"BD(\d+)", ident)
+        if not m:
+            raise ProtocoloInvalido(f"{onde}: ID Base {ident!r} fora da forma BDn")
+        sigla = valores["Sigla"]
+        if not re.fullmatch(r"[\w-]+", sigla):
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: Sigla {sigla!r} não serve de "
+                                    f"chave (letras, dígitos, `_` ou `-`)")
+        if any(b["sigla"] == sigla for b in bases):
+            raise ProtocoloInvalido(f"{onde}: sigla repetida {sigla!r}")
+        ficha_ = caminho_ficha(sigla)
+        if not (RAIZ / ficha_).exists():
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: ficha da sigla {sigla!r} não "
+                                    f"existe — procurada em {ficha_} (`documentos.ficha` "
+                                    f"do {CONFIG.name})")
+        bases.append({"id": f"BD{int(m.group(1))}", "sigla": sigla,
+                      "nome": valores["Nome da base"], "ficha": ficha_})
+    _numeracao([b["id"] for b in bases], "BD", "bases")
+    return bases
+
+
 def fontes(t):
     bloco = secao(t, "Fontes de informação")
     bases_bloco = secao(bloco, "Bases de dados")
-
-    bases = []
-    for linha in bases_bloco.splitlines():
-        if not linha.lstrip().startswith("|"):
-            continue
-        cels = celulas(linha)
-        if len(cels) < 3:
-            continue
-        m = re.match(r"^BD(\d+)$", cels[0])
-        if not m:
-            continue
-        bases.append({"id": f"BD{int(m.group(1))}",
-                      "nome": desescapa(cels[1]).strip(),
-                      "papel": desescapa(cels[2]).strip()})
-    _numeracao([b["id"] for b in bases], "BD", "bases")
+    bases = bases_de_dados(bloco)
 
     acesso = next((p for p in paragrafos(bases_bloco)
                    if p.startswith("Ordem de execução")), "")
@@ -711,39 +867,34 @@ def _doi(texto_ref):
     return m.group(1).rstrip(".")
 
 
-def _mapa(bloco):
-    """Mapa por estudo: (n, autor, ano, bases) da frase de distribuição."""
-    linha = next((l for l in bloco.splitlines() if "Mapa por estudo" in l), "")
-    linha = linha[linha.index("Mapa por estudo"):] if linha else ""
-    return [(int(n), aut, int(ano), [b.strip() for b in bases.split("+")])
-            for n, aut, ano, bases in re.findall(
-                r"\((\d+)\)\s+([A-Za-zÀ-ÿ][\wÀ-ÿ'’-]*(?:\s+[A-Za-zÀ-ÿ][\wÀ-ÿ'’-]*)*)\s+"
-                r"(\d{4})\s+—\s+([^;.]+)", linha)]
+def sementes(t, siglas):
+    """Referências e bases esperadas, da tabela `ID Semente | Semente | Bases`.
 
-
-def sementes(t):
-    """Referências, bases esperadas e distribuição declarada do conjunto-semente."""
-    bloco = secao(t, "Acervos pessoais")
-    refs = re.findall(r"^- (SE\d+):\s+(.+)$", bloco, re.M)
-    if not refs:
-        raise ProtocoloInvalido("nenhuma referência identificada em Acervos pessoais")
-
-    mapa = {n: (aut, ano, bases) for n, aut, ano, bases in _mapa(bloco)}
+    Cada base citada tem de ser sigla da tabela de bases, na grafia exata; semente sem base
+    reprova.
+    """
+    onde = f"tabela '{SECAO_SEMENTES}'"
     estudos = []
-    for ident, bruto in refs:
-        n = int(ident[2:])
-        ref = desescapa(bruto).strip()
+    for linha in tabela_da_secao(t, SECAO_SEMENTES, COLUNAS_SEMENTES):
+        ident = desescapa(linha["ID Semente"]).strip()
+        if not re.fullmatch(r"SE\d+", ident):
+            raise ProtocoloInvalido(f"{onde}: ID Semente {ident!r} fora da forma SEn")
+        ref = desescapa(linha["Semente"]).strip()
         m = re.match(r"^(.*?)\s*\((\d{4})\)\.\s*(.*)$", ref)
         if not m:
-            raise ProtocoloInvalido(f"referência {n} sem autoria e ano no padrão esperado")
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: referência sem autoria e ano no "
+                                    f"padrão esperado")
         autores, ano, resto = m.groups()
-        aut_mapa, ano_mapa, bases = mapa.get(n, ("", 0, []))
+        bases = _lista(linha["Bases"])
+        if not bases:
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: semente sem base")
+        fora = [b for b in bases if b not in siglas]
+        if fora:
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: base {fora} não é sigla da "
+                                    f"tabela 'Bases de dados' {list(siglas)}")
+        if len(set(bases)) != len(bases):
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: base repetida {bases}")
         primeiro = autores.split(",")[0].strip()
-        if aut_mapa and normaliza(primeiro) != normaliza(aut_mapa):
-            raise ProtocoloInvalido(
-                f"referência {n}: mapa diz {aut_mapa!r} e a lista diz {primeiro!r}")
-        if ano_mapa and int(ano) != ano_mapa:
-            raise ProtocoloInvalido(f"referência {n}: mapa diz {ano_mapa}, lista diz {ano}")
         estudos.append({
             "id": ident, "autores": autores.strip(), "ano": int(ano),
             "titulo": _titulo(resto), "doi": _doi(ref),
@@ -753,38 +904,17 @@ def sementes(t):
     return estudos
 
 
-def distribuicao(t, estudos):
-    """Recalcula a distribuição do mapa e confere contra o parágrafo."""
-    bloco = secao(t, "Acervos pessoais")
-    por_base = {b: 0 for b in BASES}
+def distribuicao(estudos, siglas):
+    """Distribuição das sementes pelas bases, calculada da tabela. Não confere prosa."""
+    por_base = {b: 0 for b in siglas}
     for e in estudos:
         for b in e["bases"]:
-            if b not in por_base:
-                raise ProtocoloInvalido(f"semente {e['id']}: base desconhecida {b!r}; "
-                                        f"siglas de [fichas]: {list(BASES)}")
             por_base[b] += 1
-    incidencias = sum(por_base.values())
     multi = sum(1 for e in estudos if len(e["bases"]) > 1)
-
-    # A prosa declarada fica antes do mapa por estudo; o mapa não usa a forma "Sigla, n".
-    prosa = bloco.split("Mapa por estudo")[0]
-    siglas = "|".join(re.escape(b) for b in BASES)
-    declarado = {b: int(v) for b, v in re.findall(r"\b(" + siglas + r"),\s*(\d+)", prosa)}
-    m = re.search(r"A soma das incidências é\s*(\d+)\s*para\s*(\d+)\s*REGISTROS ÚNICOS", bloco)
-    declarado_inc = int(m.group(1)) if m else None
-    declarado_unicos = int(m.group(2)) if m else None
-    m = re.search(r"(\d+)\s*estudos estão em mais de uma base e\s*(\d+)\s*em uma só", bloco)
-    declarado_multi = int(m.group(1)) if m else None
-    declarado_so_um = int(m.group(2)) if m else None
-
     return {
-        "por_base": por_base, "incidencias": incidencias, "registros": len(estudos),
-        "em_mais_de_uma_base": multi, "em_uma_so": len(estudos) - multi,
-        "declarado": {
-            "por_base": declarado, "incidencias": declarado_inc,
-            "registros": declarado_unicos, "em_mais_de_uma_base": declarado_multi,
-            "em_uma_so": declarado_so_um,
-        },
+        "por_base": por_base, "incidencias": sum(por_base.values()),
+        "registros": len(estudos), "em_mais_de_uma_base": multi,
+        "em_uma_so": len(estudos) - multi,
     }
 
 
@@ -793,7 +923,6 @@ def distribuicao(t, estudos):
 # conhece sintaxe de base: campo, tag e operador são lidos do texto da ficha. O que ele
 # conhece é o contrato de extração — onde a string está e como o termo se separa.
 
-COR_FACETA = dict(CFG["cores"])
 OPERADORES = {"OR", "AND", "NOT"}
 CAMPOS_STRING = ("title", "abstract", "descriptor", "TS", "TI", "AB", "AK")
 SECOES_FICHA = ("3. Strings por faceta", "4. Expressões de busca",
@@ -801,8 +930,37 @@ SECOES_FICHA = ("3. Strings por faceta", "4. Expressões de busca",
 MODOS_DERIVACAO = ("morfologia", "radical")
 
 
-def ficha(slug):
-    return (RAIZ / FICHAS[slug]["arquivo"]).read_text(encoding="utf-8")
+def base_de(d, sigla):
+    """A base de sigla `sigla`, da tabela "Bases de dados" lida em `d`."""
+    achada = next((b for b in d["bases"] if b["sigla"] == sigla), None)
+    if achada is None:
+        raise ProtocoloInvalido(f"base {sigla!r} não consta da tabela 'Bases de dados' "
+                                f"({[b['sigla'] for b in d['bases']]})")
+    return achada
+
+
+def ficha(d, sigla):
+    return (RAIZ / base_de(d, sigla)["ficha"]).read_text(encoding="utf-8")
+
+
+def forma_execucao(t_ficha, caminho):
+    """Forma de execução declarada na ficha: exatamente uma linha `- Execução: <forma>`.
+
+    Sem padrão: linha ausente, repetida ou com valor fora de `FORMAS_EXECUCAO` reprova,
+    nomeando a ficha. Devolve o valor interno (`unica` ou `particionada`).
+    """
+    achados = re.findall(r"^-\s*Execução:\s*(.*?)\s*$", t_ficha, re.M)
+    admitidos = list(FORMAS_EXECUCAO)
+    if not achados:
+        raise ProtocoloInvalido(f"ficha {caminho}: falta a linha `- Execução: <forma>` "
+                                f"(formas admitidas: {admitidos})")
+    if len(achados) > 1:
+        raise ProtocoloInvalido(f"ficha {caminho}: linha `- Execução:` repetida {achados}")
+    valor = desescapa(achados[0]).strip()
+    if valor not in FORMAS_EXECUCAO:
+        raise ProtocoloInvalido(f"ficha {caminho}: forma de execução {valor!r} fora das "
+                                f"admitidas {admitidos}")
+    return FORMAS_EXECUCAO[valor]
 
 
 def _rotulo(linha):
@@ -954,10 +1112,8 @@ def consultas_curadas(bloco):
             item = {"grupo": grupo, "n": int(cels[0]),
                     "rotulo": f"{grupo} — consulta {int(cels[0])}",
                     "consulta": consulta}
+            # A faceta é identificada só pelo código FCTn; símbolo gráfico não conta.
             facetas = {f"FCT{n}" for n in re.findall(r"FCT(\d)", cels[2] if len(cels) > 2 else "")}
-            for cor, fid in COR_FACETA.items():
-                if len(cels) > 2 and cor in cels[2]:
-                    facetas.add(fid)
             if facetas:
                 item["facetas"] = sorted(facetas)
             saida.append(item)
@@ -999,18 +1155,18 @@ def expressoes_base(t, slug):
     return expressoes, curadas, ancoras
 
 
-def execucao_base(slug, expressoes, curadas, executada):
+def execucao_base(forma, expressoes, curadas, executada):
     """O que se executa nesta base: uma, particionada em subconsultas ou curada.
 
     A expressão é a que o protocolo declara executada; a forma (única ou particionada)
-    vem de `[fichas]` do config.toml, e a curada, da própria ficha.
+    é a declarada na ficha (`forma_execucao`), e a curada, a da própria ficha.
     """
     expressao = executada
     if curadas:
         modo = "curada"
         itens = curadas
     else:
-        modo = FICHAS[slug]["execucao"]
+        modo = forma
         if executada not in expressoes:
             raise ProtocoloInvalido(f"a ficha não traz a expressão executada {executada}")
         ex = expressoes[executada]
@@ -1033,7 +1189,7 @@ def filtros_base(execucao):
             "onde": "consulta" if (ano or idioma or tipo) else "interface"}
 
 
-def declaracao_base(t):
+def declaracao_base(t, idiomas_quadro):
     """Idiomas, camadas, derivações e redução declarada — o que a string pode deixar de fora."""
     bloco = secao(t, SECOES_FICHA[2])
     idiomas, camadas, derivacoes, exclusoes = {}, "", "", []
@@ -1068,7 +1224,7 @@ def declaracao_base(t):
         raise ProtocoloInvalido(f"camadas {camadas!r} não é 'todas' nem 'nucleo'")
     for fid in idiomas:
         for i in idiomas[fid]:
-            if i not in IDIOMAS:
+            if i not in idiomas_quadro:
                 raise ProtocoloInvalido(f"declaração de {fid}: idioma {i!r} desconhecido")
     modos = [m.strip() for m in re.split(r"\s*(?:,|;| e )\s*", derivacoes) if m.strip()]
     for m in modos:
@@ -1079,22 +1235,22 @@ def declaracao_base(t):
             "exclusoes": exclusoes}
 
 
-def base_derivada(slug, d, t_ficha=None):
+def base_derivada(sigla, d, t_ficha=None):
     """O derivado de uma base. A forma vem da ficha; o vocabulário, do protocolo."""
-    t = ficha(slug) if t_ficha is None else t_ficha
-    nome = next((b["nome"] for b in d["fontes"]["bases"]
-                 if b["id"] == FICHAS[slug]["bd"]), FICHAS[slug]["bd"])
-    expressoes, curadas, ancoras = expressoes_base(t, slug)
-    execucao = execucao_base(slug, expressoes, curadas, d["executada"])
+    b = base_de(d, sigla)
+    t = ficha(d, sigla) if t_ficha is None else t_ficha
+    forma = forma_execucao(t, b["ficha"])
+    expressoes, curadas, ancoras = expressoes_base(t, sigla)
+    execucao = execucao_base(forma, expressoes, curadas, d["executada"])
     return {
-        "base": {"id": FICHAS[slug]["bd"], "slug": slug, "nome": nome,
-                 "ficha": FICHAS[slug]["arquivo"]},
+        "base": {"id": b["id"], "sigla": sigla, "nome": b["nome"], "ficha": b["ficha"],
+                 "execucao_declarada": forma},
         "facetas": facetas_base(t),
         "ancoras": ancoras,
         "expressoes": {k: expressoes[k] for k in sorted(expressoes)},
         "execucao": execucao,
         "filtros": filtros_base(execucao),
-        "declaracao": declaracao_base(t),
+        "declaracao": declaracao_base(t, d["idiomas"]),
     }
 
 
@@ -1189,13 +1345,14 @@ def _vocabulario(fid, d, decl):
     quadro é vocabulário de referência; o que vale para a busca é a STR.
     """
     f = next(x for x in d["tabelas"] if x["id"] == fid)
-    idiomas = decl.get("idiomas", {}).get(fid) or list(IDIOMAS)
+    idiomas = decl.get("idiomas", {}).get(fid) or list(d["idiomas"])
     camadas = CAMADAS if decl.get("camadas") == "todas" else ("nucleo",)
     na_str = {normaliza(x) for x in d["strings"][fid]["termos"]}
     tabela = _sem_repeticao([x for i in idiomas for c in camadas
                              for x in f["camadas"][i][c]])
     vigentes = [x for x in tabela if normaliza(x) in na_str]
-    quadro = _sem_repeticao([x for i in IDIOMAS for c in CAMADAS for x in f["camadas"][i][c]])
+    quadro = _sem_repeticao([x for i in d["idiomas"] for c in CAMADAS
+                             for x in f["camadas"][i][c]])
     fora = [x for x in quadro if normaliza(x) not in na_str]
     return vigentes, fora
 
@@ -1316,7 +1473,13 @@ def analisa(t=None):
     t = texto() if t is None else t
     params = {}
     pal = palavras(t)
-    tb = tabelas(t)
+    tb, idiomas = tabelas(t)
+    _estrutural(params, "idiomas", list(idiomas))
+    ids_facetas = [f["id"] for f in pal]
+    insts, insts_faceta = instrumentos(t, ids_facetas, idiomas)
+    _estrutural(params, "instrumentos", [
+        f"{s} ({i['modo']}; {'/'.join(i['idiomas'])}; {','.join(i['facetas'])})"
+        for s, i in insts.items()])
     st = strings(t)
     for n in st:
         # A string repete termo entre camadas; a lista executada é deduplicada. É ela
@@ -1324,13 +1487,20 @@ def analisa(t=None):
         st[n]["termos"] = _sem_repeticao(st[n]["termos"])
     comp, exec_, sonda, sens = expressoes(t, params)
     crit = criterios(t)
-    est = sementes(t)
+    fts = fontes(t)
+    siglas = [b["sigla"] for b in fts["bases"]]
+    _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['ficha']}"
+                                  for b in fts["bases"]])
+    est = sementes(t, siglas)
+    _estrutural(params, "sementes", [f"{e['id']}: {', '.join(e['bases'])}" for e in est])
     d = {
         "questoes": questoes(t),
         "facetas": pal,
         "ancoras": ancoras(pal, params),
+        "idiomas": idiomas,
         "tabelas": tb,
-        "instrumentos": instrumentos(t),
+        "instrumentos": insts,
+        "instrumentos_por_faceta": insts_faceta,
         "strings": st,
         "expressoes": comp,
         "executada": exec_,
@@ -1338,10 +1508,11 @@ def analisa(t=None):
         "sensibilidade": sens,
         "criterios": crit,
         "recorte": recorte(t, params),
-        "fontes": fontes(t),
+        "fontes": fts,
+        "bases": fts["bases"],
         "limiar": limiar(t, params),
         "sementes": est,
-        "distribuicao": distribuicao(t, est),
+        "distribuicao": distribuicao(est, siglas),
     }
     # O protocolo não declara estes; valem os do config.toml, com a origem registrada.
     d["divergencia"] = _parametro(params, "divergencia_fidelidade", None,
@@ -1353,6 +1524,24 @@ def analisa(t=None):
     d["parametros"] = params
     d["papeis"] = papeis(d)
     return d
+
+
+_CACHE = {}
+
+
+def dados():
+    """O protocolo lido uma vez por execução, para os scripts consumidores.
+
+    Leitura reprovada termina o script com a mensagem do leitor: nenhum consumidor segue
+    com estrutura incompleta.
+    """
+    if "d" not in _CACHE:
+        try:
+            _CACHE["d"] = analisa()
+        except ProtocoloInvalido as e:
+            raise SystemExit(f"Protocolo ilegível ({CFG['protocolo']}) — {e}\n"
+                             f"  Rode  python3 src/protocolo.py --conferir") from None
+    return _CACHE["d"]
 
 
 # ---------------------------------------------------------------------- conferência
@@ -1432,13 +1621,13 @@ def conferir(t=None):
         return [str(e)]
 
     for f in d["tabelas"]:
-        for i in IDIOMAS:
+        for i in d["idiomas"]:
             for c in CAMADAS:
                 if not f["camadas"][i][c]:
                     problemas.append(f"faceta {f['id']}: camada {c} vazia em {i}")
         # Repetição entre camadas é legítima (o mesmo termo em núcleo e em relacionados);
         # a lista final é deduplicada. Dentro da mesma camada, é defeito.
-        for i in IDIOMAS:
+        for i in d["idiomas"]:
             for c in CAMADAS:
                 vistos = set()
                 for termo in f["camadas"][i][c]:
@@ -1448,14 +1637,10 @@ def conferir(t=None):
                             f"faceta {f['id']} {i}/{c}: {termo!r} repetido na mesma camada")
                     vistos.add(k)
 
-    for f in d["facetas"]:
-        if not f["cor"]:
-            problemas.append(f"faceta {f['id']}: cor não declarada")
-
     # A string só pode usar termo que o quadro da própria faceta contém. É a remissão que
     # impede string e vocabulário de divergirem em silêncio.
     minimo = d["parametros"]["minimo_termos_string"]["valor"]
-    quadro = {f["id"]: {normaliza(x) for i in IDIOMAS for x in f["termos"][i]}
+    quadro = {f["id"]: {normaliza(x) for i in d["idiomas"] for x in f["termos"][i]}
               for f in d["tabelas"]}
     for n, s in d["strings"].items():
         if len(s["termos"]) < minimo:
@@ -1482,35 +1667,15 @@ def conferir(t=None):
     if d["fontes"]["ordem_execucao"] != [b["nome"] for b in d["fontes"]["bases"]]:
         problemas.append(f"ordem de execução {d['fontes']['ordem_execucao']} difere da "
                          f"numeração das bases")
-    bds = {b["id"] for b in d["fontes"]["bases"]}
-    com_ficha = {f["bd"] for f in FICHAS.values()}
-    for slug, f in FICHAS.items():
-        if f["bd"] not in bds:
-            problemas.append(f"ficha {slug} ({CONFIG.name}) aponta {f['bd']}, que não é base "
-                             f"do protocolo")
-    for bd in sorted(bds - com_ficha):
-        problemas.append(f"base {bd} do protocolo sem ficha em [fichas] do {CONFIG.name}")
 
     if not d["questoes"]["questao_principal"]:
         problemas.append("questão geral vazia")
 
+    # Base e ficha de cada semente são lidas e conferidas pelo leitor (sigla da tabela de
+    # bases, ficha existente); a distribuição é calculada da tabela, sem prosa a conferir.
     for e in d["sementes"]:
         if not e["titulo"] or len(e["titulo"]) < 12:
             problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
-        if not e["bases"]:
-            problemas.append(f"semente {e['id']}: sem base esperada no mapa")
-
-    dist = d["distribuicao"]
-    dec = dist["declarado"]
-    for b, v in dec["por_base"].items():
-        if dist["por_base"].get(b) != v:
-            problemas.append(
-                f"distribuição em {b}: prosa diz {v}, mapa soma {dist['por_base'].get(b)}")
-    for campo, rotulo in (("incidencias", "incidências"), ("registros", "registros únicos"),
-                          ("em_mais_de_uma_base", "estudos em mais de uma base"),
-                          ("em_uma_so", "estudos em uma só base")):
-        if dec[campo] is not None and dist[campo] != dec[campo]:
-            problemas.append(f"{rotulo}: prosa diz {dec[campo]}, mapa dá {dist[campo]}")
     return problemas
 
 
@@ -1541,10 +1706,10 @@ def relatorio(d):
     L.append(f"  questão: 1 geral, {len(d['questoes']['questoes_especificas'])} específicas")
     for f in d["tabelas"]:
         n_string = len(d["strings"][f["id"]]["termos"])
-        n_bruto = sum(len(f["termos"][i]) for i in IDIOMAS)
+        n_bruto = sum(len(f["termos"][i]) for i in d["idiomas"])
         insts = ", ".join(f"{i['sigla']}({'/'.join(i['idiomas'])}"
-                          f"{', manual' if i['modo'] == 'manual' else ''})"
-                          for i in d["instrumentos"][f["id"]])
+                          f"{', manual' if i['modo'] == MODO_MANUAL else ''})"
+                          for i in d["instrumentos_por_faceta"][f["id"]])
         L.append(f"  faceta {f['id']} — {f['nome'][:52]:<54} "
                  f"tabela {n_bruto:>3} formas / string {n_string:>3} termos   "
                  f"instrumentos: {insts}")
@@ -1569,7 +1734,24 @@ def relatorio(d):
     L.append("  parâmetros em uso:")
     for nome, p in d["parametros"].items():
         L.append(f"    {nome:<24} {_legivel(p['valor'])[:70]:<72} [{p['origem']}]")
+    for nome, valor, origem in execucao_das_fichas(d):
+        L.append(f"    {nome:<24} {valor[:70]:<72} [{origem}]")
     return "\n".join(L)
+
+
+def execucao_das_fichas(d):
+    """Forma de execução de cada base, com origem na ficha: (nome, valor, origem).
+
+    Ficha ilegível nesse ponto aparece como tal, sem derrubar a exibição das demais.
+    """
+    saida = []
+    for b in d["bases"]:
+        try:
+            valor = forma_execucao(ficha(d, b["sigla"]), b["ficha"])
+        except (ProtocoloInvalido, OSError) as e:
+            valor = f"ILEGÍVEL — {e}"
+        saida.append((f"execucao.{b['sigla']}", valor, f"ficha {b['ficha']}"))
+    return saida
 
 
 def relatorio_bases(bases, d):
@@ -1657,19 +1839,22 @@ def _problemas_sementes(dado, d):
     return problemas, avisos
 
 
-def _problemas_registro(dado):
-    """Confere o registro documental e as execuções que declaram arquivo exportado."""
+def _problemas_registro(dado, bds):
+    """Confere o registro documental e as execuções que declaram arquivo exportado.
+
+    `bds` são os identificadores da tabela "Bases de dados" do protocolo.
+    """
     if not isinstance(dado, dict):
         return ["registro_execucao.json não é um objeto"]
     bases = dado.get("bases")
     if not isinstance(bases, dict):
         return ["registro_execucao.json sem a chave `bases`"]
-    faltam = [b for b in BDS if b not in bases]
+    faltam = [b for b in bds if b not in bases]
     if faltam:
         return [f"registro_execucao.json sem as bases {faltam}"]
 
     problemas = []
-    for bd in BDS:
+    for bd in bds:
         base = bases[bd]
         execucoes = base.get("execucoes")
         if not isinstance(execucoes, list):
@@ -1704,13 +1889,15 @@ def _problemas_registro(dado):
 
 
 def _problemas_bases(d):
+    """Problemas de cada base, isolados: ficha ilegível reprova só a sua base."""
     problemas = []
-    for slug in FICHAS:
+    for b in d["bases"]:
+        sigla = b["sigla"]
         try:
-            base = base_derivada(slug, d)
-            problemas += [f"{slug}: {p}" for p in cobertura_base(slug, base, d)]
+            base = base_derivada(sigla, d)
+            problemas += [f"{sigla}: {p}" for p in cobertura_base(sigla, base, d)]
         except ProtocoloInvalido as e:
-            problemas.append(f"{slug}: {e}")
+            problemas.append(f"{sigla}: {e}")
     return problemas
 
 
@@ -1734,7 +1921,7 @@ def conferir_dados():
     if erro:
         problemas.append(erro)
     else:
-        problemas += _problemas_registro(dado)
+        problemas += _problemas_registro(dado, [b["id"] for b in d["bases"]])
 
     problemas += _problemas_bases(d)
     return problemas, avisos
@@ -1872,7 +2059,7 @@ def pendencias_relatorio():
     else:
         bases = registro.get("bases") or {}
         com_arquivo = 0
-        for bd in BDS:
+        for bd in [b["id"] for b in d["bases"]]:
             base = bases.get(bd) or {}
             nome = base.get("base") or bd
             for p in base.get("pendencias") or []:
@@ -1910,11 +2097,11 @@ def pendencias_relatorio():
     # Lacuna que a própria ficha declara e deixa em aberto. A decisão é do pesquisador:
     # acrescentar o termo à string, com nova execução e novo teste de aderência, ou manter
     # a perda e declará-la no relatório.
-    for slug in FICHAS:
+    for base in d["bases"]:
         try:
-            b = base_derivada(slug, d)
+            b = base_derivada(base["sigla"], d)
         except ProtocoloInvalido as e:
-            linhas.append(f"[{slug}] ficha ilegível: {e}")
+            linhas.append(f"[{base['sigla']}] ficha ilegível: {e}")
             continue
         pendentes = [e for e in b["declaracao"]["exclusoes"]
                      if "pendente" in normaliza(e["motivo"])]
@@ -1940,6 +2127,25 @@ def _troca_linha(linhas, prefixo, de, para):
     return [l.replace(de, para, 1) if l.startswith(prefixo) else l for l in linhas]
 
 
+def _tabela_sem_coluna(linhas, cabecalho, coluna):
+    """Retira a coluna `coluna` (posição) da tabela cujo cabeçalho começa por `cabecalho`."""
+    i = next(k for k, l in enumerate(linhas) if l.startswith(cabecalho))
+    saida = list(linhas)
+    while i < len(saida) and saida[i].lstrip().startswith("|"):
+        cels = celulas(saida[i])
+        saida[i] = "| " + " | ".join(c for k, c in enumerate(cels) if k != coluna) + " |"
+        i += 1
+    return saida
+
+
+def _sem_tabela(linhas, cabecalho):
+    i = next(k for k, l in enumerate(linhas) if l.startswith(cabecalho))
+    j = i
+    while j < len(linhas) and linhas[j].lstrip().startswith("|"):
+        j += 1
+    return linhas[:i] + linhas[j:]
+
+
 def _mutacoes(t):
     """Cópias defeituosas: (nome, texto, trecho esperado na reprovação)."""
     linhas = t.splitlines()
@@ -1958,9 +2164,6 @@ def _mutacoes(t):
          "camada relacionados vazia"),
         ("string fora do padrão OR",
          _troca_linha(linhas, "| STR2 |", " OR ", ", "), "fora do padrão"),
-        ("semente ausente", [l for l in linhas if not l.startswith("- SE10:")], "prosa diz"),
-        ("distribuição contradita", [l.replace("Scopus, 6;", "Scopus, 7;", 1) for l in linhas],
-         "prosa diz"),
         ("termo duplicado na faceta", duplicada, "repetido na mesma camada"),
         ("questão geral removida",
          [l for l in linhas if l.strip() != "### Questão geral de revisão"], "Questão geral"),
@@ -1979,11 +2182,9 @@ def _mutacoes(t):
          [l.replace("| CE3 |", "| CE2 |", 1) for l in linhas], "numeração CE"),
         ("base com identificador repetido",
          [l.replace("| BD3 |", "| BD2 |", 1) for l in linhas], "numeração BD"),
-        ("semente fora de numeração",
-         [l.replace("- SE10:", "- SE11:", 1) for l in linhas], "numeração SE"),
         # Coerência das expressões.
         ("âncora desmarcada",
-         _troca_linha(linhas, "- Faceta 2 (FCT2)", " — âncora obrigatória 2", ""),
+         _troca_linha(linhas, "- Faceta 2 (FCT2)", " (âncora obrigatória 2)", ""),
          "conjunção das âncoras"),
         ("executada que não é a união das específicas",
          _troca_linha(linhas, "| EB4 |", "(STR3 OR STR4)", "STR3"), "não é a união"),
@@ -2030,15 +2231,68 @@ def _mutacoes(t):
         ("recorte temporal ilegível",
          _troca_linha(linhas, "| CE1 |", "após o ano 2016", "após o ano de dois mil"),
          "sem ano legível"),
+        # Parâmetros estruturais: ausência e valor inválido reprovam, sem padrão.
+        ("composição ausente (seção de expressões removida)",
+         [l for l in linhas if l.strip() != "## Expressões de busca"], "Expressões de busca"),
+        # Leitor de tabela pelo cabeçalho.
+        ("coluna Sigla retirada da tabela de bases",
+         _tabela_sem_coluna(linhas, "| ID Base |", 1), "falta a coluna ['Sigla']"),
+        ("coluna repetida na tabela de instrumentos",
+         _troca_linha(linhas, "| Sigla | Instrumento", "| Caminho |", "| Modo |"),
+         "coluna repetida ['Modo']"),
+        ("tabela de bases ausente", _sem_tabela(linhas, "| ID Base |"),
+         "tabela 'Bases de dados' ausente"),
+        # Facetas.
+        ("âncora com parêntese mal formado",
+         _troca_linha(linhas, "- Faceta 1 (FCT1)", "(âncora obrigatória 1)",
+                      "(âncora obrigatória 1"), "âncora fora da forma"),
+        ("linha de faceta com travessão residual",
+         _troca_linha(linhas, "- Faceta 3 (FCT3)", "ensino-aprendizagem",
+                      "ensino-aprendizagem — vermelho"), "travessão"),
+        # Quadro terminológico: idioma pelo cabeçalho.
+        ("idioma repetido no cabeçalho do quadro",
+         _troca_linha(linhas, "| FCT2 | pt |", "| FCT2 | pt | en | es |",
+                      "| FCT2 | pt | en | en |"), "coluna repetida ['en']"),
+        ("coluna de idioma sem nome no quadro",
+         _troca_linha(linhas, "| FCT3 | pt |", "| FCT3 | pt | en | es |",
+                      "| FCT3 | pt |  | es |"), "sem nome"),
+        ("idiomas diferentes entre facetas",
+         _troca_linha(linhas, "| FCT4 | pt |", "| FCT4 | pt | en | es |",
+                      "| FCT4 | pt | en | fr |"), "diferem dos idiomas"),
         # Instrumentos.
-        ("instrumento sem cadastro na configuração",
-         _troca_linha(linhas, "- FCT1:", "UNESCO Thesaurus", "UNESCO Thesaurus, Tesauro X"),
-         "não consta de [instrumentos]"),
-        ("faceta sem linha de instrumentos", [l for l in linhas if not l.startswith("- FCT4:")],
-         "sem linha"),
-        ("instrumento ambíguo",
-         _troca_linha(linhas, "- FCT2:", "ERIC Thesaurus,", "ERIC Thesaurus UNESCO Thesaurus,"),
-         "mais de um instrumento"),
+        ("instrumento com sigla repetida",
+         _troca_linha(linhas, "| eric |", "| eric |", "| brased |"), "sigla repetida"),
+        ("instrumento com campo vazio",
+         _troca_linha(linhas, "| tbci |", "| pt | FCT1 |", "|  | FCT1 |"), "campo vazio"),
+        ("instrumento com Modo fora do domínio",
+         _troca_linha(linhas, "| eric |", "| Manual |", "| Semiautomático |"),
+         "fora dos admitidos"),
+        ("instrumento com idioma fora do quadro",
+         _troca_linha(linhas, "| brased |", "| pt | FCT2", "| fr | FCT2"), "['fr'] fora"),
+        ("instrumento com faceta inexistente em FCTs",
+         _troca_linha(linhas, "| unesco |", "FCT4 |", "FCT4s |"), "['FCT4s']"),
+        ("faceta do quadro sem instrumento",
+         _troca_linha(_troca_linha(_troca_linha(linhas, "| unesco |", ", FCT4 |", " |"),
+                                   "| eric |", ", FCT4 |", " |"),
+                      "| brased |", ", FCT4 |", " |"), "sem instrumento"),
+        ("instrumento Automático sem cliente",
+         _troca_linha(linhas, "| eric |", "| Manual |", "| Automático |"), "sem cliente"),
+        ("instrumento com Caminho que não é URL",
+         _troca_linha(linhas, "| eric |", "https://vocabularyserver.com/eric/",
+                      "vocabularyserver eric"), "não é URL"),
+        # Bases e sementes.
+        ("sigla de base repetida",
+         _troca_linha(linhas, "| BD3 |", "| eric |", "| scopus |"), "sigla repetida"),
+        ("sigla de base sem ficha",
+         _troca_linha(linhas, "| BD3 |", "| eric |", "| ericx |"),
+         "ficha da sigla 'ericx' não existe"),
+        ("semente sem base",
+         _troca_linha(linhas, "| SE10 |", "| wos |", "|  |"), "semente sem base"),
+        ("semente com sigla em outra grafia",
+         _troca_linha(linhas, "| SE2 |", "| wos, scopus |", "| WoS, scopus |"),
+         "linha SE2: base ['WoS']"),
+        ("semente fora de numeração",
+         [l.replace("| SE10 |", "| SE11 |", 1) for l in linhas], "numeração SE"),
     ]
     return [(nome, "\n".join(ls), espera) for nome, ls, espera in casos]
 
@@ -2050,7 +2304,7 @@ def _autoteste_precedencia(t):
         ("limiar ausente do protocolo vale pelo padrão", "limiar_aderencia",
          [l for l in t.splitlines() if not l.startswith("- Regra de ajuste:")]),
         ("âncoras não marcadas valem pelo padrão", "ancoras",
-         [re.sub(r" — âncora obrigatória \d", "", l) for l in t.splitlines()]),
+         [re.sub(r" \(âncora obrigatória \d\)", "", l) for l in t.splitlines()]),
     ]
     for nome, param, linhas in casos:
         n += 1
@@ -2113,11 +2367,16 @@ def _autoteste_config():
     testa("chave exigida ausente", sem("padroes.limiar_aderencia"),
           "padroes.limiar_aderencia")
     testa("caminho do protocolo ausente", sem("protocolo"), "`protocolo`")
-    testa("ficha sem arquivo", sem(f"fichas.{next(iter(FICHAS))}.arquivo"), "arquivo")
-    primeiro = next(iter(CFG["instrumentos"]))
-    c = copy.deepcopy(CFG)
-    c["instrumentos"][primeiro]["modo"] = "outro"
-    testa("instrumento com modo desconhecido", lambda: valida_config(c), "modo")
+    testa("padrão de caminho da ficha ausente", sem("documentos.ficha"), "documentos.ficha")
+    testa("padrão de caminho da ficha sem {sigla}",
+          com("documentos.ficha", "docs/busca_base.md"), MARCA_SIGLA)
+    # Chave retirada (parâmetro estrutural) de volta à configuração: segunda fonte.
+    testa("[fichas.wos] na configuração",
+          com("fichas", {"wos": {"bd": "BD1", "sigla": "WoS", "execucao": "unica"}}),
+          "`fichas`")
+    for chave, valor in (("padroes.composicao", {"EB1": [["STR1"]]}), ("cores", {"x": "FCT1"}),
+                         ("instrumentos", {"X": {"sigla": "x"}}), ("idiomas", ["pt"])):
+        testa(f"chave retirada `{chave}` na configuração", com(chave, valor), f"`{chave}`")
     testa("faixa padrão invertida", com("padroes.sensibilidade", [0.15, 0.05]), "inferior")
     with tempfile.TemporaryDirectory() as tmp:
         ruim = pathlib.Path(tmp) / "config.toml"
@@ -2132,8 +2391,8 @@ def _autoteste_validacao(t, d):
     """Prova o planejamento da validação terminológica por instrumento.
 
     Sobre o protocolo e cópias alteradas em memória: todos os instrumentos da faceta são
-    planejados, instrumento retirado da linha não é, só nos idiomas que o instrumento
-    cobre, e o modo manual faz a linha nascer pendente de validação manual.
+    planejados, instrumento cuja coluna FCTs perde a faceta não é, só nos idiomas que o
+    instrumento cobre, e o modo `Manual` faz a linha nascer pendente de validação manual.
     """
     falhas, n = 0, 0
 
@@ -2147,65 +2406,131 @@ def _autoteste_validacao(t, d):
             falhas += 1
 
     def planejados(dd, fid):
-        return {i["sigla"] for idioma in IDIOMAS for i in instrumentos_do_termo(dd, fid, idioma)}
+        return {i["sigla"] for idioma in dd["idiomas"]
+                for i in instrumentos_do_termo(dd, fid, idioma)}
 
     # Vários instrumentos: a faceta com mais instrumentos tem todos planejados. Sem faceta
     # com mais de um, o caso não prova nada e falha.
-    fid = max(d["instrumentos"], key=lambda f: len(d["instrumentos"][f]))
-    declarados = {i["sigla"] for i in d["instrumentos"][fid] if set(i["idiomas"]) & set(IDIOMAS)}
+    por_faceta = d["instrumentos_por_faceta"]
+    fid = max(por_faceta, key=lambda f: len(por_faceta[f]))
+    declarados = {i["sigla"] for i in por_faceta[fid] if set(i["idiomas"]) & set(d["idiomas"])}
     testa(f"faceta com vários instrumentos ({fid}) planeja todos",
           len(declarados) > 1 and planejados(d, fid) == declarados,
           f"declarados {sorted(declarados)}, planejados {sorted(planejados(d, fid))}")
 
-    # Instrumento retirado da linha da faceta, na cópia do texto.
-    linha = re.search(rf"^-\s*{fid}\s*:\s*(.*)$", t, re.M)
-    itens = [x.strip() for x in linha.group(1).split(",") if x.strip()] if linha else []
-    if len(itens) < 2:
-        testa(f"instrumento retirado da linha de {fid}", False,
-              "a linha não tem dois instrumentos para retirar um")
+    # Instrumento retirado: a faceta sai da coluna FCTs da linha dele, na cópia do texto.
+    if len(por_faceta[fid]) < 2:
+        testa(f"instrumento retirado de {fid}", False,
+              "a faceta não tem dois instrumentos para retirar um")
     else:
-        retirado = _resolve_instrumento(itens[-1], fid)
-        sigla = CFG["instrumentos"][retirado]["sigla"]
-        mutante = t.replace(linha.group(0), linha.group(0).replace(
-            linha.group(1), ", ".join(itens[:-1])), 1)
+        sigla = por_faceta[fid][-1]["sigla"]
+        linha = next(l for l in t.splitlines()
+                     if l.lstrip().startswith("|") and celulas(l)[0] == sigla)
+        cels = celulas(linha)
+        cab = celulas(blocos_de_tabela(secao(t, SECAO_INSTRUMENTOS))[0][0])
+        k = cab.index("FCTs")
+        cels[k] = ", ".join(f for f in _lista(cels[k]) if f != fid)
+        mutante = t.replace(linha, "| " + " | ".join(cels) + " |", 1)
         dm = analisa(mutante)
-        testa(f"instrumento retirado da linha de {fid} ({sigla}) não é planejado",
+        testa(f"faceta {fid} retirada da coluna FCTs de {sigla}: {sigla} não é planejado",
               mutante != t and sigla not in planejados(dm, fid)
               and planejados(dm, fid) == planejados(d, fid) - {sigla},
               f"planejados {sorted(planejados(dm, fid))}")
 
     # Filtro por idioma: um instrumento passa a cobrir só um dos idiomas.
     dm = copy.deepcopy(d)
-    inst = dm["instrumentos"][fid][0]
+    inst = dm["instrumentos_por_faceta"][fid][0]
     so = inst["idiomas"][0]
     inst["idiomas"] = [so]
-    fora = [i for i in IDIOMAS if i != so]
+    fora = [i for i in dm["idiomas"] if i != so]
     testa(f"{inst['sigla']} restrito a {so} só é planejado em {so}",
           bool(fora)
           and inst["sigla"] in {i["sigla"] for i in instrumentos_do_termo(dm, fid, so)}
           and all(inst["sigla"] not in {i["sigla"] for i in instrumentos_do_termo(dm, fid, x)}
                   for x in fora))
 
-    # Modo manual: um instrumento automatizado declarado manual nasce pendente; um manual
-    # declarado automatizado deixa de nascer pendente.
+    # Modo manual: um instrumento automático declarado Manual nasce pendente.
     dm = copy.deepcopy(d)
-    autos = [i for i in dm["instrumentos"][fid] if i["modo"] != "manual"]
+    autos = [i for i in dm["instrumentos_por_faceta"][fid] if i["modo"] != MODO_MANUAL]
     if not autos:
-        testa(f"instrumento manual em {fid}", False, "nenhum instrumento automatizado")
+        testa(f"instrumento manual em {fid}", False, "nenhum instrumento automático")
     else:
-        autos[0]["modo"] = "manual"
-        plano = [i for idioma in IDIOMAS for i in instrumentos_do_termo(dm, fid, idioma)
+        autos[0]["modo"] = MODO_MANUAL
+        plano = [i for idioma in dm["idiomas"] for i in instrumentos_do_termo(dm, fid, idioma)
                  if i["sigla"] == autos[0]["sigla"]]
-        testa(f"{autos[0]['sigla']} declarado manual nasce pendente de validação manual",
-              bool(plano) and all(i["modo"] == "manual" and
-                                  estado_inicial(i).get("status_proposto") == STATUS_MANUAL
-                                  for i in plano))
-    manuais = [i for f in d["instrumentos"].values() for i in f if i["modo"] == "manual"]
-    testa("instrumento manual do protocolo nasce pendente e o automatizado não",
+        testa(f"{autos[0]['sigla']} declarado {MODO_MANUAL} nasce pendente de validação "
+              f"manual", bool(plano) and all(i["modo"] == MODO_MANUAL and
+                                            estado_inicial(i).get("status_proposto")
+                                            == STATUS_MANUAL for i in plano))
+    manuais = [i for i in d["instrumentos"].values() if i["modo"] == MODO_MANUAL]
+    testa("instrumento manual do protocolo nasce pendente e o automático não",
           bool(manuais)
           and all(estado_inicial(i).get("status_proposto") == STATUS_MANUAL for i in manuais)
           and all(estado_inicial(i).get("status_proposto") != STATUS_MANUAL
-                  for f in d["instrumentos"].values() for i in f if i["modo"] != "manual"))
+                  for i in d["instrumentos"].values() if i["modo"] != MODO_MANUAL))
+    return falhas, n
+
+
+def _autoteste_estrutural(t, d):
+    """Leituras estruturais que têm de APROVAR: o leitor não pode reprovar o que é válido.
+
+    Complementa as mutações, que provam a reprovação: aqui se prova que a gramática nova
+    lê o caso legítimo com o valor certo.
+    """
+    falhas, n = 0, 0
+
+    def testa(nome, condicao, detalhe=""):
+        nonlocal falhas, n
+        n += 1
+        if condicao:
+            print(f"  [ok] {nome}")
+        else:
+            print(f"  [FALHA] {nome}{' — ' + detalhe if detalhe else ''}")
+            falhas += 1
+
+    # Hífen dentro do nome pertence ao nome; âncora entre parênteses não.
+    fct3 = next(f for f in d["facetas"] if f["id"] == "FCT3")
+    testa("FCT3 lida com o hífen no nome e sem âncora",
+          fct3["nome"] == "Práticas do processo de ensino-aprendizagem" and not fct3["ancora"],
+          repr(fct3))
+    fct1 = next(f for f in d["facetas"] if f["id"] == "FCT1")
+    testa("FCT1 lida como âncora, sem o parêntese no nome",
+          fct1["ancora"] and "(" not in fct1["nome"] and "âncora" not in fct1["nome"],
+          repr(fct1))
+    # Nome da base pela coluna, não pela posição.
+    bd1 = next(b for b in d["bases"] if b["id"] == "BD1")
+    testa("BD1 lida com o nome da coluna 'Nome da base'",
+          bd1["nome"] == "Web of Science (Core Collection)", repr(bd1))
+
+    # Colunas do quadro em outra ordem: os termos de `pt` continuam lidos como português.
+    linhas = t.splitlines()
+    i = next(k for k, l in enumerate(linhas) if l.startswith("| FCT2 |"))
+    cab = celulas(linhas[i])
+    a, b = cab.index("pt"), cab.index("en")
+    j = i
+    while j < len(linhas) and linhas[j].lstrip().startswith("|"):
+        cels = celulas(linhas[j])
+        cels[a], cels[b] = cels[b], cels[a]
+        linhas[j] = "| " + " | ".join(cels) + " |"
+        j += 1
+    mutante = "\n".join(linhas)
+    problemas = conferir(mutante)
+    try:
+        dm = analisa(mutante)
+        f2 = next(f for f in dm["tabelas"] if f["id"] == "FCT2")
+        orig = next(f for f in d["tabelas"] if f["id"] == "FCT2")
+        mesmos = all(f2["termos"][x] == orig["termos"][x] for x in d["idiomas"])
+    except ProtocoloInvalido as e:
+        mesmos, problemas = False, [str(e)]
+    testa("quadro de FCT2 com colunas `en | pt` aprova e lê `pt` como português",
+          mutante != t and not problemas and mesmos, f"{problemas[:1]}")
+
+    # Forma curada: emoji sem FCTn não atribui faceta.
+    curadas = consultas_curadas("#### Grupo\n| n | Consulta | Facetas |\n| - | - | - |\n"
+                                "| 1 | `ontology` | 🟦 |\n| 2 | `ontology` | FCT1 |\n")
+    testa("consulta curada marcada só por emoji fica sem faceta; FCTn atribui",
+          "facetas" not in curadas[0] and curadas[1].get("facetas") == ["FCT1"],
+          repr(curadas))
     return falhas, n
 
 
@@ -2239,8 +2564,9 @@ def _autoteste_dados(d):
             print(f"  [FALHA] aprovou indevidamente: {nome}")
             falhas += 1
 
+    bds = [b["id"] for b in d["bases"]]
     base_ps, _ = _problemas_sementes(sem, d)
-    base_pr = _problemas_registro(reg)
+    base_pr = _problemas_registro(reg, bds)
     if base_ps or base_pr:
         print(f"  [FALHA] o arquivo corrente já está reprovado: "
               f"{(base_ps or base_pr)[0]}")
@@ -2263,22 +2589,22 @@ def _autoteste_dados(d):
     testa("semente fora do protocolo com metadados preservados", bool(a))
 
     copia = copy.deepcopy(reg)
-    del copia["bases"][BDS[0]]
-    testa("registro sem uma das bases", bool(_problemas_registro(copia)))
+    del copia["bases"][bds[0]]
+    testa("registro sem uma das bases", bool(_problemas_registro(copia, bds)))
 
     copia = copy.deepcopy(reg)
-    copia["bases"][BDS[0]]["execucoes"].append({
+    copia["bases"][bds[0]]["execucoes"].append({
         "id": "EX99", "expressao": d["executada"], "arquivo": "data/execucoes/ausente.ris",
         "registros_lidos": 1, "status": "valida"})
     testa("execução apontando arquivo de exportação ausente",
-          bool(_problemas_registro(copia)))
+          bool(_problemas_registro(copia, bds)))
 
     copia = copy.deepcopy(reg)
-    copia["bases"][BDS[0]]["execucoes"].append({
+    copia["bases"][bds[0]]["execucoes"].append({
         "id": "EX99", "expressao": d["executada"], "arquivo": str(REGISTRO.relative_to(RAIZ)),
         "registros_lidos": "um", "status": "valida"})
     testa("execução com `registros_lidos` que não é inteiro",
-          bool(_problemas_registro(copia)))
+          bool(_problemas_registro(copia, bds)))
     if n != CASOS_DADOS:
         print(f"  [FALHA] {n} casos executados, CASOS_DADOS declara {CASOS_DADOS}")
         falhas += 1
@@ -2292,17 +2618,18 @@ def _autoteste_bases(d):
     Defeito que a conferência não pega é defeito que passa em silêncio na fonte.
     """
     falhas, n = 0, 0
-    # As mutações abaixo reescrevem trechos do texto de fichas específicas; os slugs são os
-    # dessas fichas. Ficha renomeada ou retirada de [fichas] falha aqui, nomeada, em vez de
-    # derrubar o autoteste com KeyError.
+    # As mutações abaixo reescrevem trechos do texto de fichas específicas; as siglas são
+    # as dessas fichas. Base renomeada ou retirada da tabela "Bases de dados" falha aqui,
+    # nomeada, em vez de derrubar o autoteste com KeyError.
+    siglas = [b["sigla"] for b in d["bases"]]
     usados = ("wos", "brapci", "eric")
-    ausentes = [s for s in usados if s not in FICHAS]
+    ausentes = [s for s in usados if s not in siglas]
     if ausentes:
-        print(f"  [FALHA] fichas usadas pelo autoteste das bases ausentes de [fichas] do "
-              f"{CONFIG.name}: {ausentes}; atualizar as mutações de _autoteste_bases")
+        print(f"  [FALHA] bases usadas pelo autoteste das fichas ausentes da tabela 'Bases de "
+              f"dados': {ausentes}; atualizar as mutações de _autoteste_bases")
         return 1, 1
     slug = "wos"
-    original = ficha(slug)
+    original = ficha(d, slug)
 
     def problemas_de(s, t_ficha):
         try:
@@ -2342,7 +2669,7 @@ def _autoteste_bases(d):
           original.replace('TS=("representação do conhecimento" OR ',
                            'TS=("modelo conceitual" OR "representação do conhecimento" OR ', 1),
           espera="não está na string do protocolo")
-    brapci = ficha("brapci")
+    brapci = ficha(d, "brapci")
     testa("termo só do quadro, em flexão, na string da BRAPCI",
           brapci.replace('("educação" OR ', '("educação" OR "educativos" OR ', 1),
           "brapci", brapci, "não está na string do protocolo")
@@ -2350,11 +2677,11 @@ def _autoteste_bases(d):
     # nenhuma outra base.
     n += 1
     mutante = brapci.replace('("educação" OR ', '("educação" OR "educativos" OR ', 1)
-    por_base = {s: problemas_de(s, mutante if s == "brapci" else ficha(s)) for s in FICHAS}
+    por_base = {s: problemas_de(s, mutante if s == "brapci" else ficha(d, s)) for s in siglas}
     outras = {s: p for s, p in por_base.items() if s != "brapci" and p}
     if mutante != brapci and por_base["brapci"] and not outras:
         print(f"  [ok] defeito só na BRAPCI reprova só a BRAPCI — "
-              f"{', '.join(s for s in FICHAS if s != 'brapci')} passam")
+              f"{', '.join(s for s in siglas if s != 'brapci')} passam")
     else:
         print(f"  [FALHA] defeito só na BRAPCI: BRAPCI "
               f"{'reprovou' if por_base['brapci'] else 'passou'}, outras reprovadas "
@@ -2370,7 +2697,29 @@ def _autoteste_bases(d):
     # Forma radical, na ficha que a declara. O controle é a ficha corrente com toda linha
     # falsamente declarada como radical reetiquetada como redução: tem de passar, ou os
     # defeitos injetados sobre ele não provam nada.
-    eric = ficha("eric")
+    eric = ficha(d, "eric")
+
+    # Forma de execução declarada na ficha: sem padrão, e o defeito fica na base afetada.
+    linha_exec = "- Execução: particionada\n"
+    testa("ficha da ERIC sem a linha de execução", eric.replace(linha_exec, "", 1), "eric",
+          eric, "falta a linha `- Execução")
+    testa("ficha da ERIC com a linha de execução repetida",
+          eric.replace(linha_exec, linha_exec * 2, 1), "eric", eric, "repetida")
+    testa("ficha da ERIC com forma de execução fora do domínio",
+          eric.replace(linha_exec, "- Execução: dividida\n", 1), "eric", eric, "'dividida'")
+    n += 1
+    sem_linha = eric.replace(linha_exec, "", 1)
+    por_base = {s: problemas_de(s, sem_linha if s == "eric" else ficha(d, s)) for s in siglas}
+    outras = {s: p for s, p in por_base.items() if s != "eric" and p}
+    if sem_linha != eric and any("busca_base_eric" in p for p in por_base["eric"]) \
+            and not outras:
+        print(f"  [ok] ficha da ERIC sem execução reprova só a ERIC, nomeando a ficha — "
+              f"{', '.join(s for s in siglas if s != 'eric')} passam")
+    else:
+        print(f"  [FALHA] ficha da ERIC sem execução: ERIC {por_base['eric'][:1]}, outras "
+              f"reprovadas {sorted(outras)}")
+        falhas += 1
+
     controle = eric
     for e, _ in _radical_sem_alcance(base_derivada("eric", d, eric)):
         controle = re.sub(r"^(\|\s*" + re.escape(e["faceta"]) + r"\s*\|\s*"
@@ -2447,12 +2796,13 @@ def autoteste(t=None):
     d = analisa(t)
     f_p, n_p = _autoteste_precedencia(t)
     f_c, n_c = _autoteste_config()
+    f_s, n_s = _autoteste_estrutural(t, d)
     f_v, n_v = _autoteste_validacao(t, d)
     f_d, n_d, x_d, motivo_d = _autoteste_dados(d)
     f_b, n_b = _autoteste_bases(d)
     f_e, n_e = _autoteste_composicao()
-    falhas += f_p + f_c + f_v + f_d + f_b + f_e
-    executados = len(mut) + n_p + n_c + n_v + n_d + n_b + n_e
+    falhas += f_p + f_c + f_s + f_v + f_d + f_b + f_e
+    executados = len(mut) + n_p + n_c + n_s + n_v + n_d + n_b + n_e
     parcial = ""
     if x_d:
         parcial = (
@@ -2471,7 +2821,8 @@ def autoteste(t=None):
     dados = f"{n_d} nas conferências dos arquivos alimentados, " if n_d else ""
     print(f"\n{'Todos os' if not x_d else 'Os'} {executados} casos executados tiveram o "
           f"resultado esperado: {len(mut)} defeitos injetados no documento, {n_p} casos de "
-          f"precedência, {n_c} de configuração, {n_v} de planejamento da validação, "
+          f"precedência, {n_c} de configuração, {n_s} de leitura estrutural que aprova, "
+          f"{n_v} de planejamento da validação, "
           f"{dados}{n_b} nas fichas das bases, {n_e} da prova da composição da "
           f"derivação.{parcial}")
     return 0

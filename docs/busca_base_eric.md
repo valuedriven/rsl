@@ -129,6 +129,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 | **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
 | **EB1** | não executar; derivação local |
 
+- Execução: particionada
 - **Fidelidade:** divergência acima de `divergencia_fidelidade` (`--mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 

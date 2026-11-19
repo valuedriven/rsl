@@ -11,13 +11,14 @@ sistemática isso contamina o registro e destrói a reprodutibilidade.
 
 ## 1. A regra única, para as quatro facetas
 
-- **Os instrumentos de cada faceta são os que o protocolo declara** na seção
-  "Instrumentos para controle terminológico". Não se presume instrumento por idioma nem
-  por faceta: o que não está na seção não é instrumento de linha alguma da planilha.
-- **O que é propriedade do instrumento** — sigla, idiomas que cobre e modo de consulta —
-  está em `[instrumentos]` do `config.toml` (ver `README.md`). Cada termo é planejado para
-  cada instrumento da sua faceta que cubra o seu idioma.
-- **Instrumento sem cliente automatizado** (modo `manual`) gera linha com o estatuto
+- **Os instrumentos de cada faceta são os que o protocolo declara** na tabela da seção
+  "Instrumentos para controle terminológico" (coluna `FCTs`). Não se presume instrumento
+  por idioma nem por faceta: o que não está na tabela não é instrumento de linha alguma da
+  planilha.
+- **O que é propriedade do instrumento** — sigla, modo, caminho e idiomas que cobre — está
+  na mesma linha da tabela (ver `README.md`). Cada termo é planejado para cada instrumento
+  da sua faceta que cubra o seu idioma.
+- **Instrumento sem cliente automatizado** (modo `Manual`) gera linha com o estatuto
   "pendente de validação manual": consulta-se à mão e registra-se a evidência como em
   qualquer outra linha. Pendente não é "não encontrado".
 
@@ -63,7 +64,7 @@ Os comandos, nesta ordem:
 | `python3 src/validar_termos.py --sonda` | mede o que cada instrumento aceita, com contagem e captura. **Obrigatório antes de tudo** |
 | `python3 src/validar_termos.py --exportar` | reconstrói a planilha a partir do protocolo, sem rede; não decide nada |
 | `python3 src/validar_termos.py --validar tbci` | consulta o TBCI, grava a evidência e propõe o estatuto |
-| `python3 src/validar_termos.py --validar unesco` | idem para o UNESCO Thesaurus; `--validar ambos --faceta 1` restringe a uma faceta |
+| `python3 src/validar_termos.py --validar unesco` | idem para o UNESCO Thesaurus; `--validar todos --faceta 1` consulta todos os instrumentos `Automático`, restrito a uma faceta |
 | `python3 src/validar_termos.py --importar` | reconcilia a planilha com o protocolo, preservando decisões e linhas fora do protocolo |
 
 A resposta bruta de cada consulta é gravada em

@@ -96,6 +96,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 | **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
 | **EB1** | não executar; derivação local |
 
+- Execução: única
 - **Fidelidade:** divergência acima de `divergencia_fidelidade` (`--mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
 - **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`--mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.

@@ -9,42 +9,35 @@ ser consultado automaticamente.
 ## Requirements
 
 ### Requirement: Instrumentos por faceta, lidos da seção do protocolo
-Os instrumentos de validação de cada faceta SHALL ser lidos da seção "Instrumentos para
-controle terminológico" do protocolo, uma linha por faceta com os nomes separados por vírgula.
-O código MUST NOT fixar instrumento por idioma nem por faceta.
+Os instrumentos de validação SHALL ser lidos da tabela da seção "Instrumentos para controle
+terminológico" do protocolo, com as colunas `Sigla | Instrumento | Modo | Caminho | Idiomas
+| FCTs`, uma linha por instrumento. As facetas de cada instrumento são as da coluna `FCTs`,
+separadas por vírgula. O código MUST NOT fixar instrumento por idioma nem por faceta.
 
 #### Scenario: Faceta com vários instrumentos
-- **WHEN** o protocolo declara para FCT2 "ERIC Thesaurus, Brased/INEP, UNESCO Thesaurus"
+- **WHEN** a tabela declara FCT2 nas linhas de `unesco`, `eric` e `brased`
 - **THEN** os termos de FCT2 são planejados para esses três instrumentos
 
 #### Scenario: Instrumento retirado do protocolo
-- **WHEN** um instrumento deixa de constar da linha de uma faceta
+- **WHEN** uma faceta deixa de constar da coluna `FCTs` de um instrumento
 - **THEN** nenhum termo dessa faceta é planejado para validação nele
 
 #### Scenario: Seção ausente ou faceta sem linha
-- **WHEN** a seção não existe ou uma faceta do quadro não tem linha nela
+- **WHEN** a seção não existe ou uma faceta do quadro não consta da coluna `FCTs` de nenhum
+  instrumento
 - **THEN** a conferência reprova, nomeando a faceta, e nenhum instrumento padrão é presumido
 
-### Requirement: Nome do instrumento é resolvido pela configuração
-Cada nome de instrumento lido do protocolo SHALL ser resolvido, pelo mapa da configuração,
-para um modo de consulta (cliente automatizado ou manual) e para os idiomas que o instrumento
-cobre. Nome sem entrada no mapa MUST reprovar a conferência, nomeando a faceta e o nome.
-
-#### Scenario: Nome não mapeado
-- **WHEN** o protocolo declara um instrumento cujo nome não consta do mapa
-- **THEN** a conferência reprova, nomeando a faceta e o nome
-
-#### Scenario: Termo fora dos idiomas do instrumento
-- **WHEN** a configuração declara que o instrumento cobre só o português
-- **THEN** só os termos em português da faceta são planejados para esse instrumento
+#### Scenario: Faceta inexistente na coluna FCTs
+- **WHEN** a coluna `FCTs` traz `FCT4s` ou outra grafia que não é faceta do protocolo
+- **THEN** a leitura reprova, nomeando o instrumento e o valor
 
 ### Requirement: Instrumento sem cliente automatizado é pendência
-Instrumento mapeado como manual SHALL gerar linha na planilha com estatuto de pendência de
+Instrumento declarado `Manual` SHALL gerar linha na planilha com estatuto de pendência de
 validação manual. Ela MUST NOT ser registrada como termo não encontrado.
 
 #### Scenario: Instrumento manual
-- **WHEN** a faceta declara um instrumento mapeado como manual
-- **THEN** a planilha registra cada termo dessa faceta, nos idiomas do instrumento, como
+- **WHEN** a tabela declara um instrumento `Manual`
+- **THEN** a planilha registra cada termo das facetas dele, nos idiomas do instrumento, como
   pendente de validação manual naquele instrumento
 
 ### Requirement: Autoteste do planejamento da validação
@@ -63,3 +56,29 @@ instrumento retirado da linha, só os idiomas que o instrumento cobre e o modo m
 #### Scenario: Instrumento manual
 - **WHEN** a faceta declara instrumento de modo `manual`
 - **THEN** o planejamento o marca como manual, e a linha nasce pendente de validação manual
+### Requirement: Propriedades do instrumento lidas do protocolo
+Sigla, modo, caminho e idiomas de cada instrumento SHALL ser lidos da sua linha na tabela. A
+sigla MUST ser única e é o valor gravado na coluna `instrumento` da planilha. Os idiomas
+MUST estar entre os idiomas do quadro terminológico. Campo vazio reprova.
+
+#### Scenario: Termo fora dos idiomas do instrumento
+- **WHEN** a linha de `tbci` declara só `pt`
+- **THEN** só os termos em português das facetas de `tbci` são planejados para ele
+
+#### Scenario: Idioma fora do quadro
+- **WHEN** um instrumento declara o idioma `fr` e o quadro não tem coluna `fr`
+- **THEN** a leitura reprova, nomeando o instrumento e o idioma
+
+### Requirement: Modo automático exige cliente da sigla
+`Modo` SHALL admitir só `Manual` ou `Automático`. Instrumento `Automático` SHALL ser
+consultado pelo cliente cujo nome é a sua sigla; sem cliente com esse nome, a leitura MUST
+reprovar. `Caminho` é a referência do instrumento para relato e consulta manual; o
+endereço de consulta automática pertence ao cliente.
+
+#### Scenario: Automático sem cliente
+- **WHEN** a linha de `eric` declara `Automático` e não há cliente `eric`
+- **THEN** a leitura reprova, nomeando a sigla e os clientes existentes
+
+#### Scenario: Modo fora do domínio
+- **WHEN** a coluna `Modo` traz `Semiautomático`
+- **THEN** a leitura reprova, nomeando o instrumento e os valores admitidos

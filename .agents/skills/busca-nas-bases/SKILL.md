@@ -27,8 +27,8 @@ pesquisador. Não há exceção, não há urgência que justifique.
 ## O que executar
 
 As expressões vivem nas quatro fichas, uma por base, em `docs/`:
-`busca_base_1_web_of_science.md`, `busca_base_2_scopus.md`,
-`busca_base_3_eric.md` e `busca_base_4_brapci.md`. **Nunca ditar uma expressão de
+`busca_base_wos.md`, `busca_base_scopus.md`,
+`busca_base_eric.md` e `busca_base_brapci.md`. **Nunca ditar uma expressão de
 memória nem reescrevê-la na conversa.** Se a ficha estiver defasada, corrigi-la e registrar
 a correção no histórico (`data/historico.md`).
 

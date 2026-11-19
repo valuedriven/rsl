@@ -103,6 +103,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 | **EB2**, **EB3** | não executar; derivação local |
 | **EB1** | não executar; derivação local |
 
+- Execução: única
 **Forma de execução.** Submeter a forma expandida, montada em arquivo por substituição de `#1` a `#4` pelos blocos da seção 3.
 
 **Retorno zero.** EB4 = 0 ou EB5 = 0 é defeito de execução até provado que a consulta longa foi aceita inteira. Contagem derivada nula, com execução válida, registra-se como achado; não relaxar a âncora 🟦 por causa dela.

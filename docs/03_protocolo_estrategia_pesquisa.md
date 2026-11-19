@@ -17,40 +17,42 @@ Estrutura da questão: PICo acrescido de desfecho (O), em adaptação declarada:
 
 ## Palavras significativas da questão de revisão
 
-- Faceta 1 (FCT1): Artefatos de representação e organização do conhecimento — AZUL — âncora obrigatória 1
-- Faceta 2 (FCT2): Domínio educacional — AMARELO/OCRE — âncora obrigatória 2
-- Faceta 3 (FCT3): Práticas do processo de ensino-aprendizagem — VERMELHO
-- Faceta 4 (FCT4): Fatores situacionais — LARANJA
+- Faceta 1 (FCT1): Artefatos de representação e organização do conhecimento (âncora obrigatória 1)
+- Faceta 2 (FCT2): Domínio educacional (âncora obrigatória 2)
+- Faceta 3 (FCT3): Práticas do processo de ensino-aprendizagem
+- Faceta 4 (FCT4): Fatores situacionais
 
 ## Instrumentos para controle terminológico
 
-- FCT1: IBICT — Tesauro Brasileiro de Ciência da Informação, UNESCO Thesaurus
-- FCT2: ERIC Thesaurus, Brased/INEP, UNESCO Thesaurus
-- FCT3: ERIC Thesaurus, Brased/INEP, UNESCO Thesaurus
-- FCT4: ERIC Thesaurus, Brased/INEP, UNESCO Thesaurus
+| Sigla | Instrumento  | Modo | Caminho | Idiomas | FCTs |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| tbci | Tesauro Brasileiro de Ciência da Informação | Automático | https://vocabularyserver.com/tbci/br/| pt | FCT1 |
+| unesco |UNESCO Thesaurus | Automático | https://vocabularies.unesco.org/unesco/| en, es | FCT1, FCT2, FCT3, FCT4 |
+| eric |ERIC Thesaurus | Manual | https://vocabularyserver.com/eric/| en | FCT2, FCT3, FCT4 |
+| brased |Brased/INEP | Manual | https://vocabularyserver.com/brased/| pt | FCT2, FCT3, FCT4 |
 
 
 ## Controle terminológico
 
-| FCT1 | Idioma Língua Materna | Idioma 2 | Idioma 3 |
+| FCT1 | pt | en | es |
 | ----- | ----- | ----- | ----- |
 | *Termos centrais (núcleo)* | \- representação do conhecimento \- organização do conhecimento \- sistema de organização do conhecimento | \- knowledge representation \- knowledge organization \- knowledge organization system | \- representación del conocimiento \- organización del conocimiento \- sistema de organización del conocimiento |
 | *Descritores potenciais e termos próximos* | \- ontologia \- ontologia de domínio \- ontologia de aplicação \- ontologia de topo \- ontologia educacional \- ontologia de aprendizagem \- ontologia de ensino \- modelo ontológico educacional \- ontologia de prática educacional \- ontologia de design instrucional \- ontologia de currículo \- ontologia facetada \- taxonomia facetada \- vocabulário controlado \- tesauro \- taxonomia \- esquema de classificação \- esquema de metadados \- ontológico \- ontológica \- classificação facetada \- análise facetada \- análise de facetas | \- ontology \- domain ontology \- application ontology \- upper ontology \- educational ontology \- learning ontology \- teaching ontology \- educational ontological model \- educational practice ontology \- instructional design ontology \- curriculum ontology \- faceted ontology \- controlled vocabulary \- thesaurus \- thesauri \- classification scheme \- metadata schema \- ontological \- faceted classification \- facet analysis \- faceted taxonomy | \- ontología \- ontología de dominio \- ontología de aplicación \- ontología de alto nivel \- ontología educativa \- ontología de aprendizaje \- ontología de enseñanza \- modelo ontológico educativo \- ontología de práctica educativa \- ontología de diseño instruccional \- ontología de currículo \- ontología facetada \- vocabulario controlado \- tesauro \- esquema de clasificación \- esquema de metadatos \- ontológico \- ontológica \- clasificación facetada \- análisis facetado \- análisis de facetas |
 | *Termos relacionados e variantes* | \- modelo conceitual \- modelagem conceitual \- esquema conceitual \- modelo de domínio \- modelo semântico \- representação formal \- engenharia de ontologias \- desenvolvimento de ontologias \- padrão de projeto ontológico \- modelagem baseada em ontologias \- representação do conhecimento baseada em ontologias | \- conceptual model \- conceptual modeling \- conceptual modelling \- conceptual schema \- domain model \- semantic model \- formal representation \- ontology engineering \- ontology development \- ontology design pattern \- ontology-based modeling \- ontology-based modelling \- ontology-based knowledge representation \- ontological engineering | \- modelo conceptual \- modelado conceptual \- esquema conceptual \- modelo de dominio \- modelo semántico \- representación formal \- ingeniería de ontologías \- desarrollo de ontologías \- patrón de diseño ontológico \- modelado basado en ontologías \- representación del conocimiento basada en ontologías |
 
-| FCT2 | Idioma Língua Materna | Idioma 2 | Idioma 3 |
+| FCT2 | pt | en | es |
 | ----: | ----- | ----- | ----- |
 |  *Termos centrais (núcleo)* | \- educação \- educacional \- processo de ensino-aprendizagem \- método de ensino \- estratégia de ensino \- ensino superior \- ensino básico \- ambiente de aprendizagem \- objeto de aprendizagem \- trilha de aprendizagem \- situação de aprendizagem \- resultado de aprendizagem \- educativo | \- education \- educational \- teaching practice \- teaching method \- teaching strategy \- classroom teaching \- teaching-learning \- teaching and learning \- learning process \- learning environment \- learning design \- learning object \- learning analytics \- learning outcome \- learning path \- student learning \- blended learning \- online learning \- lifelong learning \- learning management system \- teaching-learning process | \- educación \- educativo \- educacional \- proceso de enseñanza-aprendizaje \- método de enseñanza \- estrategia de enseñanza \- enseñanza superior \- entorno de aprendizaje \- objeto de aprendizaje \- situación de aprendizaje \- resultado de aprendizaje |
 | *Descritores potenciais e termos próximos* | \- educação básica \- ensino fundamental \- ensino médio \- ensino superior \- educação profissional e tecnológica \- educação a distância \- educação online \- educação digital \- educação formal \- educação não formal | \- basic education \- primary education \- secondary education \- higher education \- vocational and technical education \- distance education \- online education \- digital education \- formal education \- non-formal education | \- educación básica \- educación primaria \- educación secundaria \- educación superior \- educación profesional y técnica \- educación a distancia \- educación en línea \- educación digital \- educación formal \- educación no formal |
 | *Termos relacionados e variantes* | \- currículo \- tecnologia educacional \- ambiente de aprendizagem \- ambiente virtual de aprendizagem \- objeto de aprendizagem \- recurso educacional aberto \- aprendizagem eletrônica \- curso online aberto e massivo \- estudante \- aluno \- professor \- docente \- instituição de ensino \- nível de ensino \- modalidade de ensino | \- curriculum \- educational technology \- learning environment \- virtual learning environment \- learning object \- open educational resource \- e-learning \- massive open online course \- learner \- student \- teacher \- instructor \- educational institution \- educational level \- education modality | \- currículo \- tecnología educativa \- entorno de aprendizaje \- entorno virtual de aprendizaje \- objeto de aprendizaje \- recurso educativo abierto \- aprendizaje electrónico \- curso en línea masivo y abierto \- aprendiz \- estudiante \- alumno \- docente \- institución educativa \- nivel educativo \- modalidad educativa |
 
-| FCT3 | Idioma Língua Materna | Idioma 2 | Idioma 3 |
+| FCT3 | pt | en | es |
 | ----: | ----- | ----- | ----- |
 |  *Termos centrais (núcleo)* | \- prática \- prática educacional \- prática pedagógica \- prática docente | \- practice \- educational practice \- pedagogical practice \- teaching practice \- instructional practice | \- práctica \- práctica educativa \- práctica pedagógica \- práctica docente |
 | *Descritores potenciais e termos próximos* | \- estratégia de ensino \- estratégia instrucional \- método de ensino \- método instrucional \- técnica de ensino \- atividade de aprendizagem \- tarefa de aprendizagem \- intervenção educacional \- intervenção pedagógica \- sequência didática \- sequência instrucional \- pedagogia | \- teaching strategy \- instructional strategy \- teaching method \- instructional method \- teaching technique \- learning activity \- learning task \- educational intervention \- instructional intervention \- teaching sequence \- instructional sequence \- pedagogy | \- estrategia de enseñanza \- estrategia didáctica \- método de enseñanza \- método instruccional \- técnica de enseñanza \- actividad de aprendizaje \- tarea de aprendizaje \- intervención educativa \- intervención pedagógica \- secuencia didáctica \- secuencia instruccional \- pedagogía |
 | *Termos relacionados e variantes* | \- boa prática \- prática recomendada \- abordagem pedagógica \- abordagem instrucional \- design instrucional \- desenho da aprendizagem \- desenho didático \- padrão pedagógico \- padrão de projeto pedagógico \- método ativo \- metodologia de ensino | \- best practice \- recommended practice \- pedagogical approach \- instructional approach \- instructional design \- learning design \- pedagogical pattern \- pedagogical design pattern \- active learning method \- teaching methodology | \- buena práctica \- práctica recomendada \- enfoque pedagógico \- enfoque instruccional \- diseño instruccional \- diseño del aprendizaje \- diseño didáctico \- patrón pedagógico \- patrón de diseño pedagógico \- método de aprendizaje activo \- metodología de enseñanza |
 
-| FCT4 | Idioma Língua Materna | Idioma 2 | Idioma 3 |
+| FCT4 | pt | en | es |
 | ----: | ----- | ----- | ----- |
 |  *Termos centrais (núcleo)* | \- fator situacional \- situação de uso educacional \- contexto de aplicação \- contexto de uso \- contexto educacional \- contexto de aprendizagem | \- situational factor \- situation of use \- application context \- context of use \- educational context \- learning context | \- factor situacional \- situación de uso \- contexto de aplicación \- contexto de uso \- contexto educativo \- contexto de aprendizaje |
 | *Descritores potenciais e termos próximos* | \- fator contextual \- fator de contexto \- condição de aplicação \- condição de implementação \- situação de aprendizagem \- cenário educacional \- ambiente de aprendizagem \- contexto institucional \- contexto sociocultural | \- contextual factor \- context factor \- application condition \- implementation condition \- learning situation \- educational setting \- learning environment \- institutional context \- sociocultural context | \- factor contextual \- factor del contexto \- condición de aplicación \- condición de implementación \- situación de aprendizaje \- escenario educativo \- entorno de aprendizaje \- contexto institucional \- contexto sociocultural |
@@ -96,12 +98,12 @@ Estrutura da questão: PICo acrescido de desfecho (O), em adaptação declarada:
 
 #### Bases de dados
 
-| ID Base | Nome da base  |  Justificativa |
-| :---- | :---- | :---- |
-| BD1 | Web of Science (Core Collection) | Cobertura multidisciplinar consolidada e indexação de citações, que viabiliza as pesquisas backward e forward e a análise bibliométrica do Módulo 4\. 
-| BD2 | Scopus | Maior cobertura de anais de computação e engenharia (LNCS/LNAI, IEEE, ACM), absorvendo as fontes de Web Semântica e Engenharia de Ontologias não consultadas isoladamente.
-| BD3 | ERIC | Base de referência do domínio educacional, com vocabulário controlado próprio (ERIC Thesaurus), tomado como referência documental dos descritores do domínio educacional nos termos da regra única de validação terminológica da seção Controle terminológico. 
-| BD4 | BRAPCI | Produção nacional em Ciência da Informação, pouco indexada nas bases internacionais; assegura a literatura em português sobre organização do conhecimento. |
+| ID Base |  Sigla | Nome da base  |  Justificativa |
+| :---- | :----- |  :---- | :---- |
+| BD1 | wos | Web of Science (Core Collection) | Cobertura multidisciplinar consolidada e indexação de citações, que viabiliza as pesquisas backward e forward e a análise bibliométrica do Módulo 4\. 
+| BD2 | scopus | Scopus | Maior cobertura de anais de computação e engenharia (LNCS/LNAI, IEEE, ACM), absorvendo as fontes de Web Semântica e Engenharia de Ontologias não consultadas isoladamente.
+| BD3 | eric |ERIC | Base de referência do domínio educacional, com vocabulário controlado próprio (ERIC Thesaurus), tomado como referência documental dos descritores do domínio educacional nos termos da regra única de validação terminológica da seção Controle terminológico. 
+| BD4 | brapci |BRAPCI | Produção nacional em Ciência da Informação, pouco indexada nas bases internacionais; assegura a literatura em português sobre organização do conhecimento. |
 
 Ordem de execução: Web of Science, Scopus, ERIC e BRAPCI, nesta sequência. Via de acesso: Web of Science (Core Collection) e Scopus pelo Portal de Periódicos da CAPES, com autenticação federada CAFe pelo vínculo do ReT com a UFMG (doutorado) ou, alternativamente, com a PUC Minas (docência); ERIC e BRAPCI de acesso livre, sem credencial.
 
@@ -111,18 +113,21 @@ Não se aplica como fonte autônoma de inclusão. Especificação técnica publi
 
 #### Acervos pessoais
 
-Conjunto-semente: estudos primários, todos dentro do recorte temporal, indicados pelo proponente. Incidências esperadas por base (um estudo pode estar indexado em mais de uma): Scopus, 6; WoS, 4; ERIC, 3; BRAPCI, 2\. A soma das incidências é 15 para 10 REGISTROS ÚNICOS: 4 estudos estão em mais de uma base e 6 em uma só. Mapa por estudo: (1) Alvarenga 2023 — BRAPCI; (2) Das 2022 — WoS+Scopus; (3) Chi 2018 — Scopus; (4) Shvets 2024 — Scopus; (5) Sousa 2018 — BRAPCI; (6) Iatrellis 2019 — ERIC; (7) Chimalakonda 2020 — ERIC+WoS+Scopus; (8) Cenka 2023 — ERIC+Scopus; (9) Piriyapongpipat 2024 — WoS+Scopus; (10) Khoo 2020 — WoS.
+#### Conjunto-semente
 
-- SE1: Alvarenga, V. B. L., & Cristovão, H. M. (2023). Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica. Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023\. 
-- SE2: Das, S., Naskar, D., & Roy, S. (2022). Reorganizing Educational Institutional Domain using Faceted Ontological Principles. Knowledge Organization, 49(1), 6-21, 2022\. DOI: 10.5771/0943-7444-2022-1-6. 
-- SE3: Chi, Y.-L., Chen, T.-Y., & Hung, C. (2018). Learning adaptivity in support of flipped learning: An ontological problem-solving approach. Expert Systems, 2018\. DOI: 10.1111/exsy.12246.
-- SE4: Shvets, O., Murtazin, K., Meeter, M., & Piho, G. (2024). Towards a Domain Model for Learning and Teaching. MODELSWARD 2024, SciTePress. DOI: 10.5220/0012471400003645. 
-- SE5: Sousa, E. E. de, & Duque, C. (2018). Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade. Informação & Informação, 23(1), 271-289, 2018 (UEL). DOI: 10.5433/1981-8920.2018v23n1p271. 
-- SE6: Iatrellis, O., Kameas, A., & Fitsilis, P. (2019). EDUC8 ontology: semantic modeling of multi-facet learning pathways. Education and Information Technologies, 2019 (Springer). DOI: 10.1007/s10639-019-09872-9.
-- SE7: Chimalakonda, S., & Nori, K. V. (2020). An ontology based modeling framework for design of educational technologies. Smart Learning Environments, 7, 2020\. DOI: 10.1186/s40561-020-00135-6. 
-- SE8: Cenka, B. A. N., Santoso, H. B., & Junus, K. (2023). Personal learning environment toward lifelong learning: an ontology-driven conceptual model. Interactive Learning Environments, 31(10), 6445-6461, 2023\. DOI: 10.1080/10494820.2022.2039947.
-- SE9: Piriyapongpipat, P., Goldin, S., & Ditcharoen, N. (2024). An alternative approach to ontology-based curriculum development in higher education. Smart Learning Environments, 11(1), 2024, p. 1-19. DOI: 10.1186/s40561-024-00307-8.
-- SE10: Khoo, C. S. G., & Kan, R. Y. P. (2020). An ontology for conceptual analysis of signature pedagogies. Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.), Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference, 2020, Aalborg, Dinamarca. Ergon Verlag, p. 484-488. DOI: 10.5771/9783956507762. 
+| ID Semente | Semente  | Bases |
+| :---- | :---- | :---- |
+| SE1 | Alvarenga, V. B. L., & Cristovão, H. M. (2023). Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica. Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023. DOI: 10.26512/rici.v16.n1.2023.47618 | brapci | 
+| SE2 | Das, S., Naskar, D., & Roy, S. (2022). Reorganizing Educational Institutional Domain using Faceted Ontological Principles. Knowledge Organization, 49(1), 6-21, 2022\. DOI: 10.5771/0943-7444-2022-1-6. | wos, scopus |
+| SE3 | Chi, Y.-L., Chen, T.-Y., & Hung, C. (2018). Learning adaptivity in support of flipped learning: An ontological problem-solving approach. Expert Systems, 2018\. DOI: 10.1111/exsy.12246. | scopus |
+| SE4 | Shvets, O., Murtazin, K., Meeter, M., & Piho, G. (2024). Towards a Domain Model for Learning and Teaching. MODELSWARD 2024, SciTePress. DOI: 10.5220/0012471400003645. | scopus |
+| SE5 | Sousa, E. E. de, & Duque, C. (2018). Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade. Informação & Informação, 23(1), 271-289, 2018 (UEL). DOI: 10.5433/1981-8920.2018v23n1p271. | brapci |
+| SE6 | Iatrellis, O., Kameas, A., & Fitsilis, P. (2019). EDUC8 ontology: semantic modeling of multi-facet learning pathways. Education and Information Technologies, 2019 (Springer). DOI: 10.1007/s10639-019-09872-9. | eric |
+| SE7 | Chimalakonda, S., & Nori, K. V. (2020). An ontology based modeling framework for design of educational technologies. Smart Learning Environments, 7, 2020\. DOI: 10.1186/s40561-020-00135-6. | eric, wos, scopus |
+| SE8 | Cenka, B. A. N., Santoso, H. B., & Junus, K. (2023). Personal learning environment toward lifelong learning: an ontology-driven conceptual model. Interactive Learning Environments, 31(10), 6445-6461, 2023\. DOI: 10.1080/10494820.2022.2039947. | eric, scopus |
+| SE9 | Piriyapongpipat, P., Goldin, S., & Ditcharoen, N. (2024). An alternative approach to ontology-based curriculum development in higher education. Smart Learning Environments, 11(1), 2024, p. 1-19. DOI: 10.1186/s40561-024-00307-8. | wos, scopus |
+| SE10 | Khoo, C. S. G., & Kan, R. Y. P. (2020). An ontology for conceptual analysis of signature pedagogies. Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.), Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference, 2020, Aalborg, Dinamarca. Ergon Verlag, p. 484-488. DOI: 10.5771/9783956507762. | wos |
+
 
 - Regra de ajuste: recuperação inferior a 80% do conjunto-semente obriga a revisar o controle terminológico antes de prosseguir, com emenda registrada. O limiar é decisão deste projeto, não norma da literatura, e consta como tal no relato. Decide a fração global, sobre a união das bases: semente que a base não indexa sai do denominador daquela base e registra-se como cobertura, não como falha da busca.
 

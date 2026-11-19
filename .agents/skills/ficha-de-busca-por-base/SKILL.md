@@ -1,6 +1,6 @@
 ---
 name: ficha-de-busca-por-base
-description: Cria ou atualiza a ficha de busca de uma base (docs/busca_base_N_*.md) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere a ficha contra o protocolo. Use ao montar a ficha de uma base nova, ao propagar emenda do protocolo às fichas, ao incorporar sintaxe recém-verificada, ao auditar se uma ficha está completa e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre a ficha e o vocabulário do protocolo.
+description: Cria ou atualiza a ficha de busca de uma base (docs/busca_base_<sigla>.md, sigla da tabela "Bases de dados" do protocolo) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere a ficha contra o protocolo. Use ao montar a ficha de uma base nova, ao propagar emenda do protocolo às fichas, ao incorporar sintaxe recém-verificada, ao auditar se uma ficha está completa e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre a ficha e o vocabulário do protocolo.
 ---
 
 # Ficha de busca por base
@@ -250,8 +250,9 @@ alterar, conferir no leitor se o contrato ainda é este.
 | campo da string | lido do texto: início `TS=` ou `TITLE-ABS-KEY`, ou prefixo `title:`, `abstract:`, `descriptor:`; campo de outra forma é lido como "todos os campos", e prefixos diferentes na mesma string, como "misto" |
 | termo da string | entre aspas, separado por `OR`; sem proximidade nem aspas aninhadas dentro da string da faceta |
 | expressão | `### EBn ...` com uma linha `**Facetas:** FCT1 (…) AND …` e o estatuto por extenso nas primeiras linhas |
+| forma de execução | exatamente uma linha `- Execução: única` ou `- Execução: particionada`; ausente, repetida ou com outro valor reprova a conferência desta base — não há padrão |
 | âncoras | subseção com "proximidade" no título, com o bloco reusado |
-| forma curada | subseção com "curadas" no título; consultas em `####` grupos, linhas `\| n \| \`consulta\` \| facetas \|` |
+| forma curada | subseção com "curadas" no título; consultas em `####` grupos, linhas `\| n \| \`consulta\` \| facetas \|`; a faceta se reconhece só pelo código `FCTn` — emoji ou cor não identifica faceta |
 | forma longa não executada | subseção "forma longa", expressões em `**EBn**` |
 | ignoradas pela leitura | subseções iniciadas por "Como executar", "Variantes" e "Como esta base" |
 | filtros reconhecidos | `PY=(…)`, `PUBYEAR`, `LA=`/`LANGUAGE`, `DT=`/`DOCTYPE`; filtro fora disso é lido como "na interface" |

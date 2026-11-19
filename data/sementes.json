@@ -1,0 +1,116 @@
+{
+  "_leia": "AUTORAL. Metadados de conferência de cada semente. As referências, o ano, o DOI, as bases esperadas e a chave de citação vêm do protocolo (docs/03_protocolo_estrategia_pesquisa.md). `ligacao` é a ligação com o protocolo, por DOI ou título — não é conteúdo bibliográfico e não se edita; `id` é rótulo e pode mudar sem perder o metadado. `--sincronizar` casa por DOI ou título e preserva o que foi conferido. Semente retirada do protocolo permanece, e `--pendencias` a reporta.",
+  "versao": 2,
+  "estudos": [
+    {
+      "id": "SE1",
+      "ligacao": "doi:10.26512/rici.v16.n1.2023.47618",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE2",
+      "ligacao": "doi:10.5771/0943-7444-2022-1-6",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE3",
+      "ligacao": "doi:10.1111/exsy.12246",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE4",
+      "ligacao": "doi:10.5220/0012471400003645",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE5",
+      "ligacao": "doi:10.5433/1981-8920.2018v23n1p271",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE6",
+      "ligacao": "doi:10.1007/s10639-019-09872-9",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE7",
+      "ligacao": "doi:10.1186/s40561-020-00135-6",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE8",
+      "ligacao": "doi:10.1080/10494820.2022.2039947",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE9",
+      "ligacao": "doi:10.1186/s40561-024-00307-8",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    },
+    {
+      "id": "SE10",
+      "ligacao": "doi:10.5771/9783956507762",
+      "verificacao": "",
+      "escopo": "",
+      "tipo": "",
+      "alinhamento": "",
+      "nota": "",
+      "veiculo_conferido": "",
+      "eric": ""
+    }
+  ]
+}
