@@ -210,11 +210,17 @@ esperado em recall, e pede a decisão.
 
 - As **cinco expressões** mantêm a composição e a contenção do protocolo
   (`expressoes-de-busca`). Proximidade e filtros, se usados, valem **para todas**.
-- Definir uma vez o que se reusa — o conjunto das âncoras em proximidade, quando houver — e
-  escrever as expressões por conjuntos. Forma expandida em segunda cópia defasa na primeira
-  alteração da string.
+- Cada expressão que se executa — a executada, as de fidelidade e a sonda — é **bloco
+  literal único**, com as âncoras em proximidade inline. Não se definem conjuntos `#n`: a
+  numeração é atribuída pela sessão e não se reproduz a partir da ficha. O bloco é o que se
+  submete; não há receita de montagem.
+- A **segunda cópia** — o bloco contra a seção 3 — não é tolerada por convenção: é conferida.
+  O conjunto de termos do bloco tem de ser o das strings das facetas declaradas; termo
+  defasado ou estranho reprova a conferência daquela base.
 - Cada expressão declara o seu **estatuto** (executada e exportada, teste de fidelidade,
-  derivada localmente, sonda de sensibilidade) e as **facetas** que compõe.
+  derivada localmente, sonda de sensibilidade) e as **facetas** que compõe. Expressão
+  derivada que não se executa não leva bloco; bloco presente na derivada padrão reprova a
+  conferência, e a forma longa é exceção declarada.
 - **Forma de execução**: única, particionada em consultas de campo único unidas por
   deduplicação, ou lista curada executada consulta a consulta. Partição tem de ser exata:
   as mesmas âncoras em todas as partes. Lista curada não lê as facetas, e a ficha diz isso.
@@ -222,7 +228,9 @@ esperado em recall, e pede a decisão.
   projeto para registrar a execução.
 - **Variantes previstas**: cada uma com o **disparo** (o que se observa para adotá-la), a
   **forma** e, quando houver, o limiar ou a exigência de emenda — em uma ou duas frases.
-  Nenhuma variante se adota por reduzir o número; mede-se contra o conjunto-semente.
+  Quando a variante muda a forma de execução, a emenda declara `- Execução:` com o novo
+  valor e escreve as partes literais. Nenhuma variante se adota por reduzir o número;
+  mede-se contra o conjunto-semente.
   Consulta removida sai da tabela sem nota; os identificadores das demais não mudam.
 
 ## Passo 5 — conjunto-semente e ressalvas
@@ -246,14 +254,15 @@ alterar, conferir no leitor se o contrato ainda é este.
 | seções lidas | cabeçalhos exatos `## 3. Strings por faceta`, `## 4. Expressões de busca` e `### Declaração de cobertura` |
 | declaração | tabela com as linhas `idiomas` (`FCTn: pt, en, es;` …), `camadas` (`todas` ou `nucleo`) e `derivações` (`morfologia` e/ou `radical`) |
 | redução termo a termo | só para termo vigente que a base deixa fora; linhas `\| FCTn \| termo \| motivo \|` dentro da seção da declaração. Termo retirado por emenda e termo alcançado pela forma radical não se declaram |
-| string por faceta | `### \`STRn\` — conjunto \`#n\` — <cor> FCTn — <nome>`, com **um único** bloco cercado |
+| string por faceta | `### \`STRn\` — string \`#n\` — <cor> FCTn — <nome>`, com **um único** bloco cercado |
 | campo da string | lido do texto: início `TS=` ou `TITLE-ABS-KEY`, ou prefixo `title:`, `abstract:`, `descriptor:`; campo de outra forma é lido como "todos os campos", e prefixos diferentes na mesma string, como "misto" |
 | termo da string | entre aspas, separado por `OR`; sem proximidade nem aspas aninhadas dentro da string da faceta |
 | expressão | `### EBn ...` com uma linha `**Facetas:** FCT1 (…) AND …` e o estatuto por extenso nas primeiras linhas |
+| bloco da expressão | literal para executada, fidelidade e sonda: sem referência a conjunto `#n`; o conjunto de termos confere com as strings das facetas declaradas, e operador, campo, proximidade (`NEAR/n`, `W/n`) e valor de filtro não contam como termo. Ausência de bloco só passa na expressão derivada que não se executa; bloco presente na derivada padrão reprova. A forma longa, quando declarada, é representação não executada e fica fora da conferência de bloco |
 | forma de execução | exatamente uma linha `- Execução: única` ou `- Execução: particionada`; ausente, repetida ou com outro valor reprova a conferência desta base — não há padrão |
-| âncoras | subseção com "proximidade" no título, com o bloco reusado |
+| âncoras | inline no bloco de cada expressão; a subseção de proximidade não é exigida e não é forma executável |
 | forma curada | subseção com "curadas" no título; consultas em `####` grupos, linhas `\| n \| \`consulta\` \| facetas \|`; a faceta se reconhece só pelo código `FCTn` — emoji ou cor não identifica faceta |
-| forma longa não executada | subseção "forma longa", expressões em `**EBn**` |
+| forma longa não executada | subseção "forma longa", expressões em `**EBn**`; não executada e fora da conferência de bloco |
 | ignoradas pela leitura | subseções iniciadas por "Como executar", "Variantes" e "Como esta base" |
 | filtros reconhecidos | `PY=(…)`, `PUBYEAR`, `LA=`/`LANGUAGE`, `DT=`/`DOCTYPE`; filtro fora disso é lido como "na interface" |
 
@@ -269,10 +278,10 @@ técnica a propor e a provar com o autoteste, não algo que a ficha resolva sozi
 ## 2. Critérios de elegibilidade           todos os CE · na consulta? · como
 ## 3. Strings por faceta                   mapa das facetas; forma da base em uma frase
 ### Declaração de cobertura                tabela; redução própria da base, se houver
-### `STRn` — conjunto `#n` — …             uma por faceta, um bloco cada
+### `STRn` — string `#n` — …                uma por faceta, um bloco cada
 ## 4. Expressões de busca                  composição, execução de cada EB, limiares, leitura de zero
-### (âncoras em proximidade | forma curada | como esta base exige a montagem)
-### EB1 … EB5                              facetas, estatuto, forma por conjuntos
+### (forma curada | como esta base exige a montagem)
+### EB1 … EB5                              facetas, estatuto, bloco literal quando se executa
 ### Como executar
 ### Variantes previstas                    disparo · forma · regra de medida
 ## 5. Conjunto-semente                     sementes da base; procedimento; limiar

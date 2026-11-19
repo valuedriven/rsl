@@ -63,7 +63,7 @@ Lida por `src/protocolo.py`.
 | FCT1 | educational ontological model | redução desta base |
 | FCT2 | massive open online course | redução desta base |
 
-### `STR1` — conjunto `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
+### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
 *No título.*
 
@@ -71,7 +71,7 @@ Lida por `src/protocolo.py`.
 (title:"knowledge representation" OR title:"knowledge organization" OR title:ontology OR title:"controlled vocabulary" OR title:thesaurus OR title:thesauri OR title:"classification scheme" OR title:"metadata schema" OR title:"faceted classification" OR title:"faceted taxonomy" OR title:"domain model" OR title:"ontological engineering")
 ```
 
-### `STR1b` — conjunto `#1b` — 🟦 FCT1 — Artefatos, subconjunto específico, no resumo
+### `STR1b` — string `#1b` — 🟦 FCT1 — Artefatos, subconjunto específico, no resumo
 
 *No resumo.*
 
@@ -79,7 +79,7 @@ Lida por `src/protocolo.py`.
 (abstract:"controlled vocabulary" OR abstract:"metadata schema" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern")
 ```
 
-### `STR2` — conjunto `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
+### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
 
 *Forma radical, no resumo.*
 
@@ -87,7 +87,7 @@ Lida por `src/protocolo.py`.
 (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching)
 ```
 
-### `STR3` — conjunto `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
+### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
 *No resumo.*
 
@@ -95,7 +95,7 @@ Lida por `src/protocolo.py`.
 (abstract:practice OR abstract:"teaching strategy" OR abstract:"instructional strategy" OR abstract:"teaching method" OR abstract:"instructional method" OR abstract:"teaching technique" OR abstract:"learning activity" OR abstract:"learning task" OR abstract:"educational intervention" OR abstract:"instructional intervention" OR abstract:"teaching sequence" OR abstract:"instructional sequence" OR abstract:pedagogy OR abstract:"best practices" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"instructional approach" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"pedagogical pattern" OR abstract:"pedagogical design pattern" OR abstract:"active learning method" OR abstract:"teaching methodology")
 ```
 
-### `STR4` — conjunto `#4` — 🟧 FCT4 — Fatores situacionais
+### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
 
 *No resumo.*
 

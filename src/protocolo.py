@@ -1031,6 +1031,30 @@ def _termos_string(texto):
     return _sem_repeticao(saida)
 
 
+def _termos_bloco(texto):
+    """Termos de um bloco de expressão, sem campo, operador, proximidade nem filtro.
+
+    O bloco é o que se submete à base: dele saem o campo (`TS=`, `TITLE-ABS-KEY(`,
+    `title:`), o operador (`AND`, `OR`, `NOT`, `NEAR/n`, `W/n`), os parênteses e o valor
+    de cláusula de filtro (`PY=`, `LA=`, `DT=`, `PUBYEAR`, `LANGUAGE(`, `DOCTYPE(`), que
+    não é termo de busca. O que resta é o conjunto de termos que a conferência compara com
+    as strings das facetas declaradas.
+    """
+    t = re.sub(r"\b(?:PY|LA|LANGUAGE|DT|DOCTYPE)\s*=?\s*\([^)]*\)", " ", texto, flags=re.I)
+    t = re.sub(r"\bPUBYEAR\s*[<>]=?\s*\d{4}", " ", t, flags=re.I)
+    t = re.sub(r"\b(?:NEAR|PRE|W)\s*/\s*\d+", " ", t, flags=re.I)
+    t = re.sub(r"\b(?:TS|TITLE-ABS-KEY)\s*[=(]", " ", t, flags=re.I)
+    t = re.sub(r"\b(?:title|abstract|descriptorx?|TI|AB|AK|SU|WC|KP|SO|DO|ALL)\s*:\s*",
+               " ", t, flags=re.I)
+    saida = []
+    for m in re.finditer(r'"([^"]+)"|([^\s()]+)', t):
+        termo = (m.group(1) or m.group(2) or "").strip()
+        if not termo or termo.upper() in OPERADORES:
+            continue
+        saida.append(termo)
+    return _sem_repeticao(saida)
+
+
 def _facetas_do_texto(resto):
     m = re.search(r"Facetas:\s*\**\s*(.+)", resto)
     if not m:
@@ -1042,12 +1066,14 @@ def _estatuto_do_texto(resto):
     baixo = normaliza(resto[:1600])
     if "sonda de sensibilidade" in baixo or "controle de sensibilidade" in baixo:
         return "sonda"
+    # A fidelidade vem antes da derivação: a expressão derivada que se executa no teste
+    # de fidelidade é bloco que se submete, e o estatuto tem de dizer isso.
+    if "teste de fidelidade" in baixo:
+        return "fidelidade"
     if "nao se executa" in baixo or "derivada localmente" in baixo:
         return "derivada"
     if "executada e exportada" in baixo or "esta que se executa" in baixo:
         return "executada"
-    if "teste de fidelidade" in baixo:
-        return "fidelidade"
     return "nao declarado"
 
 
@@ -1091,7 +1117,7 @@ def _expressoes_em_negrito(resto):
         cabeca = _rotulo(corpo.split("\n")[0])
         saida[ident] = {"id": ident, "titulo": f"{ident} {cabeca}".strip(),
                         "estatuto": "derivada", "facetas": facetas,
-                        "blocos": _cercados(corpo)}
+                        "blocos": _cercados(corpo), "forma_longa": True}
     return saida
 
 
@@ -1426,6 +1452,38 @@ def cobertura_base(slug, base, d):
         precisa_forma = expr["estatuto"] in ("executada", "fidelidade", "sonda")
         if precisa_forma and not expr["blocos"]:
             problemas.append(f"{ident}: expressão sem forma legível nesta base")
+        # Bloco só onde há execução: a derivada padrão não é forma que se submete. A
+        # forma longa é representação não executada e fica fora desta regra.
+        if expr["estatuto"] == "derivada" and not expr.get("forma_longa"):
+            if expr["blocos"]:
+                problemas.append(f"{ident}: expressão derivada não se executa e não leva bloco")
+            continue
+        if not precisa_forma or not expr["blocos"]:
+            continue
+        # Bloco que se submete é literal: referência a conjunto depende da numeração da
+        # sessão e não se reproduz a partir da ficha.
+        referencias = sorted({r for b in expr["blocos"]
+                              for r in re.findall(r"#\d+", b["texto"])})
+        if referencias:
+            problemas.append(f"{ident}: referência a conjunto {', '.join(referencias)} no "
+                             f"bloco — a expressão que se executa é bloco literal")
+            continue
+        # O conjunto de termos do bloco tem de ser o das strings que a expressão declara:
+        # é o que impede a segunda cópia de defasar da seção 3.
+        esperados = _sem_repeticao([t for s in base["facetas"]
+                                    if s["faceta"] in expr["facetas"] for t in s["termos"]])
+        achados = _sem_repeticao([t for b in expr["blocos"]
+                                  for t in _termos_bloco(b["texto"])])
+        por_norm = {normaliza(t): t for t in esperados}
+        no_bloco = {normaliza(t): t for t in achados}
+        for k, termo in por_norm.items():
+            if k not in no_bloco:
+                problemas.append(f"{ident}: termo {termo!r} das facetas declaradas não está "
+                                 f"no bloco")
+        for k, termo in no_bloco.items():
+            if k not in por_norm:
+                problemas.append(f"{ident}: termo {termo!r} do bloco não consta das facetas "
+                                 f"declaradas ({', '.join(expr['facetas'])})")
 
     execucao = base["execucao"]
     if execucao["expressao"] != d["executada"]:
@@ -1676,6 +1734,10 @@ def conferir(t=None):
     for e in d["sementes"]:
         if not e["titulo"] or len(e["titulo"]) < 12:
             problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
+
+    # A forma de cada base é parte da coerência do documento: ficha ilegível ou fora do
+    # protocolo reprova só a sua base.
+    problemas += _problemas_bases(d)
     return problemas
 
 
@@ -2531,6 +2593,14 @@ def _autoteste_estrutural(t, d):
     testa("consulta curada marcada só por emoji fica sem faceta; FCTn atribui",
           "facetas" not in curadas[0] and curadas[1].get("facetas") == ["FCT1"],
           repr(curadas))
+
+    # Forma longa: representação não executada, marcada para ficar fora da conferência
+    # de bloco que recusa a derivada padrão.
+    longa = _expressoes_em_negrito("**EB1** geral\n\n```\nconsulta\n```\n")
+    testa("forma longa é derivada marcada e não entra na conferência de bloco",
+          longa["EB1"]["estatuto"] == "derivada"
+          and longa["EB1"].get("forma_longa") is True,
+          repr(longa))
     return falhas, n
 
 
@@ -2753,6 +2823,92 @@ def _autoteste_bases(d):
           m2.replace("| derivações | morfologia e radical |",
                      "| derivações | morfologia |", 1), "eric", controle,
           "não declara a derivação radical")
+
+    # Bloco literal: referência a conjunto e termo defasado da seção 3. Cada defeito é
+    # injetado num bloco de uma base e tem de reprovar só aquela base.
+    def com_bloco(texto_ficha, ident, transforma):
+        """Transforma o primeiro bloco cercado da expressão `ident` da ficha."""
+        i = texto_ficha.index(f"### {ident}")
+        cab, corpo = texto_ficha[:i], texto_ficha[i:]
+        a = corpo.index("```") + 3
+        b = corpo.index("```", a)
+        return cab + corpo[:a] + transforma(corpo[a:b]) + corpo[b:]
+
+    def com_bloco_novo(texto_ficha, ident, bloco):
+        """Acrescenta um bloco cercado à expressão `ident`, que não tinha forma."""
+        i = texto_ficha.find(f"### {ident}")
+        if i < 0:
+            return texto_ficha
+        j = texto_ficha.find("**Facetas:**", i)
+        if j < 0:
+            return texto_ficha
+        fim = texto_ficha.find("\n", j)
+        if fim < 0:
+            return texto_ficha
+        return texto_ficha[:fim + 1] + "\n```\n" + bloco + "\n```\n" + texto_ficha[fim + 1:]
+
+    casos = [
+        ("conjunto #n devolvido ao bloco executado", "wos",
+         com_bloco(original, "EB4", lambda b: b.replace("\nTS=", "\n#5 AND TS=", 1)),
+         ("referência a conjunto",)),
+        ("termo do bloco executado defasado da seção 3", "wos",
+         com_bloco(original, "EB4", lambda b: b.replace('"prática"', '"praxis"', 1)),
+         ("do bloco não consta das facetas declaradas",
+          "das facetas declaradas não está no bloco")),
+        ("termo alterado só na seção 3", "wos",
+         original.replace('"prática" OR', '"praxis" OR', 1),
+         ("do bloco não consta das facetas declaradas",
+          "das facetas declaradas não está no bloco")),
+        ("termo do bloco executado particionado defasado da seção 3", "eric",
+         com_bloco(controle, "EB4", lambda b: b.replace("abstract:practice",
+                                                       "abstract:praxis", 1)),
+         ("do bloco não consta das facetas declaradas",)),
+        ("conjunto #n devolvido ao bloco de fidelidade", "wos",
+         com_bloco(original, "EB2", lambda b: b.replace("\nTS=", "\n#5 AND TS=", 1)),
+         ("referência a conjunto",)),
+        ("termo do bloco de sonda defasado da seção 3", "wos",
+         com_bloco(original, "EB5",
+                   lambda b: b.replace('"knowledge representation"',
+                                       '"knowledge representation X"', 1)),
+         ("do bloco não consta das facetas declaradas",
+          "das facetas declaradas não está no bloco")),
+        ("bloco devolvido à expressão derivada padrão", "wos",
+         com_bloco_novo(original, "EB1", 'TS=("ontologia")'),
+         ("expressão derivada não se executa e não leva bloco",)),
+    ]
+    for nome, base_mut, mutante, esperas in casos:
+        n += 1
+        referencia = original if base_mut == "wos" else controle
+        if mutante == referencia:
+            print(f"  [FALHA] mutação não aplicada: {nome}")
+            falhas += 1
+            continue
+        por_base = {s: problemas_de(s, mutante if s == base_mut else ficha(d, s))
+                    for s in siglas}
+        outras = {s: p for s, p in por_base.items() if s != base_mut and p}
+        achados = [p for p in por_base[base_mut] if any(e in p for e in esperas)]
+        faltam = [e for e in esperas if not any(e in p for p in por_base[base_mut])]
+        if not faltam and not outras:
+            print(f"  [ok] reprovou: {nome} — só a {base_mut.upper()} — "
+                  f"{achados[0][:80]}")
+        else:
+            print(f"  [FALHA] {nome}: {base_mut.upper()} "
+                  f"{'faltou ' + str(faltam) if faltam else 'reprovou'}, outras reprovadas "
+                  f"{sorted(outras)}")
+            falhas += 1
+
+    # A forma longa é representação não executada: o bloco nela não é recusado pela regra
+    # que fecha a derivada padrão.
+    n += 1
+    base_longa = base_derivada("wos", d, original)
+    base_longa["expressoes"]["EB1"]["blocos"] = [{"rotulo": "", "texto": 'TS=("ontologia")'}]
+    base_longa["expressoes"]["EB1"]["forma_longa"] = True
+    problemas_longa = cobertura_base("wos", base_longa, d)
+    if not any("expressão derivada" in p for p in problemas_longa):
+        print("  [ok] forma longa com bloco não é recusada pela regra da derivada")
+    else:
+        print(f"  [FALHA] forma longa recusada: {problemas_longa[:1]}")
+        falhas += 1
     return falhas, n
 
 

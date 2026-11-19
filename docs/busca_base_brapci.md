@@ -11,7 +11,6 @@ Sintaxe não documentada em fonte alguma: apurada por medição, com as sondagen
 | Truncamento `*` | **Funciona**; não se usa |
 | Lematização | **Não medida**; flexões explícitas nas strings |
 | Comprimento máximo da consulta | **Não verificado**; a EB4 expandida tem cerca de 4.100 caracteres — sondar antes da primeira execução |
-| Combinação de conjuntos de busca | **Não verificada**; executa-se a forma expandida |
 | Proximidade | **Não verificada** |
 | Exportação — formatos e lote | **Não verificada** |
 | Local de pesquisa | **Seletor único** — Título, Resumo, Palavras-chave, Autor, Todos os campos —, aplicado à consulta inteira |
@@ -60,25 +59,25 @@ Lida por `src/protocolo.py`.
 | camadas | todas |
 | derivações | morfologia |
 
-### `STR1` — conjunto `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
+### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
 ```
 ("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "ontologia" OR "ontologias" OR "ontologia de domínio" OR "ontologias de domínio" OR "ontologia de aplicação" OR "ontologia de topo" OR "vocabulário controlado" OR "tesauro" OR "taxonomia facetada" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "ontologia facetada" OR "ontologia educacional" OR "ontologia de aprendizagem" OR "ontologia de ensino" OR "modelo ontológico educacional" OR "ontologia de prática educacional" OR "ontologia de design instrucional" OR "ontologia de currículo" OR "modelo de domínio" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "representação do conhecimento baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems" OR "ontology" OR "ontologies" OR "domain ontology" OR "domain ontologies" OR "application ontology" OR "upper ontology" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "faceted taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "faceted ontology" OR "educational ontology" OR "learning ontology" OR "teaching ontology" OR "educational ontological model" OR "educational practice ontology" OR "instructional design ontology" OR "curriculum ontology" OR "domain model" OR "ontology engineering" OR "ontology development" OR "ontology design pattern" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontology-based knowledge representation" OR "ontological engineering" OR "taxonomía facetada")
 ```
 
-### `STR2` — conjunto `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
+### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
 
 ```
 ("educação" OR "educacional" OR "educacionais" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educação básica" OR "ensino fundamental" OR "ensino médio" OR "educação profissional e tecnológica" OR "educação a distância" OR "educação online" OR "educação digital" OR "educação formal" OR "educação não formal" OR "tecnologia educacional" OR "ambiente virtual de aprendizagem" OR "recurso educacional aberto" OR "aprendizagem eletrônica" OR "curso online aberto e massivo")
 ```
 
-### `STR3` — conjunto `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
+### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
 ```
 ("prática" OR "prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino")
 ```
 
-### `STR4` — conjunto `#4` — 🟧 FCT4 — Fatores situacionais
+### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
 
 ```
 ("fator situacional" OR "fatores situacionais" OR "situação de uso educacional" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "população-alvo" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "nível de ensino" OR "modalidade de ensino" OR "instituição de ensino" OR "instituição educacional" OR "infraestrutura educacional" OR "recurso disponível" OR "recursos disponíveis" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "contextualização")
@@ -104,55 +103,43 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 | **EB1** | não executar; derivação local |
 
 - Execução: única
-**Forma de execução.** Submeter a forma expandida, montada em arquivo por substituição de `#1` a `#4` pelos blocos da seção 3.
+**Forma de execução.** Submeter o bloco de EB4 da seção 4 como está, sem definir conjunto.
 
 **Retorno zero.** EB4 = 0 ou EB5 = 0 é defeito de execução até provado que a consulta longa foi aceita inteira. Contagem derivada nula, com execução válida, registra-se como achado; não relaxar a âncora 🟦 por causa dela.
 
 ### EB1 (as quatro facetas)
 
-*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧) · **conjuntos:** #1 AND #2 AND #3 AND #4
-
-```
-#1 AND #2 AND #3 AND #4
-```
+*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)
 
 ### EB2 (modelos e ontologias que representam práticas do processo de ensino-aprendizagem)
 
-*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) · **conjuntos:** #1 AND #2 AND #3
-
-```
-#1 AND #2 AND #3
-```
+*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)
 
 ### EB3 (artefatos que formalizam os fatores situacionais do domínio educacional)
 
-*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧) · **conjuntos:** #1 AND #2 AND #4
-
-```
-#1 AND #2 AND #4
-```
+*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧)
 
 ### EB4 (de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional)
 
-*Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧)) · **conjuntos:** #1 AND #2 AND (#3 OR #4)
+*Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
 ```
-#1 AND #2 AND (#3 OR #4)
+("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "ontologia" OR "ontologias" OR "ontologia de domínio" OR "ontologias de domínio" OR "ontologia de aplicação" OR "ontologia de topo" OR "vocabulário controlado" OR "tesauro" OR "taxonomia facetada" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "ontologia facetada" OR "ontologia educacional" OR "ontologia de aprendizagem" OR "ontologia de ensino" OR "modelo ontológico educacional" OR "ontologia de prática educacional" OR "ontologia de design instrucional" OR "ontologia de currículo" OR "modelo de domínio" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "representação do conhecimento baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems" OR "ontology" OR "ontologies" OR "domain ontology" OR "domain ontologies" OR "application ontology" OR "upper ontology" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "faceted taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "faceted ontology" OR "educational ontology" OR "learning ontology" OR "teaching ontology" OR "educational ontological model" OR "educational practice ontology" OR "instructional design ontology" OR "curriculum ontology" OR "domain model" OR "ontology engineering" OR "ontology development" OR "ontology design pattern" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontology-based knowledge representation" OR "ontological engineering" OR "taxonomía facetada") AND ("educação" OR "educacional" OR "educacionais" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educação básica" OR "ensino fundamental" OR "ensino médio" OR "educação profissional e tecnológica" OR "educação a distância" OR "educação online" OR "educação digital" OR "educação formal" OR "educação não formal" OR "tecnologia educacional" OR "ambiente virtual de aprendizagem" OR "recurso educacional aberto" OR "aprendizagem eletrônica" OR "curso online aberto e massivo") AND (("prática" OR "prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino") OR ("fator situacional" OR "fatores situacionais" OR "situação de uso educacional" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "população-alvo" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "nível de ensino" OR "modalidade de ensino" OR "instituição de ensino" OR "instituição educacional" OR "infraestrutura educacional" OR "recurso disponível" OR "recursos disponíveis" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "contextualização"))
 ```
 
 ### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
 
-*Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) · **conjuntos:** #1 AND #2
+*Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
 
 ```
-#1 AND #2
+("representação do conhecimento" OR "organização do conhecimento" OR "sistema de organização do conhecimento" OR "ontologia" OR "ontologias" OR "ontologia de domínio" OR "ontologias de domínio" OR "ontologia de aplicação" OR "ontologia de topo" OR "vocabulário controlado" OR "tesauro" OR "taxonomia facetada" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "ontologia facetada" OR "ontologia educacional" OR "ontologia de aprendizagem" OR "ontologia de ensino" OR "modelo ontológico educacional" OR "ontologia de prática educacional" OR "ontologia de design instrucional" OR "ontologia de currículo" OR "modelo de domínio" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "representação do conhecimento baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "knowledge organization system" OR "knowledge organization systems" OR "ontology" OR "ontologies" OR "domain ontology" OR "domain ontologies" OR "application ontology" OR "upper ontology" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "faceted taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "faceted ontology" OR "educational ontology" OR "learning ontology" OR "teaching ontology" OR "educational ontological model" OR "educational practice ontology" OR "instructional design ontology" OR "curriculum ontology" OR "domain model" OR "ontology engineering" OR "ontology development" OR "ontology design pattern" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontology-based knowledge representation" OR "ontological engineering" OR "taxonomía facetada") AND ("educação" OR "educacional" OR "educacionais" OR "processo de ensino-aprendizagem" OR "método de ensino" OR "estratégia de ensino" OR "ensino superior" OR "ensino básico" OR "ambiente de aprendizagem" OR "objeto de aprendizagem" OR "trilha de aprendizagem" OR "situação de aprendizagem" OR "resultado de aprendizagem" OR "educação básica" OR "ensino fundamental" OR "ensino médio" OR "educação profissional e tecnológica" OR "educação a distância" OR "educação online" OR "educação digital" OR "educação formal" OR "educação não formal" OR "tecnologia educacional" OR "ambiente virtual de aprendizagem" OR "recurso educacional aberto" OR "aprendizagem eletrônica" OR "curso online aberto e massivo")
 ```
 
 ### Como executar
 
 1. Aplicar a regra de execução da seção 1.
-2. **Sondar o comprimento.** Submeter a forma expandida de EB5 e conferir que foi aceita inteira, comparando o retorno com o de `#1 AND #2` partido em metades da faceta 🟦. Registrar a sondagem.
-3. Executar EB4 na forma expandida. Retorno de exatamente 1.000: partir, conforme as variantes.
+2. **Sondar o comprimento.** Submeter o bloco de EB5 da seção 4 e conferir que foi aceito inteiro, comparando o retorno com o da faceta 🟦 partida em metades, cada metade com a faceta 🟨. Registrar a sondagem.
+3. Executar o bloco de EB4 como está. Retorno de exatamente 1.000: partir, conforme as variantes.
 4. Executar EB5 uma única vez, na mesma data.
 5. Exportar em RIS ou BibTeX; sem exportação, registrar os metadados no Zotero e anotar a entrada manual como risco de transcrição.
 6. Registrar: `python3 src/derivar_expressoes.py --registrar brapci EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`, com a justificativa do teto de 1.000 quando for o caso; rodar `--derivar` e `--sensibilidade`.
@@ -162,11 +149,11 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 
 #### Partição — por comprimento ou pelo teto de 1.000
 
-Disparo: consulta recusada ou truncada pelo comprimento, ou retorno de exatamente 1.000. Forma, em ordem: (1) executar `#1 AND #2 AND #3` e `#1 AND #2 AND #4`; (2) partir a faceta 🟦 em português e em inglês, com o resto idêntico; (3) subintervalos de anos. Unir por deduplicação, nunca por soma. Registrar a partição como adaptação.
+Disparo: consulta recusada ou truncada pelo comprimento, ou retorno de exatamente 1.000. Forma, em ordem: (1) executar os blocos literais de EB2 e de EB3; (2) partir a faceta 🟦 em português e em inglês, com o resto idêntico; (3) subintervalos de anos. Unir por deduplicação, nunca por soma. Registrar a partição como adaptação. A emenda declara `- Execução: particionada` e escreve as partes literais.
 
 #### Varredura da faceta 🟦 isolada — fora do corpus
 
-Disparo: medir o custo da âncora 🟨 nesta base. Forma: `#1` sozinho, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros de `#1` fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`--mostrar`) leva a emenda.
+Disparo: medir o custo da âncora 🟨 nesta base. Forma: a string da faceta 🟦 sozinha, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros da faceta 🟦 fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`--mostrar`) leva a emenda.
 
 #### Partição por *Título*
 
