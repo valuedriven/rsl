@@ -16,7 +16,7 @@ Esta skill tem um princípio e o princípio é a skill:
 | --- | --- | --- |
 | questão secundária | objetivo específico | objetivo nomeia o tema da questão, conferido contra o protocolo (`docs/03`) |
 | objeto | questão principal | as mesmas operações nomeadas |
-| regra de inclusão | elegibilidade e 1ª filtragem | a mesma regra escrita nos três lugares |
+| regra de inclusão | elegibilidade e 1ª filtragem | a mesma regra na fonte (protocolo) e no critério da 1ª filtragem; o plano remete |
 | quadro terminológico | strings executadas | o mesmo vocabulário qualificado |
 | facetas | expressões de busca | composição, não escrita à mão |
 | seção do plano (`docs/01`) | remissão de outro instrumento | citação por chave, conferida ao alterar a seção |

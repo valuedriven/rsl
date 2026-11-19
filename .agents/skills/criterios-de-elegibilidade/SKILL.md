@@ -16,14 +16,13 @@ processo de ensino-aprendizagem **E/OU** os fatores situacionais que condicionam
 sua aplicação. Representar apenas uma das duas **basta** — é da comparação entre
 soluções parciais que se enunciam as lacunas de integração.
 
-**Por que a regra é uma só, escrita nos três lugares.** O parecer externo achou
+**Por que a regra é uma só, escrita na fonte.** O parecer externo achou
 duas formulações divergentes, uma conjuntiva no plano (`docs/01`) e uma disjuntiva no
 protocolo (`docs/03`); a conferência achou uma **terceira**, mais larga que as duas, no
-critério da 1ª filtragem, que não exigia nenhuma das duas dimensões. Hoje os três
-lugares — a declaração de escopo do plano, o critério de elegibilidade do protocolo e o
-critério da 1ª filtragem — dizem a mesma coisa; divergência entre eles é defeito a
-corrigir no
-documento.
+critério da 1ª filtragem, que não exigia nenhuma das duas dimensões. Hoje a regra está
+enunciada na tabela de critérios do protocolo (`docs/03`, CE7); o plano remete a ela
+(`docs/01`, 2.4) e o critério da 1ª filtragem tem de dizer a mesma coisa. Divergência
+entre a fonte e o critério da filtragem é defeito a corrigir no documento.
 
 Ser artefato de representação não basta. Ser artefato do domínio educacional não
 basta. É o CE12 que exclui isso.

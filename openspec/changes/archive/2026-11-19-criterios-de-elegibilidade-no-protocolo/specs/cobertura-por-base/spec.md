@@ -11,10 +11,10 @@ nomeando ficha e ID.
 
 #### Scenario: Ficha cita critério inexistente
 
-- **WHEN** o protocolo é renumerado e o CE9 passa a CE10, e a ficha da WoS ainda cita CE9
-  como "Outros tipos documentais"
-- **THEN** a conferência da WoS reprova, nomeando CE9 como ausente do protocolo e CE10 como
-  ausente da ficha, e as demais bases corrigidas não reprovam
+- **WHEN** o protocolo é renumerado e a ficha de uma base ainda cita o ID antigo
+- **THEN** a conferência daquela base reprova, nomeando a ficha e o ID citado como ausente
+  do protocolo e o ID vigente como ausente da ficha, e as demais bases corrigidas não
+  reprovam
 
 #### Scenario: Critério agrupado numa linha
 
@@ -33,5 +33,5 @@ base e exigir que só aquela base reprove.
 
 #### Scenario: Defeito injetado numa base
 
-- **WHEN** o autoteste troca CE9 por CE99 na ficha da Scopus
+- **WHEN** o autoteste troca um ID existente por outro inexistente na ficha da Scopus
 - **THEN** a conferência da Scopus reprova e as das demais bases não reprovam
