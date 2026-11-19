@@ -92,6 +92,7 @@ são a evidência do teste.
 | `tipo` | primário ou secundário — preencher em `sementes.json` |
 | `escopo` | DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher em `sementes.json` |
 | `verificacao` | estado de conferência da referência — preencher em `sementes.json` |
+| `papel` | `desenvolvimento` ou `validação` — do protocolo |
 | `base` | WoS, Scopus, ERIC ou BRAPCI |
 | `esperada_na_base` | sim se o mapa do protocolo indica esta base |
 | `indexada` | etapa 1: sim ou não, por busca de título. **obrigatório** |
@@ -117,10 +118,17 @@ branco, marcado `A CONFERIR` ou `PENDÊNCIA` — sai com a coluna em branco. O i
 pode ser executado; o que falta é registro, não dado de busca, e a pendência se reporta
 em vez de se esconder.
 
+**Papel.** Só as sementes de **validação** decidem a passagem. As de **desenvolvimento**
+orientaram a inclusão, a manutenção ou a retirada de um termo e são relatadas à parte; elas
+não compensam a validação. A distinção vive na coluna `Papel` da tabela do protocolo e é
+exigida na leitura: papel ausente, fora do domínio ou conjunto de validação vazio reprova.
+
 ## 7. Limiar e consequência
 
-O teste de aderência exige **80%** sobre a união das bases. Abaixo disso, revisão
-obrigatória do controlo terminológico antes de prosseguir, com emenda ao protocolo.
+O teste de aderência exige **80%** sobre a união das bases, contando **só as sementes de
+validação**. Abaixo disso, revisão obrigatória do controlo terminológico antes de
+prosseguir, com emenda ao protocolo. O relato traz o intervalo de Wilson a 95%: com
+conjunto pequeno, o intervalo mostra a imprecisão em vez de deixar ler 80% como estimativa.
 Ver `teste-de-aderencia`, que é onde a medição acontece.
 
 Acrescentar ou retirar semente altera o denominador do teste: é emenda, e exige

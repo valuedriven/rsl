@@ -204,7 +204,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 | SE2 | Das et al. (2022) | `10.5771/0943-7444-2022-1-6` | — |
 | SE7 | Chimalakonda & Nori (2020) | `10.1186/s40561-020-00135-6` | — |
 | SE9 | Piriyapongpipat et al. (2024) | `10.1186/s40561-024-00307-8` | — |
-| SE10 | Khoo & Kan (2020) | `10.5771/9783956507762` | caso-teste de cobertura de campo; DOI do volume dos anais: na etapa 2, procurar por título |
+| SE10 | Khoo & Kan (2020) | `10.5771/9783956507762-484` | caso-teste de cobertura de campo; DOI do capítulo |
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador desta base e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 

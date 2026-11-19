@@ -22,7 +22,8 @@ protocolo = "docs/03_protocolo_estrategia_pesquisa.md"
 [padroes]
 # CE de "Intervalo temporal" com ação Incluir ("após o ano AAAA").
 recorte_ano_min = 2017
-# Regra de ajuste do conjunto-semente ("recuperação inferior a N%").
+# Regra de ajuste do conjunto-semente ("recuperação inferior a N% das sementes de
+# validação").
 limiar_aderencia = 0.80
 # Faixa da fração elegível de sonda \ executada (EB5: "< N%" e "> M%").
 sensibilidade = [0.05, 0.15]

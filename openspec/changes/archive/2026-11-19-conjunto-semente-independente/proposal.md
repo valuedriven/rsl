@@ -80,9 +80,16 @@ Ação, independente da decisão sobre D1 e D2:
 ### D4 — Metadado das sementes
 
 Os dados bibliográficos das 10 sementes estão pendentes de conferência (`--pendencias`). A
-SE10 traz o DOI do volume dos anais, não o do capítulo; a ficha da WoS já registra isso.
+SE10 trazia o DOI do volume dos anais, não o do capítulo; a ficha da WoS já registrava isso.
 Cada referência se confere na fonte (skill `conferir-referencia`), e nada se preenche de
-memória.
+memória. Na implementação, o DOI do capítulo foi conferido no Crossref e registrado.
+
+### D5 — Casamento por prefixo
+
+A skill `teste-de-aderencia` declara que prefixo é indício, nunca acerto; o código o
+contava como recuperação. A correção alinha o código à skill: o prefixo é impresso como
+`[? ]`, não entra no numerador, e a conferência humana fica registrada na coluna `recuperada`
+do instrumento.
 
 ## Capabilities
 

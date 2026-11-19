@@ -69,3 +69,38 @@ O protocolo passa a enunciar sozinho o que a triagem aplica. A regra operacional
 - A coluna "Justificativa" passa a estar preenchida em todas as linhas; estavam vazias as de localização de itens e de adequação temática.
 
 Alcance: **elegibilidade** — muda o que entra e por qual motivo; as strings e as expressões não mudam, e a busca não é reexecutada. As quatro fichas, o README e as skills são atualizados para os IDs vigentes. `--conferir` ganha duas dimensões: reprova critério de elegibilidade com justificativa vazia, e reprova, por base, a ficha cuja seção 2 não cite exatamente os IDs da tabela do protocolo. Cada uma tem caso de autoteste que injeta o defeito e prova a reprovação.
+
+## 2026-11-19 — Conjunto-semente por papel: validação decide a aderência (decisão do ReT)
+
+O conjunto-semente tinha 10 estudos e 15 incidências, sem distinguir os que orientaram o vocabulário dos que não orientaram. A emenda de 2026-11-17 registra que `modelo de domínio` foi mantido "necessário à recuperação de SE4": essa semente é recuperada por construção, e a aderência medida sobre ela fica inflada. Nenhuma aderência estava registrada (`data/registro_execucao.json` ausente), de modo que a correção não descarta resultado.
+
+Decisões:
+
+- **D1 (a) — separar desenvolvimento e validação.** Semente que motivou a inclusão, a manutenção ou a retirada de um termo é de **desenvolvimento**; as demais são de **validação**. Só a aderência de validação é comparada ao limiar e decide a passagem; a de desenvolvimento é relatada como não decisória e não compensa a validação.
+- **Classificação atual:** SE4 é desenvolvimento, por registro explícito da manutenção de `modelo de domínio`; SE1, SE2, SE3, SE5, SE6, SE7, SE8, SE9 e SE10 são validação. A suspeita de que SE2 e SE9 tenham orientado `ontologia facetada` e `ontologia de currículo` é **não verificada** e não basta para reclassificá-las; fica registrada para conferência.
+- **D2 — manter o conjunto atual e ampliar depois.** O conjunto de validação fica com 9 sementes por ora; a ampliação se registra como pendência, com tamanho-alvo a fixar pelo pesquisador. O limiar continua **80%**, agora aplicado só à validação: 80% exige **8 de 9 (88,9%)**, pois 7/9 = 77,8%.
+- **Intervalo:** o relato da validação passa a trazer o intervalo de Wilson a 95%, junto da proporção.
+
+Alcance: **método de aferição da aderência** — muda o denominador que decide a passagem e a forma do relato; as strings, as expressões, o recorte e o limiar de 80% não mudam, e a busca não é reexecutada. O denominador definitivo continua sendo a coluna `indexado` da planilha, conferida à mão; o relato por papel é sobre as sementes informadas.
+
+A coluna `Papel` entra na tabela do conjunto-semente e é exigida pela leitura: papel ausente, fora do domínio (`desenvolvimento` ou `validação`) ou conjunto de validação vazio reprova `--conferir`. `gen_semente.py` passa a gravar a coluna `papel`, e `--aderencia` relata validação e desenvolvimento separadamente, com o intervalo de Wilson. A classificação foi registrada antes de qualquer execução; `data/registro_execucao.json` continua ausente.
+
+## 2026-11-19 — Conferência do conjunto-semente declarada pelo pesquisador
+
+O pesquisador declarou ter conferido a indexação das 10 sementes nas quatro bases e os dados bibliográficos (autoria, título, veículo, ano e DOI). A coluna `Bases` e as referências do protocolo foram mantidas; a seção 5 das quatro fichas confere com a coluna, e `--conferir` exibe a mesma distribuição por base (wos 4, scopus 6, eric 3, brapci 2). A conferência não detalhou data e fonte por base; a declaração foi registrada em 2026-11-19.
+
+A verificação bibliográfica foi registrada em `data/sementes.json`; `escopo`, `tipo` e `alinhamento` continuam pendentes (PD01), porque não constam do protocolo e são juízos autorais. O DOI da SE10 registrado é o do volume dos anais; o DOI do capítulo não foi registrado, e a ficha da WoS já remete à busca por título na etapa 2.
+
+Alcance: **dados do conjunto-semente** — as strings, as expressões, a composição e o limiar não mudam; a busca não é reexecutada. Nenhuma célula foi preenchida de memória: os dados são os do protocolo, confirmados pelo pesquisador.
+
+## 2026-11-19 — Correções da verificação do conjunto-semente (decisão do ReT)
+
+A verificação da change `conjunto-semente-independente` apontou quatro avisos e duas sugestões. As correções aplicadas:
+
+- **DOI do capítulo da SE10 — retificação.** A entrada anterior registrava o DOI do volume dos anais (`10.5771/9783956507762`) e dizia que o DOI do capítulo não fora registrado. O capítulo tem DOI próprio, `10.5771/9783956507762-484`, conferido no Crossref em 2026-11-19; a resposta bruta está em `data/evidencia/referencias/SE10_crossref.json`, e o registro extraído, em `SE10_crossref.md`. O protocolo, `data/sementes.json` e a ficha da WoS foram corrigidos.
+- **Regra de ajuste do protocolo.** A prosa passou a dizer que o limiar de 80% se aplica às **sementes de validação**, sobre a união das bases; as de desenvolvimento são relatadas à parte e não compensam a validação. O valor do limiar, as strings, as expressões e o recorte não mudaram.
+- **Conferência do conjunto-semente.** O lastro ficou declarado como limitação: a conferência de indexação é declaração do pesquisador e não detalhou data e fonte por base; não se apresenta como verificação independente (PD19). A classificação por papel foi registrada antes de qualquer execução registrada; PD17, se confirmada como aderência das strings vigentes, exige reavaliar essa ordem.
+- **Casamento por prefixo.** `--aderencia` deixou de contar o casamento por prefixo como recuperação: ele é impresso como `[? ]`, fica fora do numerador e exige conferência humana e registro na coluna `recuperada`. A mudança alinha o código à skill `teste-de-aderencia`; não havia aderência registrada, de modo que nenhum resultado é afetado.
+- **Testes.** O autoteste de `derivar_expressoes.py` ganhou casos para título exato, prefixo como indício e preservação do total recuperado; o de `protocolo.py` continua cobrindo papel ausente, papel fora do domínio e conjunto de validação vazio e executou 113 casos, com 10 ainda não executados por falta de `data/registro_execucao.json` (PD02). A preservação "Mesmo resultado" foi conferida por inspeção do diff — as funções de derivação, fidelidade e sensibilidade não foram tocadas, e a prova da composição e as deriváveis seguem no autoteste existente.
+
+Alcance: **método de aferição da aderência e dados do conjunto-semente** — o numerador deixa de aceitar prefixo sem conferência, e o DOI e a prosa do limiar são corrigidos. As strings, as expressões, o recorte e o valor do limiar não mudam; a busca não é reexecutada.

@@ -15,9 +15,13 @@ python3 src/derivar_expressoes.py --aderencia
 ```
 
 Lê o conjunto-semente e as execuções registradas em `data/registro_execucao.json`, casa por título
-normalizado e, na falta dele, por prefixo, e imprime recuperados/informados. **Prefixo é
-indício, nunca acerto** — exige conferência humana. A razão impressa **não é a aderência**:
-o denominador são as sementes que cada base indexa.
+normalizado e, na falta dele, por prefixo, e imprime o relato **separado por papel**:
+recuperação das sementes de **validação** e das de **desenvolvimento**. Só a validação é
+comparada ao limiar; ela traz a proporção e o intervalo de Wilson a 95%. O desenvolvimento é
+não decisório e não compensa a validação. **Prefixo é indício, nunca acerto**: o candidato por
+prefixo é impresso como `[? ]` e **não entra no numerador** — exige conferência humana e
+registro na coluna `recuperada`. A razão impressa é sobre as sementes informadas; o denominador
+definitivo são as sementes que cada base indexa.
 
 O conjunto-semente é lido do documento do protocolo. As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
@@ -32,11 +36,15 @@ substitui esse registro: ela mede, o instrumento documenta.
 
 | | |
 | --- | --- |
-| **Limiar** | 80% sobre a UNIÃO das bases |
+| **Limiar** | 80% sobre a UNIÃO das bases, aplicado **só às sementes de validação** |
+| **Decide** | a aderência de validação; a de desenvolvimento é não decisória e não compensa a validação |
+| **Incerteza** | a validação é relatada com o intervalo de Wilson a 95%, junto da proporção |
 | **Abaixo** | revisão obrigatória do controlo terminológico antes de prosseguir, com emenda ao protocolo |
 
 Sobre a **união**, não por base: nenhuma base isolada tem obrigação de trazer tudo, e
-exigir 80% de cada uma reprovaria buscas corretas.
+exigir 80% de cada uma reprovaria buscas corretas. Sobre a **validação**, não sobre o total:
+semente que orientou o vocabulário é recuperada por construção e não pode servir de prova
+do desenho da busca.
 
 Limiar sem consequência é ornamento. A consequência está declarada e cumpre-se.
 

@@ -165,7 +165,9 @@ ROTULO_CAMADA = {
 # ROTULO_CAMADA. Coluna extra (ex.: Justificativa) é ignorada.
 COLUNAS_BASES = ("ID Base", "Sigla", "Nome da base")
 COLUNAS_INSTRUMENTOS = ("Sigla", "Instrumento", "Modo", "Caminho", "Idiomas", "FCTs")
-COLUNAS_SEMENTES = ("ID Semente", "Semente", "Bases")
+COLUNAS_SEMENTES = ("ID Semente", "Semente", "Bases", "Papel")
+# Papel da semente no teste: só a de validação decide a passagem (design D1-a).
+PAPEIS_SEMENTE = ("desenvolvimento", "validação")
 MODO_MANUAL, MODO_AUTOMATICO = "Manual", "Automático"
 MODOS_INSTRUMENTO = (MODO_MANUAL, MODO_AUTOMATICO)
 # Forma de execução declarada na ficha (`- Execução: ...`) → valor interno.
@@ -868,10 +870,12 @@ def _doi(texto_ref):
 
 
 def sementes(t, siglas):
-    """Referências e bases esperadas, da tabela `ID Semente | Semente | Bases`.
+    """Referências, bases esperadas e papel, da tabela
+    `ID Semente | Semente | Bases | Papel`.
 
     Cada base citada tem de ser sigla da tabela de bases, na grafia exata; semente sem base
-    reprova.
+    reprova. O papel é `desenvolvimento` ou `validação`; ausente ou fora do domínio reprova,
+    nomeando a semente.
     """
     onde = f"tabela '{SECAO_SEMENTES}'"
     estudos = []
@@ -879,6 +883,13 @@ def sementes(t, siglas):
         ident = desescapa(linha["ID Semente"]).strip()
         if not re.fullmatch(r"SE\d+", ident):
             raise ProtocoloInvalido(f"{onde}: ID Semente {ident!r} fora da forma SEn")
+        papel = desescapa(linha["Papel"]).strip()
+        if not papel:
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: papel da semente vazio; "
+                                    f"admitidos {list(PAPEIS_SEMENTE)}")
+        if papel not in PAPEIS_SEMENTE:
+            raise ProtocoloInvalido(f"{onde}, linha {ident}: papel {papel!r} fora dos "
+                                    f"admitidos {list(PAPEIS_SEMENTE)}")
         ref = desescapa(linha["Semente"]).strip()
         m = re.match(r"^(.*?)\s*\((\d{4})\)\.\s*(.*)$", ref)
         if not m:
@@ -898,23 +909,34 @@ def sementes(t, siglas):
         estudos.append({
             "id": ident, "autores": autores.strip(), "ano": int(ano),
             "titulo": _titulo(resto), "doi": _doi(ref),
-            "bases": bases, "chave": f"{primeiro} {ano}",
+            "bases": bases, "papel": papel, "chave": f"{primeiro} {ano}",
         })
     _numeracao([e["id"] for e in estudos], "SE", "referências")
     return estudos
 
 
 def distribuicao(estudos, siglas):
-    """Distribuição das sementes pelas bases, calculada da tabela. Não confere prosa."""
+    """Distribuição das sementes pelas bases e por papel, calculada da tabela.
+
+    Não confere prosa. `por_base` e `por_base_papel` contam incidências: a semente
+    indexada em duas bases conta nas duas, como manda a leitura do conjunto-semente.
+    `por_papel` conta estudos distintos.
+    """
     por_base = {b: 0 for b in siglas}
+    por_base_papel = {b: {p: 0 for p in PAPEIS_SEMENTE} for b in siglas}
     for e in estudos:
         for b in e["bases"]:
             por_base[b] += 1
+            por_base_papel[b][e["papel"]] += 1
     multi = sum(1 for e in estudos if len(e["bases"]) > 1)
     return {
         "por_base": por_base, "incidencias": sum(por_base.values()),
         "registros": len(estudos), "em_mais_de_uma_base": multi,
         "em_uma_so": len(estudos) - multi,
+        "por_papel": {p: sum(1 for e in estudos if e["papel"] == p)
+                      for p in PAPEIS_SEMENTE},
+        "por_base_papel": por_base_papel,
+        "validacao_vazia": not any(e["papel"] == "validação" for e in estudos),
     }
 
 
@@ -1592,7 +1614,8 @@ def analisa(t=None):
     _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['ficha']}"
                                   for b in fts["bases"]])
     est = sementes(t, siglas)
-    _estrutural(params, "sementes", [f"{e['id']}: {', '.join(e['bases'])}" for e in est])
+    _estrutural(params, "sementes", [f"{e['id']} ({e['papel']}): {', '.join(e['bases'])}"
+                                     for e in est])
     d = {
         "questoes": questoes(t),
         "facetas": pal,
@@ -1784,6 +1807,12 @@ def conferir(t=None):
         if not e["titulo"] or len(e["titulo"]) < 12:
             problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
 
+    # Sem semente de validação a aderência decisória não tem denominador: o defeito é
+    # impedido na leitura, não descoberto em M3/E2.
+    if d["distribuicao"]["validacao_vazia"]:
+        problemas.append("conjunto-semente sem semente de validação: a aderência que decide "
+                         "a passagem não teria denominador")
+
     # A forma de cada base é parte da coerência do documento: ficha ilegível ou fora do
     # protocolo reprova só a sua base.
     problemas += _problemas_bases(d)
@@ -1834,6 +1863,13 @@ def relatorio(d):
     L.append(f"  sementes: {len(d['sementes'])}  "
              f"incidências: {dist['incidencias']}  "
              f"por base: " + ", ".join(f"{b} {v}" for b, v in dist["por_base"].items()))
+    papeis = "  ".join(
+        f"{p}: {dist['por_papel'][p]} estudo(s), "
+        f"{sum(dist['por_base_papel'][b][p] for b in dist['por_base'])} incidência(s) "
+        f"(" + ", ".join(f"{b} {dist['por_base_papel'][b][p]}"
+                         for b in dist["por_base"]) + ")"
+        for p in PAPEIS_SEMENTE)
+    L.append(f"  sementes por papel: {papeis}")
     L.append(f"  expressões: " + ", ".join(
         f"{n}=" + _composicao_legivel(c)
         for n, c in sorted(d["expressoes"].items())) +
@@ -2475,6 +2511,19 @@ def _mutacoes(t):
          "linha SE2: base ['WoS']"),
         ("semente fora de numeração",
          [l.replace("| SE10 |", "| SE11 |", 1) for l in linhas], "numeração SE"),
+        # Papel da semente: coluna exigida, valor no domínio e conjunto de validação não vazio.
+        ("coluna Papel retirada da tabela de sementes",
+         _tabela_sem_coluna(linhas, "| ID Semente |", 3), "falta a coluna ['Papel']"),
+        ("semente sem papel",
+         _troca_linha(linhas, "| SE4 |", "| desenvolvimento |", "|  |"),
+         "papel da semente vazio"),
+        ("semente com papel fora do domínio",
+         _troca_linha(linhas, "| SE7 |", "| validação |", "| teste |"),
+         "papel 'teste' fora"),
+        ("conjunto-semente sem validação",
+         [l.replace("| validação |", "| desenvolvimento |")
+          if l.startswith("| SE") else l for l in linhas],
+         "sem semente de validação"),
     ]
     return [(nome, "\n".join(ls), espera) for nome, ls, espera in casos]
 
@@ -2683,6 +2732,19 @@ def _autoteste_estrutural(t, d):
     bd1 = next(b for b in d["bases"] if b["id"] == "BD1")
     testa("BD1 lida com o nome da coluna 'Nome da base'",
           bd1["nome"] == "Web of Science (Core Collection)", repr(bd1))
+
+    # Papel da semente: leitura por nome de coluna e distribuição calculada.
+    se4 = next(e for e in d["sementes"] if e["id"] == "SE4")
+    se1 = next(e for e in d["sementes"] if e["id"] == "SE1")
+    testa("SE4 lida como desenvolvimento e SE1 como validação",
+          se4["papel"] == "desenvolvimento" and se1["papel"] == "validação",
+          f"SE4={se4['papel']!r}, SE1={se1['papel']!r}")
+    dist = d["distribuicao"]
+    testa("distribuição por papel soma estudos e incidências e tem validação",
+          sum(dist["por_papel"].values()) == len(d["sementes"])
+          and sum(sum(v.values()) for v in dist["por_base_papel"].values())
+          == dist["incidencias"]
+          and not dist["validacao_vazia"], repr(dist))
 
     # Colunas do quadro em outra ordem: os termos de `pt` continuam lidos como português.
     linhas = t.splitlines()

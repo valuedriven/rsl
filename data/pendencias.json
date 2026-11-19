@@ -9,12 +9,13 @@
     {
       "id": "PD01",
       "categoria": "dados",
-      "descricao": "Metadado de conferência das 10 sementes do protocolo não preenchido: data/sementes.json existe, mas os campos verificacao, escopo, tipo, alinhamento, nota, veiculo_conferido e eric estão vazios nas 10.",
-      "origem": "data/sementes.json (10 estudos, campos de conferência vazios); python3 src/protocolo.py --pendencias",
+      "descricao": "Metadado de conferência das 10 sementes: a verificação bibliográfica e o veículo foram declarados conferidos pelo pesquisador em 2026-11-19 e registrados em data/sementes.json. O DOI do capítulo da SE10 foi conferido no Crossref em 2026-11-19 e registrado (10.5771/9783956507762-484). Os campos escopo, tipo e alinhamento continuam vazios, porque não constam do protocolo e dependem de decisão do pesquisador; o campo eric permanece vazio.",
+      "origem": "data/sementes.json; data/historico.md, 2026-11-19; python3 src/protocolo.py --pendencias",
       "bloqueia": "--conferir-dados; teste de aderência (M3/E2)",
-      "acao_sugerida": "preencher o metadado de conferência das 10 sementes; --sincronizar reconcilia a ligação e não preenche a conferência",
+      "acao_sugerida": "preencher escopo, tipo e alinhamento de cada semente, que são juízos autorais e não dados bibliográficos; --sincronizar reconcilia a ligação e não preenche a conferência",
       "responsavel": "pesquisador",
-      "estado": "aberta"
+      "estado": "aberta",
+      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento."
     },
     {
       "id": "PD02",
@@ -180,7 +181,30 @@
       "bloqueia": "condição de passagem de M3/E2 (aderência)",
       "acao_sugerida": "conferir se o resultado existe e vale para a versão vigente das strings; se valer, registrá-lo em registro_execucao.json e correr a anatomia da perda; se não, descartar esta pendência",
       "responsavel": "pesquisador",
+      "estado": "aberta",
+      "atualizacao": "2026-11-19: a classificação do conjunto-semente foi registrada antes de qualquer execução registrada; se esta pendência se confirmar como aderência das strings vigentes, reavaliar a ordem classificação × aderência."
+    },
+    {
+      "id": "PD18",
+      "categoria": "aderencia",
+      "descricao": "Conjunto de validação com 9 sementes (SE1, SE2, SE3, SE5, SE6, SE7, SE8, SE9 e SE10); SE4 é de desenvolvimento por registro. A ampliação do conjunto de validação está pendente, com tamanho-alvo a fixar pelo pesquisador. Até a ampliação, o intervalo de Wilson a 95% fica largo: 8/9 resulta em 88,9% (56,5%–98,0%).",
+      "origem": "data/historico.md, 2026-11-19; openspec/changes/conjunto-semente-independente",
+      "bloqueia": "precisão da estimativa de aderência; não bloqueia a execução do teste",
+      "acao_sugerida": "buscar sementes novas por procedimento independente da string (skill conjunto-semente), conferir cada referência e acrescentar à tabela do protocolo com papel validação",
+      "responsavel": "pesquisador",
       "estado": "aberta"
+    },
+    {
+      "id": "PD19",
+      "categoria": "aderencia",
+      "descricao": "Indexação das 10 sementes nas quatro bases: o pesquisador declarou, em 2026-11-19, ter conferido a indexação; a coluna 'Bases' do protocolo e a seção 5 das fichas foram mantidas e conferem entre si. A conferência não detalhou data e fonte por base.",
+      "origem": "openspec/changes/conjunto-semente-independente, tarefa 2.1; data/historico.md, 2026-11-19",
+      "bloqueia": "nada; a conferência foi declarada e a distribuição por base confere",
+      "acao_sugerida": "se quiser registrar evidência por base, anexar data e fonte de cada conferência",
+      "responsavel": "pesquisador",
+      "estado": "resolvida",
+      "limitacao": "A conferência é declaração do pesquisador; não há data e fonte por base. Não deve ser citada como verificação independente.",
+      "resolucao": "2026-11-19: conferência declarada pelo pesquisador; coluna e fichas mantidas, sem divergência; data e fonte por base não detalhadas. Lastro limitado registrado nesta pendência."
     }
   ]
 }

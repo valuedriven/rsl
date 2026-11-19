@@ -125,21 +125,22 @@ Não se aplica como fonte autônoma de inclusão. Especificação técnica publi
 
 #### Conjunto-semente
 
-| ID Semente | Semente  | Bases |
-| :---- | :---- | :---- |
-| SE1 | Alvarenga, V. B. L., & Cristovão, H. M. (2023). Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica. Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023. DOI: 10.26512/rici.v16.n1.2023.47618 | brapci | 
-| SE2 | Das, S., Naskar, D., & Roy, S. (2022). Reorganizing Educational Institutional Domain using Faceted Ontological Principles. Knowledge Organization, 49(1), 6-21, 2022\. DOI: 10.5771/0943-7444-2022-1-6. | wos, scopus |
-| SE3 | Chi, Y.-L., Chen, T.-Y., & Hung, C. (2018). Learning adaptivity in support of flipped learning: An ontological problem-solving approach. Expert Systems, 2018\. DOI: 10.1111/exsy.12246. | scopus |
-| SE4 | Shvets, O., Murtazin, K., Meeter, M., & Piho, G. (2024). Towards a Domain Model for Learning and Teaching. MODELSWARD 2024, SciTePress. DOI: 10.5220/0012471400003645. | scopus |
-| SE5 | Sousa, E. E. de, & Duque, C. (2018). Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade. Informação & Informação, 23(1), 271-289, 2018 (UEL). DOI: 10.5433/1981-8920.2018v23n1p271. | brapci |
-| SE6 | Iatrellis, O., Kameas, A., & Fitsilis, P. (2019). EDUC8 ontology: semantic modeling of multi-facet learning pathways. Education and Information Technologies, 2019 (Springer). DOI: 10.1007/s10639-019-09872-9. | eric |
-| SE7 | Chimalakonda, S., & Nori, K. V. (2020). An ontology based modeling framework for design of educational technologies. Smart Learning Environments, 7, 2020\. DOI: 10.1186/s40561-020-00135-6. | eric, wos, scopus |
-| SE8 | Cenka, B. A. N., Santoso, H. B., & Junus, K. (2023). Personal learning environment toward lifelong learning: an ontology-driven conceptual model. Interactive Learning Environments, 31(10), 6445-6461, 2023\. DOI: 10.1080/10494820.2022.2039947. | eric, scopus |
-| SE9 | Piriyapongpipat, P., Goldin, S., & Ditcharoen, N. (2024). An alternative approach to ontology-based curriculum development in higher education. Smart Learning Environments, 11(1), 2024, p. 1-19. DOI: 10.1186/s40561-024-00307-8. | wos, scopus |
-| SE10 | Khoo, C. S. G., & Kan, R. Y. P. (2020). An ontology for conceptual analysis of signature pedagogies. Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.), Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference, 2020, Aalborg, Dinamarca. Ergon Verlag, p. 484-488. DOI: 10.5771/9783956507762. | wos |
+| ID Semente | Semente  | Bases | Papel |
+| :---- | :---- | :---- | :---- |
+| SE1 | Alvarenga, V. B. L., & Cristovão, H. M. (2023). Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica. Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023. DOI: 10.26512/rici.v16.n1.2023.47618 | brapci | validação |
+| SE2 | Das, S., Naskar, D., & Roy, S. (2022). Reorganizing Educational Institutional Domain using Faceted Ontological Principles. Knowledge Organization, 49(1), 6-21, 2022\. DOI: 10.5771/0943-7444-2022-1-6. | wos, scopus | validação |
+| SE3 | Chi, Y.-L., Chen, T.-Y., & Hung, C. (2018). Learning adaptivity in support of flipped learning: An ontological problem-solving approach. Expert Systems, 2018\. DOI: 10.1111/exsy.12246. | scopus | validação |
+| SE4 | Shvets, O., Murtazin, K., Meeter, M., & Piho, G. (2024). Towards a Domain Model for Learning and Teaching. MODELSWARD 2024, SciTePress. DOI: 10.5220/0012471400003645. | scopus | desenvolvimento |
+| SE5 | Sousa, E. E. de, & Duque, C. (2018). Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade. Informação & Informação, 23(1), 271-289, 2018 (UEL). DOI: 10.5433/1981-8920.2018v23n1p271. | brapci | validação |
+| SE6 | Iatrellis, O., Kameas, A., & Fitsilis, P. (2019). EDUC8 ontology: semantic modeling of multi-facet learning pathways. Education and Information Technologies, 2019 (Springer). DOI: 10.1007/s10639-019-09872-9. | eric | validação |
+| SE7 | Chimalakonda, S., & Nori, K. V. (2020). An ontology based modeling framework for design of educational technologies. Smart Learning Environments, 7, 2020\. DOI: 10.1186/s40561-020-00135-6. | eric, wos, scopus | validação |
+| SE8 | Cenka, B. A. N., Santoso, H. B., & Junus, K. (2023). Personal learning environment toward lifelong learning: an ontology-driven conceptual model. Interactive Learning Environments, 31(10), 6445-6461, 2023\. DOI: 10.1080/10494820.2022.2039947. | eric, scopus | validação |
+| SE9 | Piriyapongpipat, P., Goldin, S., & Ditcharoen, N. (2024). An alternative approach to ontology-based curriculum development in higher education. Smart Learning Environments, 11(1), 2024, p. 1-19. DOI: 10.1186/s40561-024-00307-8. | wos, scopus | validação |
+| SE10 | Khoo, C. S. G., & Kan, R. Y. P. (2020). An ontology for conceptual analysis of signature pedagogies. Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.), Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference, 2020, Aalborg, Dinamarca. Ergon Verlag, p. 484-488. DOI: 10.5771/9783956507762-484. | wos | validação |
 
+- Conferência do conjunto-semente: o pesquisador declarou, em 2026-11-19, ter conferido a indexação das 10 sementes nas quatro bases e os dados bibliográficos desta tabela; a coluna `Bases` e as referências foram mantidas. A conferência não detalhou data e fonte por base e não se apresenta como conferência independente: é declaração do pesquisador. O DOI do capítulo da SE10 foi conferido no Crossref e registrado; a resposta bruta está em `data/evidencia/referencias/SE10_crossref.json`. A verificação bibliográfica está registrada em `data/sementes.json`; `escopo`, `tipo` e `alinhamento` seguem pendentes (PD01), porque não constam do protocolo.
 
-- Regra de ajuste: recuperação inferior a 80% do conjunto-semente obriga a revisar o controle terminológico antes de prosseguir, com emenda registrada. O limiar é decisão deste projeto, não norma da literatura, e consta como tal no relato. Decide a fração global, sobre a união das bases: semente que a base não indexa sai do denominador daquela base e registra-se como cobertura, não como falha da busca.
+- Regra de ajuste: recuperação inferior a 80% das sementes de validação obriga a revisar o controle terminológico antes de prosseguir, com emenda registrada. O limiar é decisão deste projeto, não norma da literatura, e consta como tal no relato. Decide a fração das sementes de validação, sobre a união das bases: semente que a base não indexa sai do denominador daquela base e registra-se como cobertura, não como falha da busca; as sementes de desenvolvimento são relatadas à parte e não compensam a validação.
 
 ### Ferramenta de gestão bibliográfica
 

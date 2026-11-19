@@ -59,6 +59,11 @@ instrumento, não o valor.
 decisória não tem denominador, e a passagem não poderia ser julgada. O defeito é impedido
 na leitura, não descoberto em M3/E2.
 
+**D-f. Casamento por prefixo é indício, não recuperação.** O título truncado pode gerar
+falso positivo, e a skill `teste-de-aderencia` já exige conferência humana. O prefixo é
+impresso como `[? ]`, fica fora do numerador e só entra na contagem depois de registrado
+na coluna `recuperada`. O casamento exato continua contando como recuperação.
+
 ## Risks / Trade-offs
 
 - [Conjunto de validação pequeno: as sementes novas ainda não existem] → o intervalo

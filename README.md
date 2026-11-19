@@ -38,7 +38,7 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `src/protocolo.py` | leitor do protocolo: confere documento e arquivos alimentados, e reconcilia o metadado das sementes | antes de executar qualquer script, e após alterar o protocolo |
 | `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/validar_termos.py` | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (TBCI, UNESCO Thesaurus) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
-| `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
+| `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o papel de cada semente e o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento | saber o que já foi decidido e por quê |
 | `data/pendencias.json` | Pendências: ações ainda a executar, cada uma com origem, o que bloqueia, ação sugerida, responsável e estado | saber o que falta fazer |
 | `config.toml` | caminho do protocolo, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados e campos das planilhas | mudar o arquivo do protocolo, um padrão ou o local das fichas |
@@ -88,9 +88,9 @@ biblioteca padrão). Ele traz:
 - `protocolo` — o arquivo do protocolo a ser lido; é o único parâmetro que o protocolo não
   sobrescreve;
 - `[padroes]` — valor padrão de cada parâmetro não estrutural que o protocolo pode declarar:
-  recorte, limiar de aderência, faixa de sensibilidade, âncoras, expressão executada, sonda,
-  limiar de divergência da fidelidade e sensibilidade mínima da calibração da triagem
-  assistida;
+  recorte, limiar de aderência (aplicado só às sementes de validação), faixa de
+  sensibilidade, âncoras, expressão executada, sonda, limiar de divergência da fidelidade e
+  sensibilidade mínima da calibração da triagem assistida;
 - os parâmetros que o protocolo não declara: dimensões obrigatórias dos critérios, mínimo de
   termos por string, natureza que identifica a executada e a sonda, arquivos de dados,
   campos das planilhas;
@@ -103,8 +103,9 @@ campo. São a composição das expressões; os instrumentos de controle terminol
 `Sigla | Instrumento | Modo | Caminho | Idiomas | FCTs`, com `Modo` `Manual` ou
 `Automático` — este exige cliente de mesma sigla em `src/validar_termos.py`); as bases
 (tabela "Bases de dados": `ID Base`, `Sigla`, `Nome da base`), cuja ficha se localiza pela
-sigla; o conjunto-semente (tabela `ID Semente | Semente | Bases`, com as siglas da tabela de
-bases); e os idiomas do quadro terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`.
+sigla; o conjunto-semente (tabela `ID Semente | Semente | Bases | Papel`, com as siglas da
+tabela de bases e o papel `desenvolvimento` ou `validação`); e os idiomas do quadro
+terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`.
 A forma de execução de cada base (`- Execução: única` ou `particionada`) é declarada na
 própria ficha. As chaves antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`,
 `idiomas`) reprovam a configuração se voltarem a ela.
@@ -148,7 +149,7 @@ união das específicas, dimensões obrigatórias dos critérios, justificativa 
 todo critério de elegibilidade, faixa de sensibilidade, instrumentos com idiomas e facetas
 do protocolo, ficha existente para cada sigla de base, IDs de critério da seção 2 de cada
 ficha iguais aos da tabela do protocolo e sementes citando só siglas da tabela de bases; a
-distribuição das sementes por base é calculada da tabela. `--conferir-dados` reprova
+distribuição das sementes por base e por papel é calculada da tabela. `--conferir-dados` reprova
 arquivo alimentado ausente ou fora do protocolo, a execução que declara exportação
 inexistente, a citação do registro de execução numa ficha sem identificador `(BDn/<id>)`, com `BDn` de outra base ou remetendo a execução
 inexistente — e, por base, termo vigente fora da string sem redução declarada e termo fora
@@ -245,8 +246,10 @@ existir.
 6. **Fontes.** Web of Science, Scopus, ERIC e BRAPCI, nessa ordem; acesso pelo Portal da
    CAPES com CAFe nas duas primeiras. A ausência de busca direta nos acervos especiais é
    limitação declarada, mitigada por backward search.
-7. **Conjunto-semente.** Estudos e incidências esperadas por base, no protocolo. É
-   instrumento de aferição, não lista de incluídos.
+7. **Conjunto-semente.** Estudos e incidências esperadas por base, no protocolo, com o
+   papel de cada semente. É instrumento de aferição, não lista de incluídos: só as
+   sementes de **validação** decidem a passagem; as de **desenvolvimento** orientaram o
+   vocabulário e são relatadas como não decisórias.
 8. **Ferramentas e registro de uso de IA.** Zotero para gestão e deduplicação, Rayyan para
    triagem cega e ASReview para priorização; o uso de IA é registrado ação a ação no LOG_IA,
    apêndice do protocolo.
@@ -276,8 +279,8 @@ conferido. A validação grava o estatuto na própria planilha
 `data/validacao_termologica.csv` e a resposta bruta em
 `data/evidencia/<instrumento>/`; `--importar` reconcilia a planilha com o protocolo,
 preservando decisões e linhas fora do protocolo. O conjunto-semente gera
-`data/semente_aderencia.csv` — uma linha por semente e por base — e imprime o ensaio seco
-no terminal; não grava guia em arquivo.
+`data/semente_aderencia.csv` — uma linha por semente e por base, com a coluna `papel` — e
+imprime o ensaio seco no terminal; não grava guia em arquivo.
 
 **Garantias.** `--conferir` reprova o documento fora da forma; `--conferir-dados` reprova
 arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente,
@@ -310,9 +313,12 @@ Executa a busca e transforma a exportação em conjunto verificável.
 4. **Derivação local.** As demais são calculadas sobre a exportação da de cobertura, com
    deduplicação dentro da base — a segunda ocorrência é marcada em `duplicata_de`, e nada é
    apagado.
-5. **Aderência.** Mede o recall contra o conjunto-semente; o denominador é o que cada base
-   indexa, conferido à mão, e o limiar (regra de ajuste do protocolo) vale **sobre a união
-   das bases**.
+5. **Aderência.** Mede o recall contra o conjunto-semente; o denominador definitivo é o que
+   cada base indexa, conferido à mão, e o limiar (regra de ajuste do protocolo) vale
+   **sobre a união das bases**. O relato separa as sementes de **validação** das de
+   **desenvolvimento**: só a validação é comparada ao limiar, e só ela traz o intervalo de
+   Wilson a 95%. O desenvolvimento é não decisório e não compensa a validação. O casamento
+   por prefixo é indício e não entra no numerador: exige conferência humana.
 6. **Fidelidade.** Executa as duas específicas diretamente na WoS e na Scopus e compara com a
    derivação; divergência acima do limiar (`divergencia_fidelidade`) reprova o método.
 7. **Coerência e cobertura.** Confere as relações de continência entre as expressões —
@@ -347,7 +353,8 @@ python3 src/derivar_expressoes.py --sensibilidade wos
 execuções; `--derivar` lê as execuções registradas, não a pasta de exportações. As saídas
 ficam na raiz de `data/`: `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`,
 um CSV de fidelidade por expressão conferida e um de sensibilidade por base sondada. A
-aderência usa `data/sementes.json` e `data/semente_aderencia.csv`.
+aderência usa `data/sementes.json` e `data/semente_aderencia.csv`; o relato por papel lê o
+`papel` da tabela do protocolo, e só a validação decide a passagem.
 
 **Recusas e marcas.** `--registrar` confere o retorno declarado contra os registros do
 arquivo e **recusa registrar quando divergem**, salvo justificativa explícita — o caso do
@@ -358,10 +365,10 @@ se o arquivo mudou. As contagens da busca usam os registros únicos, com o núme
 lado. O recorte temporal é apenas conferido aqui, e a linha "fora" deve ser zero em todas as
 bases.
 
-**Condição de passagem:** suficiência do portfólio — aderência e fidelidade dentro dos
-limiares (`--mostrar`). Fora disso, revisa-se o controle terminológico antes de prosseguir, com
-emenda registrada. Skills: `busca-nas-bases`, `deduplicacao`, `teste-de-aderencia` e
-`conferencias-da-busca`.
+**Condição de passagem:** suficiência do portfólio — aderência de **validação** e fidelidade
+dentro dos limiares (`--mostrar`). Fora disso, revisa-se o controle terminológico antes de
+prosseguir, com emenda registrada. Skills: `busca-nas-bases`, `deduplicacao`,
+`teste-de-aderencia` e `conferencias-da-busca`.
 
 #### E3 — Seleção dos estudos
 

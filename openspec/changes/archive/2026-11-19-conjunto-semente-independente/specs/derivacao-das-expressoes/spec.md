@@ -8,19 +8,21 @@ fidelidade e da sensibilidade MUST ser idênticas às anteriores à mudança, ex
 da coluna `facetas_exigidas` de `contagens_busca.csv`, que passa à forma estrita
 (`FCT1 AND FCT2 AND (FCT3 OR FCT4)`) por decisão do pesquisador, a grafia das siglas das
 bases, que passa a ser a do protocolo (`wos`, `scopus`, `eric`, `brapci`), e, na aderência,
-o relato separado por papel da semente, com o intervalo de confiança, e a coluna `papel` da
-planilha de aderência.
+o relato separado por papel da semente, com o intervalo de confiança, a coluna `papel` da
+planilha de aderência e o casamento por prefixo, que deixa de entrar no numerador e passa a
+ser relatado como indício.
 
 #### Scenario: Mesmo resultado
 - **WHEN** a prova da composição, as deriváveis e o mapa de bases são calculados antes e
   depois da mudança
 - **THEN** os valores coincidem, comparadas as siglas sem distinção de caixa
 
-#### Scenario: Aderência muda só na forma do relato
+#### Scenario: Aderência preservada nos casamentos exatos
 - **WHEN** a aderência é calculada antes e depois da separação por papel, com os mesmos
   registros
-- **THEN** o total de sementes recuperadas coincide, e só a decomposição por papel, o
-  intervalo e a coluna `papel` são novos
+- **THEN** o total de sementes recuperadas por casamento exato coincide, e só a decomposição
+  por papel, o intervalo e a coluna `papel` são novos; o casamento por prefixo deixa de ser
+  contado e passa a indício
 
 ## ADDED Requirements
 
@@ -41,6 +43,16 @@ que decide a passagem.
 - **WHEN** a recuperação de validação fica abaixo do limiar e a total, somando
   desenvolvimento, fica acima
 - **THEN** o relato declara a aderência abaixo do limiar
+
+### Requirement: Casamento por prefixo é indício
+
+`--aderencia` SHALL imprimir o casamento por prefixo de título como indício e MUST NOT
+contá-lo no numerador da aderência. A confirmação do casamento por prefixo exige registro
+humano na coluna `recuperada`.
+
+#### Scenario: Prefixo não entra no numerador
+- **WHEN** uma semente só casa com um registro por prefixo de título
+- **THEN** o relato a marca como indício e não a conta como recuperada
 
 ### Requirement: Intervalo de confiança da aderência
 

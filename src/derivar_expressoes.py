@@ -54,6 +54,7 @@ import csv
 import itertools
 import datetime
 import json
+import math
 import pathlib
 import re
 import sys
@@ -472,13 +473,68 @@ def _autoteste_composicao():
     return falhas, n
 
 
+def _autoteste_aderencia():
+    """Prova o relato por papel e o intervalo de Wilson, com dados sintéticos."""
+    falhas, n = 0, 0
+
+    def testa(nome, condicao, detalhe=""):
+        nonlocal falhas, n
+        n += 1
+        if condicao:
+            print(f"  [ok] {nome}")
+        else:
+            print(f"  [FALHA] {nome}{' — ' + detalhe if detalhe else ''}")
+            falhas += 1
+
+    lo, hi = _wilson(8, 10)
+    testa("Wilson 8/10 = 80% com intervalo 49,0%–94,3%",
+          abs(lo - 0.490) < 0.001 and abs(hi - 0.943) < 0.001,
+          f"{lo:.3%}–{hi:.3%}")
+    testa("Wilson sem tentativa não tem intervalo", _wilson(0, 0) is None)
+
+    idx = {_chave_titulo("Um título completo para o teste"): [{"base": "wos"}]}
+    exatas, prefixo = _casa_titulo(idx, _chave_titulo("Um título completo para o teste"))
+    testa("título exato é recuperação", bool(exatas) and not prefixo)
+    exatas, prefixo = _casa_titulo(idx, _chave_titulo("Um título completo"))
+    testa("prefixo é indício, não recuperação", not exatas and bool(prefixo))
+
+    sementes = ([{"id": f"V{k}", "papel": "validação"} for k in range(1, 7)]
+                + [{"id": f"D{k}", "papel": "desenvolvimento"} for k in range(1, 5)])
+    recuperadas = {f"V{k}" for k in range(1, 6)} | {f"D{k}" for k in range(1, 5)}
+    av = _avalia_aderencia(sementes, recuperadas, limiar=0.8)
+    val, dev = av["decide"], av["por_papel"]["desenvolvimento"]
+    testa("5/6 de validação e 4/4 de desenvolvimento são relatados separados",
+          val["recuperadas"] == 5 and val["total"] == 6
+          and dev["recuperadas"] == 4 and dev["total"] == 4,
+          f"validação {val['recuperadas']}/{val['total']}, "
+          f"desenvolvimento {dev['recuperadas']}/{dev['total']}")
+    testa("total recuperado independe do papel",
+          sum(v["recuperadas"] for v in av["por_papel"].values()) == len(recuperadas))
+
+    # 4/6 de validação = 66,7%; 4/4 de desenvolvimento leva o total a 80%, mas o
+    # desenvolvimento não compensa: a validação continua abaixo do limiar.
+    recuperadas = {f"V{k}" for k in range(1, 5)} | {f"D{k}" for k in range(1, 5)}
+    av = _avalia_aderencia(sementes, recuperadas, limiar=0.8)
+    testa("desenvolvimento não compensa validação",
+          av["decide"]["recuperadas"] == 4 and av["decide"]["total"] == 6
+          and not av["decide"]["aprovada"]
+          and av["por_papel"]["desenvolvimento"]["proporcao"] == 1.0,
+          f"validação {av['decide']['proporcao']:.1%}, "
+          f"total {(av['decide']['recuperadas'] + av['por_papel']['desenvolvimento']['recuperadas']) / 10:.0%}")
+    return falhas, n
+
+
 def autoteste():
     print("Prova da composição das expressões:")
     falhas, n = _autoteste_composicao()
+    print("\nProva da aderência por papel:")
+    f_a, n_a = _autoteste_aderencia()
+    falhas += f_a
+    n += n_a
     if falhas:
-        print(f"\n{falhas} de {n} caso(s) do autoteste da composição falharam.")
+        print(f"\n{falhas} de {n} caso(s) do autoteste falharam.")
         return 1
-    print(f"\nOs {n} casos do autoteste da composição tiveram o resultado esperado.")
+    print(f"\nOs {n} casos do autoteste tiveram o resultado esperado.")
     return 0
 
 
@@ -751,17 +807,78 @@ def aplica_recorte(regs):
     return dentro + sem_ano, fora
 
 
+def _chave_titulo(t):
+    """Título normalizado para casamento: sem acento, caixa ou pontuação."""
+    t = unicodedata.normalize("NFKD", (t or "").lower())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    return re.sub(r"[^a-z0-9]+", " ", t).strip()
+
+
+def _casa_titulo(idx, chave):
+    """Casamento exato e candidatos por prefixo. Prefixo é indício, não recuperação."""
+    if not chave:
+        return [], []
+    exatas = idx.get(chave)
+    if exatas:
+        return exatas, []
+    prefixo = [r for k, v in idx.items() if k.startswith(chave[:60]) for r in v]
+    return [], prefixo
+
+
+def _wilson(k, n, z=1.96):
+    """Intervalo de Wilson a 95% para k sucessos em n tentativas.
+
+    Com n pequeno e proporção perto de 1, o intervalo normal sai assimétrico de forma
+    errada e ultrapassa 100%; o Wilson tem cobertura adequada nessa faixa e usa só a
+    biblioteca padrão.
+    """
+    if n <= 0:
+        return None
+    p = k / n
+    denom = 1 + z * z / n
+    centro = (p + z * z / (2 * n)) / denom
+    meio = (z / denom) * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+    return max(0.0, centro - meio), min(1.0, centro + meio)
+
+
+def _avalia_aderencia(sementes, recuperadas, limiar=None):
+    """Contagem e decisão por papel. `recuperadas` é o conjunto de IDs recuperados.
+
+    Só a validação é comparada ao limiar; o desenvolvimento é relatado como não
+    decisório e não compensa a validação. `limiar` permite fixar o valor no autoteste;
+    por omissão, vale o do protocolo.
+    """
+    limiar = _D["limiar"] if limiar is None else limiar
+    por_papel = {p: {"total": 0, "recuperadas": 0, "ids": []}
+                 for p in protocolo.PAPEIS_SEMENTE}
+    for e in sementes:
+        p = e["papel"]
+        por_papel[p]["total"] += 1
+        if e["id"] in recuperadas:
+            por_papel[p]["recuperadas"] += 1
+            por_papel[p]["ids"].append(e["id"])
+    for p in por_papel:
+        total = por_papel[p]["total"]
+        por_papel[p]["proporcao"] = por_papel[p]["recuperadas"] / total if total else 0.0
+    val = por_papel["validação"]
+    val["intervalo"] = _wilson(val["recuperadas"], val["total"])
+    val["aprovada"] = val["total"] > 0 and val["proporcao"] >= limiar
+    return {"por_papel": por_papel, "decide": val, "limiar": limiar}
+
+
 def aderencia():
     """Teste de aderência ao conjunto-semente, sobre as consultas registradas.
 
-    Mede recall: quantos dos estudos-semente que a base indexa aparecem na
-    exportação. NÃO aplica o recorte temporal — o conjunto-semente valida o
-    desenho da busca, não os critérios de elegibilidade.
+    Mede recall: quantos dos estudos-semente aparecem na exportação. NÃO aplica o
+    recorte temporal — o conjunto-semente valida o desenho da busca, não os
+    critérios de elegibilidade.
 
-    As referências vêm do protocolo, seção do conjunto-semente; a coluna
-    `indexado` da planilha é o denominador e precisa ser preenchida à mão, base
-    por base, buscando cada semente pelo título: ausência por falta de indexação
-    não é falha da string.
+    Relata validação e desenvolvimento separadamente. Só a validação é comparada ao
+    limiar e traz o intervalo de Wilson a 95%; o desenvolvimento é não decisório e não
+    compensa a validação. As referências vêm do protocolo, seção do conjunto-semente;
+    a coluna `indexado` da planilha é o denominador definitivo e precisa ser preenchida
+    à mão, base por base, buscando cada semente pelo título: ausência por falta de
+    indexação não é falha da string.
     """
     sementes = _D["sementes"]
     _, validas = carrega_consultas()
@@ -770,36 +887,56 @@ def aderencia():
         print("Nenhum registro lido.")
         sys.exit(1)
 
-    def chave(t):
-        t = unicodedata.normalize("NFKD", (t or "").lower())
-        t = "".join(c for c in t if not unicodedata.combining(c))
-        return re.sub(r"[^a-z0-9]+", " ", t).strip()
-
     idx = {}
     for r in regs:
-        idx.setdefault(chave(r.get("titulo")), []).append(r)
+        idx.setdefault(_chave_titulo(r.get("titulo")), []).append(r)
 
     print(f"\nADERÊNCIA AO CONJUNTO-SEMENTE — {len(sementes)} estudos, "
           f"{len(regs)} registros únicos\n")
-    achados = 0
+    recuperadas, indicios = set(), set()
     for e in sementes:
-        k = chave(e["titulo"])
-        casa = idx.get(k)
-        if not casa:                      # tentativa por prefixo, para títulos truncados
-            casa = [r for kk, v in idx.items() if kk.startswith(k[:60]) for r in v] or None
-        if casa:
-            achados += 1
-            bases = ", ".join(sorted({r.get("base", "?") for r in casa}))
-            print(f"  [OK ] {e['id']:>4}. {e['ano']}  {e['titulo'][:58]:<60} {bases}")
+        k = _chave_titulo(e["titulo"])
+        exatas, prefixo = _casa_titulo(idx, k)
+        if exatas:
+            recuperadas.add(e["id"])
+            bases = ", ".join(sorted({r.get("base", "?") for r in exatas}))
+            print(f"  [OK ] {e['id']:>4}. {e['ano']} [{e['papel']}] "
+                  f"{e['titulo'][:48]:<50} {bases}")
+        elif prefixo:
+            indicios.add(e["id"])
+            bases = ", ".join(sorted({r.get("base", "?") for r in prefixo}))
+            print(f"  [? ] {e['id']:>4}. {e['ano']} [{e['papel']}] "
+                  f"{e['titulo'][:48]:<50} {bases} — prefixo; conferir à mão")
         else:
-            print(f"  [   ] {e['id']:>4}. {e['ano']}  {e['titulo'][:58]:<60} "
-                  f"esperado em: {', '.join(e['bases'])}")
-    print(f"\n  recuperados: {achados} de {len(sementes)} sementes "
-          f"({achados / len(sementes):.0%} do total informado)")
-    print("\n  ATENÇÃO: esta razão NÃO é a aderência. O denominador correto são as sementes que")
-    print("  cada base INDEXA, apurado à mão na coluna `indexado` da planilha. Semente ausente")
-    print("  por não ser indexada não conta contra a string.")
+            print(f"  [   ] {e['id']:>4}. {e['ano']} [{e['papel']}] "
+                  f"{e['titulo'][:48]:<50} esperado em: {', '.join(e['bases'])}")
+
+    av = _avalia_aderencia(sementes, recuperadas)
+    val, dev = av["decide"], av["por_papel"]["desenvolvimento"]
+    print(f"\n  TOTAL — {len(recuperadas)}/{len(sementes)} sementes recuperadas "
+          f"({len(recuperadas) / len(sementes):.0%}); informativo, não decide")
+    print(f"\n  ADERÊNCIA DE VALIDAÇÃO — {val['recuperadas']}/{val['total']} = "
+          f"{val['proporcao']:.1%}")
+    if val["intervalo"]:
+        lo, hi = val["intervalo"]
+        print(f"    intervalo de Wilson a 95%: {lo:.1%}–{hi:.1%}")
+    else:
+        print("    sem sementes de validação: a aderência não tem denominador")
+    print(f"    limiar do protocolo: {av['limiar']:.0%} — "
+          f"{'APROVADA' if val['aprovada'] else 'REPROVADA'}; esta é a aderência que "
+          f"decide a passagem")
+    print(f"\n  ADERÊNCIA DE DESENVOLVIMENTO — {dev['recuperadas']}/{dev['total']} = "
+          f"{dev['proporcao']:.1%}")
+    print("    não decisória: não compensa a validação nem altera a passagem")
+    if indicios:
+        print(f"\n  INDÍCIO POR PREFIXO — {len(indicios)} semente(s) NÃO contabilizada(s): "
+              f"{', '.join(sorted(indicios))}")
+        print("    prefixo não é acerto: conferir à mão e registrar na coluna `recuperada`.")
+    print("\n  ATENÇÃO: a razão acima é sobre as sementes informadas. O denominador definitivo")
+    print("  são as sementes que cada base INDEXA, apurado à mão na coluna `indexado` da")
+    print("  planilha. Semente ausente por não ser indexada não conta contra a string.")
     print("  Cada ausência acima exige diagnóstico: qual termo a teria alcançado?")
+    return 0 if val["total"] else 1
 
 
 def derivar():
@@ -1100,7 +1237,7 @@ def main():
     if a.registrar:
         return registrar(*a.registrar, a.retorno, a.data_hora, a.justificar)
     if a.aderencia:
-        aderencia(); return 0
+        return aderencia()
     if a.derivar:
         derivar(); return 0
     if a.fidelidade:
