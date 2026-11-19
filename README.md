@@ -144,12 +144,15 @@ derivam e registram. Quatro invariantes valem para todos:
 `--conferir` verifica a **coerência interna** do protocolo, não valores esperados: numeração
 dos identificadores, camadas do vocabulário, string contida no quadro da sua faceta,
 âncoras em todas as expressões, sonda igual à conjunção das âncoras, executada igual à
-união das específicas, dimensões obrigatórias dos critérios, faixa de sensibilidade,
-instrumentos com idiomas e facetas do protocolo, ficha existente para cada sigla de base e
-sementes citando só siglas da tabela de bases; a distribuição das sementes por base é
-calculada da tabela. `--conferir-dados` reprova arquivo alimentado ausente ou fora do
-protocolo, a execução que declara exportação inexistente e, por base, termo vigente fora da
-string sem redução declarada e termo fora da STR dentro dela, mesmo em flexão.
+união das específicas, dimensões obrigatórias dos critérios, justificativa preenchida em
+todo critério de elegibilidade, faixa de sensibilidade, instrumentos com idiomas e facetas
+do protocolo, ficha existente para cada sigla de base, IDs de critério da seção 2 de cada
+ficha iguais aos da tabela do protocolo e sementes citando só siglas da tabela de bases; a
+distribuição das sementes por base é calculada da tabela. `--conferir-dados` reprova
+arquivo alimentado ausente ou fora do protocolo, a execução que declara exportação
+inexistente, a citação do registro de execução numa ficha sem identificador `(BDn/<id>)`, com `BDn` de outra base ou remetendo a execução
+inexistente — e, por base, termo vigente fora da string sem redução declarada e termo fora
+da STR dentro dela, mesmo em flexão.
 `--autoteste` injeta defeitos numa cópia e exige que cada conferência reprove pelo motivo
 esperado — inclusive configuração inválida, precedência, parâmetro estrutural ausente ou
 inválido, ficha divergente do protocolo e
@@ -236,8 +239,9 @@ existir.
    **única executada como busca definitiva**; as demais são calculadas localmente em M3/E2.
    `EB4` equivale a `EB2 ∪ EB3`, e `EB5 = STR1 AND STR2` é a **sonda de sensibilidade**,
    executada uma única vez e fora do corpus.
-5. **Critérios de elegibilidade.** Inclusão e exclusão, com a regra única de inclusão —
-   práticas **e/ou** fatores situacionais — e a regra de borda.
+5. **Critérios de elegibilidade.** Inclusão e exclusão, com a regra única de inclusão
+   (CE7) — práticas **e/ou** fatores situacionais —, as regras de exceção e de borda e o
+   contra-escopo nomeado (CE9 a CE12).
 6. **Fontes.** Web of Science, Scopus, ERIC e BRAPCI, nessa ordem; acesso pelo Portal da
    CAPES com CAFe nas duas primeiras. A ausência de busca direta nos acervos especiais é
    limitação declarada, mitigada por backward search.
@@ -276,8 +280,10 @@ preservando decisões e linhas fora do protocolo. O conjunto-semente gera
 no terminal; não grava guia em arquivo.
 
 **Garantias.** `--conferir` reprova o documento fora da forma; `--conferir-dados` reprova
-arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente
-e, por base, termo vigente ausente sem redução declarada ou termo fora da STR presente.
+arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente,
+citação do registro de execução sem identificador `(BDn/<id>)`, de outra base ou de execução
+inexistente, e, por base, termo vigente ausente sem redução declarada ou termo fora da STR
+presente.
 `--sincronizar` não apaga
 semente retirada do protocolo: ela permanece e é reportada, para decisão. `--autoteste` injeta
 defeitos numa cópia e exige que as conferências os reprovem.
@@ -370,13 +376,15 @@ calibração da triagem assistida aprovada em E2.
    priorização altera a ordem de leitura, nunca o conjunto lido —, e
    `data/ordem_triagem.csv` registra a ordem por pertinência e recência.
 3. **2ª filtragem — título e resumo.** Aplica os critérios decidíveis sem o texto completo:
-   recorte, idioma, tipo documental e exclusões temáticas manifestas, com kappa.
-4. **3ª filtragem — texto completo.** Aplica integralmente o CE6, com a regra de
-   exceção e a regra de borda, e justifica cada exclusão. Dois revisores independentes, sem
-   IA na decisão, com kappa. Divergência remanescente vai ao VT.
+   recorte, idioma, tipo documental e exclusões temáticas manifestas, com kappa; exclui pelo
+   CE6 o documento não localizado em texto completo, esgotadas as vias de obtenção.
+4. **3ª filtragem — texto completo.** Aplica integralmente os critérios de adequação
+   temática — CE7, com as regras de exceção e de borda, e CE8 a CE12, que nomeiam o
+   contra-escopo —, e justifica cada exclusão pelo ID do critério. Dois revisores
+   independentes, sem IA na decisão, com kappa. Divergência remanescente vai ao VT.
 5. **Backward search.** Uma geração, apenas sobre os estudos incluídos. Revisões
-   sistemáticas permanecem elegíveis, mas vão para **conjunto suplementar** com contagem
-   própria.
+   sistemáticas e de escopo são elegíveis por critério próprio (CE5) e vão para
+   **conjunto suplementar** com contagem própria.
 6. **Registro do fluxo.** O fluxograma PRISMA registra as exclusões justificadas e
    quantificadas em cada passagem.
 
@@ -432,8 +440,15 @@ Skill: `fichamento`.
 - **Rastreabilidade.** Questão, objetivos, facetas, quadro terminológico, strings e
   critérios precisam concordar; `--conferir` e `--conferir-dados` são a trava, e
   `--autoteste` prova que as conferências reprovam. Skill: `rastreabilidade`.
+- **Otimização de strings e vocabulário.** Diagnostica redundância, polissemia e lacuna no
+  controle terminológico e nas strings por faceta. Skill:
+  `otimizar-strings-revisao-sistematica`.
 - **Referências.** Nenhum dado bibliográfico se preenche de memória: confere-se na fonte e
   registra-se o estado da conferência. Skill: `conferir-referencia`.
+- **Revisão geral do projeto.** Percorre o estado do ciclo e os instrumentos, executa as
+  conferências e os autotestes, confere o lastro das afirmações e entrega achados
+  classificados; não escreve, não acessa fonte externa e não decide. Skill:
+  `revisao-geral-do-projeto`.
 - **Parecer externo.** Cada achado é conferido contra o texto corrente antes de aceito; o
   parecer é hipótese sobre o documento, não constatação. Skill: `parecer-sobre-protocolo`.
 - **Pendências.** As ações por fazer ficam em `data/pendencias.json`.

@@ -2,23 +2,23 @@
 
 ## 1. Estado de verificação da sintaxe
 
-Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?advanced`; comportamento verificado por medição, com as sondagens em `data/registro_execucao.json` (BD3).
+Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?advanced`; comportamento **não verificado** — medir na primeira execução e registrar a execução.
 
 | Elemento | Situação |
 | :--- | :--- |
 | Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`) | **Verificados em fonte oficial** |
 | Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` | **Verificados em fonte oficial**, comportamento **não medido** |
-| Prefixo de campo restringe de fato | **Verificado por medição** |
-| Parênteses para agrupamento | **Suportados**; o grupo **não funciona sozinho** e precisa de condição externa |
-| Condição externa a um grupo | **Verificada** em qualquer forma: campo, texto livre ou outro grupo, antes ou depois |
-| Campos diferentes num mesmo grupo | **Não suportados**: devolvem zero, sem mensagem de erro |
-| `pubyearmin`/`pubyearmax` junto a um grupo | **Não suportados**: zeram o retorno |
-| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | **Verificado por medição** |
-| Truncamento com `*` | **Não suportado**: devolve zero |
-| Lematização | **Verificada** para plural regular; **não** para irregular |
-| Aspas como frase | **Verificadas** dentro e fora do campo; o operador implícito entre palavras é conjunção |
-| Campo `descriptor` | **Medido**: campo controlado; casa apenas formas autorizadas |
-| Comprimento máximo da consulta | **Teto entre 1.502 e 1.799 caracteres brutos**; manter abaixo de **1.400** |
+| Prefixo de campo restringe de fato | **Não verificado**; medir na primeira execução |
+| Parênteses para agrupamento | **Não verificado**; medir na primeira execução |
+| Condição externa a um grupo | **Não verificado**; medir na primeira execução |
+| Campos diferentes num mesmo grupo | **Não verificado**; medir na primeira execução |
+| `pubyearmin`/`pubyearmax` junto a um grupo | **Não verificado**; medir na primeira execução |
+| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | **Não verificado**; medir na primeira execução |
+| Truncamento com `*` | **Não verificado**; medir na primeira execução |
+| Lematização | **Não verificado**; medir na primeira execução |
+| Aspas como frase | **Não verificado**; medir na primeira execução |
+| Campo `descriptor` | **Não verificado**; medir na primeira execução |
+| Comprimento máximo da consulta | **Não verificado**; manter abaixo de **1.400** até medir na primeira execução |
 | Negação com prefixo `-` | **Verificada em fonte oficial**, não medida |
 | Hífen como separador de palavras (`ontology-driven`, `e-learning`) | **Não medido** |
 | Teto de retorno exibido e de exportação por lote | **Não verificados** |
@@ -32,11 +32,13 @@ Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?adv
 | :--- | :---: | :--- | :--- |
 | Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Não** | filtro de data da página de resultados, 2017 a 2026; registrar o rótulo do filtro e o retorno antes e depois |
 | Idiomas — português, inglês e espanhol | CE3 | **Não** | termos só em inglês; campo `language` não usado |
-| Tipo documental e revisão por pares | CE4 | **Não** | `Peer reviewed only` desmarcada; campo `publicationtype` não usado |
-| Texto completo | CE5 | **Não** | `Full text available on ERIC` desmarcada |
-| Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, em forma radical | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz |
-| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
+| Tipo documental e revisão por pares | CE4 / CE5 | **Não** | `Peer reviewed only` desmarcada; campo `publicationtype` não usado |
+| Texto completo | CE6 | **Não** | `Full text available on ERIC` desmarcada |
+| Adequação temática — regra de inclusão | CE7 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
+| Adequação temática — não pertinência | CE8 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª |
+| Adequação temática — contra-escopo | CE9 / CE10 / CE11 / CE12 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
+| Domínio de aplicação educacional | CE13 / CE14 | **Sim**, em forma radical | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz |
+| Outros tipos documentais | CE15 | **Não** | 2ª filtragem |
 
 ---
 

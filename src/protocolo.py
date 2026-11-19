@@ -963,6 +963,32 @@ def forma_execucao(t_ficha, caminho):
     return FORMAS_EXECUCAO[valor]
 
 
+def criterios_da_ficha(t_ficha, caminho):
+    """IDs de critério citados na seção 2 da ficha, coluna de ID.
+
+    A ficha declara o que a base aplica e onde; a chave é o ID. Agrupamento na mesma
+    célula (`CE1 / CE2`) conta os dois. Seção ausente, ou sem nenhum ID, é ficha
+    ilegível: sem ela não se sabe o que a base aplica.
+    """
+    try:
+        bloco = secao(t_ficha, "2. Critérios de elegibilidade")
+    except ProtocoloInvalido:
+        raise ProtocoloInvalido(f"ficha {caminho}: seção '2. Critérios de elegibilidade' "
+                                f"não encontrada")
+    ids = []
+    for linha in bloco.splitlines():
+        if not linha.lstrip().startswith("|"):
+            continue
+        cels = celulas(linha)
+        if len(cels) < 2:
+            continue
+        ids += re.findall(r"CE\d+", cels[1])
+    if not ids:
+        raise ProtocoloInvalido(f"ficha {caminho}: seção 2 sem IDs de critério na coluna "
+                                f"de ID")
+    return sorted(set(ids), key=lambda x: int(x[2:]))
+
+
 def _rotulo(linha):
     """Rótulo legível: desfaz ênfase do Markdown, corta a lista de facetas e a pontuação."""
     s = re.sub(r"[*`_]", "", (linha or "")).strip()
@@ -1272,6 +1298,7 @@ def base_derivada(sigla, d, t_ficha=None):
         "base": {"id": b["id"], "sigla": sigla, "nome": b["nome"], "ficha": b["ficha"],
                  "execucao_declarada": forma},
         "facetas": facetas_base(t),
+        "criterios": criterios_da_ficha(t, b["ficha"]),
         "ancoras": ancoras,
         "expressoes": {k: expressoes[k] for k in sorted(expressoes)},
         "execucao": execucao,
@@ -1389,11 +1416,26 @@ def _facetas_da_composicao(d, ident):
     return sorted({faceta_de[x] for g in d["expressoes"][ident] for x in g})
 
 
+def _ordem_criterio(cid):
+    return int(cid[2:])
+
+
 def cobertura_base(slug, base, d):
-    """Problemas de forma da base: vocabulário, âncoras, composição, execução."""
+    """Problemas de forma da base: critérios, vocabulário, âncoras, composição, execução."""
     problemas = []
     decl = base.get("declaracao") or {}
     modos = set(decl.get("derivacoes") or [])
+
+    # A seção 2 cita os critérios que a base aplica. Renumerar o protocolo sem atualizar a
+    # ficha deixaria a triagem aplicando um critério que o documento já não nomeia.
+    caminho = base["base"]["ficha"]
+    protocolo = {c["id"] for c in d["criterios"]}
+    citados = set(base.get("criterios") or [])
+    for cid in sorted(citados - protocolo, key=_ordem_criterio):
+        problemas.append(f"ficha {caminho}: cita {cid}, que não existe na tabela de "
+                         f"critérios do protocolo")
+    for cid in sorted(protocolo - citados, key=_ordem_criterio):
+        problemas.append(f"ficha {caminho}: não cita {cid}, que o protocolo declara")
 
     for fid in sorted(d["strings"]):
         if not decl.get("idiomas", {}).get(fid):
@@ -1711,6 +1753,13 @@ def conferir(t=None):
 
     problemas += _coerencia_expressoes(d)
 
+    # Justificativa é afirmação de decisão: célula vazia, só com espaço ou com traço não a
+    # contém. A conferência garante que existe; não avalia o conteúdo.
+    for c in d["criterios"]:
+        if not c["justificativa"].strip(" \t-–—"):
+            problemas.append(f"critério {c['id']} sem justificativa (coluna "
+                             f"'Justificativa' vazia)")
+
     dimensoes = {c["dimensao"] for c in d["criterios"]}
     for esperada in d["parametros"]["dimensoes_criterio"]["valor"]:
         if esperada not in dimensoes:
@@ -1963,6 +2012,60 @@ def _problemas_bases(d):
     return problemas
 
 
+CITACAO_EXECUCAO = re.compile(r"\((BD\d+)/([^)\s]+)\)")
+
+
+def _problemas_citacoes_registro(d, registro, t_fichas=None):
+    """Citação do registro de execução sem lastro, por base.
+
+    Toda menção ao caminho do registro — em tabela ou em prosa — nomeia a execução na forma
+    `(BDn/<id>)`, com `BDn` da própria base e o id presente no registro. Menção sem
+    identificador, identificador de outra base ou execução inexistente reprova só a base da
+    ficha. Sem o registro, a menção já é citação sem lastro. `t_fichas` permite conferir
+    cópias do texto no autoteste.
+    """
+    caminho = str(CFG["dados"]["registro"])
+    execucoes = {}
+    if isinstance(registro, dict) and isinstance(registro.get("bases"), dict):
+        for bd, base in registro["bases"].items():
+            if isinstance(base, dict) and isinstance(base.get("execucoes"), list):
+                execucoes[bd] = {e.get("id") for e in base["execucoes"]
+                                 if isinstance(e, dict)}
+    problemas = []
+    for b in d["bases"]:
+        sigla, bd = b["sigla"], b["id"]
+        if t_fichas is not None and sigla in t_fichas:
+            t = t_fichas[sigla]
+        else:
+            try:
+                t = ficha(d, sigla)
+            except ProtocoloInvalido as e:
+                problemas.append(f"{sigla}: {e}")
+                continue
+        for n, linha in enumerate(t.splitlines(), 1):
+            if caminho not in linha:
+                continue
+            citacoes = CITACAO_EXECUCAO.findall(linha)
+            where = f"{sigla}: ficha {b['ficha']}:{n}"
+            if not citacoes:
+                problemas.append(f"{where}: menção ao registro sem identificador de execução "
+                                 f"`(BDn/<id>)`")
+                continue
+            for cit_bd, ident in citacoes:
+                ref = f"{cit_bd}/{ident}"
+                if cit_bd != bd:
+                    problemas.append(f"{where}: cita a execução {ref}, de outra base; a "
+                                     f"execução tem de ser de {bd}")
+                elif ident not in execucoes.get(bd, set()):
+                    if registro is None:
+                        problemas.append(f"{where}: cita a execução {ref} sem lastro — "
+                                         f"registro de execução ausente")
+                    else:
+                        problemas.append(f"{where}: cita a execução {ref}, inexistente no "
+                                         f"registro")
+    return problemas
+
+
 def conferir_dados():
     """Confere os arquivos alimentados contra o documento. Devolve (problemas, avisos)."""
     problemas, avisos = [], []
@@ -1979,13 +2082,14 @@ def conferir_dados():
         problemas += p
         avisos += a
 
-    dado, erro = _le_json(REGISTRO)
+    registro, erro = _le_json(REGISTRO)
     if erro:
         problemas.append(erro)
     else:
-        problemas += _problemas_registro(dado, [b["id"] for b in d["bases"]])
+        problemas += _problemas_registro(registro, [b["id"] for b in d["bases"]])
 
     problemas += _problemas_bases(d)
+    problemas += _problemas_citacoes_registro(d, registro)
     return problemas, avisos
 
 
@@ -2208,6 +2312,18 @@ def _sem_tabela(linhas, cabecalho):
     return linhas[:i] + linhas[j:]
 
 
+def _justificativa_vazia(linhas, prefixo, valor=""):
+    """A linha `prefixo` com a coluna Justificativa (última célula) trocada por `valor`."""
+    saida = []
+    for l in linhas:
+        if l.startswith(prefixo):
+            cels = celulas(l)
+            cels[-1] = valor
+            l = "| " + " | ".join(cels) + " |"
+        saida.append(l)
+    return saida
+
+
 def _mutacoes(t):
     """Cópias defeituosas: (nome, texto, trecho esperado na reprovação)."""
     linhas = t.splitlines()
@@ -2233,6 +2349,10 @@ def _mutacoes(t):
          "numeração QER"),
         ("dimensão de critério ausente",
          _troca_linha(linhas, "| CE3 |", "| Idioma |", "| Língua |"), "critério de 'Idioma'"),
+        ("critério sem justificativa",
+         _justificativa_vazia(linhas, "| CE6 |"), "sem justificativa"),
+        ("justificativa reduzida a traço",
+         _justificativa_vazia(linhas, "| CE6 |", "—"), "sem justificativa"),
         ("base removida", [l for l in linhas if not l.startswith("| BD4 |")], "BRAPCI"),
         ("questão geral sem QGR", [l.replace("- QGR:", "", 1) for l in linhas], "QGR"),
         ("faceta com identificador trocado",
@@ -2607,7 +2727,7 @@ def _autoteste_estrutural(t, d):
 # Casos de `_autoteste_dados`, para relatar quantos deixaram de rodar quando os arquivos
 # alimentados faltam. Teste novo em `_autoteste_dados` atualiza este número; o autoteste
 # reprova se divergirem.
-CASOS_DADOS = 6
+CASOS_DADOS = 10
 
 
 def _autoteste_dados(d):
@@ -2675,6 +2795,41 @@ def _autoteste_dados(d):
         "registros_lidos": "um", "status": "valida"})
     testa("execução com `registros_lidos` que não é inteiro",
           bool(_problemas_registro(copia, bds)))
+
+    # Citação do registro: cada defeito numa base, e a reprovação só naquela base.
+    alvos = ("wos", "scopus", "eric", "brapci")
+    siglas = [b["sigla"] for b in d["bases"]]
+    faltam = [s for s in alvos if s not in siglas]
+    if faltam:
+        motivo = f"bases do autoteste da citação ausentes: {faltam}"
+        print(f"  [FALHA] {motivo}; atualizar as mutações de _autoteste_dados")
+        return falhas + 1, n, CASOS_DADOS - n, motivo
+    textos = {b["sigla"]: ficha(d, b["sigla"]) for b in d["bases"]}
+    caminho = str(CFG["dados"]["registro"])
+    bd_de = {b["sigla"]: b["id"] for b in d["bases"]}
+    # Identificador que o registro corrente comprovadamente não tem: o caso não depende
+    # do conteúdo registrado.
+    ids = {e.get("id") for base in reg.get("bases", {}).values()
+           for e in base.get("execucoes", []) if isinstance(e, dict)}
+    inexistente = "execucao-inexistente-99"
+    while inexistente in ids:
+        inexistente += "-x"
+
+    def so_a_base(nome, alvo, linha):
+        copia_t = dict(textos)
+        copia_t[alvo] = copia_t[alvo].rstrip("\n") + "\n\n" + linha + "\n"
+        p = _problemas_citacoes_registro(d, reg, copia_t)
+        outras = [x for x in p if not x.startswith(alvo + ":")]
+        testa(nome, bool(p) and not outras)
+
+    so_a_base("citação do registro sem identificador de execução", "wos",
+              f"Verificado por medição — `{caminho}` ({bd_de['wos']})")
+    so_a_base("citação de execução inexistente no registro", "scopus",
+              f"Medido — `{caminho}` ({bd_de['scopus']}/{inexistente})")
+    so_a_base("citação de execução de outra base", "eric",
+              f"Medido — `{caminho}` ({bd_de['wos']}/sonda-de-outra-base)")
+    so_a_base("citação do registro em prosa sem identificador", "brapci",
+              f"Comportamento apurado por medição, com as sondagens em `{caminho}`.")
     if n != CASOS_DADOS:
         print(f"  [FALHA] {n} casos executados, CASOS_DADOS declara {CASOS_DADOS}")
         falhas += 1
@@ -2692,7 +2847,7 @@ def _autoteste_bases(d):
     # as dessas fichas. Base renomeada ou retirada da tabela "Bases de dados" falha aqui,
     # nomeada, em vez de derrubar o autoteste com KeyError.
     siglas = [b["sigla"] for b in d["bases"]]
-    usados = ("wos", "brapci", "eric")
+    usados = ("wos", "scopus", "brapci", "eric")
     ausentes = [s for s in usados if s not in siglas]
     if ausentes:
         print(f"  [FALHA] bases usadas pelo autoteste das fichas ausentes da tabela 'Bases de "
@@ -2756,6 +2911,28 @@ def _autoteste_bases(d):
         print(f"  [FALHA] defeito só na BRAPCI: BRAPCI "
               f"{'reprovou' if por_base['brapci'] else 'passou'}, outras reprovadas "
               f"{sorted(outras)}")
+        falhas += 1
+
+    # Seção 2 da ficha: ID inexistente numa única base reprova só aquela base, nomeando o
+    # ID citado e o critério do protocolo que a ficha deixou de citar.
+    scopus = ficha(d, "scopus")
+    inicio = scopus.index(secao(scopus, "2. Critérios de elegibilidade"))
+    achado = re.search(r"CE\d+", scopus[inicio:])
+    retirado = achado.group(0)
+    novo = f"CE{max(int(c['id'][2:]) for c in d['criterios']) + 1}"
+    mutante = scopus[:inicio + achado.start()] + novo + scopus[inicio + achado.end():]
+    n += 1
+    por_base = {s: problemas_de(s, mutante if s == "scopus" else ficha(d, s))
+                for s in siglas}
+    outras = {s: p for s, p in por_base.items() if s != "scopus" and p}
+    espera = (novo, f"não cita {retirado}")
+    if mutante != scopus and all(any(x in p for p in por_base["scopus"]) for x in espera) \
+            and not outras:
+        print(f"  [ok] ID inexistente na seção 2 da Scopus reprova só a Scopus — nomeia "
+              f"{novo} e a ausência de {retirado}")
+    else:
+        print(f"  [FALHA] ID inexistente na seção 2 da Scopus: Scopus "
+              f"{por_base['scopus'][:1]}, outras reprovadas {sorted(outras)}")
         falhas += 1
     testa("expressão com faceta trocada",
           original.replace("**Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)",

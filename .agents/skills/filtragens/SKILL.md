@@ -8,7 +8,7 @@ description: Conduz as três filtragens de seleção dos estudos, com dois revis
 | | Unidade | Critério | IA |
 | --- | --- | --- | --- |
 | **1ª** | título | pertinência temática preliminar | classificação assistida em paralelo |
-| **2ª** | resumo | critérios de elegibilidade | — |
+| **2ª** | título e resumo | critérios de elegibilidade, inclusive a disponibilidade do texto completo (CE6) | — |
 | **3ª** | texto completo | critérios de elegibilidade | **excluída da decisão** |
 
 ## 1. O critério da 1ª filtragem

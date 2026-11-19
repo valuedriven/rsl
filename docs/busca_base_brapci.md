@@ -2,21 +2,21 @@
 
 ## 1. Estado de verificação da sintaxe
 
-Sintaxe não documentada em fonte alguma: apurada por medição, com as sondagens em `data/registro_execucao.json` (BD4).
+Sintaxe não documentada em fonte alguma: **não verificada por medição** — sondar antes da primeira execução e registrar a execução.
 
 | Elemento | Situação |
 | :--- | :--- |
-| Aspas como frase | **Funcionam** |
-| `AND`, `OR` e parênteses | **Funcionam**; operador insensível à caixa |
-| Truncamento `*` | **Funciona**; não se usa |
+| Aspas como frase | **Não verificado**; sondar antes da primeira execução |
+| `AND`, `OR` e parênteses | **Não verificado**; sondar antes da primeira execução |
+| Truncamento `*` | **Não verificado**; não se usa |
 | Lematização | **Não medida**; flexões explícitas nas strings |
 | Comprimento máximo da consulta | **Não verificado**; a EB4 expandida tem cerca de 4.100 caracteres — sondar antes da primeira execução |
 | Proximidade | **Não verificada** |
 | Exportação — formatos e lote | **Não verificada** |
-| Local de pesquisa | **Seletor único** — Título, Resumo, Palavras-chave, Autor, Todos os campos —, aplicado à consulta inteira |
-| Campos diferentes na mesma consulta | **Não** |
-| Filtros | **Ano inicial e ano final**, tipo de publicação e limite de resultados |
-| Teto de exibição | **1.000 registros**: retorno de exatamente 1.000 é **corte**, não contagem |
+| Local de pesquisa | **Não verificado**; conferir na interface antes da primeira execução |
+| Campos diferentes na mesma consulta | **Não verificado**; conferir na interface antes da primeira execução |
+| Filtros | **Não verificado**; conferir na interface antes da primeira execução |
+| Teto de exibição | **Não verificado**; retorno de exatamente 1.000 será tratado como **corte** até medir |
 
 **Regra de execução, para toda consulta desta ficha.**
 
@@ -37,11 +37,13 @@ Sintaxe não documentada em fonte alguma: apurada por medição, com as sondagen
 | :--- | :---: | :--- | :--- |
 | Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **No filtro da interface** | ano inicial 2017 e final 2026, antes de executar; conferir o ano no retorno |
 | Idiomas — português, inglês e espanhol | CE3 | **Dispensado** | strings em português, e em inglês na faceta 🟦; sem filtro de idioma |
-| Tipo documental | CE4 | **Não** | filtro de tipo não usado |
-| Texto completo | CE5 | **Não** | 2ª filtragem |
-| Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
-| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
+| Tipo documental | CE4 / CE5 | **Não** | filtro de tipo não usado |
+| Texto completo | CE6 | **Não** | 2ª filtragem |
+| Adequação temática — regra de inclusão | CE7 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
+| Adequação temática — não pertinência | CE8 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª |
+| Adequação temática — contra-escopo | CE9 / CE10 / CE11 / CE12 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
+| Domínio de aplicação educacional | CE13 / CE14 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
+| Outros tipos documentais | CE15 | **Não** | 2ª filtragem |
 
 ---
 

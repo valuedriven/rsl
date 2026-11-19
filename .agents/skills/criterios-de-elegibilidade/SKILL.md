@@ -26,7 +26,7 @@ corrigir no
 documento.
 
 Ser artefato de representação não basta. Ser artefato do domínio educacional não
-basta. É o critério (h) que exclui isso.
+basta. É o CE12 que exclui isso.
 
 ## 2. Contribuição contra operação sobre a contribuição
 
@@ -35,7 +35,7 @@ A distinção que decide os casos difíceis.
 | | Exemplo neste recorte | Decisão |
 | --- | --- | --- |
 | **Contribuição** representacional | ontologia que formaliza práticas | incluído |
-| **Operação sobre** a contribuição | ponderar, priorizar, personalizar práticas para contextos; inferir aplicabilidade por transferência entre contextos | excluído — critérios (i) e (b) |
+| **Operação sobre** a contribuição | ponderar, priorizar, personalizar práticas para contextos; inferir aplicabilidade por transferência entre contextos | excluído — regra de borda do CE7 |
 
 A operação pressupõe a representação e não a produz. Estudo cuja **única**
 contribuição seja uma operação é excluído; o que, além dela, represente as próprias
@@ -47,11 +47,11 @@ registra-se só o que pertence ao recorte.
 **Retirar um critério pode tornar elegível o que se queria excluir.**
 
 Ponderação e transferência saíram do escopo do **projeto de pesquisa**, e com elas o
-seu lugar no quadro da divisão do problema e no contra-escopo. Os critérios (b) e (i)
-**permaneceram**, e é por isso que eles continuam a excluir: sem eles, nenhum outro
-critério alcança tal estudo — o (h) não o exclui, porque o estudo versa sobre
-práticas. Dos dois critérios saiu apenas a remissão ao escopo do projeto, que já não
-existia, substituída pela exigência de contribuição representacional.
+seu lugar no quadro da divisão do problema e no contra-escopo. A regra de borda do
+**CE7** **permaneceu**, e é por isso que ela continua a excluir: sem ela, nenhum outro
+critério alcança tal estudo — o **CE12** não o exclui, porque o estudo versa sobre
+práticas. Da regra saiu apenas a remissão ao escopo do projeto, que já não existia,
+substituída pela exigência de contribuição representacional.
 
 Antes de suprimir um critério, perguntar sempre: **que critério passa a excluir isto?**
 Não havendo resposta, o critério fica.

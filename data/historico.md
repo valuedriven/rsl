@@ -44,3 +44,28 @@ As expressões que se executam passam a ser **bloco literal único**, submetido 
 `--conferir` ganha três dimensões: bloco de expressão executada, de fidelidade ou de sonda não referencia conjunto `#n`; o conjunto de termos do bloco confere com as strings das facetas que a expressão declara, ignorando operador, campo, proximidade (`NEAR/n`, `W/n`) e valor de filtro; e bloco na expressão derivada padrão reprova — a forma longa, quando a ficha a declara, é representação não executada e fica fora. A conferência compara termos, não topologia: termo posto no grupo errado ou operador trocado continua guardado pela coerência pós-execução (`EB4 = EB2 ∪ EB3`, `EB5 ⊃ EB4`).
 
 **Não verificado:** o comprimento máximo da consulta aceito pela WoS, pela Scopus e pela BRAPCI. As consultas expandidas têm cerca de 9.900, 10.000 e 4.100 caracteres; a aceitação se mede na primeira execução, com a sonda de EB5 e depois a de EB4, registrada em `data/registro_execucao.json`. Recusa por extensão vira emenda de partição, com as mesmas âncoras em todas as partes e união por deduplicação; a emenda declara `- Execução: particionada` e escreve as partes literais. Nenhuma execução está registrada (`data/registro_execucao.json` ausente, PD02): nenhuma contagem fica vencida por esta decisão.
+
+## 2026-11-19 — Citações de medição sem lastro rebaixadas (decisão do ReT)
+
+As quatro fichas afirmavam verificação por medição e citavam `data/registro_execucao.json` como fonte, mas o registro não existe no repositório. Decisão: **rebaixar para Não verificado**, sem reconstituir as medições, porque não há dado que as sustente. Alcance: `docs/busca_base_wos.md` e `docs/busca_base_scopus.md`, seção 1; `docs/busca_base_eric.md` e `docs/busca_base_brapci.md`, cabeçalho e linhas de medição que dele dependem. A medição fica remetida à primeira execução e se registra então, com a execução nomeada. As strings e a composição das expressões não mudam; nenhuma contagem é afetada.
+
+## 2026-11-19 — Fundamento quantitativo da emenda v2 não registrado
+
+A nota de emenda de 2026-11-17 afirma que "a execução revelou volume incompatível com a triagem no prazo", mas não traz contagem, e as contagens da execução da versão 1 não foram registradas nem estão com o pesquisador. Alcance: o fundamento quantitativo da emenda v2 fica declarado **não registrado**; nenhuma contagem é reconstituída de memória. A justificativa conceitual da emenda — QER2 e QER3 constitutivas do escopo — permanece, e é ela que sustenta a forma vigente.
+
+## 2026-11-19 — Revisão geral do projeto como skill própria (decisão do ReT)
+
+A revisão geral do projeto passa a ser procedimento reproduzível, na skill `revisao-geral-do-projeto`, separada da `parecer-sobre-protocolo`, que fica restrita à avaliação de parecer externo. A revisão geral **produz** achados percorrendo o estado do projeto; o parecer **confere** achados que chegam prontos. A skill nova remete ao README os comandos de conferência e à `parecer-sobre-protocolo` as classes de achado, sem os copiar. Alcance: procedimento do agente; os instrumentos da revisão não mudam.
+
+## 2026-11-19 — Critérios de elegibilidade no protocolo (decisão do ReT)
+
+O protocolo passa a enunciar sozinho o que a triagem aplica. A regra operacional de inclusão só existia no plano (`01_plano.md`, 2.4), embora o README declare o protocolo prevalente.
+
+- A regra única de inclusão — o estudo formaliza, no domínio educacional, práticas do processo de ensino-aprendizagem **e/ou** os fatores situacionais que as condicionam — vira o critério de inclusão **CE7**, com a **regra de exceção** e a **regra de borda** em nota imediatamente após a tabela. O plano substitui a regra e a lista "Ficam fora do recorte" por remissão ao protocolo.
+- O contra-escopo vira quatro critérios de exclusão nomeados, **CE9 a CE12**, um por item, para que a exclusão da 3ª filtragem cite o motivo por ID no fluxograma PRISMA. A não pertinência temática geral fica no **CE8**.
+- As revisões sistemáticas e de escopo saem do CE4 e entram pelo **CE5**, com destino declarado: conjunto suplementar, com contagem própria, fora do portfólio de evidência primária.
+- A localização de itens passa a **CE6** e declara a verificação na **segunda filtragem, de título e resumo**.
+- A numeração passa de CE1–CE9 a **CE1–CE15**: os antigos CE7, CE8 e CE9 passam a CE13, CE14 e CE15.
+- A coluna "Justificativa" passa a estar preenchida em todas as linhas; estavam vazias as de localização de itens e de adequação temática.
+
+Alcance: **elegibilidade** — muda o que entra e por qual motivo; as strings e as expressões não mudam, e a busca não é reexecutada. As quatro fichas, o README e as skills são atualizados para os IDs vigentes. `--conferir` ganha duas dimensões: reprova critério de elegibilidade com justificativa vazia, e reprova, por base, a ficha cuja seção 2 não cite exatamente os IDs da tabela do protocolo. Cada uma tem caso de autoteste que injeta o defeito e prova a reprovação.

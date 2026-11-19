@@ -1,6 +1,6 @@
 ---
 name: parecer-sobre-protocolo
-description: Avalia um parecer externo sobre o protocolo, ou faz a autoavaliação crítica dos instrumentos, conferindo cada achado contra o texto corrente antes de o aceitar. Use ao receber crítica, revisão ou parecer sobre os documentos da revisão, e ao auditar o protocolo em busca de divergências entre instrumentos.
+description: Avalia um parecer externo sobre o protocolo, conferindo cada achado contra o texto corrente antes de o aceitar. Use ao receber crítica, revisão ou parecer sobre os documentos da revisão. Para a revisão geral do projeto, que produz os achados, use `revisao-geral-do-projeto`.
 ---
 
 # Avaliar um parecer sobre o protocolo

@@ -14,7 +14,7 @@
 | Intervalos de `PY=` de até 5 anos (recomendação) | Verificado | idem |
 | Filtro de texto completo em sintaxe de consulta | **Não existe** | ausência na página de *field tags* |
 | Valores exatos admitidos em `DT=` e `LA=` | **Não verificados** | conferir na lista da interface |
-| `NEAR/x` entre grupos entre parênteses | **Verificado por medição** | `data/registro_execucao.json` (BD1) |
+| `NEAR/x` entre grupos entre parênteses | **Não verificado** | medir na primeira execução e registrar a execução |
 | Distância padrão de `NEAR` sem número | **Não verificada** | — |
 | Comprimento máximo da consulta | **Não verificado** | medir na primeira execução; a EB4 expandida tem cerca de 9.900 caracteres |
 | Tratamento de diacríticos | **Não verificado** | as strings trazem as duas grafias |
@@ -30,11 +30,13 @@ As expressões usam `TS=`, `PY=`, `DT=` e `NEAR/5`. Valor de `DT=` recusado pela
 | :--- | :---: | :--- | :--- |
 | Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Sim** | `AND PY=(2017-2026)` |
 | Idiomas — português, inglês e espanhol | CE3 | Em variante | `AND LA=(English OR Portuguese OR Spanish)` |
-| Tipo documental | CE4 | **Sim** | `AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")` |
-| Disponibilidade de texto completo | CE5 | **Não** | 2ª filtragem |
-| Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
-| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
+| Tipo documental | CE4 / CE5 | **Sim** | `AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")` |
+| Disponibilidade de texto completo | CE6 | **Não** | 2ª filtragem |
+| Adequação temática — regra de inclusão | CE7 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
+| Adequação temática — não pertinência | CE8 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª |
+| Adequação temática — contra-escopo | CE9 / CE10 / CE11 / CE12 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
+| Domínio de aplicação educacional | CE13 / CE14 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
+| Outros tipos documentais | CE15 | **Não** | 2ª filtragem |
 
 ---
 

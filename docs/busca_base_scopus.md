@@ -12,7 +12,7 @@
 | `OPENACCESS(0` ou `1)` | Verificado | idem |
 | `AND`, `OR`, `AND NOT`; precedência `OR` → `AND` → `AND NOT` | Verificado; a precedência muda em 2026 | idem |
 | Truncamento `*` e `?`, mínimo de 3 caracteres antes do curinga | Verificado | idem |
-| Proximidade `W/n` e `PRE/n` | Verificados; `W/5` **medido** entre termos simples e entre grupos pequenos de frases | idem e `data/registro_execucao.json` (BD2) |
+| Proximidade `W/n` e `PRE/n` | Verificados em fonte oficial; `W/5` **não medido** | idem |
 | `W/5` entre os grupos inteiros das duas âncoras | **Não medido** | medir na primeira execução; recusa leva à variante "Redução por recusa da interface" |
 | `{}` frase exata *versus* `""` frase aproximada | Verificado | idem |
 | Limite de operadores por consulta | **Não documentado** | — |
@@ -31,11 +31,13 @@ Todas as facetas vão entre parênteses explícitos; nenhuma expressão depende 
 | :--- | :---: | :--- | :--- |
 | Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Sim** | `AND PUBYEAR > 2016 AND PUBYEAR < 2027` |
 | Idiomas — português, inglês e espanhol | CE3 | **Sim** | `AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish))` |
-| Tipo documental | CE4 | **Sim** | `AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` |
-| Disponibilidade de texto completo | CE5 | **Não** | 2ª filtragem; `OPENACCESS(1)` só como contingência |
-| Adequação temática | CE6 | **Não** | filtragens do Módulo 3, Etapa 3 |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
-| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
+| Tipo documental | CE4 / CE5 | **Sim** | `AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` |
+| Disponibilidade de texto completo | CE6 | **Não** | 2ª filtragem; `OPENACCESS(1)` só como contingência |
+| Adequação temática — regra de inclusão | CE7 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
+| Adequação temática — não pertinência | CE8 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª |
+| Adequação temática — contra-escopo | CE9 / CE10 / CE11 / CE12 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
+| Domínio de aplicação educacional | CE13 / CE14 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
+| Outros tipos documentais | CE15 | **Não** | 2ª filtragem |
 
 ---
 
@@ -156,7 +158,7 @@ Disparo: a anatomia da perda atribui a perda à proximidade, ou a interface recu
 
 #### Sem limite de tipo documental
 
-Disparo: medir o efeito do critério CE4. Forma: EB4 sem a cláusula `DOCTYPE`; reportar a diferença de retorno.
+Disparo: medir o efeito dos critérios CE4 e CE5. Forma: EB4 sem a cláusula `DOCTYPE`; reportar a diferença de retorno.
 
 #### Redução por recusa da interface
 

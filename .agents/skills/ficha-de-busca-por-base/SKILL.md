@@ -99,6 +99,13 @@ que se registra:
 | **Verificado por medição** | sondagem registrada com consulta, retorno e captura, no registro de execução |
 | **Não verificado** | escreve-se assim; nunca se presume pela documentação de outra base |
 
+**Toda menção ao arquivo de registro de execução nomeia a execução.** Escrever o caminho do
+registro — `data/registro_execucao.json` — em qualquer linha da ficha, em tabela ou em prosa,
+só é correto junto da citação `(BDn/<id>)`, com `BDn` da própria base e a execução existente
+no registro; a conferência dos dados reprova a ficha sem esse lastro, e só aquela base.
+Instrução que apenas manda registrar diz "registro de execução", sem o caminho. O estado
+**Verificado por medição** exige essa citação; sem ela, o estado é **Não verificado**.
+
 **Documentação não é comportamento.** Bases já contradisseram a própria documentação —
 curinga que devolve zero, operador que zera o retorno quando há grupo, teto de retorno não
 anunciado. O que a expressão usa e só a documentação sustenta fica marcado como a medir, e a

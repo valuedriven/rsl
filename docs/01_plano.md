@@ -73,13 +73,7 @@
 
 ## 2.4 Contra-escopo
 
-| Ficam fora do recorte: |
-| :---- |
-
-| •  a representação de evidências científicas, de alegações sobre efeitos e da proveniência dos estudos; •  o apoio à decisão docente e a recomendação dirigida ao professor; •  a instanciação e a operacionalização dos artefatos em estruturas e sistemas computacionais — bases de conhecimento, grafos de conhecimento, dados conectados, sistemas baseados em ontologias; •  os artefatos cujo objeto de representação no domínio educacional seja alheio tanto às práticas de ensino-aprendizagem quanto aos fatores situacionais que condicionam a sua aplicação. |
-| :---- |
-
-| *Regra de borda: o estudo é incluído quando, além da contribuição excluída, formalizar práticas e/ou fatores situacionais, e registra-se no fichamento só o que pertence a este recorte (o estudo que instancia um grafo de conhecimento e especifica um modelo conceitual das práticas entra pelo modelo, não pelo grafo). OPERAÇÕES sobre fatores situacionais — ponderação, priorização e personalização de práticas, inferência de aplicabilidade por transferência entre contextos — não justificam inclusão por si. Critérios de elegibilidade: protocolo (`docs/03`).* |
+| Recorte e exclusões temáticas: regra única de inclusão, regras de exceção e de borda e contra-escopo estão nos critérios de elegibilidade do protocolo (`docs/03`). |
 | :---- |
 
 # 3. Cronograma

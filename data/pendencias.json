@@ -9,10 +9,10 @@
     {
       "id": "PD01",
       "categoria": "dados",
-      "descricao": "data/sementes.json ausente: o metadado de conferência das 10 sementes do protocolo não existe no repositório.",
-      "origem": "python3 src/protocolo.py --pendencias",
+      "descricao": "Metadado de conferência das 10 sementes do protocolo não preenchido: data/sementes.json existe, mas os campos verificacao, escopo, tipo, alinhamento, nota, veiculo_conferido e eric estão vazios nas 10.",
+      "origem": "data/sementes.json (10 estudos, campos de conferência vazios); python3 src/protocolo.py --pendencias",
       "bloqueia": "--conferir-dados; teste de aderência (M3/E2)",
-      "acao_sugerida": "rodar python3 src/protocolo.py --sincronizar e preencher o metadado de conferência",
+      "acao_sugerida": "preencher o metadado de conferência das 10 sementes; --sincronizar reconcilia a ligação e não preenche a conferência",
       "responsavel": "pesquisador",
       "estado": "aberta"
     },
@@ -138,7 +138,8 @@
       "bloqueia": "nada da revisão; reduz o risco de defeito nos scripts",
       "acao_sugerida": "implementar, rodar a verificação, revisar e arquivar",
       "responsavel": "pesquisador / agente",
-      "estado": "aberta"
+      "estado": "resolvida",
+      "resolucao": "Change arquivada em openspec/changes/archive/2026-11-18-parametros-scripts-e-autoteste/, com as 21 tarefas concluídas; commit 726280a (2026-11-18)."
     },
     {
       "id": "PD14",
@@ -148,7 +149,8 @@
       "bloqueia": "nada",
       "acao_sugerida": "fazer commit do arquivamento",
       "responsavel": "pesquisador",
-      "estado": "aberta"
+      "estado": "resolvida",
+      "resolucao": "Arquivamento em openspec/changes/archive/2026-11-18-protocolo-fonte-unica/ commitado em 7249dac (2026-11-18); os arquivos constam de git ls-files."
     },
     {
       "id": "PD15",
