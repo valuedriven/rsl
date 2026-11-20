@@ -1,22 +1,19 @@
 """Instrumento do teste de aderência: a planilha a preencher e o ensaio seco.
 
-As referências, as bases de cada semente e o papel vêm do conjunto-semente
-(`[documentos] sementes`); o metadado das sementes (`[dados] sementes`) guarda só o que é
-autoral — verificação, escopo, tipo, alinhamento,
-nota —, ligado por DOI ou título, de modo que o rótulo `id` pode mudar sem perder o
-metadado. A planilha é gravada em `[saidas] aderencia`.
+Tudo o que a planilha traz de cada semente — referência, bases, papel e os dados de
+conferência (verificação, tipo, alinhamento…) — vem do arquivo de sementes
+(`[documentos] sementes`), lido por `ctx.protocolo()`. Não há outro arquivo de semente. A
+planilha é gravada em `[saidas] aderencia`.
 
 O ensaio seco — o que cada título entrega às facetas — é impresso no terminal, não
-gravado: o instrumento é a planilha. Entrada do metadado sem correspondência no
-conjunto-semente é reportada, para decisão.
+gravado: o instrumento é a planilha. O ensaio não é declaração de faceta: o campo
+`facetas` é juízo do pesquisador e não se copia dele.
 """
 
 import csv
-import json
 
-from .config import relativo
-from .dados import campo_pendente, ligacao_semente
-from .erros import DadosInvalidos
+from . import gramatica as G
+from .dados import campo_pendente
 from .markdown import normaliza
 from .saida import Saida
 
@@ -29,7 +26,6 @@ def colunas(d):
         ("autores_ano", "autoria abreviada e ano"),
         ("titulo", "título, como consta na referência do conjunto-semente"),
         ("tipo", "primário ou secundário — preencher no arquivo de sementes"),
-        ("escopo", "DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher no arquivo de sementes"),
         ("verificacao", "estado de conferência da referência — preencher no arquivo de "
                         "sementes"),
         ("papel", "papel da semente no conjunto: desenvolvimento ou validação — do "
@@ -46,34 +42,15 @@ def colunas(d):
 
 
 def carrega(ctx, d):
-    autorais = ctx.config.valor("planilha.campos_autorais")
-    caminho = ctx.config.caminho("dados.sementes")
+    """Termos de cada faceta e as sementes lidas, com a marca de conferência preenchida."""
     facetas = {"facetas": [{"faceta": fid, "termos": v["termos"]}
                            for fid, v in d["strings"].items()]}
-    if not caminho.exists():
-        raise DadosInvalidos(f"{relativo(caminho)} não encontrado: é onde vive o metadado "
-                             f"autoral das sementes")
-    try:
-        conteudo = json.loads(caminho.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as e:
-        raise DadosInvalidos(f"{relativo(caminho)} ilegível: {e}") from None
-    meta = {e["ligacao"]: e for e in conteudo.get("estudos", []) if e.get("ligacao")}
-
+    conferencia = [c.chave for c in G.CONFERENCIA]
     estudos = []
     for ref in d["sementes"]:
         e = dict(ref)
-        # A ligação é por DOI ou título: o `id` é rótulo e pode mudar sem perder o metadado.
-        m = meta.get(ligacao_semente(ref), {})
-        for c in autorais:
-            e[c] = m.get(c, "")
-        e["_meta"] = any(str(e.get(c) or "").strip() for c in autorais)
+        e["_meta"] = any(str(e.get(c) or "").strip() for c in conferencia)
         estudos.append(e)
-
-    atuais = {ligacao_semente(s) for s in d["sementes"]}
-    orfas = [k for k in meta if k not in atuais]
-    if orfas:
-        print(f"AVISO: {len(orfas)} entrada(s) de {caminho.name} sem semente no protocolo: "
-              f"{len(orfas)} — decidir: remover com registro ou reincluir no protocolo")
     return facetas, estudos
 
 
@@ -108,8 +85,7 @@ def relata_ensaio(d, estudos, facetas):
 
 def _pendentes(estudos):
     """Sementes com campo de metadado ainda não conferido, e quais campos são."""
-    rotulo = {"verificacao": "verificação", "escopo": "escopo",
-              "tipo": "tipo", "alinhamento": "alinhamento"}
+    rotulo = {"verificacao": "verificação", "tipo": "tipo", "alinhamento": "alinhamento"}
     saida = []
     for e in estudos:
         campos = [rotulo[c] for c in rotulo if campo_pendente(e.get(c, ""))]
@@ -124,10 +100,9 @@ def linhas_planilha(d, estudos):
         for b in (x["sigla"] for x in d["bases"]):
             linhas.append({
                 "id": e["id"],
-                "autores_ano": f"{e['autores'].split(',')[0].strip()} et al. {e['ano']}",
+                "autores_ano": f"{e['autores'][0].split(',')[0].strip()} et al. {e['ano']}",
                 "titulo": e["titulo"],
                 "tipo": e.get("tipo", ""),
-                "escopo": e.get("escopo", ""),
                 "verificacao": e.get("verificacao", ""),
                 "papel": e["papel"],
                 "base": b,
@@ -161,11 +136,11 @@ def cmd_planilha(ctx, a=None):
     alinhadas = sum(1 for e in estudos
                     if e.get("alinhamento")
                     and not str(e["alinhamento"]).startswith(("A CONFERIR", "a conferir")))
-    print(f"metadados: {com_entrada}/{len(estudos)} com campo autoral preenchido; "
+    print(f"conferência: {com_entrada}/{len(estudos)} com campo de conferência preenchido; "
           f"{confirmadas} com verificação confirmada; {alinhadas} com alinhamento conferido")
     pendentes = _pendentes(estudos)
     if pendentes:
-        print("pendências de metadados:")
+        print("pendências de conferência:")
         for e, campos in pendentes:
             print(f"  {e['id']:>4}. {e['chave']}: {', '.join(campos)}")
     relata_ensaio(d, estudos, facetas)

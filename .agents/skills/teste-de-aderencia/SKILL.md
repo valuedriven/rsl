@@ -24,13 +24,19 @@ registro na coluna `recuperada`. A razão impressa é sobre as sementes informad
 definitivo são as sementes que cada base indexa.
 
 O conjunto-semente é lido do arquivo de sementes (`[documentos] sementes` do
-`config.toml`); a regra de ajuste e o limiar, do protocolo. As exportações das bases são a
+`config.toml`), o único lugar de dado de semente; a regra de ajuste e o limiar, do
+protocolo. No arquivo, o campo `bases` declara **indexação**, não recuperação: a
+recuperação é o resultado deste teste e fica na planilha. O campo `facetas`, quando o
+pesquisador o preenche, é o contraponto da anatomia da perda: semente declarada numa
+faceta sem termo dela no título ou no resumo aponta lacuna de vocabulário. Semente retirada
+muda o denominador; recall de antes e de depois só se comparam com o registro da retirada
+em `data/historico.md` (ver `conjunto-semente`, §4). As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
 `busca registrar` antes do teste; ver `README.md`, seção Scripts.
 
 O instrumento de campo é `data/semente_aderencia.csv` — uma linha por semente e por
 base, gerado por `python3 -m rsl sementes planilha`. O preenchimento das etapas 1 e 2 e o
-significado de cada coluna estão em `conjunto-semente`, §6. A linha de comando não
+significado de cada coluna estão em `conjunto-semente`, §7. A linha de comando não
 substitui esse registro: ela mede, o instrumento documenta.
 
 ## 2. Limiar e consequência

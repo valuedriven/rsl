@@ -1,9 +1,9 @@
-"""Arquivos alimentados: conferência contra o protocolo, sincronização das sementes e
-relato de pendências.
+"""Arquivos alimentados: conferência contra o protocolo e relato de pendências.
 
 Nada aqui é derivado de Markdown. São arquivos que se alimentam (`[dados]` do
-config.toml): os metadados autorais de cada semente e o registro documental das
-execuções. O que o protocolo já diz não se copia para JSON — lê-se do documento.
+config.toml): o registro documental das execuções e a evidência bruta. O que o protocolo
+ou o arquivo de sementes (`[documentos] sementes`) já dizem não se copia para JSON —
+lê-se do documento, por `ctx.protocolo()`.
 
 Arquivo ausente ou ilegível sai com o código DADOS; conteúdo incoerente com o protocolo,
 com REPROVADO; ficha fora da gramática, com PROTOCOLO_ILEGIVEL, só na sua base.
@@ -12,6 +12,7 @@ com REPROVADO; ficha fora da gramática, com PROTOCOLO_ILEGIVEL, só na sua base
 import csv
 import json
 import pathlib
+import re
 
 from . import gramatica as G
 from .config import RAIZ, relativo
@@ -21,23 +22,14 @@ from .fichas import base_derivada, ficha
 from .markdown import normaliza
 from .saida import Saida
 
-CMD_SINCRONIZAR = "python3 -m rsl sementes sincronizar"
 CMD_PENDENCIAS = "python3 -m rsl pendencias"
 CMD_REGISTRAR = "python3 -m rsl busca registrar"
 CMD_EXPORTAR = "python3 -m rsl termos exportar"
 CMD_VALIDAR = "python3 -m rsl termos validar"
 STATUS_EXECUCAO = ("valida", "divergente_justificada")
-VERSAO_SEMENTES = 2
-
-
-def leia_sementes(ctx):
-    return ("AUTORAL. Metadados de conferência de cada semente. As referências, o ano, o "
-            "DOI, as bases esperadas e a chave de citação vêm do protocolo "
-            f"({ctx.caminho_protocolo}). `ligacao` é a ligação com o "
-            "protocolo, por DOI ou título — não é conteúdo bibliográfico e não se edita; "
-            "`id` é rótulo e pode mudar sem perder o metadado. "
-            f"`{CMD_SINCRONIZAR}` casa por DOI ou título e preserva o que foi conferido. "
-            f"Semente retirada do protocolo permanece, e `{CMD_PENDENCIAS}` a reporta.")
+# Subpasta de `[dados] evidencia` com a evidência bruta das referências das sementes,
+# nomeada `SEn_…`; só ela é conferida contra o arquivo de sementes (D6).
+SUBPASTA_REFERENCIAS = "referencias"
 
 
 def le_json(caminho):
@@ -57,46 +49,6 @@ def exige_json(caminho):
     if erro:
         raise DadosInvalidos(erro)
     return dado
-
-
-def ligacao_semente(e):
-    """Ligação de uma semente com o protocolo: DOI quando houver; senão, título normalizado.
-
-    É a chave que a sincronização usa e que os consumidores devem usar: o `id` é rótulo,
-    não identidade, e pode mudar sem que o metadado autoral se perca.
-    """
-    doi = (e.get("doi") or "").strip().lower()
-    return ("doi:" + doi) if doi else ("ti:" + normaliza(e.get("titulo", ""))[:120])
-
-
-def _indice_sementes(dado):
-    return {e.get("id"): e for e in (dado or {}).get("estudos", []) if e.get("id")}
-
-
-def problemas_sementes(ctx, dado, d):
-    problemas, avisos = [], []
-    nome = ctx.config.caminho("dados.sementes").name
-    if not isinstance(dado, dict) or "estudos" not in dado:
-        return [f"{nome} sem a chave `estudos`"], []
-    autorais = ctx.config.valor("planilha.campos_autorais")
-    idx = _indice_sementes(dado)
-    protocolo = {e["id"]: e for e in d["sementes"]}
-    for ident, e in protocolo.items():
-        meta = idx.get(ident)
-        if meta is None:
-            problemas.append(f"sementes: {ident} ({ligacao_semente(e)}) sem metadados")
-            continue
-        if meta.get("ligacao") and meta["ligacao"] != ligacao_semente(e):
-            avisos.append(f"sementes: {ident} tem ligação {meta['ligacao']!r} e o protocolo "
-                          f"{ligacao_semente(e)!r} — conferir")
-        for campo in autorais:
-            if campo not in meta:
-                problemas.append(f"sementes: {ident} sem o campo {campo!r}")
-    for ident in idx:
-        if ident not in protocolo:
-            avisos.append(f"sementes: {ident} fora do protocolo, metadados preservados — "
-                          f"decidir")
-    return problemas, avisos
 
 
 def problemas_registro(ctx, dado, bds):
@@ -196,18 +148,34 @@ def problemas_citacoes_registro(ctx, d, registro):
     return [p if isinstance(p, Problema) else Problema(p) for p in problemas]
 
 
+def problemas_evidencia(d, pasta):
+    """Evidência bruta de semente que não está no arquivo de sementes (D6).
+
+    Todo arquivo sob `pasta/referencias/` (`pasta` é `[dados] evidencia`) cujo nome comece
+    por `SEn_` pertence à semente `SEn`. Se o `id` não está no arquivo de sementes, a
+    semente foi retirada (ou renumerada) e a evidência ficou: reprova, nomeando o arquivo.
+    As outras subpastas da evidência não são conferidas. Não confere se a evidência de um
+    `id` existente é mesmo daquela semente.
+    """
+    pasta = pathlib.Path(pasta) / SUBPASTA_REFERENCIAS
+    if not pasta.is_dir():
+        return []
+    ids = {e["id"] for e in d["sementes"]}
+    padrao = re.compile(rf"({G.I_SE.padrao.pattern})_")
+    problemas = []
+    for arq in sorted(x for x in pasta.rglob("*") if x.is_file()):
+        m = padrao.match(arq.name)
+        if m and m.group(1) not in ids:
+            problemas.append(f"evidência {relativo(arq)} é da semente {m.group(1)}, que não "
+                             f"está no arquivo de sementes — remover a evidência da semente "
+                             f"retirada, ou renomeá-la para o id novo (renumeração)")
+    return problemas
+
+
 def conferir_dados(ctx):
     """Confere os arquivos alimentados contra o documento. Devolve (Resultado, avisos)."""
     d = ctx.protocolo()
     problemas, avisos = Resultado(), []
-
-    dado, erro = le_json(ctx.config.caminho("dados.sementes"))
-    if erro:
-        problemas.append(Problema(f"{erro} — rode  {CMD_SINCRONIZAR}", Saida.DADOS))
-    else:
-        p, a = problemas_sementes(ctx, dado, d)
-        problemas += [Problema(x) for x in p]
-        avisos += a
 
     registro, erro = le_json(ctx.config.caminho("dados.registro"))
     if erro:
@@ -216,6 +184,8 @@ def conferir_dados(ctx):
         problemas += [Problema(x) for x in problemas_registro(
             ctx, registro, [b["id"] for b in d["bases"]])]
 
+    problemas += [Problema(x) for x in problemas_evidencia(
+        d, ctx.config.caminho("dados.evidencia"))]
     problemas += problemas_bases(ctx, d)
     problemas += problemas_citacoes_registro(ctx, d, registro)
     return problemas, avisos
@@ -228,100 +198,15 @@ def cmd_conferir_dados(ctx, a=None):
     if problemas:
         imprime_problemas(problemas)
         return problemas.codigo
-    pasta = relativo(ctx.config.caminho("dados.sementes").parent)
+    pasta = relativo(ctx.config.caminho("dados.registro").parent)
     print(f"Arquivos alimentados de {pasta}/ na forma esperada.")
     return Saida.OK
 
 
-# ------------------------------------------------------------------- sincronização
-def sincroniza_sementes(ctx, d, existente):
-    """Casa por DOI ou título, com o id como último recurso; preserva o conferido."""
-    autorais = ctx.config.valor("planilha.campos_autorais")
-    antigos = (existente or {}).get("estudos", [])
-    por_ligacao = {}
-    for e in antigos:
-        por_ligacao.setdefault(e.get("ligacao"), []).append(e)
-    usados, estudos, novos, religados = set(), [], [], []
-    for e in d["sementes"]:
-        ligacao = ligacao_semente(e)
-        escolhido = None
-        for cand in por_ligacao.get(ligacao, []):
-            if id(cand) not in usados:
-                escolhido = cand
-                break
-        if escolhido is None:
-            for cand in antigos:
-                if id(cand) in usados or cand.get("id") != e["id"]:
-                    continue
-                escolhido = cand
-                religados.append(f"{e['id']}: ligação atualizada de "
-                                 f"{cand.get('ligacao')!r} para {ligacao!r}")
-                break
-        if escolhido is None:
-            meta = {"id": e["id"], "ligacao": ligacao}
-            meta.update({campo: "" for campo in autorais})
-            novos.append(e["id"])
-            estudos.append(meta)
-            continue
-        usados.add(id(escolhido))
-        meta = {"id": e["id"], "ligacao": ligacao}
-        for campo in autorais:
-            meta[campo] = escolhido.get(campo, "")
-        estudos.append(meta)
-    orfaos = [x for x in antigos if id(x) not in usados]
-    return ({"_leia": leia_sementes(ctx), "versao": VERSAO_SEMENTES, "estudos": estudos},
-            novos, religados, orfaos)
-
-
-def _escreve(caminho, dado):
-    caminho.parent.mkdir(parents=True, exist_ok=True)
-    caminho.write_text(json.dumps(dado, ensure_ascii=False, indent=2) + "\n",
-                       encoding="utf-8")
-
-
-def cmd_sincronizar(ctx, a=None):
-    """Reconcilia o arquivo de sementes com o protocolo. Não cria nem grava derivado."""
-    from .conferencia import conferir                               # noqa: PLC0415
-    problemas = conferir(ctx)
-    if problemas:
-        print("Documento fora da forma esperada; nada foi sincronizado:")
-        for p in problemas:
-            print("  -", p)
-        return problemas.codigo
-    d = ctx.protocolo()
-    caminho = ctx.config.caminho("dados.sementes")
-    nome = caminho.name
-
-    sem, erro = le_json(caminho)
-    if erro and caminho.exists():
-        raise DadosInvalidos(erro)
-    dados_s, novos_s, religados, orfaos = sincroniza_sementes(ctx, d, sem or {})
-
-    if sem == dados_s:
-        print(f"  {nome}: sem mudança")
-        mudou = False
-    else:
-        _escreve(caminho, dados_s)
-        print(f"  {nome}: gravado")
-        mudou = True
-
-    if novos_s:
-        print(f"\n  semente(s) acrescentada(s): {', '.join(novos_s)}")
-    if religados:
-        print("\n  ligação de semente refeita:")
-        for x in religados:
-            print("    ~", x)
-    if orfaos:
-        print(f"\n  semente(s) fora do protocolo, metadados preservados: "
-              f"{', '.join(x.get('id', '?') for x in orfaos)}")
-    if not mudou:
-        print("\nNada a gravar: o metadado das sementes já reflete o protocolo.")
-    return Saida.OK
-
-
 # ---------------------------------------------------------------------- pendências
-CAMPOS_PENDENTES = (("verificacao", "verificação"), ("escopo", "escopo"),
-                    ("tipo", "tipo"), ("alinhamento", "alinhamento"))
+# Campos de conferência cujo valor vazio é juízo ou conferência ainda não feitos.
+CAMPOS_PENDENTES = ((G.C_VERIFICACAO.chave, "verificação"), (G.C_TIPO.chave, "tipo"),
+                    (G.C_ALINHAMENTO.chave, "alinhamento"))
 
 
 def campo_pendente(valor):
@@ -329,38 +214,45 @@ def campo_pendente(valor):
     return not v or v.startswith(("A CONFERIR", "a conferir")) or "PENDÊNCIA" in v
 
 
+def pendencias_sementes(d):
+    """Dado ainda não obtido e juízo ainda não feito, por semente, sem reprovar (D4).
+
+    DOI ausente; facetas a informar; semente de validação cujas facetas não incluem
+    nenhuma âncora (a regra está em aberto: só se relata); campo de conferência vazio.
+    Com `facetas` vazia, relata-se só "facetas a informar": a falta de âncora é
+    consequência dela, não segundo juízo pendente.
+    """
+    ancoras_ = set(d["ancoras"])
+    linhas = []
+    for e in d["sementes"]:
+        abertos = []
+        if not e[G.C_DOI.chave]:
+            abertos.append("DOI ausente")
+        if not e[G.C_FACETAS.chave]:
+            abertos.append("facetas a informar")
+        elif e["papel"] == G.PAPEL_VALIDACAO and not ancoras_ & set(e[G.C_FACETAS.chave]):
+            abertos.append(f"validação sem faceta âncora ({', '.join(d['ancoras'])}) — "
+                           f"regra a decidir")
+        abertos += [rotulo for campo, rotulo in CAMPOS_PENDENTES
+                    if campo_pendente(e.get(campo))]
+        if abertos:
+            linhas.append(f"[semente {e['id']} {e['chave']}] pendente: {', '.join(abertos)}")
+    return linhas
+
+
 def cmd_pendencias(ctx, a=None):
     """Relata o que está aberto, sem escrever arquivo algum."""
     from .termos.planejamento import STATUS_MANUAL                  # noqa: PLC0415
     d = ctx.protocolo()
     linhas = []
-    sementes_ = ctx.config.caminho("dados.sementes")
     registro_ = ctx.config.caminho("dados.registro")
     validacao = ctx.config.caminho("dados.validacao")
 
-    for caminho, acao in ((sementes_, f"rode  {CMD_SINCRONIZAR}"),
-                          (registro_, "reconstitua o registro a partir das fichas e do que "
-                                      "a base exibiu")):
-        if not caminho.exists():
-            linhas.append(f"[ausente] {relativo(caminho)} — {acao}")
+    if not registro_.exists():
+        linhas.append(f"[ausente] {relativo(registro_)} — reconstitua o registro a partir "
+                      f"das fichas e do que a base exibiu")
 
-    s, erro = le_json(sementes_)
-    if erro is None:
-        protocolo = {e["id"]: e for e in d["sementes"]}
-        for ident, meta in _indice_sementes(s).items():
-            if ident not in protocolo:
-                linhas.append(f"[semente fora do protocolo] {ident} — decidir: remover com "
-                              f"registro ou reincluir no protocolo")
-                continue
-            vazios = [rotulo for campo, rotulo in CAMPOS_PENDENTES
-                      if campo_pendente(meta.get(campo))]
-            if vazios:
-                chave = protocolo[ident]["chave"]
-                linhas.append(f"[semente {ident} {chave}] pendente: {', '.join(vazios)}")
-        faltam = [e["id"] for e in d["sementes"] if e["id"] not in _indice_sementes(s)]
-        if faltam:
-            linhas.append(f"[sementes] {len(faltam)} sem metadados: {', '.join(faltam)} — "
-                          f"rode  {CMD_SINCRONIZAR}")
+    linhas += pendencias_sementes(d)
 
     registro, erro = le_json(registro_)
     if erro is not None:
@@ -418,7 +310,7 @@ def cmd_pendencias(ctx, a=None):
                 f"[{b['base']['nome']}] {len(pendentes)} termo(s) declarado(s) como lacuna, "
                 f"com decisão pendente: " +
                 ", ".join(f"{e['termo']} ({e['faceta']})" for e in pendentes[:6]))
-    pasta = relativo(sementes_.parent)
+    pasta = relativo(registro_.parent)
     if not linhas:
         print(f"Nenhuma pendência detectada nos artefatos de {pasta}/.")
     else:

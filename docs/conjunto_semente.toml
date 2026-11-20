@@ -1,59 +1,195 @@
 [[sementes]]
 id = "SE1"
-semente = "Alvarenga, V. B. L., & Cristovão, H. M. (2023). Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica. Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023. DOI: 10.26512/rici.v16.n1.2023.47618"
+autores = ["Alvarenga, V. B. L.", "Cristovão, H. M."]
+ano = 2023
+titulo = "Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica"
+veiculo = "Revista Ibero-Americana de Ciência da Informação (RICI)"
+volume = "16"
+numero = "1"
+doi = "10.26512/rici.v16.n1.2023.47618"
 bases = ["brapci"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = ""
 
 [[sementes]]
 id = "SE2"
-semente = "Das, S., Naskar, D., & Roy, S. (2022). Reorganizing Educational Institutional Domain using Faceted Ontological Principles. Knowledge Organization, 49(1), 6-21, 2022. DOI: 10.5771/0943-7444-2022-1-6."
+autores = ["Das, S.", "Naskar, D.", "Roy, S."]
+ano = 2022
+titulo = "Reorganizing Educational Institutional Domain using Faceted Ontological Principles"
+veiculo = "Knowledge Organization"
+volume = "49"
+numero = "1"
+paginas = "6-21"
+doi = "10.5771/0943-7444-2022-1-6"
 bases = ["wos", "scopus"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = ""
 
 [[sementes]]
 id = "SE3"
-semente = "Chi, Y.-L., Chen, T.-Y., & Hung, C. (2018). Learning adaptivity in support of flipped learning: An ontological problem-solving approach. Expert Systems, 2018. DOI: 10.1111/exsy.12246."
+autores = ["Chi, Y.-L.", "Chen, T.-Y.", "Hung, C."]
+ano = 2018
+titulo = "Learning adaptivity in support of flipped learning: An ontological problem-solving approach"
+veiculo = "Expert Systems"
+doi = "10.1111/exsy.12246"
 bases = ["scopus"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = ""
 
 [[sementes]]
 id = "SE4"
-semente = "Shvets, O., Murtazin, K., Meeter, M., & Piho, G. (2024). Towards a Domain Model for Learning and Teaching. MODELSWARD 2024, SciTePress. DOI: 10.5220/0012471400003645."
+autores = ["Shvets, O.", "Murtazin, K.", "Meeter, M.", "Piho, G."]
+ano = 2024
+titulo = "Towards a Domain Model for Learning and Teaching"
+veiculo = "MODELSWARD 2024"
+doi = "10.5220/0012471400003645"
 bases = ["scopus"]
+facetas = []
 papel = "desenvolvimento"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = "SciTePress"
 
 [[sementes]]
 id = "SE5"
-semente = "Sousa, E. E. de, & Duque, C. (2018). Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade. Informação & Informação, 23(1), 271-289, 2018 (UEL). DOI: 10.5433/1981-8920.2018v23n1p271."
+autores = ["Sousa, E. E. de", "Duque, C."]
+ano = 2018
+titulo = "Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade"
+veiculo = "Informação & Informação"
+volume = "23"
+numero = "1"
+paginas = "271-289"
+doi = "10.5433/1981-8920.2018v23n1p271"
 bases = ["brapci"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = "(UEL)"
 
 [[sementes]]
 id = "SE6"
-semente = "Iatrellis, O., Kameas, A., & Fitsilis, P. (2019). EDUC8 ontology: semantic modeling of multi-facet learning pathways. Education and Information Technologies, 2019 (Springer). DOI: 10.1007/s10639-019-09872-9."
+autores = ["Iatrellis, O.", "Kameas, A.", "Fitsilis, P."]
+ano = 2019
+titulo = "EDUC8 ontology: semantic modeling of multi-facet learning pathways"
+veiculo = "Education and Information Technologies"
+doi = "10.1007/s10639-019-09872-9"
 bases = ["eric"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = "(Springer)"
 
 [[sementes]]
 id = "SE7"
-semente = "Chimalakonda, S., & Nori, K. V. (2020). An ontology based modeling framework for design of educational technologies. Smart Learning Environments, 7, 2020. DOI: 10.1186/s40561-020-00135-6."
+autores = ["Chimalakonda, S.", "Nori, K. V."]
+ano = 2020
+titulo = "An ontology based modeling framework for design of educational technologies"
+veiculo = "Smart Learning Environments"
+volume = "7"
+doi = "10.1186/s40561-020-00135-6"
 bases = ["eric", "wos", "scopus"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = ""
 
 [[sementes]]
 id = "SE8"
-semente = "Cenka, B. A. N., Santoso, H. B., & Junus, K. (2023). Personal learning environment toward lifelong learning: an ontology-driven conceptual model. Interactive Learning Environments, 31(10), 6445-6461, 2023. DOI: 10.1080/10494820.2022.2039947."
+autores = ["Cenka, B. A. N.", "Santoso, H. B.", "Junus, K."]
+ano = 2023
+titulo = "Personal learning environment toward lifelong learning: an ontology-driven conceptual model"
+veiculo = "Interactive Learning Environments"
+volume = "31"
+numero = "10"
+paginas = "6445-6461"
+doi = "10.1080/10494820.2022.2039947"
 bases = ["eric", "scopus"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = ""
 
 [[sementes]]
 id = "SE9"
-semente = "Piriyapongpipat, P., Goldin, S., & Ditcharoen, N. (2024). An alternative approach to ontology-based curriculum development in higher education. Smart Learning Environments, 11(1), 2024, p. 1-19. DOI: 10.1186/s40561-024-00307-8."
+autores = ["Piriyapongpipat, P.", "Goldin, S.", "Ditcharoen, N."]
+ano = 2024
+titulo = "An alternative approach to ontology-based curriculum development in higher education"
+veiculo = "Smart Learning Environments"
+volume = "11"
+numero = "1"
+paginas = "1-19"
+doi = "10.1186/s40561-024-00307-8"
 bases = ["wos", "scopus"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = ""
 
 [[sementes]]
 id = "SE10"
-semente = "Khoo, C. S. G., & Kan, R. Y. P. (2020). An ontology for conceptual analysis of signature pedagogies. Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.), Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference, 2020, Aalborg, Dinamarca. Ergon Verlag, p. 484-488. DOI: 10.5771/9783956507762-484."
+autores = ["Khoo, C. S. G.", "Kan, R. Y. P."]
+ano = 2020
+titulo = "An ontology for conceptual analysis of signature pedagogies"
+veiculo = "Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference"
+paginas = "484-488"
+doi = "10.5771/9783956507762-484"
 bases = ["wos"]
+facetas = []
 papel = "validação"
+verificacao = "CONFIRMADA — dados bibliográficos do volume e do capítulo conferidos no Crossref em 2026-11-19 (DOI do capítulo: 10.5771/9783956507762-484); conteúdo não consultado."
+tipo = ""
+alinhamento = ""
+nota = "Conferência declarada pelo pesquisador; dados do protocolo. O DOI do capítulo foi conferido no Crossref em 2026-11-19; resposta bruta em data/evidencia/referencias/SE10_crossref.json."
+veiculo_conferido = "sim"
+eric = ""
+observacoes = "Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.); Aalborg, Dinamarca; Ergon Verlag"

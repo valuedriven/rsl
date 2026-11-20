@@ -26,11 +26,11 @@ ESQUEMA = {
                 "divergencia_fidelidade", "calibracao_triagem"),
     "conferencia": ("minimo_termos_string", "dimensoes_criterio", "dimensao_recorte"),
     "busca": ("ano_recencia", "amostra_sensibilidade"),
-    "dados": ("sementes", "registro", "validacao", "execucoes", "evidencia"),
+    "dados": ("registro", "validacao", "execucoes", "evidencia"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
                "sensibilidade", "aderencia"),
     "documentos": ("ficha", "sementes"),
-    "planilha": ("campos_validacao", "campos_autorais"),
+    "planilha": ("campos_validacao",),
 }
 # Chaves retiradas: a presença de qualquer uma reprova com mensagem própria, para que não
 # haja segunda fonte que divirja em silêncio.

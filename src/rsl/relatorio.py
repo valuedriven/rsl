@@ -3,6 +3,7 @@
 from . import gramatica as G
 from .erros import ProtocoloInvalido
 from .fichas import ficha, forma_execucao
+from .leitura import referencia
 from .saida import Saida
 
 
@@ -72,6 +73,9 @@ def relatorio(ctx, d):
                          for b in dist["por_base"]) + ")"
         for p in G.D_PAPEL.valores.values())
     L.append(f"  sementes por papel: {papeis}")
+    L.append("  sementes (referência montada dos campos do arquivo de sementes; só exibição):")
+    for e in d["sementes"]:
+        L.append(f"    {e['id']:>4} [{e['papel']}] {referencia(e)}")
     L.append("  expressões: " + ", ".join(
         f"{n}=" + composicao_legivel(c)
         for n, c in sorted(d["expressoes"].items())) +

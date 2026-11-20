@@ -26,8 +26,8 @@ outro conjunto, de outra função, em `docs/02`, seção Estudos inicialmente co
 | | Conjunto-semente | Leitura exploratória |
 | --- | --- | --- |
 | Função | aferir recall | situar o tema, fixar fronteiras |
-| Fonte | protocolo (`docs/03`), Acervos pessoais | `docs/02`, Estudos inicialmente consultados |
-| Vive no | protocolo (`docs/03`), Acervos pessoais | `docs/02`, Estudos inicialmente consultados |
+| Regras (ajuste, fórmula de recuperação) | protocolo, seção Conjunto-semente | — |
+| Vive no | arquivo de `[documentos] sementes` do `config.toml` | `docs/02`, Estudos inicialmente consultados |
 | Recorte temporal | obrigatório | **dispensado** — leitura de fundamentação pode ser anterior |
 
 Confundi-los já aconteceu: o conjunto-semente ocupou o 3º passo e a leitura
@@ -47,7 +47,58 @@ Três exigências de qualificação:
   da busca e não os critérios de elegibilidade;
 - **todos conferidos em fonte**, com autor, título, veículo, ano e DOI.
 
-## 4. Incidências por base contra estudos distintos
+## 4. Registrar a semente no arquivo de sementes
+
+Cada semente é uma tabela `[[sementes]]` do arquivo apontado por `[documentos] sementes`
+do `config.toml`. É o **único lugar** de dado de semente: não há outro arquivo a
+reconciliar. O esquema é fechado e está em `python3 -m rsl gramatica`; campo desconhecido
+reprova, para que erro de digitação não passe como campo ignorado.
+
+- **Dados bibliográficos, campo a campo**: `autores` (lista), `ano` (inteiro), `titulo`,
+  `veiculo`, e, quando a fonte os traz, `volume`, `numero`, `paginas` e `doi` (só
+  `10.x/…`, sem `DOI:` nem URL). Transcrever da fonte conferida, **nunca de memória** —
+  ver `conferir-referencia`. O que a fonte não traz fica vazio. DOI ausente não reprova:
+  `python3 -m rsl pendencias` o relata, porque o DOI é a chave de conferência.
+- **`observacoes`**: o que a referência traz e não cabe em outro campo (editores, evento,
+  local, editora), transcrito como está. Nada da referência se perde.
+- **`bases` é indexação, não recuperação**: as siglas das bases que indexam a semente, da
+  tabela de bases do protocolo. Semente que a base não indexa sai do denominador daquela
+  base. O que a busca recuperou é resultado e fica na planilha (§7).
+- **`facetas` é juízo do pesquisador**: as `FCTn` que o estudo trata, julgadas a partir do
+  **resumo ou do texto completo**, **nunca do ensaio seco** (§6). O valor do campo está em
+  contrastar as duas coisas — semente declarada em FCT2 sem termo de FCT2 no título indica
+  lacuna de vocabulário —, e copiar o ensaio tornaria o contraste circular. Vazia, vira
+  pendência; semente de validação sem nenhuma faceta âncora também é relatada, enquanto o
+  pesquisador não decide a regra.
+- **`papel`**: `desenvolvimento` ou `validação` (§7).
+- **Conferência**: `verificacao`, `tipo`, `alinhamento`, `nota`, `veiculo_conferido`,
+  `eric`. `tipo` e `alinhamento` vazios são relatados como pendência.
+
+O `id` é `SEn`, em **sequência a partir de SE1, sem lacuna**: lacuna ou `id` fora de
+sequência reprova a leitura.
+
+### Retirar uma semente: sai de tudo e renumera as seguintes
+
+Semente retirada não fica guardada em lugar nenhum. A retirada tem quatro passos, no mesmo
+trabalho:
+
+1. **tirar a tabela `[[sementes]]` e renumerar as seguintes** — retirar SE3 faz SE4 a SE10
+   passarem a SE3 a SE9;
+2. **evidência bruta** em `data/evidencia/`: remover os arquivos `SEn_…` da semente
+   retirada e renomear os das renumeradas para o `id` novo. `python3 -m rsl
+   conferir-dados` reprova evidência de `id` inexistente, mas **não** detecta arquivo de
+   renumerada esquecido com um `id` que ainda existe: esse fica atribuído à semente
+   errada sem que nada reprove, e a renomeação tem de ser conferida a olho;
+3. **`data/pendencias.json`**: atualizar as menções aos `id` renumerados;
+4. **`data/historico.md`**: registrar a retirada — data, `id`, referência, motivo — e a
+   **correspondência entre `id` antigo e novo**. As entradas anteriores não se reescrevem:
+   citam o `id` vigente na data, e a correspondência permite lê-las. Sem esse registro, o
+   recall de antes e o de depois não se comparam, porque o denominador mudou. Nenhuma
+   verificação automática o exige: a semente retirada não deixa marca para conferir.
+
+A planilha `semente_aderencia.csv` deixa de trazer a semente na regeneração seguinte.
+
+## 5. Incidências por base contra estudos distintos
 
 O erro de leitura mais fácil deste instrumento, e o parecer externo tropeçou nele.
 
@@ -58,7 +109,7 @@ distintos — 4 em mais de uma base e 6 numa só.
 **Declarar que são incidências, e publicar o mapa por estudo.** Sem o mapa, a
 distribuição não se confere.
 
-## 5. Ensaio seco contra as facetas
+## 6. Ensaio seco contra as facetas
 
 Antes de executar, aplicar as facetas a cada semente e ver quais seriam acionadas.
 É diagnóstico de vocabulário, não de busca.
@@ -71,15 +122,14 @@ como aprovação é erro.
 python3 -m rsl sementes planilha
 ```
 
-O comando lê as referências, o mapa por base e o papel do arquivo de sementes
-(`[documentos] sementes`) e os metadados autorais de
-`data/sementes.json` (verificação, escopo, tipo, alinhamento, nota), gera a planilha
+O comando lê as sementes do arquivo de sementes (`[documentos] sementes`) — dados
+bibliográficos, bases, papel e conferência —, gera a planilha
 `data/semente_aderencia.csv` e **imprime no terminal** a composição, o estado de
 conferência e o ensaio seco — quantas sementes o título entrega às facetas e quantas
 satisfazem as duas âncoras e uma faceta temática. Não grava guia em arquivo: o
 instrumento é a planilha.
 
-## 6. O instrumento: a planilha e o procedimento
+## 7. O instrumento: a planilha e o procedimento
 
 `semente_aderencia.csv` tem uma linha por semente e por base — com 10 sementes e 4
 bases, 40 linhas. Preencher **durante** a execução, não depois: as colunas de registro
@@ -90,9 +140,8 @@ são a evidência do teste.
 | `id` | identificador da semente (SEn), conforme o arquivo de sementes |
 | `autores_ano` | autoria abreviada e ano |
 | `titulo` | título, como consta na referência do arquivo de sementes |
-| `tipo` | primário ou secundário — preencher em `sementes.json` |
-| `escopo` | DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher em `sementes.json` |
-| `verificacao` | estado de conferência da referência — preencher em `sementes.json` |
+| `tipo` | primário ou secundário — preencher no arquivo de sementes |
+| `verificacao` | estado de conferência da referência — preencher no arquivo de sementes |
 | `papel` | `desenvolvimento` ou `validação` — do arquivo de sementes |
 | `base` | WoS, Scopus, ERIC ou BRAPCI |
 | `esperada_na_base` | sim se o campo `bases` da semente indica esta base |
@@ -114,8 +163,7 @@ O preenchimento segue duas etapas, e a ordem importa:
 > `indexada` em branco impede o cálculo: sem ela não há denominador. `recuperada` só se
 > preenche onde `indexada` = sim.
 
-Semente com metadado pendente — `verificacao`, `escopo`, `tipo` ou `alinhamento` em
-branco, marcado `A CONFERIR` ou `PENDÊNCIA` — sai com a coluna em branco. O instrumento
+Semente com conferência pendente — `verificacao`, `tipo` ou `alinhamento` em branco, marcado `A CONFERIR` ou `PENDÊNCIA` — sai com a coluna em branco. O instrumento
 pode ser executado; o que falta é registro, não dado de busca, e a pendência se reporta
 em vez de se esconder.
 
@@ -124,7 +172,7 @@ orientaram a inclusão, a manutenção ou a retirada de um termo e são relatada
 não compensam a validação. A distinção vive no campo `papel` do arquivo de sementes e é
 exigida na leitura: papel ausente, fora do domínio ou conjunto de validação vazio reprova.
 
-## 7. Limiar e consequência
+## 8. Limiar e consequência
 
 O teste de aderência exige **80%** sobre a união das bases, contando **só as sementes de
 validação**. Abaixo disso, revisão obrigatória do controlo terminológico antes de

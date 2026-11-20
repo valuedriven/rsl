@@ -31,7 +31,7 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `docs/01_plano.md` | Plano: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
 | `docs/02_protocolo_informacoes_gerais.md` | Protocolo, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
 | `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QERn), facetas e âncoras, instrumentos de controle terminológico, vocabulário, strings, expressões e notas explicativas, critérios de elegibilidade, fontes, regra de ajuste do conjunto-semente, procedimentos, instrumentos e ferramentas. Fonte única desses dados e dos parâmetros que declara | montar ou conferir a busca |
-| `docs/conjunto_semente.toml` | Conjunto-semente: uma tabela `[[sementes]]` por estudo, com `id`, `semente` (a referência), `bases` e `papel`. Fonte única das sementes; caminho em `[documentos] sementes` do `config.toml` | compor ou conferir o conjunto-semente |
+| arquivo de sementes (`[documentos] sementes` do `config.toml`) | Conjunto-semente: uma tabela `[[sementes]]` por estudo, campo a campo — dados bibliográficos (`id`, `autores`, `ano`, `titulo`, `veiculo`, `volume`, `numero`, `paginas`, `doi`), aferição (`bases`, `facetas`, `papel`), conferência (`verificacao`, `tipo`, `alinhamento`, `nota`, `veiculo_conferido`, `eric`) e `observacoes`. Único lugar de dado de semente | compor ou conferir o conjunto-semente |
 | `docs/busca_base_wos.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
 | `docs/busca_base_scopus.md` | ficha da Scopus, mesma estrutura | idem |
 | `docs/busca_base_eric.md` | ficha da ERIC, mesma estrutura | idem |
@@ -39,7 +39,7 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `src/rsl/` (`conferir`, `conferir-dados`, `autoteste`, `mostrar`, `pendencias`, `gramatica`) | leitura e conferência do protocolo e das fichas, conferência dos arquivos alimentados, autoteste único, resumo dos parâmetros em uso e contrato de forma do protocolo | antes de executar qualquer subcomando, e após alterar o protocolo ou uma ficha |
 | `src/rsl/` (`busca …`) | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
 | `src/rsl/` (`termos …`) | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (módulo de mesma sigla em `src/rsl/termos/clientes/`) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
-| `src/rsl/` (`sementes …`) | reconciliação do metadado das sementes e planilha de aderência a partir do conjunto-semente, com o papel de cada semente e o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
+| `src/rsl/` (`sementes …`) | planilha de aderência a partir do arquivo de sementes, com o papel e a conferência de cada semente, e o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento | saber o que já foi decidido e por quê |
 | `data/pendencias.json` | Pendências: ações ainda a executar, cada uma com origem, o que bloqueia, ação sugerida, responsável e estado | saber o que falta fazer |
 | `config.toml` | caminho do protocolo e do arquivo de sementes, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados, arquivos de saída e campos das planilhas | mudar o arquivo do protocolo ou das sementes, um padrão, o local das fichas ou de um arquivo |
@@ -48,11 +48,11 @@ Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arqu
 
 | Caminho | O que contém | Quem escreve |
 | --- | --- | --- |
-| `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `sementes sincronizar` |
 | `data/registro_execucao.json` | resultados da execução das consultas nas bases: sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `busca registrar` |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, com data, alcance e fundamento | pesquisador |
 | `data/pendencias.json` | ações ainda a executar, identificadas por `PDnn` | pesquisador e agente, a pedido |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
+| `data/evidencia/` | respostas brutas das consultas: instrumentos de controle terminológico (`<instrumento>/`) e conferência de referências (`referencias/`, arquivos `SEn_…` nomeados pelo `id` da semente) | subcomandos `termos` e agente, a pedido |
 | `data/` (raiz) | planilhas e CSVs gravados pelos subcomandos (nomes em `[dados]` e `[saidas]` do `config.toml`): `validacao_terminologica.csv`, `semente_aderencia.csv`, `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_eb<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | subcomandos e pesquisador (planilha de validação) |
 | `data/evidencia/` | resposta bruta de cada consulta terminológica | `termos validar` |
 | `data/arquivo/` | cópias anteriores, com `SHA256` | migrações |
@@ -62,7 +62,7 @@ As pastas `execucoes/`, `evidencia/` e `arquivo/` são criadas quando o primeiro
 O que é **derivado do documento não vira arquivo**: questão, facetas, instrumentos,
 strings, expressões, critérios e fontes são lidos do protocolo a cada execução, e a forma de
 cada base, da ficha correspondente. Em `data/` guarda-se o que alguém **alimenta** — o
-metadado das sementes e o registro das execuções — e a planilha de validação, registro do
+registro das execuções e a evidência bruta das consultas — e a planilha de validação, registro do
 estatuto dos termos, lida e regravada por `termos exportar`, `termos validar` e `termos importar`.
 
 ### Três registros, três finalidades
@@ -99,8 +99,9 @@ autoteste. Ele traz:
   campos das planilhas;
 - `[documentos] ficha` — padrão de caminho da ficha de cada base, com `{sigla}`
   (`docs/busca_base_{sigla}.md`);
-- `[documentos] sementes` — o arquivo do conjunto-semente (`docs/conjunto_semente.toml`);
-  ausente, o subcomando para com CONFIGURACAO, nomeando a chave e o caminho.
+- `[documentos] sementes` — o arquivo do conjunto-semente. Os documentos citam o arquivo
+  por esta chave, não pelo caminho; ausente, o subcomando para com CONFIGURACAO, nomeando a
+  chave e o caminho.
 
 **Parâmetros estruturais** não têm padrão e não constam do `config.toml`: são lidos só do
 protocolo, e a ausência ou o valor inválido reprova a leitura, nomeando tabela, linha e
@@ -114,9 +115,14 @@ obrigatória`, com `Sim` ou `Não`); os instrumentos de controle terminológico 
 sigla; e os idiomas do quadro terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`,
 com os termos de cada célula separados por vírgula. O **conjunto-semente** também é
 estrutural, mas vem só do arquivo de sementes (`[documentos] sementes`): esquema fechado,
-com `id` (`SEn`, único), `semente`, `bases` (siglas da tabela de bases, na grafia exata) e
-`papel` (`desenvolvimento` ou `validação`); campo ausente, de outro tipo ou desconhecido
-reprova, nomeando a semente e o campo. A faixa de sensibilidade é lida das notas
+exibido por `python3 -m rsl gramatica`, com `id` (`SEn`, único, em sequência a partir de
+SE1, sem lacuna), os dados bibliográficos campo a campo (`autores` em lista, `ano` inteiro,
+`doi` na forma `10.x/…`), `bases` (siglas da tabela de bases, na grafia exata), `facetas`
+(`FCTn` da tabela de facetas), `papel` (`desenvolvimento` ou `validação`), os campos de
+conferência e `observacoes`; campo exigido ausente, campo de outro tipo ou desconhecido
+reprova, nomeando a semente e o campo. Nada se extrai da referência por padrão de texto.
+DOI ausente, `facetas` vazia, semente de validação sem faceta âncora e `tipo` ou
+`alinhamento` vazios não reprovam: `pendencias` os relata. A faixa de sensibilidade é lida das notas
 explicativas citadas pela executada (`< N%` e `> M%`).
 A forma de execução de cada base (`- Execução: única` ou `particionada`) é declarada na
 própria ficha. As chaves antigas (`padroes.composicao`, `padroes.ancoras`,
@@ -145,7 +151,7 @@ python3 -m rsl                                 # sem subcomando: a ajuda, com os
 
 Neste README os comandos aparecem como `python3 -m rsl …`, com `src/` no caminho de
 importação. Os subcomandos se agrupam por atividade: `conferir`, `conferir-dados`,
-`autoteste`, `mostrar`, `pendencias`, `gramatica`; `sementes sincronizar|planilha`;
+`autoteste`, `mostrar`, `pendencias`, `gramatica`; `sementes planilha`;
 `termos sonda|exportar|validar <sigla>|importar`; `busca
 registrar|derivar|aderencia|fidelidade|sensibilidade`. Todo subcomando termina com um destes
 códigos de saída, e toda saída diferente de OK termina com uma linha que nomeia o código:
@@ -172,23 +178,23 @@ conferem, derivam e registram. Quatro invariantes valem para todos:
 - **Uma fonte por dado.** O vocabulário, as expressões, os critérios e os parâmetros que
   declara vêm do protocolo; a forma da busca, da ficha da base; o resto, do `config.toml`.
   Não há cópia intermediária nem valor de parâmetro no código.
-- **O que é autoral se preserva.** Os metadados de conferência em `sementes.json`, as
-  execuções em `registro_execucao.json` e a declaração de cobertura nas fichas são editados
-  pelo pesquisador; `sementes sincronizar` só reconcilia sementes, `busca registrar` só
-  acrescenta ou atualiza a execução que ele mesmo confere e `termos importar` preserva as
-  decisões da validação na planilha.
-- **Nada se apaga por sincronização.** Semente retirada do conjunto-semente permanece em
-  `data/sementes.json` com o seu metadado e é reportada por `conferir-dados` e por `pendencias`, para decisão;
-  termo retirado do protocolo permanece na planilha de validação como linha fora do
-  protocolo. Termo vigente do protocolo ausente da string de uma base só passa se a ficha o
+- **O que é autoral se preserva.** O arquivo de sementes (`[documentos] sementes`), com a
+  conferência de cada semente, as execuções em `registro_execucao.json` e a declaração de
+  cobertura nas fichas são editados pelo pesquisador; nenhum subcomando grava o arquivo de
+  sementes, `busca registrar` só acrescenta ou atualiza a execução que ele mesmo confere e
+  `termos importar` preserva as decisões da validação na planilha.
+- **Semente retirada sai de tudo; termo retirado fica registrado.** Semente retirada sai do
+  arquivo de sementes, das saídas regeneradas e da evidência bruta, e as seguintes se
+  renumeram, com a correspondência de `id` registrada em `data/historico.md`; evidência
+  `SEn_…` de semente que não está no arquivo reprova `conferir-dados`. Termo retirado do
+  protocolo permanece na planilha de validação como linha fora do protocolo. Termo vigente do protocolo ausente da string de uma base só passa se a ficha o
   declarar na redução; sem declaração, a conferência daquela base reprova — e só daquela.
   O vigente é a string (STR) do protocolo: termo que só consta do quadro terminológico não é
   esperado na base e, se aparecer nela, reprova. As fichas são operacionais — forma vigente,
   sem cabeçalho, histórico nem justificativa.
 - **O identificador é a chave.** Tudo se identifica pelo código do protocolo — `QGR`/`QERn`,
-  `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn` —, e não por posição. Na semente, a ligação com
-  o protocolo é feita por DOI ou título, de modo que o rótulo pode mudar sem perder o
-  metadado.
+  `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn` —, e não por posição. Cada semente tem um só
+  lugar, o arquivo de sementes; não há ligação entre arquivos a manter.
 
 `conferir` verifica a **coerência interna** do protocolo, não valores esperados: numeração
 dos identificadores, camadas do vocabulário, string contida no quadro da sua faceta,
@@ -200,7 +206,8 @@ ficha iguais aos da tabela do protocolo e sementes citando só siglas da tabela 
 distribuição das sementes por base e por papel é calculada do arquivo de sementes.
 Protocolo, ficha ou arquivo de sementes fora da gramática sai com PROTOCOLO_ILEGIVEL, nomeando o elemento do contrato; incoerência,
 com REPROVADO. `conferir-dados` reprova
-arquivo alimentado ausente ou fora do protocolo, a execução que declara exportação
+arquivo alimentado ausente ou fora do protocolo, evidência bruta `SEn_…` de semente que não
+está no arquivo de sementes, a execução que declara exportação
 inexistente, a citação do registro de execução numa ficha sem identificador `(BDn/<id>)`, com `BDn` de outra base ou remetendo a execução
 inexistente — e, por base, termo vigente fora da string sem redução declarada e termo fora
 da STR dentro dela, mesmo em flexão.
@@ -213,8 +220,8 @@ contagem de cada grupo. As cópias defeituosas são geradas da estrutura lida, n
 do protocolo vigente: semente nova ou faixa alterada dentro do válido não quebram o
 autoteste. Sem os arquivos alimentados, o resultado é PARCIAL, com o número de casos que não
 rodaram.
-`sementes sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido;
-rodar duas vezes não muda nada. `pendencias` relata sem escrever. Os comandos estão no fluxo
+`mostrar` exibe cada semente como referência montada dos campos, sem gravar. `pendencias`
+relata sem escrever. Os comandos estão no fluxo
 de trabalho, em M3.
 
 ## Fluxo de trabalho — RS Banyan
@@ -301,7 +308,9 @@ existir.
    CAPES com CAFe nas duas primeiras. A ausência de busca direta nos acervos especiais é
    limitação declarada, mitigada por backward search.
 7. **Conjunto-semente.** Estudos e incidências esperadas por base, no arquivo de sementes
-   (`docs/conjunto_semente.toml`), com o papel de cada semente; a regra de ajuste e a
+   (`[documentos] sementes`), com os dados bibliográficos, as bases que indexam cada
+   semente (indexação, não recuperação), as facetas informadas pelo pesquisador, o papel e
+   a conferência, campo a campo; a regra de ajuste e a
    fórmula de recuperação ficam no protocolo. É instrumento de aferição, não lista de incluídos: só as
    sementes de **validação** decidem a passagem; as de **desenvolvimento** orientaram o
    vocabulário e são relatadas como não decisórias.
@@ -324,15 +333,13 @@ python3 -m rsl termos validar tbci
 python3 -m rsl termos validar unesco
 python3 -m rsl termos importar
 
-# metadado das sementes e instrumento de aderência (planilha e ensaio seco no terminal)
-python3 -m rsl sementes sincronizar
+# instrumento de aderência (planilha e ensaio seco no terminal)
 python3 -m rsl sementes planilha
 ```
 
 **Arquivos.** O vocabulário vem do protocolo, lido a cada execução; não há JSON derivado a
-regerar. `sementes sincronizar` mexe apenas no metadado das
-sementes: religa a semente de `sementes.json` por DOI ou título, preservando o que já foi
-conferido. A validação grava o estatuto na própria planilha
+regerar. As sementes vêm só do arquivo de sementes, editado pelo pesquisador; nenhum
+subcomando o grava. A validação grava o estatuto na própria planilha
 `data/validacao_terminologica.csv` e a resposta bruta em
 `data/evidencia/<instrumento>/`; `termos importar` reconcilia a planilha com o protocolo,
 preservando decisões e linhas fora do protocolo. Erro de rede, bloqueio, captcha, limite ou
@@ -348,9 +355,7 @@ imprime o ensaio seco no terminal; não grava guia em arquivo.
 arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente,
 citação do registro de execução sem identificador `(BDn/<id>)`, de outra base ou de execução
 inexistente, e, por base, termo vigente ausente sem redução declarada ou termo fora da STR
-presente.
-`sementes sincronizar` não apaga
-semente retirada do conjunto-semente: ela permanece e é reportada, para decisão. `autoteste` injeta
+presente, e evidência bruta de semente que não está no arquivo de sementes. `autoteste` injeta
 defeitos numa cópia e exige que as conferências os reprovem com o código esperado.
 
 **Condição de passagem:** viabilidade das strings e protocolo validado por revisor expert.
@@ -416,8 +421,8 @@ execuções; `busca derivar` lê as execuções registradas, não a pasta de exp
 saídas ficam na raiz de `data/` (`[saidas]` do `config.toml`): `registros.csv`,
 `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_<expressão>.csv` por expressão
 conferida e `sensibilidade_<base>.csv` por base sondada, com a chave em minúsculas. A
-aderência usa `data/sementes.json` e `data/semente_aderencia.csv`; o relato por papel lê o
-`papel` da tabela do protocolo, e só a validação decide a passagem.
+aderência usa o arquivo de sementes (`[documentos] sementes`) e `data/semente_aderencia.csv`;
+o relato por papel lê o campo `papel` de cada semente, e só a validação decide a passagem.
 
 **Recusas e marcas.** `busca registrar` confere o retorno declarado contra os registros do
 arquivo e **recusa registrar quando divergem**, salvo justificativa explícita — o caso do
@@ -502,8 +507,8 @@ Skill: `fichamento`.
 ### Atividades transversais
 
 - **Toda decisão que altere questão, facetas, critérios ou busca é emenda.** Altera-se o
-  documento-fonte — o plano, o protocolo ou a ficha da base — e, quando o dado é o metadado das
-  sementes, reconcilia-se com `sementes sincronizar`; a decisão se registra no histórico,
+  documento-fonte — o plano, o protocolo, a ficha da base ou o arquivo de sementes —; a
+  decisão se registra no histórico,
   `data/historico.md`. Não se edita planilha de saída nem se corrige o produto à mão:
   corrige-se a fonte e confere-se de novo — a exceção é a planilha de validação, que é o
   registro do estatuto dos termos. Skill: `registrar-decisao`.

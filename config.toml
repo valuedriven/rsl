@@ -65,7 +65,6 @@ amostra_sensibilidade = 50
 
 [dados]
 # Arquivos alimentados e pastas de entrada. Caminhos relativos à raiz do projeto.
-sementes = "data/sementes.json"
 registro = "data/registro_execucao.json"
 validacao = "data/validacao_terminologica.csv"
 # Exportações brutas de cada execução, por base.
@@ -88,8 +87,9 @@ aderencia = "semente_aderencia.csv"
 # Ficha de busca de cada base, localizada pela sigla da tabela "Bases de dados" do
 # protocolo; tem de conter {sigla}. Caminho relativo à raiz do projeto.
 ficha = "docs/busca_base_{sigla}.md"
-# Arquivo do conjunto-semente (TOML, uma tabela [[sementes]] por estudo, com id, semente,
-# bases e papel), editado pelo pesquisador. Esquema em `python3 -m rsl gramatica`.
+# Arquivo do conjunto-semente (TOML, uma tabela [[sementes]] por estudo, com os dados
+# bibliográficos, a aferição e a conferência de cada semente, campo a campo), editado pelo
+# pesquisador. É o único lugar de dado de semente. Esquema em `python3 -m rsl gramatica`.
 sementes = "docs/conjunto_semente.toml"
 
 # ----------------------------------------------------------------- planilhas e JSON
@@ -103,6 +103,3 @@ campos_validacao = [
     "arquivo_evidencia", "observacao_tecnica",
     "decisao_ReT", "justificativa_ReT", "data_decisao",
 ]
-# Metadados de cada semente em sementes.json que a sincronização nunca sobrescreve.
-campos_autorais = ["verificacao", "escopo", "tipo", "alinhamento", "nota",
-                   "veiculo_conferido", "eric"]

@@ -230,7 +230,7 @@ class CampoToml(Elemento):
     """Campo de um item de uma tabela TOML: nome, tipo e exigência."""
 
     tipo = "campo"
-    TIPOS = {"texto": str, "lista de textos": list}
+    TIPOS = {"texto": str, "lista de textos": list, "inteiro": int}
 
     def __init__(self, nome, documento, tabela, chave, tipo_valor, exigencia=EXIGIDO,
                  descricao=""):
@@ -249,7 +249,8 @@ class CampoToml(Elemento):
 
     def aceita(self, valor):
         tipo = self.TIPOS[self.tipo_valor]
-        if not isinstance(valor, tipo):
+        # bool é subclasse de int no Python; no TOML, `true` não é número.
+        if not isinstance(valor, tipo) or isinstance(valor, bool):
             return False
         return tipo is not list or all(isinstance(x, str) for x in valor)
 
@@ -489,28 +490,58 @@ TT_SEMENTES = TabelaToml(
     "sementes", A, "sementes",
     descricao="TOML inválido, tabela ausente ou vazia e campo desconhecido reprovam, "
               "nomeando a semente e o campo")
-C_ID = CampoToml("sementes.id", A, TT_SEMENTES, "id", "texto",
-                 descricao="ausente, de outro tipo, fora da forma SEn ou repetido reprova")
-C_SEMENTE = CampoToml("sementes.semente", A, TT_SEMENTES, "semente", "texto",
-                      descricao="a referência; ausente, de outro tipo ou vazia reprova")
-C_BASES = CampoToml("sementes.bases", A, TT_SEMENTES, "bases", "lista de textos",
-                    descricao="lista vazia, base que não é sigla da tabela de bases do "
-                              "protocolo (grafia exata) e base repetida reprovam")
-C_PAPEL = CampoToml("sementes.papel", A, TT_SEMENTES, "papel", "texto",
-                    descricao="ausente ou de outro tipo reprova")
+
+
+def _campo(chave, tipo_valor, descricao, exigencia=EXIGIDO):
+    return CampoToml(f"sementes.{chave}", A, TT_SEMENTES, chave, tipo_valor,
+                     exigencia=exigencia, descricao=descricao)
+
+
+_OPC = "campo opcional: ausente equivale a vazio; presente e de outro tipo, reprova"
+# Bibliográficos. A referência legível é montada destes campos; nada se extrai de texto.
+C_ID = _campo("id", "texto", "ausente, de outro tipo, fora da forma SEn, repetido ou fora "
+                             "da sequência a partir de SE1, sem lacuna, reprova")
+C_AUTORES = _campo("autores", "lista de textos", "ausente, de outro tipo, vazia ou com "
+                                                 "autor vazio reprova")
+C_ANO = _campo("ano", "inteiro", "ausente ou de outro tipo (texto, por exemplo) reprova")
+C_TITULO = _campo("titulo", "texto", "ausente, de outro tipo ou vazio reprova")
+C_VEICULO = _campo("veiculo", "texto", "ausente, de outro tipo ou vazio reprova")
+C_VOLUME = _campo("volume", "texto", _OPC, OPCIONAL)
+C_NUMERO = _campo("numero", "texto", _OPC, OPCIONAL)
+C_PAGINAS = _campo("paginas", "texto", _OPC, OPCIONAL)
+C_DOI = _campo("doi", "texto", "campo opcional: ausente ou vazio vira pendência "
+                               "(`pendencias`); presente fora da forma 10.x/…, reprova",
+               OPCIONAL)
+# Aferição.
+C_BASES = _campo("bases", "lista de textos",
+                 "siglas das bases que indexam a semente (indexação, não recuperação); "
+                 "lista vazia, base que não é sigla da tabela de bases do protocolo (grafia "
+                 "exata) e base repetida reprovam")
+C_FACETAS = _campo("facetas", "lista de textos",
+                   "FCTn informadas pelo pesquisador (não do ensaio seco); faceta fora da "
+                   "tabela de facetas ou repetida reprova; vazia vira pendência", OPCIONAL)
+C_PAPEL = _campo("papel", "texto", "ausente ou de outro tipo reprova")
+# Conferência: estado da referência e juízos do pesquisador.
+C_VERIFICACAO = _campo("verificacao", "texto", _OPC, OPCIONAL)
+C_TIPO = _campo("tipo", "texto", _OPC + "; vazio vira pendência", OPCIONAL)
+C_ALINHAMENTO = _campo("alinhamento", "texto", _OPC + "; vazio vira pendência", OPCIONAL)
+C_NOTA = _campo("nota", "texto", _OPC, OPCIONAL)
+C_VEICULO_CONFERIDO = _campo("veiculo_conferido", "texto", _OPC, OPCIONAL)
+C_ERIC = _campo("eric", "texto", _OPC, OPCIONAL)
+# Sobra: o que a referência traz e não cabe em outro campo, transcrito como está.
+C_OBSERVACOES = _campo("observacoes", "texto", _OPC, OPCIONAL)
+CONFERENCIA = (C_VERIFICACAO, C_TIPO, C_ALINHAMENTO, C_NOTA, C_VEICULO_CONFERIDO, C_ERIC)
+
 I_SE = Identificador("se", A, None, "SE", descricao="id fora da sequência reprova")
 D_PAPEL = Dominio("papel", A, None, "papel",
                   {"desenvolvimento": "desenvolvimento", "validação": "validação"},
                   descricao="só a validação decide a passagem; vazio ou fora do domínio "
                             "reprova")
 PAPEL_DESENVOLVIMENTO, PAPEL_VALIDACAO = D_PAPEL.valores
-F_REFERENCIA = FrasePadrao(
-    "referencia", A, None, "Autores (AAAA). Título. … DOI: 10.…  (no campo semente)",
-    r"^(.*?)\s*\((\d{4})\)\.\s*(.*)$",
-    descricao="sem autoria e ano entre parênteses, reprova; o título termina no primeiro "
-              "ponto seguido de maiúscula ou dígito; o DOI é opcional")
-F_DOI = FrasePadrao("doi", A, None, "DOI: 10.…", r"DOI:\s*(10\.\S+?)\s*$",
-                    exigencia=OPCIONAL)
+F_DOI = FrasePadrao("doi", A, None, "10.<prefixo>/<sufixo>  (no campo doi, sem `DOI:` nem "
+                                    "URL)",
+                    r"^10\.\d{4,9}/\S+$", exigencia=OPCIONAL,
+                    descricao="doi presente fora da forma reprova")
 
 
 def exigidos(documento=None):

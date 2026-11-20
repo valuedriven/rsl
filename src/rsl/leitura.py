@@ -58,8 +58,10 @@ def numeracao(ids, identificador, onde, documento=G.PROTOCOLO):
         raise ProtocoloInvalido(identificador, f"{onde}: nenhum {prefixo}n encontrado",
                                 documento)
     if ids != esperado:
+        k = next(k for k, (x, y) in enumerate(zip(ids, esperado)) if x != y)
         raise ProtocoloInvalido(identificador, f"{onde} fora da numeração {prefixo}1 a "
-                                               f"{prefixo}{len(ids)}: {ids}", documento)
+                                               f"{prefixo}{len(ids)}: {ids} — {ids[k]} "
+                                               f"onde se esperava {esperado[k]}", documento)
 
 
 def percentual(s):
@@ -643,30 +645,35 @@ def fontes(ctx, t, locais):
 
 
 # ------------------------------------------------------------------------ sementes
-def _titulo(resto):
-    """O título termina no primeiro ponto seguido de maiúscula ou de dígito."""
-    m = re.search(r"[.!?]\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9“\"])", resto)
-    return (resto[:m.start() + 1] if m else resto).strip()
-
-
-def _doi(texto_ref):
-    m = G.F_DOI.padrao.search(texto_ref.rstrip())
-    if not m:
-        return ""
-    return m.group(1).rstrip(".")
-
-
 def _semente_invalida(elemento, ident, detalhe):
     return ProtocoloInvalido(elemento, f"semente {ident}: {detalhe}")
 
 
-def sementes(texto, siglas, locais):
-    """Referências, bases esperadas e papel, do arquivo de sementes (TOML).
+def _lista_de_siglas(item, campo, ident, admitidas, rotulo_tabela, vazia_reprova):
+    """Lista de siglas sem espaço sobrando: cada uma da tabela (grafia exata), sem
+    repetição."""
+    valores = [x.strip() for x in item.get(campo.chave, [])]
+    if vazia_reprova and not valores:
+        raise _semente_invalida(campo, ident, f"campo '{campo.chave}' vazio: semente sem "
+                                              f"base")
+    fora = [x for x in valores if x not in admitidas]
+    if fora:
+        raise _semente_invalida(campo, ident, f"{campo.chave} {fora} não é sigla da "
+                                              f"{rotulo_tabela} {list(admitidas)}")
+    if len(set(valores)) != len(valores):
+        raise _semente_invalida(campo, ident, f"{campo.chave} com repetição {valores}")
+    return valores
 
-    O esquema é o da gramática (`TT_SEMENTES` e os seus campos): campo ausente, de outro
-    tipo ou desconhecido reprova, nomeando a semente e o campo. Cada base citada tem de ser
-    sigla da tabela de bases, na grafia exata; o papel tem de estar no domínio. Autoria,
-    ano, título e DOI são extraídos do campo `semente`.
+
+def sementes(texto, siglas, facetas_, locais):
+    """Sementes do arquivo de sementes (TOML), campo a campo.
+
+    O esquema é o da gramática (`TT_SEMENTES` e os seus campos): campo exigido ausente,
+    campo de outro tipo ou campo desconhecido reprova, nomeando a semente e o campo. Cada
+    base citada tem de ser sigla da tabela de bases, e cada faceta, `FCTn` da tabela de
+    facetas, na grafia exata e sem repetição; o papel tem de estar no domínio; o `id`, em
+    sequência a partir de SE1. Autoria, ano, título e DOI são os campos: nada se extrai
+    por padrão de texto. Campo opcional ausente vale vazio.
     """
     T = G.TT_SEMENTES
     campos = {c.chave: c for c in T.campos}
@@ -692,7 +699,9 @@ def sementes(texto, siglas, locais):
                                               f"do esquema {list(campos)}")
         for c in T.campos:
             if c.chave not in item:
-                raise _semente_invalida(c, ident, f"falta o campo '{c.chave}'")
+                if c.exigido:
+                    raise _semente_invalida(c, ident, f"falta o campo '{c.chave}'")
+                continue
             if not c.aceita(item[c.chave]):
                 raise _semente_invalida(c, ident, f"campo '{c.chave}' não é "
                                                   f"{c.tipo_valor}: {item[c.chave]!r}")
@@ -703,39 +712,53 @@ def sementes(texto, siglas, locais):
         if ident in vistos:
             raise _semente_invalida(G.C_ID, ident, f"campo '{G.C_ID.chave}' repetido")
         vistos.add(ident)
-        papel = item[G.C_PAPEL.chave].strip()
+        e = {"id": ident}
+        for c in T.campos:
+            if c is G.C_ID:
+                continue
+            valor = item.get(c.chave, [] if c.tipo_valor == "lista de textos" else "")
+            e[c.chave] = valor.strip() if isinstance(valor, str) else valor
+        for c in (G.C_TITULO, G.C_VEICULO):
+            if not e[c.chave]:
+                raise _semente_invalida(c, ident, f"campo '{c.chave}' vazio")
+        e[G.C_AUTORES.chave] = [a.strip() for a in e[G.C_AUTORES.chave]]
+        if not e[G.C_AUTORES.chave] or not all(e[G.C_AUTORES.chave]):
+            raise _semente_invalida(G.C_AUTORES, ident, f"campo '{G.C_AUTORES.chave}' vazio "
+                                                        f"ou com autor vazio")
+        if e[G.C_DOI.chave] and not G.F_DOI.padrao.match(e[G.C_DOI.chave]):
+            raise _semente_invalida(G.F_DOI, ident, f"campo '{G.C_DOI.chave}' "
+                                                    f"{e[G.C_DOI.chave]!r} fora da forma "
+                                                    f"{G.F_DOI.texto.split()[0]}")
+        papel = e[G.C_PAPEL.chave]
         if papel not in G.D_PAPEL.valores:
             raise _semente_invalida(G.D_PAPEL, ident, f"campo '{G.C_PAPEL.chave}' {papel!r} "
                                                       f"fora dos admitidos "
                                                       f"{list(G.D_PAPEL.valores)}")
-        ref = item[G.C_SEMENTE.chave].strip()
-        if not ref:
-            raise _semente_invalida(G.C_SEMENTE, ident, f"campo '{G.C_SEMENTE.chave}' vazio")
-        m = G.F_REFERENCIA.padrao.match(ref)
-        if not m:
-            raise _semente_invalida(G.F_REFERENCIA, ident, f"campo '{G.C_SEMENTE.chave}' "
-                                                           f"sem autoria e ano no padrão "
-                                                           f"esperado")
-        autores, ano, resto = m.groups()
-        bases = [b.strip() for b in item[G.C_BASES.chave]]
-        if not bases:
-            raise _semente_invalida(G.C_BASES, ident, f"campo '{G.C_BASES.chave}' vazio: "
-                                                      f"semente sem base")
-        fora = [b for b in bases if b not in siglas]
-        if fora:
-            raise _semente_invalida(G.C_BASES, ident, f"base {fora} não é sigla da "
-                                                      f"{G.T_BASES.rotulo} {list(siglas)}")
-        if len(set(bases)) != len(bases):
-            raise _semente_invalida(G.C_BASES, ident, f"base repetida {bases}")
-        primeiro = autores.split(",")[0].strip()
-        estudos.append({
-            "id": ident, "autores": autores.strip(), "ano": int(ano),
-            "titulo": _titulo(resto), "doi": _doi(ref),
-            "bases": bases, "papel": G.D_PAPEL.valores[papel], "chave": f"{primeiro} {ano}",
-        })
+        e[G.C_PAPEL.chave] = G.D_PAPEL.valores[papel]
+        e[G.C_BASES.chave] = _lista_de_siglas(item, G.C_BASES, ident, siglas,
+                                              G.T_BASES.rotulo, vazia_reprova=True)
+        e[G.C_FACETAS.chave] = _lista_de_siglas(item, G.C_FACETAS, ident, facetas_,
+                                                G.T_FACETAS.rotulo, vazia_reprova=False)
+        primeiro = e[G.C_AUTORES.chave][0].split(",")[0].strip()
+        e["chave"] = f"{primeiro} {e[G.C_ANO.chave]}"
+        estudos.append(e)
         locais["semente"][ident] = k - 1
     numeracao([e["id"] for e in estudos], G.I_SE, "sementes", G.SEMENTES)
     return estudos
+
+
+def referencia(e):
+    """A semente como referência legível, montada dos campos na ordem autores, ano, título,
+    veículo, volume, número, páginas e DOI; campo vazio não deixa marcador. É exibição:
+    não se grava."""
+    partes = [f"{'; '.join(e['autores'])} ({e['ano']}). {e['titulo']}. {e['veiculo']}"]
+    for campo, marca in (("volume", "v. "), ("numero", "n. "), ("paginas", "p. ")):
+        if e.get(campo):
+            partes.append(f"{marca}{e[campo]}")
+    texto = ", ".join(partes) + "."
+    if e.get("doi"):
+        texto += f" DOI: {e['doi']}"
+    return texto
 
 
 def distribuicao(estudos, siglas):
@@ -824,7 +847,7 @@ def analisa(ctx):
     siglas = [b["sigla"] for b in fts["bases"]]
     _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['ficha']}"
                                   for b in fts["bases"]])
-    est = sementes(ctx.texto_sementes, siglas, locais)
+    est = sementes(ctx.texto_sementes, siglas, ids_facetas, locais)
     params["sementes"] = {"valor": [f"{e['id']} ({e['papel']}): {', '.join(e['bases'])}"
                                     for e in est],
                           "origem": f"arquivo de sementes ({ctx.caminho_sementes})"}

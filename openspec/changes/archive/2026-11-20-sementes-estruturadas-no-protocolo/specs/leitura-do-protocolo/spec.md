@@ -7,7 +7,7 @@ O conjunto-semente SHALL ser lido do arquivo TOML localizado por `[documentos] s
 uma tabela `[[sementes]]` por estudo, com os campos do esquema estruturado declarado na
 gramática:
 
-- bibliográficos: `id` (`SEn`, único), `autores` (lista não vazia), `ano` (inteiro),
+- bibliográficos: `id` (`SEn`, único e em sequência a partir de SE1), `autores` (lista não vazia), `ano` (inteiro),
   `titulo`, `veiculo`, e os opcionais `volume`, `numero`, `paginas` e `doi`;
 - aferição: `bases` (siglas que indexam a semente), `facetas` (opcional, `FCTn` informadas
   pelo pesquisador) e `papel`;
@@ -18,6 +18,12 @@ gramática:
 Autoria, ano, título e DOI MUST ser lidos dos campos, sem extração por padrão de texto, e
 nenhum outro arquivo SHALL guardar dado de semente.
 
+#### Scenario: Arquivo atual
+- **WHEN** o arquivo de sementes tem as 10 sementes de SE1 a SE10, com os campos do
+  esquema estruturado
+- **THEN** a leitura aprova, e a distribuição por base e por papel exibida por `mostrar` é
+  a mesma exibida antes da troca do esquema intermediário pelo estruturado
+
 #### Scenario: Título com ponto
 - **WHEN** o `titulo` de uma semente contém um ponto seguido de maiúscula
 - **THEN** o título lido é o campo inteiro
@@ -25,10 +31,6 @@ nenhum outro arquivo SHALL guardar dado de semente.
 #### Scenario: Semente sem DOI
 - **WHEN** uma semente não tem `doi`
 - **THEN** a leitura aprova, e `pendencias` relata o DOI ausente
-
-#### Scenario: Lacuna na numeração
-- **WHEN** o arquivo tem SE1, SE2 e SE4, sem SE3
-- **THEN** a leitura aprova
 
 #### Scenario: Distribuição calculada
 - **WHEN** o arquivo é lido
@@ -38,9 +40,13 @@ nenhum outro arquivo SHALL guardar dado de semente.
 ### Requirement: Arquivo de sementes fora do esquema reprova
 Arquivo de sementes ausente MUST terminar com CONFIGURACAO, nomeando a chave e o caminho.
 MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a semente e o campo: TOML inválido; campo
-obrigatório ausente ou de tipo errado; campo desconhecido; `id` fora da forma `SEn` ou
-repetido; `doi` fora da forma `10.x/…`; base fora da tabela de bases, com outra grafia ou
+obrigatório ausente ou de tipo errado; campo desconhecido; `id` fora da forma `SEn`,
+repetido ou fora da sequência a partir de SE1; `doi` fora da forma `10.x/…`; base fora da tabela de bases, com outra grafia ou
 repetida; faceta fora da tabela de facetas ou repetida; `papel` fora do domínio.
+
+#### Scenario: Lacuna na numeração
+- **WHEN** o arquivo tem SE1, SE2 e SE4, sem SE3
+- **THEN** a leitura reprova, nomeando SE4 e o `id` esperado, SE3
 
 #### Scenario: Papel fora do domínio
 - **WHEN** uma semente traz `papel = "teste"`
@@ -66,14 +72,20 @@ repetida; faceta fora da tabela de facetas ou repetida; `papel` fora do domínio
 
 ## ADDED Requirements
 
-### Requirement: Juízo pendente relatado, sem reprovar
+### Requirement: Dado ou juízo pendente relatado, sem reprovar
 `pendencias` SHALL relatar, nomeando a semente, sem reprovar a leitura:
 
+- `doi` ausente;
 - `facetas` vazia ou ausente;
-- semente de validação cujas `facetas` não incluem nenhuma faceta marcada `Sim` na coluna
-  "Âncora obrigatória" da tabela de facetas. O caso fica como pendência até o pesquisador
-  decidir a regra;
+- semente de validação com `facetas` preenchida que não inclui nenhuma faceta marcada
+  `Sim` na coluna "Âncora obrigatória" da tabela de facetas. O caso fica como pendência
+  até o pesquisador decidir a regra. Com `facetas` vazia ou ausente, só se relata
+  "facetas a informar": a falta de âncora decorre dela e não é relatada à parte;
 - `tipo` ou `alinhamento` vazios.
+
+#### Scenario: DOI a obter
+- **WHEN** a semente SE6 não traz `doi`
+- **THEN** a leitura aprova, e `pendencias` relata SE6 com DOI ausente
 
 #### Scenario: Facetas a informar
 - **WHEN** a semente SE3 não traz `facetas`
@@ -84,10 +96,17 @@ repetida; faceta fora da tabela de facetas ou repetida; `papel` fora do domínio
   âncoras
 - **THEN** a leitura aprova, e `pendencias` relata SE5 sem faceta âncora
 
+#### Scenario: Validação sem facetas
+- **WHEN** a semente de validação SE3 não traz `facetas`
+- **THEN** `pendencias` relata SE3 com facetas a informar, e não relata SE3 sem faceta
+  âncora
+
 ### Requirement: Semente retirada não deixa resto
 Semente retirada SHALL sair do arquivo, das saídas regeneradas e da evidência bruta.
-`conferir-dados` MUST reprovar arquivo de `data/evidencia/referencias/` nomeado com um
-`SEn` que não está no arquivo de sementes, nomeando o arquivo.
+`conferir-dados` MUST reprovar arquivo da subpasta `referencias/` de `[dados] evidencia`
+(hoje `data/evidencia/referencias/`) nomeado com um `SEn` que não está no arquivo de
+sementes, nomeando o arquivo. As outras subpastas da evidência MUST NOT ser conferidas
+por essa regra.
 
 #### Scenario: Evidência de semente retirada
 - **WHEN** SE10 é retirada do arquivo e `SE10_crossref.json` continua em
@@ -110,9 +129,14 @@ referência exibida MUST NOT ser gravada em arquivo nem no protocolo.
 ### Requirement: Autoteste prova a reprovação do esquema estruturado
 O autoteste SHALL injetar numa cópia do arquivo de sementes, a partir das sementes lidas,
 cada um destes defeitos e exigir PROTOCOLO_ILEGIVEL: `ano` como texto, `autores` vazia,
-`doi` fora da forma, faceta fora da tabela, faceta repetida e o campo `semente` do esquema
-intermediário. O autoteste SHALL também exigir que `conferir-dados` reprove a evidência de
-semente inexistente.
+`doi` fora da forma, faceta fora da tabela, faceta repetida, lacuna na numeração dos `id` e
+o campo `semente` do esquema intermediário. O autoteste SHALL também exigir que
+`conferir-dados` reprove a evidência de semente inexistente.
+
+#### Scenario: DOI ausente não reprova
+- **WHEN** o autoteste retira o `doi` de uma semente numa cópia
+- **THEN** a cópia é aprovada e `pendencias` relata a semente; se a cópia reprovar, o
+  autoteste falha
 
 #### Scenario: Defeito não detectado
 - **WHEN** a cópia com o campo `semente` é aprovada

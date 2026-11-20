@@ -8,27 +8,17 @@ import copy
 
 from .. import gramatica as G
 from ..config import relativo
-from ..dados import (le_json, problemas_citacoes_registro, problemas_registro,
-                     problemas_sementes)
+from ..dados import le_json, problemas_citacoes_registro, problemas_registro
 from ..fichas import ficha
 
 
 def casos(ctx, g):
     d = ctx.protocolo()
     cfg = ctx.config
-    autorais = cfg.valor("planilha.campos_autorais")
     bds = [b["id"] for b in d["bases"]]
     siglas = [b["sigla"] for b in d["bases"]]
     caminho_reg = str(cfg.valor("dados.registro"))
-    sem = reg = None
-
-    def sementes_reprova(transforma, avisos=False):
-        def caso():
-            copia = copy.deepcopy(sem)
-            transforma(copia)
-            p, a = problemas_sementes(ctx, copia, d)
-            return bool(a if avisos else p)
-        return caso
+    reg = None
 
     def registro_reprova(transforma):
         def caso():
@@ -63,18 +53,9 @@ def casos(ctx, g):
         return next((x for x in bds if x != bd_de[sigla]),
                     f"{G.I_BD.prefixo}{len(bds) + 1}")
 
-    proximo_se = f"{G.I_SE.prefixo}{len(d['sementes']) + 99}"
     alvo = [siglas[k % len(siglas)] for k in range(4)]
     bd_de = dict(zip(siglas, bds))
     lista = [
-        ("semente do protocolo sem metadados",
-         lambda: sementes_reprova(lambda c: c.__setitem__("estudos", c["estudos"][1:]))()),
-        ("semente sem campo de conferência",
-         lambda: sementes_reprova(lambda c: c["estudos"][0].pop(autorais[0], None))()),
-        ("semente fora do protocolo com metadados preservados",
-         lambda: sementes_reprova(lambda c: c["estudos"].append(
-             {"id": proximo_se, "ligacao": "ti:semente inventada",
-              **{x: "" for x in autorais}}), avisos=True)()),
         ("registro sem uma das bases",
          lambda: registro_reprova(lambda c: c["bases"].pop(bds[0]))()),
         ("execução apontando arquivo de exportação ausente",
@@ -97,14 +78,12 @@ def casos(ctx, g):
                                     f"em `{caminho_reg}`.")()),
     ]
 
-    sem, erro_s = le_json(cfg.caminho("dados.sementes"))
     reg, erro_r = le_json(cfg.caminho("dados.registro"))
-    if erro_s or erro_r:
-        g.nao_executa(len(lista), "; ".join(e for e in (erro_s, erro_r) if e))
+    if erro_r:
+        g.nao_executa(len(lista), erro_r)
         return
-    base_ps, _ = problemas_sementes(ctx, sem, d)
     base_pr = problemas_registro(ctx, reg, bds)
-    if base_ps or base_pr:
-        g.falha(f"o arquivo alimentado corrente já está reprovado: {(base_ps or base_pr)[0]}")
+    if base_pr:
+        g.falha(f"o arquivo alimentado corrente já está reprovado: {base_pr[0]}")
     for nome, caso in lista:
         g.testa(f"reprovou: {nome}", caso(), "aprovou indevidamente")

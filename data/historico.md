@@ -157,3 +157,29 @@ Pendência de método, levada ao pesquisador: N3 diz que a fração elegível de
 - **Efeito das strings novas.** O efeito da retirada dos 23 termos de STR2 sobre EB4 e EB5 será avaliado na busca (teste de aderência e sonda de sensibilidade), e não antes.
 
 Alcance: **instrumento** (relato da sensibilidade e skill) e **busca** (sem restrição por acesso aberto na Scopus). Limiares, strings e critérios não mudam por estas decisões.
+
+## 2026-11-20 — Conjunto-semente estruturado campo a campo (change `sementes-estruturadas-no-protocolo`)
+
+O arquivo de sementes (`[documentos] sementes` do `config.toml`) passou do esquema intermediário (`id`, `semente` em texto livre, `bases`, `papel`) ao esquema estruturado, e é agora o único lugar de dado de semente. Decisões do pesquisador de 2026-11-19 e 2026-11-20, registradas na proposta da change.
+
+- **Campos estruturados.** Os dados bibliográficos são campos (`autores` em lista, `ano` inteiro, `titulo`, `veiculo`, `volume`, `numero`, `paginas`, `doi`), e não se extraem mais da referência por padrão de texto: `_titulo()` e `_doi()` saíram do leitor. Entraram `facetas` (FCTn informadas pelo pesquisador) e `observacoes` (o que a referência traz e não cabe em outro campo, transcrito como está: SE4 "SciTePress"; SE5 "(UEL)"; SE6 "(Springer)"; SE10 os editores, "Aalborg, Dinamarca" e "Ergon Verlag"). `bases` passa a significar indexação, e não recuperação. A transcrição foi feita campo a campo, sem os leitores de padrão e sem completar dado de memória. A reconstituição a partir do campo `semente` não deixou sobra em nenhuma das 10 sementes. O texto de `semente` diferia da célula da tabela de bf6b9bf só pelo escape `\.` em SE2, SE3, SE7 e SE8, e a diferença foi apresentada ao pesquisador antes da gravação.
+- **Fusão dos dados de conferência, com o mesmo conteúdo.** `verificacao`, `tipo`, `alinhamento`, `nota`, `veiculo_conferido` e `eric` passaram de `data/sementes.json` ao arquivo de sementes, casados por DOI. A conferência campo a campo deu 0 diferença nas 10 sementes. `data/sementes.json` foi removido, e com ele `sementes sincronizar`, a ligação por DOI ou título, o aviso de entrada órfã e as chaves `[dados] sementes` e `[planilha] campos_autorais` do `config.toml`.
+- **`escopo` retirado.** Estava vazio nas 10 sementes, o que foi verificado antes da retirada. A planilha de aderência perdeu a coluna. Campo `escopo` no arquivo reprova como campo desconhecido.
+- **Sequência de `id` mantida, com renumeração na retirada.** O `id` continua em sequência a partir de SE1, sem lacuna. Retirar uma semente renumera as seguintes. A retirada renomeia a evidência bruta, atualiza `data/pendencias.json` e registra neste histórico a correspondência entre `id` antigo e novo (skill `conjunto-semente`, §4). Evidência `SEn_…` de `id` que não está no arquivo reprova `conferir-dados`. A conferência percorre só a subpasta `referencias/` de `[dados] evidencia` (decisão do pesquisador de 2026-11-20).
+- **DOI ausente é pendência, não reprovação.** `pendencias` relata o DOI ausente, as facetas vazias, a semente de validação sem faceta âncora e `tipo` ou `alinhamento` vazios. Nenhuma semente atual está sem DOI. As 10 aparecem com facetas a informar (PD20). A regra para semente de validação sem âncora fica em branco por decisão do pesquisador (PD21). Com `facetas` vazia, só se relata "facetas a informar", e a falta de âncora não é relatada à parte (decisão do pesquisador de 2026-11-20).
+
+Fundamento: o leitor de padrão lia sem reprovar, e errado, referência com ponto no título, com subtítulo ou com DOI fora do fim. Os metadados de conferência viviam noutro arquivo, ligados por um elo frágil (proposta da change).
+
+Alcance: **instrumento**. Composição, critérios, limiares, strings, recorte e o próprio conjunto de sementes não mudam. Conferências sobre o estado depois da change:
+
+- a distribuição exibida por `mostrar` é idêntica à de antes: 10 sementes, 15 incidências; wos 4, scopus 6, eric 3, brapci 2; desenvolvimento 1, validação 9;
+- `semente_aderencia.csv` tem as mesmas 40 linhas, menos a coluna `escopo`. A coluna `titulo` difere nas 40 linhas só pelo ponto final, que `_titulo()` incluía e o campo `titulo` não traz;
+- o ensaio seco é idêntico.
+
+`rsl conferir` sai com 0. `rsl autoteste` executa 224 casos sem falha (PARCIAL, 7 casos dependentes do registro de execução não executados; eram 10, e os 3 de `sementes.json` saíram com o arquivo). `rsl conferir-dados` sai com 5, pelo registro de execução ausente (PD02).
+
+O que não se alterou e por quê:
+
+- as entradas anteriores deste histórico citam o caminho e o esquema vigentes na data, e não se reescrevem;
+- a mudança de forma do protocolo já foi registrada pela entrada de `reestruturacao-do-protocolo`;
+- `conferir-dados` não confere se a evidência de um `id` existente é mesmo daquela semente. Depois de uma renumeração, arquivo não renomeado passa em silêncio. Comparar o DOI da evidência com o `doi` da semente fica em aberto, para decisão do pesquisador (design da change, Open Questions).

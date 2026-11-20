@@ -7,8 +7,6 @@ exigido sem gerador faz o autoteste falhar, nomeando o elemento: a gramática n�
 exigência que o autoteste não prove.
 """
 
-import re
-
 from .. import gramatica as G
 from ..conferencia import conferir
 from ..fichas import ficha
@@ -143,8 +141,6 @@ ESPECIFICOS = {
                                        G.D_MODO.campo),
     G.D_ACAO: _acao,
     G.D_PAPEL: _no_primeiro_item(G.C_PAPEL.chave, lambda v: FORA_DA_FORMA),
-    G.F_REFERENCIA: _no_primeiro_item(G.C_SEMENTE.chave,
-                                      lambda v: re.sub(r"\(\d{4}\)\.", "", v, count=1)),
     G.F_STRING_BASE: _string_base,
     G.D_CAMADAS: _valor_do_rotulo(G.RF_CAMADAS),
     G.D_EXECUCAO: _execucao,

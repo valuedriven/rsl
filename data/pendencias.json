@@ -9,13 +9,13 @@
     {
       "id": "PD01",
       "categoria": "dados",
-      "descricao": "Metadado de conferência das 10 sementes: a verificação bibliográfica e o veículo foram declarados conferidos pelo pesquisador em 2026-11-19 e registrados em data/sementes.json. O DOI do capítulo da SE10 foi conferido no Crossref em 2026-11-19 e registrado (10.5771/9783956507762-484). Os campos escopo, tipo e alinhamento continuam vazios, porque não constam do protocolo e dependem de decisão do pesquisador; o campo eric permanece vazio.",
-      "origem": "data/sementes.json; data/historico.md, 2026-11-19; python3 src/protocolo.py --pendencias",
-      "bloqueia": "conferir-dados; teste de aderência (M3/E2)",
-      "acao_sugerida": "preencher escopo, tipo e alinhamento de cada semente, que são juízos autorais e não dados bibliográficos; sementes sincronizar reconcilia a ligação e não preenche a conferência",
+      "descricao": "Conferência das 10 sementes, registrada no arquivo de sementes (`[documentos] sementes` do config.toml): a verificação bibliográfica e o veículo foram declarados conferidos pelo pesquisador em 2026-11-19 (campos `verificacao` e `veiculo_conferido`). O DOI do capítulo da SE10 foi conferido no Crossref em 2026-11-19 e registrado (10.5771/9783956507762-484). Os campos `tipo` e `alinhamento` continuam vazios, porque dependem de decisão do pesquisador; o campo `eric` permanece vazio.",
+      "origem": "arquivo de sementes (`[documentos] sementes`); data/historico.md, 2026-11-19 e 2026-11-20; python3 -m rsl pendencias",
+      "bloqueia": "teste de aderência (M3/E2): a planilha sai com `tipo` em branco",
+      "acao_sugerida": "preencher `tipo` e `alinhamento` de cada semente no arquivo de sementes (`[documentos] sementes`); são juízos autorais, não dados bibliográficos",
       "responsavel": "pesquisador",
       "estado": "aberta",
-      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento."
+      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento. 2026-11-20: os dados de conferência passaram de data/sementes.json, removido, ao arquivo de sementes, com o mesmo conteúdo; o campo escopo foi retirado por decisão do pesquisador; restam tipo e alinhamento."
     },
     {
       "id": "PD02",
@@ -205,6 +205,26 @@
       "estado": "resolvida",
       "limitacao": "A conferência é declaração do pesquisador; não há data e fonte por base. Não deve ser citada como verificação independente.",
       "resolucao": "2026-11-19: conferência declarada pelo pesquisador; coluna e fichas mantidas, sem divergência; data e fonte por base não detalhadas. Lastro limitado registrado nesta pendência."
+    },
+    {
+      "id": "PD20",
+      "categoria": "aderencia",
+      "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio nas 10 sementes do arquivo de sementes (`[documentos] sementes`). É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
+      "origem": "openspec/changes/sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl pendencias",
+      "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda; não bloqueia a execução do teste de aderência",
+      "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill conjunto-semente, §4)",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD21",
+      "categoria": "aderencia",
+      "descricao": "Regra para semente de validação sem faceta âncora: não há regra para a semente de validação cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl pendencias` só relata o caso, sem reprovar.",
+      "origem": "openspec/changes/sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
+      "bloqueia": "nada por ora; o caso só aparece quando as facetas das sementes forem informadas (PD20)",
+      "acao_sugerida": "decidir a regra e registrá-la (skill registrar-decisao); até lá, o caso é relatado",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
     }
   ]
 }

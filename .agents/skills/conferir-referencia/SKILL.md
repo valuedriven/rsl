@@ -46,8 +46,8 @@ fica ao lado dele e muda à medida que a consulta ocorra.
 ## Procedimento
 
 1. Verificar se o item já tem estado registrado — conjunto-semente no arquivo de
-   sementes (`[documentos] sementes` do `config.toml`), com o metadado de conferência em
-   `data/sementes.json`; leitura exploratória em `docs/02`, seção Estudos
+   sementes (`[documentos] sementes` do `config.toml`), com os dados bibliográficos e a
+   conferência campo a campo; leitura exploratória em `docs/02`, seção Estudos
    inicialmente consultados; obras de referência em `docs/02`, seção Obras de referência
    a consultar.
 2. Não tendo, consultar a fonte. Havendo busca na web disponível, usá-la e **resolver até o

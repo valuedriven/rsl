@@ -13,13 +13,15 @@ Toda operação SHALL ser executada por `python3 -m rsl <subcomando>`, a partir 
 projeto. Os subcomandos SHALL ser estes:
 
 - `conferir`, `conferir-dados`, `autoteste`, `mostrar`, `pendencias` e `gramatica`;
-- `sementes sincronizar` e `sementes planilha`;
+- `sementes planilha`;
 - `termos sonda`, `termos exportar`, `termos validar <sigla>` e `termos importar`;
 - `busca registrar`, `busca derivar`, `busca aderencia`, `busca fidelidade` e
   `busca sensibilidade`.
 
 Os scripts `src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.py` e
-`src/gen_semente.py` MUST NOT continuar existindo como ponto de entrada.
+`src/gen_semente.py` MUST NOT continuar existindo como ponto de entrada. O subcomando
+`sementes sincronizar` MUST NOT existir, porque o conjunto-semente não tem mais arquivo
+separado a reconciliar.
 
 #### Scenario: Ajuda
 - **WHEN** se executa `python3 -m rsl` sem subcomando
@@ -28,6 +30,11 @@ Os scripts `src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.
 #### Scenario: Script antigo
 - **WHEN** se procura `src/protocolo.py` ou `src/gen_semente.py`
 - **THEN** o arquivo não existe, e nenhum documento do projeto cita o script antigo como
+  comando
+
+#### Scenario: Sincronização retirada
+- **WHEN** se executa `python3 -m rsl sementes sincronizar`
+- **THEN** a saída tem o código USO, e nenhum documento do projeto cita o subcomando como
   comando
 
 ### Requirement: Correspondência com os nomes das specs
@@ -41,7 +48,6 @@ correspondência:
 | `--autoteste` | `autoteste` |
 | `--mostrar` | `mostrar` |
 | `--pendencias` | `pendencias` |
-| `--sincronizar` | `sementes sincronizar` |
 | `gen_semente.py` | `sementes planilha` |
 | `--sonda` | `termos sonda` |
 | `--exportar` | `termos exportar` |
@@ -53,7 +59,8 @@ correspondência:
 | `--fidelidade` | `busca fidelidade` |
 | `--sensibilidade` | `busca sensibilidade` |
 
-O comportamento exigido por essas specs MUST NOT mudar com a troca de nome.
+O comportamento exigido por essas specs MUST NOT mudar com a troca de nome. `--sincronizar`
+não tem sucessor: requisito que o cite fica sem efeito.
 
 #### Scenario: Requisito antigo
 - **WHEN** uma spec exige que `--conferir` reprove um defeito

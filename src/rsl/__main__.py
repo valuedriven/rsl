@@ -65,10 +65,8 @@ def _parser():
     novo(sub, "gramatica", "exibe o contrato de forma que o leitor exige do protocolo e "
          "das fichas", "relatorio", "cmd_gramatica", contexto=False)
 
-    sem = sub.add_parser("sementes", help="metadado das sementes e instrumento de aderência")
+    sem = sub.add_parser("sementes", help="instrumento do teste de aderência")
     sub_sem = sem.add_subparsers(title="subcomandos", metavar="<subcomando>")
-    novo(sub_sem, "sincronizar", "reconcilia o arquivo de sementes com o protocolo",
-         "dados", "cmd_sincronizar")
     novo(sub_sem, "planilha", "grava a planilha do teste de aderência e imprime o ensaio "
          "seco", "sementes", "cmd_planilha")
 

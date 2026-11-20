@@ -16,10 +16,12 @@ campo desconhecido. Os campos declarados SHALL ser os do esquema estruturado: `i
 - **THEN** `rsl gramatica` o exibe, e o autoteste passa a gerar o caso de campo ausente
 
 #### Scenario: Caminho fora da gramática
-- **WHEN** se procura `docs/sementes.toml` nas declarações da gramática
+- **WHEN** se procura nas declarações da gramática o caminho configurado em `[documentos]
+  sementes`
 - **THEN** não há ocorrência, porque o caminho vem do `config.toml`
 
 #### Scenario: Esquema estruturado exibido
 - **WHEN** se executa `rsl gramatica`
 - **THEN** o grupo do arquivo de sementes traz os 19 campos do esquema estruturado, cada
-  um com tipo e exigência, e não traz `semente`
+  um com tipo e exigência, o `id` com a exigência de sequência a partir de SE1, e não
+  traz `semente`
