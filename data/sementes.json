@@ -1,5 +1,5 @@
 {
-  "_leia": "AUTORAL. Metadados de conferência de cada semente. As referências, o ano, o DOI, as bases esperadas e a chave de citação vêm do protocolo (docs/03_protocolo_estrategia_pesquisa.md). `ligacao` é a ligação com o protocolo, por DOI ou título — não é conteúdo bibliográfico e não se edita; `id` é rótulo e pode mudar sem perder o metadado. `--sincronizar` casa por DOI ou título e preserva o que foi conferido. Semente retirada do protocolo permanece, e `--pendencias` a reporta.",
+  "_leia": "AUTORAL. Metadados de conferência de cada semente. As referências, o ano, o DOI, as bases esperadas e a chave de citação vêm do protocolo (docs/03_protocolo_estrategia_pesquisa.md). `ligacao` é a ligação com o protocolo, por DOI ou título — não é conteúdo bibliográfico e não se edita; `id` é rótulo e pode mudar sem perder o metadado. `python3 -m rsl sementes sincronizar` casa por DOI ou título e preserva o que foi conferido. Semente retirada do protocolo permanece, e `python3 -m rsl pendencias` a reporta.",
   "versao": 2,
   "estudos": [
     {

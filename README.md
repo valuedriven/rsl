@@ -16,7 +16,7 @@ repete o conteúdo dos documentos.
 | --- | --- |
 | `docs/` | conteúdo da revisão: plano, protocolo e fichas de busca; os arquivos do pesquisador e os que o agente mantém |
 | `data/` | o que é alimentado — os JSON, o histórico e as exportações — e o que os scripts gravam nele: as planilhas e CSVs na raiz, a evidência em `evidencia/` e as cópias em `arquivo/` |
-| `src/` | scripts de execução |
+| `src/rsl/` | pacote de execução: ponto de entrada único `python3 -m rsl <subcomando>` |
 | `config.toml` | configuração dos scripts: caminho do protocolo, valores padrão dos parâmetros não estruturais, padrão de caminho das fichas e arquivos de dados |
 | `.agents/skills/` | competências metodológicas e operacionais do agente |
 | `AGENTS.md` | contrato de trabalho do agente: como ele se comporta, não o que o projeto decide |
@@ -35,25 +35,25 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `docs/busca_base_scopus.md` | ficha da Scopus, mesma estrutura | idem |
 | `docs/busca_base_eric.md` | ficha da ERIC, mesma estrutura | idem |
 | `docs/busca_base_brapci.md` | ficha da BRAPCI, mesma estrutura | idem |
-| `src/protocolo.py` | leitor do protocolo: confere documento e arquivos alimentados, e reconcilia o metadado das sementes | antes de executar qualquer script, e após alterar o protocolo |
-| `src/derivar_expressoes.py` | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
-| `src/validar_termos.py` | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (TBCI, UNESCO Thesaurus) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
-| `src/gen_semente.py` | geração da planilha de aderência a partir do conjunto-semente, com o papel de cada semente e o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
+| `src/rsl/` (`conferir`, `conferir-dados`, `autoteste`, `mostrar`, `pendencias`, `gramatica`) | leitura e conferência do protocolo e das fichas, conferência dos arquivos alimentados, autoteste único, resumo dos parâmetros em uso e contrato de forma do protocolo | antes de executar qualquer subcomando, e após alterar o protocolo ou uma ficha |
+| `src/rsl/` (`busca …`) | registro das execuções no `registro_execucao.json`, derivação local das expressões, aderência, fidelidade e sonda de sensibilidade | registrar execução, calcular a pertinência de cada registro, testar a busca |
+| `src/rsl/` (`termos …`) | validação terminológica nos instrumentos que o protocolo declara por faceta: consulta automatizada onde há cliente (módulo de mesma sigla em `src/rsl/termos/clientes/`) e linha pendente de validação manual nos demais, com a planilha como registro | conferir o estatuto de cada termo |
+| `src/rsl/` (`sementes …`) | reconciliação do metadado das sementes e planilha de aderência a partir do conjunto-semente, com o papel de cada semente e o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento | saber o que já foi decidido e por quê |
 | `data/pendencias.json` | Pendências: ações ainda a executar, cada uma com origem, o que bloqueia, ação sugerida, responsável e estado | saber o que falta fazer |
-| `config.toml` | caminho do protocolo, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados e campos das planilhas | mudar o arquivo do protocolo, um padrão ou o local das fichas |
+| `config.toml` | caminho do protocolo, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados, arquivos de saída e campos das planilhas | mudar o arquivo do protocolo, um padrão, o local das fichas ou de um arquivo |
 
 Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arquivo:
 
 | Caminho | O que contém | Quem escreve |
 | --- | --- | --- |
-| `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `--sincronizar` |
-| `data/registro_execucao.json` | resultados da execução das consultas nas bases: sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `--registrar` |
+| `data/sementes.json` | metadados de conferência de cada semente, ligados por DOI ou título | pesquisador, reconciliado por `sementes sincronizar` |
+| `data/registro_execucao.json` | resultados da execução das consultas nas bases: sondagens de sintaxe, estado da interface, retornos, exportações, conferências e aderência, por base; e, em cada execução registrada, o arquivo e a conferência do retorno | pesquisador e `busca registrar` |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, com data, alcance e fundamento | pesquisador |
 | `data/pendencias.json` | ações ainda a executar, identificadas por `PDnn` | pesquisador e agente, a pedido |
 | `data/execucoes/<base>/` | exportações intactas das bases | pesquisador |
-| `data/` (raiz) | planilhas e CSVs gerados pelos scripts: `validacao_termologica.csv`, `semente_aderencia.csv`, `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_EB<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | scripts e pesquisador (planilha de validação) |
-| `data/evidencia/` | resposta bruta de cada consulta terminológica | `validar_termos.py` |
+| `data/` (raiz) | planilhas e CSVs gravados pelos subcomandos (nomes em `[dados]` e `[saidas]` do `config.toml`): `validacao_terminologica.csv`, `semente_aderencia.csv`, `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_eb<n>.csv` e `sensibilidade_<base>.csv`; a planilha de validação é o registro do estatuto dos termos | subcomandos e pesquisador (planilha de validação) |
+| `data/evidencia/` | resposta bruta de cada consulta terminológica | `termos validar` |
 | `data/arquivo/` | cópias anteriores, com `SHA256` | migrações |
 
 As pastas `execucoes/`, `evidencia/` e `arquivo/` são criadas quando o primeiro arquivo chega.
@@ -62,7 +62,7 @@ O que é **derivado do documento não vira arquivo**: questão, facetas, instrum
 strings, expressões, critérios e fontes são lidos do protocolo a cada execução, e a forma de
 cada base, da ficha correspondente. Em `data/` guarda-se o que alguém **alimenta** — o
 metadado das sementes e o registro das execuções — e a planilha de validação, registro do
-estatuto dos termos, lida e regravada por `validar_termos.py`.
+estatuto dos termos, lida e regravada por `termos exportar`, `termos validar` e `termos importar`.
 
 ### Três registros, três finalidades
 
@@ -82,8 +82,10 @@ Cada registro guarda um tipo de informação, e nenhum repete o outro:
 
 ### Configuração e parâmetros
 
-`config.toml`, na raiz, é lido por `src/protocolo.py` com `tomllib` (**Python 3.11+**, só
-biblioteca padrão). Ele traz:
+`config.toml`, na raiz, é lido pelo pacote `src/rsl/` com `tomllib` (**Python 3.11+**, só
+biblioteca padrão), sob demanda: importar um módulo não lê nada; a leitura acontece quando um
+subcomando a pede. A variável de ambiente `RSL_CONFIG` aponta outro arquivo, para ensaio e
+autoteste. Ele traz:
 
 - `protocolo` — o arquivo do protocolo a ser lido; é o único parâmetro que o protocolo não
   sobrescreve;
@@ -91,9 +93,10 @@ biblioteca padrão). Ele traz:
   recorte, limiar de aderência (aplicado só às sementes de validação), faixa de
   sensibilidade, âncoras, expressão executada, sonda, limiar de divergência da fidelidade e
   sensibilidade mínima da calibração da triagem assistida;
-- os parâmetros que o protocolo não declara: dimensões obrigatórias dos critérios, mínimo de
-  termos por string, natureza que identifica a executada e a sonda, arquivos de dados,
-  campos das planilhas;
+- os parâmetros que o protocolo não declara: dimensões obrigatórias dos critérios e a do
+  recorte temporal, mínimo de termos por string, natureza que identifica a executada e a
+  sonda, ano de recência e tamanho-alvo da amostra da sonda (`[busca]`), arquivos de dados
+  (`[dados]`), arquivos de saída (`[saidas]`) e campos das planilhas;
 - `[documentos] ficha` — padrão de caminho da ficha de cada base, com `{sigla}`
   (`docs/busca_base_{sigla}.md`).
 
@@ -101,36 +104,70 @@ biblioteca padrão). Ele traz:
 protocolo, e a ausência ou o valor inválido reprova a leitura, nomeando tabela, linha e
 campo. São a composição das expressões; os instrumentos de controle terminológico (tabela
 `Sigla | Instrumento | Modo | Caminho | Idiomas | FCTs`, com `Modo` `Manual` ou
-`Automático` — este exige cliente de mesma sigla em `src/validar_termos.py`); as bases
+`Automático` — este exige cliente de mesma sigla em `src/rsl/termos/clientes/`); as bases
 (tabela "Bases de dados": `ID Base`, `Sigla`, `Nome da base`), cuja ficha se localiza pela
 sigla; o conjunto-semente (tabela `ID Semente | Semente | Bases | Papel`, com as siglas da
 tabela de bases e o papel `desenvolvimento` ou `validação`); e os idiomas do quadro
 terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`.
 A forma de execução de cada base (`- Execução: única` ou `particionada`) é declarada na
 própria ficha. As chaves antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`,
-`idiomas`) reprovam a configuração se voltarem a ela.
+`idiomas`, `expressoes.colunas`) reprovam a configuração se voltarem a ela, e chave fora do
+esquema também. A forma que o leitor exige do protocolo e das fichas — seções, tabelas,
+colunas, rótulos, marcadores, identificadores e frases de onde se lê um parâmetro — é o
+contrato exibido por `python3 -m rsl gramatica`, a partir da única declaração no código
+(`src/rsl/gramatica.py`); não há cópia mantida à mão.
 
 **Precedência (parâmetros não estruturais):** o valor declarado no protocolo prevalece sobre
 o padrão; o padrão vale só quando o protocolo não declara o parâmetro. Trecho do protocolo presente e ilegível reprova a
-conferência, sem cair no padrão. `python3 src/protocolo.py --mostrar` exibe o valor em uso e
-a origem de cada parâmetro. Configuração ausente, inválida ou incompleta faz os scripts
-pararem com mensagem que nomeia a chave.
+conferência, sem cair no padrão. `python3 -m rsl mostrar` exibe o valor em uso e a origem de
+cada parâmetro. Configuração ausente, inválida ou incompleta faz o subcomando parar com o
+código CONFIGURACAO e mensagem que nomeia a chave.
 
 ### Scripts
 
-Os scripts leem o protocolo e os artefatos de `data/`; nenhum decide conteúdo — conferem,
-derivam e registram. Quatro invariantes valem para todos:
+Toda operação se executa por um ponto de entrada único, a partir da raiz do projeto:
+
+```bash
+PYTHONPATH=src python3 -m rsl <subcomando>     # ou, de dentro de src/: python3 -m rsl …
+python3 -m rsl                                 # sem subcomando: a ajuda, com os códigos
+```
+
+Neste README os comandos aparecem como `python3 -m rsl …`, com `src/` no caminho de
+importação. Os subcomandos se agrupam por atividade: `conferir`, `conferir-dados`,
+`autoteste`, `mostrar`, `pendencias`, `gramatica`; `sementes sincronizar|planilha`;
+`termos sonda|exportar|validar <sigla>|importar`; `busca
+registrar|derivar|aderencia|fidelidade|sensibilidade`. Todo subcomando termina com um destes
+códigos de saída, e toda saída diferente de OK termina com uma linha que nomeia o código:
+
+| Código | Nome | Quando |
+| --- | --- | --- |
+| 0 | OK | a operação terminou e nada reprovou |
+| 1 | REPROVADO | uma conferência ou condição de aceite reprovou o conteúdo: problema de coerência, `busca registrar` recusado, fidelidade acima do limiar, autoteste com caso que falhou |
+| 2 | USO | argumento ou subcomando inválido |
+| 3 | CONFIGURACAO | `config.toml` ausente, inválido ou incompleto, ou chave `protocolo` que aponta arquivo inexistente |
+| 4 | PROTOCOLO_ILEGIVEL | protocolo ou ficha fora da gramática que o leitor exige (`gramatica`) |
+| 5 | DADOS | arquivo alimentado, exportação ou arquivo de entrada ausente ou ilegível |
+| 6 | PARCIAL | autoteste sem falha, com casos não executados |
+| 7 | FONTE_EXTERNA | fonte externa com erro, bloqueio, captcha ou limite excedido |
+
+Quando mais de uma condição ocorre, vale a mais grave: CONFIGURACAO, PROTOCOLO_ILEGIVEL,
+DADOS, FONTE_EXTERNA, REPROVADO, PARCIAL. Os arquivos gravados seguem `snake_case`, em
+português e sem acento, com o substantivo do conteúdo e, quando há um por chave, a chave em
+minúsculas (`fidelidade_eb2.csv`, `sensibilidade_wos.csv`).
+
+Os subcomandos leem o protocolo e os artefatos de `data/`; nenhum decide conteúdo —
+conferem, derivam e registram. Quatro invariantes valem para todos:
 
 - **Uma fonte por dado.** O vocabulário, as expressões, os critérios e os parâmetros que
   declara vêm do protocolo; a forma da busca, da ficha da base; o resto, do `config.toml`.
   Não há cópia intermediária nem valor de parâmetro no código.
 - **O que é autoral se preserva.** Os metadados de conferência em `sementes.json`, as
   execuções em `registro_execucao.json` e a declaração de cobertura nas fichas são editados
-  pelo pesquisador; `--sincronizar` só reconcilia sementes, `--registrar` só acrescenta ou
-  atualiza a execução que ele mesmo confere e `--importar` preserva as decisões da
-  validação na planilha.
+  pelo pesquisador; `sementes sincronizar` só reconcilia sementes, `busca registrar` só
+  acrescenta ou atualiza a execução que ele mesmo confere e `termos importar` preserva as
+  decisões da validação na planilha.
 - **Nada se apaga por sincronização.** Semente retirada do protocolo permanece no arquivo
-  com o seu metadado e é reportada por `--conferir-dados` e por `--pendencias`, para decisão;
+  com o seu metadado e é reportada por `conferir-dados` e por `pendencias`, para decisão;
   termo retirado do protocolo permanece na planilha de validação como linha fora do
   protocolo. Termo vigente do protocolo ausente da string de uma base só passa se a ficha o
   declarar na redução; sem declaração, a conferência daquela base reprova — e só daquela.
@@ -142,26 +179,32 @@ derivam e registram. Quatro invariantes valem para todos:
   o protocolo é feita por DOI ou título, de modo que o rótulo pode mudar sem perder o
   metadado.
 
-`--conferir` verifica a **coerência interna** do protocolo, não valores esperados: numeração
+`conferir` verifica a **coerência interna** do protocolo, não valores esperados: numeração
 dos identificadores, camadas do vocabulário, string contida no quadro da sua faceta,
 âncoras em todas as expressões, sonda igual à conjunção das âncoras, executada igual à
 união das específicas, dimensões obrigatórias dos critérios, justificativa preenchida em
 todo critério de elegibilidade, faixa de sensibilidade, instrumentos com idiomas e facetas
 do protocolo, ficha existente para cada sigla de base, IDs de critério da seção 2 de cada
 ficha iguais aos da tabela do protocolo e sementes citando só siglas da tabela de bases; a
-distribuição das sementes por base e por papel é calculada da tabela. `--conferir-dados` reprova
+distribuição das sementes por base e por papel é calculada da tabela. Protocolo ou ficha
+fora da gramática sai com PROTOCOLO_ILEGIVEL, nomeando o elemento do contrato; incoerência,
+com REPROVADO. `conferir-dados` reprova
 arquivo alimentado ausente ou fora do protocolo, a execução que declara exportação
 inexistente, a citação do registro de execução numa ficha sem identificador `(BDn/<id>)`, com `BDn` de outra base ou remetendo a execução
 inexistente — e, por base, termo vigente fora da string sem redução declarada e termo fora
 da STR dentro dela, mesmo em flexão.
-`--autoteste` injeta defeitos numa cópia e exige que cada conferência reprove pelo motivo
-esperado — inclusive configuração inválida, precedência, parâmetro estrutural ausente ou
-inválido, ficha divergente do protocolo e
-composição das expressões que quebra as relações entre executada, específicas, geral e sonda
-(esta também por `src/derivar_expressoes.py --autoteste`).
-`--sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido; rodar
-duas vezes não muda nada. `--pendencias` relata sem escrever. Os comandos estão no fluxo de
-trabalho, em M3.
+`autoteste` injeta defeitos numa cópia em memória e exige que cada conferência reprove pelo
+motivo e com o código esperados — inclusive configuração inválida, precedência, parâmetro
+estrutural ausente ou inválido, cada elemento exigido da gramática, ficha divergente do
+protocolo, arquivos alimentados, composição das expressões que quebra as relações entre
+executada, específicas, geral e sonda, e aderência por papel —, numa só chamada e com a
+contagem de cada grupo. As cópias defeituosas são geradas da estrutura lida, não de literais
+do protocolo vigente: semente nova ou faixa alterada dentro do válido não quebram o
+autoteste. Sem os arquivos alimentados, o resultado é PARCIAL, com o número de casos que não
+rodaram.
+`sementes sincronizar` religa a semente por DOI ou título, sem tocar no que já foi conferido;
+rodar duas vezes não muda nada. `pendencias` relata sem escrever. Os comandos estão no fluxo
+de trabalho, em M3.
 
 ## Fluxo de trabalho — RS Banyan
 
@@ -256,40 +299,47 @@ existir.
 
 ```bash
 # confere documento, dados e guardas
-python3 src/protocolo.py --conferir
-python3 src/protocolo.py --conferir-dados
-python3 src/protocolo.py --conferir --autoteste
-python3 src/protocolo.py --mostrar      # parâmetros em uso e a origem de cada um
+python3 -m rsl conferir
+python3 -m rsl conferir-dados
+python3 -m rsl autoteste
+python3 -m rsl mostrar          # parâmetros em uso e a origem de cada um
+python3 -m rsl gramatica        # a forma que o leitor exige do protocolo e das fichas
 
 # validação terminológica: sonda obrigatória antes de validar
-python3 src/validar_termos.py --sonda
-python3 src/validar_termos.py --exportar
-python3 src/validar_termos.py --validar tbci
-python3 src/validar_termos.py --validar unesco
-python3 src/validar_termos.py --importar
+python3 -m rsl termos sonda
+python3 -m rsl termos exportar
+python3 -m rsl termos validar tbci
+python3 -m rsl termos validar unesco
+python3 -m rsl termos importar
 
-# instrumento de aderência: planilha por semente e por base, e ensaio seco no terminal
-python3 src/gen_semente.py
+# metadado das sementes e instrumento de aderência (planilha e ensaio seco no terminal)
+python3 -m rsl sementes sincronizar
+python3 -m rsl sementes planilha
 ```
 
 **Arquivos.** O vocabulário vem do protocolo, lido a cada execução; não há JSON derivado a
-regerar. `--sincronizar` mexe apenas no metadado das
+regerar. `sementes sincronizar` mexe apenas no metadado das
 sementes: religa a semente de `sementes.json` por DOI ou título, preservando o que já foi
 conferido. A validação grava o estatuto na própria planilha
-`data/validacao_termologica.csv` e a resposta bruta em
-`data/evidencia/<instrumento>/`; `--importar` reconcilia a planilha com o protocolo,
-preservando decisões e linhas fora do protocolo. O conjunto-semente gera
+`data/validacao_terminologica.csv` e a resposta bruta em
+`data/evidencia/<instrumento>/`; `termos importar` reconcilia a planilha com o protocolo,
+preservando decisões e linhas fora do protocolo. Erro de rede, bloqueio, captcha, limite ou
+resposta fora do formato interrompe `termos validar` na hora, sem nova tentativa e sem
+consultar o termo seguinte: o que já foi consultado fica gravado, a linha do termo
+interrompido registra a condição, e o código é FONTE_EXTERNA. A detecção de captcha é
+heurística, por marcadores no corpo; por isso resposta fora do formato esperado também
+interrompe. O conjunto-semente gera
 `data/semente_aderencia.csv` — uma linha por semente e por base, com a coluna `papel` — e
 imprime o ensaio seco no terminal; não grava guia em arquivo.
 
-**Garantias.** `--conferir` reprova o documento fora da forma; `--conferir-dados` reprova
+**Garantias.** `conferir` reprova o documento fora da forma; `conferir-dados` reprova
 arquivo alimentado ausente ou fora do protocolo, execução que declara exportação inexistente,
 citação do registro de execução sem identificador `(BDn/<id>)`, de outra base ou de execução
 inexistente, e, por base, termo vigente ausente sem redução declarada ou termo fora da STR
 presente.
-`--sincronizar` não apaga
-semente retirada do protocolo: ela permanece e é reportada, para decisão. `--autoteste` injeta
-defeitos numa cópia e exige que as conferências os reprovem.
+`sementes sincronizar` não apaga
+semente retirada do protocolo: ela permanece e é reportada, para decisão. `autoteste` injeta
+defeitos numa cópia e exige que as conferências os reprovem com o código esperado.
 
 **Condição de passagem:** viabilidade das strings e protocolo validado por revisor expert.
 Reprovado, volta-se ao vocabulário e registra-se a emenda no histórico.
@@ -325,7 +375,7 @@ Executa a busca e transforma a exportação em conjunto verificável.
    `EB4 = EB2 ∪ EB3` e `EB5 ⊃ EB4` — e a cobertura de campo da exportação. A conferência é
    condição necessária e não suficiente: o que garante a coerência é a construção —
    expressões uniformes e execução única da de cobertura —, não a verificação.
-8. **Sensibilidade.** `--sensibilidade` mede quanto `EB5` recupera que `EB4` não, e grava
+8. **Sensibilidade.** `busca sensibilidade` mede quanto `EB5` recupera que `EB4` não, e grava
    a amostra a classificar. O que decide é a fração **elegível** dessa amostra, classificada
    à mão, contra a faixa de sensibilidade do protocolo (detalhamento de EB5).
 9. **Calibração da triagem assistida.** Antes do primeiro uso, o ASReview passa por estudo
@@ -334,39 +384,40 @@ Executa a busca e transforma a exportação em conjunto verificável.
 
 ```bash
 # registra a consulta; na ERIC, um arquivo por consulta da forma particionada
-python3 src/derivar_expressoes.py --registrar wos <expressão> data/execucoes/wos/<arquivo>.ris --retorno <n>
+python3 -m rsl busca registrar wos <expressão> data/execucoes/wos/<arquivo>.ris --retorno <n>
 
 # deriva as expressões não executadas, conta únicos e grava a ordem de triagem
-python3 src/derivar_expressoes.py --derivar
+python3 -m rsl busca derivar
 
 # aderência ao conjunto-semente
-python3 src/derivar_expressoes.py --aderencia
+python3 -m rsl busca aderencia
 
 # fidelidade da derivação, exigida na WoS e na Scopus
-python3 src/derivar_expressoes.py --fidelidade <expressão> data/execucoes/wos/<arquivo>.ris
+python3 -m rsl busca fidelidade <expressão> data/execucoes/wos/<arquivo>.ris
 
 # sonda de sensibilidade: fração de EB5 fora de EB4, com a amostra a classificar
-python3 src/derivar_expressoes.py --sensibilidade wos
+python3 -m rsl busca sensibilidade wos
 ```
 
 **Arquivos.** `data/registro_execucao.json` é o registro documental e o rastro técnico das
-execuções; `--derivar` lê as execuções registradas, não a pasta de exportações. As saídas
-ficam na raiz de `data/`: `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`,
-um CSV de fidelidade por expressão conferida e um de sensibilidade por base sondada. A
+execuções; `busca derivar` lê as execuções registradas, não a pasta de exportações. As
+saídas ficam na raiz de `data/` (`[saidas]` do `config.toml`): `registros.csv`,
+`contagens_busca.csv`, `ordem_triagem.csv`, `fidelidade_<expressão>.csv` por expressão
+conferida e `sensibilidade_<base>.csv` por base sondada, com a chave em minúsculas. A
 aderência usa `data/sementes.json` e `data/semente_aderencia.csv`; o relato por papel lê o
 `papel` da tabela do protocolo, e só a validação decide a passagem.
 
-**Recusas e marcas.** `--registrar` confere o retorno declarado contra os registros do
+**Recusas e marcas.** `busca registrar` confere o retorno declarado contra os registros do
 arquivo e **recusa registrar quando divergem**, salvo justificativa explícita — o caso do
 teto de retorno da BRAPCI (ficha da base). A execução aceita é gravada na base correspondente do
 `registro_execucao.json`, com `arquivo`, `registros_lidos` e `status`; é essa entrada que
-`--derivar`, `--aderencia` e `--sensibilidade` leem. `--derivar` reconfere a contagem e para
-se o arquivo mudou. As contagens da busca usam os registros únicos, com o número bruto ao
+`busca derivar`, `busca aderencia` e `busca sensibilidade` leem. `busca derivar` reconfere a
+contagem e para, com o código DADOS, se o arquivo mudou ou faltar. As contagens da busca usam os registros únicos, com o número bruto ao
 lado. O recorte temporal é apenas conferido aqui, e a linha "fora" deve ser zero em todas as
 bases.
 
 **Condição de passagem:** suficiência do portfólio — aderência de **validação** e fidelidade
-dentro dos limiares (`--mostrar`). Fora disso, revisa-se o controle terminológico antes de
+dentro dos limiares (`python3 -m rsl mostrar`). Fora disso, revisa-se o controle terminológico antes de
 prosseguir, com emenda registrada. Skills: `busca-nas-bases`, `deduplicacao`,
 `teste-de-aderencia` e `conferencias-da-busca`.
 
@@ -440,13 +491,13 @@ Skill: `fichamento`.
 
 - **Toda decisão que altere questão, facetas, critérios ou busca é emenda.** Altera-se o
   documento-fonte — o plano, o protocolo ou a ficha da base — e, quando o dado é o metadado das
-  sementes, reconcilia-se com `--sincronizar`; a decisão se registra no histórico,
+  sementes, reconcilia-se com `sementes sincronizar`; a decisão se registra no histórico,
   `data/historico.md`. Não se edita planilha de saída nem se corrige o produto à mão:
   corrige-se a fonte e confere-se de novo — a exceção é a planilha de validação, que é o
   registro do estatuto dos termos. Skill: `registrar-decisao`.
 - **Rastreabilidade.** Questão, objetivos, facetas, quadro terminológico, strings e
-  critérios precisam concordar; `--conferir` e `--conferir-dados` são a trava, e
-  `--autoteste` prova que as conferências reprovam. Skill: `rastreabilidade`.
+  critérios precisam concordar; `conferir` e `conferir-dados` são a trava, e
+  `autoteste` prova que as conferências reprovam. Skill: `rastreabilidade`.
 - **Otimização de strings e vocabulário.** Diagnostica redundância, polissemia e lacuna no
   controle terminológico e nas strings por faceta. Skill:
   `otimizar-strings-revisao-sistematica`.
@@ -459,7 +510,7 @@ Skill: `fichamento`.
 - **Parecer externo.** Cada achado é conferido contra o texto corrente antes de aceito; o
   parecer é hipótese sobre o documento, não constatação. Skill: `parecer-sobre-protocolo`.
 - **Pendências.** As ações por fazer ficam em `data/pendencias.json`.
-  `python3 src/protocolo.py --pendencias` relata o que encontra nos artefatos, sem escrever
+  `python3 -m rsl pendencias` relata o que encontra nos artefatos, sem escrever
   e sem ler esse arquivo; promover um achado a pendência registrada é decisão do
   pesquisador.
 

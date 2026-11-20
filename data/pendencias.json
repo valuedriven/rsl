@@ -11,8 +11,8 @@
       "categoria": "dados",
       "descricao": "Metadado de conferência das 10 sementes: a verificação bibliográfica e o veículo foram declarados conferidos pelo pesquisador em 2026-11-19 e registrados em data/sementes.json. O DOI do capítulo da SE10 foi conferido no Crossref em 2026-11-19 e registrado (10.5771/9783956507762-484). Os campos escopo, tipo e alinhamento continuam vazios, porque não constam do protocolo e dependem de decisão do pesquisador; o campo eric permanece vazio.",
       "origem": "data/sementes.json; data/historico.md, 2026-11-19; python3 src/protocolo.py --pendencias",
-      "bloqueia": "--conferir-dados; teste de aderência (M3/E2)",
-      "acao_sugerida": "preencher escopo, tipo e alinhamento de cada semente, que são juízos autorais e não dados bibliográficos; --sincronizar reconcilia a ligação e não preenche a conferência",
+      "bloqueia": "conferir-dados; teste de aderência (M3/E2)",
+      "acao_sugerida": "preencher escopo, tipo e alinhamento de cada semente, que são juízos autorais e não dados bibliográficos; sementes sincronizar reconcilia a ligação e não preenche a conferência",
       "responsavel": "pesquisador",
       "estado": "aberta",
       "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento."
@@ -22,7 +22,7 @@
       "categoria": "dados",
       "descricao": "data/registro_execucao.json ausente. As fichas citam esse arquivo como evidência das medições de sintaxe (BD1 a BD4), então o 'verificado por medição' delas está hoje sem a evidência no repositório.",
       "origem": "python3 src/protocolo.py --pendencias; docs/busca_base_wos.md:17; docs/busca_base_scopus.md:15; docs/busca_base_eric.md:5; docs/busca_base_brapci.md:5",
-      "bloqueia": "--conferir-dados; --registrar, --derivar, --aderencia, --sensibilidade",
+      "bloqueia": "conferir-dados; busca registrar, busca derivar, busca aderencia, busca sensibilidade",
       "acao_sugerida": "reconstituir o registro a partir das fichas e do que cada base exibiu; nenhum script o gera",
       "responsavel": "pesquisador",
       "estado": "aberta"
@@ -30,10 +30,10 @@
     {
       "id": "PD03",
       "categoria": "validacao-terminologica",
-      "descricao": "data/validacao_termologica.csv ausente: nenhum termo tem consulta registrada, e pela regra do protocolo todos são termos livres até a validação.",
+      "descricao": "data/validacao_terminologica.csv ausente: nenhum termo tem consulta registrada, e pela regra do protocolo todos são termos livres até a validação.",
       "origem": "python3 src/protocolo.py --pendencias",
       "bloqueia": "validação terminológica (M3/E1, passo 2)",
-      "acao_sugerida": "python3 src/validar_termos.py --sonda, depois --exportar, --validar tbci e --validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
+      "acao_sugerida": "PYTHONPATH=src python3 -m rsl termos sonda, depois termos exportar, termos validar tbci e termos validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
       "responsavel": "pesquisador",
       "estado": "aberta"
     },
@@ -169,7 +169,7 @@
       "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
       "origem": "README.md, M3/E2 passo 6; .agents/skills/conferencias-da-busca/SKILL.md §2 (a marca 'P5, por fazer' foi removida em 2026-11-18)",
       "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
-      "acao_sugerida": "python3 src/derivar_expressoes.py --fidelidade, depois de registrada a execução de cobertura",
+      "acao_sugerida": "PYTHONPATH=src python3 -m rsl busca fidelidade, depois de registrada a execução de cobertura",
       "responsavel": "pesquisador",
       "estado": "aberta"
     },

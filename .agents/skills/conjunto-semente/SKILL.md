@@ -68,7 +68,7 @@ acionado por nenhuma das sementes — o ensaio nada diz sobre ele, e tratar o si
 como aprovação é erro.
 
 ```
-python3 src/gen_semente.py
+python3 -m rsl sementes planilha
 ```
 
 O comando lê as referências e o mapa por base do protocolo e os metadados autorais de

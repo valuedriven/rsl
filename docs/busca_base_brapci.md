@@ -53,7 +53,7 @@ Sintaxe não documentada em fonte alguma: **não verificada por medição** — 
 
 ### Declaração de cobertura
 
-Lida por `src/protocolo.py`.
+Lida por `python3 -m rsl conferir` (leitor das fichas em `src/rsl/fichas.py`).
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -144,7 +144,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 3. Executar o bloco de EB4 como está. Retorno de exatamente 1.000: partir, conforme as variantes.
 4. Executar EB5 uma única vez, na mesma data.
 5. Exportar em RIS ou BibTeX; sem exportação, registrar os metadados no Zotero e anotar a entrada manual como risco de transcrição.
-6. Registrar: `python3 src/derivar_expressoes.py --registrar brapci EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`, com a justificativa do teto de 1.000 quando for o caso; rodar `--derivar` e `--sensibilidade`.
+6. Registrar: `python3 -m rsl busca registrar brapci EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`, com a justificativa do teto de 1.000 quando for o caso; rodar `busca derivar` e `busca sensibilidade`.
 7. Medir a aderência (seção 5).
 
 ### Variantes previstas
@@ -155,7 +155,7 @@ Disparo: consulta recusada ou truncada pelo comprimento, ou retorno de exatament
 
 #### Varredura da faceta 🟦 isolada — fora do corpus
 
-Disparo: medir o custo da âncora 🟨 nesta base. Forma: a string da faceta 🟦 sozinha, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros da faceta 🟦 fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`--mostrar`) leva a emenda.
+Disparo: medir o custo da âncora 🟨 nesta base. Forma: a string da faceta 🟦 sozinha, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros da faceta 🟦 fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`python3 -m rsl mostrar`) leva a emenda.
 
 #### Partição por *Título*
 
@@ -174,7 +174,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de aderência** (`limiar_aderencia`, `--mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **Se a SE5 não aparecer.** Consultar `Duque` em *Local de pesquisa* = **Autor**, abrir o registro e ler resumo e palavras-chave.
 

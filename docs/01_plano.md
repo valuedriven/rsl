@@ -192,10 +192,10 @@
 
 | Medida | O que afere | Limiar | Consequência de não atingir |
 | :---- | :---- | :---- | :---- |
-| Teste de aderência ao conjunto-semente | Recall das expressões de busca, sobre a união das bases | `limiar_aderencia` (`config.toml`; o valor em uso sai em `python3 src/protocolo.py --mostrar`) | Revisão obrigatória do controle terminológico antes de prosseguir |
+| Teste de aderência ao conjunto-semente | Recall das expressões de busca, sobre a união das bases | `limiar_aderencia` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | Revisão obrigatória do controle terminológico antes de prosseguir |
 | Índice kappa entre os dois revisores humanos | Concordância da decisão de triagem, sempre antes do desbloqueio do modo cego | Calculado nas TRÊS filtragens; nunca com a IA | Divergência vai a discussão e, remanescendo, ao VT, com a decisão registrada |
-| Calibração da triagem assistida | Sensibilidade do ASReview, aferida em conjunto DISJUNTO do de ajuste | `calibracao_triagem` (`config.toml`; o valor em uso sai em `python3 src/protocolo.py --mostrar`) | Triagem permanece integralmente humana |
-| Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Divergência até `divergencia_fidelidade` (`config.toml`; o valor em uso sai em `python3 src/protocolo.py --mostrar`) | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
+| Calibração da triagem assistida | Sensibilidade do ASReview, aferida em conjunto DISJUNTO do de ajuste | `calibracao_triagem` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | Triagem permanece integralmente humana |
+| Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Divergência até `divergencia_fidelidade` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
 | Conferência de coerência entre as expressões de busca | Se as relações de continência declaradas no protocolo (`docs/03`) se verificam no retorno de cada base | Relações do protocolo | Reexecução na base e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE |
 | Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A conferência da ficha é RECUSADA pela guarda, e não há saída a conferir |
 | Dupla passagem de deduplicação | Duplicatas remanescentes após DOI e título, e depois por semelhança semântica | Par duvidoso NÃO é fundido | O par permanece como dois registros e a decisão é registrada |

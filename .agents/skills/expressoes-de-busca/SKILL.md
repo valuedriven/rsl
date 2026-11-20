@@ -43,7 +43,7 @@ São três estados, e o quadro terminológico do protocolo (`docs/03`) os distin
    quanto a restrição de EB4 custa em alcance. A fração elegível da perda decide.
 4. **Pertinência calculada localmente** — a expressão não vai à base; a contagem sai
    da aplicação dos seus termos aos registros já exportados, por
-   `src/derivar_expressoes.py`.
+   `busca derivar` (`src/rsl/busca/`).
 
 ### Por que só EB4 vai à base
 

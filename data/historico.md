@@ -104,3 +104,24 @@ A verificação da change `conjunto-semente-independente` apontou quatro avisos 
 - **Testes.** O autoteste de `derivar_expressoes.py` ganhou casos para título exato, prefixo como indício e preservação do total recuperado; o de `protocolo.py` continua cobrindo papel ausente, papel fora do domínio e conjunto de validação vazio e executou 113 casos, com 10 ainda não executados por falta de `data/registro_execucao.json` (PD02). A preservação "Mesmo resultado" foi conferida por inspeção do diff — as funções de derivação, fidelidade e sensibilidade não foram tocadas, e a prova da composição e as deriváveis seguem no autoteste existente.
 
 Alcance: **método de aferição da aderência e dados do conjunto-semente** — o numerador deixa de aceitar prefixo sem conferência, e o DOI e a prosa do limiar são corrigidos. As strings, as expressões, o recorte e o valor do limiar não mudam; a busca não é reexecutada.
+
+## 2026-11-19 — Scripts reunidos no pacote `src/rsl` (decisão de instrumento)
+
+Os quatro scripts (`src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.py` e `src/gen_semente.py`) deram lugar ao pacote `src/rsl/`, com um ponto de entrada único, `python3 -m rsl <subcomando>`, a partir da raiz e com `src/` no caminho de importação (`PYTHONPATH=src`). Change `refatoracao-dos-scripts`.
+
+- **Comandos.** As opções viraram subcomandos por atividade: `conferir`, `conferir-dados`, `autoteste` (agora um só, com a prova da composição e a aderência por papel), `mostrar`, `pendencias`, `gramatica`; `sementes sincronizar|planilha`; `termos sonda|exportar|validar|importar`; `busca registrar|derivar|aderencia|fidelidade|sensibilidade`. A correspondência com os nomes antigos está na spec `interface-de-comando`. README, skills, fichas e plano citam os subcomandos.
+- **Códigos de saída.** Passam a distinguir a reprovação do conteúdo da falha em ler: 0 OK, 1 REPROVADO, 2 USO, 3 CONFIGURACAO, 4 PROTOCOLO_ILEGIVEL, 5 DADOS, 6 PARCIAL, 7 FONTE_EXTERNA. Antes, conferência reprovada, protocolo ilegível, configuração inválida e arquivo ausente saíam todos com 1, e o autoteste parcial saía com 0.
+- **Nomes de arquivo.** A planilha de validação passa a `data/validacao_terminologica.csv` (a grafia anterior, "termológica", remete a calor); a saída de fidelidade, a `fidelidade_eb<n>.csv`. Todos os caminhos de entrada e de saída vêm do `config.toml` (`[dados]`, `[saidas]`).
+- **Gramática do protocolo.** A forma que o leitor exige do protocolo e das fichas está declarada num só lugar do código e é exibida por `python3 -m rsl gramatica`. O leitor ficou mais estrito em dois pontos: o cabeçalho de seção tem de estar no nível declarado, e a linha de cada camada do quadro terminológico (núcleo, próximos, relacionados) passa a ser exigida, com PROTOCOLO_ILEGIVEL. Antes, a linha ausente era lida como camada vazia e reprovada como incoerência.
+- **Fonte externa.** A validação terminológica deixou de repetir a requisição depois de erro de rede e de seguir para o termo seguinte depois de falha. Agora interrompe na hora, sem nova tentativa, conforme o AGENTS.md §9.
+
+Fundamento: a exploração de 2026-11-19 verificou códigos de saída ambíguos, conteúdo fixado no código (caminhos, nomes de saída, literais do protocolo vigente nas mutações do autoteste), duas normalizações Unicode diferentes, código morto e a nova tentativa automática em `validar_termos.py` (proposta da change).
+
+Alcance: **instrumento, não método**. Composição, critérios, limiares, strings e recorte não mudam. Antes da migração, gravou-se uma referência com o código antigo sobre exportações e um registro de execução sintéticos. Com o código novo, `mostrar` e `conferir` saíram idênticos byte a byte, e `registros.csv`, `contagens_busca.csv`, `ordem_triagem.csv`, a fidelidade e as duas sensibilidades também, com o nome novo. A comparação das duas normalizações (NFKD e NFD) sobre os termos do protocolo e das fichas e sobre os textos sintéticos não achou diferença, e ficou a NFKD. Valores que estavam fixos no código passaram ao `config.toml` sem mudança de valor: ano de recência da ordem de triagem (`busca.ano_recencia = 2022`), tamanho-alvo da amostra da sonda (`busca.amostra_sensibilidade = 50`) e dimensão do recorte (`conferencia.dimensao_recorte`). Nenhuma execução está registrada (PD02): nenhuma contagem fica vencida.
+
+Mudanças de comportamento fora da forma, registradas para conferência:
+
+- `termos validar --faceta n` passou a filtrar a faceta. Antes, comparava `FCTn` com `n` e não consultava nenhum termo.
+- O cliente da UNESCO colhe os rótulos de TG, TE e TR nos idiomas que o protocolo declara para o instrumento (hoje `en, es`), e não mais em `en, es, fr`, que estavam fixos no código.
+- A sonda dos clientes usa termos do próprio protocolo, e não termos fixos.
+- O campo `forma` das execuções registradas passa a dizer `registrada por busca registrar`.

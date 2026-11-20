@@ -1,17 +1,20 @@
-# Configuração dos scripts de src/ — lida por src/protocolo.py com tomllib (Python 3.11+).
+# Configuração do pacote src/rsl (python3 -m rsl <subcomando>), lida sob demanda com tomllib
+# (Python 3.11+). A variável de ambiente RSL_CONFIG aponta outro arquivo, para ensaio.
 #
 # Regra de precedência: o PROTOCOLO é a fonte. Todo parâmetro NÃO ESTRUTURAL tem aqui um
 # valor padrão; quando o protocolo declara o parâmetro, vale o valor do protocolo. Trecho
-# do protocolo presente e ilegível reprova a conferência — não cai no padrão. `--mostrar`
-# exibe o valor em uso e a origem de cada parâmetro.
+# do protocolo presente e ilegível reprova a leitura — não cai no padrão. `python3 -m rsl
+# mostrar` exibe o valor em uso e a origem de cada parâmetro.
 #
 # Parâmetros ESTRUTURAIS não têm padrão e não entram aqui: composição das expressões,
 # instrumentos (sigla, modo, caminho, idiomas, facetas), bases (sigla, nome), conjunto-
 # semente e idiomas do quadro vêm só do protocolo; a forma de execução de cada base vem da
-# ficha. As chaves antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`,
-# `idiomas`) reprovam a configuração se voltarem.
+# ficha. A FORMA exigida do protocolo e das fichas (seções, colunas, rótulos) é a gramática
+# do leitor, exibida por `python3 -m rsl gramatica`, e também não entra aqui. As chaves
+# antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`, `idiomas`,
+# `expressoes.colunas`) e qualquer chave fora do esquema reprovam a configuração.
 #
-# Este arquivo é editado pelo pesquisador; nenhum script o grava.
+# Este arquivo é editado pelo pesquisador; nenhum subcomando o grava.
 
 # Documento do protocolo a ser lido. Único parâmetro que o protocolo não sobrescreve:
 # é ele que localiza o protocolo. Caminho relativo à raiz do projeto.
@@ -44,9 +47,6 @@ calibracao_triagem = 0.95
 # Texto da coluna Natureza que identifica o papel da expressão no protocolo.
 natureza_executada = "Cobertura restrita"
 natureza_sonda = "Controle de sensibilidade"
-# Cabeçalho da tabela "Expressões de busca", exatamente e na ordem. Cabeçalho diferente
-# reprova a leitura: as colunas são lidas por posição.
-colunas = ["ID expressão", "Natureza", "Expressão de busca", "Detalhamento"]
 
 [conferencia]
 # Mínimo de termos distintos por string de faceta.
@@ -57,11 +57,38 @@ dimensoes_criterio = [
     "Intervalo temporal", "Idioma", "Tipo documental", "Localização de itens",
     "Adequação temática", "Domínio de aplicação", "Outros critérios",
 ]
+# Dimensão (coluna Dimensão) cujo critério Incluir declara o recorte temporal ("após o ano
+# AAAA").
+dimensao_recorte = "Intervalo temporal"
+
+[busca]
+# Ordem de leitura da 1ª filtragem (Medida 4): registro publicado neste ano ou depois conta
+# como recente, depois da riqueza das expressões atingidas. Ordem de leitura, não critério.
+ano_recencia = 2022
+# Tamanho-alvo da amostra sistemática da sonda de sensibilidade: um a cada
+# max(1, perdidos // N) registros perdidos pela executada vai à classificação manual.
+amostra_sensibilidade = 50
 
 [dados]
+# Arquivos alimentados e pastas de entrada. Caminhos relativos à raiz do projeto.
 sementes = "data/sementes.json"
 registro = "data/registro_execucao.json"
-validacao = "data/validacao_termologica.csv"
+validacao = "data/validacao_terminologica.csv"
+# Exportações brutas de cada execução, por base.
+execucoes = "data/execucoes"
+# Respostas brutas das consultas aos instrumentos de controle terminológico.
+evidencia = "data/evidencia"
+
+[saidas]
+# Arquivos derivados, regeráveis, gravados em `pasta`. Nomes em snake_case, em português,
+# sem acento; arquivo por chave leva a chave em minúsculas ({expressao}, {base}).
+pasta = "data"
+registros = "registros.csv"
+contagens = "contagens_busca.csv"
+ordem_triagem = "ordem_triagem.csv"
+fidelidade = "fidelidade_{expressao}.csv"
+sensibilidade = "sensibilidade_{base}.csv"
+aderencia = "semente_aderencia.csv"
 
 [documentos]
 # Ficha de busca de cada base, localizada pela sigla da tabela "Bases de dados" do

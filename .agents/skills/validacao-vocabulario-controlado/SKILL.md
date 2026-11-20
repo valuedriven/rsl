@@ -47,9 +47,9 @@ validação.
 
 ## 4. O registro é o instrumento
 
-O registro é a própria planilha `data/validacao_termologica.csv`, com 22 colunas e uma
+O registro é a própria planilha `data/validacao_terminologica.csv`, com 22 colunas e uma
 linha por termo e instrumento. Ela é construída a partir das tabelas do protocolo e
-guarda o estatuto de cada termo: `--exportar` reconstrói a planilha e `--importar` a
+guarda o estatuto de cada termo: `termos exportar` reconstrói a planilha e `termos importar` a
 reconcilia com o protocolo, preservando as colunas `decisao_ReT`, `justificativa_ReT` e
 `data_decisao` e as linhas de termo retirado. Não há JSON intermediário. É ela o
 instrumento de controlo, e **não se duplica em documento algum** — o protocolo (`docs/03`) declara a
@@ -61,11 +61,11 @@ Os comandos, nesta ordem:
 
 | Comando | O que faz |
 | --- | --- |
-| `python3 src/validar_termos.py --sonda` | mede o que cada instrumento aceita, com contagem e captura. **Obrigatório antes de tudo** |
-| `python3 src/validar_termos.py --exportar` | reconstrói a planilha a partir do protocolo, sem rede; não decide nada |
-| `python3 src/validar_termos.py --validar tbci` | consulta o TBCI, grava a evidência e propõe o estatuto |
-| `python3 src/validar_termos.py --validar unesco` | idem para o UNESCO Thesaurus; `--validar todos --faceta 1` consulta todos os instrumentos `Automático`, restrito a uma faceta |
-| `python3 src/validar_termos.py --importar` | reconcilia a planilha com o protocolo, preservando decisões e linhas fora do protocolo |
+| `python3 -m rsl termos sonda` | mede o que cada instrumento aceita, com contagem e captura. **Obrigatório antes de tudo** |
+| `python3 -m rsl termos exportar` | reconstrói a planilha a partir do protocolo, sem rede; não decide nada |
+| `python3 -m rsl termos validar tbci` | consulta o TBCI, grava a evidência e propõe o estatuto |
+| `python3 -m rsl termos validar unesco` | idem para o UNESCO Thesaurus; `termos validar todos --faceta 1` consulta todos os instrumentos `Automático`, restrito a uma faceta |
+| `python3 -m rsl termos importar` | reconcilia a planilha com o protocolo, preservando decisões e linhas fora do protocolo |
 
 A resposta bruta de cada consulta é gravada em
 `data/evidencia/<instrumento>/<hash>.json`, e `arquivo_evidencia` na planilha aponta
@@ -77,7 +77,7 @@ Campos que decidem: `instrumento`, `consultado_em`, `status_proposto`,
 `justificativa_ReT`. A decisão final e a incorporação de termos relacionados e
 específicos são do ReT com a Validação Temática — a ferramenta recupera e registra.
 
-Estado corrente: verificar na planilha e em `python3 src/protocolo.py --pendencias`;
+Estado corrente: verificar na planilha e em `python3 -m rsl pendencias`;
 não presumir que a validação foi executada.
 
 ## 6. Antes do primeiro uso de um instrumento

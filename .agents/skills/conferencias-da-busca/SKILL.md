@@ -48,7 +48,7 @@ O teste afere se o cálculo reproduz a base.
 
 Procedimento: executar EB2 e EB3 **directamente** na base (estado 2 de execução, o
 experimental), e comparar com a contagem derivada localmente dos mesmos registros. A
-sonda de EB5 se mede à parte, por `--sensibilidade`, e não se confunde com fidelidade.
+sonda de EB5 se mede à parte, por `busca sensibilidade`, e não se confunde com fidelidade.
 
 **Limiar: coincidência exacta das contagens.** Não aproximada — a derivação é
 determinística e qualquer diferença denuncia divergência entre o que a base entende e

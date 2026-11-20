@@ -47,7 +47,7 @@ Todas as facetas vão entre parênteses explícitos; nenhuma expressão depende 
 
 ### Declaração de cobertura
 
-Lida por `src/protocolo.py`.
+Lida por `python3 -m rsl conferir` (leitor das fichas em `src/rsl/fichas.py`).
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -99,8 +99,8 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 | **EB1** | não executar; derivação local |
 
 - Execução: única
-- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`--mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
-- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`--mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`python3 -m rsl mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### EB1 (as quatro facetas)
@@ -146,7 +146,7 @@ TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimen
 3. Submeter sempre a partir de arquivo, nunca recuperando o texto da interface.
 4. Exportar em RIS, com todos os campos.
 5. Conferir o retorno da exportação contra o da tela e o recorte temporal dentro do arquivo.
-6. Registrar EB4 e EB5: `python3 src/derivar_expressoes.py --registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `--derivar` e `--sensibilidade`.
+6. Registrar EB4 e EB5: `python3 -m rsl busca registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `busca sensibilidade`.
 7. Medir a aderência (seção 5). Semente esperada não recuperada: aplicar a anatomia da perda.
 8. Na primeira execução, conferir se o retorno de EB4 tem a mesma ordem de grandeza do da Web of Science; discrepância indica problema de agrupamento.
 
@@ -174,7 +174,7 @@ AND OPENACCESS(1)
 
 #### Truncamento
 
-Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`). Forma: testar a consulta abaixo; a adoção exige emenda.
+Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`). Forma: testar a consulta abaixo; a adoção exige emenda.
 
 ```
 TITLE-ABS-KEY(ontolog* W/5 educat*)
@@ -182,7 +182,7 @@ TITLE-ABS-KEY(ontolog* W/5 educat*)
 
 #### Camada de precisão
 
-Disparo: retorno alto demais para a triagem. Forma: restringir por `SUBJAREA`, com os códigos conferidos na documentação. Camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `--mostrar`) é reprovada.
+Disparo: retorno alto demais para a triagem. Forma: restringir por `SUBJAREA`, com os códigos conferidos na documentação. Camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`) é reprovada.
 
 ---
 
@@ -201,7 +201,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de aderência** (`limiar_aderencia`, `--mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **Anatomia da perda.** Executar em ordem, com o DOI da semente; a primeira que devolver zero é a causa.
 
