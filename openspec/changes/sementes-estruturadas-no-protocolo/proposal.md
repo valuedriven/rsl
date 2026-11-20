@@ -1,16 +1,22 @@
 # Proposal
 
-> O nome da change (`sementes-estruturadas-no-protocolo`) é anterior à decisão de
-> 2026-11-20: o conjunto-semente sai do protocolo para um arquivo TOML próprio, apontado
-> pelo protocolo. O nome foi mantido para não recriar a change.
+> O nome da change (`sementes-estruturadas-no-protocolo`) é anterior às decisões de
+> 2026-11-20: o conjunto-semente sai do protocolo para um arquivo TOML próprio, localizado
+> pelo `config.toml`. O nome foi mantido para não recriar a change.
+>
+> **Depende de `reestruturacao-do-protocolo`.** Aquela change leva a tabela de sementes
+> para `docs/sementes.toml` num formato intermediário (`id`, `semente` em texto livre,
+> `bases`, `papel`), que o pesquisador já criou. Esta change parte desse arquivo e o
+> estrutura. Os requisitos aqui modificados são os que ficam nas specs depois do
+> arquivamento daquela.
 
 ## Why
 
 Os dados de cada semente estão hoje em dois lugares, ligados por um elo frágil:
 
-- **No protocolo**, a tabela `ID Semente | Semente | Bases | Papel` traz a referência
-  inteira como texto livre. O leitor extrai autoria, ano, título e DOI por expressão
-  regular:
+- **Em `docs/sementes.toml`**, o campo `semente` traz a referência inteira como texto
+  livre, como fazia a tabela do protocolo. O leitor extrai autoria, ano, título e DOI por
+  expressão regular:
   - o título termina "no primeiro ponto seguido de maiúscula ou de dígito" (`_titulo()`);
   - o DOI tem de ser o último elemento da célula (`_doi()`).
 
@@ -25,8 +31,9 @@ Decisões do pesquisador:
 
 - 2026-11-19: o conjunto-semente passa a TOML estruturado, lido com `tomllib`.
 - 2026-11-20:
-  - o TOML é um **arquivo próprio**, `docs/conjunto_semente.toml`, apontado pela seção
-    "Conjunto-semente" do protocolo;
+  - o TOML é um **arquivo próprio**, `docs/sementes.toml`, com tabela `[[sementes]]`,
+    como o pesquisador o criou;
+  - o caminho fica no `config.toml` (`[documentos] sementes`), e o protocolo não o cita;
   - ele **absorve os dados de conferência**, e `data/sementes.json` deixa de existir;
   - `bases` registra a **indexação** da semente na base. A recuperação pela busca continua
     calculada em `semente_aderencia.csv`;
@@ -40,12 +47,8 @@ Decisões do pesquisador:
 
 ## What Changes
 
-- **BREAKING (forma do protocolo):** a seção "Conjunto-semente" troca a tabela por uma
-  linha que aponta o arquivo `docs/conjunto_semente.toml`. As regras que acompanham a
-  seção (regra de ajuste, fórmula de recuperação) ficam no protocolo, porque são método e
-  não dado.
-- **Arquivo `docs/conjunto_semente.toml`**, com uma tabela `[[semente]]` por estudo e
-  esquema fechado:
+- **Campo `semente` decomposto.** O arquivo `docs/sementes.toml` troca o texto livre por
+  campos, e o esquema fechado passa a ser:
   - os dados bibliográficos: `id`, `autores` (lista), `ano`, `titulo`, `veiculo`, mais
     `volume`, `numero`, `paginas` e `doi`, opcionais;
   - `bases`: lista das siglas das bases que indexam a semente;
@@ -54,16 +57,16 @@ Decisões do pesquisador:
   - os dados de conferência, opcionais: `verificacao`, `tipo`, `alinhamento`, `nota`,
     `veiculo_conferido`, `eric`;
   - `observacoes`, opcional: o que a referência traz e não cabe em outro campo.
-- **A leitura reprova, com PROTOCOLO_ILEGIVEL:**
-  - apontamento ausente, duplicado ou para arquivo inexistente;
-  - TOML inválido;
-  - campo obrigatório ausente ou de tipo errado;
+
+  O campo `semente` sai, e com ele `_titulo()` e `_doi()`. As regras da seção
+  "Conjunto-semente" do protocolo (regra de ajuste, fórmula de recuperação) não mudam.
+- **A leitura reprova, com PROTOCOLO_ILEGIVEL**, além do que `reestruturacao-do-protocolo`
+  já faz reprovar (TOML inválido, arquivo ausente com CONFIGURACAO):
+  - campo obrigatório do esquema novo ausente ou de tipo errado;
   - campo desconhecido;
   - `id` fora da forma `SEn` ou repetido;
   - DOI fora da forma `10.x/…`;
-  - base ou faceta fora das respectivas tabelas do protocolo, ou repetida;
-  - `papel` fora do domínio;
-  - conjunto sem semente de validação.
+  - faceta fora da tabela de facetas do protocolo, ou repetida.
 - **Relatado em `pendencias`, sem reprovar:**
   - `facetas` vazia;
   - semente de validação sem faceta âncora, enquanto o pesquisador não decide a regra;
@@ -85,28 +88,30 @@ Nenhuma.
 
 ### Modified Capabilities
 
-- `leitura-do-protocolo`: "Conjunto-semente lido de tabela" é substituído pela leitura do
-  arquivo apontado, com esquema fechado, `facetas`, dados de conferência e `observacoes`. O
-  cenário de distribuição em "Conferência verifica coerência interna" passa a citar o
-  arquivo.
-- `gramatica-do-protocolo`: a seção "Conjunto-semente" passa a exigir o apontamento do
-  arquivo, e a gramática exibe o esquema do arquivo.
+- `leitura-do-protocolo`: "Conjunto-semente lido do arquivo de sementes", o esquema
+  intermediário deixado por `reestruturacao-do-protocolo`, é substituído pela leitura com
+  esquema estruturado, `facetas`, dados de conferência e `observacoes`. Entram as
+  pendências de juízo, a retirada sem resto e a referência exibida a partir dos campos.
+- `gramatica-do-protocolo`: o esquema do arquivo de sementes exibido pela gramática passa
+  aos campos novos.
 - `interface-de-comando`: `sementes sincronizar` sai da lista de subcomandos e da
   correspondência de nomes.
-- `derivacao-das-expressoes`: `sementes.json` sai dos arquivos lidos da configuração, o
-  caminho do conjunto-semente vem do protocolo, e a planilha de aderência perde `escopo`.
+- `derivacao-das-expressoes`: `sementes.json` sai dos arquivos lidos da configuração, e a
+  planilha de aderência perde `escopo` e passa a ler os dados de conferência do arquivo de
+  sementes.
 
 ## Impact
 
-- `docs/03_protocolo_estrategia_pesquisa.md`, seção "Conjunto-semente": a tabela sai e
-  entra o apontamento. É emenda de forma, registrada em `data/historico.md`.
-- Novo `docs/conjunto_semente.toml`.
+- `docs/sementes.toml`: reescrito com os campos estruturados, a partir da transcrição e da
+  migração conferidas. O protocolo não muda.
 - `data/sementes.json`: removido, depois de migrado e conferido campo a campo.
 - `data/evidencia/referencias/SE10_crossref.*`: permanecem, porque SE10 continua no
   conjunto. A regra nova vale para retiradas futuras.
 - `data/pendencias.json`, PD01: deixa de citar `escopo` e `sementes.json`.
 - Código: `src/rsl/leitura.py`, `gramatica.py`, `relatorio.py`, `sementes.py`,
   `dados.py`, `config.py`, `__main__.py` e o autoteste.
-- `config.toml`, `README.md` (Mapa, Scripts, regras de preservação e de sincronização) e
-  as skills `conjunto-semente` e `teste-de-aderencia`.
-- **Dependência satisfeita:** `refatoracao-dos-scripts` está arquivada (2026-11-20).
+- `config.toml` (`[dados] sementes` e `[planilha] campos_autorais` saem), `README.md`
+  (Mapa, Scripts, regras de preservação e de sincronização) e as skills
+  `conjunto-semente` e `teste-de-aderencia`.
+- **Dependências:** `refatoracao-dos-scripts` está arquivada (2026-11-20);
+  `reestruturacao-do-protocolo` precisa estar arquivada antes da tarefa 2.1.

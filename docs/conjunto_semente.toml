@@ -1,0 +1,59 @@
+[[sementes]]
+id = "SE1"
+semente = "Alvarenga, V. B. L., & Cristovão, H. M. (2023). Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica. Revista Ibero-Americana de Ciência da Informação (RICI), 16(1), 2023. DOI: 10.26512/rici.v16.n1.2023.47618"
+bases = ["brapci"]
+papel = "validação"
+
+[[sementes]]
+id = "SE2"
+semente = "Das, S., Naskar, D., & Roy, S. (2022). Reorganizing Educational Institutional Domain using Faceted Ontological Principles. Knowledge Organization, 49(1), 6-21, 2022. DOI: 10.5771/0943-7444-2022-1-6."
+bases = ["wos", "scopus"]
+papel = "validação"
+
+[[sementes]]
+id = "SE3"
+semente = "Chi, Y.-L., Chen, T.-Y., & Hung, C. (2018). Learning adaptivity in support of flipped learning: An ontological problem-solving approach. Expert Systems, 2018. DOI: 10.1111/exsy.12246."
+bases = ["scopus"]
+papel = "validação"
+
+[[sementes]]
+id = "SE4"
+semente = "Shvets, O., Murtazin, K., Meeter, M., & Piho, G. (2024). Towards a Domain Model for Learning and Teaching. MODELSWARD 2024, SciTePress. DOI: 10.5220/0012471400003645."
+bases = ["scopus"]
+papel = "desenvolvimento"
+
+[[sementes]]
+id = "SE5"
+semente = "Sousa, E. E. de, & Duque, C. (2018). Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade. Informação & Informação, 23(1), 271-289, 2018 (UEL). DOI: 10.5433/1981-8920.2018v23n1p271."
+bases = ["brapci"]
+papel = "validação"
+
+[[sementes]]
+id = "SE6"
+semente = "Iatrellis, O., Kameas, A., & Fitsilis, P. (2019). EDUC8 ontology: semantic modeling of multi-facet learning pathways. Education and Information Technologies, 2019 (Springer). DOI: 10.1007/s10639-019-09872-9."
+bases = ["eric"]
+papel = "validação"
+
+[[sementes]]
+id = "SE7"
+semente = "Chimalakonda, S., & Nori, K. V. (2020). An ontology based modeling framework for design of educational technologies. Smart Learning Environments, 7, 2020. DOI: 10.1186/s40561-020-00135-6."
+bases = ["eric", "wos", "scopus"]
+papel = "validação"
+
+[[sementes]]
+id = "SE8"
+semente = "Cenka, B. A. N., Santoso, H. B., & Junus, K. (2023). Personal learning environment toward lifelong learning: an ontology-driven conceptual model. Interactive Learning Environments, 31(10), 6445-6461, 2023. DOI: 10.1080/10494820.2022.2039947."
+bases = ["eric", "scopus"]
+papel = "validação"
+
+[[sementes]]
+id = "SE9"
+semente = "Piriyapongpipat, P., Goldin, S., & Ditcharoen, N. (2024). An alternative approach to ontology-based curriculum development in higher education. Smart Learning Environments, 11(1), 2024, p. 1-19. DOI: 10.1186/s40561-024-00307-8."
+bases = ["wos", "scopus"]
+papel = "validação"
+
+[[sementes]]
+id = "SE10"
+semente = "Khoo, C. S. G., & Kan, R. Y. P. (2020). An ontology for conceptual analysis of signature pedagogies. Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.), Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference, 2020, Aalborg, Dinamarca. Ergon Verlag, p. 484-488. DOI: 10.5771/9783956507762-484."
+bases = ["wos"]
+papel = "validação"

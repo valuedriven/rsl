@@ -16,6 +16,14 @@ suas consequências, porque decidir sobre a busca cabe ao pesquisador (AGENTS.md
 
 ### D1 — Termos repetidos em mais de uma faceta (verificado no texto)
 
+> **Atualização de 2026-11-20 (change `reestruturacao-do-protocolo`).** O pesquisador
+> retirou 23 termos do quadro de FCT2, e STR2 e as strings de FCT2 das fichas foram
+> alinhadas a ele. Saíram de STR2 todos os termos repetidos listados abaixo, além de treze
+> sem par em outra faceta (registro em `data/historico.md`, 2026-11-20). Para STR2, a
+> alternativa adotada na prática foi a (a). Falta decidir se a conferência deve reprovar
+> a repetição entre facetas, e o efeito sobre EB2/EB3 e sobre a aderência ainda não foi
+> medido.
+
 O mesmo termo aparece em strings de facetas diferentes:
 
 - STR2, que é a âncora do domínio educacional, contém `teaching practice`, `teaching method`,

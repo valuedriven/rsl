@@ -21,7 +21,8 @@ import re
 
 PROTOCOLO = "protocolo"
 FICHA = "ficha de base"
-DOCUMENTOS = (PROTOCOLO, FICHA)
+SEMENTES = "arquivo de sementes"
+DOCUMENTOS = (PROTOCOLO, FICHA, SEMENTES)
 
 EXIGIDO = "exigido"
 OPCIONAL = "opcional"
@@ -206,6 +207,53 @@ class Dominio(Elemento):
         return " | ".join(self.valores)
 
 
+class TabelaToml(Elemento):
+    """Tabela de tabelas TOML (`[[nome]]`), uma por item; o esquema dos campos é fechado."""
+
+    tipo = "tabela TOML"
+
+    def __init__(self, nome, documento, chave, exigencia=EXIGIDO, descricao=""):
+        self.chave = chave
+        self.campos = []
+        super().__init__(nome, documento, exigencia, descricao)
+
+    @property
+    def rotulo(self):
+        return f"tabela TOML [[{self.chave}]]"
+
+    def forma(self):
+        return f"[[{self.chave}]]   (campos: {', '.join(c.chave for c in self.campos)}; " \
+               f"campo fora do esquema reprova)"
+
+
+class CampoToml(Elemento):
+    """Campo de um item de uma tabela TOML: nome, tipo e exigência."""
+
+    tipo = "campo"
+    TIPOS = {"texto": str, "lista de textos": list}
+
+    def __init__(self, nome, documento, tabela, chave, tipo_valor, exigencia=EXIGIDO,
+                 descricao=""):
+        self.tabela = tabela
+        self.chave = chave
+        self.tipo_valor = tipo_valor
+        tabela.campos.append(self)
+        super().__init__(nome, documento, exigencia, descricao)
+
+    @property
+    def rotulo(self):
+        return f"campo '{self.chave}' de [[{self.tabela.chave}]]"
+
+    def forma(self):
+        return f"{self.chave} = <{self.tipo_valor}>"
+
+    def aceita(self, valor):
+        tipo = self.TIPOS[self.tipo_valor]
+        if not isinstance(valor, tipo):
+            return False
+        return tipo is not list or all(isinstance(x, str) for x in valor)
+
+
 # ======================================================================== protocolo
 P = PROTOCOLO
 
@@ -215,26 +263,26 @@ S_QER = Secao("questoes_especificas", P, "Questões específicas de revisão", 3
 M_QGR = Marcador("qgr", P, S_QGR, "- QGR: <questão geral>", r"^-\s*QGR:\s*(.+)$",
                  descricao="primeiro parágrafo da seção; sem o marcador, reprova")
 M_ESTRUTURA = Marcador(
-    "estrutura", P, S_QGR, "Estrutura da questão…",
-    r"^Estrutura da questão",
-    descricao="parágrafo que declara a estrutura (PICo); ausente, reprova")
+    "estrutura", P, S_QGR, "[A] estrutura da questão…  (sem distinção de caixa)",
+    r"(?i)^(?:a\s+)?estrutura da questão",
+    descricao="parágrafo iniciado pelo marcador, que declara a estrutura (PICo); ausente, "
+              "reprova")
 I_QER = Identificador("qer", P, S_QER, "QER",
                       descricao="item `- QERn: <questão>`; fora da sequência, reprova")
 F_QER = FrasePadrao("questao_especifica", P, S_QER, "- QERn: <questão>",
                     r"^-\s*(QER\d+):\s*(.+)$")
 
-S_PALAVRAS = Secao("palavras", P, "Palavras significativas da questão de revisão", 2)
-F_FACETA = FrasePadrao(
-    "faceta", P, S_PALAVRAS, "- Faceta n (FCTn): <nome> [(âncora obrigatória k)]",
-    r"^-\s*Faceta\s+(\d+)\s*(?:\((FCT\d+)\))?\s*:\s*(.+)$",
-    descricao="identificador diferente de FCTn, nome vazio ou travessão residual reprovam")
-F_ANCORA = FrasePadrao(
-    "ancora", P, S_PALAVRAS, "(âncora obrigatória k)",
-    r"\s*\(\s*âncora obrigatória\s+(\d+)\s*\)\s*$", exigencia=OPCIONAL,
-    descricao="no fim da linha da faceta; sem nenhuma, valem as âncoras padrão "
-              "(`padroes.ancoras`); a palavra âncora fora dessa forma reprova")
-PALAVRA_ANCORA = "âncora"
-I_FCT = Identificador("fct", P, S_PALAVRAS, "FCT")
+S_FACETAS = Secao("facetas", P, "Facetas da questão de revisão", 2)
+T_FACETAS = Tabela(
+    "facetas", P, S_FACETAS, ("Id faceta", "Faceta", "Âncora obrigatória"), modo="exato",
+    linhas="uma por faceta: `| FCTn | <nome> | Sim/Não |`",
+    descricao="cabeçalho diferente, nome vazio e tabela sem nenhuma âncora reprovam (sem "
+              "âncora, a sonda não seria identificável)")
+I_FCT = Identificador("fct", P, S_FACETAS, "FCT")
+# Valor do documento, sem distinção de caixa → a faceta é âncora obrigatória.
+D_ANCORA = Dominio("ancora", P, S_FACETAS, "Âncora obrigatória", {"Sim": True, "Não": False},
+                   descricao="Sim ou Não, sem distinção de caixa; vazio ou outro valor "
+                             "reprova")
 
 S_INSTRUMENTOS = Secao("instrumentos", P, "Instrumentos para controle terminológico", 2)
 T_INSTRUMENTOS = Tabela(
@@ -251,11 +299,13 @@ MODO_MANUAL, MODO_AUTOMATICO = D_MODO.valores
 S_CONTROLE = Secao("controle", P, "Controle terminológico", 2)
 T_QUADRO = Tabela(
     "quadro", P, S_CONTROLE, ("FCTn", "<idioma>", "…"), modo="por_nome",
-    linhas="uma linha por camada; termos separados por `\\- `",
+    linhas="uma linha por camada; termos separados por vírgula",
     descricao="uma tabela por faceta, com o identificador na primeira célula do cabeçalho; "
               "as demais células nomeiam os idiomas, os mesmos em todas as tabelas, em "
-              "qualquer ordem")
-SEPARADOR_TERMOS = r"\\-\s*"
+              "qualquer ordem; célula com o separador antigo `\\- ` reprova")
+SEPARADOR_TERMOS = r"\s*,\s*"
+# Forma antiga da lista de termos (`\- termo \- termo`): reprova, em vez de virar um termo só.
+SEPARADOR_ANTIGO = r"(?:^|\s)\\-\s"
 R_NUCLEO = RotuloLinha("nucleo", P, T_QUADRO, "Termos centrais", "nucleo",
                        descricao="linha ausente reprova; célula vazia é reprovada pela "
                                  "conferência")
@@ -277,17 +327,27 @@ F_STRING = FrasePadrao("string", P, S_STRINGS, '("termo" OR "termo" OR …)',
 
 S_EXPRESSOES = Secao("expressoes", P, "Expressões de busca", 2)
 T_EXPRESSOES = Tabela(
-    "expressoes", P, S_EXPRESSOES,
-    ("ID expressão", "Natureza", "Expressão de busca", "Detalhamento"), modo="exato",
-    descricao="cabeçalho diferente reprova: as colunas são lidas pela posição; a Natureza "
-              "identifica a executada e a sonda (`[expressoes]` do config.toml)")
+    "expressoes", P, S_EXPRESSOES, ("ID", "Expressão de busca", "Função protocolar"),
+    modo="exato",
+    descricao="cabeçalho diferente reprova: as colunas são lidas pela posição. A Função "
+              "protocolar é texto livre; dela só se extraem as referências (Nn). Executada e "
+              "sonda são identificadas pela composição: nenhuma ou mais de uma candidata "
+              "reprova")
 I_EB = Identificador("eb", P, S_EXPRESSOES, "EB")
 F_COMPOSICAO = FrasePadrao(
     "composicao", P, S_EXPRESSOES, "STRn AND STRn AND (STRn OR STRn)", r"STR\d+",
     descricao="AND em maiúsculas é a única conjunção; OR só entre parênteses, sem "
               "aninhamento; `+`, operador em minúscula ou OR fora de parênteses reprovam")
+S_NOTAS = Secao("notas", P, "Notas explicativas", 3, exigencia=OPCIONAL, pai=S_EXPRESSOES,
+                descricao="ausente, nenhuma nota; cabeçalho em outro nível reprova")
+F_NOTA = FrasePadrao("nota", P, S_NOTAS, "- Nn — <texto>", r"^-\s*(N\d+)\s*—\s*(.+)$",
+                     exigencia=OPCIONAL, descricao="nota repetida reprova")
+F_REF_NOTA = FrasePadrao(
+    "referencia_nota", P, S_EXPRESSOES, "(Nn)  na Função protocolar", r"\((N\d+)\)",
+    exigencia=OPCIONAL,
+    descricao="referência sem a nota correspondente reprova; nota não citada, não")
 F_FAIXA = FrasePadrao(
-    "faixa_sensibilidade", P, S_EXPRESSOES, "< N% … > M%  (no Detalhamento da sonda)",
+    "faixa_sensibilidade", P, S_NOTAS, "< N% … > M%  (nas notas citadas pela executada)",
     r"(<|>)\s*\**\s*(\d+(?:[.,]\d+)?)\s*%", exigencia=OPCIONAL,
     descricao="sem os dois limites, vale `padroes.sensibilidade`; um sem o outro reprova")
 
@@ -321,22 +381,6 @@ F_ORDEM = FrasePadrao(
 MARCA_ORDEM = "Ordem de execução"
 S_ACERVOS = Secao("acervos", P, "Acervos especiais", 4, pai=S_FONTES)
 S_SEMENTES = Secao("sementes", P, "Conjunto-semente", 4, pai=S_FONTES)
-T_SEMENTES = Tabela("sementes", P, S_SEMENTES, ("ID Semente", "Semente", "Bases", "Papel"),
-                    descricao="semente sem base, base que não é sigla da tabela de bases "
-                              "e base repetida reprovam")
-I_SE = Identificador("se", P, S_SEMENTES, "SE")
-D_PAPEL = Dominio("papel", P, S_SEMENTES, "Papel",
-                  {"desenvolvimento": "desenvolvimento", "validação": "validação"},
-                  descricao="só a validação decide a passagem; vazio ou fora do domínio "
-                            "reprova")
-PAPEL_DESENVOLVIMENTO, PAPEL_VALIDACAO = D_PAPEL.valores
-F_REFERENCIA = FrasePadrao(
-    "referencia", P, S_SEMENTES, "Autores (AAAA). Título. … DOI: 10.…",
-    r"^(.*?)\s*\((\d{4})\)\.\s*(.*)$",
-    descricao="sem autoria e ano entre parênteses, reprova; o título termina no primeiro "
-              "ponto seguido de maiúscula ou dígito; o DOI é opcional")
-F_DOI = FrasePadrao("doi", P, S_SEMENTES, "DOI: 10.…", r"DOI:\s*(10\.\S+?)\s*$",
-                    exigencia=OPCIONAL)
 M_REGRA = Marcador("regra_ajuste", P, S_SEMENTES, "Regra de ajuste", r"Regra de ajuste",
                    exigencia=OPCIONAL,
                    descricao="sem a regra, vale `padroes.limiar_aderencia`")
@@ -344,9 +388,6 @@ F_LIMIAR = FrasePadrao(
     "limiar_aderencia", P, S_SEMENTES, "recuperação inferior a N%  (na Regra de ajuste)",
     r"recuperação inferior a\s+(\d+(?:[.,]\d+)?)\s*%",
     descricao="exigida quando há Regra de ajuste: regra sem limiar legível reprova")
-S_FERRAMENTA = Secao("ferramenta", P, "Ferramenta de gestão bibliográfica", 3)
-F_FERRAMENTA = FrasePadrao("item_ferramenta", P, S_FERRAMENTA, "- <tema>: <texto>",
-                           r"^-\s*(.+?):\s*(.+)$", exigencia=OPCIONAL)
 
 # ============================================================================ ficha
 F = FICHA
@@ -438,6 +479,38 @@ F_CITACAO = FrasePadrao(
     r"\((BD\d+)/([^)\s]+)\)", exigencia=OPCIONAL,
     descricao="menção ao registro sem a citação, com BDn de outra base ou com execução "
               "inexistente reprova a base (conferir-dados)")
+
+
+# ============================================================== arquivo de sementes
+# O caminho do arquivo vem do config.toml (`[documentos] sementes`), não da gramática.
+A = SEMENTES
+
+TT_SEMENTES = TabelaToml(
+    "sementes", A, "sementes",
+    descricao="TOML inválido, tabela ausente ou vazia e campo desconhecido reprovam, "
+              "nomeando a semente e o campo")
+C_ID = CampoToml("sementes.id", A, TT_SEMENTES, "id", "texto",
+                 descricao="ausente, de outro tipo, fora da forma SEn ou repetido reprova")
+C_SEMENTE = CampoToml("sementes.semente", A, TT_SEMENTES, "semente", "texto",
+                      descricao="a referência; ausente, de outro tipo ou vazia reprova")
+C_BASES = CampoToml("sementes.bases", A, TT_SEMENTES, "bases", "lista de textos",
+                    descricao="lista vazia, base que não é sigla da tabela de bases do "
+                              "protocolo (grafia exata) e base repetida reprovam")
+C_PAPEL = CampoToml("sementes.papel", A, TT_SEMENTES, "papel", "texto",
+                    descricao="ausente ou de outro tipo reprova")
+I_SE = Identificador("se", A, None, "SE", descricao="id fora da sequência reprova")
+D_PAPEL = Dominio("papel", A, None, "papel",
+                  {"desenvolvimento": "desenvolvimento", "validação": "validação"},
+                  descricao="só a validação decide a passagem; vazio ou fora do domínio "
+                            "reprova")
+PAPEL_DESENVOLVIMENTO, PAPEL_VALIDACAO = D_PAPEL.valores
+F_REFERENCIA = FrasePadrao(
+    "referencia", A, None, "Autores (AAAA). Título. … DOI: 10.…  (no campo semente)",
+    r"^(.*?)\s*\((\d{4})\)\.\s*(.*)$",
+    descricao="sem autoria e ano entre parênteses, reprova; o título termina no primeiro "
+              "ponto seguido de maiúscula ou dígito; o DOI é opcional")
+F_DOI = FrasePadrao("doi", A, None, "DOI: 10.…", r"DOI:\s*(10\.\S+?)\s*$",
+                    exigencia=OPCIONAL)
 
 
 def exigidos(documento=None):

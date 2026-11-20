@@ -14,8 +14,9 @@ from ..conferencia import conferir
 from ..fichas import ficha
 from ..markdown import blocos_de_tabela, celulas, linha_do_cabecalho, normaliza, secao
 from ..saida import Saida
-from .textos import (FORA_DA_FORMA, coluna, edita_celula, linhas_de_tabela_do_trecho,
-                     linhas_do_trecho, remove_linhas, sub_na_linha, troca_celula)
+from .textos import (FORA_DA_FORMA, coluna, edita_celula, itens_toml,
+                     linhas_de_tabela_do_trecho,
+                     linhas_do_trecho, remove_linhas, sub_na_linha, toml_de, troca_celula)
 
 
 # --------------------------------------------------------------- geradores por tipo
@@ -82,11 +83,28 @@ def _acao(e, t, d):
     return troca_celula(t, idx, G.COL_CRIT_ACAO, FORA_DA_FORMA), e
 
 
-def _referencia(e, t, d):
-    L = d["locais"]
-    idx = next(iter(L["semente"].values()))
-    k = coluna(t, L["cabecalho_sementes"], G.T_SEMENTES.colunas[1])
-    return edita_celula(t, idx, k, lambda c: re.sub(r"\(\d{4}\)\.", "", c, count=1)), e
+def _no_primeiro_item(campo, funcao):
+    """Arquivo de sementes: o campo do primeiro item editado por `funcao` (None o retira)."""
+    def gera(e, t, d):
+        itens = itens_toml(t, G.TT_SEMENTES.chave)
+        valor = funcao(itens[0][campo])
+        if valor is None:
+            del itens[0][campo]
+        else:
+            itens[0][campo] = valor
+        return toml_de(itens, G.TT_SEMENTES.chave), e
+    return gera
+
+
+def _tabela_toml(e, t, d):
+    return t.replace(f"[[{e.chave}]]", f"[[{e.chave}-renomeada]]"), e
+
+
+def _campo_toml(e, t, d):
+    return _no_primeiro_item(e.chave, lambda v: None)(e, t, d)
+
+
+GENERICOS.update({G.TabelaToml: _tabela_toml, G.CampoToml: _campo_toml})
 
 
 def _string_base(e, t, d):
@@ -124,14 +142,15 @@ ESPECIFICOS = {
     G.D_MODO: _celula_da_primeira("instrumento", "cabecalho_instrumentos",
                                        G.D_MODO.campo),
     G.D_ACAO: _acao,
-    G.D_PAPEL: _celula_da_primeira("semente", "cabecalho_sementes", G.D_PAPEL.campo),
-    G.F_REFERENCIA: _referencia,
+    G.D_PAPEL: _no_primeiro_item(G.C_PAPEL.chave, lambda v: FORA_DA_FORMA),
+    G.F_REFERENCIA: _no_primeiro_item(G.C_SEMENTE.chave,
+                                      lambda v: re.sub(r"\(\d{4}\)\.", "", v, count=1)),
     G.F_STRING_BASE: _string_base,
     G.D_CAMADAS: _valor_do_rotulo(G.RF_CAMADAS),
     G.D_EXECUCAO: _execucao,
     # Linha fora da forma deixa um buraco na numeração: quem reprova é o identificador.
     G.F_QER: _com_nomeado(_frase, G.I_QER),
-    G.F_FACETA: _com_nomeado(_frase, G.I_FCT),
+    G.D_ANCORA: _celula_da_primeira("faceta", "cabecalho_facetas", G.D_ANCORA.campo),
     G.T_CRITERIOS: _com_nomeado(_tabela, G.I_CE),
     # Sem a tabela da declaração, a primeira exigência que falta é a dos idiomas.
     G.TF_DECLARACAO: _com_nomeado(_tabela, G.RF_IDIOMAS),
@@ -153,6 +172,10 @@ def casos(ctx, g):
             original = t
             def executa(m):
                 return conferir(ctx.com_texto(m))
+        elif e.documento == G.SEMENTES:
+            original = ctx.texto_sementes
+            def executa(m):
+                return conferir(ctx.com_sementes(m))
         else:
             original = t_ficha
             def executa(m):
@@ -162,4 +185,5 @@ def casos(ctx, g):
         g.espera(f"{e.rotulo}{onde} retirado ou deformado", mutante, original, executa,
                  Saida.PROTOCOLO_ILEGIVEL, (nomeado.rotulo,))
     print(f"  ({len(exigidos)} elementos exigidos na gramática, "
-          f"{len([e for e in exigidos if e.documento == G.FICHA])} da ficha de base)")
+          f"{len([e for e in exigidos if e.documento == G.FICHA])} da ficha de base, "
+          f"{len([e for e in exigidos if e.documento == G.SEMENTES])} do arquivo de sementes)")

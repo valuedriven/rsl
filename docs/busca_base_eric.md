@@ -33,12 +33,10 @@ Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?adv
 | Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Não** | filtro de data da página de resultados, 2017 a 2026; registrar o rótulo do filtro e o retorno antes e depois |
 | Idiomas — português, inglês e espanhol | CE3 | **Não** | termos só em inglês; campo `language` não usado |
 | Tipo documental e revisão por pares | CE4 / CE5 | **Não** | `Peer reviewed only` desmarcada; campo `publicationtype` não usado |
-| Texto completo | CE6 | **Não** | `Full text available on ERIC` desmarcada |
-| Adequação temática — regra de inclusão | CE7 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
-| Adequação temática — não pertinência | CE8 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª |
-| Adequação temática — contra-escopo | CE9 / CE10 / CE11 / CE12 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
-| Domínio de aplicação educacional | CE13 / CE14 | **Sim**, em forma radical | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz |
-| Outros tipos documentais | CE15 | **Não** | 2ª filtragem |
+| Adequação temática — regra de inclusão | CE6 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
+| Adequação temática — não pertinência e contra-escopo | CE6 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
+| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, em forma radical | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz |
+| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
 
 ---
 

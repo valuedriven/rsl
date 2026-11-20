@@ -1,6 +1,6 @@
 """Autoteste do protocolo: defeitos injetados, precedência e leitura estrutural que aprova.
 
-Toda cópia defeituosa é gerada da estrutura lida (`d["locais"]`): "a última semente",
+Toda cópia defeituosa é gerada da estrutura lida (`d["locais"]`): "a última faceta",
 "a primeira base", "a linha da expressão executada". Nada aqui depende de identificador,
 sigla, termo ou valor do protocolo vigente.
 """
@@ -13,7 +13,8 @@ from ..markdown import celulas, desescapa, linha_do_cabecalho, lista
 from ..saida import Saida
 from . import conferir_texto, resultado
 from .textos import (cabecalho, celula, coluna, edita_celula, linhas, monta_linha,
-                     remove_coluna, remove_linhas, remove_tabela, sub_na_linha, troca_celula,
+                     insere_depois, remove_coluna, remove_linhas, remove_tabela, sub_na_linha,
+                     troca_celula,
                      troca_colunas, troca_linha)
 
 R, P = Saida.REPROVADO, Saida.PROTOCOLO_ILEGIVEL
@@ -44,16 +45,14 @@ def mutacoes(ctx, g):
     especifica = sorted(p["especificas"])[0] if p["especificas"] else None
     idx_exec, idx_sonda = L["expressao"][d["executada"]], L["expressao"][d["sonda"]]
     idx_espec = L["expressao"].get(especifica)
-    k_comp = G.T_EXPRESSOES.colunas.index(G.T_EXPRESSOES.colunas[2])
-    k_nat = G.T_EXPRESSOES.colunas.index(G.T_EXPRESSOES.colunas[1])
+    _, c_e_comp, c_e_funcao = G.T_EXPRESSOES.colunas
+    k_comp = G.T_EXPRESSOES.colunas.index(c_e_comp)
+    k_func = G.T_EXPRESSOES.colunas.index(c_e_funcao)
     criterios = list(L["criterio"])
     bases = list(L["base"])
-    sementes = list(L["semente"])
     c_bd_id, c_sigla, c_nome = G.T_BASES.colunas
-    c_se_id, c_se_ref, c_se_bases, c_papel = G.T_SEMENTES.colunas
     c_i_sigla, _, c_modo, c_caminho, c_idiomas, c_fcts = G.T_INSTRUMENTOS.colunas
-    cab_b, cab_s, cab_i = (L["cabecalho_bases"], L["cabecalho_sementes"],
-                           L["cabecalho_instrumentos"])
+    cab_b, cab_i = L["cabecalho_bases"], L["cabecalho_instrumentos"]
     insts = list(L["instrumento"])
 
     def cel_inst(sigla, nome_col, valor):
@@ -71,8 +70,13 @@ def mutacoes(ctx, g):
     primeiro = re.split(G.SEPARADOR_TERMOS, celula(t, nuc, k_id0))
     primeiro = next((x.strip() for x in primeiro if x.strip()), "")
     caso("termo duplicado na mesma camada",
-         edita_celula(t, nuc, k_id0, lambda c: f"\\- {primeiro} {c}"), R,
+         edita_celula(t, nuc, k_id0, lambda c: f"{primeiro}, {c}"), R,
          "repetido na mesma camada")
+    caso("quadro com o separador antigo `\\- `",
+         edita_celula(t, nuc, k_id0,
+                      lambda c: " ".join(f"\\- {x.strip()}"
+                                         for x in re.split(G.SEPARADOR_TERMOS, c))), P,
+         ("separados por", "a vírgula"))
 
     # --- questões
     caso("questão geral removida",
@@ -83,21 +87,31 @@ def mutacoes(ctx, g):
 
     # --- facetas
     n2 = _numero(f2, G.I_FCT.prefixo)
+    cab_f = L["cabecalho_facetas"]
+    c_f_id, c_f_nome, c_f_ancora = G.T_FACETAS.colunas
+    k_f_id, k_f_nome, k_f_ancora = (coluna(t, cab_f, c) for c in G.T_FACETAS.colunas)
     caso("faceta com identificador trocado",
-         sub_na_linha(t, L["faceta"][f2], rf"\(({G.I_FCT.prefixo}\d+)\)",
-                      f"{G.I_FCT.prefixo}{n2 + 1}", 1),
-         P, "não corresponde")
-    if ancoradas:
+         troca_celula(t, L["faceta"][f2], k_f_id, f"{G.I_FCT.prefixo}{n2 + 1}"),
+         P, f"numeração {G.I_FCT.prefixo}")
+    caso("faceta com nome vazio", troca_celula(t, L["faceta"][f2], k_f_nome, ""), P,
+         f"{c_f_nome} vazia")
+    caso("âncora fora do domínio",
+         troca_celula(t, L["faceta"][ancoradas[-1]], k_f_ancora, "Talvez"), P,
+         ("'Talvez' fora dos admitidos", ancoradas[-1]))
+    mut = t
+    for fid in ancoradas:
+        mut = troca_celula(mut, L["faceta"][fid], k_f_ancora,
+                           next(k for k, v in G.D_ANCORA.valores.items() if not v))
+    caso("tabela de facetas sem nenhuma âncora", mut, P, ("nenhuma faceta marcada",
+                                                          G.T_FACETAS.rotulo))
+    caso("cabeçalho da tabela de facetas fora da forma",
+         troca_celula(t, cab_f, k_f_ancora, "Âncora"), P, "difere do esperado")
+    if len(ancoradas) > 1:
+        # Uma âncora a menos: nenhuma expressão é só a conjunção das âncoras restantes.
         caso("âncora desmarcada",
-             sub_na_linha(t, L["faceta"][ancoradas[-1]], G.F_ANCORA.padrao.pattern, ""),
-             R, "conjunção das âncoras")
-        caso("âncora com parêntese mal formado",
-             sub_na_linha(t, L["faceta"][ancoradas[0]], r"\)\s*$", ""), P,
-             "âncora fora da forma")
-    alvo_livre = livres[0] if livres else f1
-    caso("linha de faceta com travessão residual",
-         troca_linha(t, L["faceta"][alvo_livre], linhas(t)[L["faceta"][alvo_livre]] +
-                     " — vermelho"), P, "travessão")
+             troca_celula(t, L["faceta"][ancoradas[-1]], k_f_ancora,
+                          next(k for k, v in G.D_ANCORA.valores.items() if not v)),
+             P, ("candidata", "sonda"))
 
     # --- strings
     caso("string fora do padrão OR", sub_na_linha(t, L["string"][f2], r" OR ", ", "), P,
@@ -145,19 +159,38 @@ def mutacoes(ctx, g):
         caso("composição com operador em minúscula",
              edita_celula(t, idx_espec, k_comp, lambda c: c.replace(" AND ", " and ", 1)), P,
              "operador fora da forma estrita")
-        caso("duas expressões executadas",
-             troca_celula(t, idx_espec, k_nat,
-                          ctx.config.valor("expressoes.natureza_executada")), P,
-             "mais de uma expressão")
+        # Executada pela composição: uma segunda expressão com grupo OR é ambiguidade.
+        grupo_or = re.search(GRUPO_OR, celula(t, idx_exec, k_comp)).group(0)
         str_espec = p["especificas"][especifica]
-        caso("sonda que não é a conjunção das âncoras",
+        caso("duas expressões com OR",
+             edita_celula(t, idx_espec, k_comp,
+                          lambda c: re.sub(rf"\b{str_espec}\b", grupo_or, c, count=1)), P,
+             ("2 candidatas a executada", especifica, d["executada"]))
+        caso("nenhuma expressão formada só pelas âncoras",
              edita_celula(t, idx_sonda, k_comp,
                           lambda c: c.rstrip("\\").rstrip() + f" AND {str_espec}" +
-                          ("\\" if c.endswith("\\") else "")), R, "conjunção das âncoras")
-    caso("executada que não é a união das específicas",
-         edita_celula(t, idx_exec, k_comp,
-                      lambda c: re.sub(GRUPO_OR, lambda m: m.group(1).split()[0], c, 1)),
-         R, "não é a união")
+                          ("\\" if c.endswith("\\") else "")), P,
+             "nenhuma candidata a sonda")
+        nota_inexistente = f"N{len(L['nota']) + 90}"
+        caso("expressão cita nota inexistente",
+             edita_celula(t, idx_espec, k_func, lambda c: c + f" ({nota_inexistente})"), P,
+             (especifica, nota_inexistente))
+    # Sonda pela composição: uma segunda expressão só de âncoras é ambiguidade.
+    ultima = sorted(L["expressao"], key=lambda k: _numero(k, G.I_EB.prefixo))[-1]
+    nova = f"{G.I_EB.prefixo}{_numero(ultima, G.I_EB.prefixo) + 1}"
+    linha_sonda = celulas(linhas(t)[idx_sonda])
+    linha_sonda[0] = nova
+    caso("duas sondas",
+         insere_depois(t, L["expressao"][ultima], monta_linha(linha_sonda)), P,
+         ("2 candidatas a sonda", d["sonda"], nova))
+    if len(p["especificas"]) > 1:
+        # A executada continua a única com OR, mas deixa de ser a união das específicas.
+        e_a, e_b = sorted(p["especificas"])[:2]
+        caso("executada que não é a união das específicas",
+             edita_celula(t, L["expressao"][e_b], k_comp,
+                          lambda c: re.sub(rf"\b{p['especificas'][e_b]}\b",
+                                           p["especificas"][e_a], c, count=1)),
+             R, "não é a união")
     caso("composição com OR fora de parênteses",
          edita_celula(t, idx_exec, k_comp, lambda c: re.sub(GRUPO_OR, r"\1", c, 1)), P,
          "fora da forma estrita")
@@ -168,10 +201,14 @@ def mutacoes(ctx, g):
     caso("cabeçalho da tabela de expressões renomeado",
          edita_celula(t, cab_e, k_comp, lambda c: c + " (renomeada)"), P, "difere do esperado")
     cels = celulas(linhas(t)[cab_e])
-    cels[k_nat], cels[k_comp] = cels[k_comp], cels[k_nat]
+    cels[k_func], cels[k_comp] = cels[k_comp], cels[k_func]
     mut = troca_linha(t, cab_e, monta_linha(cels))
     caso("cabeçalho da tabela de expressões com colunas trocadas", mut, P,
          "difere do esperado")
+    caso("cabeçalho antigo da tabela de expressões (com Natureza e Detalhamento)",
+         troca_linha(t, cab_e, monta_linha(["ID expressão", "Natureza", c_e_comp,
+                                            "Detalhamento"])), P,
+         ("difere do esperado", str(list(G.T_EXPRESSOES.colunas))))
     caso("composição ausente (seção de expressões removida)",
          remove_linhas(t, [linha_do_cabecalho(t, G.S_EXPRESSOES)]), P,
          G.S_EXPRESSOES.titulo)
@@ -180,9 +217,9 @@ def mutacoes(ctx, g):
         caso("faixa de sensibilidade incoerente",
              sub_na_linha(t, L["faixa"], r"<\s*\**\s*(\d+(?:[.,]\d+)?)",
                           str(round(hi * 100) + 10), 1), R, "incoerente")
-        caso("faixa de sensibilidade ilegível",
+        caso("faixa de sensibilidade com limite único (sem o superior)",
              sub_na_linha(t, L["faixa"], r">\s*\**\s*\d+(?:[.,]\d+)?\s*%", "acima do teto"), P,
-             "falta o limite")
+             ("falta o limite superior", next(n for n, i in L["nota"].items() if i == L["faixa"])))
     caso("limiar de aderência ilegível",
          sub_na_linha(t, L["limiar"], G.F_LIMIAR.padrao.pattern,
                       "recuperação inferior a muitas") if "limiar" in L else None, P,
@@ -254,35 +291,6 @@ def mutacoes(ctx, g):
          troca_celula(t, cab_qn, len(cabecalho(t, cab_qn)) - 1, "xx")
          if fn != f1 else None, P, "diferem dos idiomas")
 
-    # --- sementes
-    k_bases, k_papel = coluna(t, cab_s, c_se_bases), coluna(t, cab_s, c_papel)
-    ult = sementes[-1]
-    caso("semente sem base", troca_celula(t, L["semente"][ult], k_bases, ""), P,
-         "semente sem base")
-    s0 = d["sementes"][0]
-    outra_grafia = s0["bases"][0].swapcase()
-    caso("semente com sigla em outra grafia",
-         edita_celula(t, L["semente"][s0["id"]], k_bases,
-                      lambda c: c.replace(s0["bases"][0], outra_grafia, 1)), P,
-         f"base ['{outra_grafia}']")
-    caso("semente fora de numeração",
-         troca_celula(t, L["semente"][ult], coluna(t, cab_s, c_se_id),
-                      f"{G.I_SE.prefixo}{_numero(ult, G.I_SE.prefixo) + 1}"), P,
-         f"numeração {G.I_SE.prefixo}")
-    caso(f"coluna {c_papel} retirada da tabela de sementes", remove_coluna(t, cab_s, k_papel),
-         P, f"falta a coluna ['{c_papel}']")
-    por_papel = {e["papel"]: e["id"] for e in reversed(d["sementes"])}
-    alvo_dev = por_papel.get(G.PAPEL_DESENVOLVIMENTO, sementes[0])
-    caso("semente sem papel", troca_celula(t, L["semente"][alvo_dev], k_papel, ""), P,
-         "papel da semente vazio")
-    alvo_val = por_papel.get(G.PAPEL_VALIDACAO, sementes[0])
-    caso("semente com papel fora do domínio",
-         troca_celula(t, L["semente"][alvo_val], k_papel, "teste"), P, "papel 'teste' fora")
-    mut = t
-    for idx in L["semente"].values():
-        mut = troca_celula(mut, idx, k_papel, G.PAPEL_DESENVOLVIMENTO)
-    caso("conjunto-semente sem validação", mut, R, "sem semente de validação")
-
     for nome, mutante, codigo, trecho in casos:
         g.espera(nome, mutante, t, executa, codigo, trecho)
 
@@ -295,8 +303,9 @@ def precedencia(ctx, g):
     casos = [
         ("limiar ausente do protocolo vale pelo padrão", "limiar_aderencia",
          remove_linhas(t, [L["limiar"]]) if "limiar" in L else None),
-        ("âncoras não marcadas valem pelo padrão", "ancoras",
-         remove_ancoras(t, d)),
+        ("nota da executada sem `<` e `>`: a faixa vale pelo padrão", "sensibilidade",
+         troca_linha(t, L["faixa"], G.F_FAIXA.padrao.sub("", linhas(t)[L["faixa"]]))
+         if "faixa" in L else None),
     ]
     for nome, param, mutante in casos:
         if mutante is None or mutante == t:
@@ -311,13 +320,6 @@ def precedencia(ctx, g):
                 and p_["valor"] == ctx.config.valor(f"padroes.{param}"), repr(p_))
 
 
-def remove_ancoras(t, d):
-    mut = t
-    for idx in d["locais"]["faceta"].values():
-        mut = sub_na_linha(mut, idx, G.F_ANCORA.padrao.pattern, "")
-    return mut
-
-
 def estrutural(ctx, g):
     """Leituras que têm de APROVAR: o leitor não pode reprovar o que é válido, e lê o valor
     pela coluna e pelo rótulo, não pela posição."""
@@ -325,20 +327,19 @@ def estrutural(ctx, g):
     L = d["locais"]
     ls = linhas(t)
 
-    # Nome da faceta: todo o resto da linha, hífen incluído; a âncora fica fora do nome.
+    # Nome da faceta: a célula inteira, hífen incluído; âncora lida da coluna.
+    cab_f = L["cabecalho_facetas"]
+    k_nome, k_ancora = (coluna(t, cab_f, c) for c in G.T_FACETAS.colunas[1:])
     errados = []
     for f in d["facetas"]:
-        bruto = desescapa(ls[L["faceta"][f["id"]]].split(":", 1)[1]).strip()
-        esperado = bruto[:bruto.rfind("(")].strip() if f["ancora"] else bruto
-        if f["nome"] != esperado:
-            errados.append((f["id"], f["nome"], esperado))
-    g.testa("nome de cada faceta lido inteiro, com hífen, sem o sufixo de âncora",
-            not errados, repr(errados))
-    ancoras = [f for f in d["facetas"] if f["ancora"]]
-    g.testa("faceta marcada lida como âncora, sem o parêntese no nome",
-            bool(ancoras) and all("(" not in f["nome"]
-                                  and G.PALAVRA_ANCORA not in f["nome"] for f in ancoras),
-            repr(ancoras))
+        bruto = desescapa(celula(t, L["faceta"][f["id"]], k_nome)).strip()
+        if f["nome"] != bruto:
+            errados.append((f["id"], f["nome"], bruto))
+    g.testa("nome de cada faceta lido inteiro, com hífen", not errados, repr(errados))
+    g.testa("âncoras lidas da coluna, na ordem da tabela, com origem no protocolo",
+            d["ancoras"] == [f["id"] for f in d["facetas"] if f["ancora"]]
+            and bool(d["ancoras"])
+            and d["parametros"]["ancoras"]["origem"] == "protocolo", repr(d["ancoras"]))
 
     def mesmo_com(mutante, chave):
         cod, msgs = resultado(lambda: ctx.com_texto(mutante).protocolo())
@@ -346,19 +347,18 @@ def estrutural(ctx, g):
             return False, msgs[:1]
         return ctx.com_texto(mutante).protocolo()[chave] == d[chave], ""
 
+    mut = t
+    for f in d["facetas"]:
+        mut = edita_celula(mut, L["faceta"][f["id"]], k_ancora, lambda c: c.strip().upper())
+    igual, msg = mesmo_com(mut, "ancoras")
+    g.testa("âncora lida sem distinção de caixa (SIM/NÃO)", mut != t and igual, f"{msg}")
+
     cab_b = L["cabecalho_bases"]
     _, c_sigla, c_nome = G.T_BASES.colunas
     mut = troca_colunas(t, cab_b, coluna(t, cab_b, c_sigla), coluna(t, cab_b, c_nome))
     igual, msg = mesmo_com(mut, "bases")
     g.testa("bases lidas pelo nome da coluna, com as colunas em outra ordem",
             mut != t and igual, f"{msg}")
-    cab_s = L["cabecalho_sementes"]
-    _, _, c_bases, c_papel = G.T_SEMENTES.colunas
-    mut = troca_colunas(t, cab_s, coluna(t, cab_s, c_bases), coluna(t, cab_s, c_papel))
-    igual, msg = mesmo_com(mut, "sementes")
-    g.testa("sementes e papel lidos pelo nome da coluna, com as colunas em outra ordem",
-            mut != t and igual, f"{msg}")
-
     dist = d["distribuicao"]
     g.testa("distribuição por papel soma estudos e incidências e tem validação",
             sum(dist["por_papel"].values()) == len(d["sementes"])

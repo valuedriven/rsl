@@ -23,7 +23,8 @@ prefixo é impresso como `[? ]` e **não entra no numerador** — exige conferê
 registro na coluna `recuperada`. A razão impressa é sobre as sementes informadas; o denominador
 definitivo são as sementes que cada base indexa.
 
-O conjunto-semente é lido do documento do protocolo. As exportações das bases são a
+O conjunto-semente é lido do arquivo de sementes (`[documentos] sementes` do
+`config.toml`); a regra de ajuste e o limiar, do protocolo. As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
 `busca registrar` antes do teste; ver `README.md`, seção Scripts.
 

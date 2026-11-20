@@ -1,15 +1,15 @@
 """Autoteste: prova que cada conferência reprova o defeito que lhe cabe, com o código esperado.
 
-Cada defeito é injetado numa cópia em memória — do protocolo, de uma ficha ou da
-configuração — gerada a partir da estrutura lida do documento corrente (a última semente
-lida, a primeira base da tabela, a linha em que a faixa foi encontrada), não de literais do
-texto vigente. Defeito não detectado, detectado por outro motivo ou com outro código faz o
-autoteste falhar; mutação que não se aplica também.
+Cada defeito é injetado numa cópia em memória — do protocolo, de uma ficha, da configuração
+ou do arquivo de sementes — gerada a partir da estrutura lida do documento corrente (a
+última semente lida, a primeira base da tabela, a linha em que a faixa foi encontrada), não
+de literais do texto vigente. Defeito não detectado, detectado por outro motivo ou com outro
+código faz o autoteste falhar; mutação que não se aplica também.
 
 Grupos executados numa só chamada, cada um com a sua contagem: defeitos injetados no
-protocolo, precedência, configuração, leitura estrutural que aprova, planejamento da
-validação, arquivos alimentados, fichas das bases, composição da derivação, aderência por
-papel e gramática do protocolo.
+protocolo, precedência, configuração, arquivo de sementes, leitura estrutural que aprova,
+planejamento da validação, arquivos alimentados, fichas das bases, composição da derivação,
+aderência por papel e gramática do protocolo.
 
 Sem os arquivos alimentados, os casos que dependem deles não rodam: o resultado é PARCIAL,
 nunca OK.
@@ -90,11 +90,13 @@ def conferir_texto(ctx):
 
 
 def grupos():
-    from . import busca, configuracao, dados, fichas, gramatica, protocolo, validacao
+    from . import (busca, configuracao, dados, fichas, gramatica, protocolo, sementes,
+                   validacao)
     return [
         ("defeitos injetados no protocolo", protocolo.mutacoes),
         ("precedência", protocolo.precedencia),
         ("configuração", configuracao.casos),
+        ("arquivo de sementes", sementes.casos),
         ("leitura estrutural que aprova", protocolo.estrutural),
         ("planejamento da validação", validacao.casos),
         ("conferências dos arquivos alimentados", dados.casos),

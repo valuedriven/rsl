@@ -60,8 +60,7 @@ def relatorio(ctx, d):
              f"({sum(1 for c in crit if c['acao'] == G.ACAO_INCLUIR)} incluir, "
              f"{sum(1 for c in crit if c['acao'] == G.ACAO_EXCLUIR)} excluir)")
     L.append(f"  fontes: {len(d['fontes']['bases'])} bases, ordem "
-             f"{d['fontes']['ordem_execucao']}; {len(d['fontes']['ferramenta_gestao'])} "
-             f"itens de ferramenta")
+             f"{d['fontes']['ordem_execucao']}")
     dist = d["distribuicao"]
     L.append(f"  sementes: {len(d['sementes'])}  "
              f"incidências: {dist['incidencias']}  "

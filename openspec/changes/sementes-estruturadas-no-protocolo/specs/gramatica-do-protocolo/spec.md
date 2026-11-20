@@ -1,26 +1,25 @@
 # Spec Delta
 
-## ADDED Requirements
+## MODIFIED Requirements
 
-### Requirement: Arquivo estruturado apontado pelo protocolo
-A gramática SHALL admitir um elemento de apontamento de arquivo: uma linha com rótulo
-declarado, seguida de um caminho relativo à raiz do projeto, e o esquema de campos
-(nome, tipo e exigência) do arquivo apontado. A seção "Conjunto-semente" SHALL exigir
-exatamente um apontamento, para um arquivo TOML. `rsl gramatica` SHALL exibir o rótulo e o
-esquema do arquivo, com os campos, os tipos e a exigência de cada um.
-
-#### Scenario: Esquema exibido
-- **WHEN** se executa `rsl gramatica`
-- **THEN** a seção "Conjunto-semente" aparece com o rótulo do apontamento e os campos
-  `id`, `autores`, `ano`, `titulo`, `veiculo`, `volume`, `numero`, `paginas`, `doi`,
-  `bases`, `facetas`, `papel`, `verificacao`, `tipo`, `alinhamento`, `nota`,
-  `veiculo_conferido`, `eric` e `observacoes`, cada um com tipo e exigência
+### Requirement: Esquema do arquivo de sementes na gramática
+A gramática SHALL declarar o esquema do arquivo de sementes: o nome da tabela e, para cada
+campo, o nome, o tipo e a exigência. O leitor MUST usar essa declaração para aceitar ou
+reprovar o arquivo, e o autoteste MUST gerar a partir dela os casos de campo ausente e de
+campo desconhecido. Os campos declarados SHALL ser os do esquema estruturado: `id`,
+`autores`, `ano`, `titulo`, `veiculo`, `volume`, `numero`, `paginas`, `doi`, `bases`,
+`facetas`, `papel`, `verificacao`, `tipo`, `alinhamento`, `nota`, `veiculo_conferido`,
+`eric` e `observacoes`.
 
 #### Scenario: Campo novo no esquema
-- **WHEN** uma change acrescenta um campo ao esquema do arquivo
-- **THEN** `rsl gramatica` o exibe, e o autoteste passa a gerar o caso de campo ausente,
-  se ele for obrigatório
+- **WHEN** uma change acrescenta um campo obrigatório ao esquema
+- **THEN** `rsl gramatica` o exibe, e o autoteste passa a gerar o caso de campo ausente
 
-#### Scenario: Apontamento ausente
-- **WHEN** a seção "Conjunto-semente" não traz a linha de apontamento
-- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando a seção e o rótulo esperado
+#### Scenario: Caminho fora da gramática
+- **WHEN** se procura `docs/sementes.toml` nas declarações da gramática
+- **THEN** não há ocorrência, porque o caminho vem do `config.toml`
+
+#### Scenario: Esquema estruturado exibido
+- **WHEN** se executa `rsl gramatica`
+- **THEN** o grupo do arquivo de sementes traz os 19 campos do esquema estruturado, cada
+  um com tipo e exigência, e não traz `semente`

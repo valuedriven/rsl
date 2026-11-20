@@ -1,4 +1,5 @@
-"""Contexto explícito de uma execução: a configuração, o texto do protocolo e das fichas.
+"""Contexto explícito de uma execução: a configuração, o texto do protocolo, das fichas e do
+arquivo de sementes.
 
 O subcomando cria o contexto e o passa às funções; não há estado de módulo. O autoteste
 cria contextos sobre cópias em memória (texto alterado, ficha alterada, configuração
@@ -9,10 +10,11 @@ from . import config as _config
 
 
 class Contexto:
-    def __init__(self, cfg, texto=None, fichas=None):
+    def __init__(self, cfg, texto=None, fichas=None, sementes=None):
         self.config = cfg
         self._texto = texto
         self._fichas = dict(fichas or {})
+        self._sementes = sementes
         self._protocolo = None
 
     @classmethod
@@ -32,6 +34,18 @@ class Contexto:
     def caminho_protocolo(self):
         return self.config.valor("protocolo")
 
+    @property
+    def texto_sementes(self):
+        """Texto do arquivo de sementes: o da cópia em memória, ou o do arquivo configurado
+        (ConfiguracaoInvalida se ausente)."""
+        if self._sementes is None:
+            self._sementes = self.config.sementes().read_text(encoding="utf-8")
+        return self._sementes
+
+    @property
+    def caminho_sementes(self):
+        return self.config.valor("documentos.sementes")
+
     def ficha(self, sigla, caminho):
         """Texto da ficha de uma base: o da cópia em memória, ou o do arquivo."""
         if sigla in self._fichas:
@@ -47,10 +61,13 @@ class Contexto:
 
     # ---------------------------------------------------------------------- cópias
     def com_texto(self, texto):
-        return Contexto(self.config, texto, self._fichas)
+        return Contexto(self.config, texto, self._fichas, self._sementes)
 
     def com_fichas(self, fichas):
-        return Contexto(self.config, self._texto, {**self._fichas, **fichas})
+        return Contexto(self.config, self._texto, {**self._fichas, **fichas}, self._sementes)
+
+    def com_sementes(self, texto):
+        return Contexto(self.config, self._texto, self._fichas, texto)
 
     def com_config(self, cfg):
-        return Contexto(cfg, self._texto, self._fichas)
+        return Contexto(cfg, self._texto, self._fichas, self._sementes)

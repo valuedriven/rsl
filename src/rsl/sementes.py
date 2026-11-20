@@ -1,13 +1,14 @@
 """Instrumento do teste de aderência: a planilha a preencher e o ensaio seco.
 
-As referências, as bases de cada semente e o papel vêm do protocolo; o arquivo de sementes
-(`[dados] sementes`) guarda só o que é autoral — verificação, escopo, tipo, alinhamento,
+As referências, as bases de cada semente e o papel vêm do conjunto-semente
+(`[documentos] sementes`); o metadado das sementes (`[dados] sementes`) guarda só o que é
+autoral — verificação, escopo, tipo, alinhamento,
 nota —, ligado por DOI ou título, de modo que o rótulo `id` pode mudar sem perder o
 metadado. A planilha é gravada em `[saidas] aderencia`.
 
 O ensaio seco — o que cada título entrega às facetas — é impresso no terminal, não
-gravado: o instrumento é a planilha. Entrada do arquivo de sementes sem correspondência no
-protocolo é reportada, para decisão.
+gravado: o instrumento é a planilha. Entrada do metadado sem correspondência no
+conjunto-semente é reportada, para decisão.
 """
 
 import csv
@@ -24,16 +25,17 @@ def colunas(d):
     bases = [b["sigla"] for b in d["bases"]]
     executada = d["executada"]
     return [
-        ("id", "identificador da semente (SEn), conforme o protocolo"),
+        ("id", "identificador da semente (SEn), conforme o conjunto-semente"),
         ("autores_ano", "autoria abreviada e ano"),
-        ("titulo", "título, como consta na referência do protocolo"),
+        ("titulo", "título, como consta na referência do conjunto-semente"),
         ("tipo", "primário ou secundário — preencher no arquivo de sementes"),
         ("escopo", "DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher no arquivo de sementes"),
         ("verificacao", "estado de conferência da referência — preencher no arquivo de "
                         "sementes"),
-        ("papel", "papel da semente no conjunto: desenvolvimento ou validação — do protocolo"),
+        ("papel", "papel da semente no conjunto: desenvolvimento ou validação — do "
+                  "conjunto-semente"),
         ("base", " ou ".join(filter(None, [", ".join(bases[:-1]), bases[-1]]))),
-        ("esperada_na_base", "sim se a tabela do conjunto-semente do protocolo cita esta base"),
+        ("esperada_na_base", "sim se o conjunto-semente cita esta base para a semente"),
         ("indexada", "etapa 1: sim ou não, por busca de título. **obrigatório**"),
         ("data_etapa1", "data da busca de título"),
         ("recuperada", f"etapa 2: sim ou não, por busca na exportação de {executada}"),

@@ -107,15 +107,18 @@ def sensibilidade(b, base=None):
                 sim = sum(1 for v in respondidos if v.lower() in ("sim", "s", "1", "true"))
                 frac_eleg = sim / len(amostra)
                 print(f"  fração ELEGÍVEL na amostra: {sim}/{len(amostra)} = {frac_eleg:.1%}")
+                # Regra de decisão da nota da executada no protocolo (N3).
                 if frac_eleg < baixo:
-                    print(f"  {frac_eleg:.1%} < {baixo:.0%}: a restrição está justificada.")
+                    print(f"  {frac_eleg:.1%} < {baixo:.0%}: favorece a manutenção de "
+                          f"{b.executada}.")
                 elif frac_eleg > alto:
-                    print(f"  {frac_eleg:.1%} > {alto:.0%}: reconsiderar, possivelmente "
-                          f"retornar a {b.sonda} como busca definitiva.")
+                    print(f"  {frac_eleg:.1%} > {alto:.0%}: exige a reconsideração de "
+                          f"{b.executada} e, se necessário, emenda.")
                 else:
-                    print(f"  {frac_eleg:.1%} na faixa {baixo:.0%}–{alto:.0%}: decisão de "
-                          f"mérito do pesquisador, a registrar como emenda.")
-        print("  A decisão se registra como emenda ao protocolo.")
+                    print(f"  {frac_eleg:.1%} na faixa {baixo:.0%}–{alto:.0%}: INCONCLUSIVO — "
+                          f"requer análise qualitativa dos elegíveis, das razões de não "
+                          f"recuperação e da viabilidade de ampliar {b.executada}.")
+        print("  Mudança na expressão executada se registra como emenda ao protocolo.")
     return codigo
 
 

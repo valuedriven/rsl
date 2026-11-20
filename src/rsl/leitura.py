@@ -12,6 +12,7 @@ cada valor: é dela que o autoteste gera as cópias defeituosas.
 """
 
 import re
+import tomllib
 import urllib.parse
 
 from . import gramatica as G
@@ -107,47 +108,55 @@ def questoes(t, locais):
 
 
 # ------------------------------------------------------------------------- facetas
-def palavras(t, locais=None):
-    """Nome e papel de cada faceta: `Faceta n (FCTn): nome [(âncora obrigatória k)]`.
+def facetas(t, locais=None):
+    """Nome e papel de cada faceta, da tabela de facetas (cabeçalho exato).
 
-    O nome é todo o resto da linha, hífens incluídos; o sufixo de âncora, entre parênteses,
-    é opcional. Travessão residual (forma antiga, com cor) e parêntese de âncora mal formado
-    reprovam: leitura tolerante faria a cor ou o sufixo entrarem no nome em silêncio.
+    O nome é a célula inteira, hífens incluídos. A âncora vem da coluna, só `Sim` ou `Não`,
+    sem distinção de caixa: valor fora do domínio reprova, em vez de virar `Não` em
+    silêncio. Sem nenhuma âncora a sonda não seria identificável: reprova aqui.
     """
+    T = G.T_FACETAS
+    c_id, c_nome, c_ancora = T.colunas
     locais = {} if locais is None else locais
+    blocos = blocos_de_tabela(secao(t, G.S_FACETAS))
+    if not blocos:
+        raise ProtocoloInvalido(T, "tabela ausente")
+    bloco = blocos[0]
+    lido = [desescapa(c).strip() for c in celulas(bloco[0])]
+    if lido != list(T.colunas):
+        raise ProtocoloInvalido(T, f"cabeçalho {lido} difere do esperado {list(T.colunas)}")
+    _, tabela = le_tabela(bloco, T)
+    locais["cabecalho_facetas"] = bloco.primeira
     locais["faceta"] = {}
+    dominio = {k.casefold(): v for k, v in G.D_ANCORA.valores.items()}
     saida = []
-    for idx, linha in linhas(secao(t, G.S_PALAVRAS)):
-        m = G.F_FACETA.padrao.match(linha)
-        if not m:
-            continue
-        n = int(m.group(1))
-        codigo = m.group(2) or ""
-        esperado = f"{G.I_FCT.prefixo}{n}"
-        if codigo != esperado:
-            achado = codigo if codigo else "ausente"
-            raise ProtocoloInvalido(G.I_FCT, f"faceta {n}: identificador {achado!r} não "
-                                             f"corresponde a {esperado}")
-        corpo = desescapa(m.group(3)).strip()
-        if "—" in corpo:
-            raise ProtocoloInvalido(G.F_FACETA, f"faceta {esperado}: travessão na linha "
-                                                f"({corpo!r}); a forma é `{G.F_FACETA.texto}`")
-        ma = G.F_ANCORA.padrao.search(corpo)
-        nome = corpo[:ma.start()].strip() if ma else corpo
-        if re.search(G.PALAVRA_ANCORA, nome, re.I):
-            raise ProtocoloInvalido(G.F_ANCORA, f"faceta {esperado}: âncora fora da forma "
-                                                f"`{G.F_ANCORA.texto}` no fim da linha: "
-                                                f"{corpo!r}")
+    for linha in tabela:
+        ident = desescapa(linha[c_id]).strip()
+        if not G.I_FCT.casa(ident):
+            raise ProtocoloInvalido(G.I_FCT, f"{c_id} {ident!r} fora da forma "
+                                             f"{G.I_FCT.prefixo}n")
+        nome = desescapa(linha[c_nome]).strip()
         if not nome:
-            raise ProtocoloInvalido(G.F_FACETA, f"faceta {esperado}: sem nome")
-        saida.append({"id": esperado, "nome": nome, "ancora": bool(ma)})
-        locais["faceta"][esperado] = idx
+            raise ProtocoloInvalido(T, f"faceta {ident}: {c_nome} vazia")
+        valor = desescapa(linha[c_ancora]).strip()
+        if valor.casefold() not in dominio:
+            raise ProtocoloInvalido(G.D_ANCORA, f"faceta {ident}: {c_ancora} {valor!r} fora "
+                                                f"dos admitidos {list(G.D_ANCORA.valores)}")
+        saida.append({"id": ident, "nome": nome, "ancora": dominio[valor.casefold()]})
+        locais["faceta"][ident] = linha["_linha"]
     numeracao([f["id"] for f in saida], G.I_FCT, "facetas")
+    if not any(f["ancora"] for f in saida):
+        raise ProtocoloInvalido(T, f"nenhuma faceta marcada como {c_ancora}: a sonda não "
+                                   f"seria identificável")
     return saida
 
 
-def _termos_celula(celula):
-    """Termos de uma célula, separados por `\\- `. O hífen interno vem sem escape."""
+def _termos_celula(celula, onde):
+    """Termos de uma célula, separados por vírgula. O separador antigo (`\\- `) reprova:
+    lido com a vírgula, a célula inteira viraria um termo só, em silêncio."""
+    if re.search(G.SEPARADOR_ANTIGO, celula):
+        raise ProtocoloInvalido(G.T_QUADRO, f"{onde}: termos separados por `\\- `; o "
+                                            f"separador é a vírgula")
     partes = re.split(G.SEPARADOR_TERMOS, celula)
     return [desescapa(p).strip() for p in partes if p.strip()]
 
@@ -171,8 +180,8 @@ def tabelas(t, pal, locais):
             continue
         ident = f"{G.I_FCT.prefixo}{int(m.group(1))}"
         if ident not in nomes:
-            raise ProtocoloInvalido(G.T_QUADRO, f"tabela da faceta {ident} sem palavra "
-                                                f"significativa")
+            raise ProtocoloInvalido(G.T_QUADRO, f"tabela da faceta {ident} sem linha na "
+                                                f"{G.T_FACETAS.rotulo}")
         cab, linhas_ = le_tabela(bloco, G.T_QUADRO, exigidas=())
         proprios = cab[1:]
         if not proprios or any(not i for i in proprios):
@@ -197,7 +206,8 @@ def tabelas(t, pal, locais):
                 continue
             local[camada.interno] = linha["_linha"]
             for idioma in idiomas:
-                atual["camadas"][idioma][camada.interno] = _termos_celula(linha[idioma])
+                atual["camadas"][idioma][camada.interno] = _termos_celula(
+                    linha[idioma], f"quadro de {ident}, {camada.texto}, {idioma}")
         faltam = [r for r in G.CAMADAS if r.interno not in local]
         if faltam:
             raise ProtocoloInvalido(faltam[0], f"quadro de {ident}: falta a linha "
@@ -304,8 +314,8 @@ def strings(t, ids_faceta, locais):
         id_faceta = f"{G.I_FCT.prefixo}{n}"
         id_string = f"{G.I_STR.prefixo}{n}"
         if id_faceta not in ids_faceta:
-            raise ProtocoloInvalido(G.I_STR, f"{id_string} sem faceta {id_faceta} nas "
-                                             f"palavras significativas")
+            raise ProtocoloInvalido(G.I_STR, f"{id_string} sem faceta {id_faceta} na "
+                                             f"{G.T_FACETAS.rotulo}")
         celula = cels[2]
         termos = G.F_STRING.padrao.findall(celula)
         if not termos:
@@ -383,20 +393,61 @@ def grupos_de_composicao(comb, ident):
     return grupos
 
 
-def expressoes(ctx, t, params, locais):
+ORIGEM_COMPOSICAO = "protocolo (composição)"
+
+
+def notas(t, locais):
+    """Notas explicativas (`- Nn — texto`) da subseção opcional das expressões.
+
+    Devolve {Nn: texto}. Sem a subseção, nenhuma nota. Nota repetida reprova: a faixa lida
+    dependeria de qual das duas valesse.
+    """
+    locais["nota"] = {}
+    if not re.search(r"^#+\s+" + re.escape(G.S_NOTAS.titulo) + r"\s*$",
+                     secao(t, G.S_EXPRESSOES), re.M):
+        return {}
+    saida = {}
+    for idx, linha in linhas(secao(t, G.S_NOTAS)):
+        m = G.F_NOTA.padrao.match(linha)
+        if not m:
+            continue
+        if m.group(1) in saida:
+            raise ProtocoloInvalido(G.F_NOTA, f"nota {m.group(1)} repetida")
+        saida[m.group(1)] = desescapa(m.group(2)).strip()
+        locais["nota"][m.group(1)] = idx
+    return saida
+
+
+def _papel_pela_composicao(papel, candidatas, criterio):
+    """O único candidato; nenhum ou mais de um reprova, nomeando os candidatos."""
+    if len(candidatas) == 1:
+        return candidatas[0]
+    achado = (f"nenhuma candidata a {papel}" if not candidatas
+              else f"{len(candidatas)} candidatas a {papel}: {candidatas}")
+    raise ProtocoloInvalido(G.T_EXPRESSOES, f"{achado}; a {papel} é a única expressão "
+                                            f"{criterio}")
+
+
+def expressoes(ctx, t, params, locais, ancoras_, strings_):
     """Composição das expressões, a executada, a sonda e a faixa de sensibilidade.
 
     Devolve (composição, executada, sonda, sensibilidade). A composição é estrutural: sem a
-    tabela, a leitura reprova; executada, sonda e faixa seguem a precedência.
+    tabela, a leitura reprova. Executada e sonda são identificadas pela composição e pelas
+    âncoras, sem texto da tabela: a executada é a única com grupo `OR`; a sonda, a única
+    formada exatamente pelas STR das âncoras. A faixa vem das notas citadas pela executada
+    e segue a precedência.
     """
     T = G.T_EXPRESSOES
     bloco = secao(t, G.S_EXPRESSOES)
-    composicao, natureza, detalhe = {}, {}, {}
-    linhas_tabela = linhas_de_tabela(bloco)
+    composicao, funcao = {}, {}
+    # A primeira tabela da seção: as demais (critérios, bases) são de subseções.
+    tabelas_ = blocos_de_tabela(bloco)
+    linhas_tabela = ([(tabelas_[0].primeira + k, l) for k, l in enumerate(tabelas_[0])]
+                     if tabelas_ else [])
     if not linhas_tabela:
         raise ProtocoloInvalido(T, "tabela ausente")
     # O cabeçalho diz o que cada coluna é: lido por posição, um cabeçalho trocado
-    # faria a natureza ou a expressão vir de outra coluna, em silêncio.
+    # faria a expressão vir de outra coluna, em silêncio.
     lido = [desescapa(c).strip() for c in celulas(linhas_tabela[0][1])]
     if lido != list(T.colunas):
         raise ProtocoloInvalido(T, f"cabeçalho {lido} difere do esperado {list(T.colunas)}")
@@ -404,47 +455,55 @@ def expressoes(ctx, t, params, locais):
     locais["expressao"] = {}
     for idx, linha in linhas_tabela:
         cels = celulas(linha)
-        if len(cels) < 4 or not G.I_EB.casa(cels[0]):
+        if len(cels) < len(T.colunas) or not G.I_EB.casa(cels[0]):
             continue
         ident = cels[0]
-        comb = desescapa(cels[2]).replace("\\", " ").strip()
+        comb = desescapa(cels[1]).replace("\\", " ").strip()
         if not G.F_COMPOSICAO.padrao.search(comb):
             raise ProtocoloInvalido(G.F_COMPOSICAO, f"expressão {ident} sem composição "
                                                     f"legível")
         composicao[ident] = grupos_de_composicao(comb, ident)
-        natureza[ident] = normaliza(cels[1])
-        detalhe[ident] = desescapa(cels[3])
+        funcao[ident] = desescapa(cels[2])
         locais["expressao"][ident] = idx
     numeracao(list(composicao), G.I_EB, "expressões")
     comp = _estrutural(params, "composicao", composicao)
 
-    def papel(nome, chave_natureza):
-        declarada = ctx.config.valor(f"expressoes.{chave_natureza}")
-        alvo = normaliza(declarada)
-        achados = sorted(k for k, v in natureza.items() if v == alvo)
-        if len(achados) > 1:
-            raise ProtocoloInvalido(T, f"mais de uma expressão com natureza "
-                                       f"{declarada!r}: {achados}")
-        valor = _parametro(ctx, params, nome, achados[0] if achados else None,
-                           f"padroes.{nome}")
-        if valor not in comp:
-            raise ProtocoloInvalido(T, f"a {nome} {valor!r} não é expressão da composição")
-        return valor
-    executada = papel("executada", "natureza_executada")
-    sonda = papel("sonda", "natureza_sonda")
+    nts = notas(t, locais)
+    citadas = {}
+    for ident, texto in funcao.items():
+        citadas[ident] = G.F_REF_NOTA.padrao.findall(texto)
+        faltam = [n for n in citadas[ident] if n not in nts]
+        if faltam:
+            raise ProtocoloInvalido(G.F_REF_NOTA, f"expressão {ident} cita a nota "
+                                                  f"{', '.join(faltam)}, que não existe em "
+                                                  f"'{G.S_NOTAS.titulo}'")
 
-    # Faixa de sensibilidade: "< N%" e "> M%" no detalhamento da sonda.
-    limites = {}
-    for m in G.F_FAIXA.padrao.finditer(detalhe.get(sonda, "")):
-        limites.setdefault(m.group(1), m.group(2))
+    executada = _papel_pela_composicao(
+        "executada", sorted(k for k, v in comp.items() if any(len(g) > 1 for g in v)),
+        "com grupo OR")
+    str_de = {fid: s_["id"] for fid, s_ in strings_.items()}
+    alvo = sorted([str_de[a]] for a in ancoras_ if a in str_de)
+    sonda = _papel_pela_composicao(
+        "sonda", sorted(k for k, v in comp.items() if sorted(v) == alvo),
+        f"formada só pelas âncoras ({' AND '.join(g[0] for g in alvo)})")
+    for nome, valor in (("executada", executada), ("sonda", sonda)):
+        params[nome] = {"valor": valor, "origem": ORIGEM_COMPOSICAO}
+
+    # Faixa de sensibilidade: "< N%" e "> M%" nas notas citadas pela executada.
+    limites, onde = {}, {}
+    for n in citadas[executada]:
+        for m in G.F_FAIXA.padrao.finditer(nts[n]):
+            if m.group(1) not in limites:
+                limites[m.group(1)], onde[m.group(1)] = m.group(2), n
     baixo, alto = limites.get("<"), limites.get(">")
     if bool(baixo) != bool(alto):
-        raise ProtocoloInvalido(G.F_FAIXA, f"faixa ilegível no detalhamento de {sonda}: "
-                                           f"falta o limite "
+        nota = onde["<" if baixo else ">"]
+        raise ProtocoloInvalido(G.F_FAIXA, f"faixa ilegível na nota {nota} da executada "
+                                           f"{executada}: falta o limite "
                                            f"{'superior' if baixo else 'inferior'}")
     faixa = [percentual(baixo), percentual(alto)] if baixo else None
     if faixa:
-        locais["faixa"] = locais["expressao"][sonda]
+        locais["faixa"] = locais["nota"][onde["<"]]
     sens = _parametro(ctx, params, "sensibilidade", faixa, "padroes.sensibilidade")
     return comp, executada, sonda, sens
 
@@ -509,9 +568,10 @@ def limiar(ctx, t, params, locais):
     return _parametro(ctx, params, "limiar_aderencia", valor, "padroes.limiar_aderencia")
 
 
-def ancoras(ctx, pal, params):
-    marcadas = [f["id"] for f in pal if f["ancora"]] or None
-    return _parametro(ctx, params, "ancoras", marcadas, "padroes.ancoras")
+def ancoras(pal, params):
+    """Facetas marcadas `Sim`, na ordem da tabela. Estrutural: a leitura já reprovou a
+    tabela sem âncora."""
+    return _estrutural(params, "ancoras", [f["id"] for f in pal if f["ancora"]])
 
 
 # ------------------------------------------------------------------------- fontes
@@ -574,17 +634,11 @@ def fontes(ctx, t, locais):
         raise ProtocoloInvalido(G.F_ORDEM, f"ordem de execução incompleta: {ordem}")
     via = acesso[m.end():].strip()
 
-    ferramenta = []
-    for fm in G.F_FERRAMENTA.padrao.finditer(secao(t, G.S_FERRAMENTA)):
-        ferramenta.append({"tema": desescapa(fm.group(1)).strip(),
-                           "texto": desescapa(fm.group(2)).strip()})
-
     return {
         "bases": bases,
         "ordem_execucao": ordem,
         "via_de_acesso": via,
         "acervos_especiais": " ".join(paragrafos(secao(t, G.S_ACERVOS))).strip(),
-        "ferramenta_gestao": ferramenta,
     }
 
 
@@ -602,59 +656,90 @@ def _doi(texto_ref):
     return m.group(1).rstrip(".")
 
 
-def sementes(t, siglas, locais):
-    """Referências, bases esperadas e papel, da tabela do conjunto-semente.
+def _semente_invalida(elemento, ident, detalhe):
+    return ProtocoloInvalido(elemento, f"semente {ident}: {detalhe}")
 
-    Cada base citada tem de ser sigla da tabela de bases, na grafia exata; semente sem base
-    reprova. O papel tem de estar no domínio; ausente ou fora reprova, nomeando a semente.
+
+def sementes(texto, siglas, locais):
+    """Referências, bases esperadas e papel, do arquivo de sementes (TOML).
+
+    O esquema é o da gramática (`TT_SEMENTES` e os seus campos): campo ausente, de outro
+    tipo ou desconhecido reprova, nomeando a semente e o campo. Cada base citada tem de ser
+    sigla da tabela de bases, na grafia exata; o papel tem de estar no domínio. Autoria,
+    ano, título e DOI são extraídos do campo `semente`.
     """
-    T = G.T_SEMENTES
-    c_id, c_ref, c_bases, c_papel = T.colunas
-    bloco, tabela = tabela_da_secao(t, T)
-    locais["cabecalho_sementes"] = bloco.primeira
+    T = G.TT_SEMENTES
+    campos = {c.chave: c for c in T.campos}
+    try:
+        dado = tomllib.loads(texto)
+    except tomllib.TOMLDecodeError as e:
+        raise ProtocoloInvalido(T, f"não é TOML válido: {e}") from None
+    fora = sorted(set(dado) - {T.chave})
+    if fora:
+        raise ProtocoloInvalido(T, f"chave fora do esquema no arquivo: {fora}")
+    itens = dado.get(T.chave)
+    if not isinstance(itens, list) or not itens or not all(isinstance(x, dict)
+                                                         for x in itens):
+        raise ProtocoloInvalido(T, f"tabela [[{T.chave}]] ausente ou vazia")
     locais["semente"] = {}
-    estudos = []
-    for linha in tabela:
-        ident = desescapa(linha[c_id]).strip()
+    estudos, vistos = [], set()
+    for k, item in enumerate(itens, 1):
+        bruto = item.get(G.C_ID.chave)
+        ident = bruto if isinstance(bruto, str) and bruto.strip() else f"nº {k}"
+        desconhecidos = sorted(set(item) - set(campos))
+        if desconhecidos:
+            raise _semente_invalida(T, ident, f"campo desconhecido {desconhecidos}; campos "
+                                              f"do esquema {list(campos)}")
+        for c in T.campos:
+            if c.chave not in item:
+                raise _semente_invalida(c, ident, f"falta o campo '{c.chave}'")
+            if not c.aceita(item[c.chave]):
+                raise _semente_invalida(c, ident, f"campo '{c.chave}' não é "
+                                                  f"{c.tipo_valor}: {item[c.chave]!r}")
+        ident = item[G.C_ID.chave].strip()
         if not G.I_SE.casa(ident):
-            raise ProtocoloInvalido(G.I_SE, f"{c_id} {ident!r} fora da forma "
-                                            f"{G.I_SE.prefixo}n")
-        papel = desescapa(linha[c_papel]).strip()
-        admitidos = list(G.D_PAPEL.valores)
-        if not papel:
-            raise ProtocoloInvalido(G.D_PAPEL, f"linha {ident}: papel da semente vazio; "
-                                               f"admitidos {admitidos}")
+            raise _semente_invalida(G.I_SE, ident, f"campo '{G.C_ID.chave}' fora da forma "
+                                                   f"{G.I_SE.prefixo}n")
+        if ident in vistos:
+            raise _semente_invalida(G.C_ID, ident, f"campo '{G.C_ID.chave}' repetido")
+        vistos.add(ident)
+        papel = item[G.C_PAPEL.chave].strip()
         if papel not in G.D_PAPEL.valores:
-            raise ProtocoloInvalido(G.D_PAPEL, f"linha {ident}: papel {papel!r} fora dos "
-                                               f"admitidos {admitidos}")
-        ref = desescapa(linha[c_ref]).strip()
+            raise _semente_invalida(G.D_PAPEL, ident, f"campo '{G.C_PAPEL.chave}' {papel!r} "
+                                                      f"fora dos admitidos "
+                                                      f"{list(G.D_PAPEL.valores)}")
+        ref = item[G.C_SEMENTE.chave].strip()
+        if not ref:
+            raise _semente_invalida(G.C_SEMENTE, ident, f"campo '{G.C_SEMENTE.chave}' vazio")
         m = G.F_REFERENCIA.padrao.match(ref)
         if not m:
-            raise ProtocoloInvalido(G.F_REFERENCIA, f"linha {ident}: referência sem autoria "
-                                                    f"e ano no padrão esperado")
+            raise _semente_invalida(G.F_REFERENCIA, ident, f"campo '{G.C_SEMENTE.chave}' "
+                                                           f"sem autoria e ano no padrão "
+                                                           f"esperado")
         autores, ano, resto = m.groups()
-        bases = lista(linha[c_bases])
+        bases = [b.strip() for b in item[G.C_BASES.chave]]
         if not bases:
-            raise ProtocoloInvalido(T, f"linha {ident}: semente sem base")
+            raise _semente_invalida(G.C_BASES, ident, f"campo '{G.C_BASES.chave}' vazio: "
+                                                      f"semente sem base")
         fora = [b for b in bases if b not in siglas]
         if fora:
-            raise ProtocoloInvalido(T, f"linha {ident}: base {fora} não é sigla da "
-                                       f"{G.T_BASES.rotulo} {list(siglas)}")
+            raise _semente_invalida(G.C_BASES, ident, f"base {fora} não é sigla da "
+                                                      f"{G.T_BASES.rotulo} {list(siglas)}")
         if len(set(bases)) != len(bases):
-            raise ProtocoloInvalido(T, f"linha {ident}: base repetida {bases}")
+            raise _semente_invalida(G.C_BASES, ident, f"base repetida {bases}")
         primeiro = autores.split(",")[0].strip()
         estudos.append({
             "id": ident, "autores": autores.strip(), "ano": int(ano),
             "titulo": _titulo(resto), "doi": _doi(ref),
             "bases": bases, "papel": G.D_PAPEL.valores[papel], "chave": f"{primeiro} {ano}",
         })
-        locais["semente"][ident] = linha["_linha"]
-    numeracao([e["id"] for e in estudos], G.I_SE, "referências")
+        locais["semente"][ident] = k - 1
+    numeracao([e["id"] for e in estudos], G.I_SE, "sementes", G.SEMENTES)
     return estudos
 
 
 def distribuicao(estudos, siglas):
-    """Distribuição das sementes pelas bases e por papel, calculada da tabela.
+    """Distribuição das sementes pelas bases e por papel, calculada do arquivo de sementes.
 
     Não confere prosa. `por_base` e `por_base_papel` contam incidências: a semente
     indexada em duas bases conta nas duas, como manda a leitura do conjunto-semente.
@@ -719,7 +804,7 @@ def analisa(ctx):
     """O protocolo lido. ProtocoloInvalido na primeira violação da gramática."""
     t = ctx.texto
     params, locais = {}, {}
-    pal = palavras(t, locais)
+    pal = facetas(t, locais)
     tb, idiomas = tabelas(t, pal, locais)
     _estrutural(params, "idiomas", list(idiomas))
     ids_facetas = [f["id"] for f in pal]
@@ -732,19 +817,21 @@ def analisa(ctx):
         # A string repete termo entre camadas; a lista executada é deduplicada. É ela
         # que a derivação local usa, e é ela que o relatório conta.
         st[n]["termos"] = sem_repeticao(st[n]["termos"])
-    comp, exec_, sonda, sens = expressoes(ctx, t, params, locais)
+    anc = ancoras(pal, params)
+    comp, exec_, sonda, sens = expressoes(ctx, t, params, locais, anc, st)
     crit = criterios(t, locais)
     fts = fontes(ctx, t, locais)
     siglas = [b["sigla"] for b in fts["bases"]]
     _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['ficha']}"
                                   for b in fts["bases"]])
-    est = sementes(t, siglas, locais)
-    _estrutural(params, "sementes", [f"{e['id']} ({e['papel']}): {', '.join(e['bases'])}"
-                                     for e in est])
+    est = sementes(ctx.texto_sementes, siglas, locais)
+    params["sementes"] = {"valor": [f"{e['id']} ({e['papel']}): {', '.join(e['bases'])}"
+                                    for e in est],
+                          "origem": f"arquivo de sementes ({ctx.caminho_sementes})"}
     d = {
         "questoes": questoes(t, locais),
         "facetas": pal,
-        "ancoras": ancoras(ctx, pal, params),
+        "ancoras": anc,
         "idiomas": idiomas,
         "tabelas": tb,
         "instrumentos": insts,

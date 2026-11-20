@@ -3,13 +3,18 @@
 ## Context
 
 A motivação está em `proposal.md`, e os requisitos, nas specs desta change. O ponto de
-partida é o pacote `src/rsl/` e a gramática declarada de `refatoracao-dos-scripts`
-(arquivada em 2026-11-20).
+partida é o estado deixado por `reestruturacao-do-protocolo`:
+
+- `docs/sementes.toml`, localizado por `[documentos] sementes`;
+- o esquema intermediário `[[sementes]]` com `id`, `semente`, `bases` e `papel`,
+  declarado na gramática;
+- autoria, ano, título e DOI ainda extraídos de `semente` por `_titulo()` e `_doi()`.
 
 O estado verificado em 2026-11-20:
 
-- **A tabela do protocolo tem 10 sementes e a coluna `Papel`**, com SE4 em
-  `desenvolvimento` e as demais em `validação`.
+- **`docs/sementes.toml` tem 10 sementes**, com SE4 em `desenvolvimento` e as demais em
+  `validação`. Os `id`, `bases` e `papel` coincidem com a tabela retirada do protocolo
+  (bf6b9bf).
 - **As referências seguem uma forma próxima da APA, com variações:**
   - SE10 traz editores, nome e local do evento;
   - algumas referências repetem o ano depois do veículo.
@@ -39,29 +44,25 @@ O estado verificado em 2026-11-20:
 
 ## Decisions
 
-### D1. Arquivo próprio, apontado pelo protocolo
+### D1. Arquivo próprio, localizado pelo `config.toml`
 
-A seção "Conjunto-semente" do protocolo traz uma única linha de apontamento, com o rótulo
-declarado na gramática:
+O arquivo é `docs/sementes.toml`, com a tabela `[[sementes]]`, nomes que o pesquisador
+escolheu ao criá-lo. O caminho vem de `[documentos] sementes`, e o protocolo não o cita
+(decisão de 2026-11-20). Essas duas coisas já são feitas por `reestruturacao-do-protocolo`,
+e esta change não as altera.
 
-```markdown
-Arquivo: `docs/conjunto_semente.toml`
-```
+As regras da seção "Conjunto-semente" (regra de ajuste, fórmula de recuperação) ficam no
+protocolo.
 
-O caminho é relativo à raiz do projeto. O caminho não vai para o `config.toml`, porque o
-conjunto-semente é parâmetro estrutural e só vem do protocolo, como diz o cabeçalho do
-`config.toml`. O protocolo continua sendo a fonte, e o arquivo é um anexo dele.
-
-As regras da seção (regra de ajuste, fórmula de recuperação) ficam no protocolo.
-
-Alternativa descartada: bloco ```` ```toml ```` dentro do protocolo, que era a forma
-anterior desta change. O pesquisador preferiu o arquivo próprio. Com ele desaparece também
-o risco de um editor de texto destruir o bloco ao exportar o `.md`.
+Alternativas descartadas:
+- bloco ```` ```toml ```` dentro do protocolo, que foi a primeira forma desta change;
+- linha de apontamento no protocolo (`Arquivo: …`), que foi a forma seguinte. O
+  pesquisador preferiu o caminho no `config.toml`.
 
 ### D2. Esquema fechado
 
 ```toml
-[[semente]]
+[[sementes]]
 id = "SE1"
 autores = ["Alvarenga, V. B. L.", "Cristovão, H. M."]
 ano = 2023
@@ -103,7 +104,8 @@ Algumas escolhas de tipo:
 - Campo opcional ausente equivale a vazio.
 
 Campo desconhecido reprova. Isso impede por construção que um erro de digitação
-(`titlo`, `observacao` ou o `escopo` retirado) passe como campo ignorado.
+(`titlo`, `observacao`, o `escopo` retirado ou o `semente` do esquema intermediário) passe
+como campo ignorado.
 
 **`bases` significa indexação, não recuperação.** A semente que a base não indexa sai do
 denominador daquela base. O que a busca recuperou é resultado e fica em
@@ -141,9 +143,12 @@ campo desconhecido. Vira pendência o que é juízo ainda não feito:
 A transcrição não usa os leitores de padrão (`_titulo`, `_doi`) para gerar o arquivo.
 Usá-los propagaria o defeito que motiva a change.
 
-- **Dados bibliográficos:** transcritos campo a campo do texto da célula. A conferência é
-  mecânica. Para cada semente, a concatenação dos campos tem de reconstituir o texto da
-  célula, admitidas só a pontuação, o ano repetido e os rótulos `DOI:`, depois de somado o
+- **Dados bibliográficos:** transcritos campo a campo do campo `semente` de
+  `docs/sementes.toml`. A transcrição de 1.2 foi feita sobre a célula da tabela de
+  bf6b9bf, e o texto de `semente` pode diferir dela (ao menos perdeu o escape `\.`); por
+  isso a reconstituição é refeita sobre `semente` antes do uso (tarefa 1.5). A conferência
+  é mecânica. Para cada semente, a concatenação dos campos tem de reconstituir o texto de
+  `semente`, admitidas só a pontuação, o ano repetido e os rótulos `DOI:`, depois de somado o
   campo `observacoes`. O que não cabe em nenhum campo vai para `observacoes`, transcrito
   como está, por decisão do pesquisador (2026-11-20). É o caso de editores, evento e local
   da SE10. A sobra deixa de ser descartável: com `observacoes`, nenhum trecho da
@@ -183,8 +188,11 @@ planilha.
 - **[Dado perdido na transcrição ou na migração]** → as duas conferências de D5 listam
   toda sobra e toda diferença. Sobra da referência vai para `observacoes`; diferença na
   migração para o trabalho e vai ao pesquisador.
-- **[Protocolo lido sem o arquivo]** → o apontamento é obrigatório, e arquivo ausente
-  reprova. A seção não fica vazia em silêncio.
+- **[Leitura sem o arquivo]** → arquivo ausente termina com CONFIGURACAO, como já exige
+  `reestruturacao-do-protocolo`. Nenhuma semente é presumida.
+- **[Transcrição feita sobre outro texto]** → a reconstituição de D5 é refeita sobre o
+  campo `semente` atual (tarefa 1.5), e a transcrição do scratchpad pode ter sido apagada:
+  nesse caso, refaz-se com o mesmo método.
 - **[Retirada sem registro no histórico]** → não há verificação automática (D6). Fica na
   skill e é declarado. Uma alternativa seria guardar no TOML uma marca de retirada, mas o
   pesquisador decidiu que a semente sai de tudo.
@@ -195,15 +203,16 @@ planilha.
 
 ## Migration Plan
 
-1. Transcrição com `observacoes` (D5) e migração dos dados de conferência, conferidas no
-   scratchpad.
+1. Transcrição com `observacoes` (D5), conferida contra o campo `semente` atual, e
+   migração dos dados de conferência, conferidas no scratchpad.
 2. No mesmo passo, para `conferir` não ficar reprovado entre um passo e outro:
-   - o leitor do arquivo e a gramática;
-   - o arquivo `docs/conjunto_semente.toml`;
-   - a troca da tabela pelo apontamento no protocolo;
+   - o esquema novo na gramática e o leitor dos campos;
+   - `docs/sementes.toml` reescrito com os campos;
    - a remoção de `sementes.json`, de `sincronizar` e das chaves do `config.toml`;
    - o autoteste.
 3. Ajuste de PD01, do README e das skills.
 
-Rollback: reverter o commit. A tabela e o `sementes.json` antigos ficam no histórico do
-git.
+O protocolo não é alterado por esta change.
+
+Rollback: reverter o commit. O `docs/sementes.toml` intermediário e o `sementes.json`
+ficam no histórico do git.

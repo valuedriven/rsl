@@ -71,7 +71,8 @@ como aprovação é erro.
 python3 -m rsl sementes planilha
 ```
 
-O comando lê as referências e o mapa por base do protocolo e os metadados autorais de
+O comando lê as referências, o mapa por base e o papel do arquivo de sementes
+(`[documentos] sementes`) e os metadados autorais de
 `data/sementes.json` (verificação, escopo, tipo, alinhamento, nota), gera a planilha
 `data/semente_aderencia.csv` e **imprime no terminal** a composição, o estado de
 conferência e o ensaio seco — quantas sementes o título entrega às facetas e quantas
@@ -86,15 +87,15 @@ são a evidência do teste.
 
 | Coluna | O que registrar |
 | --- | --- |
-| `id` | identificador da semente (SEn), conforme o protocolo |
+| `id` | identificador da semente (SEn), conforme o arquivo de sementes |
 | `autores_ano` | autoria abreviada e ano |
-| `titulo` | título, como consta na referência do protocolo |
+| `titulo` | título, como consta na referência do arquivo de sementes |
 | `tipo` | primário ou secundário — preencher em `sementes.json` |
 | `escopo` | DENTRO, FRONTEIRA ou ÂNCORA AUSENTE — preencher em `sementes.json` |
 | `verificacao` | estado de conferência da referência — preencher em `sementes.json` |
-| `papel` | `desenvolvimento` ou `validação` — do protocolo |
+| `papel` | `desenvolvimento` ou `validação` — do arquivo de sementes |
 | `base` | WoS, Scopus, ERIC ou BRAPCI |
-| `esperada_na_base` | sim se o mapa do protocolo indica esta base |
+| `esperada_na_base` | sim se o campo `bases` da semente indica esta base |
 | `indexada` | etapa 1: sim ou não, por busca de título. **obrigatório** |
 | `data_etapa1` | data da busca de título |
 | `recuperada` | etapa 2: sim ou não, por busca na exportação de EB4 |
@@ -120,7 +121,7 @@ em vez de se esconder.
 
 **Papel.** Só as sementes de **validação** decidem a passagem. As de **desenvolvimento**
 orientaram a inclusão, a manutenção ou a retirada de um termo e são relatadas à parte; elas
-não compensam a validação. A distinção vive na coluna `Papel` da tabela do protocolo e é
+não compensam a validação. A distinção vive no campo `papel` do arquivo de sementes e é
 exigida na leitura: papel ausente, fora do domínio ou conjunto de validação vazio reprova.
 
 ## 7. Limiar e consequência

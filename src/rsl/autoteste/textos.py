@@ -135,3 +135,28 @@ def linhas_do_trecho(t, elemento):
     """(índice, linha) das linhas da seção `elemento` (do documento inteiro, se None)."""
     from ..markdown import documento, linhas as linhas_md, secao
     return linhas_md(secao(t, elemento) if elemento is not None else documento(t))
+
+
+# ------------------------------------------------------------- arquivo de sementes (TOML)
+def itens_toml(texto, chave):
+    """Os itens de `[[chave]]` do texto TOML, como cópia editável."""
+    import tomllib
+    return [dict(x) for x in tomllib.loads(texto)[chave]]
+
+
+def _valor_toml(v):
+    import json
+    if isinstance(v, list):
+        return "[" + ", ".join(_valor_toml(x) for x in v) + "]"
+    if isinstance(v, str):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+
+def toml_de(itens, chave):
+    """Texto TOML de uma lista de itens `[[chave]]` (textos, listas de textos, números)."""
+    blocos = []
+    for item in itens:
+        blocos.append(f"[[{chave}]]\n" +
+                      "".join(f"{k} = {_valor_toml(v)}\n" for k, v in item.items()))
+    return "\n".join(blocos)

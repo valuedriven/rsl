@@ -115,7 +115,13 @@ def _mensagem(e, ctx):
     if isinstance(e, erros.ConfiguracaoInvalida):
         return f"Configuração inválida — {e}"
     if isinstance(e, erros.ProtocoloInvalido):
-        onde = f" ({ctx.caminho_protocolo})" if ctx is not None else ""
+        from .gramatica import SEMENTES                               # noqa: PLC0415
+        if ctx is None:
+            onde = ""
+        elif e.documento == SEMENTES:
+            onde = f" ({ctx.caminho_sementes})"
+        else:
+            onde = f" ({ctx.caminho_protocolo})"
         return f"Protocolo ilegível{onde} — {e}"
     if isinstance(e, erros.DadosInvalidos):
         return f"Dados ausentes ou ilegíveis — {e}"

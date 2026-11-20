@@ -92,9 +92,11 @@ ficha da base ou padrão da configuração).
 
 ### Requirement: Conferência verifica coerência interna
 `--conferir` SHALL reprovar contradições internas: termo de STR ausente do quadro da faceta;
-expressão sem as âncoras; executada que não seja a união das específicas; sonda que não seja a
-conjunção das âncoras; semente sem base ou com base fora da tabela de bases; dimensão de
-critério em uso não declarada no protocolo; faixa de sensibilidade com inferior ≥ superior.
+expressão sem as âncoras; executada que não seja a união das específicas; semente sem base
+ou com base fora da tabela de bases; dimensão de critério em uso não declarada no
+protocolo; faixa de sensibilidade com inferior ≥ superior. A sonda ser a conjunção das
+âncoras é garantida pela identificação ("Executada e sonda identificadas pela
+composição") e não é conferida de novo.
 
 #### Scenario: Termo da string fora do quadro
 - **WHEN** uma STR contém um termo que não consta do quadro da sua faceta
@@ -105,9 +107,10 @@ critério em uso não declarada no protocolo; faixa de sensibilidade com inferio
 - **THEN** `--conferir` não reprova por dimensão de critério
 
 #### Scenario: Distribuição das sementes não é declarada em prosa
-- **WHEN** o protocolo traz o conjunto-semente só na tabela, sem parágrafo de incidências
-- **THEN** `--conferir` não reprova por distribuição; a distribuição por base é calculada da
-  tabela e exibida
+- **WHEN** o conjunto-semente está só no arquivo de sementes, sem parágrafo de incidências
+  no protocolo
+- **THEN** `--conferir` não reprova por distribuição; a distribuição por base é calculada do
+  campo `bases` do arquivo e exibida
 
 ### Requirement: Autoteste prova que cada conferência reprova
 `autoteste` SHALL injetar, numa cópia em memória, ao menos um defeito por:
@@ -183,13 +186,19 @@ com mensagem que nomeie a expressão.
 - **THEN** a leitura reprova nomeando a expressão e a forma esperada
 
 ### Requirement: Cabeçalho da tabela de expressões conferido
-O cabeçalho da tabela "Expressões de busca" SHALL coincidir exatamente, na ordem, com
-`[expressoes] colunas` do `config.toml`; cabeçalho diferente MUST reprovar a leitura com
-mensagem que mostre o cabeçalho lido e o esperado.
+O cabeçalho da tabela "Expressões de busca" SHALL coincidir exatamente, na ordem, com as
+colunas declaradas na gramática: `ID`, `Expressão de busca` e `Função protocolar`.
+Cabeçalho diferente MUST reprovar a leitura com PROTOCOLO_ILEGIVEL e com mensagem que
+mostre o cabeçalho lido e o esperado. A coluna "Função protocolar" é texto livre: o leitor
+só extrai dela as referências `(Nn)` às notas explicativas.
 
 #### Scenario: Coluna renomeada
 - **WHEN** a coluna "Expressão de busca" aparece como "Combinação de Strings"
 - **THEN** a leitura reprova, mostrando o cabeçalho lido e o esperado
+
+#### Scenario: Cabeçalho antigo
+- **WHEN** a tabela traz `ID expressão | Natureza | Expressão de busca | Detalhamento`
+- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, mostrando o cabeçalho esperado
 
 ### Requirement: Resultado parcial do autoteste declarado
 Quando houver caso não executado, o autoteste SHALL declarar que o resultado é parcial e
@@ -204,11 +213,15 @@ falha, o código é REPROVADO, e a mensagem informa também os casos não execut
 #### Scenario: Falha com casos não executados
 - **WHEN** um caso executado falha e há casos não executados
 - **THEN** o código de saída é REPROVADO, e a mensagem informa os casos não executados
+
 ### Requirement: Parâmetros estruturais só do protocolo
-Composição das expressões, instrumentos, bases, conjunto-semente e idiomas do quadro SHALL
-ser lidos só do protocolo, sem padrão. Ausência ou valor inválido MUST reprovar a leitura,
-nomeando tabela, linha e campo. `config.toml` que ainda traga `padroes.composicao`, `cores`,
-`fichas`, `instrumentos` ou `idiomas` MUST reprovar, para que não haja segunda fonte.
+Composição das expressões, facetas e âncoras, instrumentos, bases e idiomas do quadro SHALL
+ser lidos só do protocolo, sem padrão. O conjunto-semente SHALL ser lido só do arquivo de
+sementes, localizado por `[documentos] sementes` do `config.toml`, sem padrão. Ausência ou
+valor inválido MUST reprovar a leitura, nomeando tabela ou arquivo, linha ou semente e
+campo. `config.toml` que ainda traga `padroes.composicao`, `padroes.executada`,
+`padroes.sonda`, `padroes.ancoras`, `[expressoes]`, `cores`, `fichas`, `instrumentos` ou
+`idiomas` MUST reprovar, para que não haja segunda fonte.
 
 #### Scenario: Tabela estrutural ausente
 - **WHEN** o protocolo não tem a tabela "Bases de dados"
@@ -218,18 +231,9 @@ nomeando tabela, linha e campo. `config.toml` que ainda traga `padroes.composica
 - **WHEN** `config.toml` traz a seção `[fichas.wos]`
 - **THEN** o script termina com erro que nomeia a chave e diz que ela vem do protocolo
 
-### Requirement: Linha de faceta sem cor
-Cada faceta SHALL ser lida da linha `Faceta n (FCTn): nome`, seguida opcionalmente de
-`(âncora obrigatória k)`. O leitor MUST NOT extrair nem exigir cor; hífen dentro do nome
-pertence ao nome.
-
-#### Scenario: Nome com hífen
-- **WHEN** a linha é `Faceta 3 (FCT3): Práticas do processo de ensino-aprendizagem`
-- **THEN** o nome lido é "Práticas do processo de ensino-aprendizagem" e FCT3 não é âncora
-
-#### Scenario: Âncora entre parênteses
-- **WHEN** a linha termina em `(âncora obrigatória 1)`
-- **THEN** a faceta é lida como âncora e o parêntese não integra o nome
+#### Scenario: Chave de natureza ainda presente
+- **WHEN** `config.toml` traz `[expressoes] natureza_executada` ou `padroes.ancoras`
+- **THEN** o script termina com erro de configuração que nomeia a chave
 
 ### Requirement: Idiomas lidos do cabeçalho do quadro
 Cada tabela do quadro terminológico SHALL ter cabeçalho `| FCTn | idioma | idioma | ... |`; o
@@ -261,35 +265,6 @@ padrão de caminho do `config.toml`; ficha inexistente MUST reprovar, nomeando b
 #### Scenario: Sigla repetida
 - **WHEN** duas linhas da tabela têm a sigla `eric`
 - **THEN** a leitura reprova, nomeando a sigla
-
-### Requirement: Conjunto-semente lido de tabela
-O conjunto-semente SHALL ser lido da tabela `ID Semente | Semente | Bases | Papel`, com
-autoria, ano, título e DOI extraídos da referência. Cada base citada MUST ser sigla da tabela
-de bases, na grafia exata; semente sem base reprova. `Papel` SHALL admitir só
-`desenvolvimento` ou `validação`; papel ausente ou fora do domínio reprova, nomeando a
-semente.
-
-#### Scenario: Sigla com outra grafia
-- **WHEN** a semente SE2 cita a base `WoS` e a tabela de bases declara `wos`
-- **THEN** a leitura reprova, nomeando SE2 e a sigla
-
-#### Scenario: Distribuição calculada
-- **WHEN** a tabela de sementes é lida
-- **THEN** a contagem por base, as incidências e as sementes em mais de uma base são
-  calculadas da tabela
-
-#### Scenario: Papel ausente
-- **WHEN** a tabela de sementes não tem a coluna `Papel`, ou a célula de SE4 está vazia
-- **THEN** a leitura reprova, nomeando a coluna ou a semente
-
-#### Scenario: Papel fora do domínio
-- **WHEN** a semente SE7 declara o papel `teste`
-- **THEN** a leitura reprova, nomeando SE7 e os valores admitidos
-
-#### Scenario: Distribuição por papel
-- **WHEN** a tabela de sementes é lida
-- **THEN** a contagem de sementes de validação e de desenvolvimento, total e por base, é
-  calculada da tabela e exibida por `--mostrar`
 
 ### Requirement: Conjunto de validação não vazio
 
@@ -337,3 +312,144 @@ que `--conferir` reprove pelo motivo esperado, nomeando o critério.
 - **WHEN** o autoteste esvazia a justificativa de um critério na cópia
 - **THEN** a conferência reprova nomeando aquele critério, e o caso conta como resultado
   esperado
+
+### Requirement: Facetas lidas da tabela
+As facetas SHALL ser lidas da tabela "Facetas da questão de revisão", com cabeçalho exato
+`Id faceta | Faceta | Âncora obrigatória`. O identificador SHALL ter a forma `FCTn`, em
+sequência a partir de FCT1, e o nome MUST NOT ser vazio. A coluna "Âncora obrigatória"
+SHALL admitir só `Sim` ou `Não`, sem distinção de caixa. As âncoras são as facetas
+marcadas `Sim`, na ordem da tabela. O leitor MUST NOT extrair nem exigir cor, e hífen
+dentro do nome pertence ao nome.
+
+#### Scenario: Protocolo atual
+- **WHEN** a tabela marca FCT1 e FCT2 com `Sim` e FCT3 e FCT4 com `Não`
+- **THEN** as âncoras lidas são FCT1 e FCT2, e `mostrar` as exibe com origem no protocolo
+
+#### Scenario: Nome com hífen
+- **WHEN** o nome de FCT3 é "Práticas do processo de ensino-aprendizagem"
+- **THEN** o nome lido é o texto inteiro da célula
+
+### Requirement: Tabela de facetas fora da forma reprova
+Valor de âncora fora do domínio, nome vazio, identificador fora da forma ou fora de
+sequência e tabela sem nenhuma âncora MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a
+faceta ou a tabela.
+
+#### Scenario: Âncora fora do domínio
+- **WHEN** a célula "Âncora obrigatória" de FCT2 traz `Talvez`
+- **THEN** a leitura reprova, nomeando FCT2 e os valores admitidos
+
+#### Scenario: Nenhuma âncora
+- **WHEN** todas as facetas estão marcadas `Não`
+- **THEN** a leitura reprova, nomeando a tabela de facetas
+
+### Requirement: Executada e sonda identificadas pela composição
+O leitor SHALL identificar a executada e a sonda a partir da composição lida e das
+âncoras, sem texto da tabela e sem padrão do `config.toml`:
+
+- a executada é a única expressão com um grupo de mais de uma STR;
+- a sonda é a única expressão cujos grupos são exatamente as STR das facetas-âncora.
+
+Nenhum candidato, ou mais de um, MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a tabela
+de expressões e os candidatos. `mostrar` SHALL exibir a executada e a sonda com origem
+"protocolo (composição)".
+
+#### Scenario: Protocolo atual
+- **WHEN** a composição é EB1 a EB5, com EB4 = `STR1 AND STR2 AND (STR3 OR STR4)` e
+  EB5 = `STR1 AND STR2`, e as âncoras são FCT1 e FCT2
+- **THEN** a executada é EB4 e a sonda é EB5
+
+#### Scenario: Duas expressões com OR
+- **WHEN** EB1 passa a `STR1 AND (STR2 OR STR3)`
+- **THEN** a leitura reprova, nomeando EB1 e EB4 como candidatas a executada
+
+#### Scenario: Duas sondas
+- **WHEN** uma cópia acrescenta EB6 = `STR1 AND STR2`
+- **THEN** a leitura reprova, nomeando EB5 e EB6 como candidatas a sonda
+
+### Requirement: Notas explicativas das expressões
+A seção "Expressões de busca" SHALL admitir a subseção opcional `### Notas explicativas`,
+com itens `- Nn — <texto>`. A referência `(Nn)` na coluna "Função protocolar" sem a nota
+correspondente MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a expressão e a nota. Nota
+não citada não reprova.
+
+#### Scenario: Nota citada inexistente
+- **WHEN** EB2 cita `(N7)` e não há nota N7
+- **THEN** a leitura reprova, nomeando EB2 e N7
+
+### Requirement: Faixa de sensibilidade lida da nota da executada
+A faixa de sensibilidade SHALL ser lida das notas citadas na linha da executada, nos
+padrões `< N%` e `> M%`. Sem nenhum dos dois limites, vale `padroes.sensibilidade`; com só
+um deles, a leitura reprova, nomeando a nota e o limite que falta.
+
+#### Scenario: Faixa da nota da executada
+- **WHEN** EB4 cita `(N3)` e N3 traz "< 5%" e "> 15%"
+- **THEN** a faixa lida é 5% a 15%, com origem no protocolo, e o trecho "5%–15%" não altera
+  a leitura
+
+#### Scenario: Limite só inferior
+- **WHEN** a nota da executada traz "< 5%" e nenhum limite superior
+- **THEN** a leitura reprova, nomeando a nota e o limite superior ausente
+
+#### Scenario: Sem faixa declarada
+- **WHEN** as notas citadas pela executada não trazem `<` nem `>` com percentual
+- **THEN** vale `padroes.sensibilidade`, e `mostrar` exibe a origem "padrão (config.toml)"
+
+### Requirement: Conjunto-semente lido do arquivo de sementes
+O conjunto-semente SHALL ser lido do arquivo TOML localizado por `[documentos] sementes`,
+uma tabela `[[sementes]]` por estudo, com esquema fechado:
+
+- `id`: texto `SEn`, obrigatório, único e em sequência a partir de SE1;
+- `semente`: a referência, texto obrigatório e não vazio;
+- `bases`: lista obrigatória e não vazia de siglas da tabela de bases;
+- `papel`: obrigatório, `desenvolvimento` ou `validação`.
+
+Autoria, ano, título e DOI SHALL continuar extraídos do campo `semente`.
+
+#### Scenario: Arquivo atual
+- **WHEN** `docs/conjunto_semente.toml` tem as 10 sementes de SE1 a SE10
+- **THEN** a leitura aprova, e a distribuição por base e por papel exibida por `mostrar` é
+  a mesma calculada da tabela de bf6b9bf
+
+#### Scenario: Distribuição calculada
+- **WHEN** o arquivo é lido
+- **THEN** a contagem por base, as incidências e as sementes em mais de uma base são
+  calculadas do campo `bases`, e a distribuição por papel, do campo `papel`
+
+### Requirement: Arquivo de sementes fora do esquema reprova
+Arquivo de sementes ausente MUST terminar com CONFIGURACAO, nomeando a chave e o caminho.
+TOML inválido, campo ausente, campo de tipo errado, campo desconhecido, `id` fora da forma,
+repetido ou fora de sequência, base fora da tabela de bases ou com outra grafia, e `papel`
+fora do domínio MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a semente e o campo.
+
+#### Scenario: Sigla com outra grafia
+- **WHEN** a semente SE2 cita a base `WoS` e a tabela de bases declara `wos`
+- **THEN** a leitura reprova, nomeando SE2 e a sigla
+
+#### Scenario: Papel fora do domínio
+- **WHEN** a semente SE7 declara o papel `teste`
+- **THEN** a leitura reprova, nomeando SE7 e os valores admitidos
+
+#### Scenario: Campo desconhecido
+- **WHEN** uma semente traz o campo `titulo`, que o esquema intermediário não declara
+- **THEN** a leitura reprova, nomeando a semente e o campo
+
+#### Scenario: Arquivo ausente
+- **WHEN** `[documentos] sementes` aponta um arquivo que não existe
+- **THEN** o subcomando termina com CONFIGURACAO, nomeando a chave e o caminho, e nenhuma
+  semente é presumida
+
+### Requirement: Termos do quadro separados por vírgula
+Cada célula de idioma do quadro terminológico SHALL ter os termos separados por vírgula.
+Célula com o separador antigo (`\- ` no início ou depois de espaço) MUST reprovar com
+PROTOCOLO_ILEGIVEL, nomeando a faceta, a camada e o idioma. Hífen dentro de palavra,
+escapado ou não, pertence ao termo.
+
+#### Scenario: Separador antigo
+- **WHEN** a célula do núcleo em `pt` de FCT1 traz `\- representação do conhecimento \- ontologia`
+- **THEN** a leitura reprova, nomeando FCT1, a camada e `pt`, e dizendo que o separador é a
+  vírgula
+
+#### Scenario: Quadro atual
+- **WHEN** as células trazem `termo, termo, termo`
+- **THEN** cada termo é lido em separado, e o quadro de cada faceta tem mais formas que
+  células

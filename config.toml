@@ -6,18 +6,21 @@
 # do protocolo presente e ilegível reprova a leitura — não cai no padrão. `python3 -m rsl
 # mostrar` exibe o valor em uso e a origem de cada parâmetro.
 #
-# Parâmetros ESTRUTURAIS não têm padrão e não entram aqui: composição das expressões,
-# instrumentos (sigla, modo, caminho, idiomas, facetas), bases (sigla, nome), conjunto-
-# semente e idiomas do quadro vêm só do protocolo; a forma de execução de cada base vem da
-# ficha. A FORMA exigida do protocolo e das fichas (seções, colunas, rótulos) é a gramática
-# do leitor, exibida por `python3 -m rsl gramatica`, e também não entra aqui. As chaves
-# antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`, `idiomas`,
-# `expressoes.colunas`) e qualquer chave fora do esquema reprovam a configuração.
+# Parâmetros ESTRUTURAIS não têm padrão e não entram aqui: composição das expressões (de
+# onde se identificam a executada e a sonda), facetas e âncoras, instrumentos (sigla, modo,
+# caminho, idiomas, facetas), bases (sigla, nome) e idiomas do quadro vêm só do protocolo;
+# o conjunto-semente vem só do arquivo de sementes (`[documentos] sementes`); a forma de
+# execução de cada base vem da ficha. A FORMA exigida do protocolo, das fichas e do arquivo
+# de sementes (seções, colunas, rótulos, campos) é a gramática do leitor, exibida por
+# `python3 -m rsl gramatica`, e também não entra aqui. As chaves antigas
+# (`padroes.composicao`, `padroes.ancoras`, `padroes.executada`, `padroes.sonda`, `cores`,
+# `fichas`, `instrumentos`, `idiomas`, `[expressoes]`) e qualquer chave fora do esquema
+# reprovam a configuração.
 #
 # Este arquivo é editado pelo pesquisador; nenhum subcomando o grava.
 
-# Documento do protocolo a ser lido. Único parâmetro que o protocolo não sobrescreve:
-# é ele que localiza o protocolo. Caminho relativo à raiz do projeto.
+# Documento do protocolo a ser lido. O protocolo não sobrescreve este parâmetro: é ele que
+# localiza o protocolo. Caminho relativo à raiz do projeto.
 protocolo = "docs/03_protocolo_estrategia_pesquisa.md"
 
 # ------------------------------------------------------------------ padrões sobrescritos
@@ -28,13 +31,9 @@ recorte_ano_min = 2017
 # Regra de ajuste do conjunto-semente ("recuperação inferior a N% das sementes de
 # validação").
 limiar_aderencia = 0.80
-# Faixa da fração elegível de sonda \ executada (EB5: "< N%" e "> M%").
+# Faixa da fração elegível de sonda \ executada ("< N%" e "> M%" nas notas citadas pela
+# executada).
 sensibilidade = [0.05, 0.15]
-# Facetas marcadas "âncora obrigatória" nas palavras significativas.
-ancoras = ["FCT1", "FCT2"]
-# Expressão executada e sonda de sensibilidade (coluna Natureza, ver [expressoes]).
-executada = "EB4"
-sonda = "EB5"
 # Divergência simétrica máxima no teste de fidelidade da derivação: acima dela a derivação
 # local é reprovada (o protocolo não a declara hoje).
 divergencia_fidelidade = 0.10
@@ -43,19 +42,14 @@ divergencia_fidelidade = 0.10
 calibracao_triagem = 0.95
 
 # ------------------------------------------------------- parâmetros só desta configuração
-[expressoes]
-# Texto da coluna Natureza que identifica o papel da expressão no protocolo.
-natureza_executada = "Cobertura restrita"
-natureza_sonda = "Controle de sensibilidade"
-
 [conferencia]
 # Mínimo de termos distintos por string de faceta.
 minimo_termos_string = 20
 # Dimensões que a tabela de critérios de elegibilidade tem de declarar, com a grafia do
 # protocolo (coluna Dimensão).
 dimensoes_criterio = [
-    "Intervalo temporal", "Idioma", "Tipo documental", "Localização de itens",
-    "Adequação temática", "Domínio de aplicação", "Outros critérios",
+    "Intervalo temporal", "Idioma", "Tipo documental", "Adequação temática",
+    "Domínio de aplicação", "Outros critérios",
 ]
 # Dimensão (coluna Dimensão) cujo critério Incluir declara o recorte temporal ("após o ano
 # AAAA").
@@ -94,6 +88,9 @@ aderencia = "semente_aderencia.csv"
 # Ficha de busca de cada base, localizada pela sigla da tabela "Bases de dados" do
 # protocolo; tem de conter {sigla}. Caminho relativo à raiz do projeto.
 ficha = "docs/busca_base_{sigla}.md"
+# Arquivo do conjunto-semente (TOML, uma tabela [[sementes]] por estudo, com id, semente,
+# bases e papel), editado pelo pesquisador. Esquema em `python3 -m rsl gramatica`.
+sementes = "docs/conjunto_semente.toml"
 
 # ----------------------------------------------------------------- planilhas e JSON
 [planilha]

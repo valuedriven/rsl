@@ -30,7 +30,8 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | --- | --- | --- |
 | `docs/01_plano.md` | Plano: contexto, objetivos, método, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | entender o desenho e os limites da revisão |
 | `docs/02_protocolo_informacoes_gerais.md` | Protocolo, informações gerais: título, vínculo institucional, projeto, tópicos preliminares, objeto e recorte | conferir o que a revisão examina e o que fica fora |
-| `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QERn), facetas, instrumentos de controle terminológico, vocabulário, strings, expressões, critérios de elegibilidade, fontes e conjunto-semente. Fonte única desses dados e dos parâmetros que declara | montar ou conferir a busca |
+| `docs/03_protocolo_estrategia_pesquisa.md` | Protocolo, estratégias de pesquisa: questão de revisão (QGR, QERn), facetas e âncoras, instrumentos de controle terminológico, vocabulário, strings, expressões e notas explicativas, critérios de elegibilidade, fontes, regra de ajuste do conjunto-semente, procedimentos, instrumentos e ferramentas. Fonte única desses dados e dos parâmetros que declara | montar ou conferir a busca |
+| `docs/conjunto_semente.toml` | Conjunto-semente: uma tabela `[[sementes]]` por estudo, com `id`, `semente` (a referência), `bases` e `papel`. Fonte única das sementes; caminho em `[documentos] sementes` do `config.toml` | compor ou conferir o conjunto-semente |
 | `docs/busca_base_wos.md` | ficha da Web of Science: sintaxe, strings por faceta, expressões, variantes, conjunto-semente e ressalvas | executar ou auditar esta base |
 | `docs/busca_base_scopus.md` | ficha da Scopus, mesma estrutura | idem |
 | `docs/busca_base_eric.md` | ficha da ERIC, mesma estrutura | idem |
@@ -41,7 +42,7 @@ em `data/historico.md`. Os demais instrumentos e o portfólio não integram este
 | `src/rsl/` (`sementes …`) | reconciliação do metadado das sementes e planilha de aderência a partir do conjunto-semente, com o papel de cada semente e o ensaio seco impresso no terminal | montar o instrumento do teste de aderência, uma linha por semente e por base |
 | `data/historico.md` | Histórico: decisões relevantes sobre a revisão, inclusive as emendas, com data, alcance e fundamento | saber o que já foi decidido e por quê |
 | `data/pendencias.json` | Pendências: ações ainda a executar, cada uma com origem, o que bloqueia, ação sugerida, responsável e estado | saber o que falta fazer |
-| `config.toml` | caminho do protocolo, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados, arquivos de saída e campos das planilhas | mudar o arquivo do protocolo, um padrão, o local das fichas ou de um arquivo |
+| `config.toml` | caminho do protocolo e do arquivo de sementes, padrões dos parâmetros não estruturais, padrão de caminho das fichas, arquivos de dados, arquivos de saída e campos das planilhas | mudar o arquivo do protocolo ou das sementes, um padrão, o local das fichas ou de um arquivo |
 
 Em `data/` (caminhos em `[dados]` do `config.toml`), a procedência de cada arquivo:
 
@@ -87,33 +88,43 @@ biblioteca padrão), sob demanda: importar um módulo não lê nada; a leitura a
 subcomando a pede. A variável de ambiente `RSL_CONFIG` aponta outro arquivo, para ensaio e
 autoteste. Ele traz:
 
-- `protocolo` — o arquivo do protocolo a ser lido; é o único parâmetro que o protocolo não
-  sobrescreve;
+- `protocolo` — o arquivo do protocolo a ser lido; o protocolo não o sobrescreve;
 - `[padroes]` — valor padrão de cada parâmetro não estrutural que o protocolo pode declarar:
   recorte, limiar de aderência (aplicado só às sementes de validação), faixa de
-  sensibilidade, âncoras, expressão executada, sonda, limiar de divergência da fidelidade e
-  sensibilidade mínima da calibração da triagem assistida;
+  sensibilidade, limiar de divergência da fidelidade e sensibilidade mínima da calibração
+  da triagem assistida;
 - os parâmetros que o protocolo não declara: dimensões obrigatórias dos critérios e a do
-  recorte temporal, mínimo de termos por string, natureza que identifica a executada e a
-  sonda, ano de recência e tamanho-alvo da amostra da sonda (`[busca]`), arquivos de dados
-  (`[dados]`), arquivos de saída (`[saidas]`) e campos das planilhas;
+  recorte temporal, mínimo de termos por string, ano de recência e tamanho-alvo da amostra
+  da sonda (`[busca]`), arquivos de dados (`[dados]`), arquivos de saída (`[saidas]`) e
+  campos das planilhas;
 - `[documentos] ficha` — padrão de caminho da ficha de cada base, com `{sigla}`
-  (`docs/busca_base_{sigla}.md`).
+  (`docs/busca_base_{sigla}.md`);
+- `[documentos] sementes` — o arquivo do conjunto-semente (`docs/conjunto_semente.toml`);
+  ausente, o subcomando para com CONFIGURACAO, nomeando a chave e o caminho.
 
 **Parâmetros estruturais** não têm padrão e não constam do `config.toml`: são lidos só do
 protocolo, e a ausência ou o valor inválido reprova a leitura, nomeando tabela, linha e
-campo. São a composição das expressões; os instrumentos de controle terminológico (tabela
+campo. São a composição das expressões, de onde se identificam a executada (a única
+expressão com grupo `OR`) e a sonda (a única formada só pelas âncoras) — nenhuma ou mais de
+uma candidata reprova; as facetas e as âncoras (tabela `Id faceta | Faceta | Âncora
+obrigatória`, com `Sim` ou `Não`); os instrumentos de controle terminológico (tabela
 `Sigla | Instrumento | Modo | Caminho | Idiomas | FCTs`, com `Modo` `Manual` ou
 `Automático` — este exige cliente de mesma sigla em `src/rsl/termos/clientes/`); as bases
 (tabela "Bases de dados": `ID Base`, `Sigla`, `Nome da base`), cuja ficha se localiza pela
-sigla; o conjunto-semente (tabela `ID Semente | Semente | Bases | Papel`, com as siglas da
-tabela de bases e o papel `desenvolvimento` ou `validação`); e os idiomas do quadro
-terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`.
+sigla; e os idiomas do quadro terminológico, lidos do cabeçalho `| FCTn | pt | en | es |`,
+com os termos de cada célula separados por vírgula. O **conjunto-semente** também é
+estrutural, mas vem só do arquivo de sementes (`[documentos] sementes`): esquema fechado,
+com `id` (`SEn`, único), `semente`, `bases` (siglas da tabela de bases, na grafia exata) e
+`papel` (`desenvolvimento` ou `validação`); campo ausente, de outro tipo ou desconhecido
+reprova, nomeando a semente e o campo. A faixa de sensibilidade é lida das notas
+explicativas citadas pela executada (`< N%` e `> M%`).
 A forma de execução de cada base (`- Execução: única` ou `particionada`) é declarada na
-própria ficha. As chaves antigas (`padroes.composicao`, `cores`, `fichas`, `instrumentos`,
-`idiomas`, `expressoes.colunas`) reprovam a configuração se voltarem a ela, e chave fora do
-esquema também. A forma que o leitor exige do protocolo e das fichas — seções, tabelas,
-colunas, rótulos, marcadores, identificadores e frases de onde se lê um parâmetro — é o
+própria ficha. As chaves antigas (`padroes.composicao`, `padroes.ancoras`,
+`padroes.executada`, `padroes.sonda`, `cores`, `fichas`, `instrumentos`, `idiomas`,
+`[expressoes]`) reprovam a configuração se voltarem a ela, e chave fora do esquema também.
+A forma que o leitor exige do protocolo, das fichas e do arquivo de sementes — seções,
+tabelas, colunas, rótulos, marcadores, identificadores, campos e frases de onde se lê um
+parâmetro — é o
 contrato exibido por `python3 -m rsl gramatica`, a partir da única declaração no código
 (`src/rsl/gramatica.py`); não há cópia mantida à mão.
 
@@ -166,8 +177,8 @@ conferem, derivam e registram. Quatro invariantes valem para todos:
   pelo pesquisador; `sementes sincronizar` só reconcilia sementes, `busca registrar` só
   acrescenta ou atualiza a execução que ele mesmo confere e `termos importar` preserva as
   decisões da validação na planilha.
-- **Nada se apaga por sincronização.** Semente retirada do protocolo permanece no arquivo
-  com o seu metadado e é reportada por `conferir-dados` e por `pendencias`, para decisão;
+- **Nada se apaga por sincronização.** Semente retirada do conjunto-semente permanece em
+  `data/sementes.json` com o seu metadado e é reportada por `conferir-dados` e por `pendencias`, para decisão;
   termo retirado do protocolo permanece na planilha de validação como linha fora do
   protocolo. Termo vigente do protocolo ausente da string de uma base só passa se a ficha o
   declarar na redução; sem declaração, a conferência daquela base reprova — e só daquela.
@@ -181,13 +192,13 @@ conferem, derivam e registram. Quatro invariantes valem para todos:
 
 `conferir` verifica a **coerência interna** do protocolo, não valores esperados: numeração
 dos identificadores, camadas do vocabulário, string contida no quadro da sua faceta,
-âncoras em todas as expressões, sonda igual à conjunção das âncoras, executada igual à
-união das específicas, dimensões obrigatórias dos critérios, justificativa preenchida em
+âncoras em todas as expressões, executada igual à união das específicas (a sonda ser a
+conjunção das âncoras é garantido pela própria identificação), dimensões obrigatórias dos critérios, justificativa preenchida em
 todo critério de elegibilidade, faixa de sensibilidade, instrumentos com idiomas e facetas
 do protocolo, ficha existente para cada sigla de base, IDs de critério da seção 2 de cada
 ficha iguais aos da tabela do protocolo e sementes citando só siglas da tabela de bases; a
-distribuição das sementes por base e por papel é calculada da tabela. Protocolo ou ficha
-fora da gramática sai com PROTOCOLO_ILEGIVEL, nomeando o elemento do contrato; incoerência,
+distribuição das sementes por base e por papel é calculada do arquivo de sementes.
+Protocolo, ficha ou arquivo de sementes fora da gramática sai com PROTOCOLO_ILEGIVEL, nomeando o elemento do contrato; incoerência,
 com REPROVADO. `conferir-dados` reprova
 arquivo alimentado ausente ou fora do protocolo, a execução que declara exportação
 inexistente, a citação do registro de execução numa ficha sem identificador `(BDn/<id>)`, com `BDn` de outra base ou remetendo a execução
@@ -283,14 +294,15 @@ existir.
    **única executada como busca definitiva**; as demais são calculadas localmente em M3/E2.
    `EB4` equivale a `EB2 ∪ EB3`, e `EB5 = STR1 AND STR2` é a **sonda de sensibilidade**,
    executada uma única vez e fora do corpus.
-5. **Critérios de elegibilidade.** Inclusão e exclusão, com a regra única de inclusão
-   (CE7) — práticas **e/ou** fatores situacionais —, as regras de exceção e de borda e o
-   contra-escopo nomeado (CE9 a CE12).
+5. **Critérios de elegibilidade.** Inclusão e exclusão, de CE1 a CE9, com a regra única de
+   inclusão por adequação temática (CE6) — práticas **e/ou** fatores situacionais — e o
+   domínio de aplicação educacional (CE7 e CE8).
 6. **Fontes.** Web of Science, Scopus, ERIC e BRAPCI, nessa ordem; acesso pelo Portal da
    CAPES com CAFe nas duas primeiras. A ausência de busca direta nos acervos especiais é
    limitação declarada, mitigada por backward search.
-7. **Conjunto-semente.** Estudos e incidências esperadas por base, no protocolo, com o
-   papel de cada semente. É instrumento de aferição, não lista de incluídos: só as
+7. **Conjunto-semente.** Estudos e incidências esperadas por base, no arquivo de sementes
+   (`docs/conjunto_semente.toml`), com o papel de cada semente; a regra de ajuste e a
+   fórmula de recuperação ficam no protocolo. É instrumento de aferição, não lista de incluídos: só as
    sementes de **validação** decidem a passagem; as de **desenvolvimento** orientaram o
    vocabulário e são relatadas como não decisórias.
 8. **Ferramentas e registro de uso de IA.** Zotero para gestão e deduplicação, Rayyan para
@@ -338,7 +350,7 @@ citação do registro de execução sem identificador `(BDn/<id>)`, de outra bas
 inexistente, e, por base, termo vigente ausente sem redução declarada ou termo fora da STR
 presente.
 `sementes sincronizar` não apaga
-semente retirada do protocolo: ela permanece e é reportada, para decisão. `autoteste` injeta
+semente retirada do conjunto-semente: ela permanece e é reportada, para decisão. `autoteste` injeta
 defeitos numa cópia e exige que as conferências os reprovem com o código esperado.
 
 **Condição de passagem:** viabilidade das strings e protocolo validado por revisor expert.
@@ -434,14 +446,14 @@ calibração da triagem assistida aprovada em E2.
    priorização altera a ordem de leitura, nunca o conjunto lido —, e
    `data/ordem_triagem.csv` registra a ordem por pertinência e recência.
 3. **2ª filtragem — título e resumo.** Aplica os critérios decidíveis sem o texto completo:
-   recorte, idioma, tipo documental e exclusões temáticas manifestas, com kappa; exclui pelo
-   CE6 o documento não localizado em texto completo, esgotadas as vias de obtenção.
-4. **3ª filtragem — texto completo.** Aplica integralmente os critérios de adequação
-   temática — CE7, com as regras de exceção e de borda, e CE8 a CE12, que nomeiam o
-   contra-escopo —, e justifica cada exclusão pelo ID do critério. Dois revisores
+   recorte, idioma, tipo documental e exclusões temáticas manifestas, com kappa. O documento
+   cujo texto completo não se localiza, depois de tentativas documentadas, é registrado como
+   não localizado, e não como exclusão temática (P4).
+4. **3ª filtragem — texto completo.** Confirma a elegibilidade com CE6 (adequação temática)
+   e CE7 a CE9 (P5), e justifica cada exclusão pelo ID do critério. Dois revisores
    independentes, sem IA na decisão, com kappa. Divergência remanescente vai ao VT.
 5. **Backward search.** Uma geração, apenas sobre os estudos incluídos. Revisões
-   sistemáticas e de escopo são elegíveis por critério próprio (CE5) e vão para
+   sistemáticas e de escopo ficam fora do portfólio de evidência primária pelo CE5 e vão para
    **conjunto suplementar** com contagem própria.
 6. **Registro do fluxo.** O fluxograma PRISMA registra as exclusões justificadas e
    quantificadas em cada passagem.

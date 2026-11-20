@@ -33,10 +33,10 @@ class Resultado(list):
 
 
 def coerencia_expressoes(d):
-    """Relações entre as expressões, sem valor esperado: âncoras, sonda e executada."""
+    """Relações entre as expressões, sem valor esperado: âncoras e executada."""
     problemas = []
     p = d["papeis"]
-    comp, exec_, sonda = d["expressoes"], p["executada"], p["sonda"]
+    comp, exec_ = d["expressoes"], p["executada"]
     existentes = {s["id"] for s in d["strings"].values()}
     if p["ancoras_sem_string"]:
         return [f"âncoras {p['ancoras_sem_string']} não são facetas com string no protocolo"]
@@ -49,9 +49,7 @@ def coerencia_expressoes(d):
         for g in ancora:
             if g not in grupos:
                 problemas.append(f"{ident}: falta a âncora obrigatória {g[0]}")
-    if sorted(comp.get(sonda, [])) != sorted(ancora):
-        problemas.append(f"a sonda {sonda} não é a conjunção das âncoras "
-                         f"({' AND '.join(g[0] for g in ancora)})")
+    # A sonda ser a conjunção das âncoras é garantido pela identificação (leitura).
     resto = [g for g in comp.get(exec_, []) if g not in ancora]
     especificas = p["especificas"]
     uniao = sorted(set(especificas.values()))

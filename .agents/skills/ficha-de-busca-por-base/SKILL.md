@@ -75,9 +75,11 @@ Na ordem, e sempre a **versão corrente** — a ficha pode ter sido editada pelo
 desde a última leitura, e essa edição é o ponto de partida:
 
 1. `README.md` — mapa, nomes de arquivo, scripts, precedência e limiares do projeto.
-2. O protocolo de estratégia: questão, facetas e cores, quadro terminológico por camada e
-   idioma, strings, expressões e a sua natureza, critérios de elegibilidade, fontes e
-   conjunto-semente. **É a fonte do vocabulário**; nada dele se reescreve de memória.
+2. O protocolo de estratégia: questão, facetas e âncoras, quadro terminológico por camada e
+   idioma, strings, expressões (a executada e a sonda, identificadas pela composição) e as
+   suas notas, critérios de elegibilidade e fontes; o conjunto-semente vem do arquivo de
+   sementes (`[documentos] sementes`). **É a fonte do vocabulário**; nada dele se reescreve
+   de memória.
 3. O protocolo de informações gerais: recorte e objeto, para os critérios de domínio.
 4. O histórico: decisões já tomadas sobre esta base — reduções, variantes adotadas, defeitos
    que já ocorreram.

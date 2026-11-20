@@ -22,15 +22,14 @@ NOME = "config.toml"
 # Chave fora do esquema reprova: chave com erro de grafia seria ignorada em silêncio.
 ESQUEMA = {
     "": ("protocolo",),
-    "padroes": ("recorte_ano_min", "limiar_aderencia", "sensibilidade", "ancoras",
-                "executada", "sonda", "divergencia_fidelidade", "calibracao_triagem"),
-    "expressoes": ("natureza_executada", "natureza_sonda"),
+    "padroes": ("recorte_ano_min", "limiar_aderencia", "sensibilidade",
+                "divergencia_fidelidade", "calibracao_triagem"),
     "conferencia": ("minimo_termos_string", "dimensoes_criterio", "dimensao_recorte"),
     "busca": ("ano_recencia", "amostra_sensibilidade"),
     "dados": ("sementes", "registro", "validacao", "execucoes", "evidencia"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
                "sensibilidade", "aderencia"),
-    "documentos": ("ficha",),
+    "documentos": ("ficha", "sementes"),
     "planilha": ("campos_validacao", "campos_autorais"),
 }
 # Chaves retiradas: a presença de qualquer uma reprova com mensagem própria, para que não
@@ -39,8 +38,15 @@ _ESTRUTURAL = ("o valor vem do protocolo (parâmetro estrutural, sem padrão)")
 RETIRADAS = {
     "padroes.composicao": _ESTRUTURAL, "cores": _ESTRUTURAL, "fichas": _ESTRUTURAL,
     "instrumentos": _ESTRUTURAL, "idiomas": _ESTRUTURAL,
-    "expressoes.colunas": "o cabeçalho da tabela é forma e vem da gramática "
-                          "(`python3 -m rsl gramatica`)",
+    "padroes.ancoras": "as âncoras vêm da coluna 'Âncora obrigatória' da tabela de facetas "
+                       "do protocolo (parâmetro estrutural, sem padrão)",
+    "expressoes": "executada e sonda são identificadas pela composição das expressões "
+                  "do protocolo; o cabeçalho da tabela é forma e vem da gramática "
+                  "(`python3 -m rsl gramatica`)",
+    "padroes.executada": "a executada é identificada pela composição (a única expressão "
+                         "com grupo OR)",
+    "padroes.sonda": "a sonda é identificada pela composição (a única expressão formada "
+                     "só pelas âncoras)",
 }
 # Marcadores que cada padrão de caminho tem de conter.
 MARCADORES = {"documentos.ficha": "{sigla}", "saidas.fidelidade": "{expressao}",
@@ -128,6 +134,14 @@ class Configuracao:
 
     def protocolo(self):
         return RAIZ / self.valor("protocolo")
+
+    def sementes(self):
+        """Arquivo de sementes; ausente termina com CONFIGURACAO, nomeando chave e caminho."""
+        caminho = self.caminho("documentos.sementes")
+        if not caminho.exists():
+            raise ConfiguracaoInvalida(f"{self.nome}: a chave `documentos.sementes` aponta "
+                                       f"{self.valor('documentos.sementes')!r}, que não existe")
+        return caminho
 
     def com(self, chave, valor):
         """Cópia com uma chave alterada, sem validar (para o autoteste)."""
