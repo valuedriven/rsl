@@ -551,9 +551,7 @@ Skill: `fichamento`.
 - Nomeação dos arquivos de estudo: `Ano_DuasPrimeirasPalavras_TIPO_UltimoSobrenomeAutor`,
   com sufixo `_FICHA` para fichamentos.
 
-## Autoria e uso de IA
-
-**Junilson Pereira Souza** — responsabilidade técnica.
+## Uso de IA
 
 A assistência de inteligência artificial é declarada e registrada ação a ação no LOG_IA,
 apêndice do protocolo. A IA **não é autora**, conforme ICMJE e COPE. As regras de uso estão em

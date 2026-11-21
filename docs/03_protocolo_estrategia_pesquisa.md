@@ -4,7 +4,7 @@
 
 ### Questão geral de revisão
 
-- QGR: Como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento (P), propostos, especificados, aplicados ou avaliados na literatura científica e técnica internacional, representam formal e semanticamente, no domínio educacional (Co), as práticas do processo de ensino-aprendizagem e os fatores situacionais que condicionam a sua aplicação (I), e com que cobertura conceitual, granularidade e grau de formalização (O)?
+- QGR: Como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento (P), propostos, especificados, aplicados ou avaliados na literatura científica e técnica internacional, estruturam e representam, no domínio educacional (Co), as práticas do processo de ensino-aprendizagem e os fatores situacionais associados à sua aplicação (I), e quais são suas características quanto à cobertura conceitual, à granularidade e ao grau de formalização (O)?
 
 A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho ou outcome (O), em adaptação declarada: P designa os artefatos de representação, que são o objeto de interesse, e não uma população de participantes; Co é o domínio educacional; os fatores situacionais integram o fenômeno de interesse (I); O é a qualidade da formalização — cobertura, granularidade e grau de formalização.
 
@@ -13,7 +13,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 - QER1: Que tipos de artefatos de representação são propostos para representar práticas educacionais e quais são o seu escopo, a sua granularidade e o seu grau de formalização? 
 - QER2: Como os artefatos representam as práticas do processo de ensino-aprendizagem, como distinguem e relacionam entre si prática, estratégia, método, técnica, atividade, intervenção e abordagem pedagógica, e que definições adotam para cada uma? 
 - QER3: Que fatores situacionais do domínio educacional são formalizados e de que modo se vinculam às práticas, inclusive sob a forma de regras, dependências e restrições? 
-- QER4: Quais limitações, lacunas e incompatibilidades de representação são identificadas nos artefatos?
+- QER4: Quais limitações, lacunas, incompatibilidades e insuficiências de integração entre práticas educacionais e fatores situacionais são identificadas nos artefatos?
 
 ## Facetas da questão de revisão
 
@@ -78,7 +78,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 | EB2 | STR1 AND STR2 AND STR3 | Análise de sensibilidade; Teste de fidelidade da derivação local (N2). |
 | EB3 | STR1 AND STR2 AND STR4 | Análise de sensibilidade; Teste de fidelidade da derivação local (N2). |
 | EB4 | STR1 AND STR2 AND (STR3 OR STR4) | Busca definitiva para definição do corpus (N3). |
-| EB5 | STR1 AND STR2 | Controle de sensibilidade / recall (N4). |
+| EB5 | STR1 AND STR2 | Controle de sensibilidade relativa (N4). |
 
 
 ### Notas explicativas
@@ -96,7 +96,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 | CE3 | Idioma | Incluir | Documentos publicados nos idiomas português, inglês e espanhol. |  | idiomas de domínio da equipe de revisão, que cobrem a produção internacional dominante do campo e a produção nacional e ibero-americana em Ciência da Informação e em Informática na Educação, dispensando tradução automática e o risco de erro interpretativo dela decorrente. |
 | CE4 | Tipo documental | Incluir | Artigos de periódicos revisados por pares; trabalhos completos em anais de eventos; teses e dissertações; capítulos de livro; relatórios técnicos e especificações de ontologias e vocabulários. Itens obtidos de literatura cinzenta serão contados no conjunto suplementar. |  | A literatura sobre artefatos de representação circula de modo relevante em anais de eventos (FOIS, ESWC, ISKO, AIED) e em especificações técnicas, de sorte que a restrição a periódicos produziria viés de disseminação. |
 | CE5 | Tipo documental | Excluir | Revisões sistemáticas e de escopo. |  | Decisão de projeto: revisões anteriores são elegíveis como fonte de backward search, não como evidência primária. São contadas no conjunto suplementar, com contagem própria, e não integram o portfólio de evidência primária. |
-| CE6 | Adequação temática | Incluir | Estudos que formalizam, no domínio educacional, as práticas do processo de ensino-aprendizagem e/ou os fatores situacionais que condicionam a sua aplicação |  | Regra única de inclusão, convertida da questão geral de revisão (dimensão I do PICo). Sem prática nem fator situacional, o estudo não responde a QER2 nem a QER3; a disjunção é decisão de projeto — é da comparação entre soluções parciais que se enunciam as lacunas de integração. Como formalização pode ser entendido um modelo conceitual ou ontologia que descreve práticas e/ou fatores.|
+| CE6 | Adequação temática | Incluir | Estudos que propõem, especificam, aplicam ou avaliam artefatos de representação e organização do conhecimento destinados a estruturar conceitos, relações ou propriedades relativos às práticas do processo de ensino-aprendizagem e/ou aos fatores situacionais que condicionam sua aplicação no domínio educacional. |  | Regra única de inclusão, convertida da questão geral de revisão (dimensão I do PICo). Sem prática nem fator situacional, o estudo não responde a QER2 nem a QER3; a disjunção é decisão de projeto — é da comparação entre soluções parciais que se enunciam as lacunas de integração. Como formalização pode ser entendido um modelo conceitual ou ontologia que descreve práticas e/ou fatores.|
 | CE7 | Domínio de aplicação | Incluir | Artefatos propostos para, aplicados a ou avaliados no domínio educacional, em qualquer nível ou modalidade de ensino — educação básica, superior, profissional e tecnológica, educação a distância e aprendizagem em ambientes digitais. |  | As lacunas a serem enunciadas ao final endereçam esse domínio e precisam ser constatadas por comparação entre as soluções nele existentes, e não inferidas por ausência. |
 | CE8 | Domínio de aplicação | Excluir | Artefatos de domínios diversos do educacional. |  | Preserva-se a densidade probatória do portfólio e a comensurabilidade entre os itens analisados. Soluções de outros domínios, quando citadas pelos estudos incluídos como modelos reutilizados, alinhados ou estendidos, são registradas no fichamento como referência de reuso, sem integrar o portfólio. |
 | CE9 | Outros critérios | Excluir | Editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos simples e expandidos sem texto completo, e versões preliminares quando houver versão posterior do mesmo trabalho — mantém-se a mais completa. |  | Documentos sem conteúdo analítico suficiente para o fichamento. |
