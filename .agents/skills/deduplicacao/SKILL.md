@@ -48,9 +48,8 @@ Também não decide elegibilidade. Duplicata é identidade do documento, não pe
 
 ## 5. Onde entra na cadeia
 
-Depois da exportação, **antes** do teste de aderência e da calibração — porque as
-duas se medem sobre o corpus deduplicado, e o tamanho da amostra de calibração é
-fração dele.
+Depois da exportação, **antes** do teste de aderência — porque ele se mede sobre o
+corpus deduplicado.
 
 A aderência mede-se sobre a **união** das bases, que só existe depois de deduplicar.
 

@@ -50,7 +50,7 @@ não saiu.
 - **Cobertura de campo das exportações** — a fração de registros sem palavras-chave ou
   resumo é ponto cego declarado por base, nunca silenciado.
 - **Reprovação em conferência**, se houver — aderência abaixo do limiar, fidelidade da
-  derivação que não coincidiu, calibração recusada. Reprovação declarada vale mais do
+  derivação que não coincidiu. Reprovação declarada vale mais do
   que limiar afrouxado.
 
 ## 5. Declaração de uso de IA

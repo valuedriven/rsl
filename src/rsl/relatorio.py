@@ -59,7 +59,8 @@ def relatorio(ctx, d):
     crit = d["criterios"]
     L.append(f"  critérios: {len(crit)} "
              f"({sum(1 for c in crit if c['acao'] == G.ACAO_INCLUIR)} incluir, "
-             f"{sum(1 for c in crit if c['acao'] == G.ACAO_EXCLUIR)} excluir)")
+             f"{sum(1 for c in crit if c['acao'] == G.ACAO_EXCLUIR)} excluir, "
+             f"{sum(1 for c in crit if c['acao'] == G.ACAO_NAO_APLICAVEL)} não aplicável)")
     L.append(f"  fontes: {len(d['fontes']['bases'])} bases, ordem "
              f"{d['fontes']['ordem_execucao']}")
     dist = d["distribuicao"]

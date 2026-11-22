@@ -14,9 +14,6 @@ só isso, que o conjunto-semente mede.
 A exigência que dá sentido ao instrumento. Semente colhida da própria busca mede a
 busca contra si mesma e confirma o que já se esperava encontrar.
 
-Serve também de **controlo externo do viés de reforço** da priorização por
-aprendizado ativo, por ser anterior e independente.
-
 ## 2. O que NÃO é o conjunto-semente
 
 **Não é a leitura exploratória.** O 3º passo do RS Banyan pede os estudos

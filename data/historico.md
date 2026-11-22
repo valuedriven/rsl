@@ -183,3 +183,14 @@ O que não se alterou e por quê:
 - as entradas anteriores deste histórico citam o caminho e o esquema vigentes na data, e não se reescrevem;
 - a mudança de forma do protocolo já foi registrada pela entrada de `reestruturacao-do-protocolo`;
 - `conferir-dados` não confere se a evidência de um `id` existente é mesmo daquela semente. Depois de uma renumeração, arquivo não renomeado passa em silêncio. Comparar o DOI da evidência com o `doi` da semente fica em aberto, para decisão do pesquisador (design da change, Open Questions).
+
+## 2026-11-22 — Fator de impacto como critério não aplicável e retirada do ASReview (decisão do ReT)
+
+- **CE10 — Fator de impacto, ação "Não aplicável".** O critério que o RS Banyan prevê em M3/E1 entra na tabela de critérios do protocolo só para documentação: não é aplicado na seleção. As quatro fichas ganharam a linha CE10 na seção 2, como `conferir` exige. A gramática do protocolo passou a admitir "Não aplicável" no domínio de 'Ação' (`src/rsl/gramatica.py`); `mostrar` conta os critérios por ação. Alcance: **critérios** (documental) e **instrumento** (gramática). Resolve PD24.
+- **ASReview fora do escopo, com a calibração da triagem assistida.** A priorização da fila por aprendizado ativo saiu do plano (decisão 5b da §3.3, que deixa de ter subdivisão; §4.1, §6.1, §6.2, §7, §8.1 e §8.2) e, com ela, a calibração que só a ela servia: o parâmetro `padroes.calibracao_triagem` saiu do `config.toml` e do código (`config.py`, `leitura.py`) e, se voltar, reprova a configuração como chave desconhecida; a skill `calibracao-da-triagem` foi apagada; o guia de procedimentos perdeu o índice correspondente. A classificação assistida por LLM na 1ª filtragem (decisão 5) não muda. As pendências PD15 e PD30 foram apagadas por decisão do pesquisador, e a PD11 deixou de citar a calibração. Alcance: **método** (triagem) e **instrumento**.
+
+Fundamento: decisão do pesquisador de 2026-11-22, na tarefa 4.1 da change `guia-de-procedimentos`.
+
+Conferências depois das alterações: `rsl conferir` sai com 0 e relata 10 critérios (5 incluir, 4 excluir, 1 não aplicável); `rsl autoteste`, 224 casos sem falha (PARCIAL, 7 dependentes do registro de execução não executados), como antes; `rsl conferir-dados`, 5 (DADOS, registro de execução ausente), como antes.
+
+O que não se alterou: as entradas anteriores deste histórico que citam o ASReview ou `calibracao_triagem` registram o estado da data e não se reescrevem.

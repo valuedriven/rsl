@@ -100,6 +100,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 | CE7 | Domínio de aplicação | Incluir | Artefatos propostos para, aplicados a ou avaliados no domínio educacional, em qualquer nível ou modalidade de ensino — educação básica, superior, profissional e tecnológica, educação a distância e aprendizagem em ambientes digitais. |  | As lacunas a serem enunciadas ao final endereçam esse domínio e precisam ser constatadas por comparação entre as soluções nele existentes, e não inferidas por ausência. |
 | CE8 | Domínio de aplicação | Excluir | Artefatos de domínios diversos do educacional. |  | Preserva-se a densidade probatória do portfólio e a comensurabilidade entre os itens analisados. Soluções de outros domínios, quando citadas pelos estudos incluídos como modelos reutilizados, alinhados ou estendidos, são registradas no fichamento como referência de reuso, sem integrar o portfólio. |
 | CE9 | Outros critérios | Excluir | Editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos simples e expandidos sem texto completo, e versões preliminares quando houver versão posterior do mesmo trabalho — mantém-se a mais completa. |  | Documentos sem conteúdo analítico suficiente para o fichamento. |
+| CE10 | Fator de impacto | Não aplicável | Fator de impacto dos estudos e dos veículos de publicação. |  | Critério previsto no modelo RS Banyan (Módulo 3, Etapa 1), registrado para fins documentais; não é aplicado na seleção. |
 
 ### Fontes de informação
 

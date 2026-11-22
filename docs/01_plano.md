@@ -84,7 +84,7 @@
 | :---- | :---- | :---- | :---- |
 | Nov, 1ª | M1 (E1–E5) e M2 (E1–E2), em paralelo; início do controle terminológico | planilha de competências e cronograma; questão de revisão redigida | — |
 | Nov, 2ª | M3 — E1 | Strings, critérios e fontes; protocolo montado e validado por expert | Viabilidade das strings |
-| Dez, 1ª | M3 — E2 | Teste de aderência e calibração da triagem assistida; execução da expressão de cobertura; alertas; contagens da busca parciais | Suficiência do portfólio |
+| Dez, 1ª | M3 — E2 | Teste de aderência; execução da expressão de cobertura; alertas; contagens da busca parciais | Suficiência do portfólio |
 | Dez, 2ª | M3 — E3 | 1ª, 2ª e 3ª filtragens; duplicatas; backward search; Portfólio Definitivo; fluxograma PRISMA | Conclusão das filtragens |
 | Jan, 1ª | M3 — E4 | Fichamentos e glossário | Conclusão dos fichamentos |
 | Jan, 2ª | M4 — E1 | Análise bibliométrica e de conteúdo; formulação da lacuna | — |
@@ -110,8 +110,7 @@
 | 2 | Estratégia de busca enxuta — facetas e expressões de busca definidas no protocolo (`docs/03`), com uma única expressão executada por base | Reduz a Etapa 2 do Módulo 3 |
 | 3 | Quatro bases, suprimindo aquelas cuja cobertura é absorvida pelas remanescentes | Reduz execuções, exportações e deduplicação |
 | 4 | Módulos 1 e 2 executados em paralelo, com o controle terminológico iniciado já na Etapa 1 do Módulo 1 | Comprime o primeiro mês |
-| 5a | Classificação assistida por LLM na 1ª filtragem, em paralelo ao avaliador humano. A IA não exclui estudo algum e não é avaliador independente: produz classificação auxiliar, que o humano confirma ou descarta | Reduz a 1ª filtragem sem dispensar decisão humana |
-| 5b | Priorização da fila de leitura por aprendizado ativo, com o ASReview — FERRAMENTA ADOTADA. Ordena a fila por probabilidade de pertinência e NUNCA decide inclusão: a fila é percorrida integralmente, e a priorização altera a ordem de leitura, não o conjunto lido | Reduz o tempo até os pertinentes, sem reduzir o conjunto lido. NÃO É DECISÃO DE COMPRESSÃO DO PRAZO: o cronograma de quatro meses não depende da sua adoção |
+| 5 | Classificação assistida por LLM na 1ª filtragem, em paralelo ao avaliador humano. A IA não exclui estudo algum e não é avaliador independente: produz classificação auxiliar, que o humano confirma ou descarta | Reduz a 1ª filtragem sem dispensar decisão humana |
 | 6 | Extração assistida por IA, com pré-preenchimento do formulário de fichamento conferido no texto-fonte | Reduz a Etapa 4 do Módulo 3 |
 | 7 | Backward search limitado a uma geração, apenas sobre os estudos incluídos | Evita a expansão indefinida do portfólio |
 
@@ -122,7 +121,7 @@
 
 ## 4.1 Ferramentas
 
-| Remissão: as ferramentas da revisão, com finalidade e condição de uso, estão no protocolo (`docs/03`); alteração de ferramenta é emenda ao protocolo. Decisões que condicionam o cronograma: Zotero como biblioteca de grupo e base da deduplicação; Rayyan para as filtragens em modo cego e o kappa entre os dois revisores humanos nas TRÊS filtragens; ASReview ADOTADO para priorizar a fila de leitura na 1ª filtragem, sob três condições: (1) viabilidade e calibração antes do primeiro uso (seção 8.2); (2) fila percorrida INTEGRALMENTE, sem interrupção por saturação aparente; (3) registro no LOG\_IA a cada execução, com versão da ferramenta e do modelo. O CRONOGRAMA DE QUATRO MESES NÃO DEPENDE DO ASREVIEW: ele muda a ordem de leitura, não o conjunto lido. Risco operacional: estar operante antes da 1ª filtragem. |
+| Remissão: as ferramentas da revisão, com finalidade e condição de uso, estão no protocolo (`docs/03`); alteração de ferramenta é emenda ao protocolo. Decisões que condicionam o cronograma: Zotero como biblioteca de grupo e base da deduplicação; Rayyan para as filtragens em modo cego e o kappa entre os dois revisores humanos nas TRÊS filtragens. |
 | :---- |
 
 ## 4.2 Pessoas (papéis e atribuições)
@@ -180,7 +179,7 @@
 | Dois revisores humanos independentes, em modo cego no Rayyan | Decisão de inclusão por julgamento único, não auditável | Nas três filtragens |
 | Independência entre revisores e IA, declarada e operada | Ancoragem do revisor na classificação automática — a IA não é avaliador independente e a sua saída só se abre após o desbloqueio da rodada | 1ª filtragem |
 | Controle terminológico paralelo entre Ciência da Informação e Educação | Perda de recall numa das tradições, por vocabulário de uma só comunidade | Módulo 3, Etapa 1 |
-| Conjunto-semente composto ANTES da busca e por caminho independente dela | Expressão de busca que confirma o que já se esperava encontrar; e viés de reforço da priorização por aprendizado ativo | Módulo 3, Etapas 1 e 2 |
+| Conjunto-semente composto ANTES da busca e por caminho independente dela | Expressão de busca que confirma o que já se esperava encontrar | Módulo 3, Etapas 1 e 2 |
 | Sondagem de sintaxe obrigatória antes da primeira execução em cada base | String inexecutável, ou retorno truncado em silêncio por limite não declarado da base | Antes de cada execução inaugural |
 | PRISMA como padrão do que relatar, com adaptação declarada item por item | Omissão de informação no relatório sob pressão de prazo | Módulo 4, Etapas 2 e 3 |
 | Validação do protocolo por revisor expert antes da execução | Protocolo internamente coerente e, ainda assim, inadequado ao objeto | Marco da 2ª quinzena de novembro |
@@ -194,7 +193,6 @@
 | :---- | :---- | :---- | :---- |
 | Teste de aderência ao conjunto-semente | Recall das expressões de busca, sobre a união das bases | `limiar_aderencia` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | Revisão obrigatória do controle terminológico antes de prosseguir |
 | Índice kappa entre os dois revisores humanos | Concordância da decisão de triagem, sempre antes do desbloqueio do modo cego | Calculado nas TRÊS filtragens; nunca com a IA | Divergência vai a discussão e, remanescendo, ao VT, com a decisão registrada |
-| Calibração da triagem assistida | Sensibilidade do ASReview, aferida em conjunto DISJUNTO do de ajuste | `calibracao_triagem` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | Triagem permanece integralmente humana |
 | Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Divergência até `divergencia_fidelidade` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
 | Conferência de coerência entre as expressões de busca | Se as relações de continência declaradas no protocolo (`docs/03`) se verificam no retorno de cada base | Relações do protocolo | Reexecução na base e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE |
 | Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A conferência da ficha é RECUSADA pela guarda, e não há saída a conferir |
@@ -218,14 +216,13 @@
 | Risco | Efeito se ocorrer | Mitigação | Quando se verifica |
 | :---- | :---- | :---- | :---- |
 | Prazo de quatro meses, no limite inferior da faixa estimada pelo modelo | Pressão para suprimir etapas e aparência de flexibilização metodológica | As catorze etapas são mantidas; a compressão vem de sete decisões de projeto, e não de supressão. Registro prévio do protocolo no OSF Registries antes das buscas | Em cada marco quinzenal |
-| Indisponibilidade dos dois revisores independentes | Trava as três filtragens, que exigem kappa entre dois revisores humanos, e com elas o portfólio inteiro | Confirmação dos dois nomes até a data-limite do cronograma, anterior à calibração da triagem assistida e ANTERIOR À EXECUÇÃO DAS BUSCAS DEFINITIVAS; não confirmados, decide-se nesse marco entre continuidade e replanejamento. Dependência crítica declarada na planilha de competências | Marco improrrogável do cronograma |
+| Indisponibilidade dos dois revisores independentes | Trava as três filtragens, que exigem kappa entre dois revisores humanos, e com elas o portfólio inteiro | Confirmação dos dois nomes até a data-limite do cronograma, ANTERIOR À EXECUÇÃO DAS BUSCAS DEFINITIVAS; não confirmados, decide-se nesse marco entre continuidade e replanejamento. Dependência crítica declarada na planilha de competências | Marco improrrogável do cronograma |
 | Recall do conjunto-semente abaixo de `limiar_aderencia` no teste de aderência | Expressões de busca insuficientes; portfólio incompleto | Revisão obrigatória do controle terminológico antes de prosseguir, com emenda ao protocolo | Módulo 3, Etapa 2, 1º passo |
 | Sintaxe de consulta não verificada na ERIC e na BRAPCI | Strings inexecutáveis ou retorno silenciosamente truncado | Sondagem de sintaxe obrigatória antes de qualquer execução nessas duas bases, com registro das contagens e capturas de tela | Módulo 3, Etapa 2 |
 | Acesso às bases por via automatizada | A API da Scopus resolve direito de acesso por IP institucional ou insttoken, e a API da Web of Science exige licença contratada: fora da rede da instituição, nenhuma das duas responde | Rota padrão de ingestão, com busca e exportação feitas pelo pesquisador; automação de interface apenas mediante confirmação dos termos de uso | Antes da Etapa 2 do Módulo 3 |
 | Suspensão do acesso institucional por uso automatizado indevido | Perda de acesso para toda a instituição, não apenas para o pesquisador | Nenhuma requisição em paralelo; parada imediata diante de captcha, aviso de atividade atípica ou limite excedido; termos de uso conferidos e registrados | Contínuo, durante as buscas |
 | Termos sem validação em tesauro | Impossibilidade de afirmar que as buscas usaram descritores autorizados | Validação contra os instrumentos que o protocolo declara por faceta (`docs/03`, Instrumentos para controle terminológico). Termo sem consulta registrada é termo livre, declarado como tal no relato; a busca não depende de autoridade — dela depende apresentar o termo COMO descritor autorizado | Módulo 3, Etapa 1, 2º passo |
 | Perda de especificações técnicas não indexadas | Ausência de padrões educacionais relevantes no portfólio | Mitigada pelo backward search de uma geração e reportada como limitação; cobertura não exaustiva (seção 6.3) | Módulo 3, Etapa 3, 6º passo |
-| Viés de ferramenta na priorização por aprendizado ativo | Reforço do perfil dos itens já rotulados como relevantes | Fila percorrida integralmente, sem interrupção por saturação aparente. Regra operacional detalhada: seção 8.2 | 1ª filtragem |
 | Ancoragem do revisor na classificação da IA | Perda da independência entre os dois revisores humanos, com kappa inflado e dupla avaliação apenas aparente | O revisor não vê a classificação da IA nem a decisão do outro revisor antes de registrar a sua; a saída da IA abre-se após o desbloqueio da rodada e serve a conferência, não a decisão | 1ª filtragem |
 | Referência ou termo inventado por ferramenta de IA | Registro falso no protocolo e perda de reprodutibilidade | Nenhuma referência citada sem verificação na fonte original; toda consulta automatizada grava a resposta bruta, e linha sem evidência é linha inválida; falha de consulta não é registrada como ausência | Contínuo |
 | Dispersão da literatura entre comunidades distintas | Portfólio heterogêneo e perda de recall em uma das tradições | Controle terminológico paralelo, e não substitutivo, entre Ciência da Informação e Educação; análise da distribuição por comunidade de origem | Módulo 4, Etapa 1 |
@@ -243,7 +240,6 @@
 | M3 | E1 — estratégias | Expansão de sinônimos e variantes para o controle terminológico | Claude.ai — modelo e versão registrados no LOG\_IA a cada uso | Cada termo confrontado com o instrumento de referência antes de entrar na string. Enquanto a conferência não ocorrer, o termo é termo livre |
 | M3 | E1 — estratégias | Consulta automatizada aos instrumentos com cliente (TBCI e UNESCO Thesaurus); os demais instrumentos declarados no protocolo são consultados à mão | validar\_termos.py — script próprio; versão registrada no LOG\_IA | A ferramenta recupera e registra; a classificação final e a incorporação de termos relacionados e específicos são do ReT com o VT |
 | M3 | E2 — localização | Deduplicação semântica dos remanescentes, após a passagem por DOI e título | Claude.ai — modelo e versão registrados no LOG\_IA | Conferência dos pares marcados como duplicata; pares duvidosos não são fundidos |
-| M3 | E3 — 1ª filtragem | Fila de títulos priorizada por aprendizado ativo | ASReview — ADOTADA; versão registrada no LOG\_IA a cada execução | Ordena a leitura, não decide: a fila é percorrida integralmente e todos os títulos são lidos. Calibração prévia obrigatória |
 | M3 | E3 — 1ª filtragem | Classificação assistida, em paralelo ao avaliador humano — não é avaliação independente | Claude.ai — modelo e versão registrados no LOG\_IA | O revisor não vê a saída da IA antes de registrar a sua decisão. Toda divergência vai a leitura humana; exclusões conferidas. A IA não exclui: o termo “avaliadores independentes” fica reservado aos revisores humanos |
 | M3 | E4 — extração | Pré-preenchimento dos campos do formulário de fichamento a partir do texto completo | Claude.ai — modelo e versão registrados no LOG\_IA | Cada campo conferido no texto-fonte; os passos de citação e de analítica são integralmente humanos |
 | M4 | E1 — interpretação | Agrupamento preliminar de conceitos para o glossário e coocorrência de termos | Claude.ai — modelo e versão registrados no LOG\_IA | Definições e fontes validadas pelo pesquisador |
@@ -258,7 +254,6 @@
 | Fronteira | O que significa na prática |
 | :---- | :---- |
 | Nenhuma exclusão só por IA | A IA marca um item como provavelmente irrelevante; a exclusão só se efetiva por decisão humana registrada. Nenhum estudo sai do portfólio sem alguém ter decidido que sai |
-| Calibração antes do uso | DECISÃO DE PROJETO: a triagem assistida só é empregada se, calibrada sobre conjunto de referência rotulado à mão, atingir SENSIBILIDADE IGUAL OU SUPERIOR A `calibracao_triagem` (`config.toml`) EM CONJUNTO DE AFERIÇÃO DISJUNTO DO DE AJUSTE. Abaixo disso, triagem integralmente humana, com emenda ao protocolo. Amostra, sorteio, partição, falsos negativos e sensibilidade não estimável: regra operacional no protocolo (`docs/03`) |
 | Dupla avaliação humana preservada | As três filtragens são feitas por dois revisores humanos independentes, e o índice kappa é calculado NAS TRÊS, entre eles, nunca com a IA, e sempre antes do desbloqueio do modo cego de cada rodada. A 3ª filtragem é, além disso, feita sem assistência de IA na decisão. A concordância entre a IA e o humano, se reportada, é métrica auxiliar e aparece em separado |
 | Independência do julgamento humano | O revisor registra a sua decisão sem acesso à classificação da IA e sem acesso à decisão do outro revisor. A saída da IA só se abre depois do desbloqueio da rodada, e serve à conferência das divergências, não à formação da decisão |
 | Nenhuma referência sem verificação | Toda referência sugerida ou normalizada por IA é conferida no registro da base ou no próprio documento |
@@ -266,7 +261,6 @@
 | Rastreabilidade registrada | Ferramenta, modelo, versão, data, finalidade e prompt de cada uso vão para o LOG\_IA, apêndice do protocolo |
 | Autoria e declaração | A IA não é autora nem co-autora, conforme as diretrizes do ICMJE e do COPE. O uso é declarado na seção de métodos do relatório, na forma exigida pelo periódico-alvo |
 | Licenciamento e confidencialidade | Não se submetem a serviços de terceiros textos completos cujas licenças o proíbam, nem dados pessoais porventura presentes nos documentos. Preferem-se ferramentas que não retenham o conteúdo submetido para treinamento. As cláusulas de uso dos metadados das bases com ferramentas de IA são conferidas antes das buscas |
-| Viés de ferramenta mitigado | A fila priorizada é PERCORRIDA INTEGRALMENTE, sem interrupção por saturação aparente: a priorização altera a ordem de leitura, nunca o conjunto lido. O conjunto-semente, composto antes da busca e por caminho independente, é o controle externo do viés de reforço |
 
 ## 8.3 Forma de registro — exigência de rastreabilidade
 

@@ -24,9 +24,9 @@ a base apresentada como obrigatória).
   manuais —, cada um com o que mede, numerador e denominador, limiar e origem do limiar,
   script ou procedimento manual e arquivo de saída.
 - **`README.md` reduzido** a guia de entrada: identificação, como executar, mapa único dos
-  caminhos (com quem escreve cada um), referência de comandos com todos os parâmetros,
-  tabela de códigos de saída, os três registros, a precedência e a remissão a
-  `docs/procedimentos.md`. Sai o que se encontra em outro artefato.
+  caminhos (com quem escreve cada um), tabela de códigos de saída, os três registros, a precedência e a remissão a
+  `docs/procedimentos.md`, onde ficam os comandos com todos os parâmetros (design D1). Sai o
+  que se encontra em outro artefato.
 - Remissões das skills ao README atualizadas para o novo lugar de cada informação.
 - Inconsistências entre o modelo, o plano e o protocolo encontradas na redação são
   **registradas como pendência**, não resolvidas no guia.
@@ -40,7 +40,11 @@ critérios; script de análise e otimização de descritores; clientes para os i
 
 ### New Capabilities
 
-Nenhuma. A mudança é documental: nenhum comportamento de script muda.
+Nenhuma. A mudança foi planejada como documental. Por decisão do pesquisador na tarefa 4.1
+(2026-11-22), dois comportamentos de script mudaram sem alterar requisito de spec, porque
+as specs não enumeram esses valores: a gramática admite a ação "Não aplicável" nos
+critérios, e `padroes.calibracao_triagem` deixou o esquema da configuração e reprova como
+chave desconhecida (ver Impact).
 
 ### Modified Capabilities
 
@@ -55,4 +59,9 @@ atendido: a tabela de códigos permanece no README. A change declara `skip_specs
   `validacao-vocabulario-controlado`, `registrar-decisao`.
 - `data/pendencias.json`: novas pendências para as divergências modelo × projeto, por
   decisão do pesquisador.
-- Nenhum código, configuração ou dado alterado.
+- Por decisão do pesquisador na tarefa 4.1 (2026-11-22), fora do escopo documental inicial:
+  CE10 (Fator de impacto, ação "Não aplicável") no protocolo e nas quatro fichas, com o novo
+  valor de ação na gramática (`src/rsl/gramatica.py`, `src/rsl/relatorio.py`); retirada do
+  ASReview e da calibração da triagem assistida do plano, do `config.toml`, do código
+  (`src/rsl/config.py`, `src/rsl/leitura.py`), das skills (`calibracao-da-triagem` apagada) e
+  das pendências. Registro em `data/historico.md`, 2026-11-22.

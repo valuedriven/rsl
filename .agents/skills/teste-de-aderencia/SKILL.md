@@ -32,7 +32,8 @@ faceta sem termo dela no título ou no resumo aponta lacuna de vocabulário. Sem
 muda o denominador; recall de antes e de depois só se comparam com o registro da retirada
 em `data/historico.md` (ver `conjunto-semente`, §4). As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
-`busca registrar` antes do teste; ver `README.md`, seção Scripts.
+`busca registrar` antes do teste; sinopse em `docs/procedimentos.md`, M3/E2, e caminhos no
+`README.md`, seção Mapa.
 
 O instrumento de campo é `data/semente_aderencia.csv` — uma linha por semente e por
 base, gerado por `python3 -m rsl sementes planilha`. O preenchimento das etapas 1 e 2 e o

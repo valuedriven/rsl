@@ -875,8 +875,6 @@ def analisa(ctx):
     # O protocolo não declara estes; valem os do config.toml, com a origem registrada.
     d["divergencia"] = _parametro(ctx, params, "divergencia_fidelidade", None,
                                   "padroes.divergencia_fidelidade")
-    d["calibracao_triagem"] = _parametro(ctx, params, "calibracao_triagem", None,
-                                         "padroes.calibracao_triagem")
     _parametro(ctx, params, "minimo_termos_string", None, "conferencia.minimo_termos_string")
     _parametro(ctx, params, "dimensoes_criterio", None, "conferencia.dimensoes_criterio")
     d["parametros"] = params

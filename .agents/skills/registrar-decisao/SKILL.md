@@ -41,7 +41,7 @@ decidida, não esquecida.
 
 - **O instrumento guarda a última definição.** Sem histórico, sem data.
 - **O histórico (`data/historico.md`) guarda as decisões**: linha do tempo, decisões
-  revogadas, emendas. O que mais se registra, e onde, está no `README.md`.
+  revogadas, emendas. O que mais se registra, e onde, está no `README.md`, seção Três registros.
 
 ## 4. O ciclo, depois do julgamento
 

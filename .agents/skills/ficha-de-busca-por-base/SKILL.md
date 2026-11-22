@@ -74,7 +74,8 @@ criar: apresentar a lacuna e pedir a decisão.
 Na ordem, e sempre a **versão corrente** — a ficha pode ter sido editada pelo pesquisador
 desde a última leitura, e essa edição é o ponto de partida:
 
-1. `README.md` — mapa, nomes de arquivo, scripts, precedência e limiares do projeto.
+1. `README.md` — mapa, nomes de arquivo e precedência; `docs/procedimentos.md` — comandos;
+   `python3 -m rsl mostrar` — limiares em uso e a origem de cada um.
 2. O protocolo de estratégia: questão, facetas e âncoras, quadro terminológico por camada e
    idioma, strings, expressões (a executada e a sonda, identificadas pela composição) e as
    suas notas, critérios de elegibilidade e fontes; o conjunto-semente vem do arquivo de
@@ -303,8 +304,8 @@ sintaxe, que é sempre desta base e com a sua fonte.
 
 ## Conferir e registrar
 
-1. Rodar a conferência do documento, a dos dados e o autoteste do projeto (comandos no
-   `README.md`). Reprovação aponta incoerência: corrige-se a ficha ou se registra a redução
+1. Rodar a conferência do documento, a dos dados e o autoteste do projeto (comandos em
+   `docs/procedimentos.md`, seção Conferências transversais). Reprovação aponta incoerência: corrige-se a ficha ou se registra a redução
    com motivo — **nunca se afrouxa a conferência** para a ficha passar.
 2. Relatar a **cobertura por faceta** como número, decomposta em literal, alcançado por
    radical, declarado e descoberto. **Cobertura não é recall**: mede quanto do vocabulário
@@ -349,5 +350,6 @@ Lógica das expressões:
 `expressoes-de-busca`. Sondagem, execução e registro sob as regras de acesso:
 `busca-nas-bases`. Coerência e fidelidade: `conferencias-da-busca`. Recall:
 `teste-de-aderencia`. Sementes: `conjunto-semente`. Critérios: `criterios-de-elegibilidade`.
-Emenda: `registrar-decisao`. Bases, nomes de arquivo, comandos e limiares deste projeto estão
-no `README.md`, e não se repetem aqui.
+Emenda: `registrar-decisao`. Nomes de arquivo deste projeto estão
+no `README.md` (Mapa); comandos, em `docs/procedimentos.md`; bases, no protocolo; limiares em
+uso, em `python3 -m rsl mostrar`. Não se repetem aqui.

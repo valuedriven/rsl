@@ -23,7 +23,7 @@ NOME = "config.toml"
 ESQUEMA = {
     "": ("protocolo",),
     "padroes": ("recorte_ano_min", "limiar_aderencia", "sensibilidade",
-                "divergencia_fidelidade", "calibracao_triagem"),
+                "divergencia_fidelidade"),
     "conferencia": ("minimo_termos_string", "dimensoes_criterio", "dimensao_recorte"),
     "busca": ("ano_recencia", "amostra_sensibilidade"),
     "dados": ("registro", "validacao", "execucoes", "evidencia"),

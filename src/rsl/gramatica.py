@@ -360,8 +360,10 @@ T_CRITERIOS = Tabela(
 COL_CRIT_ID, COL_CRIT_DIMENSAO, COL_CRIT_ACAO, COL_CRIT_CRITERIO, _, COL_CRIT_JUST = \
     range(6)
 I_CE = Identificador("ce", P, S_CRITERIOS, "CE")
-D_ACAO = Dominio("acao", P, S_CRITERIOS, "Ação", {"Incluir": "Incluir", "Excluir": "Excluir"})
-ACAO_INCLUIR, ACAO_EXCLUIR = D_ACAO.valores
+# "Não aplicável": critério do modelo registrado só para documentação; não entra na seleção.
+D_ACAO = Dominio("acao", P, S_CRITERIOS, "Ação",
+                 {"Incluir": "Incluir", "Excluir": "Excluir", "Não aplicável": "Não aplicável"})
+ACAO_INCLUIR, ACAO_EXCLUIR, ACAO_NAO_APLICAVEL = D_ACAO.valores
 F_RECORTE = FrasePadrao(
     "recorte", P, S_CRITERIOS, "após o ano AAAA  (critério Incluir da dimensão do recorte)",
     r"após o ano\s+(\d{4})", exigencia=OPCIONAL,

@@ -37,9 +37,6 @@ sensibilidade = [0.05, 0.15]
 # Divergência simétrica máxima no teste de fidelidade da derivação: acima dela a derivação
 # local é reprovada (o protocolo não a declara hoje).
 divergencia_fidelidade = 0.10
-# Sensibilidade mínima da triagem assistida (ASReview), aferida em conjunto disjunto do de
-# ajuste; abaixo dela a triagem permanece integralmente humana (o protocolo não a declara).
-calibracao_triagem = 0.95
 
 # ------------------------------------------------------- parâmetros só desta configuração
 [conferencia]

@@ -114,7 +114,7 @@
     {
       "id": "PD11",
       "categoria": "equipe",
-      "descricao": "Revisores 1 e 2 a definir. O plano trata isso como dependência crítica: os nomes precisam ser confirmados até a data-limite do cronograma, antes da calibração da triagem e das buscas definitivas. Sem eles, as três filtragens ficam travadas.",
+      "descricao": "Revisores 1 e 2 a definir. O plano trata isso como dependência crítica: os nomes precisam ser confirmados até a data-limite do cronograma, antes das buscas definitivas. Sem eles, as três filtragens ficam travadas.",
       "origem": "docs/01_plano.md:145-146, 149, 227",
       "bloqueia": "M3/E3 — as três filtragens (kappa)",
       "acao_sugerida": "confirmar os nomes até a 1ª quinzena de dezembro; se não houver confirmação, decidir no marco, como o plano prevê",
@@ -154,20 +154,10 @@
       "resolucao": "Arquivamento em openspec/changes/archive/2026-11-18-protocolo-fonte-unica/ commitado em 7249dac (2026-11-18); os arquivos constam de git ls-files."
     },
     {
-      "id": "PD15",
-      "categoria": "triagem-assistida",
-      "descricao": "O estudo de viabilidade e a calibração do ASReview não foram feitos. Até que sejam, a triagem é integralmente humana.",
-      "origem": "README.md, M3/E2 passo 9 (calibração antes do primeiro uso, limiar calibracao_triagem); afirmação que constava de .agents/skills/calibracao-da-triagem/SKILL.md §6, removida em 2026-11-18",
-      "bloqueia": "uso do ASReview na 1ª filtragem (M3/E3)",
-      "acao_sugerida": "fazer o estudo de viabilidade e a calibração conforme a skill calibracao-da-triagem",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
       "id": "PD16",
       "categoria": "conferencias-da-busca",
       "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
-      "origem": "README.md, M3/E2 passo 6; .agents/skills/conferencias-da-busca/SKILL.md §2 (a marca 'P5, por fazer' foi removida em 2026-11-18)",
+      "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/conferencias-da-busca/SKILL.md §2 (a marca 'P5, por fazer' foi removida em 2026-11-18)",
       "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
       "acao_sugerida": "PYTHONPATH=src python3 -m rsl busca fidelidade, depois de registrada a execução de cobertura",
       "responsavel": "pesquisador",
@@ -223,6 +213,87 @@
       "origem": "openspec/changes/sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
       "bloqueia": "nada por ora; o caso só aparece quando as facetas das sementes forem informadas (PD20)",
       "acao_sugerida": "decidir a regra e registrá-la (skill registrar-decisao); até lá, o caso é relatado",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD22",
+      "categoria": "protocolo",
+      "descricao": "Remissões a passo por ordinal: o plano (§6, §7 e §8.3) e o protocolo (§Acervos pessoais) citam passos como \"Módulo 3, Etapa 2, 1º passo\". O guia (`docs/procedimentos.md`) não numera os passos.",
+      "origem": "plano §6, §7 e §8.3; protocolo §Acervos pessoais; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "nada imediato; a remissão por ordinal fica frágil se a ordem dos passos mudar",
+      "acao_sugerida": "substituir cada ordinal pelo texto do passo correspondente em `docs/procedimentos.md`",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD23",
+      "categoria": "relato",
+      "descricao": "Acervos pessoais: o modelo inclui estudos de acervos especiais e pessoais pré-selecionados (M3/E3); o protocolo não admite acervos pessoais como fonte autônoma de inclusão.",
+      "origem": "docs/procedimentos.md M3/E3; protocolo §Acervos pessoais; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "o relato PRISMA (M4/E2)",
+      "acao_sugerida": "declarar no relato que o passo não se aplica, remetendo ao protocolo §Acervos pessoais",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD24",
+      "categoria": "protocolo",
+      "descricao": "Fator de impacto nos critérios de elegibilidade: o modelo lista fatores de impacto entre os critérios (M3/E1); a tabela de critérios do protocolo não os traz.",
+      "origem": "docs/procedimentos.md M3/E1; protocolo §Critérios de elegibilidade; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "a definição dos critérios de elegibilidade (M3/E1) e a validação do protocolo pelo expert",
+      "acao_sugerida": "redigir o critério (métrica, fonte da métrica e ação) e incluí-lo na tabela de critérios como emenda ao protocolo; atualizar a seção 2 das fichas, cujos IDs de critério `conferir` compara com a tabela (skills criterios-de-elegibilidade e registrar-decisao)",
+      "responsavel": "pesquisador",
+      "estado": "resolvida",
+      "resolucao": "2026-11-22: CE10 (dimensão Fator de impacto, ação Não aplicável) incluído no protocolo como critério só documental, por decisão do pesquisador, e acrescentado à seção 2 das quatro fichas; a gramática passou a admitir a ação \"Não aplicável\". `conferir` sai OK."
+    },
+    {
+      "id": "PD25",
+      "categoria": "protocolo",
+      "descricao": "Avaliação de risco de viés: o modelo a prevê na 3ª filtragem (M3/E3); o protocolo não a declara, e o plano §6.3 diz que a avaliação dos artefatos não é avaliação de risco de viés.",
+      "origem": "docs/procedimentos.md M3/E3; plano §6.3; protocolo §Procedimentos; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "a 3ª filtragem (M3/E3) e o relato PRISMA",
+      "acao_sugerida": "incluir no protocolo o procedimento e o instrumento de avaliação de risco de viés e harmonizar o plano §6.3, como emenda (skill registrar-decisao)",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD26",
+      "categoria": "protocolo",
+      "descricao": "Backward search no plano: o plano traz o backward de uma geração (§3.1, §3.3 decisão 7, §7); o protocolo (P11) prevê backward e forward.",
+      "origem": "plano §3.1, §3.3 e §7; protocolo §Procedimentos (P11); openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "a busca complementar (M3/E3)",
+      "acao_sugerida": "retirar do plano as referências ao backward e levar ao protocolo o que delas for decisão (geração, alcance), como emenda (skill registrar-decisao)",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD27",
+      "categoria": "tecnica",
+      "descricao": "`sementes planilha` regrava `semente_aderencia.csv` inteira e apaga as colunas preenchidas à mão (`indexada`, `recuperada`, `como_localizada`, datas, `observacao`).",
+      "origem": "src/rsl/sementes.py (gravação com open(\"w\"), sem leitura do arquivo anterior); openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "o preenchimento manual do teste de aderência: reexecutar o subcomando perde o trabalho feito",
+      "acao_sugerida": "preservar as colunas manuais por id e base na regravação, como `busca sensibilidade` preserva `elegivel`, com caso no autoteste que reprove a perda (change própria)",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD28",
+      "categoria": "tecnica",
+      "descricao": "`--retorno` aparece como opcional no `-h` de `busca registrar`, mas sem ele nada é registrado e o código é USO.",
+      "origem": "src/rsl/busca/execucao.py (registrar); python3 -m rsl busca registrar -h; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "nada; a ajuda engana quem a lê",
+      "acao_sugerida": "tornar `--retorno` obrigatório no parser e atualizar a sinopse em `docs/procedimentos.md` (change própria)",
+      "responsavel": "pesquisador",
+      "estado": "aberta"
+    },
+    {
+      "id": "PD29",
+      "categoria": "tecnica",
+      "descricao": "A docstring de `aderencia` cita a coluna `indexado`; a planilha de aderência usa `indexada`.",
+      "origem": "src/rsl/busca/aderencia.py; src/rsl/sementes.py; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "bloqueia": "nada",
+      "acao_sugerida": "corrigir a docstring para `indexada`",
       "responsavel": "pesquisador",
       "estado": "aberta"
     }

@@ -396,3 +396,27 @@ def estrutural(ctx, g):
     g.testa("forma longa é derivada marcada e não entra na conferência de bloco",
             eb in longa and longa[eb]["estatuto"] == "derivada"
             and longa[eb].get("forma_longa") is True, repr(longa))
+
+    # Critério "Não aplicável": é lido e fica fora da seleção. O critério que declara o
+    # recorte, com a ação trocada, deixa de declará-lo, e o recorte cai no padrão.
+    if "recorte" in L:
+        idx = L["recorte"]
+        ident = next(c["id"] for c in d["criterios"] if L["criterio"][c["id"]] == idx)
+        mut = troca_celula(t, idx, G.COL_CRIT_ACAO, G.ACAO_NAO_APLICAVEL)
+        cod, msgs = resultado(lambda: ctx.com_texto(mut).protocolo())
+        if cod != Saida.OK:
+            g.falha(f"critério com ação {G.ACAO_NAO_APLICAVEL!r}: leitura reprovou "
+                    f"({msgs[:1]})")
+        else:
+            dm = ctx.com_texto(mut).protocolo()
+            acao = next(c["acao"] for c in dm["criterios"] if c["id"] == ident)
+            rec = dm["parametros"]["recorte_ano_min"]
+            g.testa(f"critério com ação {G.ACAO_NAO_APLICAVEL!r} é lido e não declara o "
+                    f"recorte (vale o padrão)",
+                    mut != t and acao == G.ACAO_NAO_APLICAVEL
+                    and rec["origem"] == f"padrão ({ctx.config.nome})"
+                    and rec["valor"] == ctx.config.valor("padroes.recorte_ano_min"),
+                    f"ação {acao!r}, recorte {rec!r}")
+    else:
+        g.falha("mutação não aplicada: critério com ação "
+                f"{G.ACAO_NAO_APLICAVEL!r} (o protocolo não declara o recorte)")

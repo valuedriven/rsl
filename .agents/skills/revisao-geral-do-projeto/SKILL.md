@@ -1,6 +1,6 @@
 ---
 name: revisao-geral-do-projeto
-description: Faz a revisão geral do estado do projeto de revisão sistemática — percorre o estado do ciclo, executa as conferências e os autotestes que o README declara, confere o lastro das afirmações, examina facetas, strings, conjunto-semente e critérios, e entrega os achados classificados com evidência e natureza do conserto. Use ao revisar o projeto inteiro, ao preparar uma rodada de emendas, ao auditar o estado antes de uma execução, e ao verificar se pendências, histórico e fichas descrevem o estado corrente.
+description: Faz a revisão geral do estado do projeto de revisão sistemática — percorre o estado do ciclo, executa as conferências e os autotestes que o guia de procedimentos declara, confere o lastro das afirmações, examina facetas, strings, conjunto-semente e critérios, e entrega os achados classificados com evidência e natureza do conserto. Use ao revisar o projeto inteiro, ao preparar uma rodada de emendas, ao auditar o estado antes de uma execução, e ao verificar se pendências, histórico e fichas descrevem o estado corrente.
 ---
 
 # Revisão geral do projeto
@@ -14,7 +14,7 @@ de um achado a pendência ou a change depende de pedido do pesquisador.
 
 ## 1. Estado
 
-Ler o `README.md` e dizer em que módulo e etapa o projeto está. Levantar o que está em curso:
+Ler o `README.md` e `docs/procedimentos.md` e dizer em que módulo e etapa o projeto está. Levantar o que está em curso:
 
 - changes abertas, com as tarefas concluídas e as pendentes;
 - arquivos modificados sem commit;
@@ -26,8 +26,9 @@ achado, não contexto.
 
 ## 2. Conferências automáticas
 
-Executar, **só em leitura**, as conferências e os autotestes que o `README.md` declara. A
-skill não fixa comandos: eles estão no README e mudam com o projeto.
+Executar, **só em leitura**, as conferências e os autotestes que `docs/procedimentos.md`
+declara (seção Conferências transversais). A skill não fixa comandos: eles estão no guia e
+mudam com o projeto.
 
 Relatar quantos casos rodaram, quantos **não** rodaram e por quê. Caso não executado não é
 caso aprovado: a ausência de um arquivo alimentado deixa a conferência correspondente sem
@@ -92,7 +93,7 @@ Não copiar para o relatório as classes nem as regras de `parecer-sobre-protoco
 
 ## Remissões
 
-Estado do projeto e comandos: `README.md`. Classes de achado e medição do que se raciocina:
+Mapa e precedência: `README.md`; etapas e comandos: `docs/procedimentos.md`. Classes de achado e medição do que se raciocina:
 `parecer-sobre-protocolo`. Vocabulário, facetas e strings: `facetacao-e-termos-livres` e
 `expressoes-de-busca`. Sementes: `conjunto-semente`. Critérios: `criterios-de-elegibilidade`.
 Decisão e propagação: `registrar-decisao`. Lacunas e síntese: `sintese-e-lacunas`.

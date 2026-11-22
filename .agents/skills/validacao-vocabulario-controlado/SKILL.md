@@ -16,7 +16,7 @@ sistemática isso contamina o registro e destrói a reprodutibilidade.
   por idioma nem por faceta: o que não está na tabela não é instrumento de linha alguma da
   planilha.
 - **O que é propriedade do instrumento** — sigla, modo, caminho e idiomas que cobre — está
-  na mesma linha da tabela (ver `README.md`). Cada termo é planejado para cada instrumento
+  na mesma linha da tabela (forma em `python3 -m rsl gramatica`). Cada termo é planejado para cada instrumento
   da sua faceta que cubra o seu idioma.
 - **Instrumento sem cliente automatizado** (modo `Manual`) gera linha com o estatuto
   "pendente de validação manual": consulta-se à mão e registra-se a evidência como em
