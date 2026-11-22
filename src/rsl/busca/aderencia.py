@@ -5,6 +5,7 @@ import math
 from .. import gramatica as G
 from ..markdown import normaliza
 from ..saida import Saida
+from ..sementes import COL_INDEXADA, COL_RECUPERADA
 from . import Busca
 from .registro import carrega_consultas, coleta, exige_registros, identifica
 
@@ -71,9 +72,10 @@ def aderencia(b):
 
     Relata validação e desenvolvimento separadamente. Só a validação é comparada ao
     limiar e traz o intervalo de Wilson a 95%; o desenvolvimento é não decisório e não
-    compensa a validação. A coluna `indexado` da planilha de aderência é o denominador
-    definitivo e precisa ser preenchida à mão, base por base, buscando cada semente pelo
-    título: ausência por falta de indexação não é falha da string.
+    compensa a validação. A coluna de indexação da planilha de aderência
+    (`sementes.COL_INDEXADA`) é o denominador definitivo e precisa ser preenchida à mão,
+    base por base, buscando cada semente pelo título: ausência por falta de indexação não é
+    falha da string.
 
     Sai com REPROVADO só quando não há semente de validação (sem denominador); a aderência
     abaixo do limiar é relatada, porque o denominador definitivo é o da planilha.
@@ -126,10 +128,11 @@ def aderencia(b):
     if indicios:
         print(f"\n  INDÍCIO POR PREFIXO — {len(indicios)} semente(s) NÃO contabilizada(s): "
               f"{', '.join(sorted(indicios))}")
-        print("    prefixo não é acerto: conferir à mão e registrar na coluna `recuperada`.")
+        print(f"    prefixo não é acerto: conferir à mão e registrar na coluna "
+              f"`{COL_RECUPERADA}`.")
     print("\n  ATENÇÃO: a razão acima é sobre as sementes informadas. O denominador definitivo")
-    print("  são as sementes que cada base INDEXA, apurado à mão na coluna `indexado` da")
-    print("  planilha. Semente ausente por não ser indexada não conta contra a string.")
+    print(f"  são as sementes que cada base INDEXA, apurado à mão na coluna `{COL_INDEXADA}`")
+    print("  da planilha. Semente ausente por não ser indexada não conta contra a string.")
     print("  Cada ausência acima exige diagnóstico: qual termo a teria alcançado?")
     return Saida.OK if val["total"] else Saida.REPROVADO
 

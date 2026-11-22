@@ -108,7 +108,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 
 | ID Base |  Sigla | Nome da base  |  Justificativa |
 | :---- | :----- |  :---- | :---- |
-| BD1 | wos | Web of Science (Core Collection) | Cobertura multidisciplinar consolidada e indexação de citações, que viabiliza as pesquisas backward e forward e a análise bibliométrica. 
+| BD1 | wos | Web of Science (Core Collection) | Cobertura multidisciplinar consolidada e indexação de citações, que viabiliza o backward search e a análise bibliométrica. 
 | BD2 | scopus | Scopus | Maior cobertura de anais de computação e engenharia (LNCS/LNAI, IEEE, ACM), absorvendo as fontes de Web Semântica e Engenharia de Ontologias não consultadas isoladamente.
 | BD3 | eric |ERIC | Base de referência do domínio educacional, com vocabulário controlado próprio (ERIC Thesaurus), tomado como referência documental dos descritores do domínio educacional nos termos da regra única de validação terminológica da seção Controle terminológico. 
 | BD4 | brapci |BRAPCI | Produção nacional em Ciência da Informação, pouco indexada nas bases internacionais; assegura a literatura em português sobre organização do conhecimento. |
@@ -121,7 +121,7 @@ Não se aplica como fonte autônoma de inclusão. Especificação técnica publi
 
 #### Acervos pessoais
 
-Não se aplica como fonte autônoma de inclusão. Os itens de acervo pessoal — biblioteca Zotero do grupo de pesquisa e referências citadas no projeto — são empregados na composição do conjunto-semente do teste de aderência (Módulo 3, Etapa 2, 1º passo), cuja função é aferir o recall das expressões de busca, e não ampliar o portfólio.
+Não se aplica como fonte autônoma de inclusão. Os itens de acervo pessoal — biblioteca Zotero do grupo de pesquisa e referências citadas no projeto — são empregados na composição do conjunto-semente do teste de aderência (Módulo 3, Etapa 2, teste de aderência das expressões de busca), cuja função é aferir o recall das expressões de busca, e não ampliar o portfólio.
 
 #### Conjunto-semente
 
@@ -142,7 +142,7 @@ Não se aplica como fonte autônoma de inclusão. Os itens de acervo pessoal —
 | P8 | Assistência de IA | Usar para expansão terminológica, sugestão de duplicatas, pré-preenchimento do formulário, agrupamento preliminar de glossário e revisão de clareza. Registrar modelo, versão, data, tarefa, prompt/instrução, entrada, saída relevante, intervenção humana e conferência. | Revisor designado | I5 | F4, F5 |
 | P9 | Extração | Testar formulário em conjunto inicial de estudos elegíveis; ajustar por emenda antes da extração definitiva. Distinguir informação declarada, inferência do revisor e não identificado. Registrar localização da evidência. Extração por IA é preliminar e será conferida. | Revisores de extração | I2 | F7 |
 | P10 | Análise e síntese | Realizar caracterização individual, comparação e identificação de capacidades/lacunas. Separar achados relatados, comparação dos revisores e lacunas inferidas. Apresentar frequência como descrição do corpus, não como qualidade. | Revisores de síntese | I7 | F7 |
-| P11 | Busca complementar | Executar backward e forward citation searching, busca de documentos técnicos e de versões atualizadas. Registrar fonte, data, documento de origem, geração, elegibilidade e relação com registro existente. Ampliação de geração = emenda. Não misturar documentos suplementares ao corpus principal. | Revisor designado | I5 | F1, F7 |
+| P11 | Busca complementar | Executar backward citation searching limitado a uma geração, apenas sobre os estudos incluídos, e busca de documentos técnicos e de versões atualizadas. Registrar fonte, data, documento de origem, geração, elegibilidade e relação com registro existente. Ampliação de geração = emenda. Não misturar documentos suplementares ao corpus principal. | Revisor designado | I5 | F1, F7 |
 | P12 | Registro e relato | Preservar estratégias, datas, filtros, arquivos brutos, registros deduplicados, decisões, não recuperados, protocolo/emendas, formulário, LOG_IA e planilhas. Relatar fluxo conforme PRISMA 2020, distinguindo registros, relatórios e estudos. | Equipe do protocolo | I1, I5, I8 | F7 |
 
 ## Instrumentos

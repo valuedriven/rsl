@@ -3,10 +3,19 @@ gerada das sementes lidas, reprova com PROTOCOLO_ILEGIVEL nomeando a semente e o
 arquivo ausente termina com CONFIGURACAO. Os casos de campo ausente e de campo desconhecido
 saem do esquema declarado na gramática, não de uma lista daqui.
 
+A regravação da planilha de aderência, num diretório temporário, conserva as colunas
+manuais, omite a linha vazia de semente ou de base que deixou de existir e recusa, com o
+arquivo intacto, a que perderia preenchimento (semente renumerada, linha sem par, coluna
+fora do esquema).
+
 Dado não obtido ou juízo não feito (DOI ausente, facetas vazias, validação sem âncora) não
 reprova: a cópia tem de ser aprovada e `pendencias` tem de relatá-la. A evidência bruta de
 semente inexistente reprova `conferir-dados`."""
 
+import contextlib
+import csv
+import hashlib
+import io
 import pathlib
 import tempfile
 
@@ -16,6 +25,7 @@ from ..conferencia import conferir
 from ..contexto import Contexto
 from ..dados import SUBPASTA_REFERENCIAS, pendencias_sementes, problemas_evidencia
 from ..saida import Saida
+from ..sementes import cmd_planilha, manuais
 from . import resultado
 from .textos import itens_toml, toml_de
 
@@ -121,6 +131,7 @@ def casos(ctx, g):
 
     _aprovam_com_pendencia(ctx, g, itens, com, d)
     _evidencia(ctx, g, itens)
+    _planilha(ctx, g, itens, d)
 
 
 def _aprovam_com_pendencia(ctx, g, itens, com, d):
@@ -184,3 +195,140 @@ def _evidencia(ctx, g, itens):
             "aprovou indevidamente")
     g.testa(f"evidência fora de {SUBPASTA_REFERENCIAS}/ não é conferida",
             not any(fora.parent.name in p for p in retirada), f"{retirada}")
+
+
+def _planilha(ctx, g, itens, d):
+    """Regravação da planilha de aderência num diretório temporário: o preenchimento
+    manual é conservado; a regravação que o perderia é recusada com o arquivo intacto.
+    `id`, bases e títulos vêm das sementes lidas."""
+    if len(itens) < 3:
+        g.nao_executa(10,"menos de três sementes: sem semente do meio a retirar")
+        return
+    c_id = G.C_ID.chave
+    bases = [b["sigla"] for b in d["bases"]]
+    cols_m = manuais(d)
+    primeiro, ultimo = itens[0][c_id], itens[-1][c_id]
+    meio = len(itens) // 2
+
+    with tempfile.TemporaryDirectory() as tmp:
+        cfg = Configuracao(ctx.config.com("saidas.pasta", tmp), ctx.config.arquivo)
+        cx = ctx.com_config(cfg)
+        arq = cfg.saida("aderencia")
+
+        def roda(c=cx):
+            with contextlib.redirect_stdout(io.StringIO()):
+                return resultado(lambda: cmd_planilha(c))
+
+        def le():
+            with arq.open(encoding="utf-8-sig", newline="") as f:
+                r = csv.DictReader(f)
+                return list(r.fieldnames), list(r)
+
+        def grava(cab, linhas):
+            with arq.open("w", encoding="utf-8-sig", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=cab)
+                w.writeheader()
+                w.writerows(linhas)
+
+        def preenche(ident, base, valores):
+            cab, linhas = le()
+            for x in linhas:
+                if x["id"] == ident and x["base"] == base:
+                    x.update(valores)
+            grava(cab, linhas)
+
+        def linha(ident, base):
+            return next((x for x in le()[1] if x["id"] == ident and x["base"] == base), {})
+
+        def sha():
+            return hashlib.sha256(arq.read_bytes()).hexdigest()
+
+        def recusa(nome, c, trechos, codigo=R):
+            antes = sha()
+            cod, msgs = roda(c)
+            faltam = [t for t in trechos if not any(t in m for m in msgs)]
+            intacto = sha() == antes
+            g.testa(f"regravação recusada ({codigo.name}), arquivo intacto: {nome}",
+                    cod == codigo and not faltam and intacto,
+                    f"{cod.name}, faltam {faltam}, intacto={intacto} {msgs[:1]}")
+
+        # Primeira geração: colunas manuais vazias.
+        cod, msgs = roda()
+        linhas = le()[1] if arq.exists() else []
+        g.testa("planilha de aderência gerada sem anterior, com as colunas manuais vazias",
+                cod == Saida.OK and len(linhas) == len(itens) * len(bases)
+                and not any(x[c] for x in linhas for c in cols_m), f"{cod.name} {msgs[:1]}")
+        if not arq.exists():
+            return
+
+        # Preservação: todas as colunas manuais de primeiro × primeira base.
+        valores = {c: f"{c} {primeiro} autoteste" for c in cols_m}
+        preenche(primeiro, bases[0], valores)
+        cod, msgs = roda()
+        conservado = {c: linha(primeiro, bases[0]).get(c) for c in cols_m}
+        g.testa(f"regravação conserva as colunas manuais ({primeiro} × {bases[0]})",
+                cod == Saida.OK and conservado == valores, f"{cod.name} {conservado}")
+
+        # Coluna derivada atualizada, manuais conservadas.
+        c_tipo = G.C_TIPO.chave
+        novo_tipo = f"{itens[0].get(c_tipo) or ''} autoteste".strip()
+        mudado = [dict(x) for x in itens]
+        mudado[0][c_tipo] = novo_tipo
+        cod, msgs = roda(cx.com_sementes(toml_de(mudado, CHAVE)))
+        x = linha(primeiro, bases[0])
+        g.testa(f"regravação traz o tipo novo de {primeiro} e conserva as manuais",
+                cod == Saida.OK and x.get("tipo") == novo_tipo
+                and {c: x.get(c) for c in cols_m} == valores, f"{cod.name} {msgs[:1]}")
+        roda()
+
+        # Semente do meio retirada, as seguintes renumeradas: o id da retirada passa a
+        # outro estudo, e o preenchimento não pode migrar para ele.
+        alvo_id, alvo_base = itens[meio][c_id], bases[-1]
+        preenche(alvo_id, alvo_base, {cols_m[0]: f"{cols_m[0]} {alvo_id} autoteste"})
+        renumeradas = [dict(x, **{c_id: f"{G.I_SE.prefixo}{k + 1}"})
+                       for k, x in enumerate(itens[:meio] + itens[meio + 1:])]
+        recusa(f"semente renumerada ({alvo_id} × {alvo_base})",
+               cx.com_sementes(toml_de(renumeradas, CHAVE)),
+               (f"{alvo_id} × {alvo_base}", cols_m[0], itens[meio][G.C_TITULO.chave],
+                "título divergente"))
+        preenche(alvo_id, alvo_base, {cols_m[0]: ""})
+
+        # Última semente retirada: linha sem par com preenchimento é recusada; vazia, omitida.
+        sem_ultimo = cx.com_sementes(toml_de(itens[:-1], CHAVE))
+        preenche(ultimo, bases[0], {cols_m[-1]: f"{cols_m[-1]} {ultimo} autoteste"})
+        recusa(f"linha sem par com preenchimento ({ultimo} × {bases[0]})", sem_ultimo,
+               (f"{ultimo} × {bases[0]}", cols_m[-1], "sem par"))
+        preenche(ultimo, bases[0], {cols_m[-1]: ""})
+        cod, msgs = roda(sem_ultimo)
+        g.testa(f"linha sem par e vazia omitida ({ultimo})",
+                cod == Saida.OK and not any(x["id"] == ultimo for x in le()[1]),
+                f"{cod.name} {msgs[:1]}")
+        roda()
+
+        # Base que deixou de existir: a linha vazia dela é omitida, sem recusa.
+        cab, linhas = le()
+        retirada = next(n for n in (f"base_autoteste_{k}" for k in range(1000))
+                        if n not in bases)
+        grava(cab, linhas + [dict(linhas[0], base=retirada, **{c: "" for c in cols_m})])
+        cod, msgs = roda()
+        g.testa(f"linha vazia de base que deixou de existir omitida ({primeiro} × {retirada})",
+                cod == Saida.OK and not any(x["base"] == retirada for x in le()[1]),
+                f"{cod.name} {msgs[:1]}")
+        grava(cab, linhas)
+
+        # Coluna fora do esquema: vazia, é descartada; com valor, recusa.
+        cab, linhas = le()
+        extra = next(n for n in (f"coluna_autoteste_{k}" for k in range(1000)) if n not in cab)
+        grava(cab + [extra], [dict(x, **{extra: ""}) for x in linhas])
+        cod, msgs = roda()
+        g.testa("coluna fora do esquema vazia é descartada",
+                cod == Saida.OK and extra not in le()[0], f"{cod.name} {msgs[:1]}")
+        cab, linhas = le()
+        grava(cab + [extra], [dict(x, **{extra: f"{x['id']} autoteste" if k == 0 else ""})
+                              for k, x in enumerate(linhas)])
+        recusa(f"coluna fora do esquema com valor ({extra})", cx,
+               (f"{linhas[0]['id']} × {linhas[0]['base']}", extra, "fora do esquema"))
+
+        # Planilha anterior ilegível: DADOS, sem regravar.
+        arq.write_bytes(b"\xff\xfe\x00" + bytes(range(128, 256)))
+        recusa("planilha anterior ilegível", cx, (arq.name, "ilegível"), Saida.DADOS)

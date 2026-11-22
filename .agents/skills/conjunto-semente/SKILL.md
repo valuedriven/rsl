@@ -16,7 +16,8 @@ busca contra si mesma e confirma o que já se esperava encontrar.
 
 ## 2. O que NÃO é o conjunto-semente
 
-**Não é a leitura exploratória.** O 3º passo do RS Banyan pede os estudos
+**Não é a leitura exploratória.** O passo "Verificar estudos iniciais sobre o
+tema" (M2/E1) do RS Banyan pede os estudos
 inicialmente consultados acerca do tema — a leitura que precede a delimitação. São
 outro conjunto, de outra função, em `docs/02`, seção Estudos inicialmente consultados:
 
@@ -27,7 +28,7 @@ outro conjunto, de outra função, em `docs/02`, seção Estudos inicialmente co
 | Vive no | arquivo de `[documentos] sementes` do `config.toml` | `docs/02`, Estudos inicialmente consultados |
 | Recorte temporal | obrigatório | **dispensado** — leitura de fundamentação pode ser anterior |
 
-Confundi-los já aconteceu: o conjunto-semente ocupou o 3º passo e a leitura
+Confundi-los já aconteceu: o conjunto-semente ocupou esse passo e a leitura
 exploratória desapareceu do instrumento.
 
 Também **não é amostra** nem portfólio, e não se usa para estimar nada.
@@ -76,7 +77,7 @@ sequência reprova a leitura.
 
 ### Retirar uma semente: sai de tudo e renumera as seguintes
 
-Semente retirada não fica guardada em lugar nenhum. A retirada tem quatro passos, no mesmo
+Semente retirada não fica guardada em lugar nenhum. A retirada tem cinco passos, no mesmo
 trabalho:
 
 1. **tirar a tabela `[[sementes]]` e renumerar as seguintes** — retirar SE3 faz SE4 a SE10
@@ -86,14 +87,20 @@ trabalho:
    conferir-dados` reprova evidência de `id` inexistente, mas **não** detecta arquivo de
    renumerada esquecido com um `id` que ainda existe: esse fica atribuído à semente
    errada sem que nada reprove, e a renomeação tem de ser conferida a olho;
-3. **`data/pendencias.json`**: atualizar as menções aos `id` renumerados;
-4. **`data/historico.md`**: registrar a retirada — data, `id`, referência, motivo — e a
+3. **planilha de aderência** (`semente_aderencia.csv`): transferir à mão o preenchimento
+   das renumeradas e esvaziar o da retirada — apagar as linhas da semente retirada e
+   trocar o `id` das linhas de cada renumerada pelo `id` novo, sem mexer no título, que
+   acompanha a linha. `python3 -m rsl sementes planilha` casa as linhas por `id`, `base` e
+   título, e **recusa a regravação** (REPROVADO, sem gravar) enquanto houver preenchimento
+   em linha sem par ou com título divergente, nomeando cada `id` × base × coluna;
+4. **`data/pendencias.json`**: atualizar as menções aos `id` renumerados;
+5. **`data/historico.md`**: registrar a retirada — data, `id`, referência, motivo — e a
    **correspondência entre `id` antigo e novo**. As entradas anteriores não se reescrevem:
    citam o `id` vigente na data, e a correspondência permite lê-las. Sem esse registro, o
    recall de antes e o de depois não se comparam, porque o denominador mudou. Nenhuma
    verificação automática o exige: a semente retirada não deixa marca para conferir.
 
-A planilha `semente_aderencia.csv` deixa de trazer a semente na regeneração seguinte.
+Feito o passo 3, a regravação da planilha deixa de trazer a semente retirada.
 
 ## 5. Incidências por base contra estudos distintos
 

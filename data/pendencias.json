@@ -1,301 +1,169 @@
 {
   "levantamento": {
     "data": "2026-11-18",
-    "procedimento": "python3 src/protocolo.py --pendencias (só relata); leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status",
-    "limitacao": "A busca por termos pode não pegar ressalvas escritas de outra forma. Os números de linha indicam onde cada item estava em 2026-11-18.",
-    "estado_possivel": "aberta | resolvida | descartada"
+    "revisao": "2026-11-22",
+    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl pendencias` e contra o código.",
+    "limitacao": "A busca por termos pode não pegar ressalvas escritas de outra forma. As origens citam seção, e não linha.",
+    "regra": "O arquivo contém só ações não concluídas; pendência resolvida ou descartada é excluída, e o que a encerrou vai ao histórico (README, Três registros)."
   },
   "pendencias": [
     {
       "id": "PD01",
       "categoria": "dados",
-      "descricao": "Conferência das 10 sementes, registrada no arquivo de sementes (`[documentos] sementes` do config.toml): a verificação bibliográfica e o veículo foram declarados conferidos pelo pesquisador em 2026-11-19 (campos `verificacao` e `veiculo_conferido`). O DOI do capítulo da SE10 foi conferido no Crossref em 2026-11-19 e registrado (10.5771/9783956507762-484). Os campos `tipo` e `alinhamento` continuam vazios, porque dependem de decisão do pesquisador; o campo `eric` permanece vazio.",
+      "descricao": "Os campos `tipo` e `alinhamento` estão vazios nas 10 sementes do arquivo de sementes (`[documentos] sementes` do config.toml). São juízos autorais, não dados bibliográficos. O campo `eric` também está vazio.",
       "origem": "arquivo de sementes (`[documentos] sementes`); data/historico.md, 2026-11-19 e 2026-11-20; python3 -m rsl pendencias",
       "bloqueia": "teste de aderência (M3/E2): a planilha sai com `tipo` em branco",
       "acao_sugerida": "preencher `tipo` e `alinhamento` de cada semente no arquivo de sementes (`[documentos] sementes`); são juízos autorais, não dados bibliográficos",
       "responsavel": "pesquisador",
-      "estado": "aberta",
-      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento. 2026-11-20: os dados de conferência passaram de data/sementes.json, removido, ao arquivo de sementes, com o mesmo conteúdo; o campo escopo foi retirado por decisão do pesquisador; restam tipo e alinhamento."
-    },
-    {
-      "id": "PD02",
-      "categoria": "dados",
-      "descricao": "data/registro_execucao.json ausente. As fichas citam esse arquivo como evidência das medições de sintaxe (BD1 a BD4), então o 'verificado por medição' delas está hoje sem a evidência no repositório.",
-      "origem": "python3 src/protocolo.py --pendencias; docs/busca_base_wos.md:17; docs/busca_base_scopus.md:15; docs/busca_base_eric.md:5; docs/busca_base_brapci.md:5",
-      "bloqueia": "conferir-dados; busca registrar, busca derivar, busca aderencia, busca sensibilidade",
-      "acao_sugerida": "reconstituir o registro a partir das fichas e do que cada base exibiu; nenhum script o gera",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento. 2026-11-20: os dados de conferência passaram de data/sementes.json, removido, ao arquivo de sementes, com o mesmo conteúdo; o campo escopo foi retirado por decisão do pesquisador; restam tipo e alinhamento. 2026-11-22: descrição reduzida ao que falta; a verificação bibliográfica, o veículo e o DOI do capítulo da SE10 constam do arquivo de sementes e do histórico."
     },
     {
       "id": "PD03",
       "categoria": "validacao-terminologica",
       "descricao": "data/validacao_terminologica.csv ausente: nenhum termo tem consulta registrada, e pela regra do protocolo todos são termos livres até a validação.",
-      "origem": "python3 src/protocolo.py --pendencias",
+      "origem": "python3 -m rsl pendencias",
       "bloqueia": "validação terminológica (M3/E1, passo 2)",
       "acao_sugerida": "PYTHONPATH=src python3 -m rsl termos sonda, depois termos exportar, termos validar tbci e termos validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD04",
       "categoria": "validacao-terminologica",
       "descricao": "TBCI: falta verificar se o servidor TemaTres consultado traz os equivalentes em inglês e espanhol. Até lá, o TBCI vale só para o português.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha tbci (até 2026-11-18 em config.toml [instrumentos]). Evidência da edição de 2014: descrição do IBICT reproduzida em edisciplinas.usp.br (id=1597195), edição de 2014 (Pinheiro & Ferrez), cerca de 1.800 termos, a maioria com versão em inglês e espanhol",
+      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha tbci. Evidência da edição de 2014: descrição do IBICT reproduzida em edisciplinas.usp.br (id=1597195), edição de 2014 (Pinheiro & Ferrez), cerca de 1.800 termos, a maioria com versão em inglês e espanhol",
       "bloqueia": "uso do TBCI em en/es",
       "acao_sugerida": "consultar o servidor TemaTres e, se ele expuser os equivalentes, atualizar a coluna Idiomas da linha tbci na tabela de instrumentos do protocolo",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD05",
       "categoria": "validacao-terminologica",
       "descricao": "Brased/INEP: cobertura de idiomas (pt) inferida, não conferida; a busca de 2026-11-18 não encontrou descrição.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha brased (até 2026-11-18 em config.toml [instrumentos]); a busca de 2026-11-18 não encontrou descrição da cobertura de idiomas",
+      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha brased; a busca de 2026-11-18 não encontrou descrição da cobertura de idiomas",
       "bloqueia": "estatuto da cobertura de idiomas declarada no protocolo",
       "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo, registrando a conferência no histórico",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD06",
       "categoria": "validacao-terminologica",
       "descricao": "ERIC Thesaurus: cobertura de idiomas (en) inferida, não conferida na fonte.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha eric (até 2026-11-18 em config.toml [instrumentos])",
+      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha eric",
       "bloqueia": "estatuto da cobertura de idiomas declarada no protocolo",
       "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo, registrando a conferência no histórico",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD07",
       "categoria": "sintaxe-base",
       "base": "BD1 — Web of Science",
-      "descricao": "Não verificados: valores exatos admitidos em DT= e LA=; distância padrão de NEAR sem número; comprimento máximo da consulta expandida (a EB4 tem cerca de 9.900 caracteres); tratamento de diacríticos; teto de retorno exibido e de exportação por lote.",
-      "origem": "docs/busca_base_wos.md:16, 18-21",
+      "descricao": "Itens de sintaxe e de exportação da Web of Science marcados como não verificados na seção 1 da ficha.",
+      "origem": "docs/busca_base_wos.md, seção 1",
       "bloqueia": "execução definitiva na WoS (M3/E2)",
       "acao_sugerida": "conferir na interface e medir na primeira execução, conforme a ficha",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD08",
       "categoria": "sintaxe-base",
       "base": "BD2 — Scopus",
-      "descricao": "Não verificados: comprimento máximo da consulta expandida (a EB4 tem cerca de 10.000 caracteres); W/5 entre os grupos inteiros das duas âncoras; limite de operadores por consulta (não documentado); lematização do plural; tratamento de diacríticos; teto de retorno exibido e de exportação por lote.",
-      "origem": "docs/busca_base_scopus.md:16, 18-22",
+      "descricao": "Itens de sintaxe e de exportação da Scopus marcados como não verificados, não medidos ou não documentados na seção 1 da ficha.",
+      "origem": "docs/busca_base_scopus.md, seção 1",
       "bloqueia": "execução definitiva na Scopus (M3/E2)",
       "acao_sugerida": "conferir na interface antes de exportar, conforme a ficha",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD09",
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
-      "descricao": "Teto de retorno exibido e de exportação por lote não verificados. Comportamento não medido: campos de casamento exato e prefixo +; negação com prefixo -; hífen como separador de palavras; lematização do plural irregular não confirmada.",
-      "origem": "docs/busca_base_eric.md:10, 18, 22-24",
+      "descricao": "Comportamento da sintaxe da ERIC e teto de retorno e de exportação marcados como não verificados ou não medidos no cabeçalho e na seção 1 da ficha.",
+      "origem": "docs/busca_base_eric.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na ERIC (M3/E2); a sondagem de sintaxe é obrigatória",
       "acao_sugerida": "sondagem de sintaxe com as contagens registradas",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD10",
       "categoria": "sintaxe-base",
       "base": "BD4 — BRAPCI",
-      "descricao": "Não verificados: comprimento máximo da consulta expandida (a EB4 tem cerca de 4.100 caracteres); proximidade; formatos e lote de exportação. Lematização não medida.",
-      "origem": "docs/busca_base_brapci.md:12-15",
+      "descricao": "Sintaxe da BRAPCI não documentada em fonte alguma: os itens de sintaxe e de exportação estão marcados como não verificados ou não medidos no cabeçalho e na seção 1 da ficha.",
+      "origem": "docs/busca_base_brapci.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na BRAPCI (M3/E2); a sondagem de sintaxe é obrigatória",
       "acao_sugerida": "sondar o comprimento antes da primeira execução, conforme a ficha",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD11",
       "categoria": "equipe",
       "descricao": "Revisores 1 e 2 a definir. O plano trata isso como dependência crítica: os nomes precisam ser confirmados até a data-limite do cronograma, antes das buscas definitivas. Sem eles, as três filtragens ficam travadas.",
-      "origem": "docs/01_plano.md:145-146, 149, 227",
+      "origem": "docs/01_plano.md, §4.2 (linhas Rev 1 e Rev 2) e §7 (indisponibilidade dos dois revisores independentes)",
       "bloqueia": "M3/E3 — as três filtragens (kappa)",
       "acao_sugerida": "confirmar os nomes até a 1ª quinzena de dezembro; se não houver confirmação, decidir no marco, como o plano prevê",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD12",
       "categoria": "equipe",
       "descricao": "RTG (mentoria), VT (bibliotecário(a) de referência, atendimento a agendar na 1ª semana) e APB a definir.",
-      "origem": "docs/01_plano.md:142-144",
+      "origem": "docs/01_plano.md, §4.2 (linhas RTG, VT e APB)",
       "bloqueia": "VT: arbitragem das divergências da 3ª filtragem (M3/E3)",
       "acao_sugerida": "definir os nomes e agendar o atendimento do VT",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD13",
-      "categoria": "tecnica",
-      "descricao": "A change OpenSpec parametros-scripts-e-autoteste tem as 11 tarefas pendentes: papéis das expressões, remoção de identificadores fixados, novos casos de autoteste e integração. Depois de revisada, falta arquivá-la.",
-      "origem": "openspec/changes/parametros-scripts-e-autoteste/tasks.md",
-      "bloqueia": "nada da revisão; reduz o risco de defeito nos scripts",
-      "acao_sugerida": "implementar, rodar a verificação, revisar e arquivar",
-      "responsavel": "pesquisador / agente",
-      "estado": "resolvida",
-      "resolucao": "Change arquivada em openspec/changes/archive/2026-11-18-parametros-scripts-e-autoteste/, com as 21 tarefas concluídas; commit 726280a (2026-11-18)."
-    },
-    {
-      "id": "PD14",
-      "categoria": "tecnica",
-      "descricao": "O arquivamento da change protocolo-fonte-unica (movida para openspec/changes/archive/2026-11-18-protocolo-fonte-unica/, specs promovidas para openspec/specs/) não foi commitado.",
-      "origem": "git status, 2026-11-18",
-      "bloqueia": "nada",
-      "acao_sugerida": "fazer commit do arquivamento",
-      "responsavel": "pesquisador",
-      "estado": "resolvida",
-      "resolucao": "Arquivamento em openspec/changes/archive/2026-11-18-protocolo-fonte-unica/ commitado em 7249dac (2026-11-18); os arquivos constam de git ls-files."
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD16",
       "categoria": "conferencias-da-busca",
       "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
-      "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/conferencias-da-busca/SKILL.md §2 (a marca 'P5, por fazer' foi removida em 2026-11-18)",
+      "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/conferencias-da-busca/SKILL.md §2",
       "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
       "acao_sugerida": "PYTHONPATH=src python3 -m rsl busca fidelidade, depois de registrada a execução de cobertura",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD17",
-      "categoria": "aderencia",
-      "descricao": "NÃO VERIFICADO. A skill teste-de-aderencia dizia que a Scopus não atingiu o limiar, que a Web of Science estava suspensa e que a anatomia da perda estava por correr para a semente 10 da WoS e as sementes 3 e 4 da Scopus. Esse resultado não tem registro no repositório, porque data/registro_execucao.json está ausente (PD02). Também não se sabe se é anterior à emenda de 2026-11-17.",
-      "origem": ".agents/skills/teste-de-aderencia/SKILL.md §5, texto removido em 2026-11-18",
-      "bloqueia": "condição de passagem de M3/E2 (aderência)",
-      "acao_sugerida": "conferir se o resultado existe e vale para a versão vigente das strings; se valer, registrá-lo em registro_execucao.json e correr a anatomia da perda; se não, descartar esta pendência",
-      "responsavel": "pesquisador",
-      "estado": "aberta",
-      "atualizacao": "2026-11-19: a classificação do conjunto-semente foi registrada antes de qualquer execução registrada; se esta pendência se confirmar como aderência das strings vigentes, reavaliar a ordem classificação × aderência."
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD18",
       "categoria": "aderencia",
-      "descricao": "Conjunto de validação com 9 sementes (SE1, SE2, SE3, SE5, SE6, SE7, SE8, SE9 e SE10); SE4 é de desenvolvimento por registro. A ampliação do conjunto de validação está pendente, com tamanho-alvo a fixar pelo pesquisador. Até a ampliação, o intervalo de Wilson a 95% fica largo: 8/9 resulta em 88,9% (56,5%–98,0%).",
-      "origem": "data/historico.md, 2026-11-19; openspec/changes/conjunto-semente-independente",
+      "descricao": "Conjunto de validação com 9 sementes (SE1, SE2, SE3, SE5, SE6, SE7, SE8, SE9 e SE10); SE4 é de desenvolvimento por registro. A ampliação do conjunto de validação está pendente, com tamanho-alvo a fixar pelo pesquisador. Até a ampliação, o intervalo de Wilson a 95% fica largo: 8/9 resulta em 88,9% (56,5%–98,0%), recalculado em 2026-11-22.",
+      "origem": "data/historico.md, 2026-11-19; openspec/changes/archive/2026-11-19-conjunto-semente-independente",
       "bloqueia": "precisão da estimativa de aderência; não bloqueia a execução do teste",
-      "acao_sugerida": "buscar sementes novas por procedimento independente da string (skill conjunto-semente), conferir cada referência e acrescentar à tabela do protocolo com papel validação",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD19",
-      "categoria": "aderencia",
-      "descricao": "Indexação das 10 sementes nas quatro bases: o pesquisador declarou, em 2026-11-19, ter conferido a indexação; a coluna 'Bases' do protocolo e a seção 5 das fichas foram mantidas e conferem entre si. A conferência não detalhou data e fonte por base.",
-      "origem": "openspec/changes/conjunto-semente-independente, tarefa 2.1; data/historico.md, 2026-11-19",
-      "bloqueia": "nada; a conferência foi declarada e a distribuição por base confere",
-      "acao_sugerida": "se quiser registrar evidência por base, anexar data e fonte de cada conferência",
-      "responsavel": "pesquisador",
-      "estado": "resolvida",
-      "limitacao": "A conferência é declaração do pesquisador; não há data e fonte por base. Não deve ser citada como verificação independente.",
-      "resolucao": "2026-11-19: conferência declarada pelo pesquisador; coluna e fichas mantidas, sem divergência; data e fonte por base não detalhadas. Lastro limitado registrado nesta pendência."
+      "acao_sugerida": "buscar sementes novas por procedimento independente da string (skill conjunto-semente), conferir cada referência e acrescentá-las ao arquivo de sementes (`[documentos] sementes`) com `papel = \"validação\"`",
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD20",
       "categoria": "aderencia",
       "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio nas 10 sementes do arquivo de sementes (`[documentos] sementes`). É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
-      "origem": "openspec/changes/sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl pendencias",
+      "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl pendencias",
       "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda; não bloqueia a execução do teste de aderência",
       "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill conjunto-semente, §4)",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD21",
       "categoria": "aderencia",
       "descricao": "Regra para semente de validação sem faceta âncora: não há regra para a semente de validação cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl pendencias` só relata o caso, sem reprovar.",
-      "origem": "openspec/changes/sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
+      "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
       "bloqueia": "nada por ora; o caso só aparece quando as facetas das sementes forem informadas (PD20)",
       "acao_sugerida": "decidir a regra e registrá-la (skill registrar-decisao); até lá, o caso é relatado",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD22",
-      "categoria": "protocolo",
-      "descricao": "Remissões a passo por ordinal: o plano (§6, §7 e §8.3) e o protocolo (§Acervos pessoais) citam passos como \"Módulo 3, Etapa 2, 1º passo\". O guia (`docs/procedimentos.md`) não numera os passos.",
-      "origem": "plano §6, §7 e §8.3; protocolo §Acervos pessoais; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
-      "bloqueia": "nada imediato; a remissão por ordinal fica frágil se a ordem dos passos mudar",
-      "acao_sugerida": "substituir cada ordinal pelo texto do passo correspondente em `docs/procedimentos.md`",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD23",
       "categoria": "relato",
       "descricao": "Acervos pessoais: o modelo inclui estudos de acervos especiais e pessoais pré-selecionados (M3/E3); o protocolo não admite acervos pessoais como fonte autônoma de inclusão.",
-      "origem": "docs/procedimentos.md M3/E3; protocolo §Acervos pessoais; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "origem": "docs/procedimentos.md M3/E3; protocolo §Acervos pessoais; openspec/changes/archive/2026-11-22-guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
       "bloqueia": "o relato PRISMA (M4/E2)",
       "acao_sugerida": "declarar no relato que o passo não se aplica, remetendo ao protocolo §Acervos pessoais",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD24",
-      "categoria": "protocolo",
-      "descricao": "Fator de impacto nos critérios de elegibilidade: o modelo lista fatores de impacto entre os critérios (M3/E1); a tabela de critérios do protocolo não os traz.",
-      "origem": "docs/procedimentos.md M3/E1; protocolo §Critérios de elegibilidade; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
-      "bloqueia": "a definição dos critérios de elegibilidade (M3/E1) e a validação do protocolo pelo expert",
-      "acao_sugerida": "redigir o critério (métrica, fonte da métrica e ação) e incluí-lo na tabela de critérios como emenda ao protocolo; atualizar a seção 2 das fichas, cujos IDs de critério `conferir` compara com a tabela (skills criterios-de-elegibilidade e registrar-decisao)",
-      "responsavel": "pesquisador",
-      "estado": "resolvida",
-      "resolucao": "2026-11-22: CE10 (dimensão Fator de impacto, ação Não aplicável) incluído no protocolo como critério só documental, por decisão do pesquisador, e acrescentado à seção 2 das quatro fichas; a gramática passou a admitir a ação \"Não aplicável\". `conferir` sai OK."
+      "responsavel": "pesquisador"
     },
     {
       "id": "PD25",
       "categoria": "protocolo",
-      "descricao": "Avaliação de risco de viés: o modelo a prevê na 3ª filtragem (M3/E3); o protocolo não a declara, e o plano §6.3 diz que a avaliação dos artefatos não é avaliação de risco de viés.",
-      "origem": "docs/procedimentos.md M3/E3; plano §6.3; protocolo §Procedimentos; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
+      "descricao": "Avaliação de risco de viés: o pesquisador decidiu, em 2026-11-22, incluí-la no protocolo; faltam o procedimento e o instrumento. O plano (§6.3 e a declaração de não aplicabilidade dos itens de risco de viés do PRISMA) continua com a formulação anterior até a emenda.",
+      "origem": "docs/procedimentos.md M3/E3; plano §6.3; protocolo §Procedimentos; data/historico.md, 2026-11-22; openspec/changes/archive/2026-11-22-guia-de-procedimentos (tarefa 4.1)",
       "bloqueia": "a 3ª filtragem (M3/E3) e o relato PRISMA",
-      "acao_sugerida": "incluir no protocolo o procedimento e o instrumento de avaliação de risco de viés e harmonizar o plano §6.3, como emenda (skill registrar-decisao)",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD26",
-      "categoria": "protocolo",
-      "descricao": "Backward search no plano: o plano traz o backward de uma geração (§3.1, §3.3 decisão 7, §7); o protocolo (P11) prevê backward e forward.",
-      "origem": "plano §3.1, §3.3 e §7; protocolo §Procedimentos (P11); openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
-      "bloqueia": "a busca complementar (M3/E3)",
-      "acao_sugerida": "retirar do plano as referências ao backward e levar ao protocolo o que delas for decisão (geração, alcance), como emenda (skill registrar-decisao)",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD27",
-      "categoria": "tecnica",
-      "descricao": "`sementes planilha` regrava `semente_aderencia.csv` inteira e apaga as colunas preenchidas à mão (`indexada`, `recuperada`, `como_localizada`, datas, `observacao`).",
-      "origem": "src/rsl/sementes.py (gravação com open(\"w\"), sem leitura do arquivo anterior); openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
-      "bloqueia": "o preenchimento manual do teste de aderência: reexecutar o subcomando perde o trabalho feito",
-      "acao_sugerida": "preservar as colunas manuais por id e base na regravação, como `busca sensibilidade` preserva `elegivel`, com caso no autoteste que reprove a perda (change própria)",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD28",
-      "categoria": "tecnica",
-      "descricao": "`--retorno` aparece como opcional no `-h` de `busca registrar`, mas sem ele nada é registrado e o código é USO.",
-      "origem": "src/rsl/busca/execucao.py (registrar); python3 -m rsl busca registrar -h; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
-      "bloqueia": "nada; a ajuda engana quem a lê",
-      "acao_sugerida": "tornar `--retorno` obrigatório no parser e atualizar a sinopse em `docs/procedimentos.md` (change própria)",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
-    },
-    {
-      "id": "PD29",
-      "categoria": "tecnica",
-      "descricao": "A docstring de `aderencia` cita a coluna `indexado`; a planilha de aderência usa `indexada`.",
-      "origem": "src/rsl/busca/aderencia.py; src/rsl/sementes.py; openspec/changes/guia-de-procedimentos (tarefa 4.1); decisão do pesquisador de 2026-11-22",
-      "bloqueia": "nada",
-      "acao_sugerida": "corrigir a docstring para `indexada`",
-      "responsavel": "pesquisador",
-      "estado": "aberta"
+      "acao_sugerida": "definir procedimento e instrumento; depois, incluí-los no protocolo como emenda e retirar do plano a formulação de não aplicabilidade (skill registrar-decisao)",
+      "responsavel": "pesquisador"
     }
   ]
 }

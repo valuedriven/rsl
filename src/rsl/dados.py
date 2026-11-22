@@ -249,8 +249,8 @@ def cmd_pendencias(ctx, a=None):
     validacao = ctx.config.caminho("dados.validacao")
 
     if not registro_.exists():
-        linhas.append(f"[ausente] {relativo(registro_)} — reconstitua o registro a partir "
-                      f"das fichas e do que a base exibiu")
+        linhas.append(f"[ausente] {relativo(registro_)} — registre a primeira execução com  "
+                      f"{CMD_REGISTRAR}")
 
     linhas += pendencias_sementes(d)
 

@@ -1,18 +1,42 @@
 """Autoteste das conferências dos arquivos alimentados.
 
 Os casos são declarados antes de rodar: sem os arquivos alimentados, nenhum roda, e todos
-são contados como não executados — nunca como aprovados.
+são contados como não executados — nunca como aprovados. O relato do registro ausente, em
+`pendencias`, roda sempre, com o registro apontado para um diretório temporário.
 """
 
+import contextlib
 import copy
+import io
+import pathlib
+import tempfile
 
 from .. import gramatica as G
-from ..config import relativo
-from ..dados import le_json, problemas_citacoes_registro, problemas_registro
+from ..config import Configuracao, relativo
+from ..dados import (CMD_REGISTRAR, cmd_pendencias, le_json, problemas_citacoes_registro,
+                     problemas_registro)
 from ..fichas import ficha
 
 
+def registro_ausente(ctx, g):
+    """Sem o registro de execução, `pendencias` orienta registrar a primeira execução com
+    `busca registrar`, e não reconstituir o registro."""
+    cfg = ctx.config
+    with tempfile.TemporaryDirectory() as tmp:
+        ausente = pathlib.Path(tmp) / pathlib.Path(cfg.valor("dados.registro")).name
+        cx = ctx.com_config(Configuracao(cfg.com("dados.registro", str(ausente)), cfg.arquivo))
+        saida = io.StringIO()
+        with contextlib.redirect_stdout(saida):
+            cmd_pendencias(cx)
+    linha = next((x.strip() for x in saida.getvalue().splitlines()
+                  if "[ausente]" in x and ausente.name in x), "")
+    g.testa("registro ausente: `pendencias` orienta a primeira execução com `busca registrar`",
+            CMD_REGISTRAR in linha and "reconstitu" not in linha,
+            linha or "a ausência não foi relatada")
+
+
 def casos(ctx, g):
+    registro_ausente(ctx, g)
     d = ctx.protocolo()
     cfg = ctx.config
     bds = [b["id"] for b in d["bases"]]

@@ -85,7 +85,7 @@
 | Nov, 1ª | M1 (E1–E5) e M2 (E1–E2), em paralelo; início do controle terminológico | planilha de competências e cronograma; questão de revisão redigida | — |
 | Nov, 2ª | M3 — E1 | Strings, critérios e fontes; protocolo montado e validado por expert | Viabilidade das strings |
 | Dez, 1ª | M3 — E2 | Teste de aderência; execução da expressão de cobertura; alertas; contagens da busca parciais | Suficiência do portfólio |
-| Dez, 2ª | M3 — E3 | 1ª, 2ª e 3ª filtragens; duplicatas; backward search; Portfólio Definitivo; fluxograma PRISMA | Conclusão das filtragens |
+| Dez, 2ª | M3 — E3 | 1ª, 2ª e 3ª filtragens; duplicatas; busca complementar (protocolo, P11); Portfólio Definitivo; fluxograma PRISMA | Conclusão das filtragens |
 | Jan, 1ª | M3 — E4 | Fichamentos e glossário | Conclusão dos fichamentos |
 | Jan, 2ª | M4 — E1 | Análise bibliométrica e de conteúdo; formulação da lacuna | — |
 | Fev, 1ª | M4 — E2 | Relatório redigido e revisado quanto ao conteúdo | — |
@@ -112,7 +112,6 @@
 | 4 | Módulos 1 e 2 executados em paralelo, com o controle terminológico iniciado já na Etapa 1 do Módulo 1 | Comprime o primeiro mês |
 | 5 | Classificação assistida por LLM na 1ª filtragem, em paralelo ao avaliador humano. A IA não exclui estudo algum e não é avaliador independente: produz classificação auxiliar, que o humano confirma ou descarta | Reduz a 1ª filtragem sem dispensar decisão humana |
 | 6 | Extração assistida por IA, com pré-preenchimento do formulário de fichamento conferido no texto-fonte | Reduz a Etapa 4 do Módulo 3 |
-| 7 | Backward search limitado a uma geração, apenas sobre os estudos incluídos | Evita a expansão indefinida do portfólio |
 
 | *Contrapartida: marcos quinzenais e registro prévio do protocolo no OSF Registries antes das buscas. As decisões 5 e 6 valem só nos limites da seção 8.* |
 | :---- |
@@ -215,14 +214,14 @@
 
 | Risco | Efeito se ocorrer | Mitigação | Quando se verifica |
 | :---- | :---- | :---- | :---- |
-| Prazo de quatro meses, no limite inferior da faixa estimada pelo modelo | Pressão para suprimir etapas e aparência de flexibilização metodológica | As catorze etapas são mantidas; a compressão vem de sete decisões de projeto, e não de supressão. Registro prévio do protocolo no OSF Registries antes das buscas | Em cada marco quinzenal |
+| Prazo de quatro meses, no limite inferior da faixa estimada pelo modelo | Pressão para suprimir etapas e aparência de flexibilização metodológica | As catorze etapas são mantidas; a compressão vem de seis decisões de projeto (seção 3.3), e não de supressão. Registro prévio do protocolo no OSF Registries antes das buscas | Em cada marco quinzenal |
 | Indisponibilidade dos dois revisores independentes | Trava as três filtragens, que exigem kappa entre dois revisores humanos, e com elas o portfólio inteiro | Confirmação dos dois nomes até a data-limite do cronograma, ANTERIOR À EXECUÇÃO DAS BUSCAS DEFINITIVAS; não confirmados, decide-se nesse marco entre continuidade e replanejamento. Dependência crítica declarada na planilha de competências | Marco improrrogável do cronograma |
-| Recall do conjunto-semente abaixo de `limiar_aderencia` no teste de aderência | Expressões de busca insuficientes; portfólio incompleto | Revisão obrigatória do controle terminológico antes de prosseguir, com emenda ao protocolo | Módulo 3, Etapa 2, 1º passo |
+| Recall do conjunto-semente abaixo de `limiar_aderencia` no teste de aderência | Expressões de busca insuficientes; portfólio incompleto | Revisão obrigatória do controle terminológico antes de prosseguir, com emenda ao protocolo | Módulo 3, Etapa 2, teste de aderência das expressões de busca |
 | Sintaxe de consulta não verificada na ERIC e na BRAPCI | Strings inexecutáveis ou retorno silenciosamente truncado | Sondagem de sintaxe obrigatória antes de qualquer execução nessas duas bases, com registro das contagens e capturas de tela | Módulo 3, Etapa 2 |
 | Acesso às bases por via automatizada | A API da Scopus resolve direito de acesso por IP institucional ou insttoken, e a API da Web of Science exige licença contratada: fora da rede da instituição, nenhuma das duas responde | Rota padrão de ingestão, com busca e exportação feitas pelo pesquisador; automação de interface apenas mediante confirmação dos termos de uso | Antes da Etapa 2 do Módulo 3 |
 | Suspensão do acesso institucional por uso automatizado indevido | Perda de acesso para toda a instituição, não apenas para o pesquisador | Nenhuma requisição em paralelo; parada imediata diante de captcha, aviso de atividade atípica ou limite excedido; termos de uso conferidos e registrados | Contínuo, durante as buscas |
-| Termos sem validação em tesauro | Impossibilidade de afirmar que as buscas usaram descritores autorizados | Validação contra os instrumentos que o protocolo declara por faceta (`docs/03`, Instrumentos para controle terminológico). Termo sem consulta registrada é termo livre, declarado como tal no relato; a busca não depende de autoridade — dela depende apresentar o termo COMO descritor autorizado | Módulo 3, Etapa 1, 2º passo |
-| Perda de especificações técnicas não indexadas | Ausência de padrões educacionais relevantes no portfólio | Mitigada pelo backward search de uma geração e reportada como limitação; cobertura não exaustiva (seção 6.3) | Módulo 3, Etapa 3, 6º passo |
+| Termos sem validação em tesauro | Impossibilidade de afirmar que as buscas usaram descritores autorizados | Validação contra os instrumentos que o protocolo declara por faceta (`docs/03`, Instrumentos para controle terminológico). Termo sem consulta registrada é termo livre, declarado como tal no relato; a busca não depende de autoridade — dela depende apresentar o termo COMO descritor autorizado | Módulo 3, Etapa 1, controle terminológico |
+| Perda de especificações técnicas não indexadas | Ausência de padrões educacionais relevantes no portfólio | Mitigada pela busca complementar (protocolo, P11) e reportada como limitação; cobertura não exaustiva (seção 6.3) | Módulo 3, Etapa 3, análise das listas de referências |
 | Ancoragem do revisor na classificação da IA | Perda da independência entre os dois revisores humanos, com kappa inflado e dupla avaliação apenas aparente | O revisor não vê a classificação da IA nem a decisão do outro revisor antes de registrar a sua; a saída da IA abre-se após o desbloqueio da rodada e serve a conferência, não a decisão | 1ª filtragem |
 | Referência ou termo inventado por ferramenta de IA | Registro falso no protocolo e perda de reprodutibilidade | Nenhuma referência citada sem verificação na fonte original; toda consulta automatizada grava a resposta bruta, e linha sem evidência é linha inválida; falha de consulta não é registrada como ausência | Contínuo |
 | Dispersão da literatura entre comunidades distintas | Portfólio heterogêneo e perda de recall em uma das tradições | Controle terminológico paralelo, e não substitutivo, entre Ciência da Informação e Educação; análise da distribuição por comunidade de origem | Módulo 4, Etapa 1 |
@@ -267,6 +266,6 @@
 | Todo uso de IA é registrado num artefato único, o LOG\_IA, apêndice do protocolo: uma linha por ação assistida. Campos e regras de operação: protocolo (`docs/03`, assistência de IA). |
 | :---- |
 
-| Regras de operação. (1) O LOG\_IA é preenchido no momento da ação, não reconstituído depois. (2) Os registros específicos já existentes passam a referenciar o campo id: a planilha de validação terminológica e o registro de execução das buscas por base deixam de duplicar os dados de ferramenta e versão e apontam para a linha correspondente. (3) O LOG\_IA é versionado junto ao repositório do projeto e entregue como apêndice do protocolo na montagem final (Módulo 3, Etapa 1, 7º passo). (4) A declaração de uso de IA na seção de métodos do relatório é redigida a partir dele. |
+| Regras de operação. (1) O LOG\_IA é preenchido no momento da ação, não reconstituído depois. (2) Os registros específicos já existentes passam a referenciar o campo id: a planilha de validação terminológica e o registro de execução das buscas por base deixam de duplicar os dados de ferramenta e versão e apontam para a linha correspondente. (3) O LOG\_IA é versionado junto ao repositório do projeto e entregue como apêndice do protocolo na montagem final (Módulo 3, Etapa 1, montagem do protocolo). (4) A declaração de uso de IA na seção de métodos do relatório é redigida a partir dele. |
 | :---- |
 

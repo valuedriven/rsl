@@ -72,7 +72,7 @@ chave, não pelo caminho.
 | `data/validacao_terminologica.csv` (`[dados] validacao`) — *sob demanda* | estatuto de cada termo; preserva as decisões e as linhas fora do protocolo | `termos exportar`, `termos validar`, `termos importar`; decisões pelo pesquisador |
 | `data/evidencia/<instrumento>/` (`[dados] evidencia`) — *sob demanda* | resposta bruta de cada consulta terminológica | `termos validar` |
 | `data/evidencia/referencias/` | resposta bruta da conferência de referências, `SEn_…` pelo `id` da semente | agente, a pedido |
-| `data/semente_aderencia.csv` (`[saidas] aderencia`) | planilha do teste de aderência, uma linha por semente e por base; regravada inteira a cada execução | `sementes planilha` |
+| `data/semente_aderencia.csv` (`[saidas] aderencia`) | planilha do teste de aderência, uma linha por semente e por base; regravada a cada execução, com as colunas manuais preservadas | `sementes planilha` |
 | `data/registros.csv`, `data/contagens_busca.csv`, `data/ordem_triagem.csv` (`[saidas]`) — *sob demanda* | registros com pertinência e marcas, contagens por base e expressão, ordem da 1ª filtragem | `busca derivar` |
 | `data/fidelidade_<expressao>.csv` (`[saidas] fidelidade`) — *sob demanda* | divergências entre derivação e execução direta | `busca fidelidade` |
 | `data/sensibilidade_<base>.csv` (`[saidas] sensibilidade`) — *sob demanda* | perda da sonda e amostra a classificar; preserva a coluna `elegivel` | `busca sensibilidade`; classificação pelo pesquisador |
@@ -93,12 +93,13 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 | Registro | Guarda | Não guarda |
 | --- | --- | --- |
 | `data/historico.md` | **decisões** relevantes — emendas, escolhas de método, de escopo e de instrumento —, com data, alcance e fundamento | ação por fazer; resultado de consulta |
-| `data/pendencias.json` | **ações ainda a executar**, com `id`, `origem`, o que bloqueia, ação sugerida, responsável e `estado` (`aberta`, `resolvida` ou `descartada`) | decisão; resultado de consulta |
+| `data/pendencias.json` | **ações ainda a executar**, e só elas, com `id`, `origem`, o que bloqueia, ação sugerida e responsável | ação concluída ou descartada; decisão; resultado de consulta |
 | `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens, retornos, exportações e conferências | decisão; ação por fazer |
 
-- Pendência resolvida muda de `estado` e ganha `resolucao`; não é apagada. Se a resolução
-  envolveu decisão, a decisão vai ao histórico, e o resultado de consulta, ao registro de
-  execução.
+- Pendência resolvida ou descartada **sai** de `data/pendencias.json`; não se arquiva. O que
+  a encerrou vai ao seu registro antes da exclusão: a decisão, inclusive a de descartar, ao
+  histórico, que cita o `id`; o resultado de consulta, ao registro de execução. O `id` de
+  pendência excluída não se reutiliza.
 - A pendência remete à sua `origem` (ficha, protocolo, plano, comando) em vez de copiar o
   conteúdo dela.
 
@@ -121,6 +122,10 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
   rastro técnico.
 - Altera-se a fonte, não a saída: as planilhas e CSVs gravados pelos subcomandos se
   regeneram; a exceção é a planilha de validação, que é o registro do estatuto dos termos.
+- A planilha de aderência é **artefato misto**: as colunas manuais — as que `sementes
+  planilha` deixa vazias na primeira geração — editam-se no próprio arquivo e se conservam
+  na regravação; as demais vêm do arquivo de sementes e da tabela de bases, e corrigem-se
+  lá. A regravação que perderia preenchimento manual é recusada, sem gravar.
 
 ## Convenções
 

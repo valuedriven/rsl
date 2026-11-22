@@ -91,7 +91,7 @@ def _parser():
     p.add_argument("base", metavar="BASE")
     p.add_argument("expressao", metavar="EXPRESSAO")
     p.add_argument("arquivo", metavar="ARQUIVO")
-    p.add_argument("--retorno", type=int, help="retorno que a base exibiu")
+    p.add_argument("--retorno", type=int, required=True, help="retorno que a base exibiu")
     p.add_argument("--data-hora", help="data e hora da consulta, ISO 8601 (padrão: agora)")
     p.add_argument("--justificar", default="",
                    help="motivo aceito para retorno declarado divergente do arquivo")

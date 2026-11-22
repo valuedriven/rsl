@@ -15,8 +15,8 @@ Sob cada passo, quando houver:
   fonte dos parâmetros. Como executar, o mapa dos caminhos e os códigos de saída: `README.md`.
 - **Skill** — competência em `.agents/skills/` que orienta a execução.
 
-Os passos não são numerados, mas a ordem é a do modelo: o ordinal citado no plano e no
-protocolo ("Módulo 3, Etapa 2, 1º passo") continua contável aqui. Valores de parâmetro e
+Os passos não são numerados, e os demais documentos citam um passo pelo módulo, pela etapa
+e pelo nome da atividade, nunca pelo ordinal. Valores de parâmetro e
 limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mostrar`.
 
 ---
@@ -175,10 +175,10 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 - Executar expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas
     explicativas; ficha de cada base §4 (Como executar, Variantes previstas) e §6
-  - Script: `python3 -m rsl busca registrar [--retorno RETORNO] [--data-hora DATA_HORA]
+  - Script: `python3 -m rsl busca registrar --retorno RETORNO [--data-hora DATA_HORA]
     [--justificar JUSTIFICAR] BASE EXPRESSAO ARQUIVO` — `BASE`: sigla da tabela de bases;
     `EXPRESSAO`: identificador da expressão no protocolo; `ARQUIVO`: exportação intacta;
-    `--retorno`: retorno que a base exibiu (sem ele, nada é registrado e o código é USO);
+    `--retorno`: retorno que a base exibiu;
     `--data-hora`: ISO 8601, padrão agora; `--justificar`: motivo aceito para retorno
     divergente do arquivo
   - Skill: `busca-nas-bases`

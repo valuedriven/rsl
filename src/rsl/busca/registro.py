@@ -6,13 +6,13 @@ import pathlib
 import re
 
 from ..config import RAIZ, relativo
+from ..dados import CMD_REGISTRAR
 from ..erros import DadosInvalidos
 from ..markdown import normaliza
 from .leitores import le_arquivo
 
 STATUS_VALIDOS = ("valida", "divergente_justificada")
 ESTADOS_EXCLUIDOS = ("vencido", "nao executado")
-CMD_REGISTRAR = "python3 -m rsl busca registrar"
 
 
 def caminho_do_arquivo(c):
