@@ -29,7 +29,7 @@ dentro da camada, a do quadro.
 #### Scenario: Termo em duplicidade na STR do protocolo
 - **WHEN** a STR1 do protocolo traz `"ontology"` duas vezes, e os demais termos são os da
   STR esperada
-- **THEN** `conferir` e `strings gerar` reprovam a STR1 com a mesma mensagem, que diz
+- **THEN** `documentos conferir` e `strings gerar` reprovam a STR1 com a mesma mensagem, que diz
   `'ontology'` em DUPLICIDADE e o número de ocorrências; e `strings gerar --gravar` grava a
   STR com o termo uma vez
 
@@ -72,7 +72,7 @@ e nenhum outro trecho do protocolo.
 #### Scenario: Gravação
 - **WHEN** se executa `python3 -m rsl strings gerar --gravar`
 - **THEN** a tabela de STRs do protocolo passa a conter as STRs esperadas; o restante do
-  arquivo fica idêntico, byte a byte; e `rsl conferir` não reprova por STR divergente
+  arquivo fica idêntico, byte a byte; e `rsl documentos conferir` não reprova por STR divergente
 
 #### Scenario: Gravação interrompida
 - **WHEN** a gravação falha antes de terminar
@@ -90,10 +90,10 @@ tocar no arquivo.
   muda
 
 ### Requirement: Autoteste prova a geração e a recusa
-O autoteste SHALL provar, numa cópia, que a STR editada à mão é reprovada por `conferir`;
+O autoteste SHALL provar, numa cópia, que a STR editada à mão é reprovada por `documentos conferir`;
 que a gravação produz STR igual à esperada e preserva o restante do arquivo; e que termo em
 duas facetas impede a gravação.
 
 #### Scenario: STR editada à mão
 - **WHEN** o autoteste acrescenta a uma cópia da STR1 um termo que não está no quadro
-- **THEN** `conferir` reprova com REPROVADO, e o autoteste falha se não reprovar
+- **THEN** `documentos conferir` reprova com REPROVADO, e o autoteste falha se não reprovar

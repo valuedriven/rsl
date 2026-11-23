@@ -1,9 +1,9 @@
-"""Gramática do protocolo e das fichas de busca: a única fonte dos literais de forma.
+"""Gramática do protocolo e dos procedimentos de busca: a única fonte dos literais de forma.
 
 Cada elemento declara o que o leitor exige de um documento — seção, tabela, coluna, rótulo
 de linha, marcador, forma de identificador, frase-padrão de onde se lê um parâmetro, domínio
 de valores. Os leitores recebem o elemento, não o literal, e a reprovação nomeia o elemento
-com o mesmo rótulo que `python3 -m rsl gramatica` exibe.
+com o mesmo rótulo que `python3 -m rsl documentos gramatica` exibe.
 
 A gramática descreve a FORMA. Valor do projeto — sigla de base, faceta existente, limiar,
 idioma, composição — não entra aqui: vem do protocolo ou do `config.toml`.
@@ -20,7 +20,7 @@ ele deformado: elemento exigido sem gerador de defeito faz o autoteste falhar.
 import re
 
 PROTOCOLO = "protocolo"
-FICHA = "ficha de base"
+FICHA = "procedimento de busca"
 SEMENTES = "arquivo de sementes"
 DOCUMENTOS = (PROTOCOLO, FICHA, SEMENTES)
 
@@ -374,7 +374,7 @@ S_FONTES = Secao("fontes", P, "Fontes de informação", 3)
 S_BASES = Secao("bases", P, "Bases de dados", 4, pai=S_FONTES)
 T_BASES = Tabela("bases", P, S_BASES, ("ID Base", "Sigla", "Nome da base"),
                  descricao="campo vazio, sigla repetida, sigla com caractere fora de "
-                           "[A-Za-z0-9_-] e sigla sem ficha reprovam")
+                           "[A-Za-z0-9_-] e sigla sem procedimento de busca reprovam")
 I_BD = Identificador("bd", P, S_BASES, "BD")
 F_ORDEM = FrasePadrao(
     "ordem_execucao", P, S_BASES, "Ordem de execução: <base>, <base> e <base>, nesta "
@@ -392,84 +392,84 @@ F_LIMIAR = FrasePadrao(
     r"recuperação inferior a\s+(\d+(?:[.,]\d+)?)\s*%",
     descricao="exigida quando há Regra de ajuste: regra sem limiar legível reprova")
 
-# ============================================================================ ficha
+# ============================================================================ procedimento de busca
 F = FICHA
 
-SF_CRITERIOS = Secao("ficha.criterios", F, "2. Critérios de elegibilidade", 2)
-TF_CRITERIOS = Tabela("ficha.criterios", F, SF_CRITERIOS, ("Critério", "ID"),
+SF_CRITERIOS = Secao("procedimento.criterios", F, "2. Critérios de elegibilidade", 2)
+TF_CRITERIOS = Tabela("procedimento.criterios", F, SF_CRITERIOS, ("Critério", "ID"),
                       modo="posicional",
                       descricao="IDs CEn na segunda coluna (`CEn / CEm` conta os dois); "
                                 "sem nenhum ID, reprova")
-SF_STRINGS = Secao("ficha.strings", F, "3. Strings por faceta", 2)
-SF_DECLARACAO = Secao("ficha.declaracao", F, "Declaração de cobertura", 3, pai=SF_STRINGS)
+SF_STRINGS = Secao("procedimento.strings", F, "3. Strings por faceta", 2)
+SF_DECLARACAO = Secao("procedimento.declaracao", F, "Declaração de cobertura", 3, pai=SF_STRINGS)
 TF_DECLARACAO = Tabela(
-    "ficha.declaracao", F, SF_DECLARACAO, ("Declaração", "Valor"), modo="posicional",
+    "procedimento.declaracao", F, SF_DECLARACAO, ("Declaração", "Valor"), modo="posicional",
     linhas="rótulos idiomas, camadas, plural, teto de caracteres, derivações; e a redução declarada, uma linha por "
            "termo: `| FCTn | termo | motivo |`")
-RF_IDIOMAS = RotuloLinha("ficha.idiomas", F, TF_DECLARACAO, "idiomas", "idiomas",
+RF_IDIOMAS = RotuloLinha("procedimento.idiomas", F, TF_DECLARACAO, "idiomas", "idiomas",
                          descricao="`FCTn: <idioma>, <idioma>; FCTm: …`; ausente, ilegível ou com idioma "
                                    "fora do quadro reprova")
-RF_CAMADAS = RotuloLinha("ficha.camadas", F, TF_DECLARACAO, "camadas", "camadas",
+RF_CAMADAS = RotuloLinha("procedimento.camadas", F, TF_DECLARACAO, "camadas", "camadas",
                          descricao="ausente reprova")
-RF_DERIVACOES = RotuloLinha("ficha.derivacoes", F, TF_DECLARACAO, "derivações",
+RF_DERIVACOES = RotuloLinha("procedimento.derivacoes", F, TF_DECLARACAO, "derivações",
                             "derivacoes", exigencia=OPCIONAL,
                             descricao="ausente, nenhuma derivação declarada")
-RF_PLURAL = RotuloLinha("ficha.plural", F, TF_DECLARACAO, "plural", "plural",
+RF_PLURAL = RotuloLinha("procedimento.plural", F, TF_DECLARACAO, "plural", "plural",
                         descricao="ausente reprova")
-D_PLURAL = Dominio("ficha.plural", F, SF_DECLARACAO, "plural",
+D_PLURAL = Dominio("procedimento.plural", F, SF_DECLARACAO, "plural",
                    {"explícito": "explicito", "pela lematização": "lematizacao"},
                    descricao="valor fora reprova; `pela lematização` exige a linha "
                              "'Lematização' da seção 1 verificada por medição, com "
                              "`(BDn/<id>)` (conferir)")
 PLURAL_EXPLICITO, PLURAL_LEMATIZACAO = D_PLURAL.valores.values()
-RF_TETO = RotuloLinha("ficha.teto", F, TF_DECLARACAO, "teto de caracteres", "teto",
+RF_TETO = RotuloLinha("procedimento.teto", F, TF_DECLARACAO, "teto de caracteres", "teto",
                       descricao="ausente reprova")
-D_TETO = Dominio("ficha.teto", F, SF_DECLARACAO, "teto de caracteres", {"nenhum": None},
+D_TETO = Dominio("procedimento.teto", F, SF_DECLARACAO, "teto de caracteres", {"nenhum": None},
                  descricao="número inteiro de caracteres (`1400` ou `1.400`) ou `nenhum`; "
                            "outro valor reprova. Com número, consulta executável mais longa "
                            "reprova a base; com `nenhum`, a maior consulta é relatada "
                            "(conferir)")
 TETO_NENHUM = "nenhum"
-SF_SINTAXE = Secao("ficha.sintaxe", F, "1. Estado de verificação da sintaxe", 2,
+SF_SINTAXE = Secao("procedimento.sintaxe", F, "1. Estado de verificação da sintaxe", 2,
                    exigencia=OPCIONAL)
-TF_SINTAXE = Tabela("ficha.sintaxe", F, SF_SINTAXE, ("Elemento", "Situação"),
+TF_SINTAXE = Tabela("procedimento.sintaxe", F, SF_SINTAXE, ("Elemento", "Situação"),
                     modo="posicional", exigencia=OPCIONAL)
 RF_LEMATIZACAO = RotuloLinha(
-    "ficha.lematizacao", F, TF_SINTAXE, "Lematização", "lematizacao", exigencia=OPCIONAL,
+    "procedimento.lematizacao", F, TF_SINTAXE, "Lematização", "lematizacao", exigencia=OPCIONAL,
     descricao="exigida com `plural: pela lematização`: estado 'verificado por medição' e "
               "citação `(BDn/<id>)`, ou a base reprova (conferir)")
-D_CAMADAS = Dominio("ficha.camadas", F, SF_DECLARACAO, "camadas",
+D_CAMADAS = Dominio("procedimento.camadas", F, SF_DECLARACAO, "camadas",
                     {"todas": "todas", "nucleo": "nucleo"})
 CAMADAS_TODAS, CAMADAS_NUCLEO = D_CAMADAS.valores
-D_DERIVACOES = Dominio("ficha.derivacoes", F, SF_DECLARACAO, "derivações",
+D_DERIVACOES = Dominio("procedimento.derivacoes", F, SF_DECLARACAO, "derivações",
                        {"morfologia": "morfologia", "radical": "radical"},
                        exigencia=OPCIONAL,
                        descricao="separadas por vírgula, `;` ou ` e `; valor fora reprova")
 DERIVACAO_RADICAL = "radical"
-F_REDUCAO = FrasePadrao("ficha.reducao", F, SF_DECLARACAO, "| FCTn | termo | motivo |",
+F_REDUCAO = FrasePadrao("procedimento.reducao", F, SF_DECLARACAO, "| FCTn | termo | motivo |",
                         r"^FCT\d+$", exigencia=OPCIONAL,
                         descricao="motivo com `radical` afirma alcance pela forma radical "
                                   "(conferido); com `pendente`, lacuna em aberto")
 MOTIVO_RADICAL = "radical"
 MOTIVO_PENDENTE = "pendente"
 F_STRING_BASE = FrasePadrao(
-    "ficha.string", F, SF_STRINGS, "### `STRn` — … FCTn … conjunto `#n`, com um bloco ```",
+    "procedimento.string", F, SF_STRINGS, "### `STRn` — … FCTn … conjunto `#n`, com um bloco ```",
     r"`(STR\d+[a-z]?)`",
     descricao="sem FCTn no cabeçalho, ou com número de blocos diferente de um, reprova; "
-              "ficha sem nenhuma string legível reprova")
-F_CONJUNTO = FrasePadrao("ficha.conjunto", F, SF_STRINGS, "conjunto `#n`",
+              "procedimento de busca sem nenhuma string legível reprova")
+F_CONJUNTO = FrasePadrao("procedimento.conjunto", F, SF_STRINGS, "conjunto `#n`",
                          r"conjunto\s+`(#\w+)`", exigencia=OPCIONAL)
-SF_EXPRESSOES = Secao("ficha.expressoes", F, "4. Expressões de busca", 2)
-MF_EXECUCAO = Marcador("ficha.execucao", F, SF_EXPRESSOES, "- Execução: <forma>",
+SF_EXPRESSOES = Secao("procedimento.expressoes", F, "4. Expressões de busca", 2)
+MF_EXECUCAO = Marcador("procedimento.execucao", F, SF_EXPRESSOES, "- Execução: <forma>",
                        r"^-\s*Execução:\s*(.*?)\s*$",
                        descricao="exatamente uma linha; ausente ou repetida reprova")
-D_EXECUCAO = Dominio("ficha.execucao", F, SF_EXPRESSOES, "Execução",
+D_EXECUCAO = Dominio("procedimento.execucao", F, SF_EXPRESSOES, "Execução",
                      {"única": "unica", "particionada": "particionada"})
 F_EXPRESSAO_BASE = FrasePadrao(
-    "ficha.expressao", F, SF_EXPRESSOES, "### EBn …", r"^(EB\d+)", exigencia=OPCIONAL,
-    descricao="as expressões da ficha têm de ser as do protocolo (conferência)")
+    "procedimento.expressao", F, SF_EXPRESSOES, "### EBn …", r"^(EB\d+)", exigencia=OPCIONAL,
+    descricao="as expressões do procedimento de busca têm de ser as do protocolo (conferência)")
 MARCA_FACETAS = "Facetas:"
-MF_FACETAS = Marcador("ficha.facetas", F, SF_EXPRESSOES, f"**{MARCA_FACETAS}** FCTn AND …",
+MF_FACETAS = Marcador("procedimento.facetas", F, SF_EXPRESSOES, f"**{MARCA_FACETAS}** FCTn AND …",
                       re.escape(MARCA_FACETAS) + r"\s*\**\s*(.+)", exigencia=OPCIONAL,
                       descricao="as facetas da expressão têm de ser as da composição "
                                 "(conferência)")
@@ -481,7 +481,7 @@ SUBTITULO_PROXIMIDADE = "proximidade"
 SUBTITULO_CURADAS = "curadas"
 SUBTITULO_FORMA_LONGA = "forma longa"
 M_SUBTITULOS = Marcador(
-    "ficha.subtitulos", F, SF_EXPRESSOES,
+    "procedimento.subtitulos", F, SF_EXPRESSOES,
     "### <subtítulo> com: " + ", ".join(SUBTITULOS_IGNORADOS + (
         SUBTITULO_PROXIMIDADE, SUBTITULO_CURADAS, SUBTITULO_FORMA_LONGA)),
     r"^###\s+", exigencia=OPCIONAL,
@@ -499,16 +499,16 @@ ESTATUTOS = (
     ("executada", ("executada e exportada", "esta que se executa")),
 )
 F_ESTATUTO = FrasePadrao(
-    "ficha.estatuto", F, SF_EXPRESSOES,
+    "procedimento.estatuto", F, SF_EXPRESSOES,
     "; ".join(f"{e}: " + " / ".join(fr) for e, fr in ESTATUTOS),
     "|".join(re.escape(fr) for _, frs in ESTATUTOS for fr in frs), exigencia=OPCIONAL,
     descricao="sem nenhuma, o estatuto é `nao declarado`")
 F_CITACAO = FrasePadrao(
-    "ficha.citacao_execucao", F, None, "(BDn/<id>)  em toda menção ao registro de execução",
+    "procedimento.citacao_execucao", F, None, "(BDn/<id>)  em toda menção ao registro de execução",
     r"\((BD\d+)/([^)\s]+)\)", exigencia=OPCIONAL,
     descricao="menção ao registro sem a citação, ou citação — com ou sem o caminho do "
               "registro na linha — com BDn de outra base ou com execução inexistente, "
-              "reprova a base (conferir-dados)")
+              "reprova a base (python3 -m rsl dados conferir)")
 
 
 # ============================================================== arquivo de sementes
@@ -539,7 +539,7 @@ C_VOLUME = _campo("volume", "texto", _OPC, OPCIONAL)
 C_NUMERO = _campo("numero", "texto", _OPC, OPCIONAL)
 C_PAGINAS = _campo("paginas", "texto", _OPC, OPCIONAL)
 C_DOI = _campo("doi", "texto", "campo opcional: ausente ou vazio vira pendência "
-                               "(`pendencias`); presente fora da forma 10.x/…, reprova",
+                               "(`projeto pendencias`); presente fora da forma 10.x/…, reprova",
                OPCIONAL)
 # Aferição.
 C_BASES = _campo("bases", "lista de textos",

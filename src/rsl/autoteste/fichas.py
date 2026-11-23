@@ -1,5 +1,5 @@
-"""Autoteste das fichas: a cobertura da base reprova ficha divergente do protocolo, e só
-na base afetada.
+"""Autoteste dos procedimentos de busca: a cobertura da base reprova procedimento de busca
+divergente do protocolo, e só na base afetada.
 
 As bases e os termos de cada caso são escolhidos pela estrutura lida: "a primeira base sem
 derivação radical", "a primeira base que declara a forma radical", "um termo vigente da
@@ -161,7 +161,7 @@ def casos(ctx, g):
             break
     if sub_ficha is None:
         g.falha("mutação não aplicável: subsumido aceito na string da base — nenhuma "
-                "faceta da ficha tem termo subsumido no quadro")
+                "faceta do procedimento de busca tem termo subsumido no quadro")
     else:
         f_s, termo_s, por_s = sub_ficha
         # O termo entra na string da faceta e em todo bloco que a repete: só assim a
@@ -185,7 +185,7 @@ def casos(ctx, g):
                 f"número", _par_irregular(x, y) == esperado,
                 f"devolveu {_par_irregular(x, y)}")
 
-    # (3) seção de critérios da ficha: ID inexistente numa base reprova só ela.
+    # (3) seção de critérios do procedimento de busca: ID inexistente numa base reprova só ela.
     t_f = textos[F]
     trecho = secao(t_f, G.SF_CRITERIOS)
     inicio = t_f.index(trecho)
@@ -196,8 +196,8 @@ def casos(ctx, g):
         novo = f"{G.I_CE.prefixo}{max(int(c['id'][len(G.I_CE.prefixo):]) for c in d['criterios']) + 1}"
         mut_f = t_f[:inicio + achado.start()] + novo + t_f[inicio + achado.end():]
         esperas_f = (novo, f"não cita {retirado}")
-    so_a_base("ID de critério inexistente na seção de critérios da ficha", F, mut_f, t_f, R,
-              esperas_f)
+    so_a_base("ID de critério inexistente na seção de critérios do procedimento de busca", F,
+              mut_f, t_f, R, esperas_f)
 
     # (4) facetas da expressão executada e camadas declaradas.
     t_a = textos[A]
@@ -216,15 +216,15 @@ def casos(ctx, g):
     testa("declaração de cobertura restringindo as camadas", A, mut, t_a, R)
 
     # (4b) plural declarado: `pela lematização` sem lastro numa só base reprova só ela; a
-    # linha retirada é ficha ilegível.
+    # linha retirada é procedimento de busca ilegível.
     texto_lem = next(k for k, v in G.D_PLURAL.valores.items() if v == G.PLURAL_LEMATIZACAO)
     sem_lastro = next((s for s in siglas
                        if lidas[s]["declaracao"]["plural"] != G.PLURAL_LEMATIZACAO
                        and not (lidas[s]["lematizacao"][1] and lidas[s]["lematizacao"][2])),
                       None)
     if sem_lastro is None:
-        g.falha("mutação não aplicável: plural pela lematização sem lastro — toda ficha já "
-                "declara a lematização ou a tem medida")
+        g.falha("mutação não aplicável: plural pela lematização sem lastro — todo procedimento "
+                "de busca já declara a lematização ou a tem medida")
     else:
         t_w = textos[sem_lastro]
         so_a_base("plural pela lematização sem a lematização medida", sem_lastro,
@@ -238,7 +238,7 @@ def casos(ctx, g):
           ("linha de plural", G.RF_PLURAL.rotulo))
 
     # (4c) teto de caracteres declarado: abaixo da maior consulta de uma base, só ela
-    # reprova; igual à maior, passa; a linha retirada é ficha ilegível.
+    # reprova; igual à maior, passa; a linha retirada é procedimento de busca ilegível.
     maior = maior_consulta(lidas[A])
     if maior is None:
         g.falha(f"mutação não aplicável: teto de caracteres — {A} sem consulta executável")
@@ -276,31 +276,34 @@ def casos(ctx, g):
                 igual and cod == OK, f"derivado {'igual' if igual else 'DIFERENTE'}, "
                                      f"código {cod.name}{erro}")
 
-    # (5) forma de execução declarada na ficha: sem padrão, e o defeito fica na base.
+    # (5) forma de execução declarada no procedimento de busca: sem padrão, e o defeito fica
+    # na base.
     t_e = textos[E]
     m_exec = G.MF_EXECUCAO.padrao.search(t_e)
     linha_exec = m_exec.group(0) + "\n" if m_exec else None
-    testa("ficha sem a linha de execução", E,
+    testa("procedimento de busca sem a linha de execução", E,
           t_e.replace(linha_exec, "", 1) if linha_exec else None, t_e, P, "falta a linha")
-    testa("ficha com a linha de execução repetida", E,
+    testa("procedimento de busca com a linha de execução repetida", E,
           t_e.replace(linha_exec, linha_exec * 2, 1) if linha_exec else None, t_e, P,
           "repetida")
-    testa("ficha com forma de execução fora do domínio", E,
+    testa("procedimento de busca com forma de execução fora do domínio", E,
           t_e.replace(m_exec.group(0), m_exec.group(0).replace(m_exec.group(1), "dividida"),
                       1) if m_exec else None, t_e, P, "'dividida'")
-    so_a_base("ficha sem execução reprova só a sua base, nomeando a ficha", E,
+    so_a_base("procedimento de busca sem execução reprova só a sua base, nomeando o "
+              "procedimento de busca", E,
               t_e.replace(linha_exec, "", 1) if linha_exec else None, t_e, P,
               (lidas[E]["base"]["ficha"],))
 
-    # (6) forma radical, na ficha que a declara. O controle é a ficha corrente com toda
-    # linha falsamente declarada como radical reetiquetada como redução: tem de passar, ou
-    # os defeitos injetados sobre ele não provam nada.
+    # (6) forma radical, no procedimento de busca que a declara. O controle é o procedimento
+    # de busca corrente com toda linha falsamente declarada como radical reetiquetada como
+    # redução: tem de passar, ou os defeitos injetados sobre ele não provam nada.
     if RAD is None:
         for nome in ("controle da forma radical aprovado",
                      "redução declarada como radical sem termo da string que a alcance",
                      "termo inventado que partilha uma palavra com o protocolo",
                      "motivo radical sem derivação radical declarada"):
-            g.falha(f"mutação não aplicável: {nome} — nenhuma ficha declara a forma radical")
+            g.falha(f"mutação não aplicável: {nome} — nenhum procedimento de busca declara a "
+                    f"forma radical")
         controle = None
     else:
         controle = textos[RAD]
@@ -398,7 +401,7 @@ def casos(ctx, g):
         so_a_base(f"termo acrescentado ao bloco executado ({lidas[RAD]['execucao']['modo']})",
                   RAD, mut, controle, R, (defasado[0],))
     else:
-        g.falha("mutação não aplicável: bloco executado da ficha com forma radical")
+        g.falha("mutação não aplicável: bloco executado do procedimento de busca com forma radical")
     fidel = (por_estatuto.get("fidelidade") or [None])[0]
     caso_bloco("conjunto #n devolvido ao bloco de fidelidade", A,
                no_bloco(fidel, lambda b: "#1 AND " + b) if fidel else None, t_a,

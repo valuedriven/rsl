@@ -10,7 +10,7 @@ Sintaxe não documentada em fonte alguma: **não verificada por medição** — 
 | `AND`, `OR` e parênteses | **Não verificado**; sondar antes da primeira execução |
 | Truncamento `*` | **Não verificado**; não se usa |
 | Lematização | **Não medida**; flexões explícitas nas strings |
-| Comprimento máximo da consulta | **Não verificado**; sondar antes da primeira execução; a maior consulta executável é medida por `python3 -m rsl conferir`, no relato do teto de caracteres |
+| Comprimento máximo da consulta | **Não verificado**; sondar antes da primeira execução; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres |
 | Proximidade | **Não verificada** |
 | Exportação — formatos e lote | **Não verificada** |
 | Local de pesquisa | **Não verificado**; conferir na interface antes da primeira execução |
@@ -18,7 +18,7 @@ Sintaxe não documentada em fonte alguma: **não verificada por medição** — 
 | Filtros | **Não verificado**; conferir na interface antes da primeira execução |
 | Teto de exibição | **Não verificado**; retorno de exatamente 1.000 será tratado como **corte** até medir |
 
-**Regra de execução, para toda consulta desta ficha.**
+**Regra de execução, para toda consulta deste procedimento de busca.**
 
 1. Aplicar o filtro de ano **antes** de executar.
 2. Manter **Local de pesquisa = Todos os campos**.
@@ -52,7 +52,7 @@ Sintaxe não documentada em fonte alguma: **não verificada por medição** — 
 
 ### Declaração de cobertura
 
-Lida por `python3 -m rsl conferir` (leitor das fichas em `src/rsl/fichas.py`).
+Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca em `src/rsl/fichas.py`).
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -145,7 +145,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 3. Executar o bloco de EB4 como está. Retorno de exatamente 1.000: partir, conforme as variantes.
 4. Executar EB5 uma única vez, na mesma data.
 5. Exportar em RIS ou BibTeX; sem exportação, registrar os metadados no Zotero e anotar a entrada manual como risco de transcrição.
-6. Registrar: `python3 -m rsl busca registrar brapci EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`, com a justificativa do teto de 1.000 quando for o caso; rodar `busca derivar` e `busca sensibilidade`.
+6. Registrar: `python3 -m rsl busca registrar brapci EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`, com a justificativa do teto de 1.000 quando for o caso; rodar `busca derivar` e `conferencia sensibilidade`.
 7. Medir a aderência (seção 5).
 
 ### Variantes previstas
@@ -156,7 +156,7 @@ Disparo: consulta recusada ou truncada pelo comprimento, ou retorno de exatament
 
 #### Varredura da faceta 🟦 isolada — fora do corpus
 
-Disparo: medir o custo da âncora 🟨 nesta base. Forma: a string da faceta 🟦 sozinha, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros da faceta 🟦 fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`python3 -m rsl mostrar`) leva a emenda.
+Disparo: medir o custo da âncora 🟨 nesta base. Forma: a string da faceta 🟦 sozinha, com o filtro de ano, uma única vez. Amostrar e classificar à mão os registros da faceta 🟦 fora de EB5; fração elegível acima do limite superior da faixa `sensibilidade` (`python3 -m rsl configuracao mostrar`) leva a emenda.
 
 #### Partição por *Título*
 
@@ -175,7 +175,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **Se a SE5 não aparecer.** Consultar `Duque` em *Local de pesquisa* = **Autor**, abrir o registro e ler resumo e palavras-chave.
 

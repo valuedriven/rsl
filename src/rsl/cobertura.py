@@ -1,10 +1,11 @@
-"""Cobertura de cada base: a string da ficha medida contra a string (STR) do protocolo.
+"""Cobertura de cada base: a string do procedimento de busca medida contra a string (STR) do
+protocolo.
 
 A cobertura é medida contra o vocabulário vigente — os termos da STR do protocolo, nos
-idiomas e camadas que a ficha declara — e contra a redução própria da base, declarada termo
-a termo: termo vigente ausente e não declarado reprova, e termo da base que não derive da
-STR também, inclusive o que só conste do quadro terminológico. A cobertura por faceta sai
-como número, porque é ela que mede o preço da forma de cada base.
+idiomas e camadas que o procedimento de busca declara — e contra a redução própria da base,
+declarada termo a termo: termo vigente ausente e não declarado reprova, e termo da base que
+não derive da STR também, inclusive o que só conste do quadro terminológico. A cobertura por
+faceta sai como número, porque é ela que mede o preço da forma de cada base.
 """
 
 import re
@@ -34,9 +35,9 @@ def _conteudo(s):
 def _candidatos(tok):
     """Formas de singular do token; duas palavras casam se as formas se tocam.
 
-    Não é lematização: é reconhecimento de flexão de número e de gênero sobre a forma
-    já sem acento — plural em -s, -es, -ies, -ais, -eis e -coes —, que é o que as fichas
-    declaram como desdobramento morfológico.
+    Não é lematização: é reconhecimento de flexão de número e de gênero sobre a forma já sem
+    acento — plural em -s, -es, -ies, -ais, -eis e -coes —, que é o que os procedimentos de
+    busca declaram como desdobramento morfológico.
     """
     c = {tok}
     for sufixo, troca in (("ies", "y"), ("coes", "cao"), ("ais", "al"), ("eis", "el")):
@@ -90,7 +91,7 @@ def _radical_sem_alcance(base):
             continue
         achados = [x for s in base["facetas"] if s["faceta"] == e["faceta"] for x in s["termos"]]
         if not radical:
-            saida.append((e, "a ficha não declara a derivação radical"))
+            saida.append((e, "o procedimento de busca não declara a derivação radical"))
         elif not any(_radical_alcanca(e["termo"], a) for a in achados):
             saida.append((e, "nenhum termo da string o contém"))
     return saida
@@ -100,9 +101,9 @@ def _vocabulario(fid, d, decl):
     """Vocabulário de uma faceta para uma base.
 
     Devolve (vigentes, fora_da_string): `vigentes` são os termos da STR do protocolo nos
-    idiomas e camadas que a ficha declara, classificados pelo quadro; `fora_da_string` são
-    os termos do quadro da faceta, em qualquer idioma ou camada, que a STR não traz. O
-    quadro é vocabulário de referência; o que vale para a busca é a STR.
+    idiomas e camadas que o procedimento de busca declara, classificados pelo quadro;
+    `fora_da_string` são os termos do quadro da faceta, em qualquer idioma ou camada, que a
+    STR não traz. O quadro é vocabulário de referência; o que vale para a busca é a STR.
     """
     f = next(x for x in d["tabelas"] if x["id"] == fid)
     idiomas = decl.get("idiomas", {}).get(fid) or list(d["idiomas"])
@@ -126,7 +127,7 @@ def subsumidos_na_base(base, d):
     """[(faceta, termo da base, termo do quadro, termo da STR que o subsume)].
 
     É relato, não reprovação: o subsumido no mesmo campo do termo que o subsume é
-    redundância a retirar da ficha; em campo próprio, é especificidade de campo.
+    redundância a retirar do procedimento de busca; em campo próprio, é especificidade de campo.
     """
     saida = []
     for fid in sorted(d["strings"]):
@@ -178,9 +179,9 @@ def _par_irregular(a, b):
 def numero_unico_na_base(base, d):
     """[(faceta, termo da STR)] presentes na string da base numa só forma de número.
 
-    Só em ficha com `plural: explícito`, e fora do alcance de truncamento. O termo cujo par
-    de plural irregular também está na string da base não é relatado: as duas formas de
-    número estão lá. É relato, não reprovação: substantivo não contável
+    Só em procedimento de busca com `plural: explícito`, e fora do alcance de truncamento. O
+    termo cujo par de plural irregular também está na string da base não é relatado: as duas
+    formas de número estão lá. É relato, não reprovação: substantivo não contável
     (`education`, `pedagogia`) não tem plural de uso.
     """
     decl = base.get("declaracao") or {}
@@ -226,15 +227,16 @@ def cobertura_base(base, d):
     modos = set(decl.get("derivacoes") or [])
 
     # A seção 2 cita os critérios que a base aplica. Renumerar o protocolo sem atualizar a
-    # ficha deixaria a triagem aplicando um critério que o documento já não nomeia.
+    # procedimento de busca deixaria a triagem aplicando um critério que o documento já não nomeia.
     caminho = base["base"]["ficha"]
     protocolo = {c["id"] for c in d["criterios"]}
     citados = set(base.get("criterios") or [])
     for cid in sorted(citados - protocolo, key=_ordem_criterio):
-        problemas.append(f"ficha {caminho}: cita {cid}, que não existe na tabela de "
-                         f"critérios do protocolo")
+        problemas.append(f"procedimento de busca {caminho}: cita {cid}, que não existe na "
+                         f"tabela de critérios do protocolo")
     for cid in sorted(protocolo - citados, key=_ordem_criterio):
-        problemas.append(f"ficha {caminho}: não cita {cid}, que o protocolo declara")
+        problemas.append(f"procedimento de busca {caminho}: não cita {cid}, que o protocolo "
+                         f"declara")
 
     for fid in sorted(d["strings"]):
         if not decl.get("idiomas", {}).get(fid):
@@ -247,8 +249,9 @@ def cobertura_base(base, d):
             if any(_mesmo_termo(termo, a) for a in achados):
                 continue
             # A forma radical declara que uma palavra-raiz presente alcança a expressão
-            # inteira. É declaração da ficha, não omissão silenciosa: a cobertura literal
-            # continua sendo reportada, e o que a regra não alcança tem de estar na tabela.
+            # inteira. É declaração do procedimento de busca, não omissão silenciosa: a
+            # cobertura literal continua sendo reportada, e o que a regra não alcança tem de
+            # estar na tabela.
             if G.DERIVACAO_RADICAL in modos and any(_radical_alcanca(termo, a) for a in achados):
                 continue
             if any(_mesmo_termo(termo, e) for e in excluidos):
@@ -261,8 +264,9 @@ def cobertura_base(base, d):
             # Termo do quadro que a STR não traz não é vigente: a base não pode executá-lo,
             # nem em flexão.
             so_quadro = next((p for p in fora if _mesmo_termo(termo, p)), None)
-            # O subsumido por termo vigente deriva da STR: a ficha pode usá-lo em campo
-            # próprio, como a `STR1b` da ERIC no resumo. É relatado, não reprovado.
+            # O subsumido por termo vigente deriva da STR: o procedimento de busca pode
+            # usá-lo em campo próprio, como a `STR1b` da ERIC no resumo. É relatado, não
+            # reprovado.
             if so_quadro and _subsumido_por(so_quadro, fid, d):
                 continue
             if so_quadro:
@@ -285,15 +289,15 @@ def cobertura_base(base, d):
         texto = next(k for k, v in G.D_PLURAL.valores.items() if v == G.PLURAL_LEMATIZACAO)
         rotulo = f"declara plural {texto!r}"
         if linha is None:
-            problemas.append(f"ficha {caminho}: {rotulo}, e a seção "
+            problemas.append(f"procedimento de busca {caminho}: {rotulo}, e a seção "
                              f"'{G.SF_SINTAXE.titulo}' não tem a linha "
                              f"'{G.RF_LEMATIZACAO.texto}'")
         elif not medida:
-            problemas.append(f"ficha {caminho}: {rotulo}, e a linha "
+            problemas.append(f"procedimento de busca {caminho}: {rotulo}, e a linha "
                              f"'{G.RF_LEMATIZACAO.texto}' não está verificada por medição: "
                              f"{linha[:90]!r}")
         elif not citacao:
-            problemas.append(f"ficha {caminho}: {rotulo}, e a linha "
+            problemas.append(f"procedimento de busca {caminho}: {rotulo}, e a linha "
                              f"'{G.RF_LEMATIZACAO.texto}' não cita a execução que a mediu "
                              f"(BDn/<id>)")
 
@@ -335,7 +339,7 @@ def cobertura_base(base, d):
         if not precisa_forma or not expr["blocos"]:
             continue
         # Bloco que se submete é literal: referência a conjunto depende da numeração da
-        # sessão e não se reproduz a partir da ficha.
+        # sessão e não se reproduz a partir do procedimento de busca.
         referencias = sorted({r for b in expr["blocos"]
                               for r in re.findall(r"#\d+", b["texto"])})
         if referencias:

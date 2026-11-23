@@ -9,8 +9,8 @@ arquivo intacto, a que perderia preenchimento (semente renumerada, linha sem par
 fora do esquema).
 
 Dado não obtido ou juízo não feito (DOI ausente, facetas vazias, validação sem âncora) não
-reprova: a cópia tem de ser aprovada e `pendencias` tem de relatá-la. A evidência bruta de
-semente inexistente reprova `conferir-dados`."""
+reprova: a cópia tem de ser aprovada e `projeto pendencias` tem de relatá-la. A evidência
+bruta de semente inexistente reprova `dados conferir`."""
 
 import contextlib
 import csv
@@ -135,7 +135,7 @@ def casos(ctx, g):
 
 
 def _aprovam_com_pendencia(ctx, g, itens, com, d):
-    """Dado ou juízo pendente: a cópia é aprovada e `pendencias` a relata, nomeando a
+    """Dado ou juízo pendente: a cópia é aprovada e `projeto pendencias` a relata, nomeando a
     semente. Cópia reprovada, ou pendência não relatada, faz o autoteste falhar."""
     c_id, c_papel, c_facetas = G.C_ID.chave, G.C_PAPEL.chave, G.C_FACETAS.chave
     ancoras = d["ancoras"]
@@ -151,7 +151,7 @@ def _aprovam_com_pendencia(ctx, g, itens, com, d):
         achou = any(f"semente {ident} " in l and trecho in l for l in linhas)
         g.testa(f"aprova com pendência{'' if relata else ' (sem relato)'}: {nome}",
                 achou == relata,
-                f"`pendencias` {'não relatou' if relata else 'relatou'} {ident} com "
+                f"`projeto pendencias` {'não relatou' if relata else 'relatou'} {ident} com "
                 f"{trecho!r}")
 
     ident = itens[0][c_id]
@@ -174,7 +174,7 @@ def _aprovam_com_pendencia(ctx, g, itens, com, d):
 
 
 def _evidencia(ctx, g, itens):
-    """Evidência `SEn_…` de semente que não está no arquivo reprova `conferir-dados`,
+    """Evidência `SEn_…` de semente que não está no arquivo reprova `dados conferir`,
     nomeando o arquivo; a de semente presente, não. Numa pasta temporária, gerada do
     último `id` lido. Só a subpasta de referências é conferida: o mesmo arquivo noutra
     subpasta da evidência não reprova."""

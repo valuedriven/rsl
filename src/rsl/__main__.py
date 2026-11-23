@@ -21,12 +21,6 @@ que nomeia o código.
 """
 
 
-# Nomes antigos de comando aceitos como aliases ocultos: {caminho antigo: caminho canônico}.
-# O catálogo (`catalogo gerar`) lê esta tabela, acusa citação de nome antigo em documento vivo
-# e a lista na correspondência de nomes. Vazia enquanto não houver renomeação.
-ALIASES = {}
-
-
 class _Parser(argparse.ArgumentParser):
     """Erro de argumento sai com USO, e a última linha nomeia o código."""
 
@@ -48,61 +42,75 @@ def _cmd(modulo, funcao, contexto=True):
 
 
 def _parser():
+    """(parser, {grupo: parser do grupo})."""
     ap = _Parser(prog="python3 -m rsl", description=__doc__, epilog=AJUDA,
                  formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(title="subcomandos", metavar="<subcomando>")
+    grupos = {}          # nome do grupo → parser do grupo (para a ajuda do grupo)
+    acoes = {}           # nome do grupo → subparsers do grupo
 
-    def novo(pai, nome, ajuda, modulo, funcao, contexto=True):
-        p = pai.add_parser(nome, help=ajuda, description=ajuda, epilog=AJUDA,
-                           formatter_class=argparse.RawDescriptionHelpFormatter)
+    def grupo(nome, ajuda=None):
+        """O grupo `nome`, criado na primeira chamada (com a ajuda) e reusado nas demais."""
+        if nome not in acoes:
+            kw = {"help": ajuda} if ajuda else {}
+            g = sub.add_parser(nome, description=ajuda, **kw)
+            grupos[nome] = g
+            acoes[nome] = g.add_subparsers(title="subcomandos", metavar="<subcomando>")
+        return acoes[nome]
+
+    def novo(nome_grupo, nome, ajuda, modulo, funcao, contexto=True):
+        p = grupo(nome_grupo).add_parser(
+            nome, help=ajuda, description=ajuda, epilog=AJUDA,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
         p.set_defaults(executa=_cmd(modulo, funcao, contexto))
         return p
 
-    novo(sub, "conferir", "lê o protocolo e as fichas e relata problemas de coerência",
-         "conferencia", "cmd_conferir")
-    novo(sub, "conferir-dados", "confere os arquivos alimentados contra o protocolo",
+    grupo("documentos", "protocolo, procedimentos de busca e sementes: conferência e "
+          "gramática")
+    novo("documentos", "conferir", "lê o protocolo e os procedimentos de busca e relata "
+         "problemas de coerência", "conferencia", "cmd_conferir")
+    novo("documentos", "gramatica", "exibe o contrato de forma que o leitor exige do "
+         "protocolo e dos procedimentos de busca", "relatorio", "cmd_gramatica",
+         contexto=False)
+
+    grupo("dados", "arquivos alimentados pela execução")
+    novo("dados", "conferir", "confere os arquivos alimentados contra o protocolo",
          "dados", "cmd_conferir_dados")
-    novo(sub, "autoteste", "injeta defeitos em cópias e exige que cada conferência os "
-         "reprove com o código esperado", "autoteste", "cmd_autoteste")
-    novo(sub, "mostrar", "resume o que foi lido e os parâmetros em uso, com a origem",
-         "relatorio", "cmd_mostrar")
-    novo(sub, "pendencias", "relata as pendências dos artefatos, sem escrever",
+
+    grupo("projeto", "autoteste das conferências e pendências dos artefatos")
+    novo("projeto", "autoteste", "injeta defeitos em cópias e exige que cada conferência "
+         "os reprove com o código esperado", "autoteste", "cmd_autoteste")
+    novo("projeto", "pendencias", "relata as pendências dos artefatos, sem escrever",
          "dados", "cmd_pendencias")
-    novo(sub, "gramatica", "exibe o contrato de forma que o leitor exige do protocolo e "
-         "das fichas", "relatorio", "cmd_gramatica", contexto=False)
 
-    sem = sub.add_parser("sementes", help="instrumento do teste de aderência")
-    sub_sem = sem.add_subparsers(title="subcomandos", metavar="<subcomando>")
-    novo(sub_sem, "planilha", "grava a planilha do teste de aderência e imprime o ensaio "
-         "seco", "sementes", "cmd_planilha")
+    grupo("configuracao", "parâmetros em uso e a sua origem")
+    novo("configuracao", "mostrar", "resume o que foi lido e os parâmetros em uso, com a "
+         "origem", "relatorio", "cmd_mostrar")
 
-    stg = sub.add_parser("strings", help="strings de busca por faceta geradas do quadro")
-    sub_stg = stg.add_subparsers(title="subcomandos", metavar="<subcomando>")
-    p = novo(sub_stg, "gerar", "calcula cada STR a partir do quadro terminológico e exibe "
-             "a diferença para a tabela do protocolo; sem --gravar, nada é gravado",
+    grupo("termos", "validação terminológica por instrumento")
+    novo("termos", "sondar", "consulta de prova em cada cliente automatizado; não grava",
+         "termos.validacao", "cmd_sonda")
+    novo("termos", "exportar", "reconstrói a planilha de validação a partir do protocolo, "
+         "sem rede", "termos.validacao", "cmd_exportar")
+    p = novo("termos", "validar", "consulta, no instrumento Automático de sigla SIGLA (ou "
+             "em todos: `todos`), os termos ainda sem estatuto", "termos.validacao",
+             "cmd_validar")
+    p.add_argument("sigla", metavar="SIGLA")
+    p.add_argument("--faceta", type=int, help="restringe a uma faceta (número n de FCTn)")
+    novo("termos", "importar", "reconcilia a planilha com o protocolo, preservando as "
+         "decisões", "termos.validacao", "cmd_importar")
+
+    grupo("strings", "strings de busca por faceta geradas do quadro")
+    p = novo("strings", "gerar", "calcula cada STR a partir do quadro terminológico e "
+             "exibe a diferença para a tabela do protocolo; sem --gravar, nada é gravado",
              "geracao", "cmd_gerar")
     p.add_argument("--gravar", action="store_true",
                    help="substitui só as células de string da tabela do protocolo, de "
                         "forma atômica; recusado se o quadro tiver termo em duas facetas")
 
-    ter = sub.add_parser("termos", help="validação terminológica por instrumento")
-    sub_ter = ter.add_subparsers(title="subcomandos", metavar="<subcomando>")
-    novo(sub_ter, "sonda", "consulta de prova em cada cliente automatizado; não grava",
-         "termos.validacao", "cmd_sonda")
-    novo(sub_ter, "exportar", "reconstrói a planilha de validação a partir do protocolo, "
-         "sem rede", "termos.validacao", "cmd_exportar")
-    p = novo(sub_ter, "validar", "consulta, no instrumento Automático de sigla SIGLA (ou "
-             "em todos: `todos`), os termos ainda sem estatuto", "termos.validacao",
-             "cmd_validar")
-    p.add_argument("sigla", metavar="SIGLA")
-    p.add_argument("--faceta", type=int, help="restringe a uma faceta (número n de FCTn)")
-    novo(sub_ter, "importar", "reconcilia a planilha com o protocolo, preservando as "
-         "decisões", "termos.validacao", "cmd_importar")
-
-    cat = sub.add_parser("catalogo", help="catálogo de apoio: skills e comandos por passo "
-                         "do guia de procedimentos")
-    sub_cat = cat.add_subparsers(title="subcomandos", metavar="<subcomando>")
-    p = novo(sub_cat, "gerar", "deriva do guia de procedimentos o catálogo de skills e "
+    grupo("catalogo", "catálogo de apoio: skills e comandos por passo do guia de "
+          "procedimentos")
+    p = novo("catalogo", "gerar", "deriva do guia de procedimentos o catálogo de skills e "
              "comandos por passo, imprime-o e confere as citações, a cobertura, a contagem "
              "de passos e o catálogo gravado; sem --gravar, nada é gravado",
              "catalogo", "cmd_gerar", contexto=False)
@@ -112,9 +120,14 @@ def _parser():
     p.add_argument("--json", action="store_true",
                    help="emite o catálogo e os problemas em JSON")
 
-    bus = sub.add_parser("busca", help="registro das execuções, derivação e testes da busca")
-    sub_bus = bus.add_subparsers(title="subcomandos", metavar="<subcomando>")
-    p = novo(sub_bus, "registrar", "registra uma execução e confere o retorno declarado "
+    grupo("aderencia", "teste de aderência ao conjunto-semente")
+    novo("aderencia", "planilhar", "grava a planilha do teste de aderência e imprime o "
+         "ensaio seco", "sementes", "cmd_planilha")
+    novo("aderencia", "medir", "teste de aderência ao conjunto-semente, por papel",
+         "busca.aderencia", "cmd_aderencia")
+
+    grupo("busca", "registro das execuções e derivação das expressões")
+    p = novo("busca", "registrar", "registra uma execução e confere o retorno declarado "
              "contra o arquivo", "busca.execucao", "cmd_registrar")
     p.add_argument("base", metavar="BASE")
     p.add_argument("expressao", metavar="EXPRESSAO")
@@ -123,19 +136,19 @@ def _parser():
     p.add_argument("--data-hora", help="data e hora da consulta, ISO 8601 (padrão: agora)")
     p.add_argument("--justificar", default="",
                    help="motivo aceito para retorno declarado divergente do arquivo")
-    novo(sub_bus, "derivar", "deriva as expressões não executadas, as contagens e a ordem "
+    novo("busca", "derivar", "deriva as expressões não executadas, as contagens e a ordem "
          "de triagem", "busca.derivacao", "cmd_derivar")
-    novo(sub_bus, "aderencia", "teste de aderência ao conjunto-semente, por papel",
-         "busca.aderencia", "cmd_aderencia")
-    p = novo(sub_bus, "fidelidade", "compara o conjunto derivado com a execução direta",
-             "busca.fidelidade", "cmd_fidelidade")
+
+    grupo("conferencia", "conferências pós-execução da busca")
+    p = novo("conferencia", "fidelidade", "compara o conjunto derivado com a execução "
+             "direta", "busca.fidelidade", "cmd_fidelidade")
     p.add_argument("expressao", metavar="EXPRESSAO")
     p.add_argument("arquivo", metavar="ARQUIVO")
-    p = novo(sub_bus, "sensibilidade", "mede a perda da sonda para a executada e grava a "
-             "amostra a classificar", "busca.sensibilidade", "cmd_sensibilidade")
+    p = novo("conferencia", "sensibilidade", "mede a perda da sonda para a executada e "
+             "grava a amostra a classificar", "busca.sensibilidade", "cmd_sensibilidade")
     p.add_argument("base", metavar="BASE", nargs="?", default=None)
-    return ap, {"sementes": sem, "strings": stg, "termos": ter, "catalogo": cat,
-                "busca": bus}
+
+    return ap, grupos
 
 
 def _mensagem(e, ctx):

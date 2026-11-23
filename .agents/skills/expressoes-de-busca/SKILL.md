@@ -60,17 +60,17 @@ exigir, já na 1ª filtragem, pelo menos uma das duas dimensões.
 
 ## Parte 2 — a sintaxe é parâmetro da base
 
-**Medida, não documentada, e declarada na ficha da base.** Esta skill não traz a sintaxe
+**Medida, não documentada, e declarada no procedimento de busca da base.** Esta skill não traz a sintaxe
 de base alguma. O que difere de uma base para outra é parâmetro: apurado e registrado na
-seção 1 da ficha (`ficha-de-busca-por-base`) e, quando governa a composição, declarado na
-declaração de cobertura, onde `conferir` o lê.
+seção 1 do procedimento de busca (`procedimento-de-busca-por-base`) e, quando governa a composição, declarado na
+declaração de cobertura, onde `documentos conferir` o lê.
 
 | Parâmetro | Onde se declara | Como governa a composição |
 | --- | --- | --- |
 | **plural** | declaração de cobertura: `explícito` ou `pela lematização` | `explícito`: a string traz as duas formas de número, ou um truncamento que as alcance. `pela lematização`: só a forma do quadro, e só com a lematização medida e a execução citada na seção 1 |
-| **teto de caracteres** | declaração de cobertura: número inteiro ou `nenhum` | com número, nenhuma consulta executável passa dele, e o que passa se particiona sem retirar termo. `conferir` mede cada bloco e reprova a base. Com `nenhum`, `conferir` relata a maior consulta |
+| **teto de caracteres** | declaração de cobertura: número inteiro ou `nenhum` | com número, nenhuma consulta executável passa dele, e o que passa se particiona sem retirar termo. `documentos conferir` mede cada bloco e reprova a base. Com `nenhum`, `documentos conferir` relata a maior consulta |
 | **truncamento** | seção 1 | curinga que a base não aceita, ou que devolve zero, não se usa: a forma vai por extenso |
-| **proximidade** | seção 1; a discussão, na subseção "Estratégia de proximidade" da ficha | operador, distância e grupos de cada lado medidos antes de usar. Vale para todas as expressões ou para nenhuma |
+| **proximidade** | seção 1; a discussão, na subseção "Estratégia de proximidade" do procedimento de busca | operador, distância e grupos de cada lado medidos antes de usar. Vale para todas as expressões ou para nenhuma |
 | **campo** | seção 1 e cabeçalho de cada string | o campo da string é lido do texto; prefixos diferentes na mesma string são "misto" |
 | **filtros** | seção 2 | na consulta ou na interface, conforme a base admite; o ano se confere no retorno |
 | **teto de retorno** | seção 1 | retorno exatamente no teto é corte até prova em contrário: particionar |
@@ -87,18 +87,18 @@ Três regras que saíram de defeito real:
   limite inferior.
 - **Simetria entre expressões.** Operador de proximidade e filtro de tipo de documento
   aplicados a EB4 e não a EB2 produziram `EB2 > EB4`, que é impossível. Era defeito da
-  ficha, não do motor.
+  procedimento de busca, não do motor.
 - **Partição por teto tem de ser exata**: âncoras idênticas em todas as partes, termos
   temáticos disjuntos, união igual à expressão original. O comprimento de cada parte
-  `conferir` mede. A exatidão da partição ainda se verifica à mão, parte a parte.
+  `documentos conferir` mede. A exatidão da partição ainda se verifica à mão, parte a parte.
 
 ## Depois de compor
 
-As fichas, uma por base, ficam em `docs/` com a expressão executável e o
+Os procedimentos de busca, uma por base, ficam em `docs/` com a expressão executável e o
 estado de verificação da sintaxe. O **registro de execução** fica em
 `data/registro_execucao.json`, uma entrada por base. **Nunca ditar uma expressão
-de memória nem reescrevê-la na conversa** — se a ficha estiver defasada, corrigi-la.
+de memória nem reescrevê-la na conversa** — se o procedimento de busca estiver defasado, corrigi-lo.
 
 Alteração de expressão é emenda **de busca**: exige reexecução e novo teste de
-aderência. `busca-nas-bases` para executar, `registrar-decisao` para o histórico
+aderência. `execucao-da-busca` para executar, `registrar-decisao` para o histórico
 (`data/historico.md`).

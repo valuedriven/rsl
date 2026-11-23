@@ -2,7 +2,7 @@
   "levantamento": {
     "data": "2026-11-18",
     "revisao": "2026-11-22",
-    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl pendencias` e contra o código.",
+    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl projeto pendencias` e contra o código.",
     "limitacao": "A busca por termos pode não pegar ressalvas escritas de outra forma. As origens citam seção, e não linha.",
     "regra": "O arquivo contém só ações não concluídas; pendência resolvida ou descartada é excluída, e o que a encerrou vai ao histórico (README, Três registros)."
   },
@@ -11,7 +11,7 @@
       "id": "PD01",
       "categoria": "dados",
       "descricao": "Os campos `tipo` e `alinhamento` estão vazios nas 10 sementes do arquivo de sementes (`[documentos] sementes` do config.toml). São juízos autorais, não dados bibliográficos. O campo `eric` também está vazio.",
-      "origem": "arquivo de sementes (`[documentos] sementes`); data/historico.md, 2026-11-19 e 2026-11-20; python3 -m rsl pendencias",
+      "origem": "arquivo de sementes (`[documentos] sementes`); data/historico.md, 2026-11-19 e 2026-11-20; python3 -m rsl projeto pendencias",
       "bloqueia": "teste de aderência (M3/E2): a planilha sai com `tipo` em branco",
       "acao_sugerida": "preencher `tipo` e `alinhamento` de cada semente no arquivo de sementes (`[documentos] sementes`); são juízos autorais, não dados bibliográficos",
       "responsavel": "pesquisador",
@@ -21,9 +21,9 @@
       "id": "PD03",
       "categoria": "validacao-terminologica",
       "descricao": "data/validacao_terminologica.csv ausente: nenhum termo tem consulta registrada, e pela regra do protocolo todos são termos livres até a validação.",
-      "origem": "python3 -m rsl pendencias",
+      "origem": "python3 -m rsl projeto pendencias",
       "bloqueia": "validação terminológica (M3/E1, passo 2)",
-      "acao_sugerida": "PYTHONPATH=src python3 -m rsl termos sonda, depois termos exportar, termos validar tbci e termos validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
+      "acao_sugerida": "PYTHONPATH=src python3 -m rsl termos sondar, depois termos exportar, termos validar tbci e termos validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
       "responsavel": "pesquisador"
     },
     {
@@ -57,27 +57,27 @@
       "id": "PD07",
       "categoria": "sintaxe-base",
       "base": "BD1 — Web of Science",
-      "descricao": "Itens de sintaxe e de exportação da Web of Science marcados como não verificados na seção 1 da ficha.",
+      "descricao": "Itens de sintaxe e de exportação da Web of Science marcados como não verificados na seção 1 do procedimento de busca.",
       "origem": "docs/procedimentos_busca_wos.md, seção 1",
       "bloqueia": "execução definitiva na WoS (M3/E2)",
-      "acao_sugerida": "conferir na interface e medir na primeira execução, conforme a ficha",
+      "acao_sugerida": "conferir na interface e medir na primeira execução, conforme o procedimento de busca",
       "responsavel": "pesquisador"
     },
     {
       "id": "PD08",
       "categoria": "sintaxe-base",
       "base": "BD2 — Scopus",
-      "descricao": "Itens de sintaxe e de exportação da Scopus marcados como não verificados, não medidos ou não documentados na seção 1 da ficha.",
+      "descricao": "Itens de sintaxe e de exportação da Scopus marcados como não verificados, não medidos ou não documentados na seção 1 do procedimento de busca.",
       "origem": "docs/procedimentos_busca_scopus.md, seção 1",
       "bloqueia": "execução definitiva na Scopus (M3/E2)",
-      "acao_sugerida": "conferir na interface antes de exportar, conforme a ficha",
+      "acao_sugerida": "conferir na interface antes de exportar, conforme o procedimento de busca",
       "responsavel": "pesquisador"
     },
     {
       "id": "PD09",
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
-      "descricao": "Comportamento da sintaxe da ERIC e teto de retorno e de exportação marcados como não verificados ou não medidos no cabeçalho e na seção 1 da ficha.",
+      "descricao": "Comportamento da sintaxe da ERIC e teto de retorno e de exportação marcados como não verificados ou não medidos no cabeçalho e na seção 1 do procedimento de busca.",
       "origem": "docs/procedimentos_busca_eric.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na ERIC (M3/E2); a sondagem de sintaxe é obrigatória",
       "acao_sugerida": "sondagem de sintaxe com as contagens registradas",
@@ -87,10 +87,10 @@
       "id": "PD10",
       "categoria": "sintaxe-base",
       "base": "BD4 — BRAPCI",
-      "descricao": "Sintaxe da BRAPCI não documentada em fonte alguma: os itens de sintaxe e de exportação estão marcados como não verificados ou não medidos no cabeçalho e na seção 1 da ficha.",
+      "descricao": "Sintaxe da BRAPCI não documentada em fonte alguma: os itens de sintaxe e de exportação estão marcados como não verificados ou não medidos no cabeçalho e na seção 1 do procedimento de busca.",
       "origem": "docs/procedimentos_busca_brapci.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na BRAPCI (M3/E2); a sondagem de sintaxe é obrigatória",
-      "acao_sugerida": "sondar o comprimento antes da primeira execução, conforme a ficha",
+      "acao_sugerida": "sondar o comprimento antes da primeira execução, conforme o procedimento de busca",
       "responsavel": "pesquisador"
     },
     {
@@ -117,7 +117,7 @@
       "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
       "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/conferencias-da-busca/SKILL.md §2",
       "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
-      "acao_sugerida": "PYTHONPATH=src python3 -m rsl busca fidelidade, depois de registrada a execução de cobertura",
+      "acao_sugerida": "PYTHONPATH=src python3 -m rsl conferencia fidelidade, depois de registrada a execução de cobertura",
       "responsavel": "pesquisador"
     },
     {
@@ -133,7 +133,7 @@
       "id": "PD20",
       "categoria": "aderencia",
       "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio nas 10 sementes do arquivo de sementes (`[documentos] sementes`). É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
-      "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl pendencias",
+      "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl projeto pendencias",
       "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda; não bloqueia a execução do teste de aderência",
       "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill conjunto-semente, §4)",
       "responsavel": "pesquisador"
@@ -141,7 +141,7 @@
     {
       "id": "PD21",
       "categoria": "aderencia",
-      "descricao": "Regra para semente de validação sem faceta âncora: não há regra para a semente de validação cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl pendencias` só relata o caso, sem reprovar.",
+      "descricao": "Regra para semente de validação sem faceta âncora: não há regra para a semente de validação cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl projeto pendencias` só relata o caso, sem reprovar.",
       "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
       "bloqueia": "nada por ora; o caso só aparece quando as facetas das sementes forem informadas (PD20)",
       "acao_sugerida": "decidir a regra e registrá-la (skill registrar-decisao); até lá, o caso é relatado",
@@ -168,8 +168,8 @@
     {
       "id": "PD26",
       "categoria": "sintaxe-base",
-      "descricao": "WoS, Scopus e BRAPCI declaram `plural: explícito` na declaração de cobertura, mas as strings das fichas trazem termos numa só forma de número, fora do alcance de truncamento. A contagem por base é a do relato de `python3 -m rsl conferir`. Pelas skills `expressoes-de-busca` e `ficha-de-busca-por-base`, `explícito` exige as duas formas de número. Se a base não lematizar, há perda de recall; a lematização de nenhuma das três está medida.",
-      "origem": "python3 -m rsl conferir (relato 'termo(s) numa só forma de número'); data/historico.md, 2026-11-22, change `strings-geradas-do-quadro`; verificação da change em 2026-11-22",
+      "descricao": "WoS, Scopus e BRAPCI declaram `plural: explícito` na declaração de cobertura, mas as strings dos procedimentos de busca trazem termos numa só forma de número, fora do alcance de truncamento. A contagem por base é a do relato de `python3 -m rsl documentos conferir`. Pelas skills `expressoes-de-busca` e `procedimento-de-busca-por-base`, `explícito` exige as duas formas de número. Se a base não lematizar, há perda de recall; a lematização de nenhuma das três está medida.",
+      "origem": "python3 -m rsl documentos conferir (relato 'termo(s) numa só forma de número'); data/historico.md, 2026-11-22, change `strings-geradas-do-quadro`; verificação da change em 2026-11-22",
       "bloqueia": "primeira execução da busca na WoS, na Scopus e na BRAPCI",
       "acao_sugerida": "aplicar a change `geracao-das-fichas-de-busca` (decisão do pesquisador de 2026-11-23): o plural explícito passa a ser gerado por regra e exceções declaradas, e `plural` passa a valer por idioma. Para o idioma que a base lematiza, medir a lematização numa execução registrada (skill `flexao-por-base`), citá-la na linha 'Lematização' da seção 1 e declarar `pela lematização` para ele. A pendência sai na primeira gravação de `procedimentos gerar`",
       "responsavel": "pesquisador"

@@ -11,7 +11,7 @@ Mede uma coisa só: **a busca recupera os estudos que tinha obrigação de recup
 ## 1. Executar
 
 ```
-python3 -m rsl busca aderencia
+python3 -m rsl aderencia medir
 ```
 
 Lê o conjunto-semente e as execuções registradas em `data/registro_execucao.json`, casa por título
@@ -36,7 +36,7 @@ em `data/historico.md` (ver `conjunto-semente`, §4). As exportações das bases
 `README.md`, seção Mapa.
 
 O instrumento de campo é `data/semente_aderencia.csv` — uma linha por semente e por
-base, gerado por `python3 -m rsl sementes planilha`. O preenchimento das etapas 1 e 2 e o
+base, gerado por `python3 -m rsl aderencia planilhar`. O preenchimento das etapas 1 e 2 e o
 significado de cada coluna estão em `conjunto-semente`, §7. A linha de comando não
 substitui esse registro: ela mede, o instrumento documenta.
 

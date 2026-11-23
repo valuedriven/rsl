@@ -33,7 +33,7 @@ identificadas pelo leitor a partir da composição e das âncoras.
 
 ### Requirement: Bases vêm do protocolo
 As bases usadas na derivação e no instrumento de aderência — sigla e identificador `BDn` —
-SHALL vir da tabela "Bases de dados" do protocolo, e a ficha, da sigla; o código MUST NOT
+SHALL vir da tabela "Bases de dados" do protocolo, e o procedimento de busca, da sigla; o código MUST NOT
 fixar lista nem mapa de bases. A base é escolhida na linha de comando pela sigla ou pelo
 identificador.
 
@@ -131,12 +131,12 @@ semente lido do arquivo de sementes. Os dados de conferência SHALL vir do mesmo
 e a planilha MUST NOT trazer a coluna `escopo`.
 
 #### Scenario: Coluna de papel
-- **WHEN** `sementes planilha` gera a planilha
+- **WHEN** `aderencia planilhar` gera a planilha
 - **THEN** cada linha traz a coluna `papel` com `desenvolvimento` ou `validação`, igual ao
   campo `papel` da semente no arquivo de sementes
 
 #### Scenario: Sem coluna de escopo
-- **WHEN** `sementes planilha` gera a planilha
+- **WHEN** `aderencia planilhar` gera a planilha
 - **THEN** o cabeçalho não traz `escopo`
 
 ### Requirement: Arquivos de entrada e de saída lidos da configuração
@@ -147,19 +147,19 @@ SHALL obter do `config.toml` o caminho de cada arquivo que leem ou gravam. Isso 
 
 #### Scenario: Registro em outro caminho
 - **WHEN** o `config.toml` aponta o registro de execução para outro caminho
-- **THEN** `busca registrar`, `busca derivar` e `conferir-dados` leem e gravam esse
+- **THEN** `busca registrar`, `busca derivar` e `dados conferir` leem e gravam esse
   caminho, e as mensagens o nomeiam
 
 #### Scenario: Arquivo de sementes em outro caminho
 - **WHEN** `[documentos] sementes` aponta outro arquivo
-- **THEN** `sementes planilha` e `busca aderencia` leem as sementes desse arquivo
+- **THEN** `aderencia planilhar` e `aderencia medir` leem as sementes desse arquivo
 
 #### Scenario: Chave antiga do arquivo de conferência
 - **WHEN** o `config.toml` traz a chave `[dados] sementes`
 - **THEN** a configuração reprova, nomeando a chave, como as demais chaves fora do esquema
 
 ### Requirement: Regravação da planilha de aderência preserva o preenchimento manual
-`sementes planilha` SHALL regravar `semente_aderencia.csv` conservando, em cada linha, as
+`aderencia planilhar` SHALL regravar `semente_aderencia.csv` conservando, em cada linha, as
 colunas preenchidas à mão (`indexada`, `data_etapa1`, `recuperada`, `como_localizada`,
 `data_etapa2` e `observacao`). A linha anterior casa com a nova por `id` e `base`, e só
 casa se o título for o mesmo, sem distinguir acento nem caixa. As demais colunas MUST vir
@@ -167,7 +167,7 @@ sempre do arquivo de sementes e da tabela de bases.
 
 #### Scenario: Preenchimento conservado
 - **WHEN** a planilha traz `indexada = sim` e `observacao` preenchida na linha SE2 × wos,
-  e `sementes planilha` é executado de novo, sem mudança no arquivo de sementes
+  e `aderencia planilhar` é executado de novo, sem mudança no arquivo de sementes
 - **THEN** a linha SE2 × wos sai com o mesmo `indexada` e a mesma `observacao`
 
 #### Scenario: Coluna derivada atualizada
@@ -177,7 +177,7 @@ sempre do arquivo de sementes e da tabela de bases.
 
 #### Scenario: Primeira geração
 - **WHEN** `semente_aderencia.csv` não existe
-- **THEN** `sementes planilha` grava a planilha com as colunas manuais vazias
+- **THEN** `aderencia planilhar` grava a planilha com as colunas manuais vazias
 
 #### Scenario: Linha anterior sem preenchimento
 - **WHEN** a planilha traz uma linha de semente ou de base que deixou de existir, com as
@@ -185,7 +185,7 @@ sempre do arquivo de sementes e da tabela de bases.
 - **THEN** a regravação omite essa linha e sai OK
 
 ### Requirement: Regravação recusada quando perderia preenchimento manual
-`sementes planilha` MUST NOT gravar a planilha quando a regravação perderia conteúdo não
+`aderencia planilhar` MUST NOT gravar a planilha quando a regravação perderia conteúdo não
 vazio da planilha anterior: coluna manual de linha sem par, de linha cujo título mudou, ou
 de coluna fora do esquema. O subcomando SHALL sair com REPROVADO, nomeando cada `id`,
 `base` e coluna afetados, e deixar o arquivo anterior intacto.
@@ -193,23 +193,23 @@ de coluna fora do esquema. O subcomando SHALL sair com REPROVADO, nomeando cada 
 #### Scenario: Semente renumerada
 - **WHEN** SE3 é retirada, SE4 passa a SE3, e a planilha traz `indexada` preenchida na
   linha SE3 × scopus com o título da semente retirada
-- **THEN** `sementes planilha` sai com REPROVADO, nomeando SE3 × scopus e o título
+- **THEN** `aderencia planilhar` sai com REPROVADO, nomeando SE3 × scopus e o título
   divergente, e `semente_aderencia.csv` não muda
 
 #### Scenario: Semente retirada com preenchimento
 - **WHEN** SE10 sai do arquivo de sementes e a planilha traz `recuperada` preenchida em
   SE10 × wos
-- **THEN** `sementes planilha` sai com REPROVADO, nomeando SE10 × wos e a coluna
+- **THEN** `aderencia planilhar` sai com REPROVADO, nomeando SE10 × wos e a coluna
   `recuperada`, e `semente_aderencia.csv` não muda
 
 #### Scenario: Coluna acrescentada à mão
 - **WHEN** a planilha traz uma coluna fora do esquema com algum valor preenchido
-- **THEN** `sementes planilha` sai com REPROVADO, nomeando a coluna, e
+- **THEN** `aderencia planilhar` sai com REPROVADO, nomeando a coluna, e
   `semente_aderencia.csv` não muda
 
 #### Scenario: Planilha anterior ilegível
 - **WHEN** `semente_aderencia.csv` existe e não é CSV legível
-- **THEN** `sementes planilha` sai com DADOS, nomeando o arquivo, e não o regrava
+- **THEN** `aderencia planilhar` sai com DADOS, nomeando o arquivo, e não o regrava
 
 ### Requirement: Autoteste prova a preservação da planilha de aderência
 O autoteste SHALL gerar a planilha num diretório temporário, preencher colunas manuais,
@@ -240,10 +240,10 @@ subcomando MUST sair com USO antes de ler qualquer arquivo, e nada é registrado
 - **THEN** a sinopse mostra `--retorno RETORNO` fora de colchetes
 
 ### Requirement: Registro de execução ausente remete à primeira execução registrada
-Quando `[dados] registro` não existe, `pendencias` SHALL relatar a ausência e orientar o
+Quando `[dados] registro` não existe, `projeto pendencias` SHALL relatar a ausência e orientar o
 registro da primeira execução com `busca registrar`. A orientação MUST NOT mandar
-reconstituir o registro a partir das fichas ou da memória.
+reconstituir o registro a partir dos procedimentos de busca ou da memória.
 
 #### Scenario: Registro ausente
-- **WHEN** `pendencias` é executado sem `registro_execucao.json`
+- **WHEN** `projeto pendencias` é executado sem `registro_execucao.json`
 - **THEN** a linha da ausência nomeia `busca registrar` e não contém "reconstitua"

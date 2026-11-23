@@ -6,7 +6,7 @@ ou o arquivo de sementes (`[documentos] sementes`) já dizem não se copia para 
 lê-se do documento, por `ctx.protocolo()`.
 
 Arquivo ausente ou ilegível sai com o código DADOS; conteúdo incoerente com o protocolo,
-com REPROVADO; ficha fora da gramática, com PROTOCOLO_ILEGIVEL, só na sua base.
+com REPROVADO; procedimento de busca fora da gramática, com PROTOCOLO_ILEGIVEL, só na sua base.
 """
 
 import csv
@@ -22,7 +22,7 @@ from .fichas import base_derivada, ficha
 from .markdown import normaliza
 from .saida import Saida
 
-CMD_PENDENCIAS = "python3 -m rsl pendencias"
+CMD_PENDENCIAS = "python3 -m rsl projeto pendencias"
 CMD_REGISTRAR = "python3 -m rsl busca registrar"
 CMD_EXPORTAR = "python3 -m rsl termos exportar"
 CMD_VALIDAR = "python3 -m rsl termos validar"
@@ -106,9 +106,9 @@ def problemas_citacoes_registro(ctx, d, registro):
     Toda menção ao caminho do registro — em tabela ou em prosa — nomeia a execução na forma
     da gramática, com `BDn` da própria base e o id presente no registro; e toda citação
     `(BDn/<id>)`, mesmo em linha sem o caminho (a linha "Lematização"), tem esse lastro.
-    Menção sem identificador, identificador de outra base ou execução inexistente reprova
-    só a base da ficha. Sem o registro, a menção já é citação sem lastro. As fichas vêm do contexto,
-    que pode trazer cópias alteradas (autoteste).
+    Menção sem identificador, identificador de outra base ou execução inexistente reprova só
+    a base do procedimento de busca. Sem o registro, a menção já é citação sem lastro. Os
+    procedimentos de busca vêm do contexto, que pode trazer cópias alteradas (autoteste).
     """
     caminho = str(ctx.config.valor("dados.registro"))
     execucoes = {}
@@ -133,7 +133,7 @@ def problemas_citacoes_registro(ctx, d, registro):
             # citação.
             if caminho not in linha and not citacoes:
                 continue
-            where = f"{sigla}: ficha {b['ficha']}:{n}"
+            where = f"{sigla}: procedimento de busca {b['ficha']}:{n}"
             if not citacoes:
                 problemas.append(f"{where}: menção ao registro sem identificador de execução "
                                  f"`{G.F_CITACAO.texto.split()[0]}`")
@@ -299,14 +299,14 @@ def cmd_pendencias(ctx, a=None):
             linhas.append(f"[validação] {manuais} linha(s) {STATUS_MANUAL} — consultar o "
                           f"instrumento e registrar na planilha")
 
-    # Lacuna que a própria ficha declara e deixa em aberto. A decisão é do pesquisador:
-    # acrescentar o termo à string, com nova execução e novo teste de aderência, ou manter
-    # a perda e declará-la no relatório.
+    # Lacuna que o próprio procedimento de busca declara e deixa em aberto. A decisão é do
+    # pesquisador: acrescentar o termo à string, com nova execução e novo teste de
+    # aderência, ou manter a perda e declará-la no relatório.
     for base in d["bases"]:
         try:
             b = base_derivada(ctx, d, base["sigla"])
         except ProtocoloInvalido as e:
-            linhas.append(f"[{base['sigla']}] ficha ilegível: {e}")
+            linhas.append(f"[{base['sigla']}] procedimento de busca ilegível: {e}")
             continue
         pendentes = [e for e in b["declaracao"]["exclusoes"]
                      if G.MOTIVO_PENDENTE in normaliza(e["motivo"])]

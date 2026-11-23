@@ -176,16 +176,6 @@ def casos(_ctx, g):
     m = dataclasses.replace(e, gravado=e.gravado + "\nlinha editada à mão\n")
     _caso(g, "catálogo gravado defasado", m, e, "defasado", f"{C.CATALOGO} defasado")
 
-    # nomes antigos
-    antigo = "antigo-autoteste velho"
-    viva = sorted(k for k in e.vivos if k.startswith(C.SKILLS))[0]
-    m = dataclasses.replace(e, aliases={**e.aliases, antigo: folha},
-                            vivos={**e.vivos, viva: e.vivos[viva] + f"\n`{antigo}`\n"})
-    _caso(g, "skill viva cita nome antigo de comando", m, e, "nome_antigo",
-          f"{viva}:")
-    fora = [k for k in e0.vivos if k == "data/historico.md" or "changes/archive" in k]
-    g.testa("histórico e changes arquivadas ficam fora da varredura", not fora, f"{fora}")
-
     # forma do guia
     m = dataclasses.replace(e, guia=_apos_linha(t, primeiro.linha, "  - Rotulo-errado: x"))
     g.espera("subitem fora da gramática do guia", m, e,

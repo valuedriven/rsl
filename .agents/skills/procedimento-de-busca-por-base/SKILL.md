@@ -1,11 +1,11 @@
 ---
-name: ficha-de-busca-por-base
-description: Cria ou atualiza a ficha de busca de uma base (docs/procedimentos_busca_<sigla>.md, sigla da tabela "Bases de dados" do protocolo) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere a ficha contra o protocolo. Use ao montar a ficha de uma base nova, ao propagar emenda do protocolo às fichas, ao incorporar sintaxe recém-verificada, ao auditar se uma ficha está completa e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre a ficha e o vocabulário do protocolo.
+name: procedimento-de-busca-por-base
+description: Cria ou atualiza o procedimento de busca de uma base (docs/procedimentos_busca_<sigla>.md, sigla da tabela "Bases de dados" do protocolo) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere o procedimento contra o protocolo. Use ao montar o procedimento de busca de uma base nova, ao propagar emenda do protocolo aos procedimentos de busca, ao incorporar sintaxe recém-verificada, ao auditar se um procedimento está completo e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre o procedimento e o vocabulário do protocolo.
 ---
 
-# Ficha de busca por base
+# Procedimento de busca por base
 
-A ficha é o **protocolo de busca de uma base**: diz como o vocabulário, as expressões e os
+O procedimento de busca é o **protocolo de busca de uma base**: diz como o vocabulário, as expressões e os
 critérios do protocolo se executam **naquela** base e com que evidência se sabe que ela
 aceita o que se submete. Não é cópia do protocolo com outra sintaxe, nem manual da base.
 
@@ -15,13 +15,13 @@ outra usa só o núcleo e executa por consultas curadas. Tratá-las como cópias
 sintaxe de uma com o vocabulário suposto de outra.
 
 > **Duas fontes, com papéis distintos.** O **vocabulário** é do protocolo; a **forma** é da
-> ficha da base. Mudar uma sem revisitar a outra é defeito que só aparece depois de a busca
+> procedimento de busca da base. Mudar uma sem revisitar a outra é defeito que só aparece depois de a busca
 > já ter sido executada.
 
-## A ficha é operacional
+## O procedimento de busca é operacional
 
-A ficha diz **como executar a busca naquela base, na forma vigente** — e nada além disso.
-Quem a abre para executar não deve ter de separar a instrução do racional.
+O procedimento de busca diz **como executar a busca naquela base, na forma vigente** — e nada além disso.
+Quem o abre para executar não deve ter de separar a instrução do racional.
 
 - **Só a decisão final.** Nada de histórico: sem datas de decisão, sem "vigente desde", sem
   "retirado em", sem forma anterior, sem retornos vencidos, sem numeração explicada por
@@ -29,35 +29,35 @@ Quem a abre para executar não deve ter de separar a instrução do racional.
   registro de execução.
 - **Sem cabeçalho.** O arquivo começa pelo título `# Strings de busca — <base>` e segue
   direto para a seção 1.
-- **Sem informação de exclusão.** Termo retirado por emenda **não se lista** na ficha: o
+- **Sem informação de exclusão.** Termo retirado por emenda **não se lista** no procedimento: o
   leitor o desconta por construção, porque o vigente é a string (STR) do protocolo e o termo
   que só consta do quadro terminológico não é esperado na base. Termo
   alcançado pela forma radical também não se lista: o leitor calcula o alcance. A tabela de
   redução só existe quando a **própria base** deixa fora da string um termo vigente, uma
   linha por termo, motivo curto.
 - **Sem justificativa.** Regra, disparo, forma e limiar — não o porquê. O racional de uma
-  decisão está no protocolo ou no histórico; a ficha não o repete. Uma frase de contexto só
+  decisão está no protocolo ou no histórico; o procedimento não o repete. Uma frase de contexto só
   entra quando sem ela a instrução seria executada errado.
 - **Número em prosa não entra** se o leitor o calcula (quantos termos, quantas consultas,
   comprimento de cada consulta): a cópia defasa.
 
-Esta skill cuida da **ficha inteira**: o que pesquisar, o que registrar, em que ordem montar,
+Esta skill cuida da **procedimento de busca inteiro**: o que pesquisar, o que registrar, em que ordem montar,
 o que a forma da base pode mudar no vocabulário e como conferir. A lógica das cinco
 expressões é de `expressoes-de-busca`; a execução e o registro dos retornos, de
-`busca-nas-bases`. Ler a que couber antes do passo correspondente.
+`execucao-da-busca`. Ler a que couber antes do passo correspondente.
 
 ## Antes de começar: qual é a operação
 
-| Operação | Disparo | O que muda na ficha |
+| Operação | Disparo | O que muda no procedimento |
 | --- | --- | --- |
-| **Ficha nova** | base nova nas fontes do protocolo | tudo; exige a base já registrada no protocolo |
+| **Procedimento novo** | base nova nas fontes do protocolo | tudo; exige a base já registrada no protocolo |
 | **Propagação de emenda** | mudou vocabulário, expressão, critério ou recorte no protocolo | as seções afetadas; mudança que altere a recuperação é emenda de busca |
 | **Sintaxe nova** | documentação consultada ou sondagem medida | seção 1 e o que dela depende |
 | **Auditoria** | pedido de revisão ou divergência encontrada | nada, até o pesquisador decidir; relatar |
 
-**Quando a ficha divergir do protocolo**, identificar primeiro o que mudou:
+**Quando o procedimento divergir do protocolo**, identificar primeiro o que mudou:
 
-- **vocabulário ou forma** → revisar a ficha: termo novo entra na string ou na redução
+- **vocabulário ou forma** → revisar o procedimento: termo novo entra na string ou na redução
   declarada, com motivo. Mudança que altere a recuperação exige nova execução e novo teste
   de aderência: é emenda de busca;
 - **só a declaração** → conferir; não há execução a repetir, mas há decisão a registrar.
@@ -66,16 +66,16 @@ Nos dois casos, registrar no histórico (`data/historico.md`). Divergência fech
 seguinte.
 
 **Base nova é decisão de escopo** — fontes de informação são do protocolo, e o pesquisador
-decide. Sem a base registrada no protocolo (`BDn`, nome, justificativa), não há ficha a
-criar: apresentar a lacuna e pedir a decisão.
+decide. Sem a base registrada no protocolo (`BDn`, nome, justificativa), não há procedimento
+a criar: apresentar a lacuna e pedir a decisão.
 
 ## Ler antes de escrever
 
-Na ordem, e sempre a **versão corrente** — a ficha pode ter sido editada pelo pesquisador
+Na ordem, e sempre a **versão corrente** — o procedimento pode ter sido editado pelo pesquisador
 desde a última leitura, e essa edição é o ponto de partida:
 
 1. `README.md` — mapa, nomes de arquivo e precedência; `docs/procedimentos.md` — comandos;
-   `python3 -m rsl mostrar` — limiares em uso e a origem de cada um.
+   `python3 -m rsl configuracao mostrar` — limiares em uso e a origem de cada um.
 2. O protocolo de estratégia: questão, facetas e âncoras, quadro terminológico por camada e
    idioma, strings, expressões (a executada e a sonda, identificadas pela composição) e as
    suas notas, critérios de elegibilidade e fontes; o conjunto-semente vem do arquivo de
@@ -85,34 +85,34 @@ desde a última leitura, e essa edição é o ponto de partida:
 4. O histórico: decisões já tomadas sobre esta base — reduções, variantes adotadas, defeitos
    que já ocorreram.
 5. O registro de execução da base: sondagens medidas, estado da interface, retornos.
-6. A ficha atual da base, se existir, e **uma ficha de outra base** como referência de
+6. O procedimento de busca atual da base, se existir, e **o de outra base** como referência de
    estrutura — sem lhe copiar a sintaxe.
 
 ## Passo 1 — apurar a sintaxe da base
 
-A seção 1 da ficha é uma tabela **elemento · situação**. A fonte se diz uma vez, acima da
+A seção 1 do procedimento é uma tabela **elemento · situação**. A fonte se diz uma vez, acima da
 tabela, quando todo o documento se apoia numa só fonte; ganha coluna própria quando as fontes
 diferem de elemento para elemento. Cada elemento tem um de quatro estados, e o estado é o
 que se registra:
 
 | Estado | Evidência exigida |
 | --- | --- |
-| **Verificado em fonte oficial** | página de ajuda ou documentação do provedor; na ficha, o título da página; a data da consulta, no registro de execução |
+| **Verificado em fonte oficial** | página de ajuda ou documentação do provedor; no procedimento, o título da página; a data da consulta, no registro de execução |
 | **Verificado em fonte secundária** | material de terceiro — treinamento, guia de biblioteca; declarar como secundário |
 | **Verificado por medição** | sondagem registrada com consulta, retorno e captura, no registro de execução |
 | **Não verificado** | escreve-se assim; nunca se presume pela documentação de outra base |
 
 **Toda menção ao arquivo de registro de execução nomeia a execução.** Escrever o caminho do
-registro — `data/registro_execucao.json` — em qualquer linha da ficha, em tabela ou em prosa,
+registro — `data/registro_execucao.json` — em qualquer linha do procedimento, em tabela ou em prosa,
 só é correto junto da citação `(BDn/<id>)`, com `BDn` da própria base e a execução existente
-no registro; a conferência dos dados reprova a ficha sem esse lastro, e só aquela base.
+no registro; a conferência dos dados reprova o procedimento sem esse lastro, e só aquela base.
 Instrução que apenas manda registrar diz "registro de execução", sem o caminho. O estado
 **Verificado por medição** exige essa citação; sem ela, o estado é **Não verificado**.
 
 **Documentação não é comportamento.** Bases já contradisseram a própria documentação —
 curinga que devolve zero, operador que zera o retorno quando há grupo, teto de retorno não
 anunciado. O que a expressão usa e só a documentação sustenta fica marcado como a medir, e a
-sondagem é obrigatória antes da primeira execução (`busca-nas-bases`).
+sondagem é obrigatória antes da primeira execução (`execucao-da-busca`).
 
 Elementos a apurar, todos — o que a base não tiver se registra como inexistente, com a
 fonte da ausência:
@@ -126,8 +126,8 @@ fonte da ausência:
   lematização;
 - **lematização**: plural regular, irregular, idiomas em que é documentada — e, até ser
   **medida na primeira execução da base** (sonda do singular contra o plural, registrada e
-  citada `(BDn/<id>)` na linha "Lematização" da seção 1), o estado é **Não verificado** e a
-  ficha declara `plural: explícito`;
+  citada `(BDn/<id>)` na linha "Lematização" da seção 1), o estado é **Não verificado** e o
+  procedimento declara `plural: explícito`;
 - **proximidade**: operador, distância padrão, se aceita grupos de cada lado;
 - **agrupamento**: parênteses, mistura de campos num grupo, grupo isolado;
 - **limites**: teto de caracteres da consulta — que alimenta o parâmetro `teto de
@@ -150,7 +150,7 @@ que não abriu é pendência registrada, nunca "a base não tem".
 
 A seção 2 é uma tabela com **todos** os critérios do protocolo, inclusive os que a base não
 aplica. Para cada um, um de quatro destinos e o *como*; a razão, quando houver, vai ao
-histórico, não à ficha:
+histórico, não ao procedimento:
 
 | Destino | Quando | Exemplo de razão |
 | --- | --- | --- |
@@ -167,13 +167,13 @@ Três regras:
 - **Critério de domínio vai por âncora**, não por filtro de categoria; categoria de assunto
   é camada de precisão, último recurso, declarada no relatório.
 - **Dispensar um critério ou movê-lo para a interface é decisão registrada** no histórico,
-  com o que se perde; na ficha fica só o destino e o *como*. Onde há filtro de ano na
+  com o que se perde; no procedimento fica só o destino e o *como*. Onde há filtro de ano na
   consulta e na página, o ano confere-se no **retorno**.
 
 ## Passo 3 — strings por faceta e declaração de cobertura
 
 O vocabulário vem do protocolo; a forma da base decide o resto, e toda mudança se declara
-na ficha, nunca na memória de quem executa.
+no procedimento, nunca na memória de quem executa.
 
 **O que a forma pode mudar**, sempre declarado: **campo** (tópico, título-resumo-palavras-
 chave, título, resumo, descritor); **proximidade** e a distância medida; **truncamento** — há
@@ -202,21 +202,21 @@ radical não entram na redução: o leitor os trata.
 
 **Parâmetros da geração da busca.** É aqui, e não na skill, que a base difere das outras.
 `plural` e `teto de caracteres` governam a composição: a string e as consultas se montam a
-partir da STR aplicando o valor declarado, e `conferir` confere o resultado contra ele. Base
+partir da STR aplicando o valor declarado, e `documentos conferir` confere o resultado contra ele. Base
 nova ou sintaxe recém-medida muda o valor do parâmetro, nunca uma regra escrita para uma
 base só.
 
 - `plural` diz quem alcança o plural: `explícito` — a string traz as duas formas de número,
   ou um truncamento que as alcance — ou `pela lematização` — a base o alcança sozinha. `pela
   lematização` só vale com a linha "Lematização" da seção 1 **verificada por medição** e
-  com a execução citada `(BDn/<id>)`; sem isso, `conferir` reprova a base. Em `explícito`,
-  `conferir` relata, sem reprovar, os termos numa só forma de número: substantivo não
+  com a execução citada `(BDn/<id>)`; sem isso, `documentos conferir` reprova a base. Em `explícito`,
+  `documentos conferir` relata, sem reprovar, os termos numa só forma de número: substantivo não
   contável não tem plural de uso; o agente propõe o plural termo a termo e o pesquisador decide.
 - `teto de caracteres` é o comprimento máximo de cada consulta executável, em caracteres
   do bloco tal como se cola na interface: um número inteiro (`1400` ou `1.400`) ou
   `nenhum`. Com número, a consulta que passa dele se particiona sem retirar termo
-  (`expressoes-de-busca`), e `conferir` reprova a base em que alguma passe. Com `nenhum`,
-  `conferir` relata a maior consulta. A origem do número — medido, documentado ou regra de
+  (`expressoes-de-busca`), e `documentos conferir` reprova a base em que alguma passe. Com `nenhum`,
+  `documentos conferir` relata a maior consulta. A origem do número — medido, documentado ou regra de
   bolso — fica na linha "Comprimento máximo da consulta" da seção 1. Sem medição, o teto é
   escolha conservadora proposta ao pesquisador. Valor alto demais aparece como recusa da
   interface; valor baixo demais custa partição, não recall.
@@ -246,7 +246,7 @@ esperado em recall, e pede a decisão.
   (`expressoes-de-busca`). Proximidade e filtros, se usados, valem **para todas**.
 - Cada expressão que se executa — a executada, as de fidelidade e a sonda — é **bloco
   literal único**, com as âncoras em proximidade inline. Não se definem conjuntos `#n`: a
-  numeração é atribuída pela sessão e não se reproduz a partir da ficha. O bloco é o que se
+  numeração é atribuída pela sessão e não se reproduz a partir do procedimento. O bloco é o que se
   submete; não há receita de montagem.
 - A **segunda cópia** — o bloco contra a seção 3 — não é tolerada por convenção: é conferida.
   O conjunto de termos do bloco tem de ser o das strings das facetas declaradas; termo
@@ -257,7 +257,7 @@ esperado em recall, e pede a decisão.
   conferência, e a forma longa é exceção declarada.
 - **Forma de execução**: única, particionada em consultas de campo único unidas por
   deduplicação, ou lista curada executada consulta a consulta. Partição tem de ser exata:
-  as mesmas âncoras em todas as partes. Lista curada não lê as facetas, e a ficha diz isso.
+  as mesmas âncoras em todas as partes. Lista curada não lê as facetas, e o procedimento diz isso.
 - **Estratégia de proximidade**, quando a base tem operador de proximidade ou quando a
   expressão o usa: subseção `### Estratégia de proximidade` na seção 4. É discussão, não
   forma executável: o leitor a ignora, e bloco cercado nela não se executa nem se confere.
@@ -291,14 +291,14 @@ esperado em recall, e pede a decisão.
 - **Conjunto-semente**: as sementes que o protocolo atribui a esta base, com identificador,
   DOI ou outro identificador **conferido na fonte**, e o procedimento em duas etapas —
   indexação primeiro, recuperação depois. Contagens **não se transcrevem**: leem-se do
-  protocolo. O **estado** da aderência não entra na ficha: está no registro de execução.
+  protocolo. O **estado** da aderência não entra no procedimento: está no registro de execução.
 - **Ressalvas**: só o que muda a execução ou o relato — estatuto dos termos, o que foi
   verificado só em fonte secundária, o que a base não cobre e quem cobre —, um item curto
   cada.
 
 ## Contrato de forma — o que a conferência lê
 
-A ficha é fonte autoral e é **lida pelo leitor do protocolo** do projeto. O que está abaixo
+O procedimento de busca é fonte autoral e é **lido pelo leitor do protocolo** do projeto. O que está abaixo
 não é estilo: fora disso a conferência daquela base reprova ou, pior, lê errado. Antes de
 alterar, conferir no leitor se o contrato ainda é este.
 
@@ -319,11 +319,11 @@ alterar, conferir no leitor se o contrato ainda é este.
 | ignoradas pela leitura | subseções iniciadas por "Como executar", "Variantes", "Como esta base" e "Estratégia de proximidade" |
 | filtros reconhecidos | `PY=(…)`, `PUBYEAR`, `LA=`/`LANGUAGE`, `DT=`/`DOCTYPE`; filtro fora disso é lido como "na interface" |
 
-**Base nova exige mudança no leitor**, além da ficha: o mapa de fichas por base e, se a
+**Base nova exige mudança no leitor**, além do procedimento: o mapa de procedimentos por base e, se a
 sintaxe trouxer campo ou filtro novo, o reconhecimento correspondente. Isso é alteração
-técnica a propor e a provar com o autoteste, não algo que a ficha resolva sozinha.
+técnica a propor e a provar com o autoteste, não algo que o procedimento resolva sozinho.
 
-## Estrutura da ficha
+## Estrutura do procedimento de busca
 
 ```
 # Strings de busca — <base>                sem cabeçalho: direto para a seção 1
@@ -342,15 +342,15 @@ técnica a propor e a provar com o autoteste, não algo que a ficha resolva sozi
 ## 6. Ressalvas                            itens curtos, só o que muda execução ou relato
 ```
 
-O texto que se repete entre fichas — composição, execução de cada expressão, leitura de
+O texto que se repete entre procedimentos — composição, execução de cada expressão, leitura de
 zero — pode ser o mesmo, e é curto; o que **não** se repete é qualquer afirmação sobre
 sintaxe, que é sempre desta base e com a sua fonte.
 
 ## Conferir e registrar
 
 1. Rodar a conferência do documento, a dos dados e o autoteste do projeto (comandos em
-   `docs/procedimentos.md`, seção Conferências transversais). Reprovação aponta incoerência: corrige-se a ficha ou se registra a redução
-   com motivo — **nunca se afrouxa a conferência** para a ficha passar.
+   `docs/procedimentos.md`, seção Conferências transversais). Reprovação aponta incoerência: corrige-se o procedimento ou se registra a redução
+   com motivo — **nunca se afrouxa a conferência** para o procedimento passar.
 2. Relatar a **cobertura por faceta** como número, decomposta em literal, alcançado por
    radical, declarado e descoberto. **Cobertura não é recall**: mede quanto do vocabulário
    declarado está na string, com outro denominador. Cobertura alta não é aderência, nem
@@ -369,7 +369,7 @@ sintaxe, que é sempre desta base e com a sua fonte.
      vale de fato, pela lógica da consulta?
    - **número escrito em prosa** — quantos termos, quantas palavras-raiz, quantas
      consultas — não deveria existir; se for indispensável, recalcula-se a partir das
-     strings da própria ficha;
+     strings do próprio procedimento;
    - **propagação entre seções**: mudança na forma de execução (partição, nomes das
      consultas, arquivos de exportação) chega a "Como executar", às ressalvas e ao registro
      de execução, e não só à seção 4;
@@ -377,14 +377,14 @@ sintaxe, que é sempre desta base e com a sua fonte.
      estado e fonte, e que as variantes têm disparo.
 4. Registrar no histórico o que mudou e por quê (`registrar-decisao`). Mudança que altere a
    recuperação torna vencidos os retornos anteriores daquela base: isso se registra no
-   histórico e no registro de execução, **não na ficha**, que passa a mostrar só a forma
+   histórico e no registro de execução, **não no procedimento**, que passa a mostrar só a forma
    nova.
-5. Reler a ficha procurando o que não é operacional — data, "antes", "passou a", "retirado
+5. Reler o procedimento procurando o que não é operacional — data, "antes", "passou a", "retirado
    em", justificativa, estado — e levar ao histórico o que ainda não estiver lá.
 
 ## Ao entregar
 
-Começar pelo que a ficha passou a dizer; depois, separadamente: o que se verificou e em que
+Começar pelo que o procedimento passou a dizer; depois, separadamente: o que se verificou e em que
 fonte, o que ficou **não verificado** e precisa de sondagem pelo pesquisador, as decisões
 metodológicas propostas e ainda pendentes, e o resultado das conferências com a saída.
 
@@ -392,8 +392,8 @@ metodológicas propostas e ainda pendentes, e o resultado das conferências com 
 
 Lógica das expressões:
 `expressoes-de-busca`. Sondagem, execução e registro sob as regras de acesso:
-`busca-nas-bases`. Coerência e fidelidade: `conferencias-da-busca`. Recall:
+`execucao-da-busca`. Coerência e fidelidade: `conferencias-da-busca`. Recall:
 `teste-de-aderencia`. Sementes: `conjunto-semente`. Critérios: `criterios-de-elegibilidade`.
 Emenda: `registrar-decisao`. Nomes de arquivo deste projeto estão
 no `README.md` (Mapa); comandos, em `docs/procedimentos.md`; bases, no protocolo; limiares em
-uso, em `python3 -m rsl mostrar`. Não se repetem aqui.
+uso, em `python3 -m rsl configuracao mostrar`. Não se repetem aqui.

@@ -15,9 +15,9 @@ Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?adv
 | `pubyearmin`/`pubyearmax` junto a um grupo | **Não verificado**; medir na primeira execução |
 | `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | **Não verificado**; medir na primeira execução |
 | Truncamento com `*` | **Não verificado**; medir na primeira execução |
-| Mínimo de três letras antes do `*` | **Não verificado**; afirmado sem fonte na skill `otimizar-strings-revisao-sistematica` até 2026-11-23; conferir na documentação oficial |
-| Derivação automática de radicais desativada, com casamento exato sem aspas | **Não verificado**; afirmado sem fonte na skill `otimizar-strings-revisao-sistematica` até 2026-11-23; conferir na documentação oficial |
-| API pública de exportação | **Não verificado**; afirmado sem fonte na skill `otimizar-strings-revisao-sistematica` até 2026-11-23; conferir na documentação oficial |
+| Mínimo de três letras antes do `*` | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
+| Derivação automática de radicais desativada, com casamento exato sem aspas | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
+| API pública de exportação | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
 | Lematização | **Não verificado**; medir na primeira execução |
 | Aspas como frase | **Não verificado**; medir na primeira execução |
 | Campo `descriptor` | **Não verificado**; medir na primeira execução |
@@ -52,7 +52,7 @@ Forma desta base: `STR1` no título; `STR1b`, subconjunto específico de `STR1`,
 
 ### Declaração de cobertura
 
-Lida por `python3 -m rsl conferir` (leitor das fichas em `src/rsl/fichas.py`).
+Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca em `src/rsl/fichas.py`).
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -122,7 +122,7 @@ Regras medidas; violá-las devolve **zero sem mensagem de erro**:
 - um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero;
 - `pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página;
 - sem truncamento; expressão composta sempre entre aspas;
-- cada consulta dentro do teto de caracteres da declaração de cobertura, que `conferir` confere contra o comprimento de cada bloco; acima dele, partir a expressão mantendo o grupo 🟦 íntegro e unir por deduplicação. As consultas de EB2, EB3 e EB4 são partidas no grupo 🟥 ou 🟧, sem retirar termo;
+- cada consulta dentro do teto de caracteres da declaração de cobertura, que `documentos conferir` confere contra o comprimento de cada bloco; acima dele, partir a expressão mantendo o grupo 🟦 íntegro e unir por deduplicação. As consultas de EB2, EB3 e EB4 são partidas no grupo 🟥 ou 🟧, sem retirar termo;
 
 Toda expressão é executada como duas consultas de campo único — `STR1` no título e `STR1b` no resumo —, ambas com a faceta 🟨 como grupo externo, unidas por deduplicação.
 
@@ -136,7 +136,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 | **EB1** | não executar; derivação local |
 
 - Execução: particionada
-- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl configuracao mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### EB1 (geral) — as quatro facetas
@@ -335,7 +335,7 @@ Executar as 13 consultas abaixo e unir por deduplicação.
 2. Aplicar o filtro de data da página e anotar o retorno antes e depois, com o rótulo exato do filtro.
 3. Registrar as 13 execuções, uma por arquivo: `python3 -m rsl busca registrar eric EB4 <arquivo> --retorno <n>`; rodar `busca derivar`. O retorno da base é a união deduplicada, nunca a soma: o número que vai às contagens da busca é o dos únicos, com o bruto ao lado.
 4. Executar EB5 (5a e 5b) uma única vez e registrar com `EB5`.
-5. Medir a aderência (seção 5). Abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`), passar à contingência das variantes.
+5. Medir a aderência (seção 5). Abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), passar à contingência das variantes.
 
 ### Variantes previstas
 
@@ -403,7 +403,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 ---
 

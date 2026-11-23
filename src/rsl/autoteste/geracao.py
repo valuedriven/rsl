@@ -73,7 +73,8 @@ def casos(ctx, g):
                  R, ("difere da STR gerada", f"{termo!r} (subsumido por {por!r})"))
 
     # Termo em duplicidade na STR: a leitura deduplica a lista que se compara, e sem o
-    # registro da repetição a STR repetida passaria em `conferir` e não seria regravada.
+    # registro da repetição a STR repetida passaria em `documentos conferir` e não seria
+    # regravada.
     repetida = sub_na_linha(t, idx_str1, r'\("', f'("{primeiro}" OR "')
     g.espera("STR com termo em duplicidade", repetida, t, executa, R,
              ("DUPLICIDADE", repr(primeiro), "2 ocorrências"))

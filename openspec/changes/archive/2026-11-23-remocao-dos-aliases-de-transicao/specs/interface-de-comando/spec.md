@@ -17,8 +17,8 @@ projeto. Os subcomandos canônicos SHALL ser estes:
 - `busca registrar` e `busca derivar`;
 - `conferencia fidelidade` e `conferencia sensibilidade`.
 
-Os nomes antigos definidos na change `namespace-de-comandos-e-skills` MUST funcionar como
-aliases temporários, conforme o requisito “Aliases de transição”. Os scripts
+Os nomes antigos definidos na change `namespace-de-comandos-e-skills` MUST NOT ser aceitos,
+conforme o requisito “Nomes antigos recusados”. Os scripts
 `src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.py` e
 `src/gen_semente.py` MUST NOT continuar existindo como ponto de entrada. O subcomando
 `sementes sincronizar` MUST NOT existir, porque o conjunto-semente não tem mais arquivo
@@ -42,10 +42,13 @@ separado a reconciliar.
 - **THEN** a saída tem o código USO, e nenhum documento do projeto cita o subcomando como
   comando
 
+#### Scenario: Catálogo no ponto de entrada
+- **WHEN** se executa `python3 -m rsl catalogo gerar -h`
+- **THEN** a ajuda descreve a geração do catálogo e a saída não tem código de erro
+
 #### Scenario: Comando canônico agrupado
 - **WHEN** se executa `python3 -m rsl aderencia medir`
-- **THEN** a operação mede a aderência ao conjunto-semente, como antes fazia
-  `busca aderencia`
+- **THEN** a operação mede a aderência ao conjunto-semente
 
 ### Requirement: Convenção de nomes
 Os subcomandos SHALL ser `grupo ação` quando houver grupo natural, com a ação no infinitivo,
@@ -70,25 +73,35 @@ O nome de cada arquivo de entrada e de saída SHALL vir do `config.toml`.
 - **THEN** a planilha de validação se chama `validacao_terminologica.csv`
 
 #### Scenario: Ação nominal recusada
-- **WHEN** se tenta registrar um comando cuja ação é substantivo, como `termos sonda`
-- **THEN** o nome canônico é `termos sondar` e o substantivo só vale como alias temporário
+- **WHEN** se tenta registrar um comando cuja ação é substantivo, como a sonda do grupo
+  `termos`
+- **THEN** o nome canônico é `termos sondar`, e o substantivo não é aceito como comando
 
 ## ADDED Requirements
 
-### Requirement: Aliases de transição
-Os nomes antigos de comando SHALL continuar funcionando como aliases ocultos até que nenhum
-documento ou skill viva os cite. O alias MUST executar a mesma operação do nome canônico e
-MUST emitir aviso de nome antigo. O catálogo MUST acusar citação de alias em documento
-vivo. A remoção dos aliases SHALL ocorrer em change própria.
+### Requirement: Nomes antigos recusados
+Os nomes antigos de comando renomeados pela change `namespace-de-comandos-e-skills` MUST NOT
+ser aceitos: cada um MUST terminar com o código USO, sem executar operação. A chave antiga
+`[documentos] ficha` do `config.toml` MUST reprovar com o código CONFIGURACAO, e a mensagem
+MUST nomear `[documentos] procedimento`.
 
-#### Scenario: Alias executa a operação
+#### Scenario: Comando antigo
 - **WHEN** se executa `python3 -m rsl busca aderencia`
-- **THEN** a operação de `aderencia medir` é executada e a saída avisa que o nome é antigo
+- **THEN** a saída tem o código USO, e nenhuma medição de aderência é executada
 
-#### Scenario: Alias não aparece na ajuda
-- **WHEN** se executa `python3 -m rsl`
-- **THEN** a ajuda lista apenas os nomes canônicos
+#### Scenario: Comando antigo de uma palavra
+- **WHEN** se executa `python3 -m rsl conferir`
+- **THEN** a saída tem o código USO
 
-#### Scenario: Remoção posterior
-- **WHEN** a change de remoção dos aliases é aplicada
-- **THEN** o nome antigo termina com o código USO, e nenhum documento vivo o cita
+#### Scenario: Chave antiga na configuração
+- **WHEN** o `config.toml` traz `[documentos] ficha`
+- **THEN** qualquer subcomando que lê a configuração sai com CONFIGURACAO, e a mensagem
+  nomeia a chave antiga e `[documentos] procedimento`
+
+## REMOVED Requirements
+
+### Requirement: Aliases de transição
+**Reason**: Nenhum documento vivo cita mais os nomes antigos; manter o alias deixaria dois
+nomes para a mesma operação.
+**Migration**: Usar o nome canônico (`aderencia medir` no lugar de `busca aderencia`, e
+assim por diante) e `[documentos] procedimento` no lugar de `[documentos] ficha`.

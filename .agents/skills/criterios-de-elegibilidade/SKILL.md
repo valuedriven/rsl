@@ -21,7 +21,7 @@ método do pesquisador, com consequência direta sobre o que entra e sobre que l
 podem enunciar ao final.
 
 **A regra é enunciada uma só vez, no documento que o projeto declara prevalente.** Os
-demais documentos (plano, critério de cada filtragem, fichas, formulários) remetem a ela
+demais documentos (plano, critério de cada filtragem, procedimentos de busca, formulários) remetem a ela
 ou a reproduzem sem mudar o sentido. Formulações divergentes da mesma regra — uma
 conjuntiva, outra disjuntiva, outra mais larga que as duas no critério de uma filtragem —
 são defeito comum e grave: cada revisor aplica uma, e a concordância mede a divergência
@@ -62,7 +62,7 @@ alcança depois da mudança. Não havendo resposta, ou o critério fica, ou a in
 classe é decidida e registrada como emenda de elegibilidade.
 
 Fazer a mesma pergunta ao renumerar: remissões ao número antigo (procedimentos,
-fichas, formulários) passam a apontar outro critério, ou nenhum.
+procedimentos de busca, formulários) passam a apontar outro critério, ou nenhum.
 
 ## 4. Regra de borda e regra de exceção
 

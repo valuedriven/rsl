@@ -1,6 +1,6 @@
 ---
-name: busca-nas-bases
-description: Conduz a EXECUÇÃO das expressões de busca nas bases Web of Science, Scopus, ERIC e BRAPCI e o registro dos retornos, sob as regras de segurança do acesso institucional federado. Use quando o pesquisador for executar busca numa base, reportar contagens de execução, anexar exportação, ou tratar de acesso CAFe, sondagem de sintaxe e registro de execução.
+name: execucao-da-busca
+description: Conduz a EXECUÇÃO da busca — executar as expressões de busca nas bases Web of Science, Scopus, ERIC e BRAPCI — e o registro dos retornos, sob as regras de segurança do acesso institucional federado. Use quando o pesquisador for executar busca numa base, reportar contagens de execução, anexar exportação, ou tratar de acesso CAFe, sondagem de sintaxe e registro de execução.
 ---
 
 # Executar e registrar busca nas bases
@@ -26,10 +26,10 @@ pesquisador. Não há exceção, não há urgência que justifique.
 
 ## O que executar
 
-As expressões vivem nas quatro fichas, uma por base, em `docs/`:
+As expressões vivem nos quatro procedimentos de busca, uma por base, em `docs/`:
 `procedimentos_busca_wos.md`, `procedimentos_busca_scopus.md`,
 `procedimentos_busca_eric.md` e `procedimentos_busca_brapci.md`. **Nunca ditar uma expressão de
-memória nem reescrevê-la na conversa.** Se a ficha estiver defasada, corrigi-la e registrar
+memória nem reescrevê-la na conversa.** Se o procedimento de busca estiver defasado, corrigi-lo e registrar
 a correção no histórico (`data/historico.md`).
 
 Só **EB4** é busca definitiva nas bases. EB1 tem a pertinência calculada localmente sobre os
@@ -39,7 +39,7 @@ registros exportados; EB2 e EB3 vão à base apenas no teste de fidelidade da de
 ## Antes da primeira execução numa base
 
 **Sondagem de sintaxe obrigatória.** Nunca supor que a base aceita o que a documentação
-diz. A tabela do que cada base aceita **medido** está na ficha da própria base, e já
+diz. A tabela do que cada base aceita **medido** está no procedimento de busca da própria base, e já
 contradisse a documentação: a ERIC não trunca (`ontolog*` devolve 0) e a BRAPCI tem teto de
 1.000 registros no retorno.
 
@@ -76,7 +76,7 @@ O que vem depois não é desta skill:
 
 | Tarefa | Skill |
 | --- | --- |
-| deduplicar o que veio de várias bases | `deduplicacao` |
+| deduplicar o que veio de várias bases | `controle-de-duplicatas` |
 | medir recall contra o conjunto-semente | `teste-de-aderencia` |
 | coerência entre expressões, fidelidade, cobertura de campo | `conferencias-da-busca` |
 
@@ -84,7 +84,7 @@ O que vem depois não é desta skill:
 
 Contagens, data, base, edição da base, texto submetido e capturas vão para
 `data/registro_execucao.json`, na base correspondente. Troca de vínculo institucional vai
-para as **contagens da busca**, por poder alterar o que a base entrega. As fichas de `docs/` são
+para as **contagens da busca**, por poder alterar o que a base entrega. Os procedimentos de busca de `docs/` são
 operacionais: carregam a sintaxe verificada, as strings, as expressões, a forma de execução
 e as variantes vigentes — sem registro, estado, histórico nem justificativa de decisão.
 

@@ -1,4 +1,5 @@
-"""Exibição: o resumo do que foi lido (`mostrar`) e o contrato da gramática (`gramatica`)."""
+"""Exibição: o resumo do que foi lido (`configuracao mostrar`) e o contrato da gramática
+(`documentos gramatica`)."""
 
 from . import gramatica as G
 from .erros import ProtocoloInvalido
@@ -30,9 +31,9 @@ def _legivel(valor):
 
 
 def execucao_das_fichas(ctx, d):
-    """Forma de execução de cada base, com origem na ficha: (nome, valor, origem).
+    """Forma de execução de cada base, com origem no procedimento de busca: (nome, valor, origem).
 
-    Ficha ilegível nesse ponto aparece como tal, sem derrubar a exibição das demais.
+    Procedimento de busca ilegível nesse ponto aparece como tal, sem derrubar a exibição das demais.
     """
     saida = []
     for b in d["bases"]:
@@ -40,7 +41,7 @@ def execucao_das_fichas(ctx, d):
             valor = forma_execucao(ficha(ctx, d, b["sigla"]), b["ficha"])
         except (ProtocoloInvalido, OSError) as e:
             valor = f"ILEGÍVEL — {e}"
-        saida.append((f"execucao.{b['sigla']}", valor, f"ficha {b['ficha']}"))
+        saida.append((f"execucao.{b['sigla']}", valor, f"procedimento de busca {b['ficha']}"))
     return saida
 
 

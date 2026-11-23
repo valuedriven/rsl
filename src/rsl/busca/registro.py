@@ -154,7 +154,8 @@ def aplica_recorte(b, regs):
         bases = sorted({r.get("base", "?") for r in fora})
         print(f"  bases de origem dos retirados: {', '.join(bases)}")
         print("  O recorte é aplicado na busca em todas as bases — na consulta ou no filtro")
-        print("  da página, como a ficha de cada base declara. Esta linha deveria ser zero:")
+        print("  da página, como o procedimento de busca de cada base declara. Esta linha "
+              "deveria ser zero:")
         print("  registro fora da janela")
         print("  indica divergência entre o declarado e o devolvido. Investigar antes de")
         print("  prosseguir, e não apenas registrar.")

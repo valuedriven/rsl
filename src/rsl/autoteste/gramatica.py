@@ -183,5 +183,5 @@ def casos(ctx, g):
         g.espera(f"{e.rotulo}{onde} retirado ou deformado", mutante, original, executa,
                  Saida.PROTOCOLO_ILEGIVEL, (nomeado.rotulo,))
     print(f"  ({len(exigidos)} elementos exigidos na gramática, "
-          f"{len([e for e in exigidos if e.documento == G.FICHA])} da ficha de base, "
+          f"{len([e for e in exigidos if e.documento == G.FICHA])} do procedimento de busca, "
           f"{len([e for e in exigidos if e.documento == G.SEMENTES])} do arquivo de sementes)")

@@ -1,15 +1,16 @@
 """Autoteste: prova que cada conferência reprova o defeito que lhe cabe, com o código esperado.
 
-Cada defeito é injetado numa cópia em memória — do protocolo, de uma ficha, da configuração
-ou do arquivo de sementes — gerada a partir da estrutura lida do documento corrente (a
-última semente lida, a primeira base da tabela, a linha em que a faixa foi encontrada), não
-de literais do texto vigente. Defeito não detectado, detectado por outro motivo ou com outro
-código faz o autoteste falhar; mutação que não se aplica também.
+Cada defeito é injetado numa cópia em memória — do protocolo, de um procedimento de busca,
+da configuração ou do arquivo de sementes — gerada a partir da estrutura lida do documento
+corrente (a última semente lida, a primeira base da tabela, a linha em que a faixa foi
+encontrada), não de literais do texto vigente. Defeito não detectado, detectado por outro
+motivo ou com outro código faz o autoteste falhar; mutação que não se aplica também.
 
 Grupos executados numa só chamada, cada um com a sua contagem: defeitos injetados no
 protocolo, precedência, configuração, arquivo de sementes, leitura estrutural que aprova,
-planejamento da validação, arquivos alimentados, fichas das bases, composição da derivação,
-aderência por papel, geração das strings, gramática do protocolo e catálogo de apoio.
+planejamento da validação, arquivos alimentados, procedimentos de busca das bases,
+composição da derivação, aderência por papel, geração das strings, gramática do protocolo,
+catálogo de apoio e nomes antigos recusados.
 
 Sem os arquivos alimentados, os casos que dependem deles não rodam: o resultado é PARCIAL,
 nunca OK.
@@ -91,7 +92,7 @@ def conferir_texto(ctx):
 
 def grupos():
     from . import (busca, catalogo, configuracao, dados, fichas, geracao, gramatica,
-                   protocolo, sementes, validacao)
+                   nomes_antigos, protocolo, sementes, validacao)
     return [
         ("defeitos injetados no protocolo", protocolo.mutacoes),
         ("precedência", protocolo.precedencia),
@@ -101,11 +102,12 @@ def grupos():
         ("planejamento da validação", validacao.casos),
         ("conferências dos arquivos alimentados", dados.casos),
         ("geração das strings", geracao.casos),
-        ("fichas das bases", fichas.casos),
+        ("procedimentos de busca das bases", fichas.casos),
         ("prova da composição da derivação", busca.composicao),
         ("aderência por papel", busca.aderencia),
         ("gramática do protocolo", gramatica.casos),
         ("catálogo de apoio", catalogo.casos),
+        ("nomes antigos recusados", nomes_antigos.casos),
     ]
 
 

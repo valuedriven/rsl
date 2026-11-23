@@ -1,6 +1,6 @@
 ---
-name: filtragens
-description: Conduz as três filtragens de seleção dos estudos, com dois revisores independentes em modo cego, cálculo do kappa e resolução de divergência. Use ao planejar ou executar triagem por título, por resumo ou por texto completo, ao calcular concordância entre revisores, e ao tratar de inclusão ou exclusão de estudo no portfólio.
+name: filtragem-dos-estudos
+description: Conduz a filtragem dos estudos — filtrar estudos nas três filtragens de seleção —, com dois revisores independentes em modo cego, cálculo do kappa e resolução de divergência. Use ao planejar ou executar triagem por título, por resumo ou por texto completo, ao calcular concordância entre revisores, e ao tratar de inclusão ou exclusão de estudo no portfólio.
 ---
 
 # As três filtragens

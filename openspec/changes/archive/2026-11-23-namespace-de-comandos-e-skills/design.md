@@ -168,7 +168,9 @@ Arquivos vivos:
 - `openspec/specs/**/*.md` (specs principais);
 - `config.toml` (comentários);
 - `data/pendencias.json` (somente pendências vivas);
-- `src/rsl/autoteste/**/*.py` (mensagens).
+- `src/rsl/**/*.py` (mensagens do programa e do autoteste), exceto os arquivos que
+  guardam a correspondência de nomes ou exercitam os nomes antigos no autoteste
+  (`CODIGO_ISENTO` em `src/rsl/catalogo.py`).
 
 Isentos:
 
@@ -178,6 +180,12 @@ Isentos:
 - a própria change de renomeação, quando cita o nome antigo para descrevê-lo.
 
 A varredura é a mesma do catálogo; não se cria uma segunda lista.
+
+Nome antigo composto (`busca fidelidade`, `conferir-dados`) é reconhecido também sem
+`rsl ` nem crase, porque mensagem do programa o cita solto; nome de uma palavra só
+(`conferir`) exige o prefixo, para não casar com palavra comum ou identificador. A forma
+de flag da correspondência das specs (`--conferir-dados`) e o nome de módulo
+(`gramatica.py`) não são citação de alias.
 
 ### D9 — Autoteste
 

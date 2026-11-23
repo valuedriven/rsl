@@ -10,9 +10,10 @@
 # onde se identificam a executada e a sonda), facetas e âncoras, instrumentos (sigla, modo,
 # caminho, idiomas, facetas), bases (sigla, nome) e idiomas do quadro vêm só do protocolo;
 # o conjunto-semente vem só do arquivo de sementes (`[documentos] sementes`); a forma de
-# execução de cada base vem da ficha. A FORMA exigida do protocolo, das fichas e do arquivo
-# de sementes (seções, colunas, rótulos, campos) é a gramática do leitor, exibida por
-# `python3 -m rsl gramatica`, e também não entra aqui. As chaves antigas
+# execução de cada base vem do procedimento de busca. A FORMA exigida do protocolo, dos
+# procedimentos de busca e do arquivo de sementes (seções, colunas, rótulos, campos) é a
+# gramática do leitor, exibida por
+# `python3 -m rsl documentos gramatica`, e também não entra aqui. As chaves antigas
 # (`padroes.composicao`, `padroes.ancoras`, `padroes.executada`, `padroes.sonda`, `cores`,
 # `fichas`, `instrumentos`, `idiomas`, `[expressoes]`) e qualquer chave fora do esquema
 # reprovam a configuração.
@@ -81,12 +82,13 @@ sensibilidade = "sensibilidade_{base}.csv"
 aderencia = "semente_aderencia.csv"
 
 [documentos]
-# Ficha de busca de cada base, localizada pela sigla da tabela "Bases de dados" do
-# protocolo; tem de conter {sigla}. Caminho relativo à raiz do projeto.
-ficha = "docs/procedimentos_busca_{sigla}.md"
+# Procedimento de busca de cada base, localizado pela sigla da tabela "Bases de dados" do
+# protocolo; tem de conter {sigla}. Caminho relativo à raiz do projeto. (Nome antigo da
+# chave: `ficha`, aceito com aviso por uma rodada.)
+procedimento = "docs/procedimentos_busca_{sigla}.md"
 # Arquivo do conjunto-semente (TOML, uma tabela [[sementes]] por estudo, com os dados
 # bibliográficos, a aferição e a conferência de cada semente, campo a campo), editado pelo
-# pesquisador. É o único lugar de dado de semente. Esquema em `python3 -m rsl gramatica`.
+# pesquisador. É o único lugar de dado de semente. Esquema em `python3 -m rsl documentos gramatica`.
 sementes = "docs/conjunto_semente.toml"
 
 # ----------------------------------------------------------------- planilhas e JSON

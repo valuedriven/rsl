@@ -19,7 +19,8 @@ QUANDO = {
     Saida.REPROVADO: "uma conferência ou condição de aceite reprovou o conteúdo",
     Saida.USO: "argumento ou subcomando inválido",
     Saida.CONFIGURACAO: "config.toml ausente, inválido ou incompleto, ou protocolo inexistente",
-    Saida.PROTOCOLO_ILEGIVEL: "protocolo ou ficha fora da gramática que o leitor exige",
+    Saida.PROTOCOLO_ILEGIVEL: "protocolo ou procedimento de busca fora da gramática que o "
+                              "leitor exige",
     Saida.DADOS: "arquivo alimentado, exportação ou arquivo de entrada ausente ou ilegível",
     Saida.PARCIAL: "autoteste sem falha, com casos não executados",
     Saida.FONTE_EXTERNA: "fonte externa com erro, bloqueio, captcha ou limite excedido",

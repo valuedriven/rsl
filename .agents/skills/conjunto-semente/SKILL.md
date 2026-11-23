@@ -49,14 +49,14 @@ Três exigências de qualificação:
 
 Cada semente é uma tabela `[[sementes]]` do arquivo apontado por `[documentos] sementes`
 do `config.toml`. É o **único lugar** de dado de semente: não há outro arquivo a
-reconciliar. O esquema é fechado e está em `python3 -m rsl gramatica`; campo desconhecido
+reconciliar. O esquema é fechado e está em `python3 -m rsl documentos gramatica`; campo desconhecido
 reprova, para que erro de digitação não passe como campo ignorado.
 
 - **Dados bibliográficos, campo a campo**: `autores` (lista), `ano` (inteiro), `titulo`,
   `veiculo`, e, quando a fonte os traz, `volume`, `numero`, `paginas` e `doi` (só
   `10.x/…`, sem `DOI:` nem URL). Transcrever da fonte conferida, **nunca de memória** —
   ver `conferir-referencia`. O que a fonte não traz fica vazio. DOI ausente não reprova:
-  `python3 -m rsl pendencias` o relata, porque o DOI é a chave de conferência.
+  `python3 -m rsl projeto pendencias` o relata, porque o DOI é a chave de conferência.
 - **`observacoes`**: o que a referência traz e não cabe em outro campo (editores, evento,
   local, editora), transcrito como está. Nada da referência se perde.
 - **`bases` é indexação, não recuperação**: as siglas das bases que indexam a semente, da
@@ -84,13 +84,13 @@ trabalho:
    passarem a SE3 a SE9;
 2. **evidência bruta** em `data/evidencia/`: remover os arquivos `SEn_…` da semente
    retirada e renomear os das renumeradas para o `id` novo. `python3 -m rsl
-   conferir-dados` reprova evidência de `id` inexistente, mas **não** detecta arquivo de
+   dados conferir` reprova evidência de `id` inexistente, mas **não** detecta arquivo de
    renumerada esquecido com um `id` que ainda existe: esse fica atribuído à semente
    errada sem que nada reprove, e a renomeação tem de ser conferida a olho;
 3. **planilha de aderência** (`semente_aderencia.csv`): transferir à mão o preenchimento
    das renumeradas e esvaziar o da retirada — apagar as linhas da semente retirada e
    trocar o `id` das linhas de cada renumerada pelo `id` novo, sem mexer no título, que
-   acompanha a linha. `python3 -m rsl sementes planilha` casa as linhas por `id`, `base` e
+   acompanha a linha. `python3 -m rsl aderencia planilhar` casa as linhas por `id`, `base` e
    título, e **recusa a regravação** (REPROVADO, sem gravar) enquanto houver preenchimento
    em linha sem par ou com título divergente, nomeando cada `id` × base × coluna;
 4. **`data/pendencias.json`**: atualizar as menções aos `id` renumerados;
@@ -123,7 +123,7 @@ acionado por nenhuma das sementes — o ensaio nada diz sobre ele, e tratar o si
 como aprovação é erro.
 
 ```
-python3 -m rsl sementes planilha
+python3 -m rsl aderencia planilhar
 ```
 
 O comando lê as sementes do arquivo de sementes (`[documentos] sementes`) — dados

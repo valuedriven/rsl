@@ -22,7 +22,7 @@ Sob cada passo, quando houver:
 
 Os passos não são numerados, e os demais documentos citam um passo pelo módulo, pela etapa
 e pelo nome da atividade, nunca pelo ordinal. Valores de parâmetro e
-limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mostrar`.
+limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl configuracao mostrar`.
 
 ---
 
@@ -58,7 +58,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 
 - Preparar o protocolo de revisão (IO 1)
   - Fonte: `docs/02_protocolo_informacoes_gerais.md`; `docs/03_protocolo_estrategia_pesquisa.md`
-  - Script: `python3 -m rsl gramatica` (forma que o leitor exige); conferências na seção
+  - Script: `python3 -m rsl documentos gramatica` (forma que o leitor exige); conferências na seção
     [Conferências transversais](#conferências-transversais)
 - Preparar a tabela de composição do portfólio (IO 2)
   - Fonte: plano §2.3
@@ -149,7 +149,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 - Estabelecer o controle terminológico
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico e
     §Instrumentos para controle terminológico
-  - Script: `python3 -m rsl termos sonda` — consulta de prova em cada cliente automatizado;
+  - Script: `python3 -m rsl termos sondar` — consulta de prova em cada cliente automatizado;
     não grava. Executar antes de validar.
   - Script: `python3 -m rsl termos exportar` — reconstrói a planilha de validação a partir
     do protocolo, sem rede
@@ -157,7 +157,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
     `Automático` da tabela de instrumentos, ou `todos`; `--faceta`: número n de `FCTn`
   - Script: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
     preservando as decisões
-  - Skill: `validacao-vocabulario-controlado`; `otimizar-strings-revisao-sistematica`
+  - Skill: `validacao-vocabulario-controlado`; `auditoria-das-strings`
 - Gerar as strings de busca por faceta a partir do quadro terminológico (adaptação do projeto)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico; a tabela
     §Strings de busca por faceta é saída de geração e não se edita à mão
@@ -165,28 +165,28 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
     acrescentar e a retirar e os subsumidos; não grava
   - Script: `python3 -m rsl strings gerar --gravar` — regrava só as células de string;
     recusado se o quadro tiver termo em mais de uma faceta
-  - Ordem: quadro → `strings gerar` → `strings gerar --gravar` → fichas → `conferir`
-  - Skill: `facetacao-e-termos-livres`; `otimizar-strings-revisao-sistematica`
+  - Ordem: quadro → `strings gerar` → `strings gerar --gravar` → procedimentos de busca → `documentos conferir`
+  - Skill: `facetacao-e-termos-livres`; `auditoria-das-strings`
 - Elaborar as expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Strings de busca por faceta,
-    §Expressões de busca e §Notas explicativas; ficha de cada base §3 e §4
-  - Skill: `expressoes-de-busca`; `ficha-de-busca-por-base`
+    §Expressões de busca e §Notas explicativas; procedimento de busca de cada base §3 e §4
+  - Skill: `expressoes-de-busca`; `procedimento-de-busca-por-base`
 - Definir os critérios de elegibilidade
-  - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade; ficha de
-    cada base §2
+  - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade;
+    procedimento de busca de cada base §2
   - Skill: `criterios-de-elegibilidade`
 - Avaliar e definir as fontes de pesquisa
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Fontes de informação (§Bases de
-    dados, §Acervos especiais, §Acervos pessoais); ficha de cada base §1
-  - Skill: `ficha-de-busca-por-base`
+    dados, §Acervos especiais, §Acervos pessoais); procedimento de busca de cada base §1
+  - Skill: `procedimento-de-busca-por-base`
 - Definir a ferramenta de gestão bibliográfica
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Ferramentas e §Procedimentos
   - Apoio: manual — decisão de gestão do pesquisador
 - Montar o protocolo de revisão (IO 1)
   - Fonte: `docs/02_protocolo_informacoes_gerais.md`; `docs/03_protocolo_estrategia_pesquisa.md`;
     LOG_IA como apêndice, plano §8.3
-  - Script: `python3 -m rsl conferir`; `python3 -m rsl conferir-dados`;
-    `python3 -m rsl autoteste` (ver [Conferências transversais](#conferências-transversais))
+  - Script: `python3 -m rsl documentos conferir`; `python3 -m rsl dados conferir`;
+    `python3 -m rsl projeto autoteste` (ver [Conferências transversais](#conferências-transversais))
   - Skill: `rastreabilidade`; `revisao-geral-do-projeto`
 - Validar o protocolo com pesquisador expert
   - Fonte: plano §6.1 (validação do protocolo por revisor expert)
@@ -197,41 +197,41 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 - Realizar teste de aderência das expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais;
     arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2
-  - Script: `python3 -m rsl sementes planilha` — grava a planilha do teste de aderência e
+  - Script: `python3 -m rsl aderencia planilhar` — grava a planilha do teste de aderência e
     imprime o ensaio seco
-  - Script: `python3 -m rsl busca aderencia` — teste de aderência ao conjunto-semente, por
+  - Script: `python3 -m rsl aderencia medir` — teste de aderência ao conjunto-semente, por
     papel; lê as execuções registradas
   - Skill: `conjunto-semente`; `teste-de-aderencia`
 - Acessar as fontes de pesquisa na ordem predefinida
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados (ordem e via de
-    acesso); ficha de cada base §1 (estado de verificação da sintaxe); plano §7
-  - Skill: `busca-nas-bases`
+    acesso); procedimento de busca de cada base §1 (estado de verificação da sintaxe); plano §7
+  - Skill: `execucao-da-busca`
 - Executar expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas
-    explicativas; ficha de cada base §4 (Como executar, Variantes previstas) e §6
+    explicativas; procedimento de busca de cada base §4 (Como executar, Variantes previstas) e §6
   - Script: `python3 -m rsl busca registrar --retorno RETORNO [--data-hora DATA_HORA]
     [--justificar JUSTIFICAR] BASE EXPRESSAO ARQUIVO` — `BASE`: sigla da tabela de bases;
     `EXPRESSAO`: identificador da expressão no protocolo; `ARQUIVO`: exportação intacta;
     `--retorno`: retorno que a base exibiu;
     `--data-hora`: ISO 8601, padrão agora; `--justificar`: motivo aceito para retorno
     divergente do arquivo
-  - Skill: `busca-nas-bases`
+  - Skill: `execucao-da-busca`
 - Avaliar a pertinência e a relevância dos resultados
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Notas explicativas; plano §6.2
   - Script: `python3 -m rsl busca derivar` — deriva as expressões não executadas, as
     contagens e a ordem de triagem
-  - Script: `python3 -m rsl busca fidelidade EXPRESSAO ARQUIVO` — compara o conjunto
+  - Script: `python3 -m rsl conferencia fidelidade EXPRESSAO ARQUIVO` — compara o conjunto
     derivado com a execução direta; `ARQUIVO`: exportação da execução direta da expressão
-  - Script: `python3 -m rsl busca sensibilidade [BASE]` — mede a perda da sonda para a
+  - Script: `python3 -m rsl conferencia sensibilidade [BASE]` — mede a perda da sonda para a
     executada e grava a amostra a classificar; sem `BASE`, todas as bases
   - Skill: `conferencias-da-busca`; índices na tabela abaixo
 - Exportar metadados dos resultados
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; exportações intactas
     no caminho `[dados] execucoes` (mapa no `README.md`)
-  - Skill: `busca-nas-bases`
+  - Skill: `execucao-da-busca`
 - Criar alertas de busca nas bases
   - Fonte: plano §3.1
-  - Skill: `busca-nas-bases`
+  - Skill: `execucao-da-busca`
 - Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2)
   - Fonte: plano §6.2; contagens em `[saidas] contagens`, gravadas por `busca derivar`
   - Skill: `relato-prisma`
@@ -240,22 +240,22 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 
 Medidos sobre as execuções registradas em `[dados] registro`. Limiar e origem: o protocolo
 prevalece onde declara; o padrão está em `[padroes]` do `config.toml`; o valor em uso e a
-origem saem de `python3 -m rsl mostrar`. Saídas em `[saidas]`, na pasta `[saidas] pasta`.
+origem saem de `python3 -m rsl configuracao mostrar`. Saídas em `[saidas]`, na pasta `[saidas] pasta`.
 
 | Índice | O que mede | Numerador / denominador | Limiar e origem | Script ou manual | Saída |
 | --- | --- | --- | --- | --- | --- |
-| Retorno declarado × lido | se a exportação traz o número de registros que a base exibiu | igualdade entre `--retorno` e os registros lidos do arquivo | igualdade; divergência só com `--justificar` (ressalva na ficha da base) | `busca registrar`; `busca derivar` reconfere e para com DADOS se o arquivo mudou | `[dados] registro` (`registros_lidos`, `status`) |
+| Retorno declarado × lido | se a exportação traz o número de registros que a base exibiu | igualdade entre `--retorno` e os registros lidos do arquivo | igualdade; divergência só com `--justificar` (ressalva no procedimento de busca da base) | `busca registrar`; `busca derivar` reconfere e para com DADOS se o arquivo mudou | `[dados] registro` (`registros_lidos`, `status`) |
 | Contagens bruta e única | registros por base e por expressão, executada e derivadas | contagem, com e sem duplicatas; a sonda fica fora | sem limiar; derivada só se aceita após a fidelidade | `busca derivar` | `[saidas] contagens` |
 | Duplicatas | registros repetidos no mesmo DOI ou título normalizado, entre as execuções registradas | contagem; nada é apagado | sem limiar | `busca derivar` | `[saidas] registros`, coluna `duplicata_de` |
 | Recorte temporal | registros dentro, fora e sem ano | contagem por situação | linha "fora" igual a zero; recorte no critério de intervalo temporal do protocolo, padrão `recorte_ano_min` | `busca derivar` (terminal) | `[saidas] registros`, coluna `recorte` |
 | Âncoras não confirmadas | registros únicos em que o casamento local não confirma as âncoras | sem âncora confirmada / registros únicos | sem limiar: aviso, nenhum registro descartado | `busca derivar` (terminal) | `[saidas] registros`, coluna `ancoras_confirmadas` |
 | Ordem de triagem | ordem de leitura da 1ª filtragem, não critério | riqueza das expressões atingidas, recência e ano | `[busca] ano_recencia` | `busca derivar` | `[saidas] ordem_triagem` |
-| Aderência de validação | recall da busca sobre as sementes que decidem a passagem | sementes de validação recuperadas por título exato / sementes de validação; denominador definitivo: as indexadas, coluna `indexada` preenchida à mão; com intervalo de Wilson a 95% | `limiar_aderencia`: regra de ajuste em protocolo §Conjunto-semente | `busca aderencia` (terminal); conferência manual na planilha | `[saidas] aderencia` (planilha de `sementes planilha`) |
-| Aderência de desenvolvimento | recall sobre as sementes que orientaram o vocabulário | recuperadas / sementes de desenvolvimento | não decisória | `busca aderencia` (terminal) | terminal |
-| Indício por prefixo | semente com título casado só por prefixo | contagem; fora do numerador | conferência humana obrigatória | `busca aderencia` (terminal) e manual | coluna `recuperada` da planilha |
-| Divergência da fidelidade | quanto a derivação local difere da execução direta da mesma expressão | (só na direta + só na derivada) / união | `divergencia_fidelidade` | `busca fidelidade` | `[saidas] fidelidade` |
-| Perda da sonda | registros da sonda que a executada não recupera, por base | só na sonda / registros da sonda | sem limiar: tamanho da perda, não decide | `busca sensibilidade` | terminal; `[saidas] sensibilidade` |
-| Fração elegível da amostra | quanto da perda da sonda seria elegível | elegíveis / amostra sistemática (tamanho-alvo `[busca] amostra_sensibilidade`) | `sensibilidade`: faixa nas notas explicativas citadas pela executada | manual (coluna `elegivel`); o cálculo sai de `busca sensibilidade` reexecutada com a amostra inteira classificada | `[saidas] sensibilidade` |
+| Aderência de validação | recall da busca sobre as sementes que decidem a passagem | sementes de validação recuperadas por título exato / sementes de validação; denominador definitivo: as indexadas, coluna `indexada` preenchida à mão; com intervalo de Wilson a 95% | `limiar_aderencia`: regra de ajuste em protocolo §Conjunto-semente | `aderencia medir` (terminal); conferência manual na planilha | `[saidas] aderencia` (planilha de `aderencia planilhar`) |
+| Aderência de desenvolvimento | recall sobre as sementes que orientaram o vocabulário | recuperadas / sementes de desenvolvimento | não decisória | `aderencia medir` (terminal) | terminal |
+| Indício por prefixo | semente com título casado só por prefixo | contagem; fora do numerador | conferência humana obrigatória | `aderencia medir` (terminal) e manual | coluna `recuperada` da planilha |
+| Divergência da fidelidade | quanto a derivação local difere da execução direta da mesma expressão | (só na direta + só na derivada) / união | `divergencia_fidelidade` | `conferencia fidelidade` | `[saidas] fidelidade` |
+| Perda da sonda | registros da sonda que a executada não recupera, por base | só na sonda / registros da sonda | sem limiar: tamanho da perda, não decide | `conferencia sensibilidade` | terminal; `[saidas] sensibilidade` |
+| Fração elegível da amostra | quanto da perda da sonda seria elegível | elegíveis / amostra sistemática (tamanho-alvo `[busca] amostra_sensibilidade`) | `sensibilidade`: faixa nas notas explicativas citadas pela executada | manual (coluna `elegivel`); o cálculo sai de `conferencia sensibilidade` reexecutada com a amostra inteira classificada | `[saidas] sensibilidade` |
 | Cobertura de campo | registros sem palavras-chave ou sem resumo, que cegam a aderência | registros sem o campo / registros da exportação, por base | fração declarada por base (plano §6.2) | manual | relato, como limitação da base |
 | Coerência entre expressões | se as relações de continência do protocolo se verificam no retorno de cada base | relações do protocolo §Expressões de busca | relações do protocolo (plano §6.2) | manual | registro de execução |
 
@@ -266,20 +266,20 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 - Analisar os títulos dos registros (1ª filtragem) e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; ordem de leitura em
     `[saidas] ordem_triagem`
-  - Skill: `filtragens`
+  - Skill: `filtragem-dos-estudos`
 - Analisar os resumos (2ª filtragem) e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos
-  - Skill: `filtragens`
+  - Skill: `filtragem-dos-estudos`
 - Analisar os textos completos (3ª filtragem) e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; plano §6.3
-  - Skill: `filtragens`
+  - Skill: `filtragem-dos-estudos`
 - Aplicar os critérios de elegibilidade e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade
-  - Skill: `criterios-de-elegibilidade`; `filtragens`
+  - Skill: `criterios-de-elegibilidade`; `filtragem-dos-estudos`
 - Controlar duplicatas e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; plano §6.2 (dupla
     passagem de deduplicação); marca `duplicata_de` em `[saidas] registros`
-  - Skill: `deduplicacao`
+  - Skill: `controle-de-duplicatas`
 - Analisar as listas de referências dos estudos selecionados e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos e §Acervos especiais;
     plano §3.3 e §7
@@ -290,7 +290,7 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 - Confirmar a seleção por avaliação dupla independente e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos (concordância e
     terceiro revisor); plano §6.1 e §6.2 (kappa)
-  - Skill: `filtragens`
+  - Skill: `filtragem-dos-estudos`
 
 ### E4 — Extração de dados
 
@@ -352,15 +352,15 @@ quando executar e o que relatam.
 
 | Comando | Quando executar | O que relata |
 | --- | --- | --- |
-| `python3 -m rsl conferir` | após alterar o protocolo, uma ficha ou o arquivo de sementes, e antes de qualquer execução | problemas de coerência do protocolo e das fichas |
-| `python3 -m rsl conferir-dados` | após alimentar `data/` ou registrar uma execução | arquivos alimentados confrontados com o protocolo |
-| `python3 -m rsl autoteste` | após alterar o código, a configuração ou a gramática | se cada conferência reprova os defeitos injetados com o código esperado |
-| `python3 -m rsl mostrar` | antes de citar um parâmetro ou limiar | o que foi lido e os parâmetros em uso, com a origem |
-| `python3 -m rsl gramatica` | ao redigir ou reestruturar o protocolo, uma ficha ou o arquivo de sementes | o contrato de forma que o leitor exige |
-| `python3 -m rsl pendencias` | ao revisar o estado do projeto | pendências encontradas nos artefatos, sem escrever |
+| `python3 -m rsl documentos conferir` | após alterar o protocolo, um procedimento de busca ou o arquivo de sementes, e antes de qualquer execução | problemas de coerência do protocolo e dos procedimentos de busca |
+| `python3 -m rsl dados conferir` | após alimentar `data/` ou registrar uma execução | arquivos alimentados confrontados com o protocolo |
+| `python3 -m rsl projeto autoteste` | após alterar o código, a configuração ou a gramática | se cada conferência reprova os defeitos injetados com o código esperado |
+| `python3 -m rsl configuracao mostrar` | antes de citar um parâmetro ou limiar | o que foi lido e os parâmetros em uso, com a origem |
+| `python3 -m rsl documentos gramatica` | ao redigir ou reestruturar o protocolo, um procedimento de busca ou o arquivo de sementes | o contrato de forma que o leitor exige |
+| `python3 -m rsl projeto pendencias` | ao revisar o estado do projeto | pendências encontradas nos artefatos, sem escrever |
 | `python3 -m rsl catalogo gerar` | após alterar este guia, uma skill ou um comando; `--gravar` regrava o catálogo | citações de skill e de comando, cobertura de apoio, contagem de passos e catálogo defasado |
 
-Promover um achado de `pendencias` a pendência registrada em `data/pendencias.json` é
+Promover um achado de `projeto pendencias` a pendência registrada em `data/pendencias.json` é
 decisão do pesquisador. Decisão que altere questão, facetas, critérios ou busca é emenda:
 altera-se a fonte e registra-se em `data/historico.md` (skill `registrar-decisao`).
 
@@ -393,7 +393,7 @@ de naturezas diferentes. O papel é declarado aqui, não inferido do nome.
 
 | Papel | Skills |
 | --- | --- |
-| procedimento | `questao-e-objetivos`; `facetacao-e-termos-livres`; `validacao-vocabulario-controlado`; `otimizar-strings-revisao-sistematica`; `expressoes-de-busca`; `criterios-de-elegibilidade`; `parecer-sobre-protocolo`; `teste-de-aderencia`; `busca-nas-bases`; `conferencias-da-busca`; `filtragens`; `deduplicacao`; `sintese-e-lacunas` |
+| procedimento | `questao-e-objetivos`; `facetacao-e-termos-livres`; `validacao-vocabulario-controlado`; `auditoria-das-strings`; `expressoes-de-busca`; `criterios-de-elegibilidade`; `parecer-sobre-protocolo`; `teste-de-aderencia`; `execucao-da-busca`; `conferencias-da-busca`; `filtragem-dos-estudos`; `controle-de-duplicatas`; `sintese-e-lacunas` |
 | instrumento | `fichamento` |
-| artefato | `conjunto-semente`; `ficha-de-busca-por-base` |
+| artefato | `conjunto-semente`; `procedimento-de-busca-por-base` |
 | transversal | `registrar-decisao`; `rastreabilidade`; `revisao-geral-do-projeto`; `conferir-referencia`; `relato-prisma` |

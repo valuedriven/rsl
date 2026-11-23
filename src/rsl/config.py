@@ -29,27 +29,31 @@ ESQUEMA = {
     "dados": ("registro", "validacao", "execucoes", "evidencia"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
                "sensibilidade", "aderencia"),
-    "documentos": ("ficha", "sementes"),
+    "documentos": ("procedimento", "sementes"),
     "planilha": ("campos_validacao",),
 }
 # Chaves retiradas: a presença de qualquer uma reprova com mensagem própria, para que não
-# haja segunda fonte que divirja em silêncio.
-_ESTRUTURAL = ("o valor vem do protocolo (parâmetro estrutural, sem padrão)")
+# haja segunda fonte que divirja em silêncio. Cada motivo termina com a correção: retirar
+# a chave, ou renomeá-la quando o valor continua sob outro nome.
+_RETIRAR = "; retirá-la"
+_ESTRUTURAL = "o valor vem do protocolo (parâmetro estrutural, sem padrão)" + _RETIRAR
 RETIRADAS = {
     "padroes.composicao": _ESTRUTURAL, "cores": _ESTRUTURAL, "fichas": _ESTRUTURAL,
     "instrumentos": _ESTRUTURAL, "idiomas": _ESTRUTURAL,
     "padroes.ancoras": "as âncoras vêm da coluna 'Âncora obrigatória' da tabela de facetas "
-                       "do protocolo (parâmetro estrutural, sem padrão)",
+                       "do protocolo (parâmetro estrutural, sem padrão)" + _RETIRAR,
     "expressoes": "executada e sonda são identificadas pela composição das expressões "
                   "do protocolo; o cabeçalho da tabela é forma e vem da gramática "
-                  "(`python3 -m rsl gramatica`)",
+                  "(`python3 -m rsl documentos gramatica`)" + _RETIRAR,
     "padroes.executada": "a executada é identificada pela composição (a única expressão "
-                         "com grupo OR)",
+                         "com grupo OR)" + _RETIRAR,
     "padroes.sonda": "a sonda é identificada pela composição (a única expressão formada "
-                     "só pelas âncoras)",
+                     "só pelas âncoras)" + _RETIRAR,
+    "documentos.ficha": "renomeada para `[documentos] procedimento`; renomeá-la, mantendo "
+                        "o valor",
 }
 # Marcadores que cada padrão de caminho tem de conter.
-MARCADORES = {"documentos.ficha": "{sigla}", "saidas.fidelidade": "{expressao}",
+MARCADORES = {"documentos.procedimento": "{sigla}", "saidas.fidelidade": "{expressao}",
               "saidas.sensibilidade": "{base}"}
 
 
@@ -69,12 +73,11 @@ def _tem(dado, chave):
 
 
 def valida(dado, nome=NOME):
-    """Confere o esquema; levanta ConfiguracaoInvalida no primeiro defeito."""
+    """Confere o esquema; levanta ConfiguracaoInvalida no primeiro defeito. Devolve o dado."""
     for chave, motivo in RETIRADAS.items():
         if _tem(dado, chave):
             raise ConfiguracaoInvalida(
-                f"{nome}: a chave `{chave}` não pertence mais à configuração — {motivo}; "
-                f"retirá-la")
+                f"{nome}: a chave `{chave}` não pertence mais à configuração — {motivo}")
     for secao, chaves in ESQUEMA.items():
         alvo = dado if not secao else dado.get(secao)
         if secao and not isinstance(alvo, dict):
@@ -129,8 +132,10 @@ class Configuracao:
         return self.caminho("saidas.pasta") / nome
 
     def ficha(self, sigla):
-        """Caminho da ficha de uma base, relativo à raiz, pelo padrão `[documentos] ficha`."""
-        return self.valor("documentos.ficha").replace(MARCADORES["documentos.ficha"], sigla)
+        """Caminho do procedimento de busca de uma base, relativo à raiz, pelo padrão
+        `[documentos] procedimento`."""
+        return self.valor("documentos.procedimento").replace(
+            MARCADORES["documentos.procedimento"], sigla)
 
     def protocolo(self):
         return RAIZ / self.valor("protocolo")

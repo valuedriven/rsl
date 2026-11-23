@@ -1,9 +1,10 @@
-"""Conferência da coerência interna do protocolo e das fichas.
+"""Conferência da coerência interna do protocolo e dos procedimentos de busca.
 
 A conferência verifica a coerência do documento, não valores esperados. Protocolo fora da
-gramática não chega aqui como problema: a leitura levanta ProtocoloInvalido, que sobe até
-o ponto de entrada com o código PROTOCOLO_ILEGIVEL. Ficha fora da gramática reprova só a
-sua base, como problema de código PROTOCOLO_ILEGIVEL; as demais bases seguem conferidas.
+gramática não chega aqui como problema: a leitura levanta ProtocoloInvalido, que sobe até o
+ponto de entrada com o código PROTOCOLO_ILEGIVEL. Procedimento de busca fora da gramática
+reprova só a sua base, como problema de código PROTOCOLO_ILEGIVEL; as demais bases seguem
+conferidas.
 """
 
 from . import gramatica as G
@@ -63,7 +64,7 @@ def coerencia_expressoes(d):
 
 
 def problemas_bases(ctx, d):
-    """Problemas de cada base, isolados: ficha ilegível reprova só a sua base."""
+    """Problemas de cada base, isolados: procedimento de busca ilegível reprova só a sua base."""
     problemas = []
     for b in d["bases"]:
         sigla = b["sigla"]
@@ -145,8 +146,9 @@ def conferir(ctx):
     if not d["questoes"]["questao_principal"]:
         problemas.append("questão geral vazia")
 
-    # Base e ficha de cada semente são lidas e conferidas pelo leitor (sigla da tabela de
-    # bases, ficha existente); a distribuição é calculada da tabela, sem prosa a conferir.
+    # Base e procedimento de busca de cada semente são lidas e conferidas pelo leitor (sigla
+    # da tabela de bases, procedimento de busca existente); a distribuição é calculada da
+    # tabela, sem prosa a conferir.
     for e in d["sementes"]:
         if not e["titulo"] or len(e["titulo"]) < 12:
             problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
@@ -158,16 +160,16 @@ def conferir(ctx):
                          "a passagem não teria denominador")
 
     resultado = Resultado(Problema(p) for p in problemas)
-    # A forma de cada base é parte da coerência do documento: ficha ilegível ou fora do
-    # protocolo reprova só a sua base.
+    # A forma de cada base é parte da coerência do documento: procedimento de busca ilegível
+    # ou fora do protocolo reprova só a sua base.
     resultado += problemas_bases(ctx, d)
     return resultado
 
 
 def relatos(ctx, d):
     """Achados que não reprovam, por base: subsumidos usados na string da base, a maior
-    consulta da base sem teto de caracteres e termos numa só forma de número em ficha de
-    plural explícito."""
+    consulta da base sem teto de caracteres e termos numa só forma de número em procedimento
+    de busca de plural explícito."""
     saida = []
     for b in d["bases"]:
         sigla = b["sigla"]

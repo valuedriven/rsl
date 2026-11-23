@@ -1,6 +1,6 @@
 ---
 name: revisao-geral-do-projeto
-description: Faz a revisão geral do estado do projeto de revisão sistemática — percorre o estado do ciclo, executa as conferências e os autotestes que o guia de procedimentos declara, confere o lastro das afirmações, examina facetas, strings, conjunto-semente e critérios, e entrega os achados classificados com evidência e natureza do conserto. Use ao revisar o projeto inteiro, ao preparar uma rodada de emendas, ao auditar o estado antes de uma execução, e ao verificar se pendências, histórico e fichas descrevem o estado corrente.
+description: Faz a revisão geral do estado do projeto de revisão sistemática — percorre o estado do ciclo, executa as conferências e os autotestes que o guia de procedimentos declara, confere o lastro das afirmações, examina facetas, strings, conjunto-semente e critérios, e entrega os achados classificados com evidência e natureza do conserto. Use ao revisar o projeto inteiro, ao preparar uma rodada de emendas, ao auditar o estado antes de uma execução, e ao verificar se pendências, histórico e procedimentos de busca descrevem o estado corrente.
 ---
 
 # Revisão geral do projeto
@@ -85,10 +85,10 @@ Não copiar para o relatório as classes nem as regras de `parecer-sobre-protoco
    comportamento que exercita, não o que o código faz fora dele. Afirmação sobre o código
    sem leitura é hipótese, e se declara como tal.
 2. **A varredura de um padrão abrange o projeto inteiro**, não só o lugar onde ele foi visto
-   primeiro. Padrão encontrado numa ficha se procura nas demais, nos documentos e no código.
+   primeiro. Padrão encontrado num procedimento de busca se procura nas demais, nos documentos e no código.
 3. **A revisão não escreve, não acessa fonte externa e não decide.** Indexação, dado
    bibliográfico e sintaxe de base ficam como inferência até a conferência pela skill própria
-   (`conferir-referencia`, `busca-nas-bases`). Achado que exige decisão vira alternativa
+   (`conferir-referencia`, `execucao-da-busca`). Achado que exige decisão vira alternativa
    apresentada ao pesquisador; promovê-lo a pendência ou a change depende de pedido dele.
 
 ## Remissões

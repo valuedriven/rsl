@@ -11,14 +11,14 @@
 | `LA=` — idioma | Verificado em fonte **secundária** | FECYT, *De la consulta simple a la compleja en Web of Science* (2024) |
 | Truncamento `*`, `?`, `$`; mínimo de 3 caracteres antes do curinga; curinga desativa a lematização | Verificado | Clarivate, *Advanced Search examples* |
 | Limite de 200 conjuntos de busca por sessão | Verificado | idem |
-| Aspas desligam a lematização e o localizador interno de sinônimos | **Não verificado** | afirmado sem fonte na skill `otimizar-strings-revisao-sistematica` até 2026-11-23; conferir na documentação oficial |
-| Busca em todos os campos (`ALL=`) limitada a 49 operadores booleanos; os demais campos sem limite | **Não verificado** | afirmado sem fonte na skill `otimizar-strings-revisao-sistematica` até 2026-11-23; conferir na documentação oficial |
+| Aspas desligam a lematização e o localizador interno de sinônimos | **Não verificado** | afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
+| Busca em todos os campos (`ALL=`) limitada a 49 operadores booleanos; os demais campos sem limite | **Não verificado** | afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
 | Intervalos de `PY=` de até 5 anos (recomendação) | Verificado | idem |
 | Filtro de texto completo em sintaxe de consulta | **Não existe** | ausência na página de *field tags* |
 | Valores exatos admitidos em `DT=` e `LA=` | **Não verificados** | conferir na lista da interface |
 | `NEAR/x` entre grupos entre parênteses | **Não verificado** | medir na primeira execução e registrar a execução |
 | Distância padrão de `NEAR` sem número | **Não verificada** | — |
-| Comprimento máximo da consulta | **Não verificado** | medir na primeira execução; a maior consulta executável é medida por `python3 -m rsl conferir`, no relato do teto de caracteres |
+| Comprimento máximo da consulta | **Não verificado** | medir na primeira execução; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres |
 | Tratamento de diacríticos | **Não verificado** | as strings trazem as duas grafias |
 | Teto de retorno exibido e de exportação por lote | **Não verificados** | conferir na interface antes de exportar |
 
@@ -47,7 +47,7 @@ Uma string por faceta. `STRn` é o identificador do protocolo e `#n` o número d
 
 ### Declaração de cobertura
 
-Lida por `python3 -m rsl conferir` (leitor das fichas em `src/rsl/fichas.py`).
+Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca em `src/rsl/fichas.py`).
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -101,8 +101,8 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 | **EB1** | não executar; derivação local |
 
 - Execução: única
-- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
-- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`python3 -m rsl mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl configuracao mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`python3 -m rsl configuracao mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
 ### EB1 (as quatro facetas)
@@ -147,7 +147,7 @@ TS=(("representação do conhecimento" OR "organização do conhecimento" OR "on
 2. Submeter o bloco de EB4 da seção 4 como está, sem definir conjunto e sem montar arquivo. Na primeira execução, conferir se a interface aceita a consulta inteira; recusa por extensão leva à variante "Partição por recusa da proximidade ou do comprimento", registrada como adaptação.
 3. Exportar em RIS, com todos os campos, em lotes dentro do limite da base.
 4. Conferir o retorno da exportação contra o da tela.
-5. Registrar EB4 e EB5: `python3 -m rsl busca registrar wos EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `busca sensibilidade`.
+5. Registrar EB4 e EB5: `python3 -m rsl busca registrar wos EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `conferencia sensibilidade`.
 6. Medir a aderência ao conjunto-semente (seção 5).
 
 ### Variantes previstas
@@ -175,7 +175,7 @@ AND LA=(English OR Portuguese OR Spanish)
 
 #### Truncamento
 
-Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`). Forma: testar `ontolog*`, `educat*`, `contextualiz*`; a adoção exige emenda.
+Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`). Forma: testar `ontolog*`, `educat*`, `contextualiz*`; a adoção exige emenda.
 
 #### Camada de precisão
 
@@ -194,7 +194,7 @@ TS=(<faceta 1>) AND AK=(<faceta 2>) AND PY=(2017-2026)
 AND WC=("Education & Educational Research" OR "Education, Scientific Disciplines" OR "Information Science & Library Science" OR "Computer Science, Artificial Intelligence" OR "Computer Science, Information Systems" OR "Computer Science, Interdisciplinary Applications" OR "Computer Science, Theory & Methods")
 ```
 
-Regra: camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`) é reprovada. Não acrescentar facetas a EB4 para reduzir o retorno.
+Regra: camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`) é reprovada. Não acrescentar facetas a EB4 para reduzir o retorno.
 
 ---
 
@@ -211,7 +211,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/seme
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador desta base e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
-**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **SE10.** O domínio está fora do título; anotar no registro se EB4 a recupera.
 

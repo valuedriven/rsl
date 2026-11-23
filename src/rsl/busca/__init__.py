@@ -4,8 +4,8 @@ ao conjunto-semente, teste de fidelidade e sonda de sensibilidade.
 Executa-se nas bases a expressão que o protocolo declara executada, uma vez por base; a
 sonda, uma única vez, para medir o custo em recall da executada. As demais expressões que a
 composição prova contidas na executada são calculadas aqui, sobre a exportação dela. A
-composição, a executada, a sonda, o recorte e os limiares vêm do protocolo (`mostrar`
-exibe os valores em uso).
+composição, a executada, a sonda, o recorte e os limiares vêm do protocolo
+(`configuracao mostrar` exibe os valores em uso).
 
 O que este pacote NÃO faz: não exclui registro algum, não decide inclusão e não substitui
 o teste de fidelidade. As contagens que produz são DERIVADAS e devem ser declaradas como tal

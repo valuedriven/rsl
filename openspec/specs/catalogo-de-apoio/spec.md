@@ -125,19 +125,6 @@ catálogo legível por máquina.
 - **WHEN** se executa `python3 -m rsl catalogo gerar --json`
 - **THEN** a saída contém os passos, as skills e os comandos em estrutura legível por máquina
 
-### Requirement: Nomes antigos em documento vivo
-A conferência SHALL procurar nomes antigos de comandos e skills em documentos e skills
-vivos e MUST reprovar a citação. `data/historico.md`, `openspec/changes/archive/` e a
-tabela de correspondência do catálogo MUST ser isentos.
-
-#### Scenario: Skill cita comando antigo
-- **WHEN** uma skill viva cita `busca aderencia` e o nome canônico é `aderencia medir`
-- **THEN** a conferência reprova, nomeando a skill e o comando antigo
-
-#### Scenario: Histórico não é escaneado
-- **WHEN** `data/historico.md` cita `sementes planilha`
-- **THEN** a conferência não reprova por essa citação
-
 ### Requirement: Autoteste do catálogo
 Cada conferência do catálogo SHALL ter um caso de autoteste que injeta o defeito
 correspondente. O caso MUST falhar quando a conferência é desligada e MUST reprovar com o
@@ -150,3 +137,17 @@ código esperado quando ela está ligada.
 #### Scenario: Contagem no autoteste
 - **WHEN** o autoteste injeta um passo extra sem marca de adaptação
 - **THEN** o caso reprova com REPROVADO; com a conferência desligada, o caso falha
+
+### Requirement: Catálogo sem correspondência de nomes
+O catálogo MUST NOT trazer tabela de correspondência entre nomes antigos e canônicos, nem no
+arquivo gravado nem na saída `--json`. A conferência MUST NOT ter regra de nome antigo:
+depois da remoção dos aliases, o catálogo não guarda lista de nomes antigos de comando, de
+skill ou de chave de configuração.
+
+#### Scenario: Catálogo gravado
+- **WHEN** se executa `python3 -m rsl catalogo gerar --gravar`
+- **THEN** `docs/catalogo_de_apoio.md` não tem a seção "Correspondência de nomes"
+
+#### Scenario: Saída JSON
+- **WHEN** se executa `python3 -m rsl catalogo gerar --json`
+- **THEN** a saída não tem o campo `correspondencia`

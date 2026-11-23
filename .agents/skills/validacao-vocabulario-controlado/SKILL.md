@@ -16,7 +16,7 @@ sistemática isso contamina o registro e destrói a reprodutibilidade.
   por idioma nem por faceta: o que não está na tabela não é instrumento de linha alguma da
   planilha.
 - **O que é propriedade do instrumento** — sigla, modo, caminho e idiomas que cobre — está
-  na mesma linha da tabela (forma em `python3 -m rsl gramatica`). Cada termo é planejado para cada instrumento
+  na mesma linha da tabela (forma em `python3 -m rsl documentos gramatica`). Cada termo é planejado para cada instrumento
   da sua faceta que cubra o seu idioma.
 - **Instrumento sem cliente automatizado** (modo `Manual`) gera linha com o estatuto
   "pendente de validação manual": consulta-se à mão e registra-se a evidência como em
@@ -61,7 +61,7 @@ Os comandos, nesta ordem:
 
 | Comando | O que faz |
 | --- | --- |
-| `python3 -m rsl termos sonda` | mede o que cada instrumento aceita, com contagem e captura. **Obrigatório antes de tudo** |
+| `python3 -m rsl termos sondar` | mede o que cada instrumento aceita, com contagem e captura. **Obrigatório antes de tudo** |
 | `python3 -m rsl termos exportar` | reconstrói a planilha a partir do protocolo, sem rede; não decide nada |
 | `python3 -m rsl termos validar tbci` | consulta o TBCI, grava a evidência e propõe o estatuto |
 | `python3 -m rsl termos validar unesco` | idem para o UNESCO Thesaurus; `termos validar todos --faceta 1` consulta todos os instrumentos `Automático`, restrito a uma faceta |
@@ -77,7 +77,7 @@ Campos que decidem: `instrumento`, `consultado_em`, `status_proposto`,
 `justificativa_ReT`. A decisão final e a incorporação de termos relacionados e
 específicos são do ReT com a Validação Temática — a ferramenta recupera e registra.
 
-Estado corrente: verificar na planilha e em `python3 -m rsl pendencias`;
+Estado corrente: verificar na planilha e em `python3 -m rsl projeto pendencias`;
 não presumir que a validação foi executada.
 
 ## 6. Antes do primeiro uso de um instrumento

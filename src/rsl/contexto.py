@@ -1,8 +1,8 @@
-"""Contexto explícito de uma execução: a configuração, o texto do protocolo, das fichas e do
-arquivo de sementes.
+"""Contexto explícito de uma execução: a configuração, o texto do protocolo, dos
+procedimentos de busca e do arquivo de sementes.
 
 O subcomando cria o contexto e o passa às funções; não há estado de módulo. O autoteste
-cria contextos sobre cópias em memória (texto alterado, ficha alterada, configuração
+cria contextos sobre cópias em memória (texto alterado, procedimento de busca alterado, configuração
 alterada) sem reimportar nada.
 """
 
@@ -47,7 +47,7 @@ class Contexto:
         return self.config.valor("documentos.sementes")
 
     def ficha(self, sigla, caminho):
-        """Texto da ficha de uma base: o da cópia em memória, ou o do arquivo."""
+        """Texto do procedimento de busca de uma base: o da cópia em memória, ou o do arquivo."""
         if sigla in self._fichas:
             return self._fichas[sigla]
         return (_config.RAIZ / caminho).read_text(encoding="utf-8")

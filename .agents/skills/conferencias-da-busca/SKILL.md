@@ -31,9 +31,9 @@ Quatro regras de diagnóstico:
 - **Incoerência não se explica por hipótese.** Perguntar ao pesquisador o que foi
   efectivamente submetido, com o texto da consulta. Hipóteses operacionais inventadas
   custaram uma rodada inteira; quatro respostas dele eliminaram todas.
-- **O defeito costuma estar na ficha, não no motor.** `EB2 > EB4` veio de operador de
+- **O defeito costuma estar no procedimento de busca, não no motor.** `EB2 > EB4` veio de operador de
   proximidade e filtro de tipo de documento aplicados a EB4 e não a EB2 — assimetria
-  gerada por quem escreveu a ficha.
+  gerada por quem escreveu o procedimento de busca.
 - **Nunca afirmar o que uma execução não pode ter feito.** Um argumento de teoria dos
   conjuntos vale sob a premissa, **não medida**, de que o motor aplica o operador como
   documentado. Foi preciso retratar exactamente isso.
@@ -48,7 +48,7 @@ O teste afere se o cálculo reproduz a base.
 
 Procedimento: executar EB2 e EB3 **directamente** na base (estado 2 de execução, o
 experimental), e comparar com a contagem derivada localmente dos mesmos registros. A
-sonda de EB5 se mede à parte, por `busca sensibilidade`, e não se confunde com fidelidade.
+sonda de EB5 se mede à parte, por `conferencia sensibilidade`, e não se confunde com fidelidade.
 
 **Limiar: coincidência exacta das contagens.** Não aproximada — a derivação é
 determinística e qualquer diferença denuncia divergência entre o que a base entende e

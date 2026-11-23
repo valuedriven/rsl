@@ -28,11 +28,19 @@ def casos(ctx, g):
     testa("chave exigida ausente", valida(cfg.sem("padroes.limiar_aderencia")),
           "padroes.limiar_aderencia")
     testa("caminho do protocolo ausente", valida(cfg.sem("protocolo")), "`protocolo`")
-    testa("padrão de caminho da ficha ausente", valida(cfg.sem("documentos.ficha")),
-          "documentos.ficha")
-    testa("padrão de caminho da ficha sem o marcador da sigla",
-          valida(cfg.com("documentos.ficha", "docs/procedimentos_busca.md")),
-          C.MARCADORES["documentos.ficha"])
+    testa("padrão de caminho do procedimento de busca ausente",
+          valida(cfg.sem("documentos.procedimento")), "documentos.procedimento")
+    testa("padrão de caminho do procedimento de busca sem o marcador da sigla",
+          valida(cfg.com("documentos.procedimento", "docs/procedimentos_busca.md")),
+          C.MARCADORES["documentos.procedimento"])
+    # Chave antiga, renomeada: reprova no lugar da canônica e nomeia a canônica.
+    antiga = cfg.sem("documentos.procedimento")
+    antiga["documentos"]["ficha"] = cfg.valor("documentos.procedimento")
+    testa("chave antiga `[documentos] ficha` no lugar da canônica", valida(antiga),
+          "`[documentos] procedimento`")
+    # A correção indicada é renomear, não retirar: retirada, a chave canônica faltaria.
+    testa("chave antiga `[documentos] ficha` indica renomear, não retirar", valida(antiga),
+          "renomeá-la")
     testa("saída de fidelidade sem o marcador da expressão",
           valida(cfg.com("saidas.fidelidade", "fidelidade.csv")),
           C.MARCADORES["saidas.fidelidade"])

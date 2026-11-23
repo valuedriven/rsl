@@ -33,8 +33,8 @@ def origem_padrao(cfg):
 def _parametro(ctx, params, nome, valor_protocolo, chave_padrao):
     """O do protocolo, se declarado (não None); senão, o padrão do config.toml.
 
-    `params` acumula valor e origem, que `mostrar` exibe. Trecho do protocolo presente e
-    ilegível não chega aqui: o leitor levanta ProtocoloInvalido antes.
+    `params` acumula valor e origem, que `configuracao mostrar` exibe. Trecho do protocolo
+    presente e ilegível não chega aqui: o leitor levanta ProtocoloInvalido antes.
     """
     if valor_protocolo is not None:
         valor, origem = valor_protocolo, ORIGEM_PROTOCOLO
@@ -578,7 +578,7 @@ def ancoras(pal, params):
 
 # ------------------------------------------------------------------------- fontes
 def bases_de_dados(ctx, t, locais):
-    """Bases da tabela de bases: identificador, sigla, nome e ficha."""
+    """Bases da tabela de bases: identificador, sigla, nome e procedimento de busca."""
     from .config import RAIZ                                        # noqa: PLC0415
     T = G.T_BASES
     c_id, c_sigla, c_nome = T.colunas
@@ -604,9 +604,9 @@ def bases_de_dados(ctx, t, locais):
             raise ProtocoloInvalido(T, f"sigla repetida {sigla!r}")
         ficha_ = ctx.config.ficha(sigla)
         if not (RAIZ / ficha_).exists():
-            raise ProtocoloInvalido(T, f"linha {ident}: ficha da sigla {sigla!r} não existe "
-                                       f"— procurada em {ficha_} (`documentos.ficha` do "
-                                       f"{ctx.config.nome})")
+            raise ProtocoloInvalido(T, f"linha {ident}: procedimento de busca da sigla {sigla!r} "
+                                       f"não existe — procurado em {ficha_} "
+                                       f"(`documentos.procedimento` do {ctx.config.nome})")
         ident = f"{G.I_BD.prefixo}{int(m.group(1))}"
         bases.append({"id": ident, "sigla": sigla, "nome": valores[c_nome], "ficha": ficha_})
         locais["base"][ident] = linha["_linha"]

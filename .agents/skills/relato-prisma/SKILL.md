@@ -35,7 +35,7 @@ substituída por ela**.
 
 Identificação, triagem, elegibilidade e inclusão, com as exclusões **justificadas e
 quantificadas em cada passagem**. As contagens vêm do registro das contagens da busca,
-alimentado por `deduplicacao` e `filtragens`.
+alimentado por `controle-de-duplicatas` e `filtragem-dos-estudos`.
 
 O fluxograma não é ilustração: é a prestação de contas de cada registro que entrou e
 não saiu.

@@ -1,6 +1,6 @@
 ---
-name: deduplicacao
-description: Deduplica os registros exportados das bases em duas passagens, por identificador e por semelhança, com regra explícita para o par duvidoso. Use ao consolidar exportações de mais de uma base, ao contar registros únicos, e ao decidir se dois registros são o mesmo estudo.
+name: controle-de-duplicatas
+description: Controla as duplicatas entre os registros exportados das bases — controlar duplicatas em duas passagens, por identificador e por semelhança, com regra explícita para o par duvidoso. Use ao consolidar exportações de mais de uma base, ao contar registros únicos, e ao decidir se dois registros são o mesmo estudo.
 ---
 
 # Deduplicação

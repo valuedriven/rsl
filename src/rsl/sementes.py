@@ -31,7 +31,7 @@ from .saida import Saida
 
 Coluna = collections.namedtuple("Coluna", "nome descricao manual")
 
-# Colunas manuais citadas por nome fora deste módulo (texto de `busca aderencia`).
+# Colunas manuais citadas por nome fora deste módulo (texto de `aderencia medir`).
 COL_INDEXADA = "indexada"
 COL_RECUPERADA = "recuperada"
 

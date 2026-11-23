@@ -1,9 +1,9 @@
 ---
-name: "otimizar-strings-revisao-sistematica"
-description: "Diagnostica e otimiza o controle terminológico e as strings de busca de protocolos de revisão sistemática ou de escopo organizados por facetas, com auditoria de redundância, polissemia e lacunas."
+name: auditoria-das-strings
+description: "Audita as strings de busca e o controle terminológico de protocolos de revisão sistemática ou de escopo organizados por facetas: auditar strings quanto a redundância, polissemia, lacunas e rendimento contra o conjunto-semente, e julgar a saída de `strings gerar` e `documentos conferir`. Use ao auditar ou otimizar strings, ajustar descritores, diagnosticar volume excessivo ou sementes perdidas."
 ---
 
-# Otimização de controle terminológico e strings de busca
+# Auditoria das strings de busca
 
 ## Quando usar
 
@@ -27,15 +27,24 @@ Atenção particular a protocolos que **executam uma expressão e derivam as out
 
 ### 2. Rodar o diagnóstico mecânico
 
-Escrever o script da seção *Script de auditoria* num diretório próprio, separado de qualquer arquivo enviado, e rodá-lo sobre o protocolo:
+O diagnóstico mecânico é feito pelos comandos do projeto, não por script copiado para a
+skill:
 
-```
-python3 -I auditar_strings.py protocolo.md
-```
+- `python3 -m rsl strings gerar` calcula cada STR a partir do quadro terminológico, com a
+  subsunção já aplicada, e exibe a diferença para a tabela do protocolo; recusa termo em
+  duas facetas;
+- `python3 -m rsl documentos conferir` relata a coerência entre protocolo e procedimentos de
+  busca, incluindo a consulta acima do teto de caracteres da base e o termo numa só forma de
+  número.
 
-Reporta redundância por subsunção, duplicação entre facetas, desbalanceamento de parênteses e aspas, e extensão em caracteres. Faz em segundos o que a leitura não pega: um protocolo real tinha 75 termos redundantes em 356 e 22 termos em duas facetas ao mesmo tempo, nenhum deles visível a olho.
+O que se rodam são comandos; o que esta skill ensina é julgar a saída: a diferença que
+`strings gerar` mostra é redundância a retirar ou termo que o quadro não tinha? O teto
+estourado pede divisão da consulta ou revisão da faceta? A leitura não pega isso a olho —
+um protocolo real tinha 75 termos redundantes em 356 e 22 termos em duas facetas ao mesmo
+tempo, nenhum deles visível.
 
-Rodar o mesmo script sobre o resultado, ao fim, e comparar as duas saídas. É o que transforma afirmação em medida.
+Rodar os mesmos comandos sobre o resultado, ao fim, e comparar as duas saídas. É o que
+transforma afirmação em medida.
 
 ### 3. Aplicar os onze critérios
 
@@ -49,7 +58,7 @@ Se o protocolo propuser expressão alternativa ou contingência, rodar o mesmo t
 
 ### 5. Declarar a adaptação por base
 
-Sem código de campo declarado por base, a busca não é reprodutível, e a omissão é comum. Produzir tabela com: campo e sintaxe da expressão por base, filtros de interface, e particularidades verificadas. Ver *Sintaxe: o que verificar em cada base*; o valor de cada base vem da ficha dela.
+Sem código de campo declarado por base, a busca não é reprodutível, e a omissão é comum. Produzir tabela com: campo e sintaxe da expressão por base, filtros de interface, e particularidades verificadas. Ver *Sintaxe: o que verificar em cada base*; o valor de cada base vem do procedimento de busca dela.
 
 ### 6. Registrar as emendas
 
@@ -95,9 +104,9 @@ Nenhum dos onze é conclusivo antes da execução. Por isso prescrever sempre **
 
 ## Sintaxe: o que verificar em cada base
 
-O fato de sintaxe é **da base**, não desta skill: vai para a ficha da base, com a fonte e o estado de verificação (skill `ficha-de-busca-por-base`), e se reconfere quando a interface muda. Esta seção lista as dimensões em que as bases divergem e o efeito de cada uma sobre a string. Nenhuma se presume igual de uma base para outra.
+O fato de sintaxe é **da base**, não desta skill: vai para o procedimento de busca da base, com a fonte e o estado de verificação (skill `procedimento-de-busca-por-base`), e se reconfere quando a interface muda. Esta seção lista as dimensões em que as bases divergem e o efeito de cada uma sobre a string. Nenhuma se presume igual de uma base para outra.
 
-**Locução, lematização e sinônimos.** Em algumas bases as aspas desligam a lematização e o localizador interno de sinônimos; em outras formam locução aproximada, que já inclui plurais e admite truncamento dentro dela, e há uma segunda forma de locução, exata, que não admite truncamento. O curinga também pode desligar a lematização: o radical truncado recupera as flexões, mas não a variante ortográfica (`color*` não alcança `colour`). Daí a enumeração explícita dos pares ortográficos, e daí o plural declarado por base na ficha, nunca presumido pela skill.
+**Locução, lematização e sinônimos.** Em algumas bases as aspas desligam a lematização e o localizador interno de sinônimos; em outras formam locução aproximada, que já inclui plurais e admite truncamento dentro dela, e há uma segunda forma de locução, exata, que não admite truncamento. O curinga também pode desligar a lematização: o radical truncado recupera as flexões, mas não a variante ortográfica (`color*` não alcança `colour`). Daí a enumeração explícita dos pares ortográficos, e daí o plural declarado por base no procedimento de busca, nunca presumido pela skill.
 
 **Derivação automática e curinga.** Há base com derivação de radicais desativada, em que a correspondência é exata mesmo sem aspas, e base que exige um mínimo de letras antes do curinga. As duas coisas mudam o que o truncamento alcança e se verificam antes de truncar.
 
@@ -105,7 +114,7 @@ O fato de sintaxe é **da base**, não desta skill: vai para a ficha da base, co
 
 **Limite de operadores e campo de busca.** O limite de operadores booleanos pode variar com o campo pesquisado. Há busca em todos os campos com limite muito menor que o da busca por tópico, e ela, além disso, recupera por texto que não é título, resumo nem palavras-chave. Em revisão sistemática, usar o campo de tópico ou os campos nomeados, nunca o de todos os campos.
 
-**Campos e forma de execução.** Os rótulos de campo (tópico, título, palavras-chave de autor, palavras-chave atribuídas), os filtros de ano, idioma e tipo documental e a forma de execução (consulta única ou histórico de busca com conjuntos numerados) variam de base para base. A ficha declara os da base; a skill exige só que a estratificação por campo do critério 9 seja replicada no cálculo local.
+**Campos e forma de execução.** Os rótulos de campo (tópico, título, palavras-chave de autor, palavras-chave atribuídas), os filtros de ano, idioma e tipo documental e a forma de execução (consulta única ou histórico de busca com conjuntos numerados) variam de base para base. O procedimento de busca declara os da base; a skill exige só que a estratificação por campo do critério 9 seja replicada no cálculo local.
 
 **Exportação reprodutível.** Onde houver API pública de exportação, preferi-la à exportação pela interface, conferindo os parâmetros na documentação vigente e registrando-os.
 
@@ -129,124 +138,9 @@ O fato de sintaxe é **da base**, não desta skill: vai para a ficha da base, co
 
 1. Protocolo revisado, **no mesmo layout do original** — mesmos títulos de seção, mesma ordem, mesmo formato de tabela. Conferir por comparação automática dos títulos, não a olho.
 2. Tabela de emendas com razão, efeito esperado e risco.
-3. Saída do script antes e depois.
+3. Saída de `strings gerar` e de `documentos conferir`, antes e depois.
 4. Lista de pendências de verificação na execução.
 
 Perguntar antes de produzir só se a arquitetura do protocolo for ambígua quanto a **qual expressão é executada em base**, porque disso depende todo o resto. As demais dúvidas resolvem-se propondo com a justificativa à vista e marcando o ponto para decisão.
 
 Se for pedida versão enxuta, retirar a camada de justificativa — preâmbulo de versão, marcadores de alteração, linhas explicativas acrescentadas às tabelas, tabelas comparativas, teste de mesa e anexo de emendas — e preservar as otimizações no texto. Dizer depois, na resposta, o que a fidelidade ao layout original obrigou a descartar.
-
-## Script de auditoria
-
-```python
-#!/usr/bin/env python3
-"""Audita strings de busca facetadas em protocolo de revisao sistematica.
-
-Uso:  python3 -I auditar_strings.py <protocolo.md>
-
-Espera tabelas markdown cujas linhas sejam  | STRn | FCTn | (string) |
-com coluna intermediaria opcional. Reporta: redundancia por subsuncao,
-duplicacao entre facetas, desbalanceamento sintatico e extensao.
-Serve ao diagnostico do protocolo de entrada e a verificacao do de saida.
-"""
-import re
-import sys
-import itertools
-import collections
-
-
-def extrair(txt):
-    pat = r'\|\s*\**(STR\d[ab]?)\**\s*\|\s*\**(FCT\d)\**\s*\|(?:[^|()]*\|)?\s*(\(.*?\))\s*\|'
-    out = {}
-    for sid, fct, body in re.findall(pat, txt, re.S):
-        out[sid] = (fct, body.replace('\\*', '*').replace('\\_', '_'))
-    return out
-
-
-def tokenizar(body):
-    corpo = body[1:-1]
-    frases = re.findall(r'"([^"]+)"', corpo)
-    resto = re.sub(r'"[^"]+"', ' ', corpo)
-    soltos = [w.strip('()') for w in re.split(r'\s+OR\s+|\s+', resto)
-              if w.strip('()') and w != 'OR']
-    return [t.lower() for t in frases + soltos]
-
-
-def subsumidos(termos):
-    pares = []
-    for a in termos:
-        if a.endswith('*'):
-            pref = a[:-1]
-            pares += [(a, b) for b in termos if b != a and b.startswith(pref)]
-        else:
-            pares += [(a, b) for b in termos
-                      if a != b and (b.startswith(a + ' ') or b.endswith(' ' + a)
-                                     or f' {a} ' in b)]
-    return sorted(set(pares))
-
-
-def main():
-    if len(sys.argv) < 2:
-        sys.exit(__doc__)
-    txt = open(sys.argv[1], encoding='utf-8').read()
-    strs = extrair(txt)
-    if not strs:
-        sys.exit('Nenhuma string encontrada. Confira o formato das linhas da tabela.')
-
-    falhas = 0
-    tok = {sid: tokenizar(b) for sid, (f, b) in strs.items()}
-
-    print('== sintaxe e extensao ==')
-    for sid, (fct, body) in strs.items():
-        par = body.count('(') - body.count(')')
-        aspas = body.count('"') % 2
-        anom = re.findall(r'OR\s+OR|\(\s*OR|OR\s*\)|""|\s+AND\s+', body)
-        c = collections.Counter(tok[sid])
-        dup = [t for t, n in c.items() if n > 1]
-        ok = par == 0 and aspas == 0 and not anom and not dup
-        falhas += 0 if ok else 1
-        print(f'  {sid} ({fct}): {len(tok[sid])} termos, {len(set(tok[sid]))} unicos, '
-              f'{len(body)} chars, parenteses={par}, aspas_impares={aspas}')
-        if anom:
-            print(f'      anomalias: {anom}')
-        if dup:
-            print(f'      duplicatas internas: {dup}')
-
-    facetas = collections.defaultdict(set)
-    for sid, (fct, _) in strs.items():
-        facetas[fct] |= set(tok[sid])
-
-    print('\n== duplicacao entre facetas ==')
-    viol = 0
-    for a, b in itertools.combinations(sorted(facetas), 2):
-        inter = sorted(facetas[a] & facetas[b])
-        if inter:
-            viol += len(inter)
-            print(f'  {a} ^ {b} ({len(inter)}): {inter}')
-    print('  nenhuma' if not viol else f'  TOTAL: {viol} termos em mais de uma faceta')
-    falhas += 1 if viol else 0
-
-    print('\n== redundancia por subsuncao ==')
-    tot = 0
-    for fct in sorted(facetas):
-        pares = subsumidos(facetas[fct])
-        tot += len(pares)
-        if pares:
-            print(f'  {fct}: {len(pares)} pares')
-            for a, b in pares:
-                print(f'      "{b}" ja recuperado por "{a}"')
-        else:
-            print(f'  {fct}: nenhum')
-    print(f'  TOTAL: {tot} termos redundantes de {sum(len(t) for t in tok.values())}')
-    falhas += 1 if tot else 0
-
-    exec_chars = sum(len(b) for sid, (f, b) in strs.items() if f in ('FCT1', 'FCT2'))
-    print(f'\n== expressao executada (FCT1 + FCT2): ~{exec_chars} caracteres ==')
-    print('\nRESULTADO:', 'limpo' if falhas == 0 else f'{falhas} categorias com achados')
-
-
-if __name__ == '__main__':
-    main()
-```
-
-Ajustar os prefixos `STR` e `FCT` e o par de facetas da expressão executada à nomenclatura do protocolo em mãos. Resíduo de subsunção pode ser exceção deliberada — locução hifenizada cuja tokenização varia por base, por exemplo — e nesse caso declara-se a exceção em vez de corrigi-la.

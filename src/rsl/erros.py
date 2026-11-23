@@ -27,10 +27,10 @@ class ConfiguracaoInvalida(ErroRSL):
 
 
 class ProtocoloInvalido(ErroRSL):
-    """O protocolo ou uma ficha não tem a forma que o leitor sabe interpretar.
+    """O protocolo ou um procedimento de busca não tem a forma que o leitor sabe interpretar.
 
     `elemento` é a declaração da gramática violada (ver `gramatica.py`); a mensagem leva o
-    documento e o nome do elemento, com o mesmo nome que `rsl gramatica` exibe.
+    documento e o nome do elemento, com o mesmo nome que `rsl documentos gramatica` exibe.
     """
 
     codigo = Saida.PROTOCOLO_ILEGIVEL

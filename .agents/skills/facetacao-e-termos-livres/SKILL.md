@@ -69,24 +69,24 @@ Tratar ampliação como desdobramento é alterar o recorte sem registrar.
 
 ## 5. Depois de alterar
 
-A ordem é a do README (Precedência): **quadro → `strings gerar` → fichas → `conferir`**.
+A ordem é a do README (Precedência): **quadro → `strings gerar` → procedimentos de busca → `documentos conferir`**.
 Altera-se o quadro, nunca a STR: a tabela de strings do protocolo é saída de geração.
 
 1. Alterar o quadro terminológico do protocolo, sem pôr o mesmo termo em duas facetas.
 2. Rodar `python3 -m rsl strings gerar` e ler a diferença: termos a acrescentar, a retirar
    e subsumidos, cada um com o termo que o subsume. Depois, `strings gerar --gravar`. A
-   guarda é automática: `conferir` reprova a STR diferente da gerada e o termo do quadro
+   guarda é automática: `documentos conferir` reprova a STR diferente da gerada e o termo do quadro
    em duas facetas, e a gravação é recusada nesse caso. A regra de subsunção é a grafia
    exata, acento e hífen inclusive; o que ela não retira é decisão de forma da base.
-3. Atualizar a ficha de cada base a partir das STRs regeradas, aplicando os parâmetros
-   que ela declara (`ficha-de-busca-por-base`):
+3. Atualizar o procedimento de busca de cada base a partir das STRs regeradas, aplicando os parâmetros
+   que ela declara (`procedimento-de-busca-por-base`):
    - retirar o subsumido do mesmo campo do termo que o subsume; o subsumido em campo
      próprio é aceito e relatado;
    - com `plural: explícito`, trazer as duas formas de número; com `pela lematização`, só a
      forma do quadro.
 4. Com `teto de caracteres` numérico, particionar sem retirar termo a consulta que passar
-   do teto. `conferir` mede cada consulta e reprova a base que passar.
-5. Rodar `conferir` e ler também os relatos, que não reprovam: subsumidos por base, a maior
-   consulta da base sem teto e termos numa só forma de número em ficha de plural explícito.
+   do teto. `documentos conferir` mede cada consulta e reprova a base que passar.
+5. Rodar `documentos conferir` e ler também os relatos, que não reprovam: subsumidos por base, a maior
+   consulta da base sem teto e termos numa só forma de número em procedimento de busca de plural explícito.
 
 Depois, `expressoes-de-busca` para recompor, e `registrar-decisao` para o histórico.

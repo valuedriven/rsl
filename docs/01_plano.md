@@ -71,7 +71,7 @@ Objetivos específicos (um por questão secundária, na ordem do protocolo):
 | Histórico — registro de decisões | Documento de apoio aos instrumentos: linha do tempo das decisões relevantes sobre a revisão, inclusive as emendas |
 | Relatório da revisão, em conformidade com o PRISMA | Texto completo com a lista de verificação respondida e o diagrama de fluxo, destinado a submissão a periódico |
 | Apresentação (.pptx) | Síntese do percurso e dos achados, para a qualificação e para a divulgação do resultado |
-| Estratégias de busca por fonte | Uma ficha por base, com as expressões executáveis e o estado de verificação da sintaxe; o registro de execução de cada base fica em `data/registro_execucao.json` |
+| Estratégias de busca por fonte | Um procedimento de busca por base, com as expressões executáveis e o estado de verificação da sintaxe; o registro de execução de cada base fica em `data/registro_execucao.json` |
 
 ## 2.4 Contra-escopo
 
@@ -192,11 +192,11 @@ Objetivos específicos (um por questão secundária, na ordem do protocolo):
 
 | Medida | O que afere | Limiar | Consequência de não atingir |
 | :---- | :---- | :---- | :---- |
-| Teste de aderência ao conjunto-semente | Recall das expressões de busca, sobre a união das bases | `limiar_aderencia` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | Revisão obrigatória do controle terminológico antes de prosseguir |
+| Teste de aderência ao conjunto-semente | Recall das expressões de busca, sobre a união das bases | `limiar_aderencia` (`config.toml`; o valor em uso sai em `python3 -m rsl configuracao mostrar`) | Revisão obrigatória do controle terminológico antes de prosseguir |
 | Índice kappa entre os dois revisores humanos | Concordância da decisão de triagem, sempre antes do desbloqueio do modo cego | Calculado nas TRÊS filtragens; nunca com a IA | Divergência vai a discussão e, remanescendo, ao VT, com a decisão registrada |
-| Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Divergência até `divergencia_fidelidade` (`config.toml`; o valor em uso sai em `python3 -m rsl mostrar`) | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
+| Teste de fidelidade da derivação das expressões | Se a contagem calculada localmente coincide com a execução direta na base | Divergência até `divergencia_fidelidade` (`config.toml`; o valor em uso sai em `python3 -m rsl configuracao mostrar`) | A derivação local é abandonada e as expressões passam a ser executadas uma a uma |
 | Conferência de coerência entre as expressões de busca | Se as relações de continência declaradas no protocolo (`docs/03`) se verificam no retorno de cada base | Relações do protocolo | Reexecução na base e registro do defeito. NECESSÁRIA E NÃO SUFICIENTE |
-| Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A conferência da ficha é RECUSADA pela guarda, e não há saída a conferir |
+| Rastreabilidade entre quadro terminológico e strings | Se todo termo usado em string tem contrapartida no quadro da sua faceta | Zero termos sem contrapartida | A conferência do procedimento de busca é RECUSADA pela guarda, e não há saída a conferir |
 | Dupla passagem de deduplicação | Duplicatas remanescentes após DOI e título, e depois por semelhança semântica | Par duvidoso NÃO é fundido | O par permanece como dois registros e a decisão é registrada |
 | Cobertura de campo nas exportações | Registros sem palavras-chave ou sem resumo, que cegam a aferição de aderência | Fração declarada por base | A fração cega é reportada como limitação daquela base, e não silenciada |
 
@@ -258,7 +258,7 @@ Objetivos específicos (um por questão secundária, na ordem do protocolo):
 | Dupla avaliação humana preservada | As três filtragens são feitas por dois revisores humanos independentes, e o índice kappa é calculado NAS TRÊS, entre eles, nunca com a IA, e sempre antes do desbloqueio do modo cego de cada rodada. A 3ª filtragem é, além disso, feita sem assistência de IA na decisão. A concordância entre a IA e o humano, se reportada, é métrica auxiliar e aparece em separado |
 | Independência do julgamento humano | O revisor registra a sua decisão sem acesso à classificação da IA e sem acesso à decisão do outro revisor. A saída da IA só se abre depois do desbloqueio da rodada, e serve à conferência das divergências, não à formação da decisão |
 | Nenhuma referência sem verificação | Toda referência sugerida ou normalizada por IA é conferida no registro da base ou no próprio documento |
-| Nenhum resultado sem evidência | Nenhuma extração entra na ficha sem conferência no texto-fonte, e nenhum termo é apresentado como descritor autorizado sem o registro da consulta que o confirmou. Falha de consulta não é registrada como ausência: a linha permanece pendente |
+| Nenhum resultado sem evidência | Nenhuma extração entra no procedimento de busca sem conferência no texto-fonte, e nenhum termo é apresentado como descritor autorizado sem o registro da consulta que o confirmou. Falha de consulta não é registrada como ausência: a linha permanece pendente |
 | Rastreabilidade registrada | Ferramenta, modelo, versão, data, finalidade e prompt de cada uso vão para o LOG\_IA, apêndice do protocolo |
 | Autoria e declaração | A IA não é autora nem co-autora, conforme as diretrizes do ICMJE e do COPE. O uso é declarado na seção de métodos do relatório, na forma exigida pelo periódico-alvo |
 | Licenciamento e confidencialidade | Não se submetem a serviços de terceiros textos completos cujas licenças o proíbam, nem dados pessoais porventura presentes nos documentos. Preferem-se ferramentas que não retenham o conteúdo submetido para treinamento. As cláusulas de uso dos metadados das bases com ferramentas de IA são conferidas antes das buscas |

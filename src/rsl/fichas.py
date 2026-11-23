@@ -1,9 +1,10 @@
-"""Leitura das fichas de busca por base.
+"""Leitura dos procedimentos de busca por base.
 
-A ficha da base é a fonte da FORMA; o protocolo é a fonte do VOCABULÁRIO. O leitor não
-conhece sintaxe de base além do necessário para separar termo de campo e de operador:
-campo, tag e operador são lidos do texto da ficha. O que ele conhece é o contrato de
-extração — onde a string está e como o termo se separa —, declarado em `gramatica.py`.
+O procedimento de busca da base é a fonte da FORMA; o protocolo é a fonte do VOCABULÁRIO. O
+leitor não conhece sintaxe de base além do necessário para separar termo de campo e de
+operador: campo, tag e operador são lidos do texto do procedimento de busca. O que ele
+conhece é o contrato de extração — onde a string está e como o termo se separa —, declarado
+em `gramatica.py`.
 """
 
 import re
@@ -22,7 +23,7 @@ MODO_CURADA = "curada"
 
 
 def documento(caminho):
-    return f"ficha {caminho}"
+    return f"procedimento de busca {caminho}"
 
 
 def base_de(d, sigla):
@@ -40,10 +41,11 @@ def ficha(ctx, d, sigla):
 
 
 def forma_execucao(t_ficha, caminho):
-    """Forma de execução declarada na ficha: exatamente uma linha do marcador de execução.
+    """Forma de execução declarada no procedimento de busca: exatamente uma linha do
+    marcador de execução.
 
     Sem padrão: linha ausente, repetida ou com valor fora do domínio reprova, nomeando a
-    ficha. Devolve o valor interno.
+    procedimento de busca. Devolve o valor interno.
     """
     doc = documento(caminho)
     achados = G.MF_EXECUCAO.padrao.findall(t_ficha)
@@ -61,10 +63,10 @@ def forma_execucao(t_ficha, caminho):
 
 
 def criterios_da_ficha(t_ficha, caminho):
-    """IDs de critério citados na seção de critérios da ficha, coluna de ID.
+    """IDs de critério citados na seção de critérios do procedimento de busca, coluna de ID.
 
-    A ficha declara o que a base aplica e onde; a chave é o ID. Agrupamento na mesma
-    célula (`CEn / CEm`) conta os dois. Seção ausente, ou sem nenhum ID, é ficha
+    O procedimento de busca declara o que a base aplica e onde; a chave é o ID. Agrupamento na mesma
+    célula (`CEn / CEm`) conta os dois. Seção ausente, ou sem nenhum ID, é procedimento de busca
     ilegível: sem ela não se sabe o que a base aplica.
     """
     doc = documento(caminho)
@@ -195,7 +197,7 @@ def _estatuto_do_texto(resto):
 
 
 def facetas_base(t, doc):
-    """As strings por faceta da ficha: STRn, faceta, conjunto, campo, termos."""
+    """As strings por faceta do procedimento de busca: STRn, faceta, conjunto, campo, termos."""
     bloco = secao(t, G.SF_STRINGS, doc)
     saida = []
     for parte in re.split(r"^###\s+", bloco, flags=re.M)[1:]:
@@ -222,7 +224,8 @@ def facetas_base(t, doc):
             "termos": _termos_string(texto_string, doc),
         })
     if not saida:
-        raise ProtocoloInvalido(G.F_STRING_BASE, "ficha sem strings por faceta legíveis", doc)
+        raise ProtocoloInvalido(G.F_STRING_BASE, "procedimento de busca sem strings por faceta "
+                                "legíveis", doc)
     return saida
 
 
@@ -306,7 +309,7 @@ def execucao_base(forma, expressoes, curadas, executada, doc):
     """O que se executa nesta base: uma, particionada em subconsultas ou curada.
 
     A expressão é a que o protocolo declara executada; a forma (única ou particionada)
-    é a declarada na ficha, e a curada, a da própria ficha.
+    é a declarada no procedimento de busca, e a curada, a do próprio procedimento de busca.
     """
     expressao = executada
     if curadas:
@@ -315,8 +318,8 @@ def execucao_base(forma, expressoes, curadas, executada, doc):
     else:
         modo = forma
         if executada not in expressoes:
-            raise ProtocoloInvalido(G.F_EXPRESSAO_BASE, f"a ficha não traz a expressão "
-                                                        f"executada {executada}", doc)
+            raise ProtocoloInvalido(G.F_EXPRESSAO_BASE, f"o procedimento de busca não traz a "
+                                                        f"expressão executada {executada}", doc)
         ex = expressoes[executada]
         itens = [{"rotulo": b["rotulo"], "consulta": b["texto"]} for b in ex["blocos"]
                  if G.ROTULO_NAO_EXECUTADA not in normaliza(b["rotulo"])]
@@ -445,11 +448,11 @@ def consultas_executaveis(base):
 
 
 def lematizacao_base(t):
-    """A linha "Lematização" da seção 1 da ficha: (texto da linha, medida, citação).
+    """A linha "Lematização" da seção 1 do procedimento de busca: (texto da linha, medida, citação).
 
     Medida é o estado afirmado "verificado por medição", sem negação; citação, a referência
     `(BDn/<id>)` a uma execução registrada. Sem a seção ou sem a linha: (None, False, None).
-    A existência da execução citada é conferida por `conferir-dados`.
+    A existência da execução citada é conferida por `dados conferir`.
     """
     try:
         trecho = secao(t, G.SF_SINTAXE)
@@ -468,7 +471,7 @@ def lematizacao_base(t):
 
 
 def base_derivada(ctx, d, sigla, t_ficha=None):
-    """O derivado de uma base. A forma vem da ficha; o vocabulário, do protocolo."""
+    """O derivado de uma base. A forma vem do procedimento de busca; o vocabulário, do protocolo."""
     b = base_de(d, sigla)
     doc = documento(b["ficha"])
     t = ficha(ctx, d, sigla) if t_ficha is None else t_ficha

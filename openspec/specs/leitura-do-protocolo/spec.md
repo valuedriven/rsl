@@ -15,13 +15,13 @@ O código de `src/` MUST NOT conter valor de parâmetro do projeto. São parâme
 - âncoras, recorte e limiares;
 - dimensões de critério;
 - instrumentos (sigla, modo, caminho, idiomas, facetas);
-- bases (sigla, ficha);
+- bases (sigla, procedimento de busca);
 - idiomas do quadro;
 - caminhos e nomes dos arquivos de dados, de entrada e de saída;
 - campos da planilha;
 - o caminho do próprio protocolo.
 
-Todo parâmetro SHALL vir do protocolo, da ficha da base ou do `config.toml` na raiz. O
+Todo parâmetro SHALL vir do protocolo, do procedimento de busca da base ou do `config.toml` na raiz. O
 autoteste MUST NOT ser exceção. As cópias defeituosas que ele produz SHALL ser geradas a
 partir da estrutura lida do protocolo corrente (por exemplo, "a última semente lida" ou "a
 primeira base da tabela"), e não de literais do texto vigente.
@@ -36,8 +36,8 @@ como se fossem do código.
 
 #### Scenario: Emenda legítima não quebra o autoteste
 - **WHEN** o protocolo ganha uma semente nova, troca a sigla de uma base de forma coerente
-  com as fichas ou altera a faixa de sensibilidade dentro do válido
-- **THEN** `conferir` passa, e `autoteste` executa os mesmos grupos de casos, sem caso
+  com os procedimentos de busca ou altera a faixa de sensibilidade dentro do válido
+- **THEN** `documentos conferir` passa, e `projeto autoteste` executa os mesmos grupos de casos, sem caso
   "mutação não aplicada"
 
 ### Requirement: Protocolo sobrescreve o padrão da configuração
@@ -69,7 +69,7 @@ próprio `config.toml` é o único fixado: a raiz do projeto.
 
 #### Scenario: Outro arquivo de protocolo
 - **WHEN** `config.toml` aponta para outro arquivo de protocolo
-- **THEN** todos os subcomandos leem esse arquivo, e `mostrar` exibe o caminho em uso
+- **THEN** todos os subcomandos leem esse arquivo, e `configuracao mostrar` exibe o caminho em uso
 
 #### Scenario: Protocolo inexistente
 - **WHEN** o caminho configurado não existe
@@ -78,7 +78,7 @@ próprio `config.toml` é o único fixado: a raiz do projeto.
 
 ### Requirement: Origem de cada parâmetro é visível
 `--mostrar` SHALL exibir, para cada parâmetro, o valor em uso e a sua origem (protocolo,
-ficha da base ou padrão da configuração).
+procedimento de busca da base ou padrão da configuração).
 
 #### Scenario: Parâmetro vindo do padrão
 - **WHEN** o limiar de divergência vem de `config.toml`
@@ -88,7 +88,7 @@ ficha da base ou padrão da configuração).
 - **WHEN** `--mostrar` exibe a composição das expressões, os instrumentos, as bases ou os
   idiomas
 - **THEN** a origem exibida é sempre o protocolo, e a forma de execução de cada base tem
-  origem na ficha
+  origem no procedimento de busca
 
 ### Requirement: Conferência verifica coerência interna
 `--conferir` SHALL reprovar contradições internas: termo de STR ausente do quadro da faceta;
@@ -133,7 +133,7 @@ inferior ≥ superior. A sonda ser a conjunção das âncoras é garantida pela 
   campo `bases` do arquivo e exibida
 
 ### Requirement: Autoteste prova que cada conferência reprova
-`autoteste` SHALL injetar, numa cópia em memória, ao menos um defeito por:
+`projeto autoteste` SHALL injetar, numa cópia em memória, ao menos um defeito por:
 
 - conferência de coerência;
 - regra de precedência;
@@ -146,7 +146,7 @@ detectado com outro código, MUST fazer o autoteste falhar.
 
 #### Scenario: Conferência que não reprova
 - **WHEN** um defeito injetado não é detectado pela conferência correspondente
-- **THEN** `autoteste` falha, nomeando o defeito
+- **THEN** `projeto autoteste` falha, nomeando o defeito
 
 #### Scenario: Parâmetro estrutural ausente
 - **WHEN** o autoteste retira de uma cópia do protocolo a coluna `Sigla` da tabela de bases
@@ -155,7 +155,7 @@ detectado com outro código, MUST fazer o autoteste falhar.
 
 #### Scenario: Código trocado
 - **WHEN** um defeito de forma é reprovado com REPROVADO em vez de PROTOCOLO_ILEGIVEL
-- **THEN** `autoteste` falha, nomeando o defeito e os dois códigos
+- **THEN** `projeto autoteste` falha, nomeando o defeito e os dois códigos
 
 ### Requirement: Somente biblioteca padrão
 Os scripts SHALL executar só com a biblioteca padrão do Python 3.11 ou superior; a
@@ -226,7 +226,7 @@ terminar com o código PARCIAL, desde que nenhum caso executado tenha falhado. H
 falha, o código é REPROVADO, e a mensagem informa também os casos não executados.
 
 #### Scenario: Arquivos alimentados ausentes
-- **WHEN** `autoteste` termina sem falha e com casos não executados
+- **WHEN** `projeto autoteste` termina sem falha e com casos não executados
 - **THEN** a última mensagem diz que o autoteste é parcial, quantos casos não rodaram e por
   quê, e o código de saída é PARCIAL
 
@@ -271,10 +271,10 @@ vazia.
 
 ### Requirement: Bases lidas da tabela do protocolo
 As bases SHALL ser lidas da tabela "Bases de dados": identificador `BDn`, sigla e nome. Sigla
-e identificador MUST ser únicos. A ficha de cada base SHALL ser localizada pela sigla, no
-padrão de caminho do `config.toml`; ficha inexistente MUST reprovar, nomeando base e caminho.
+e identificador MUST ser únicos. O procedimento de busca de cada base SHALL ser localizada pela sigla, no
+padrão de caminho do `config.toml`; procedimento de busca inexistente MUST reprovar, nomeando base e caminho.
 
-#### Scenario: Ficha da sigla não existe
+#### Scenario: Procedimento de busca da sigla não existe
 - **WHEN** o padrão é `docs/procedimentos_busca_{sigla}.md` e não existe
   `docs/procedimentos_busca_eric.md`
 - **THEN** a leitura reprova, nomeando BD3, a sigla `eric` e o caminho procurado
@@ -344,7 +344,7 @@ dentro do nome pertence ao nome.
 
 #### Scenario: Protocolo atual
 - **WHEN** a tabela marca FCT1 e FCT2 com `Sim` e FCT3 e FCT4 com `Não`
-- **THEN** as âncoras lidas são FCT1 e FCT2, e `mostrar` as exibe com origem no protocolo
+- **THEN** as âncoras lidas são FCT1 e FCT2, e `configuracao mostrar` as exibe com origem no protocolo
 
 #### Scenario: Nome com hífen
 - **WHEN** o nome de FCT3 é "Práticas do processo de ensino-aprendizagem"
@@ -371,7 +371,7 @@ O leitor SHALL identificar a executada e a sonda a partir da composição lida e
 - a sonda é a única expressão cujos grupos são exatamente as STR das facetas-âncora.
 
 Nenhum candidato, ou mais de um, MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a tabela
-de expressões e os candidatos. `mostrar` SHALL exibir a executada e a sonda com origem
+de expressões e os candidatos. `configuracao mostrar` SHALL exibir a executada e a sonda com origem
 "protocolo (composição)".
 
 #### Scenario: Protocolo atual
@@ -413,7 +413,7 @@ um deles, a leitura reprova, nomeando a nota e o limite que falta.
 
 #### Scenario: Sem faixa declarada
 - **WHEN** as notas citadas pela executada não trazem `<` nem `>` com percentual
-- **THEN** vale `padroes.sensibilidade`, e `mostrar` exibe a origem "padrão (config.toml)"
+- **THEN** vale `padroes.sensibilidade`, e `configuracao mostrar` exibe a origem "padrão (config.toml)"
 
 ### Requirement: Conjunto-semente lido do arquivo de sementes
 O conjunto-semente SHALL ser lido do arquivo TOML localizado por `[documentos] sementes`,
@@ -434,7 +434,7 @@ nenhum outro arquivo SHALL guardar dado de semente.
 #### Scenario: Arquivo atual
 - **WHEN** o arquivo de sementes tem as 10 sementes de SE1 a SE10, com os campos do
   esquema estruturado
-- **THEN** a leitura aprova, e a distribuição por base e por papel exibida por `mostrar` é
+- **THEN** a leitura aprova, e a distribuição por base e por papel exibida por `configuracao mostrar` é
   a mesma exibida antes da troca do esquema intermediário pelo estruturado
 
 #### Scenario: Título com ponto
@@ -443,7 +443,7 @@ nenhum outro arquivo SHALL guardar dado de semente.
 
 #### Scenario: Semente sem DOI
 - **WHEN** uma semente não tem `doi`
-- **THEN** a leitura aprova, e `pendencias` relata o DOI ausente
+- **THEN** a leitura aprova, e `projeto pendencias` relata o DOI ausente
 
 #### Scenario: Distribuição calculada
 - **WHEN** o arquivo é lido
@@ -500,7 +500,7 @@ escapado ou não, pertence ao termo.
   células
 
 ### Requirement: Dado ou juízo pendente relatado, sem reprovar
-`pendencias` SHALL relatar, nomeando a semente, sem reprovar a leitura:
+`projeto pendencias` SHALL relatar, nomeando a semente, sem reprovar a leitura:
 
 - `doi` ausente;
 - `facetas` vazia ou ausente;
@@ -512,25 +512,25 @@ escapado ou não, pertence ao termo.
 
 #### Scenario: DOI a obter
 - **WHEN** a semente SE6 não traz `doi`
-- **THEN** a leitura aprova, e `pendencias` relata SE6 com DOI ausente
+- **THEN** a leitura aprova, e `projeto pendencias` relata SE6 com DOI ausente
 
 #### Scenario: Facetas a informar
 - **WHEN** a semente SE3 não traz `facetas`
-- **THEN** a leitura aprova, e `pendencias` relata SE3 com facetas a informar
+- **THEN** a leitura aprova, e `projeto pendencias` relata SE3 com facetas a informar
 
 #### Scenario: Validação sem âncora
 - **WHEN** a semente de validação SE5 traz `facetas = ["FCT3"]`, e FCT1 e FCT2 são as
   âncoras
-- **THEN** a leitura aprova, e `pendencias` relata SE5 sem faceta âncora
+- **THEN** a leitura aprova, e `projeto pendencias` relata SE5 sem faceta âncora
 
 #### Scenario: Validação sem facetas
 - **WHEN** a semente de validação SE3 não traz `facetas`
-- **THEN** `pendencias` relata SE3 com facetas a informar, e não relata SE3 sem faceta
+- **THEN** `projeto pendencias` relata SE3 com facetas a informar, e não relata SE3 sem faceta
   âncora
 
 ### Requirement: Semente retirada não deixa resto
 Semente retirada SHALL sair do arquivo, das saídas regeneradas e da evidência bruta.
-`conferir-dados` MUST reprovar arquivo da subpasta `referencias/` de `[dados] evidencia`
+`dados conferir` MUST reprovar arquivo da subpasta `referencias/` de `[dados] evidencia`
 (hoje `data/evidencia/referencias/`) nomeado com um `SEn` que não está no arquivo de
 sementes, nomeando o arquivo. As outras subpastas da evidência MUST NOT ser conferidas
 por essa regra.
@@ -538,14 +538,14 @@ por essa regra.
 #### Scenario: Evidência de semente retirada
 - **WHEN** SE10 é retirada do arquivo e `SE10_crossref.json` continua em
   `data/evidencia/referencias/`
-- **THEN** `conferir-dados` reprova, nomeando `SE10_crossref.json`
+- **THEN** `dados conferir` reprova, nomeando `SE10_crossref.json`
 
 #### Scenario: Planilha regenerada
-- **WHEN** SE10 é retirada e `sementes planilha` é executado
+- **WHEN** SE10 é retirada e `aderencia planilhar` é executado
 - **THEN** `semente_aderencia.csv` não traz linha de SE10
 
 ### Requirement: Referência exibida a partir dos campos
-`mostrar` SHALL exibir cada semente como referência legível, montada dos campos na ordem
+`configuracao mostrar` SHALL exibir cada semente como referência legível, montada dos campos na ordem
 autores, ano, título, veículo, volume, número, páginas e DOI, omitindo o campo vazio. A
 referência exibida MUST NOT ser gravada em arquivo nem no protocolo.
 
@@ -558,11 +558,11 @@ O autoteste SHALL injetar numa cópia do arquivo de sementes, a partir das semen
 cada um destes defeitos e exigir PROTOCOLO_ILEGIVEL: `ano` como texto, `autores` vazia,
 `doi` fora da forma, faceta fora da tabela, faceta repetida, lacuna na numeração dos `id` e
 o campo `semente` do esquema intermediário. O autoteste SHALL também exigir que
-`conferir-dados` reprove a evidência de semente inexistente.
+`dados conferir` reprove a evidência de semente inexistente.
 
 #### Scenario: DOI ausente não reprova
 - **WHEN** o autoteste retira o `doi` de uma semente numa cópia
-- **THEN** a cópia é aprovada e `pendencias` relata a semente; se a cópia reprovar, o
+- **THEN** a cópia é aprovada e `projeto pendencias` relata a semente; se a cópia reprovar, o
   autoteste falha
 
 #### Scenario: Defeito não detectado

@@ -2,7 +2,7 @@
 
 Os casos são declarados antes de rodar: sem os arquivos alimentados, nenhum roda, e todos
 são contados como não executados — nunca como aprovados. O relato do registro ausente, em
-`pendencias`, roda sempre, com o registro apontado para um diretório temporário.
+`projeto pendencias`, roda sempre, com o registro apontado para um diretório temporário.
 """
 
 import contextlib
@@ -19,8 +19,8 @@ from ..fichas import ficha
 
 
 def registro_ausente(ctx, g):
-    """Sem o registro de execução, `pendencias` orienta registrar a primeira execução com
-    `busca registrar`, e não reconstituir o registro."""
+    """Sem o registro de execução, `projeto pendencias` orienta registrar a primeira
+    execução com `busca registrar`, e não reconstituir o registro."""
     cfg = ctx.config
     with tempfile.TemporaryDirectory() as tmp:
         ausente = pathlib.Path(tmp) / pathlib.Path(cfg.valor("dados.registro")).name
@@ -30,7 +30,8 @@ def registro_ausente(ctx, g):
             cmd_pendencias(cx)
     linha = next((x.strip() for x in saida.getvalue().splitlines()
                   if "[ausente]" in x and ausente.name in x), "")
-    g.testa("registro ausente: `pendencias` orienta a primeira execução com `busca registrar`",
+    g.testa("registro ausente: `projeto pendencias` orienta a primeira execução com "
+            "`busca registrar`",
             CMD_REGISTRAR in linha and "reconstitu" not in linha,
             linha or "a ausência não foi relatada")
 
@@ -57,7 +58,7 @@ def casos(ctx, g):
             "registros_lidos": lidos, "status": "valida"})
 
     def so_a_base(alvo, linha):
-        """A citação injetada na ficha de `alvo` reprova só essa base."""
+        """A citação injetada no procedimento de busca de `alvo` reprova só essa base."""
         def caso():
             texto = ficha(ctx, d, alvo).rstrip("\n") + "\n\n" + linha + "\n"
             p = problemas_citacoes_registro(ctx.com_fichas({alvo: texto}), d, reg)

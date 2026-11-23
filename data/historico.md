@@ -323,3 +323,58 @@ O que não se alterou e por quê:
 - **Nenhum comando ou skill renomeado.** As renomeações são da change `namespace-de-comandos-e-skills`, que usa o catálogo como guarda. A varredura de nomes antigos fica inativa enquanto não houver alias declarado.
 - **Protocolo, procedimentos de busca, conjunto-semente, strings, expressões, critérios, bases e `config.toml`** não mudam.
 - **A classificação manual/lacuna e o papel de cada skill** foram propostos pelo agente na aplicação, pela leitura do design. Revê-los é alteração do guia, seguida de `catalogo gerar --gravar`.
+
+## 2026-11-23 — Namespace de comandos, aliases de transição, skills renomeadas e “procedimento de busca” (change `namespace-de-comandos-e-skills`)
+
+Aplicação da change `namespace-de-comandos-e-skills`, proposta e aprovada pelo pesquisador, com as decisões C1 e `documentos` registradas antes.
+
+- **O que estava.** Os comandos misturavam verbo e substantivo, e o teste de aderência estava dividido entre `sementes` e `busca`. Cinco skills tinham nome que não era o da atividade. A skill de strings embutia um script que duplicava `strings gerar` e a conferência. O artefato de cada base se chamava “ficha” no texto, na skill, na chave de configuração, na gramática e nas specs.
+- **Namespace.** Os comandos passam a `grupo ação`, com a ação no infinitivo. Antigo → canônico:
+  - `conferir` → `documentos conferir`;
+  - `conferir-dados` → `dados conferir`;
+  - `gramatica` → `documentos gramatica`;
+  - `autoteste` → `projeto autoteste`;
+  - `mostrar` → `configuracao mostrar`;
+  - `pendencias` → `projeto pendencias`;
+  - `sementes planilha` → `aderencia planilhar`;
+  - `busca aderencia` → `aderencia medir`;
+  - `termos sonda` → `termos sondar`;
+  - `busca fidelidade` → `conferencia fidelidade`;
+  - `busca sensibilidade` → `conferencia sensibilidade`.
+
+  `busca registrar`, `busca derivar`, `termos exportar`, `termos validar`, `termos importar`, `strings gerar` e `catalogo gerar` não mudam. Alcance: **instrumento** (nomes); nenhum comando muda de comportamento nem de código de saída.
+- **Aliases de transição.** Cada nome antigo continua aceito como alias oculto: executa a mesma função, avisa que o nome é antigo e não aparece na ajuda. O catálogo acusa citação de alias em documento vivo. A remoção é change própria, com o critério de nenhuma citação viva. Alcance: **instrumento**.
+- **Skills renomeadas.** Antigo → canônico:
+  - `otimizar-strings-revisao-sistematica` → `auditoria-das-strings`;
+  - `busca-nas-bases` → `execucao-da-busca`;
+  - `deduplicacao` → `controle-de-duplicatas`;
+  - `filtragens` → `filtragem-dos-estudos`;
+  - `ficha-de-busca-por-base` → `procedimento-de-busca-por-base`.
+
+  As descrições passam a trazer o vocabulário do passo do guia. Alcance: **redação**.
+- **Script embutido removido.** O bloco `auditar_strings.py` sai de `auditoria-das-strings`. A skill passa a mandar rodar `strings gerar` e `documentos conferir` e a ensinar a julgar a saída. Alcance: **instrumento**.
+- **C1 aplicado.** “Ficha” passa a “procedimento de busca” em toda parte viva: guia, README, plano, os próprios procedimentos de busca, skills, specs principais, comentários do `config.toml`, pendências, mensagens e textos do código e identificadores da gramática (`procedimento.*` no lugar de `ficha.*`). A chave `[documentos] ficha` passa a `[documentos] procedimento`. A antiga é aceita por uma rodada, com aviso, e as duas juntas reprovam. O alcance de C1 foi decidido pelo pesquisador na aplicação: troca completa, inclusive identificadores, specs e documentos. Alcance: **redação**.
+- **Guarda do catálogo.** A varredura de nome antigo passa a cobrir também a chave de configuração renomeada. Para skill renomeada, só reconhece a citação: em crase, pelo caminho da pasta ou pelo `name:`. O nome antigo pode ser palavra comum (“as três filtragens”), que não é citação da skill. O autoteste prova que a citação em crase reprova e que a prosa não reprova.
+
+O que não se alterou e por quê:
+
+- **Módulos e nomes internos de `src/rsl/`** (`fichas.py`, `ctx.ficha`, a chave de dado `"ficha"` das bases): seguem a atividade e ficam fora do escopo, pelo design da change. O texto que o usuário vê mudou; o nome Python, não.
+- **Protocolo, strings, expressões, critérios, bases, conjunto-semente e dados de execução** não mudam.
+- **O histórico e as changes arquivadas** continuam com os nomes antigos; o histórico não se reescreve por mudança de nome.
+- **A change `geracao-das-fichas-de-busca`** conserva o seu nome e o da capacidade `geracao-das-fichas`, como já registrado na decisão C1. Os artefatos dela não foram tocados.
+- **`avaliacao-da-necessidade` e `busca-complementar`** continuam como lacuna declarada.
+
+## 2026-11-23 — Remoção dos aliases de transição (change `remocao-dos-aliases-de-transicao`)
+
+Aplicação da change `remocao-dos-aliases-de-transicao`. O critério de entrada (nenhuma citação viva de nome antigo) foi conferido antes da aplicação.
+
+- **Comandos antigos recusados.** Os onze nomes antigos de comando listados na entrada da change `namespace-de-comandos-e-skills` deixam de ser aliases e terminam com o código USO. Alcance: **instrumento**.
+- **Chave antiga recusada.** `[documentos] ficha` passa a chave retirada: presente, reprova com CONFIGURACAO e a mensagem nomeia `[documentos] procedimento`. Alcance: **instrumento**.
+- **Correspondência de nomes retirada (decisão do pesquisador).** Havia duas alternativas: manter a varredura de nome antigo do catálogo, a tabela de correspondência e o registro de skills renomeadas como proteção contra regressão, ou retirá-los junto com os aliases. O pesquisador decidiu retirar. Saem a regra de nome antigo do catálogo, a seção "Correspondência de nomes" de `docs/catalogo_de_apoio.md` e o registro dos nomes antigos de skill e de chave. Consequência aceita: fora das citações de comando do guia, que continuam conferidas pela existência no parser, nada acusa automaticamente um documento que volte a citar nome antigo. Alcance: **instrumento**.
+- **Autoteste.** O grupo "aliases de transição" dá lugar a "nomes antigos recusados": cada nome antigo exige USO e, como contraprova, o canônico correspondente tem de ser aceito. Alcance: **instrumento**.
+
+O que não se alterou e por quê:
+
+- **A correspondência das specs com as flags anteriores** (`--conferir` → `documentos conferir` etc., em `interface-de-comando`) não é alias e continua.
+- **Módulos internos de `src/rsl/`**, inclusive `fichas.py`, seguem fora do escopo, conforme a proposta.
+- **O histórico e as changes arquivadas** continuam citando os nomes antigos.

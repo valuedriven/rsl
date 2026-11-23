@@ -3,7 +3,7 @@
 A STR esperada de uma faceta é a união dos termos do quadro dessa faceta — três camadas,
 idiomas do cabeçalho — menos os subsumidos por outro termo da mesma STR. O quadro é a fonte;
 a tabela "Strings de busca por faceta" do protocolo é saída de geração, regravada por
-`strings gerar --gravar` e conferida por `conferir`.
+`strings gerar --gravar` e conferida por `documentos conferir`.
 
 Subsunção (D2): `a` subsume `b` quando as palavras de `a` aparecem, contíguas e na mesma
 ordem, em `b`, com a mesma grafia — acento e hífen inclusive, sem flexão. A regra é
@@ -98,7 +98,7 @@ def diferencas(d):
 
 
 def duplicidade(termo, vezes):
-    """A mensagem única da duplicidade, usada pela geração e por `conferir`."""
+    """A mensagem única da duplicidade, usada pela geração e por `documentos conferir`."""
     return f"{termo!r} em DUPLICIDADE: {vezes} ocorrências na STR; a STR gerada o traz uma vez"
 
 
@@ -146,7 +146,7 @@ def problemas_atribuicao(d):
 
 
 def problemas_str(d):
-    """Problemas de STR divergente da esperada, para `conferir`."""
+    """Problemas de STR divergente da esperada, para `documentos conferir`."""
     saida = []
     for fid, dif in sorted(diferencas(d).items()):
         sid = d["strings"][fid]["id"]

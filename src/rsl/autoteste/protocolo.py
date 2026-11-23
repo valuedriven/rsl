@@ -235,9 +235,9 @@ def mutacoes(ctx, g):
              troca_celula(t, L["base"][bases[-1]], coluna(t, cab_b, c_sigla),
                           d["bases"][0]["sigla"]), P, "sigla repetida")
     sigla_ult = d["bases"][-1]["sigla"]
-    caso("sigla de base sem ficha",
+    caso("sigla de base sem procedimento de busca",
          troca_celula(t, L["base"][bases[-1]], coluna(t, cab_b, c_sigla), sigla_ult + "x"), P,
-         f"ficha da sigla '{sigla_ult}x' não existe")
+         f"procedimento de busca da sigla '{sigla_ult}x' não existe")
     caso(f"coluna {c_sigla} retirada da tabela de bases",
          remove_coluna(t, cab_b, coluna(t, cab_b, c_sigla)), P, f"falta a coluna ['{c_sigla}']")
     caso("tabela de bases ausente", remove_tabela(t, cab_b), P, "tabela ausente")

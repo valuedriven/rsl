@@ -10,25 +10,29 @@ comandos e para os arquivos que eles gravam.
 
 ### Requirement: Ponto de entrada único
 Toda operação SHALL ser executada por `python3 -m rsl <subcomando>`, a partir da raiz do
-projeto. Os subcomandos SHALL ser estes:
+projeto. Os subcomandos canônicos SHALL ser estes:
 
-- `conferir`, `conferir-dados`, `autoteste`, `mostrar`, `pendencias` e `gramatica`;
-- `sementes planilha`;
+- `documentos conferir` e `documentos gramatica`;
+- `dados conferir`;
+- `projeto autoteste` e `projeto pendencias`;
+- `configuracao mostrar`;
+- `termos sondar`, `termos exportar`, `termos validar <sigla>` e `termos importar`;
 - `strings gerar`;
 - `catalogo gerar`;
-- `termos sonda`, `termos exportar`, `termos validar <sigla>` e `termos importar`;
-- `busca registrar`, `busca derivar`, `busca aderencia`, `busca fidelidade` e
-  `busca sensibilidade`.
+- `aderencia planilhar` e `aderencia medir`;
+- `busca registrar` e `busca derivar`;
+- `conferencia fidelidade` e `conferencia sensibilidade`.
 
-Os scripts `src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.py` e
+Os nomes antigos definidos na change `namespace-de-comandos-e-skills` MUST NOT ser aceitos,
+conforme o requisito “Nomes antigos recusados”. Os scripts
+`src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.py` e
 `src/gen_semente.py` MUST NOT continuar existindo como ponto de entrada. O subcomando
 `sementes sincronizar` MUST NOT existir, porque o conjunto-semente não tem mais arquivo
 separado a reconciliar.
 
 #### Scenario: Ajuda
 - **WHEN** se executa `python3 -m rsl` sem subcomando
-- **THEN** a ajuda lista os subcomandos, inclusive `strings` e `catalogo`, e a saída tem o
-  código USO
+- **THEN** a ajuda lista apenas os subcomandos canônicos e a saída tem o código USO
 
 #### Scenario: Ajuda do subcomando de geração
 - **WHEN** se executa `python3 -m rsl strings gerar -h`
@@ -48,41 +52,45 @@ separado a reconciliar.
 - **WHEN** se executa `python3 -m rsl catalogo gerar -h`
 - **THEN** a ajuda descreve a geração do catálogo e a saída não tem código de erro
 
+#### Scenario: Comando canônico agrupado
+- **WHEN** se executa `python3 -m rsl aderencia medir`
+- **THEN** a operação mede a aderência ao conjunto-semente
+
 ### Requirement: Correspondência com os nomes das specs
 As specs que citam as operações pelos nomes antigos SHALL ser lidas por esta
 correspondência:
 
 | Nome antigo | Subcomando |
 | --- | --- |
-| `--conferir` | `conferir` |
-| `--conferir-dados` | `conferir-dados` |
-| `--autoteste` | `autoteste` |
-| `--mostrar` | `mostrar` |
-| `--pendencias` | `pendencias` |
-| `gen_semente.py` | `sementes planilha` |
-| `--sonda` | `termos sonda` |
+| `--conferir` | `documentos conferir` |
+| `--conferir-dados` | `dados conferir` |
+| `--autoteste` | `projeto autoteste` |
+| `--mostrar` | `configuracao mostrar` |
+| `--pendencias` | `projeto pendencias` |
+| `gen_semente.py` | `aderencia planilhar` |
+| `--sonda` | `termos sondar` |
 | `--exportar` | `termos exportar` |
 | `--validar` | `termos validar` |
 | `--importar` | `termos importar` |
 | `--registrar` | `busca registrar` |
 | `--derivar` | `busca derivar` |
-| `--aderencia` | `busca aderencia` |
-| `--fidelidade` | `busca fidelidade` |
-| `--sensibilidade` | `busca sensibilidade` |
+| `--aderencia` | `aderencia medir` |
+| `--fidelidade` | `conferencia fidelidade` |
+| `--sensibilidade` | `conferencia sensibilidade` |
 
 O comportamento exigido por essas specs MUST NOT mudar com a troca de nome. `--sincronizar`
 não tem sucessor: requisito que o cite fica sem efeito.
 
 #### Scenario: Requisito antigo
 - **WHEN** uma spec exige que `--conferir` reprove um defeito
-- **THEN** `python3 -m rsl conferir` reprova esse defeito
+- **THEN** `python3 -m rsl documentos conferir` reprova esse defeito
 
 ### Requirement: Autoteste único
-`python3 -m rsl autoteste` SHALL executar, numa só chamada, todos os autotestes do projeto,
+`python3 -m rsl projeto autoteste` SHALL executar, numa só chamada, todos os autotestes do projeto,
 inclusive a prova da composição da derivação, e informar a contagem de cada grupo.
 
 #### Scenario: Composição incluída
-- **WHEN** se executa `python3 -m rsl autoteste`
+- **WHEN** se executa `python3 -m rsl projeto autoteste`
 - **THEN** o resumo traz os casos da prova da composição ao lado dos demais grupos
 
 ### Requirement: Códigos de saída semânticos
@@ -94,7 +102,7 @@ Todo subcomando SHALL terminar com um destes códigos, e com nenhum outro:
 | 1 | REPROVADO | uma conferência ou uma condição de aceite reprovou o conteúdo: problema de coerência, `busca registrar` recusado, fidelidade acima do limiar, autoteste com caso que falhou |
 | 2 | USO | argumento ou subcomando inválido |
 | 3 | CONFIGURACAO | `config.toml` ausente, inválido ou incompleto, ou chave `protocolo` que aponta arquivo inexistente |
-| 4 | PROTOCOLO_ILEGIVEL | protocolo ou ficha fora da gramática que o leitor exige |
+| 4 | PROTOCOLO_ILEGIVEL | protocolo ou procedimento de busca fora da gramática que o leitor exige |
 | 5 | DADOS | arquivo alimentado, exportação ou arquivo de entrada ausente ou ilegível |
 | 6 | PARCIAL | autoteste sem falha, com casos não executados |
 | 7 | FONTE_EXTERNA | fonte externa com erro, bloqueio, captcha ou limite excedido |
@@ -103,13 +111,13 @@ Quando mais de uma condição ocorre, vale a de maior gravidade, nesta ordem: CO
 PROTOCOLO_ILEGIVEL, DADOS, FONTE_EXTERNA, REPROVADO, PARCIAL.
 
 #### Scenario: Protocolo ilegível não é reprovação
-- **WHEN** o protocolo não tem a seção "Expressões de busca" e se executa `conferir`
+- **WHEN** o protocolo não tem a seção "Expressões de busca" e se executa `documentos conferir`
 - **THEN** a saída tem o código PROTOCOLO_ILEGIVEL, e não REPROVADO, e a mensagem nomeia a
   seção
 
 #### Scenario: Coerência reprovada
 - **WHEN** o protocolo é legível e uma STR tem termo fora do quadro da sua faceta
-- **THEN** `conferir` sai com REPROVADO
+- **THEN** `documentos conferir` sai com REPROVADO
 
 #### Scenario: Configuração inválida
 - **WHEN** o `config.toml` não é TOML válido
@@ -128,7 +136,7 @@ A tabela de códigos de saída SHALL constar da ajuda de `python3 -m rsl` e do R
 saída diferente de OK MUST trazer, na última linha, o nome do código.
 
 #### Scenario: Última linha
-- **WHEN** `conferir` reprova
+- **WHEN** `documentos conferir` reprova
 - **THEN** a última linha da saída contém `REPROVADO`
 
 ### Requirement: Importação sem efeito
@@ -142,9 +150,11 @@ pede.
   subcomando é executado
 
 ### Requirement: Convenção de nomes
-Os subcomandos SHALL ser verbos no infinitivo, em português e sem acento, agrupados por
-atividade quando houver mais de um por atividade. Os arquivos que os subcomandos gravam
-SHALL seguir estas regras:
+Os subcomandos SHALL ser `grupo ação` quando houver grupo natural, com a ação no infinitivo,
+em português e sem acento; o topo pode ser verbo quando não houver grupo. O grupo SHALL
+nomear o artefato ou domínio (`documentos`, `dados`, `projeto`, `configuracao`, `termos`,
+`strings`, `catalogo`, `aderencia`, `busca`, `conferencia`). Os arquivos que os subcomandos
+gravam SHALL seguir estas regras:
 
 - `snake_case`, em português e sem acento;
 - o nome é o substantivo do conteúdo;
@@ -154,9 +164,33 @@ SHALL seguir estas regras:
 O nome de cada arquivo de entrada e de saída SHALL vir do `config.toml`.
 
 #### Scenario: Saída por expressão
-- **WHEN** `busca fidelidade` confere a EB2
+- **WHEN** `conferencia fidelidade` confere a EB2
 - **THEN** a saída gravada se chama `fidelidade_eb2.csv`
 
 #### Scenario: Planilha de validação
 - **WHEN** a configuração é a do projeto
 - **THEN** a planilha de validação se chama `validacao_terminologica.csv`
+
+#### Scenario: Ação nominal recusada
+- **WHEN** se tenta registrar um comando cuja ação é substantivo, como a sonda do grupo
+  `termos`
+- **THEN** o nome canônico é `termos sondar`, e o substantivo não é aceito como comando
+
+### Requirement: Nomes antigos recusados
+Os nomes antigos de comando renomeados pela change `namespace-de-comandos-e-skills` MUST NOT
+ser aceitos: cada um MUST terminar com o código USO, sem executar operação. A chave antiga
+`[documentos] ficha` do `config.toml` MUST reprovar com o código CONFIGURACAO, e a mensagem
+MUST nomear `[documentos] procedimento`.
+
+#### Scenario: Comando antigo
+- **WHEN** se executa `python3 -m rsl busca aderencia`
+- **THEN** a saída tem o código USO, e nenhuma medição de aderência é executada
+
+#### Scenario: Comando antigo de uma palavra
+- **WHEN** se executa `python3 -m rsl conferir`
+- **THEN** a saída tem o código USO
+
+#### Scenario: Chave antiga na configuração
+- **WHEN** o `config.toml` traz `[documentos] ficha`
+- **THEN** qualquer subcomando que lê a configuração sai com CONFIGURACAO, e a mensagem
+  nomeia a chave antiga e `[documentos] procedimento`

@@ -53,7 +53,7 @@ A IA **pré-preenche** os campos a partir do texto completo. Depois disso:
 - **cada campo é conferido no texto-fonte** — sem excepção, inclusive os que parecem
   óbvios;
 - os passos de **citação** e de **analítica** são integralmente humanos;
-- **nenhuma extração entra na ficha sem conferência**, e nenhuma referência entra sem
+- **nenhuma extração entra no procedimento de busca sem conferência**, e nenhuma referência entra sem
   verificação na fonte — ver `conferir-referencia`;
 - ferramenta, modelo, versão, data, finalidade e prompt vão para o **LOG_IA**.
 
@@ -72,6 +72,6 @@ que `facetacao-e-termos-livres` descreve.
 
 ## 6. Registrar
 
-Uma ficha por estudo, nomeada no padrão do projeto com sufixo `_FICHA`. Campo não
+Um procedimento de busca por estudo, nomeada no padrão do projeto com sufixo `_FICHA`. Campo não
 aplicável declara-se como tal, e não fica vazio — vazio é ambíguo entre "não se
 aplica" e "não foi lido".

@@ -19,7 +19,7 @@ def fidelidade(b, expr, caminho):
     if ident == b.sonda:
         raise Uso(f"{b.sonda} é a sonda de sensibilidade, não expressão de conferência: o "
                   f"conjunto dela é superconjunto de {b.executada} e não se deriva da "
-                  f"exportação da executada. Use  busca sensibilidade <base>.")
+                  f"exportação da executada. Use  python3 -m rsl conferencia sensibilidade <base>.")
     arq = pathlib.Path(caminho)
     if not arq.exists():
         raise DadosInvalidos(f"Arquivo não encontrado: {arq}")

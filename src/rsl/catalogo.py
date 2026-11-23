@@ -51,15 +51,10 @@ PAPEIS = ("procedimento", "instrumento", "artefato", "transversal")
 SECAO_TRANSVERSAIS = "Conferências transversais"
 SECAO_PAPEIS = "Papel das skills"
 
-# Skills renomeadas: {nome antigo: nome canônico}. Os comandos antigos vêm de
-# `__main__.ALIASES`. Ambos alimentam a varredura de nomes antigos e a tabela de
-# correspondência; vazios, a regra fica inativa.
-SKILLS_RENOMEADAS = {}
-
 # Regras, na ordem do relato. Cada problema leva a regra que o produziu; o autoteste
 # desliga uma por vez.
 REGRAS = ("contagem", "cobertura", "skill_existe", "skill_nome", "skill_orfa", "skill_papel",
-          "comando_existe", "comando_opcao", "comando_orfao", "nome_antigo", "defasado")
+          "comando_existe", "comando_opcao", "comando_orfao", "defasado")
 
 
 # ------------------------------------------------------------------------ entradas
@@ -76,9 +71,6 @@ class Entradas:
     skills: dict          # pasta → texto do SKILL.md ("" se ausente)
     grupos: frozenset     # prefixos de caminho que são grupo, como tuplas
     comandos: dict        # caminho (tupla) → Comando, só as folhas
-    aliases: dict         # caminho antigo (texto) → caminho canônico (texto)
-    renomeadas: dict      # skill antiga → skill canônica
-    vivos: dict           # caminho relativo → texto, documentos e skills vivos
     gravado: str | None   # texto do catálogo gravado, ou None
 
 
@@ -103,23 +95,9 @@ def arvore(ap):
     return frozenset(grupos), comandos
 
 
-def _vivos(raiz):
-    """Documentos e skills vivos: README, docs/*.md (menos o catálogo gerado), as skills e as
-    specs principais. Histórico e changes arquivadas não entram."""
-    arquivos = [raiz / "README.md", *sorted((raiz / "docs").glob("*.md")),
-                *sorted((raiz / SKILLS).glob("*/SKILL.md")),
-                *sorted((raiz / "openspec" / "specs").glob("**/*.md"))]
-    saida = {}
-    for f in arquivos:
-        rel = f.relative_to(raiz).as_posix()
-        if rel != CATALOGO and f.is_file():
-            saida[rel] = f.read_text(encoding="utf-8")
-    return saida
-
-
 def carrega(raiz=None):
     """As entradas do projeto, lidas do disco."""
-    from .__main__ import ALIASES, _parser                          # noqa: PLC0415
+    from .__main__ import _parser                                   # noqa: PLC0415
     raiz = raiz or _config.RAIZ
     guia = raiz / GUIA
     if not guia.is_file():
@@ -135,8 +113,7 @@ def carrega(raiz=None):
     cat = raiz / CATALOGO
     return Entradas(
         guia=guia.read_text(encoding="utf-8"), skills=skills, grupos=grupos,
-        comandos=comandos, aliases=dict(ALIASES), renomeadas=dict(SKILLS_RENOMEADAS),
-        vivos=_vivos(raiz),
+        comandos=comandos,
         gravado=cat.read_text(encoding="utf-8") if cat.is_file() else None)
 
 
@@ -346,17 +323,6 @@ def _apoio(valor):
     return m.group(1), (m.group(2) or "").strip()
 
 
-def _padroes_antigos(e):
-    """(nome antigo, canônico, regex) para comandos e skills renomeados."""
-    saida = []
-    for antigo, novo in e.aliases.items():
-        corpo = r"\s+".join(re.escape(p) for p in antigo.split())
-        saida.append((antigo, novo, re.compile(rf"(?:rsl\s+|`){corpo}(?![\w-])")))
-    for antigo, novo in e.renomeadas.items():
-        saida.append((antigo, novo, re.compile(rf"(?<![\w-]){re.escape(antigo)}(?![\w-])")))
-    return saida
-
-
 def confere(e, g=None, desligadas=frozenset()):
     """Lista de (regra, mensagem). `g` é o guia já lido; `desligadas`, regras puladas."""
     g = g or le_guia(e.guia, e.grupos, e.comandos)
@@ -440,19 +406,10 @@ def confere(e, g=None, desligadas=frozenset()):
             if o not in validas:
                 acusa("comando_opcao", f"opção inexistente `{o}` em "
                                        f"`{' '.join(c.caminho)}` — {onde}")
-    alias = {tuple(a.split()) for a in e.aliases}
     for caminho in sorted(e.comandos):
-        if caminho not in citados and caminho not in alias:
+        if caminho not in citados:
             acusa("comando_orfao", f"comando não citado em passo nem declarado transversal: "
                                    f"`{' '.join(caminho)}`")
-
-    # nomes antigos em documento vivo
-    for antigo, novo, rx in _padroes_antigos(e):
-        for arq, texto in sorted(e.vivos.items()):
-            for m in rx.finditer(texto):
-                n = texto.count("\n", 0, m.start()) + 1
-                acusa("nome_antigo", f"{arq}:{n}: cita o nome antigo `{antigo}`; o canônico "
-                                     f"é `{novo}`")
 
     # catálogo gravado
     if "defasado" not in desligadas:
@@ -476,7 +433,6 @@ def _lista(itens):
 def visoes(e, g):
     """Estrutura do catálogo, usada pelo markdown e pelo JSON."""
     transversais = {c.caminho for c in g.transversais if not c.erro}
-    alias = {tuple(a.split()) for a in e.aliases}
     passos = [{
         "modulo": p.modulo, "etapa": p.etapa, "passo": p.nome, "origem": p.origem,
         "fonte": p.fonte, "skills": p.skills,
@@ -494,8 +450,6 @@ def visoes(e, g):
                        "passos": [p.onde for p in ps], "comandos": cmds, "estado": estado})
     comandos = []
     for caminho in sorted(e.comandos):
-        if caminho in alias:
-            continue
         ps = [p for p in g.passos if any(c.caminho == caminho for c in p.scripts)]
         estado = ("passo" if ps else "transversal" if caminho in transversais
                   else "não citado")
@@ -515,13 +469,8 @@ def visoes(e, g):
     contagem = {"modelo": sum(p.origem == "modelo" for p in g.passos),
                 "adaptacao": sum(p.origem == "adaptação" for p in g.passos),
                 "total": len(g.passos)}
-    correspondencia = ([{"tipo": "comando", "antigo": a, "canonico": n}
-                        for a, n in sorted(e.aliases.items())]
-                       + [{"tipo": "skill", "antigo": a, "canonico": n}
-                          for a, n in sorted(e.renomeadas.items())])
     return {"passos": passos, "skills": skills, "comandos": comandos,
-            "cobertura": cobertura, "contagem": contagem,
-            "correspondencia": correspondencia}
+            "cobertura": cobertura, "contagem": contagem}
 
 
 def renderiza(e, g):
@@ -579,11 +528,6 @@ def renderiza(e, g):
             for a in p.apoio or ["—"]:
                 tipo, razao = _apoio(a)
                 out.append(f"| {_cel(p.onde)} | {tipo} | {_cel(razao) or '—'} |")
-    if v["correspondencia"]:
-        out += ["", "## Correspondência de nomes", "",
-                "| Tipo | Nome antigo | Nome canônico |", "| --- | --- | --- |"]
-        for k in v["correspondencia"]:
-            out.append(f"| {k['tipo']} | `{k['antigo']}` | `{k['canonico']}` |")
     return "\n".join(out) + "\n"
 
 

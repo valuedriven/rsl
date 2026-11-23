@@ -170,7 +170,7 @@ def derivar(b):
               "de fidelidade tende a reprovar.")
     print("\nAs contagens das expressões não executadas são DERIVADAS. Declará-las como tal "
           "nas contagens da busca e no relatório, "
-          "e só aceitá-las após o teste de fidelidade (busca fidelidade).")
+          "e só aceitá-las após o teste de fidelidade (python3 -m rsl conferencia fidelidade).")
     return Saida.OK
 
 
