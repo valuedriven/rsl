@@ -305,3 +305,21 @@ O que não se alterou e por quê:
 
 - **Nada foi renomeado ainda.** A skill, a chave e o texto continuam com "ficha" até a aplicação da change de namespace. A change `geracao-das-fichas-de-busca` também conserva, por ora, o seu nome e o da capacidade `geracao-das-fichas`: o nome de change e de capacidade é rótulo de planejamento, e renomeá-los antes da aplicação não muda o que se entrega.
 - **Entradas anteriores do histórico** continuam dizendo "ficha"; o histórico não se reescreve por mudança de nome.
+
+## 2026-11-23 — Catálogo de apoio, passo de adaptação e marcadores de apoio (change `catalogo-de-apoio`)
+
+Aplicação da change `catalogo-de-apoio`, proposta e aprovada pelo pesquisador.
+
+- **O que estava.** O guia de procedimentos (`docs/procedimentos.md`) era a única fonte do mapeamento passo → fonte, skill e script, mas nada o lia. A contagem declarada no topo era a do modelo, e o guia listava também o passo de geração das STRs, sem marca. Os passos sem skill nem script não diziam se a ausência era decisão ou lacuna. Skill órfã, comando citado inexistente e contagem divergente não reprovavam.
+- **Passo de adaptação.** O guia passa a declarar os passos do modelo, mais um passo de adaptação do projeto — a geração das STRs —, e o total. O passo leva a marca `(adaptação do projeto)`. O plano (§1.4) ganha uma nota que remete ao guia, e a descrição do modelo não muda. Alcance: **instrumento** (forma do guia).
+- **Marcadores de apoio.** O passo sem skill nem script declara `Apoio: manual — <razão>` ou `Apoio: lacuna — <razão>`. `lacuna` só vale para as duas lacunas reconhecidas: `avaliacao-da-necessidade` (pesquisas preliminares, revisões anteriores, biblioteca especializada e obras de referência, em M1/E1, M1/E2 e M2/E1) e `busca-complementar` (acervos especiais e pessoais, em M3/E3). Os demais passos sem apoio são `manual`. Alcance: **instrumento**.
+- **Citações acrescentadas.** `questao-e-objetivos` nos passos de M2/E2, `relato-prisma` na tabela de composição do portfólio e na normalização do relatório, `busca-nas-bases` na exportação de metadados e nos alertas. Alcance: **redação**.
+- **Papel das skills.** O guia declara o papel de cada skill (procedimento, instrumento, artefato ou transversal) na seção "Papel das skills". As transversais são `registrar-decisao`, `rastreabilidade`, `revisao-geral-do-projeto`, `conferir-referencia` e `relato-prisma`. `fichamento` é a de instrumento; `conjunto-semente` e `ficha-de-busca-por-base`, as de artefato. Alcance: **redação**.
+- **Catálogo gerado.** `python3 -m rsl catalogo gerar` lê o guia, as skills e o parser, imprime o catálogo e confere: a contagem de passos, a cobertura de apoio, as skills citadas e órfãs, os comandos e as opções citados, os comandos não citados, as citações de nome antigo em documento vivo e o catálogo defasado. `--gravar` grava `docs/catalogo_de_apoio.md` de forma atômica. O catálogo é saída de geração e não se edita à mão. O guia ganha a seção "Catálogo de apoio" e a linha de `catalogo gerar` nas conferências transversais; o README, o caminho no mapa e a ordem guia → `catalogo gerar` → `--gravar`. Alcance: **instrumento**.
+
+O que não se alterou e por quê:
+
+- **Nenhuma skill criada.** `avaliacao-da-necessidade` e `busca-complementar` ficam como lacuna declarada até decisão do pesquisador. Criá-las agora seria decisão metodológica tomada pelo agente.
+- **Nenhum comando ou skill renomeado.** As renomeações são da change `namespace-de-comandos-e-skills`, que usa o catálogo como guarda. A varredura de nomes antigos fica inativa enquanto não houver alias declarado.
+- **Protocolo, procedimentos de busca, conjunto-semente, strings, expressões, critérios, bases e `config.toml`** não mudam.
+- **A classificação manual/lacuna e o papel de cada skill** foram propostos pelo agente na aplicação, pela leitura do design. Revê-los é alteração do guia, seguida de `catalogo gerar --gravar`.

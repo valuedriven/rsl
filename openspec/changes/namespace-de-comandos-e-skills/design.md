@@ -220,8 +220,8 @@ como aliases; nenhum dado é perdido.
 
 ## Open Questions
 
-- `documentos` ou `protocolo` como grupo de `conferir` e `gramatica`: o desenho adota
-  `documentos` porque `gramatica` também cobre sementes e procedimentos de busca. Se o
-  pesquisador preferir `protocolo`, a tabela muda em um lugar só.
+- ~~`documentos` ou `protocolo` como grupo de `conferir` e `gramatica`~~: **decidido
+  `documentos`** pelo pesquisador em 2026-11-23, porque `gramatica` também cobre sementes e
+  procedimentos de busca.
 - Criar as skills `avaliacao-da-necessidade` e `busca-complementar`: fora desta change; a
   lacuna fica declarada.

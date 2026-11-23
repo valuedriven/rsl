@@ -28,7 +28,9 @@ importação. A configuração é `config.toml`, na raiz; a variável de ambient
 aponta outro arquivo, para ensaio e autoteste. O que cada chave significa está nos
 comentários do próprio `config.toml`; a forma que o leitor exige do protocolo, das fichas e
 do arquivo de sementes, em `python3 -m rsl gramatica`; o valor em uso de cada parâmetro e a
-sua origem, em `python3 -m rsl mostrar`.
+sua origem, em `python3 -m rsl mostrar`. O mapeamento de cada passo do guia às skills e aos
+comandos, conferido contra as skills e o parser, sai de `python3 -m rsl catalogo gerar`
+(ensaio; `--gravar` regrava o catálogo).
 
 ### Códigos de saída
 
@@ -64,7 +66,8 @@ chave, não pelo caminho.
 | `docs/conjunto_semente.toml` (`[documentos] sementes`) | conjunto-semente, uma tabela `[[sementes]]` por estudo; único lugar de dado de semente | pesquisador; nenhum subcomando grava |
 | `docs/procedimentos_busca_<sigla>.md` (`[documentos] ficha`) | ficha de cada base: sintaxe, critérios, strings com a declaração de cobertura (inclusive os parâmetros `plural` e `teto de caracteres`), expressões, estratégia de proximidade, execução, conjunto-semente e ressalvas | pesquisador e agente, a pedido |
 | `docs/parametros_complementares.md` | instrumento de extração e síntese: grupos de extração, cobertura conceitual, granularidade e grau de formalização | pesquisador |
-| `docs/procedimentos.md` | guia de procedimentos: módulos, etapas e passos, com fonte, script e skill | pesquisador e agente, a pedido |
+| `docs/procedimentos.md` | guia de procedimentos: módulos, etapas e passos, com fonte, script, skill e apoio; fonte do catálogo de apoio | pesquisador e agente, a pedido |
+| `docs/catalogo_de_apoio.md` | catálogo de apoio: skills e comandos por passo, por skill e por comando, e cobertura por etapa; saída de geração, não se edita à mão | `catalogo gerar --gravar`, a partir do guia de procedimentos |
 | `data/historico.md` | decisões, inclusive emendas | pesquisador; agente, a pedido |
 | `data/pendencias.json` | ações ainda a executar, `PDnn` | pesquisador; agente, a pedido |
 | `data/registro_execucao.json` (`[dados] registro`) — *sob demanda* | resultados das consultas nas bases, por base e por execução | pesquisador e `busca registrar` |
@@ -131,6 +134,10 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
   união dos termos do quadro terminológico da faceta, menos os subsumidos. Altera-se o
   quadro, e a ordem é quadro → `strings gerar` (ensaio) → `strings gerar --gravar` →
   fichas → `conferir`. STR editada à mão, ou defasada do quadro, reprova em `conferir`.
+- O **catálogo de apoio** é saída de geração do guia de procedimentos. Altera-se o guia —
+  ou cria-se, renomeia-se ou retira-se uma skill ou um comando —, e a ordem é guia →
+  `catalogo gerar` (ensaio e conferência) → `catalogo gerar --gravar`. Catálogo editado à
+  mão, ou defasado do guia, reprova em `catalogo gerar`.
 - A planilha de aderência é **artefato misto**: as colunas manuais — as que `sementes
   planilha` deixa vazias na primeira geração — editam-se no próprio arquivo e se conservam
   na regravação; as demais vêm do arquivo de sementes e da tabela de bases, e corrigem-se

@@ -1,8 +1,10 @@
 # Guia de procedimentos — módulos, etapas e passos
 
 O que se faz, em que ordem e com que apoio. A revisão segue o **RS Banyan** (plano,
-`docs/01_plano.md` §1.4): quatro módulos, catorze etapas e sessenta e três passos. Os
-títulos de módulo e de etapa são os do plano §1.4; os passos seguem a ordem da estrutura
+`docs/01_plano.md` §1.4): quatro módulos, catorze etapas e 63 passos do modelo, mais um
+passo de adaptação do projeto — a geração das STRs —, totalizando 64. O passo de adaptação
+leva a marca `(adaptação do projeto)`. Os títulos de módulo e de etapa são os do plano §1.4;
+os passos do modelo seguem a ordem da estrutura
 fornecida pelo pesquisador, atribuída a Borges (2020). **Essa estrutura de passos não foi
 conferida na tese.**
 
@@ -14,6 +16,9 @@ Sob cada passo, quando houver:
 - **Script** — sinopse do comando, transcrita de `python3 -m rsl <subcomando> -h`, que é a
   fonte dos parâmetros. Como executar, o mapa dos caminhos e os códigos de saída: `README.md`.
 - **Skill** — competência em `.agents/skills/` que orienta a execução.
+- **Apoio** — só no passo sem skill nem script: `manual — <razão>` quando a atividade é do
+  pesquisador, de gestão ou está fora do repositório; `lacuna — <razão>` quando falta uma
+  skill ou um script e a decisão está pendente.
 
 Os passos não são numerados, e os demais documentos citam um passo pelo módulo, pela etapa
 e pelo nome da atividade, nunca pelo ordinal. Valores de parâmetro e
@@ -27,9 +32,12 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 
 - Realizar pesquisas preliminares sobre o tema
   - Fonte: plano §1.1
+  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
 - Consultar pesquisadores da área sobre as intenções iniciais
+  - Apoio: manual — contato do pesquisador com especialistas, fora do repositório
 - Elaborar o escopo da revisão e discuti-lo com a orientação
   - Fonte: plano §2.1 a §2.4
+  - Apoio: manual — decisão do pesquisador com a orientação
 - Elaborar os objetivos da revisão
   - Fonte: plano §1.2 e §1.3;
   - Skill: `questao-e-objetivos`
@@ -37,9 +45,11 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 ### E2 — Avaliação da necessidade
 
 - Pesquisar revisões sistemáticas anteriores
+  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
 - Consultar biblioteca especializada no tema
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas; papel VT
     no plano §4.2
+  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
 - Decidir sobre a execução da revisão
   - Fonte: plano §1.1 e §2.2
   - Skill: `registrar-decisao`
@@ -52,6 +62,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
     [Conferências transversais](#conferências-transversais)
 - Preparar a tabela de composição do portfólio (IO 2)
   - Fonte: plano §2.3
+  - Skill: `relato-prisma`
 - Preparar o fluxograma da revisão (IO 3)
   - Fonte: plano §1.4 (método de apresentação) e §6.3
   - Skill: `relato-prisma`
@@ -63,25 +74,33 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
   - Skill: `fichamento`
 - Definir a ferramenta de gestão de dados bibliográficos
   - Fonte: protocolo §Ferramentas; plano §4.1
+  - Apoio: manual — decisão de gestão do pesquisador
 - Definir as ferramentas de visualização da informação
+  - Apoio: manual — decisão de gestão do pesquisador
 
 ### E4 — Definição da equipe
 
 - Relacionar os agentes aptos a auxiliar na revisão
   - Fonte: plano §4.2
+  - Apoio: manual — gestão da equipe, decisão do pesquisador
 - Validar a proposta de equipe com a orientação
   - Fonte: plano §4.2
+  - Apoio: manual — decisão do pesquisador com a orientação
 - Preparar a planilha de competências (IO 6)
   - Fonte: plano §4.2 (a planilha está fora deste repositório)
+  - Apoio: manual — instrumento mantido fora do repositório
 
 ### E5 — Elaboração do cronograma
 
 - Relacionar as tarefas de cada etapa
   - Fonte: plano §3.2 e §3.3
+  - Apoio: manual — planejamento do pesquisador
 - Validar a estimativa de prazos com a orientação
   - Fonte: plano §3.1
+  - Apoio: manual — decisão do pesquisador com a orientação
 - Preparar o cronograma (IO 7)
   - Fonte: plano §3.2 (o cronograma está fora deste repositório e é o único lugar das datas)
+  - Apoio: manual — instrumento mantido fora do repositório
 
 ---
 
@@ -91,8 +110,10 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 
 - Consultar obras de referência da área
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Obras de referência a consultar
+  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
 - Consultar biblioteca especializada no tema
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas
+  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
 - Verificar estudos iniciais sobre o tema
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Estudos inicialmente consultados acerca
     do tema da revisão
@@ -102,12 +123,16 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 
 - Especificar a temática da revisão
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Especificação da temática da revisão
+  - Skill: `questao-e-objetivos`
 - Delimitar a abordagem sobre a temática
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Delimitação da abordagem sobre a temática
+  - Skill: `questao-e-objetivos`
 - Identificar o objeto de estudo da revisão
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Objeto de estudo da revisão
+  - Skill: `questao-e-objetivos`
 - Especificar o objeto de estudo da revisão
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Objeto da revisão
+  - Skill: `questao-e-objetivos`
 - Redigir as questões de revisão e registrá-las no protocolo (IO 1)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Questão de revisão
   - Skill: `questao-e-objetivos`
@@ -133,7 +158,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
   - Script: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
     preservando as decisões
   - Skill: `validacao-vocabulario-controlado`; `otimizar-strings-revisao-sistematica`
-- Gerar as strings de busca por faceta a partir do quadro terminológico
+- Gerar as strings de busca por faceta a partir do quadro terminológico (adaptação do projeto)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico; a tabela
     §Strings de busca por faceta é saída de geração e não se edita à mão
   - Script: `python3 -m rsl strings gerar` — ensaio: exibe, por faceta, os termos a
@@ -156,6 +181,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
   - Skill: `ficha-de-busca-por-base`
 - Definir a ferramenta de gestão bibliográfica
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Ferramentas e §Procedimentos
+  - Apoio: manual — decisão de gestão do pesquisador
 - Montar o protocolo de revisão (IO 1)
   - Fonte: `docs/02_protocolo_informacoes_gerais.md`; `docs/03_protocolo_estrategia_pesquisa.md`;
     LOG_IA como apêndice, plano §8.3
@@ -202,8 +228,10 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 - Exportar metadados dos resultados
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; exportações intactas
     no caminho `[dados] execucoes` (mapa no `README.md`)
+  - Skill: `busca-nas-bases`
 - Criar alertas de busca nas bases
   - Fonte: plano §3.1
+  - Skill: `busca-nas-bases`
 - Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2)
   - Fonte: plano §6.2; contagens em `[saidas] contagens`, gravadas por `busca derivar`
   - Skill: `relato-prisma`
@@ -258,6 +286,7 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
   - Skill: `conferir-referencia`
 - Incluir estudos de acervos especiais e pessoais e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Acervos especiais e §Acervos pessoais
+  - Apoio: lacuna — skill a decidir (busca-complementar): inclusão de acervos especiais e pessoais sem procedimento declarado
 - Confirmar a seleção por avaliação dupla independente e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos (concordância e
     terceiro revisor); plano §6.1 e §6.2 (kappa)
@@ -267,8 +296,10 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 
 - Organizar os arquivos do portfólio definitivo
   - Fonte: convenção de nomeação no `README.md` §Convenções
+  - Apoio: manual — gestão de arquivos pela convenção do README
 - Padronizar os arquivos de fichamento
   - Fonte: `README.md` §Convenções
+  - Apoio: manual — gestão de arquivos pela convenção do README
 - Coletar dados com o formulário de fichamento (IO 4)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos e §Instrumentos;
     `docs/parametros_complementares.md`; uso de IA no plano §8
@@ -302,12 +333,15 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 ### E3 — Preparação textual e divulgação
 
 - Revisar a língua e o estilo do texto final
+  - Apoio: manual — revisão textual do pesquisador
 - Traduzir o resumo do relatório
+  - Apoio: manual — tradução pelo pesquisador
 - Normalizar e formatar o relatório
   - Fonte: `README.md` §Convenções
-  - Skill: `conferir-referencia`
+  - Skill: `conferir-referencia`; `relato-prisma`
 - Registrar e publicar o relatório
   - Fonte: plano §2.3
+  - Apoio: manual — submissão e registro fora do repositório
 
 ---
 
@@ -324,7 +358,42 @@ quando executar e o que relatam.
 | `python3 -m rsl mostrar` | antes de citar um parâmetro ou limiar | o que foi lido e os parâmetros em uso, com a origem |
 | `python3 -m rsl gramatica` | ao redigir ou reestruturar o protocolo, uma ficha ou o arquivo de sementes | o contrato de forma que o leitor exige |
 | `python3 -m rsl pendencias` | ao revisar o estado do projeto | pendências encontradas nos artefatos, sem escrever |
+| `python3 -m rsl catalogo gerar` | após alterar este guia, uma skill ou um comando; `--gravar` regrava o catálogo | citações de skill e de comando, cobertura de apoio, contagem de passos e catálogo defasado |
 
 Promover um achado de `pendencias` a pendência registrada em `data/pendencias.json` é
 decisão do pesquisador. Decisão que altere questão, facetas, critérios ou busca é emenda:
 altera-se a fonte e registra-se em `data/historico.md` (skill `registrar-decisao`).
+
+## Catálogo de apoio
+
+Este guia é a fonte do mapeamento passo → skill e comando; `docs/catalogo_de_apoio.md` é a
+visão derivada dele, por passo, por skill e por comando, com a cobertura por etapa. O
+catálogo é saída de geração (`python3 -m rsl catalogo gerar --gravar`) e não se edita à
+mão: altera-se este guia e regenera-se.
+
+A forma deste guia é o contrato que o catálogo lê: módulo em `## M<n> — `, etapa em
+`### E<n> — `, passo em `- ` na coluna 0 e os subitens `Fonte`, `Script`, `Skill`, `Apoio`
+e `Ordem` indentados sob o passo. A conferência do catálogo exige:
+
+- **contagem** — os passos sem marca são do modelo e têm de ser 63, o número do RS Banyan;
+  os marcados `(adaptação do projeto)` são do projeto; o total declarado no topo é a soma;
+- **apoio** — todo passo cita skill ou comando, ou declara `Apoio: manual` ou
+  `Apoio: lacuna` com a razão; `lacuna` é relatada, mas não reprova;
+- **citações** — toda skill citada existe e tem o `name` igual à pasta; toda skill existente
+  é citada num passo ou declarada transversal em [Papel das skills](#papel-das-skills); todo
+  comando e opção citados existem no parser; todo comando do parser é citado num passo ou
+  na tabela de conferências transversais.
+
+## Papel das skills
+
+Cada skill tem um papel. Skill de **procedimento** nomeia a atividade de um ou mais passos;
+skill de **instrumento** orienta um instrumento operacional do modelo; skill de **artefato**
+nomeia o artefato que mantém; skill **transversal** incide em mais de um módulo ou em passos
+de naturezas diferentes. O papel é declarado aqui, não inferido do nome.
+
+| Papel | Skills |
+| --- | --- |
+| procedimento | `questao-e-objetivos`; `facetacao-e-termos-livres`; `validacao-vocabulario-controlado`; `otimizar-strings-revisao-sistematica`; `expressoes-de-busca`; `criterios-de-elegibilidade`; `parecer-sobre-protocolo`; `teste-de-aderencia`; `busca-nas-bases`; `conferencias-da-busca`; `filtragens`; `deduplicacao`; `sintese-e-lacunas` |
+| instrumento | `fichamento` |
+| artefato | `conjunto-semente`; `ficha-de-busca-por-base` |
+| transversal | `registrar-decisao`; `rastreabilidade`; `revisao-geral-do-projeto`; `conferir-referencia`; `relato-prisma` |

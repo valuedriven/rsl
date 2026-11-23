@@ -15,6 +15,7 @@ projeto. Os subcomandos SHALL ser estes:
 - `conferir`, `conferir-dados`, `autoteste`, `mostrar`, `pendencias` e `gramatica`;
 - `sementes planilha`;
 - `strings gerar`;
+- `catalogo gerar`;
 - `termos sonda`, `termos exportar`, `termos validar <sigla>` e `termos importar`;
 - `busca registrar`, `busca derivar`, `busca aderencia`, `busca fidelidade` e
   `busca sensibilidade`.
@@ -26,7 +27,8 @@ separado a reconciliar.
 
 #### Scenario: Ajuda
 - **WHEN** se executa `python3 -m rsl` sem subcomando
-- **THEN** a ajuda lista os subcomandos, inclusive `strings`, e a saída tem o código USO
+- **THEN** a ajuda lista os subcomandos, inclusive `strings` e `catalogo`, e a saída tem o
+  código USO
 
 #### Scenario: Ajuda do subcomando de geração
 - **WHEN** se executa `python3 -m rsl strings gerar -h`
@@ -41,6 +43,10 @@ separado a reconciliar.
 - **WHEN** se executa `python3 -m rsl sementes sincronizar`
 - **THEN** a saída tem o código USO, e nenhum documento do projeto cita o subcomando como
   comando
+
+#### Scenario: Catálogo no ponto de entrada
+- **WHEN** se executa `python3 -m rsl catalogo gerar -h`
+- **THEN** a ajuda descreve a geração do catálogo e a saída não tem código de erro
 
 ### Requirement: Correspondência com os nomes das specs
 As specs que citam as operações pelos nomes antigos SHALL ser lidas por esta

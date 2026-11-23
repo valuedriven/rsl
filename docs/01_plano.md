@@ -36,6 +36,8 @@ Objetivos específicos (um por questão secundária, na ordem do protocolo):
 | M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | Quatro: elaboração das estratégias de pesquisa; localização dos estudos; seleção dos estudos; extração de dados | Como se busca, o que entra no portfólio e o que se extrai de cada item |
 | M4 — Discussão e redação | Três: interpretação do conhecimento; registro e validação do conteúdo; preparação textual e divulgação | O que os achados significam, como se relatam e onde se publicam |
 
+*Adaptação do projeto: o modelo tem sessenta e três passos; o projeto acrescenta um passo de adaptação — a geração das strings de busca por faceta a partir do quadro terminológico —, declarado e marcado no guia de procedimentos (`docs/procedimentos.md`). A descrição do modelo não muda.*
+
 | Escolha do modelo: revisão QUALITATIVA, adequada a objeto que não é efeito de intervenção; INSTRUMENTOS OPERACIONAIS que tornam cada passo auditável; modelo ADOTADO NO PROGRAMA. *Referência: BORGES, G. S. B. Proposta metodológica de revisão sistemática: um estudo a partir de fundamentos da Biblioteconomia e da Ciência da Informação. Orientadora: Gercina Ângela de Lima. Tese (Doutorado em Gestão e Organização do Conhecimento) — Escola de Ciência da Informação, Universidade Federal de Minas Gerais, Belo Horizonte, 2020\.* |
 | :---- |
 

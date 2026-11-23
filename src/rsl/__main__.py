@@ -21,6 +21,12 @@ que nomeia o código.
 """
 
 
+# Nomes antigos de comando aceitos como aliases ocultos: {caminho antigo: caminho canônico}.
+# O catálogo (`catalogo gerar`) lê esta tabela, acusa citação de nome antigo em documento vivo
+# e a lista na correspondência de nomes. Vazia enquanto não houver renomeação.
+ALIASES = {}
+
+
 class _Parser(argparse.ArgumentParser):
     """Erro de argumento sai com USO, e a última linha nomeia o código."""
 
@@ -93,6 +99,19 @@ def _parser():
     novo(sub_ter, "importar", "reconcilia a planilha com o protocolo, preservando as "
          "decisões", "termos.validacao", "cmd_importar")
 
+    cat = sub.add_parser("catalogo", help="catálogo de apoio: skills e comandos por passo "
+                         "do guia de procedimentos")
+    sub_cat = cat.add_subparsers(title="subcomandos", metavar="<subcomando>")
+    p = novo(sub_cat, "gerar", "deriva do guia de procedimentos o catálogo de skills e "
+             "comandos por passo, imprime-o e confere as citações, a cobertura, a contagem "
+             "de passos e o catálogo gravado; sem --gravar, nada é gravado",
+             "catalogo", "cmd_gerar", contexto=False)
+    p.add_argument("--gravar", action="store_true",
+                   help="grava docs/catalogo_de_apoio.md de forma atômica; recusado se "
+                        "alguma conferência reprovar")
+    p.add_argument("--json", action="store_true",
+                   help="emite o catálogo e os problemas em JSON")
+
     bus = sub.add_parser("busca", help="registro das execuções, derivação e testes da busca")
     sub_bus = bus.add_subparsers(title="subcomandos", metavar="<subcomando>")
     p = novo(sub_bus, "registrar", "registra uma execução e confere o retorno declarado "
@@ -115,7 +134,8 @@ def _parser():
     p = novo(sub_bus, "sensibilidade", "mede a perda da sonda para a executada e grava a "
              "amostra a classificar", "busca.sensibilidade", "cmd_sensibilidade")
     p.add_argument("base", metavar="BASE", nargs="?", default=None)
-    return ap, {"sementes": sem, "strings": stg, "termos": ter, "busca": bus}
+    return ap, {"sementes": sem, "strings": stg, "termos": ter, "catalogo": cat,
+                "busca": bus}
 
 
 def _mensagem(e, ctx):

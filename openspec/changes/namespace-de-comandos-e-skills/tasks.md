@@ -5,7 +5,7 @@
 - [x] 1.1 Confirmar com o pesquisador a decisão C1/C2 para o artefato “ficha” e registrar a
   escolha no histórico. Verificar que a escolha está escrita e que as tarefas do ramo não
   escolhido ficam explicitamente puladas.
-- [ ] 1.2 Confirmar o grupo `documentos` (em vez de `protocolo`) para `conferir` e
+- [x] 1.2 Confirmar o grupo `documentos` (em vez de `protocolo`) para `conferir` e
   `gramatica`; se o pesquisador preferir `protocolo`, atualizar a tabela canônica antes de
   implementar. Verificar que a tabela do design e a do proposal citam o mesmo grupo.
 - [ ] 1.3 Confirmar que a change `catalogo-de-apoio` está implementada e que

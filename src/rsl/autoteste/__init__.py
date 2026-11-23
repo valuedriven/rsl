@@ -9,7 +9,7 @@ código faz o autoteste falhar; mutação que não se aplica também.
 Grupos executados numa só chamada, cada um com a sua contagem: defeitos injetados no
 protocolo, precedência, configuração, arquivo de sementes, leitura estrutural que aprova,
 planejamento da validação, arquivos alimentados, fichas das bases, composição da derivação,
-aderência por papel, geração das strings e gramática do protocolo.
+aderência por papel, geração das strings, gramática do protocolo e catálogo de apoio.
 
 Sem os arquivos alimentados, os casos que dependem deles não rodam: o resultado é PARCIAL,
 nunca OK.
@@ -90,8 +90,8 @@ def conferir_texto(ctx):
 
 
 def grupos():
-    from . import (busca, configuracao, dados, fichas, geracao, gramatica, protocolo,
-                   sementes, validacao)
+    from . import (busca, catalogo, configuracao, dados, fichas, geracao, gramatica,
+                   protocolo, sementes, validacao)
     return [
         ("defeitos injetados no protocolo", protocolo.mutacoes),
         ("precedência", protocolo.precedencia),
@@ -105,6 +105,7 @@ def grupos():
         ("prova da composição da derivação", busca.composicao),
         ("aderência por papel", busca.aderencia),
         ("gramática do protocolo", gramatica.casos),
+        ("catálogo de apoio", catalogo.casos),
     ]
 
 

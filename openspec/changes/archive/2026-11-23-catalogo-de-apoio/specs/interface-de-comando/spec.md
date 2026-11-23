@@ -21,7 +21,8 @@ separado a reconciliar.
 
 #### Scenario: Ajuda
 - **WHEN** se executa `python3 -m rsl` sem subcomando
-- **THEN** a ajuda lista os subcomandos e a saída tem o código USO
+- **THEN** a ajuda lista os subcomandos, inclusive `strings` e `catalogo`, e a saída tem o
+  código USO
 
 #### Scenario: Ajuda do subcomando de geração
 - **WHEN** se executa `python3 -m rsl strings gerar -h`
