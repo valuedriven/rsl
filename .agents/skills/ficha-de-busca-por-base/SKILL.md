@@ -1,6 +1,6 @@
 ---
 name: ficha-de-busca-por-base
-description: Cria ou atualiza a ficha de busca de uma base (docs/busca_base_<sigla>.md, sigla da tabela "Bases de dados" do protocolo) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere a ficha contra o protocolo. Use ao montar a ficha de uma base nova, ao propagar emenda do protocolo às fichas, ao incorporar sintaxe recém-verificada, ao auditar se uma ficha está completa e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre a ficha e o vocabulário do protocolo.
+description: Cria ou atualiza a ficha de busca de uma base (docs/procedimentos_busca_<sigla>.md, sigla da tabela "Bases de dados" do protocolo) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere a ficha contra o protocolo. Use ao montar a ficha de uma base nova, ao propagar emenda do protocolo às fichas, ao incorporar sintaxe recém-verificada, ao auditar se uma ficha está completa e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre a ficha e o vocabulário do protocolo.
 ---
 
 # Ficha de busca por base
@@ -38,8 +38,8 @@ Quem a abre para executar não deve ter de separar a instrução do racional.
 - **Sem justificativa.** Regra, disparo, forma e limiar — não o porquê. O racional de uma
   decisão está no protocolo ou no histórico; a ficha não o repete. Uma frase de contexto só
   entra quando sem ela a instrução seria executada errado.
-- **Número em prosa não entra** se o leitor o calcula (quantos termos, quantas consultas):
-  a cópia defasa.
+- **Número em prosa não entra** se o leitor o calcula (quantos termos, quantas consultas,
+  comprimento de cada consulta): a cópia defasa.
 
 Esta skill cuida da **ficha inteira**: o que pesquisar, o que registrar, em que ordem montar,
 o que a forma da base pode mudar no vocabulário e como conferir. A lógica das cinco
@@ -124,11 +124,15 @@ fonte da ausência:
 - **frase**: aspas, e o que acontece com hífen, barra e parêntese dentro delas;
 - **truncamento e curinga**: símbolo, mínimo de caracteres, e se o curinga desliga a
   lematização;
-- **lematização**: plural regular, irregular, idiomas em que é documentada;
+- **lematização**: plural regular, irregular, idiomas em que é documentada — e, até ser
+  **medida na primeira execução da base** (sonda do singular contra o plural, registrada e
+  citada `(BDn/<id>)` na linha "Lematização" da seção 1), o estado é **Não verificado** e a
+  ficha declara `plural: explícito`;
 - **proximidade**: operador, distância padrão, se aceita grupos de cada lado;
 - **agrupamento**: parênteses, mistura de campos num grupo, grupo isolado;
-- **limites**: teto de caracteres da consulta, de conjuntos por sessão, de **retorno
-  exibido** e de **exportação**;
+- **limites**: teto de caracteres da consulta — que alimenta o parâmetro `teto de
+  caracteres` da declaração de cobertura —, de conjuntos por sessão, de **retorno exibido** e
+  de **exportação**;
 - **filtros**: ano, idioma, tipo documental, revisão por pares, texto completo — e para cada
   um **se vai na consulta ou só na interface**, e se convive com o resto da sintaxe;
 - **vocabulário controlado** próprio da base e o campo em que opera;
@@ -190,12 +194,32 @@ ou lista curada executada consulta a consulta.
 - **termo que não derive do protocolo** — palavra nova só com decisão registrada, e isso vale
   também para variantes, contingências e camadas.
 
-**A declaração de cobertura** é tabela legível por máquina, com três parâmetros —
-**idiomas** por faceta, **camadas** (integral ou núcleo) e **derivações** — e, só quando a
-base deixa fora da string um termo vigente (da STR do protocolo), a **redução** termo a
-termo. Termo fora da STR e termo alcançado pela forma radical não entram na redução: o
-leitor os trata.
+**A declaração de cobertura** é tabela legível por máquina, com cinco parâmetros —
+**idiomas** por faceta, **camadas** (integral ou núcleo), **plural**, **teto de caracteres** e
+**derivações** — e, só quando a base deixa fora da string um termo vigente (da STR do
+protocolo), a **redução** termo a termo. Termo fora da STR e termo alcançado pela forma
+radical não entram na redução: o leitor os trata.
 
+**Parâmetros da geração da busca.** É aqui, e não na skill, que a base difere das outras.
+`plural` e `teto de caracteres` governam a composição: a string e as consultas se montam a
+partir da STR aplicando o valor declarado, e `conferir` confere o resultado contra ele. Base
+nova ou sintaxe recém-medida muda o valor do parâmetro, nunca uma regra escrita para uma
+base só.
+
+- `plural` diz quem alcança o plural: `explícito` — a string traz as duas formas de número,
+  ou um truncamento que as alcance — ou `pela lematização` — a base o alcança sozinha. `pela
+  lematização` só vale com a linha "Lematização" da seção 1 **verificada por medição** e
+  com a execução citada `(BDn/<id>)`; sem isso, `conferir` reprova a base. Em `explícito`,
+  `conferir` relata, sem reprovar, os termos numa só forma de número: substantivo não
+  contável não tem plural de uso; o agente propõe o plural termo a termo e o pesquisador decide.
+- `teto de caracteres` é o comprimento máximo de cada consulta executável, em caracteres
+  do bloco tal como se cola na interface: um número inteiro (`1400` ou `1.400`) ou
+  `nenhum`. Com número, a consulta que passa dele se particiona sem retirar termo
+  (`expressoes-de-busca`), e `conferir` reprova a base em que alguma passe. Com `nenhum`,
+  `conferir` relata a maior consulta. A origem do número — medido, documentado ou regra de
+  bolso — fica na linha "Comprimento máximo da consulta" da seção 1. Sem medição, o teto é
+  escolha conservadora proposta ao pesquisador. Valor alto demais aparece como recusa da
+  interface; valor baixo demais custa partição, não recall.
 - `morfologia` reconhece flexão de número e gênero, não lematização.
 - `radical` declara que um termo da string alcança os termos do protocolo que o **contêm**
   por inteiro e na mesma ordem: `ontology` alcança `domain ontology`, mas
@@ -234,6 +258,25 @@ esperado em recall, e pede a decisão.
 - **Forma de execução**: única, particionada em consultas de campo único unidas por
   deduplicação, ou lista curada executada consulta a consulta. Partição tem de ser exata:
   as mesmas âncoras em todas as partes. Lista curada não lê as facetas, e a ficha diz isso.
+- **Estratégia de proximidade**, quando a base tem operador de proximidade ou quando a
+  expressão o usa: subseção `### Estratégia de proximidade` na seção 4. É discussão, não
+  forma executável: o leitor a ignora, e bloco cercado nela não se executa nem se confere.
+  Discute, com o estado de verificação de cada afirmação:
+  - **o que a proximidade restringe**: entre que grupos se aplica (as âncoras, uma âncora e
+    uma temática) e que ruído pretende cortar. Proximidade sem ruído identificado é
+    restrição sem motivo;
+  - **operador e distância**: ordenado ou não, distância padrão, unidade (palavra), e a
+    distância escolhida contra as alternativas. Distância menor ganha precisão e perde os
+    registros em que os conceitos aparecem em frases diferentes do resumo;
+  - **comportamento medido** com grupos grandes de cada lado, com frase entre aspas,
+    truncamento e restrição de campo. Há base que recusa ou zera a consulta sem aviso, e
+    documentação não substitui sondagem;
+  - **o preço em recall**: sementes que a proximidade exclui e a anatomia da perda da sonda.
+    Esse é o disparo da forma sem proximidade, que fica nas variantes;
+  - **simetria e derivação**: a mesma cláusula em todas as expressões, ou em nenhuma. O teste
+    de fidelidade diz se a derivação local reproduz a expressão executada com proximidade;
+  - **o que fica para o pesquisador**: usar ou não a proximidade, e com que distância. O
+    agente propõe com a medida e o custo esperado.
 - **Como executar**: passos numerados, do controle da sessão ao registro, com o comando do
   projeto para registrar a execução.
 - **Variantes previstas**: cada uma com o **disparo** (o que se observa para adotá-la), a
@@ -262,7 +305,7 @@ alterar, conferir no leitor se o contrato ainda é este.
 | Elemento | Forma exigida |
 | --- | --- |
 | seções lidas | cabeçalhos exatos `## 3. Strings por faceta`, `## 4. Expressões de busca` e `### Declaração de cobertura` |
-| declaração | tabela com as linhas `idiomas` (`FCTn: pt, en, es;` …), `camadas` (`todas` ou `nucleo`) e `derivações` (`morfologia` e/ou `radical`) |
+| declaração | tabela com as linhas `idiomas` (`FCTn: pt, en, es;` …), `camadas` (`todas` ou `nucleo`), `plural` (`explícito` ou `pela lematização`), `teto de caracteres` (número inteiro ou `nenhum`) e `derivações` (`morfologia` e/ou `radical`); sem `idiomas`, `camadas`, `plural` ou `teto de caracteres`, ou com valor fora do domínio, a leitura daquela base reprova |
 | redução termo a termo | só para termo vigente que a base deixa fora; linhas `\| FCTn \| termo \| motivo \|` dentro da seção da declaração. Termo retirado por emenda e termo alcançado pela forma radical não se declaram |
 | string por faceta | `### \`STRn\` — string \`#n\` — <cor> FCTn — <nome>`, com **um único** bloco cercado |
 | campo da string | lido do texto: início `TS=` ou `TITLE-ABS-KEY`, ou prefixo `title:`, `abstract:`, `descriptor:`; campo de outra forma é lido como "todos os campos", e prefixos diferentes na mesma string, como "misto" |
@@ -273,7 +316,7 @@ alterar, conferir no leitor se o contrato ainda é este.
 | âncoras | inline no bloco de cada expressão; a subseção de proximidade não é exigida e não é forma executável |
 | forma curada | subseção com "curadas" no título; consultas em `####` grupos, linhas `\| n \| \`consulta\` \| facetas \|`; a faceta se reconhece só pelo código `FCTn` — emoji ou cor não identifica faceta |
 | forma longa não executada | subseção "forma longa", expressões em `**EBn**`; não executada e fora da conferência de bloco |
-| ignoradas pela leitura | subseções iniciadas por "Como executar", "Variantes" e "Como esta base" |
+| ignoradas pela leitura | subseções iniciadas por "Como executar", "Variantes", "Como esta base" e "Estratégia de proximidade" |
 | filtros reconhecidos | `PY=(…)`, `PUBYEAR`, `LA=`/`LANGUAGE`, `DT=`/`DOCTYPE`; filtro fora disso é lido como "na interface" |
 
 **Base nova exige mudança no leitor**, além da ficha: o mapa de fichas por base e, se a
@@ -292,6 +335,7 @@ técnica a propor e a provar com o autoteste, não algo que a ficha resolva sozi
 ## 4. Expressões de busca                  composição, execução de cada EB, limiares, leitura de zero
 ### (forma curada | como esta base exige a montagem)
 ### EB1 … EB5                              facetas, estatuto, bloco literal quando se executa
+### Estratégia de proximidade              opcional; discussão, não lida como forma
 ### Como executar
 ### Variantes previstas                    disparo · forma · regra de medida
 ## 5. Conjunto-semente                     sementes da base; procedimento; limiar
@@ -320,7 +364,7 @@ sintaxe, que é sempre desta base e com a sua fonte.
      inteira, lematização não alcança derivação adjetival, e o hífen como separador é
      suposição do leitor, a medir em cada base;
    - **as variantes, a contingência e as camadas** — o leitor salta as subseções
-     "Variantes" e "Como executar". Usam só termos da STR do protocolo, sem termo que
+     "Variantes", "Como executar" e "Estratégia de proximidade". Usam só termos da STR do protocolo, sem termo que
      só conste do quadro? A relação que afirmam com a forma executada (subconjunto, partição exata)
      vale de fato, pela lógica da consulta?
    - **número escrito em prosa** — quantos termos, quantas palavras-raiz, quantas

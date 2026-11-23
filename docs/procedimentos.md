@@ -31,8 +31,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
 - Elaborar o escopo da revisão e discuti-lo com a orientação
   - Fonte: plano §2.1 a §2.4
 - Elaborar os objetivos da revisão
-  - Fonte: plano §1.2 e §1.3; a formulação canônica das questões está no protocolo
-    (`docs/03_protocolo_estrategia_pesquisa.md` §Questão de revisão)
+  - Fonte: plano §1.2 e §1.3;
   - Skill: `questao-e-objetivos`
 
 ### E2 — Avaliação da necessidade
@@ -134,6 +133,15 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl mo
   - Script: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
     preservando as decisões
   - Skill: `validacao-vocabulario-controlado`; `otimizar-strings-revisao-sistematica`
+- Gerar as strings de busca por faceta a partir do quadro terminológico
+  - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico; a tabela
+    §Strings de busca por faceta é saída de geração e não se edita à mão
+  - Script: `python3 -m rsl strings gerar` — ensaio: exibe, por faceta, os termos a
+    acrescentar e a retirar e os subsumidos; não grava
+  - Script: `python3 -m rsl strings gerar --gravar` — regrava só as células de string;
+    recusado se o quadro tiver termo em mais de uma faceta
+  - Ordem: quadro → `strings gerar` → `strings gerar --gravar` → fichas → `conferir`
+  - Skill: `facetacao-e-termos-livres`; `otimizar-strings-revisao-sistematica`
 - Elaborar as expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Strings de busca por faceta,
     §Expressões de busca e §Notas explicativas; ficha de cada base §3 e §4

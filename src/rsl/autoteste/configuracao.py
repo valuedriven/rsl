@@ -31,7 +31,7 @@ def casos(ctx, g):
     testa("padrão de caminho da ficha ausente", valida(cfg.sem("documentos.ficha")),
           "documentos.ficha")
     testa("padrão de caminho da ficha sem o marcador da sigla",
-          valida(cfg.com("documentos.ficha", "docs/busca_base.md")),
+          valida(cfg.com("documentos.ficha", "docs/procedimentos_busca.md")),
           C.MARCADORES["documentos.ficha"])
     testa("saída de fidelidade sem o marcador da expressão",
           valida(cfg.com("saidas.fidelidade", "fidelidade.csv")),

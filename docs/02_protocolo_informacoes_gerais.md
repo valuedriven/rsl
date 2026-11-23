@@ -14,9 +14,10 @@
 ### Obras de referência a consultar
 
 - SOUZA, Renato Rocha; TUDHOPE, Douglas; ALMEIDA, Mauricio Barcellos. Towards a taxonomy of KOS: dimensions for classifying knowledge organization systems. Knowledge Organization, v. 39, n. 3, p. 179–192, 2012\. 
-- INSTITUTO BRASILEIRO DE INFORMAÇÃO EM CIÊNCIA E TECNOLOGIA. Tesauro Brasileiro de Ciência da Informação. Brasília: IBICT. Disponível em: https\://vocabularyserver.com/tbci/br/.
-- INSTITUTO NACIONAL DE ESTUDOS E PESQUISAS EDUCACIONAIS ANÍSIO TEIXEIRA. Thesaurus Brasileiro da Educação (Brased). Brasília: INEP. Disponível em: https\://www\.gov.br/inep/pt-br/areas-de-atuacao/gestao-do-conhecimento-e-estudos-educacionais/cgdi/gestao-terminologica/mostras-virtuais-do-Brased.
-- INSTITUTE OF EDUCATION SCIENCES. ERIC Thesaurus. Washington: IES/ED. Disponível em: https\://eric.ed.gov/default.aspx?ti=all. UNESCO. UNESCO Thesaurus. Paris: UNESCO. Disponível em: https\://vocabularies.unesco.org/.
+- INSTITUTO BRASILEIRO DE INFORMAÇÃO EM CIÊNCIA E TECNOLOGIA. Tesauro Brasileiro de Ciência da Informação. Brasília: IBICT. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `tbci`.
+- INSTITUTO NACIONAL DE ESTUDOS E PESQUISAS EDUCACIONAIS ANÍSIO TEIXEIRA. Thesaurus Brasileiro da Educação (Brased). Brasília: INEP. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `brased`.
+- INSTITUTE OF EDUCATION SCIENCES. ERIC Thesaurus. Washington: IES/ED. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `eric`.
+- UNESCO. UNESCO Thesaurus. Paris: UNESCO. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `unesco`.
 - FINK, L. Dee. Creating significant learning experiences: an integrated approach to designing college courses. San Francisco: Jossey-Bass, 2003\. Ed. rev. e atual., 2013\. — fonte da noção de fatores situacionais. A edição consultada é registrada na citação (a paginação difere entre as duas). 
 - FINK, L. Dee. A self-directed guide to designing courses for significant learning. San Francisco: Jossey-Bass, 2003\. — cinco categorias de fatores situacionais, REFERÊNCIA DE PARTIDA da faceta 4 e do campo 4 do fichamento; orientam a codificação sem restringi-la: fator não previsto é registrado com a própria designação e constitui achado.
 - INSTITUTE OF ELECTRICAL AND ELECTRONICS ENGINEERS. IEEE 1484.12.1-2020 — IEEE Standard for Learning Object Metadata. New York: IEEE, 2020\. Edição anterior, superada: IEEE 1484.12.1-2002. Cita-se a edição que o estudo analisado empregue.

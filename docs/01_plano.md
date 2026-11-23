@@ -7,7 +7,7 @@
 | Esta revisão sistemática integra a pesquisa de doutorado de Junilson Pereira Souza, orientada pela Profa. Dra. Elisângela Cristina Aganette, no Programa de Pós-Graduação em Gestão e Organização do Conhecimento (PPGGOC) da Escola de Ciência da Informação (ECI) da Universidade Federal de Minas Gerais. Recebe o código interno RSL-01 e é a primeira de um conjunto de revisões previstas para o projeto. Título: Representação do conhecimento sobre práticas educacionais e seus fatores situacionais: revisão sistemática de modelos conceituais, ontologias e outros sistemas de organização do conhecimento. |
 | :---- |
 
-| 1.2 QUESTÃO DE PESQUISA DO PROJETO *Como representar formalmente práticas que influenciam a efetividade do processo de ensino-aprendizagem, sustentadas ou refutadas por evidências científicas e associadas aos fatores situacionais de sua produção e aplicação, de modo a possibilitar sua interpretação em diferentes situações educacionais e apoiar decisões alinhadas ao propósito dos alunos?* |
+| 1.2 Questão de pesquisa do projeto: *Como representar formalmente práticas que influenciam a efetividade do processo de ensino-aprendizagem, sustentadas ou refutadas por evidências científicas e associadas aos fatores situacionais de sua produção e aplicação, de modo a possibilitar sua interpretação em diferentes situações educacionais e apoiar decisões alinhadas ao propósito dos alunos?* |
 | :---- |
 
 | A revisão não responde à questão do projeto por inteiro: produz a fundamentação representacional de que a resposta depende. Divisão do problema: dos cinco problemas representacionais da questão, 2 cabem a esta revisão e 3 a revisões autônomas (seção 2). Alinhamento ao projeto: atende aos Objetivos Específicos OE1 (parcial), OE2 e OE3, e subsidia o OE4 — a decisão entre reutilizar, alinhar, estender ou construir artefato de representação. Remissões: a questão de revisão e as questões secundárias constam do protocolo (`docs/03`, Questão de revisão) e prevalecem sobre qualquer formulação feita aqui; equipe e atribuições, no protocolo e na planilha de competências; prazos, no cronograma. |
@@ -15,14 +15,14 @@
 
 ## 1.3 Objetivos
 
-| Objetivo geral. *Caracterizar como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento propostos, especificados, aplicados ou avaliados no domínio educacional representam formalmente as práticas do processo de ensino-aprendizagem e/ou os fatores situacionais que condicionam a sua aplicação, aferindo a cobertura conceitual, granularidade e grau de formalização dessas representações e enunciando as lacunas de representação do domínio.* *Objetivo de caracterização e comparação, não de avaliação do mérito pedagógico; o desfecho é o da questão de revisão.* Objetivos específicos: *um por questão secundária, na ordem do protocolo (`docs/03`).* |
-| :---- |
+- Objetivo geral (OG): Caracterizar como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento propostos, especificados, aplicados ou avaliados no domínio educacional representam formalmente as práticas do processo de ensino-aprendizagem e os fatores situacionais associados à sua aplicação, aferindo a cobertura conceitual, granularidade e grau de formalização dessas representações e enunciando as lacunas de representação do domínio.
 
-| •  OE1 — Identificar e tipificar os artefatos de representação propostos para representar práticas educacionais, caracterizando o escopo, a granularidade e o grau de formalização de cada um. •  OE2 — Analisar como esses artefatos representam as práticas do processo de ensino-aprendizagem, como distinguem e relacionam entre si prática, estratégia, método, técnica, atividade, intervenção e abordagem pedagógica, e que definições adotam para cada uma. •  OE3 — Identificar que fatores situacionais do domínio educacional são formalizados, tomando as cinco categorias de Fink como REFERÊNCIA DE PARTIDA, não como enquadramento obrigatório (fator não previsto é registrado como achado), e apurar de que modo se vinculam às práticas, inclusive sob a forma de regras, dependências e restrições. •  OE4 — Examinar como essas soluções são avaliadas, alinhadas, reutilizadas e mantidas, e enunciar as capacidades, limitações, incompatibilidades e lacunas de representação reportadas no domínio educacional. |
-| :---- |
+Objetivos específicos (um por questão secundária, na ordem do protocolo):
+- OE1: Identificar e tipificar os artefatos propostos, especificados, aplicados ou avaliados para representar práticas educacionais, caracterizando o escopo, a granularidade e o grau de formalização de cada um.
+- OE2: Analisar como esses artefatos representam as práticas do processo de ensino-aprendizagem, como distinguem e relacionam entre si prática, estratégia, método, técnica, atividade, intervenção e abordagem pedagógica, e que definições adotam para cada uma.
+- OE3: Identificar que fatores situacionais do domínio educacional são formalizados, tomando as cinco categorias de Fink como REFERÊNCIA DE PARTIDA, não como enquadramento obrigatório (fator não previsto é registrado como achado), e apurar de que modo se vinculam às práticas, inclusive sob a forma de regras, dependências e restrições.
+- OE4: Examinar limitações, lacunas, incompatibilidades e insuficiências de integração entre práticas educacionais e fatores situacionais identificadas nos artefatos.
 
-| *Remissão: a formulação canônica das questões secundárias está no protocolo (`docs/03`, Questão de revisão) e prevalece; os objetivos alteram-se com elas.* |
-| :---- |
 
 ## 1.4 Base metodológica
 

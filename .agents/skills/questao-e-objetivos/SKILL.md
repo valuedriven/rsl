@@ -72,7 +72,7 @@ o apure nem questão sem objetivo que a justifique.
 **Os objetivos são redigidos, não derivados mecanicamente.** Tentou-se derivar da
 pergunta por transformação sintática e o resultado foi agramatical — está medido.
 Mas a redação fica **amarrada por conferência**: cada objetivo nomeia o tema da sua
-questão, e a correspondência se verifica item a item contra o protocolo (`docs/03`). É a amarração,
+questão, e a correspondência se verifica item a item contra o protocolo, seção Questão de revisão. É a amarração,
 não a disciplina, que impede a divergência.
 
 O objetivo geral fecha com o mesmo desfecho que a questão declara, para que objetivo
@@ -81,8 +81,8 @@ comparação — não avaliação do mérito pedagógico das práticas represent
 
 ## 5. Onde vive cada coisa
 
-A formulação canónica das questões está no protocolo (`docs/02`, Etapa 2), e **prevalece**; os
-objetivos estão no plano (`docs/01`), seção 1.3, como leitura das questões em forma de propósito.
+A formulação canónica das questões está no protocolo, seção Questão de revisão, e **prevalece**; os
+objetivos estão no plano, seção Objetivos, como leitura das questões em forma de propósito.
 Alterar questão secundária sem revisitar o objetivo correspondente é a divergência que
 a conferência tem de apanhar.
 

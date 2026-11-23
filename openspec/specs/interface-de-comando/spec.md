@@ -14,6 +14,7 @@ projeto. Os subcomandos SHALL ser estes:
 
 - `conferir`, `conferir-dados`, `autoteste`, `mostrar`, `pendencias` e `gramatica`;
 - `sementes planilha`;
+- `strings gerar`;
 - `termos sonda`, `termos exportar`, `termos validar <sigla>` e `termos importar`;
 - `busca registrar`, `busca derivar`, `busca aderencia`, `busca fidelidade` e
   `busca sensibilidade`.
@@ -25,7 +26,11 @@ separado a reconciliar.
 
 #### Scenario: Ajuda
 - **WHEN** se executa `python3 -m rsl` sem subcomando
-- **THEN** a ajuda lista os subcomandos e a saída tem o código USO
+- **THEN** a ajuda lista os subcomandos, inclusive `strings`, e a saída tem o código USO
+
+#### Scenario: Ajuda do subcomando de geração
+- **WHEN** se executa `python3 -m rsl strings gerar -h`
+- **THEN** a ajuda mostra a opção `--gravar` e diz que, sem ela, nada é gravado
 
 #### Scenario: Script antigo
 - **WHEN** se procura `src/protocolo.py` ou `src/gen_semente.py`

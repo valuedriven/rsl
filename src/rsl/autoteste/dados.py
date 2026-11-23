@@ -100,6 +100,14 @@ def casos(ctx, g):
         (f"citação do registro em prosa sem identificador ({alvo[3]})",
          lambda: so_a_base(alvo[3], f"Comportamento apurado por medição, com as sondagens "
                                     f"em `{caminho_reg}`.")()),
+        # A linha "Lematização" que sustenta `plural: pela lematização` cita só a execução,
+        # sem o caminho do registro: a citação se confere do mesmo modo.
+        (f"citação de execução inexistente na linha Lematização, sem o caminho ({alvo[0]})",
+         lambda: so_a_base(alvo[0], f"| {G.RF_LEMATIZACAO.texto} | Verificado por medição "
+                                    f"({bd_de[alvo[0]]}/{inexistente()}) |")()),
+        (f"citação de outra base na linha Lematização, sem o caminho ({alvo[1]})",
+         lambda: so_a_base(alvo[1], f"| {G.RF_LEMATIZACAO.texto} | Verificado por medição "
+                                    f"({outra_bd(alvo[1])}/de-outra-base) |")()),
     ]
 
     reg, erro_r = le_json(cfg.caminho("dados.registro"))

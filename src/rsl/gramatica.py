@@ -404,7 +404,7 @@ SF_STRINGS = Secao("ficha.strings", F, "3. Strings por faceta", 2)
 SF_DECLARACAO = Secao("ficha.declaracao", F, "Declaração de cobertura", 3, pai=SF_STRINGS)
 TF_DECLARACAO = Tabela(
     "ficha.declaracao", F, SF_DECLARACAO, ("Declaração", "Valor"), modo="posicional",
-    linhas="rótulos idiomas, camadas, derivações; e a redução declarada, uma linha por "
+    linhas="rótulos idiomas, camadas, plural, teto de caracteres, derivações; e a redução declarada, uma linha por "
            "termo: `| FCTn | termo | motivo |`")
 RF_IDIOMAS = RotuloLinha("ficha.idiomas", F, TF_DECLARACAO, "idiomas", "idiomas",
                          descricao="`FCTn: <idioma>, <idioma>; FCTm: …`; ausente, ilegível ou com idioma "
@@ -414,6 +414,30 @@ RF_CAMADAS = RotuloLinha("ficha.camadas", F, TF_DECLARACAO, "camadas", "camadas"
 RF_DERIVACOES = RotuloLinha("ficha.derivacoes", F, TF_DECLARACAO, "derivações",
                             "derivacoes", exigencia=OPCIONAL,
                             descricao="ausente, nenhuma derivação declarada")
+RF_PLURAL = RotuloLinha("ficha.plural", F, TF_DECLARACAO, "plural", "plural",
+                        descricao="ausente reprova")
+D_PLURAL = Dominio("ficha.plural", F, SF_DECLARACAO, "plural",
+                   {"explícito": "explicito", "pela lematização": "lematizacao"},
+                   descricao="valor fora reprova; `pela lematização` exige a linha "
+                             "'Lematização' da seção 1 verificada por medição, com "
+                             "`(BDn/<id>)` (conferir)")
+PLURAL_EXPLICITO, PLURAL_LEMATIZACAO = D_PLURAL.valores.values()
+RF_TETO = RotuloLinha("ficha.teto", F, TF_DECLARACAO, "teto de caracteres", "teto",
+                      descricao="ausente reprova")
+D_TETO = Dominio("ficha.teto", F, SF_DECLARACAO, "teto de caracteres", {"nenhum": None},
+                 descricao="número inteiro de caracteres (`1400` ou `1.400`) ou `nenhum`; "
+                           "outro valor reprova. Com número, consulta executável mais longa "
+                           "reprova a base; com `nenhum`, a maior consulta é relatada "
+                           "(conferir)")
+TETO_NENHUM = "nenhum"
+SF_SINTAXE = Secao("ficha.sintaxe", F, "1. Estado de verificação da sintaxe", 2,
+                   exigencia=OPCIONAL)
+TF_SINTAXE = Tabela("ficha.sintaxe", F, SF_SINTAXE, ("Elemento", "Situação"),
+                    modo="posicional", exigencia=OPCIONAL)
+RF_LEMATIZACAO = RotuloLinha(
+    "ficha.lematizacao", F, TF_SINTAXE, "Lematização", "lematizacao", exigencia=OPCIONAL,
+    descricao="exigida com `plural: pela lematização`: estado 'verificado por medição' e "
+              "citação `(BDn/<id>)`, ou a base reprova (conferir)")
 D_CAMADAS = Dominio("ficha.camadas", F, SF_DECLARACAO, "camadas",
                     {"todas": "todas", "nucleo": "nucleo"})
 CAMADAS_TODAS, CAMADAS_NUCLEO = D_CAMADAS.valores
@@ -451,7 +475,8 @@ MF_FACETAS = Marcador("ficha.facetas", F, SF_EXPRESSOES, f"**{MARCA_FACETAS}** F
                                 "(conferência)")
 # Subtítulos de `4. Expressões de busca` que não são expressão (início do título, em
 # minúsculas) e os que têm leitura própria.
-SUBTITULOS_IGNORADOS = ("como executar", "variantes", "como esta base")
+SUBTITULOS_IGNORADOS = ("como executar", "variantes", "como esta base",
+                        "estratégia de proximidade")
 SUBTITULO_PROXIMIDADE = "proximidade"
 SUBTITULO_CURADAS = "curadas"
 SUBTITULO_FORMA_LONGA = "forma longa"
@@ -460,7 +485,8 @@ M_SUBTITULOS = Marcador(
     "### <subtítulo> com: " + ", ".join(SUBTITULOS_IGNORADOS + (
         SUBTITULO_PROXIMIDADE, SUBTITULO_CURADAS, SUBTITULO_FORMA_LONGA)),
     r"^###\s+", exigencia=OPCIONAL,
-    descricao="como executar / variantes / como esta base: ignorados; proximidade: "
+    descricao="como executar / variantes / como esta base / estratégia de proximidade: "
+              "ignorados; proximidade: "
               "conjunto das âncoras; curadas: forma curada (`#### grupo` e `| n | "
               "`consulta` | FCTn |`); forma longa: `**EBn**` com bloco")
 ROTULO_NAO_EXECUTADA = "nao e a forma executada"
@@ -480,8 +506,9 @@ F_ESTATUTO = FrasePadrao(
 F_CITACAO = FrasePadrao(
     "ficha.citacao_execucao", F, None, "(BDn/<id>)  em toda menção ao registro de execução",
     r"\((BD\d+)/([^)\s]+)\)", exigencia=OPCIONAL,
-    descricao="menção ao registro sem a citação, com BDn de outra base ou com execução "
-              "inexistente reprova a base (conferir-dados)")
+    descricao="menção ao registro sem a citação, ou citação — com ou sem o caminho do "
+              "registro na linha — com BDn de outra base ou com execução inexistente, "
+              "reprova a base (conferir-dados)")
 
 
 # ============================================================== arquivo de sementes

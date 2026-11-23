@@ -839,6 +839,13 @@ def analisa(ctx):
     for n in st:
         # A string repete termo entre camadas; a lista executada é deduplicada. É ela
         # que a derivação local usa, e é ela que o relatório conta.
+        # A grafia lida, sem a deduplicação sem acento, é a que se compara com a STR
+        # gerada do quadro (`geracao.py`): lá o acento distingue.
+        st[n]["literais"] = list(dict.fromkeys(st[n]["termos"]))
+        # A deduplicação apagaria a repetição antes da comparação: a forma repetida, na
+        # grafia lida, fica registrada para que a STR com termo em duplicidade reprove.
+        st[n]["repetidos"] = {x: st[n]["termos"].count(x) for x in st[n]["literais"]
+                              if st[n]["termos"].count(x) > 1}
         st[n]["termos"] = sem_repeticao(st[n]["termos"])
     anc = ancoras(pal, params)
     comp, exec_, sonda, sens = expressoes(ctx, t, params, locais, anc, st)

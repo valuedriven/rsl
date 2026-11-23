@@ -10,7 +10,8 @@ como número, porque é ela que mede o preço da forma de cada base.
 import re
 
 from . import gramatica as G
-from .fichas import MODO_CURADA, MODOS_EXECUCAO, termos_bloco
+from .geracao import subsume
+from .fichas import MODO_CURADA, MODOS_EXECUCAO, consultas_executaveis, termos_bloco
 from .leitura import CAMADAS, sem_repeticao
 from .markdown import normaliza
 
@@ -116,6 +117,98 @@ def _vocabulario(fid, d, decl):
     return vigentes, fora
 
 
+def _subsumido_por(termo_quadro, fid, d):
+    """Termo da STR da faceta que subsume o termo do quadro, na regra da geração; ou None."""
+    return next((x for x in d["strings"][fid]["literais"] if subsume(x, termo_quadro)), None)
+
+
+def subsumidos_na_base(base, d):
+    """[(faceta, termo da base, termo do quadro, termo da STR que o subsume)].
+
+    É relato, não reprovação: o subsumido no mesmo campo do termo que o subsume é
+    redundância a retirar da ficha; em campo próprio, é especificidade de campo.
+    """
+    saida = []
+    for fid in sorted(d["strings"]):
+        _, fora = _vocabulario(fid, d, base.get("declaracao") or {})
+        for s in base["facetas"]:
+            if s["faceta"] != fid:
+                continue
+            for termo in s["termos"]:
+                p = next((x for x in fora if _mesmo_termo(termo, x)), None)
+                por = p and _subsumido_por(p, fid, d)
+                if por:
+                    saida.append((fid, s.get("id", fid), termo, por))
+    return saida
+
+
+def _truncamento_alcanca(termo, achados):
+    """Algum termo truncado (`radical*`) da string alcança o termo, em qualquer número."""
+    alvo = normaliza(termo)
+    for a in achados:
+        if a.endswith("*"):
+            prefixo = normaliza(a.rstrip("*"))
+            if prefixo and re.search(r"(?:^| )" + re.escape(prefixo), alvo):
+                return True
+    return False
+
+
+# Plural irregular de origem latina ou grega (`thesaurus`/`thesauri`, `analysis`/`analyses`).
+# Só serve ao relato de número único: a derivação conferida em `cobertura_base` continua
+# com a flexão de `_candidatos`, e um par a mais aqui só cala um relato, nunca aprova termo.
+_PLURAIS_IRREGULARES = (("us", "i"), ("um", "a"), ("on", "a"), ("is", "es"),
+                        ("ex", "ices"), ("ix", "ices"))
+
+
+def _par_irregular(a, b):
+    """`a` e `b` são o mesmo termo em números diferentes por plural irregular da última
+    palavra, com as demais palavras iguais."""
+    pa, pb = normaliza(a).split(), normaliza(b).split()
+    if len(pa) != len(pb) or not pa or pa[:-1] != pb[:-1]:
+        return False
+    x, y = pa[-1], pb[-1]
+    for sing, plur in _PLURAIS_IRREGULARES:
+        for s, p in ((x, y), (y, x)):
+            if (s.endswith(sing) and p.endswith(plur) and len(s) > len(sing) + 1
+                    and s[:-len(sing)] == p[:-len(plur)]):
+                return True
+    return False
+
+
+def numero_unico_na_base(base, d):
+    """[(faceta, termo da STR)] presentes na string da base numa só forma de número.
+
+    Só em ficha com `plural: explícito`, e fora do alcance de truncamento. O termo cujo par
+    de plural irregular também está na string da base não é relatado: as duas formas de
+    número estão lá. É relato, não reprovação: substantivo não contável
+    (`education`, `pedagogia`) não tem plural de uso.
+    """
+    decl = base.get("declaracao") or {}
+    if decl.get("plural") != G.PLURAL_EXPLICITO:
+        return []
+    saida = []
+    for fid in sorted(d["strings"]):
+        vigentes, _ = _vocabulario(fid, d, decl)
+        achados = [x for s in base["facetas"] if s["faceta"] == fid for x in s["termos"]]
+        for t in vigentes:
+            formas = {normaliza(a) for a in achados if _mesmo_termo(t, a)}
+            if len(formas) != 1 or _truncamento_alcanca(t, achados):
+                continue
+            if any(_par_irregular(t, a) for a in achados):
+                continue
+            saida.append((fid, t))
+    return saida
+
+
+def maior_consulta(base):
+    """(comprimento, expressão, rótulo) da consulta executável mais longa, ou None."""
+    consultas = consultas_executaveis(base)
+    if not consultas:
+        return None
+    ident, rotulo, texto = max(consultas, key=lambda c: len(c[2]))
+    return len(texto), ident, rotulo
+
+
 def _facetas_da_composicao(d, ident):
     """Facetas exigidas por uma expressão, pela composição lida do protocolo."""
     faceta_de = {s["id"]: fid for fid, s in d["strings"].items()}
@@ -168,6 +261,10 @@ def cobertura_base(base, d):
             # Termo do quadro que a STR não traz não é vigente: a base não pode executá-lo,
             # nem em flexão.
             so_quadro = next((p for p in fora if _mesmo_termo(termo, p)), None)
+            # O subsumido por termo vigente deriva da STR: a ficha pode usá-lo em campo
+            # próprio, como a `STR1b` da ERIC no resumo. É relatado, não reprovado.
+            if so_quadro and _subsumido_por(so_quadro, fid, d):
+                continue
             if so_quadro:
                 problemas.append(f"{fid}: {termo!r} está na string desta base e não está na "
                                  f"string do protocolo (consta só do quadro: {so_quadro!r})")
@@ -180,6 +277,35 @@ def cobertura_base(base, d):
     for e, porque in _radical_sem_alcance(base):
         problemas.append(f"{e['faceta']}: {e['termo']!r} consta da redução como alcançado "
                          f"pela forma radical, e {porque}")
+
+    # Plural pela lematização é afirmação sobre a base, e afirmação se confere: só com a
+    # lematização medida e a execução que a mediu citada.
+    if decl.get("plural") == G.PLURAL_LEMATIZACAO:
+        linha, medida, citacao = base.get("lematizacao") or (None, False, None)
+        texto = next(k for k, v in G.D_PLURAL.valores.items() if v == G.PLURAL_LEMATIZACAO)
+        rotulo = f"declara plural {texto!r}"
+        if linha is None:
+            problemas.append(f"ficha {caminho}: {rotulo}, e a seção "
+                             f"'{G.SF_SINTAXE.titulo}' não tem a linha "
+                             f"'{G.RF_LEMATIZACAO.texto}'")
+        elif not medida:
+            problemas.append(f"ficha {caminho}: {rotulo}, e a linha "
+                             f"'{G.RF_LEMATIZACAO.texto}' não está verificada por medição: "
+                             f"{linha[:90]!r}")
+        elif not citacao:
+            problemas.append(f"ficha {caminho}: {rotulo}, e a linha "
+                             f"'{G.RF_LEMATIZACAO.texto}' não cita a execução que a mediu "
+                             f"(BDn/<id>)")
+
+    # O teto de caracteres é parâmetro da base: a consulta mais longa que ele seria recusada
+    # pela interface ou, pior, truncada em silêncio.
+    teto = decl.get("teto")
+    if teto is not None:
+        for ident, rotulo, texto in consultas_executaveis(base):
+            if len(texto) > teto:
+                problemas.append(f"{ident}: consulta {rotulo[:60]!r} tem {len(texto)} "
+                                 f"caracteres, acima do teto de caracteres declarado "
+                                 f"({teto}); particionar sem retirar termo")
 
     previstas = sorted(d["expressoes"])
     if sorted(base["expressoes"]) != previstas:

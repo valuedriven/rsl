@@ -1,0 +1,213 @@
+# Strings de busca — Scopus
+
+## 1. Estado de verificação da sintaxe
+
+| Elemento | Situação | Fonte |
+| :--- | :--- | :--- |
+| `TITLE-ABS-KEY()` | Verificado | Elsevier, *Scopus Search API — search tips* |
+| `PUBYEAR >`, `<`, `=` | Verificado | idem |
+| `LANGUAGE()` | Verificado | idem |
+| `DOCTYPE()` com os códigos `ar`, `re`, `cp`, `ch`, `bk`, `ed`, `le`, `no`, `sh` | Verificados | idem |
+| `SRCTYPE()` com `j`, `b`, `k`, `p`, `r`, `d` | Verificado | idem |
+| `OPENACCESS(0` ou `1)` | Verificado | idem |
+| `AND`, `OR`, `AND NOT`; precedência `OR` → `AND` → `AND NOT` | Verificado; a precedência muda em 2026 | idem |
+| Truncamento `*` e `?`, mínimo de 3 caracteres antes do curinga | Verificado | idem |
+| Proximidade `W/n` e `PRE/n` | Verificados em fonte oficial; `W/5` **não medido** | idem |
+| `W/5` entre os grupos inteiros das duas âncoras | **Não medido** | medir na primeira execução; recusa leva à variante "Redução por recusa da interface" |
+| `{}` frase exata *versus* `""` frase aproximada | Verificado | idem |
+| `""` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento | **Não verificado** | afirmado sem fonte na skill `otimizar-strings-revisao-sistematica` até 2026-11-23; conferir na documentação oficial |
+| Limite de operadores por consulta | **Não documentado** | — |
+| Comprimento máximo da consulta | **Não verificado** | medir na primeira execução; a maior consulta executável é medida por `python3 -m rsl conferir`, no relato do teto de caracteres |
+| Lematização do plural | **Não verificada** | — |
+| Tratamento de diacríticos | **Não verificado** | as strings trazem as duas grafias |
+| Teto de retorno exibido e de exportação por lote | **Não verificados** | conferir na interface antes de exportar |
+
+Todas as facetas vão entre parênteses explícitos; nenhuma expressão depende da ordem implícita de avaliação.
+
+---
+
+## 2. Critérios de elegibilidade
+
+| Critério | ID | Na consulta? | Como |
+| :--- | :---: | :--- | :--- |
+| Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Sim** | `AND PUBYEAR > 2016 AND PUBYEAR < 2027` |
+| Idiomas — português, inglês e espanhol | CE3 | **Sim** | `AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish))` |
+| Tipo documental | CE4 / CE5 | **Sim** | `AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` |
+| Adequação temática — regra de inclusão | CE6 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
+| Adequação temática — não pertinência e contra-escopo | CE6 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
+| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) nas cinco expressões |
+| Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
+| Fator de impacto — não aplicável | CE10 | **Não** | não se aplica: critério só documental |
+
+---
+
+## 3. Strings por faceta
+
+`STRn` é o identificador do protocolo e `#n` o número da string na composição. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
+
+### Declaração de cobertura
+
+Lida por `python3 -m rsl conferir` (leitor das fichas em `src/rsl/fichas.py`).
+
+| Parâmetro | Valor |
+| :--- | :--- |
+| idiomas | FCT1: pt, en, es; FCT2: pt, en, es; FCT3: pt, en, es; FCT4: pt, en, es |
+| camadas | todas |
+| plural | explícito |
+| teto de caracteres | nenhum |
+| derivações | morfologia |
+
+### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
+
+```
+TITLE-ABS-KEY("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering" OR "representación del conocimiento" OR "organización del conocimiento" OR "ontología" OR "modelo ontológico educativo" OR "vocabulario controlado" OR "taxonomía" OR "esquema de clasificación" OR "esquema de metadatos" OR "clasificación facetada" OR "modelo conceptual" OR "modelado conceptual" OR "esquema conceptual" OR "modelo de dominio" OR "modelo semántico" OR "ingeniería de ontologías" OR "desarrollo de ontologías" OR "patrón de diseño ontológico" OR "modelado basado en ontologías")
+```
+
+### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
+
+```
+TITLE-ABS-KEY("educação" OR "educacional" OR "educacionais" OR "educacionales" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz" OR "education" OR "educational" OR "teaching and learning" OR "teaching-learning" OR "learning path" OR "student learning" OR "blended learning" OR "online learning" OR "lifelong learning" OR "learning management system" OR "learning environment" OR "learning object" OR "e-learning" OR "massive open online course" OR "learning infrastructure" OR "learner" OR "educación" OR "enseñanza superior" OR "enseñanza y aprendizaje" OR "itinerario de aprendizaje" OR "aprendizaje del estudiante" OR "aprendizaje combinado" OR "aprendizaje en línea" OR "aprendizaje a lo largo de la vida" OR "sistema de gestión del aprendizaje" OR "tecnología educativa" OR "entorno de aprendizaje" OR "entorno virtual de aprendizaje" OR "objeto de aprendizaje" OR "recurso educativo abierto" OR "aprendizaje electrónico" OR "curso en línea masivo y abierto" OR "institución educativa" OR "infraestructura educativa" OR "nivel educativo" OR "modalidad educativa")
+```
+
+### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
+
+```
+TITLE-ABS-KEY("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino" OR "educational practice" OR "pedagogical practice" OR "teaching practice" OR "instructional practice" OR "teaching strategy" OR "instructional strategy" OR "teaching method" OR "instructional method" OR "teaching technique" OR "learning activity" OR "learning task" OR "educational intervention" OR "instructional intervention" OR "teaching sequence" OR "instructional sequence" OR "pedagogy" OR "pedagogies" OR "best practice" OR "best practices" OR "recommended practice" OR "recommended practices" OR "pedagogical approach" OR "instructional approach" OR "instructional design" OR "learning design" OR "pedagogical pattern" OR "pedagogical design pattern" OR "active learning method" OR "teaching methodology" OR "práctica educativa" OR "prácticas educativas" OR "práctica pedagógica" OR "práctica docente" OR "estrategia de enseñanza" OR "estrategia didáctica" OR "método de enseñanza" OR "método instruccional" OR "técnica de enseñanza" OR "actividad de aprendizaje" OR "tarea de aprendizaje" OR "intervención educativa" OR "intervención pedagógica" OR "secuencia didáctica" OR "secuencia instruccional" OR "pedagogía" OR "buena práctica" OR "buenas prácticas" OR "práctica recomendada" OR "prácticas recomendadas" OR "enfoque pedagógico" OR "enfoque instruccional" OR "diseño instruccional" OR "diseño del aprendizaje" OR "diseño didáctico" OR "patrón pedagógico" OR "patrón de diseño pedagógico" OR "método de aprendizaje activo" OR "metodología de enseñanza")
+```
+
+### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
+
+```
+TITLE-ABS-KEY("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "sensível ao contexto" OR "contextualização" OR "situational factor" OR "situational factors" OR "situation of use" OR "educational context" OR "learning context" OR "contextual factor" OR "contextual factors" OR "factor contextual" OR "factores contextuales" OR "context factor" OR "context factors" OR "application condition" OR "application conditions" OR "implementation condition" OR "implementation conditions" OR "learning situation" OR "educational setting" OR "institutional context" OR "sociocultural context" OR "class profile" OR "learner characteristic" OR "learner characteristics" OR "contextual constraint" OR "contextual constraints" OR "context modeling" OR "context modelling" OR "context representation" OR "context-aware" OR "contextualization" OR "contextualisation" OR "factor situacional" OR "factores situacionales" OR "situación de uso" OR "contexto educativo" OR "contexto de aprendizaje" OR "factor del contexto" OR "factores del contexto" OR "condición de aplicación" OR "condiciones de aplicación" OR "condición de implementación" OR "condiciones de implementación" OR "situación de aprendizaje" OR "escenario educativo" OR "perfil del grupo" OR "característica del estudiante" OR "características de los estudiantes" OR "restricción contextual" OR "restricciones contextuales" OR "modelado del contexto" OR "representación del contexto" OR "sensible al contexto" OR "contextualización")
+```
+
+---
+
+## 4. Expressões de busca
+
+```
+EB1 = #1 AND #2 AND #3 AND #4
+EB2 = #1 AND #2 AND #3
+EB3 = #1 AND #2 AND #4
+EB4 = #1 AND #2 AND (#3 OR #4)     (executada)
+EB5 = #1 AND #2                    (sonda de sensibilidade)
+```
+
+| Expressão | Execução |
+| :--- | :--- |
+| **EB4** | executar e exportar: é o corpus desta base |
+| **EB5** | executar uma única vez, na mesma data; não compõe o corpus |
+| **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
+| **EB1** | não executar; derivação local |
+
+- Execução: única
+- **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`python3 -m rsl mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
+- **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
+
+### EB1 (as quatro facetas)
+
+*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)
+
+### EB2 (modelos e ontologias que representam práticas do processo de ensino-aprendizagem)
+
+*Derivada localmente — executar apenas no teste de fidelidade.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)
+
+```
+TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering" OR "representación del conocimiento" OR "organización del conocimiento" OR "ontología" OR "modelo ontológico educativo" OR "vocabulario controlado" OR "taxonomía" OR "esquema de clasificación" OR "esquema de metadatos" OR "clasificación facetada" OR "modelo conceptual" OR "modelado conceptual" OR "esquema conceptual" OR "modelo de dominio" OR "modelo semántico" OR "ingeniería de ontologías" OR "desarrollo de ontologías" OR "patrón de diseño ontológico" OR "modelado basado en ontologías") W/5 ("educação" OR "educacional" OR "educacionais" OR "educacionales" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz" OR "education" OR "educational" OR "teaching and learning" OR "teaching-learning" OR "learning path" OR "student learning" OR "blended learning" OR "online learning" OR "lifelong learning" OR "learning management system" OR "learning environment" OR "learning object" OR "e-learning" OR "massive open online course" OR "learning infrastructure" OR "learner" OR "educación" OR "enseñanza superior" OR "enseñanza y aprendizaje" OR "itinerario de aprendizaje" OR "aprendizaje del estudiante" OR "aprendizaje combinado" OR "aprendizaje en línea" OR "aprendizaje a lo largo de la vida" OR "sistema de gestión del aprendizaje" OR "tecnología educativa" OR "entorno de aprendizaje" OR "entorno virtual de aprendizaje" OR "objeto de aprendizaje" OR "recurso educativo abierto" OR "aprendizaje electrónico" OR "curso en línea masivo y abierto" OR "institución educativa" OR "infraestructura educativa" OR "nivel educativo" OR "modalidad educativa")) AND TITLE-ABS-KEY("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino" OR "educational practice" OR "pedagogical practice" OR "teaching practice" OR "instructional practice" OR "teaching strategy" OR "instructional strategy" OR "teaching method" OR "instructional method" OR "teaching technique" OR "learning activity" OR "learning task" OR "educational intervention" OR "instructional intervention" OR "teaching sequence" OR "instructional sequence" OR "pedagogy" OR "pedagogies" OR "best practice" OR "best practices" OR "recommended practice" OR "recommended practices" OR "pedagogical approach" OR "instructional approach" OR "instructional design" OR "learning design" OR "pedagogical pattern" OR "pedagogical design pattern" OR "active learning method" OR "teaching methodology" OR "práctica educativa" OR "prácticas educativas" OR "práctica pedagógica" OR "práctica docente" OR "estrategia de enseñanza" OR "estrategia didáctica" OR "método de enseñanza" OR "método instruccional" OR "técnica de enseñanza" OR "actividad de aprendizaje" OR "tarea de aprendizaje" OR "intervención educativa" OR "intervención pedagógica" OR "secuencia didáctica" OR "secuencia instruccional" OR "pedagogía" OR "buena práctica" OR "buenas prácticas" OR "práctica recomendada" OR "prácticas recomendadas" OR "enfoque pedagógico" OR "enfoque instruccional" OR "diseño instruccional" OR "diseño del aprendizaje" OR "diseño didáctico" OR "patrón pedagógico" OR "patrón de diseño pedagógico" OR "método de aprendizaje activo" OR "metodología de enseñanza") AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
+```
+
+### EB3 (artefatos que formalizam os fatores situacionais do domínio educacional)
+
+*Derivada localmente — executar apenas no teste de fidelidade.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧)
+
+```
+TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering" OR "representación del conocimiento" OR "organización del conocimiento" OR "ontología" OR "modelo ontológico educativo" OR "vocabulario controlado" OR "taxonomía" OR "esquema de clasificación" OR "esquema de metadatos" OR "clasificación facetada" OR "modelo conceptual" OR "modelado conceptual" OR "esquema conceptual" OR "modelo de dominio" OR "modelo semántico" OR "ingeniería de ontologías" OR "desarrollo de ontologías" OR "patrón de diseño ontológico" OR "modelado basado en ontologías") W/5 ("educação" OR "educacional" OR "educacionais" OR "educacionales" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz" OR "education" OR "educational" OR "teaching and learning" OR "teaching-learning" OR "learning path" OR "student learning" OR "blended learning" OR "online learning" OR "lifelong learning" OR "learning management system" OR "learning environment" OR "learning object" OR "e-learning" OR "massive open online course" OR "learning infrastructure" OR "learner" OR "educación" OR "enseñanza superior" OR "enseñanza y aprendizaje" OR "itinerario de aprendizaje" OR "aprendizaje del estudiante" OR "aprendizaje combinado" OR "aprendizaje en línea" OR "aprendizaje a lo largo de la vida" OR "sistema de gestión del aprendizaje" OR "tecnología educativa" OR "entorno de aprendizaje" OR "entorno virtual de aprendizaje" OR "objeto de aprendizaje" OR "recurso educativo abierto" OR "aprendizaje electrónico" OR "curso en línea masivo y abierto" OR "institución educativa" OR "infraestructura educativa" OR "nivel educativo" OR "modalidad educativa")) AND TITLE-ABS-KEY("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "sensível ao contexto" OR "contextualização" OR "situational factor" OR "situational factors" OR "situation of use" OR "educational context" OR "learning context" OR "contextual factor" OR "contextual factors" OR "factor contextual" OR "factores contextuales" OR "context factor" OR "context factors" OR "application condition" OR "application conditions" OR "implementation condition" OR "implementation conditions" OR "learning situation" OR "educational setting" OR "institutional context" OR "sociocultural context" OR "class profile" OR "learner characteristic" OR "learner characteristics" OR "contextual constraint" OR "contextual constraints" OR "context modeling" OR "context modelling" OR "context representation" OR "context-aware" OR "contextualization" OR "contextualisation" OR "factor situacional" OR "factores situacionales" OR "situación de uso" OR "contexto educativo" OR "contexto de aprendizaje" OR "factor del contexto" OR "factores del contexto" OR "condición de aplicación" OR "condiciones de aplicación" OR "condición de implementación" OR "condiciones de implementación" OR "situación de aprendizaje" OR "escenario educativo" OR "perfil del grupo" OR "característica del estudiante" OR "características de los estudiantes" OR "restricción contextual" OR "restricciones contextuales" OR "modelado del contexto" OR "representación del contexto" OR "sensible al contexto" OR "contextualización") AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
+```
+
+### EB4 (de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional)
+
+*Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
+
+```
+TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering" OR "representación del conocimiento" OR "organización del conocimiento" OR "ontología" OR "modelo ontológico educativo" OR "vocabulario controlado" OR "taxonomía" OR "esquema de clasificación" OR "esquema de metadatos" OR "clasificación facetada" OR "modelo conceptual" OR "modelado conceptual" OR "esquema conceptual" OR "modelo de dominio" OR "modelo semántico" OR "ingeniería de ontologías" OR "desarrollo de ontologías" OR "patrón de diseño ontológico" OR "modelado basado en ontologías") W/5 ("educação" OR "educacional" OR "educacionais" OR "educacionales" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz" OR "education" OR "educational" OR "teaching and learning" OR "teaching-learning" OR "learning path" OR "student learning" OR "blended learning" OR "online learning" OR "lifelong learning" OR "learning management system" OR "learning environment" OR "learning object" OR "e-learning" OR "massive open online course" OR "learning infrastructure" OR "learner" OR "educación" OR "enseñanza superior" OR "enseñanza y aprendizaje" OR "itinerario de aprendizaje" OR "aprendizaje del estudiante" OR "aprendizaje combinado" OR "aprendizaje en línea" OR "aprendizaje a lo largo de la vida" OR "sistema de gestión del aprendizaje" OR "tecnología educativa" OR "entorno de aprendizaje" OR "entorno virtual de aprendizaje" OR "objeto de aprendizaje" OR "recurso educativo abierto" OR "aprendizaje electrónico" OR "curso en línea masivo y abierto" OR "institución educativa" OR "infraestructura educativa" OR "nivel educativo" OR "modalidad educativa")) AND (TITLE-ABS-KEY("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino" OR "educational practice" OR "pedagogical practice" OR "teaching practice" OR "instructional practice" OR "teaching strategy" OR "instructional strategy" OR "teaching method" OR "instructional method" OR "teaching technique" OR "learning activity" OR "learning task" OR "educational intervention" OR "instructional intervention" OR "teaching sequence" OR "instructional sequence" OR "pedagogy" OR "pedagogies" OR "best practice" OR "best practices" OR "recommended practice" OR "recommended practices" OR "pedagogical approach" OR "instructional approach" OR "instructional design" OR "learning design" OR "pedagogical pattern" OR "pedagogical design pattern" OR "active learning method" OR "teaching methodology" OR "práctica educativa" OR "prácticas educativas" OR "práctica pedagógica" OR "práctica docente" OR "estrategia de enseñanza" OR "estrategia didáctica" OR "método de enseñanza" OR "método instruccional" OR "técnica de enseñanza" OR "actividad de aprendizaje" OR "tarea de aprendizaje" OR "intervención educativa" OR "intervención pedagógica" OR "secuencia didáctica" OR "secuencia instruccional" OR "pedagogía" OR "buena práctica" OR "buenas prácticas" OR "práctica recomendada" OR "prácticas recomendadas" OR "enfoque pedagógico" OR "enfoque instruccional" OR "diseño instruccional" OR "diseño del aprendizaje" OR "diseño didáctico" OR "patrón pedagógico" OR "patrón de diseño pedagógico" OR "método de aprendizaje activo" OR "metodología de enseñanza") OR TITLE-ABS-KEY("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "sensível ao contexto" OR "contextualização" OR "situational factor" OR "situational factors" OR "situation of use" OR "educational context" OR "learning context" OR "contextual factor" OR "contextual factors" OR "factor contextual" OR "factores contextuales" OR "context factor" OR "context factors" OR "application condition" OR "application conditions" OR "implementation condition" OR "implementation conditions" OR "learning situation" OR "educational setting" OR "institutional context" OR "sociocultural context" OR "class profile" OR "learner characteristic" OR "learner characteristics" OR "contextual constraint" OR "contextual constraints" OR "context modeling" OR "context modelling" OR "context representation" OR "context-aware" OR "contextualization" OR "contextualisation" OR "factor situacional" OR "factores situacionales" OR "situación de uso" OR "contexto educativo" OR "contexto de aprendizaje" OR "factor del contexto" OR "factores del contexto" OR "condición de aplicación" OR "condiciones de aplicación" OR "condición de implementación" OR "condiciones de implementación" OR "situación de aprendizaje" OR "escenario educativo" OR "perfil del grupo" OR "característica del estudiante" OR "características de los estudiantes" OR "restricción contextual" OR "restricciones contextuales" OR "modelado del contexto" OR "representación del contexto" OR "sensible al contexto" OR "contextualización")) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
+```
+
+### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
+
+*Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
+
+```
+TITLE-ABS-KEY(("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering" OR "representación del conocimiento" OR "organización del conocimiento" OR "ontología" OR "modelo ontológico educativo" OR "vocabulario controlado" OR "taxonomía" OR "esquema de clasificación" OR "esquema de metadatos" OR "clasificación facetada" OR "modelo conceptual" OR "modelado conceptual" OR "esquema conceptual" OR "modelo de dominio" OR "modelo semántico" OR "ingeniería de ontologías" OR "desarrollo de ontologías" OR "patrón de diseño ontológico" OR "modelado basado en ontologías") W/5 ("educação" OR "educacional" OR "educacionais" OR "educacionales" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz" OR "education" OR "educational" OR "teaching and learning" OR "teaching-learning" OR "learning path" OR "student learning" OR "blended learning" OR "online learning" OR "lifelong learning" OR "learning management system" OR "learning environment" OR "learning object" OR "e-learning" OR "massive open online course" OR "learning infrastructure" OR "learner" OR "educación" OR "enseñanza superior" OR "enseñanza y aprendizaje" OR "itinerario de aprendizaje" OR "aprendizaje del estudiante" OR "aprendizaje combinado" OR "aprendizaje en línea" OR "aprendizaje a lo largo de la vida" OR "sistema de gestión del aprendizaje" OR "tecnología educativa" OR "entorno de aprendizaje" OR "entorno virtual de aprendizaje" OR "objeto de aprendizaje" OR "recurso educativo abierto" OR "aprendizaje electrónico" OR "curso en línea masivo y abierto" OR "institución educativa" OR "infraestructura educativa" OR "nivel educativo" OR "modalidad educativa")) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
+```
+
+### Como executar
+
+1. Conferir a sessão contra a seção 1, na primeira execução do dia.
+2. Submeter o bloco de EB4 da seção 4 como está, sem definir conjunto. Na primeira execução, conferir se a interface aceita a consulta inteira; recusa por extensão leva à variante "Redução por recusa da interface", registrada como adaptação.
+3. Submeter sempre a partir de arquivo, nunca recuperando o texto da interface.
+4. Exportar em RIS, com todos os campos.
+5. Conferir o retorno da exportação contra o da tela e o recorte temporal dentro do arquivo.
+6. Registrar EB4 e EB5: `python3 -m rsl busca registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `busca sensibilidade`.
+7. Medir a aderência (seção 5). Semente esperada não recuperada: aplicar a anatomia da perda.
+8. Na primeira execução, conferir se o retorno de EB4 tem a mesma ordem de grandeza do da Web of Science; discrepância indica problema de agrupamento.
+
+### Variantes previstas
+
+#### Forma ampla, sem proximidade
+
+Disparo: a anatomia da perda atribui a perda à proximidade, ou a interface recusa `W/5` entre grupos deste tamanho. Forma: trocar a proximidade entre as duas âncoras por `AND` entre os grupos, nas cinco expressões. Adoção exige emenda.
+
+#### Sem limite de tipo documental
+
+Disparo: medir o efeito dos critérios CE4 e CE5. Forma: EB4 sem a cláusula `DOCTYPE`; reportar a diferença de retorno.
+
+#### Redução por recusa da interface
+
+Disparo: bloco executado recusado por extensão. Forma: partir o grupo 🟨 das âncoras em duas metades — educação formal; tecnologia educacional e aprendizagem digital —, mantendo o resto idêntico, e unir por deduplicação. Registrar a partição como adaptação. A emenda declara `- Execução: particionada` e escreve as partes literais.
+
+#### Truncamento
+
+Não usar curinga. Disparo: aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`). Forma: testar a consulta abaixo; a adoção exige emenda.
+
+```
+TITLE-ABS-KEY(ontolog* W/5 educat*)
+```
+
+#### Camada de precisão
+
+Disparo: retorno alto demais para a triagem. Forma: restringir por `SUBJAREA`, com os códigos conferidos na documentação. Camada com aderência abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl mostrar`) é reprovada.
+
+---
+
+## 5. Conjunto-semente
+
+Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/sementes.json`; aferição em `data/semente_aderencia.csv`.
+
+| # | Estudo | DOI ou identificador | Observação |
+| :---: | :--- | :--- | :--- |
+| SE2 | Das et al. (2022) | `10.5771/0943-7444-2022-1-6` | — |
+| SE3 | Chi et al. (2018) | `10.1111/exsy.12246` | — |
+| SE4 | Shvets et al. (2024) | `10.5220/0012471400003645` | comunicação em anais |
+| SE7 | Chimalakonda & Nori (2020) | `10.1186/s40561-020-00135-6` | — |
+| SE8 | Cenka et al. (2023) | `10.1080/10494820.2022.2039947` | — |
+| SE9 | Piriyapongpipat et al. (2024) | `10.1186/s40561-024-00307-8` | — |
+
+**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
+
+**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
+
+**Anatomia da perda.** Executar em ordem, com o DOI da semente; a primeira que devolver zero é a causa.
+
+| # | Consulta | Se devolver zero |
+| :---: | :--- | :--- |
+| 1 | `DOI(<DOI>)` | a base não indexa o estudo: sai do denominador |
+| 2 | `DOI(<DOI>) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` | um filtro a exclui: identificar qual critério |
+| 3 | `DOI(<DOI>) AND TITLE-ABS-KEY(🟦) AND TITLE-ABS-KEY(🟨)` | o vocabulário não a alcança: emenda de termo |
+| 4 | `DOI(<DOI>) AND TITLE-ABS-KEY((🟦) W/5 (🟨))` | a proximidade a exclui: variante "Forma ampla" |
+
+---
+
+## 6. Ressalvas
+
+1. Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.

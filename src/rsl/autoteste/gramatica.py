@@ -143,6 +143,8 @@ ESPECIFICOS = {
     G.D_PAPEL: _no_primeiro_item(G.C_PAPEL.chave, lambda v: FORA_DA_FORMA),
     G.F_STRING_BASE: _string_base,
     G.D_CAMADAS: _valor_do_rotulo(G.RF_CAMADAS),
+    G.D_PLURAL: _valor_do_rotulo(G.RF_PLURAL),
+    G.D_TETO: _valor_do_rotulo(G.RF_TETO),
     G.D_EXECUCAO: _execucao,
     # Linha fora da forma deixa um buraco na numeração: quem reprova é o identificador.
     G.F_QER: _com_nomeado(_frase, G.I_QER),

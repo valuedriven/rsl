@@ -7,9 +7,11 @@ sua base, como problema de código PROTOCOLO_ILEGIVEL; as demais bases seguem co
 """
 
 from . import gramatica as G
-from .cobertura import cobertura_base
+from .cobertura import (cobertura_base, maior_consulta, numero_unico_na_base,
+                        subsumidos_na_base)
 from .erros import ProtocoloInvalido
 from .fichas import base_derivada
+from .geracao import problemas_atribuicao, problemas_str
 from .leitura import CAMADAS
 from .markdown import normaliza
 from .saida import Saida, mais_grave
@@ -109,6 +111,12 @@ def conferir(ctx):
                 problemas.append(f"faceta {n}: termo {termo!r} da string não consta do "
                                  f"quadro da faceta")
 
+    # A STR é saída de geração a partir do quadro: a editada à mão, ou a que ficou para trás
+    # de uma alteração do quadro, reprova mesmo sem que ninguém rode o gerador. E o quadro
+    # com termo em duas facetas faria as STRs geradas se implicarem.
+    problemas += problemas_str(d)
+    problemas += problemas_atribuicao(d)
+
     problemas += coerencia_expressoes(d)
 
     # Justificativa é afirmação de decisão: célula vazia, só com espaço ou com traço não a
@@ -156,6 +164,45 @@ def conferir(ctx):
     return resultado
 
 
+def relatos(ctx, d):
+    """Achados que não reprovam, por base: subsumidos usados na string da base, a maior
+    consulta da base sem teto de caracteres e termos numa só forma de número em ficha de
+    plural explícito."""
+    saida = []
+    for b in d["bases"]:
+        sigla = b["sigla"]
+        try:
+            base = base_derivada(ctx, d, sigla)
+        except ProtocoloInvalido:
+            continue                      # já reprovada em problemas_bases
+        for fid, sid, termo, por in subsumidos_na_base(base, d):
+            saida.append(f"{sigla}: {sid} ({fid}): {termo!r} subsumido por {por!r} da STR")
+        maior = maior_consulta(base)
+        if base["declaracao"].get("teto") is None and maior:
+            n, ident, rotulo = maior
+            saida.append(f"{sigla}: teto de caracteres {G.TETO_NENHUM!r}; a maior consulta "
+                         f"executável tem {n} caracteres ({ident}, {rotulo[:50]!r})")
+        unicos = {}
+        for fid, termo in numero_unico_na_base(base, d):
+            unicos.setdefault(fid, []).append(termo)
+        for fid, termos in sorted(unicos.items()):
+            saida.append(f"{sigla}: {fid}: {len(termos)} termo(s) numa só forma de número, "
+                         f"com plural explícito: {', '.join(map(repr, termos))}")
+    return saida
+
+
+def imprime_relatos(ctx):
+    try:
+        linhas_ = relatos(ctx, ctx.protocolo())
+    except ProtocoloInvalido:
+        return
+    if linhas_:
+        print("RELATOS (não reprovam):")
+        for x in linhas_:
+            print("  -", x)
+        print()
+
+
 def imprime_problemas(problemas):
     print("PROBLEMAS:")
     for p in problemas:
@@ -165,6 +212,7 @@ def imprime_problemas(problemas):
 def cmd_conferir(ctx, a=None):
     from .relatorio import relatorio                                # noqa: PLC0415
     resultado = conferir(ctx)
+    imprime_relatos(ctx)
     if resultado:
         imprime_problemas(resultado)
         return resultado.codigo

@@ -58,7 +58,7 @@
       "categoria": "sintaxe-base",
       "base": "BD1 — Web of Science",
       "descricao": "Itens de sintaxe e de exportação da Web of Science marcados como não verificados na seção 1 da ficha.",
-      "origem": "docs/busca_base_wos.md, seção 1",
+      "origem": "docs/procedimentos_busca_wos.md, seção 1",
       "bloqueia": "execução definitiva na WoS (M3/E2)",
       "acao_sugerida": "conferir na interface e medir na primeira execução, conforme a ficha",
       "responsavel": "pesquisador"
@@ -68,7 +68,7 @@
       "categoria": "sintaxe-base",
       "base": "BD2 — Scopus",
       "descricao": "Itens de sintaxe e de exportação da Scopus marcados como não verificados, não medidos ou não documentados na seção 1 da ficha.",
-      "origem": "docs/busca_base_scopus.md, seção 1",
+      "origem": "docs/procedimentos_busca_scopus.md, seção 1",
       "bloqueia": "execução definitiva na Scopus (M3/E2)",
       "acao_sugerida": "conferir na interface antes de exportar, conforme a ficha",
       "responsavel": "pesquisador"
@@ -78,7 +78,7 @@
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
       "descricao": "Comportamento da sintaxe da ERIC e teto de retorno e de exportação marcados como não verificados ou não medidos no cabeçalho e na seção 1 da ficha.",
-      "origem": "docs/busca_base_eric.md, cabeçalho e seção 1",
+      "origem": "docs/procedimentos_busca_eric.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na ERIC (M3/E2); a sondagem de sintaxe é obrigatória",
       "acao_sugerida": "sondagem de sintaxe com as contagens registradas",
       "responsavel": "pesquisador"
@@ -88,7 +88,7 @@
       "categoria": "sintaxe-base",
       "base": "BD4 — BRAPCI",
       "descricao": "Sintaxe da BRAPCI não documentada em fonte alguma: os itens de sintaxe e de exportação estão marcados como não verificados ou não medidos no cabeçalho e na seção 1 da ficha.",
-      "origem": "docs/busca_base_brapci.md, cabeçalho e seção 1",
+      "origem": "docs/procedimentos_busca_brapci.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na BRAPCI (M3/E2); a sondagem de sintaxe é obrigatória",
       "acao_sugerida": "sondar o comprimento antes da primeira execução, conforme a ficha",
       "responsavel": "pesquisador"
@@ -163,6 +163,15 @@
       "origem": "docs/procedimentos.md M3/E3; plano §6.3; protocolo §Procedimentos; data/historico.md, 2026-11-22; openspec/changes/archive/2026-11-22-guia-de-procedimentos (tarefa 4.1)",
       "bloqueia": "a 3ª filtragem (M3/E3) e o relato PRISMA",
       "acao_sugerida": "definir procedimento e instrumento; depois, incluí-los no protocolo como emenda e retirar do plano a formulação de não aplicabilidade (skill registrar-decisao)",
+      "responsavel": "pesquisador"
+    },
+    {
+      "id": "PD26",
+      "categoria": "sintaxe-base",
+      "descricao": "WoS, Scopus e BRAPCI declaram `plural: explícito` na declaração de cobertura, mas as strings das fichas trazem termos numa só forma de número, fora do alcance de truncamento. A contagem por base é a do relato de `python3 -m rsl conferir`. Pelas skills `expressoes-de-busca` e `ficha-de-busca-por-base`, `explícito` exige as duas formas de número. Se a base não lematizar, há perda de recall; a lematização de nenhuma das três está medida.",
+      "origem": "python3 -m rsl conferir (relato 'termo(s) numa só forma de número'); data/historico.md, 2026-11-22, change `strings-geradas-do-quadro`; verificação da change em 2026-11-22",
+      "bloqueia": "primeira execução da busca na WoS, na Scopus e na BRAPCI",
+      "acao_sugerida": "aplicar a change `geracao-das-fichas-de-busca` (decisão do pesquisador de 2026-11-23): o plural explícito passa a ser gerado por regra e exceções declaradas, e `plural` passa a valer por idioma. Para o idioma que a base lematiza, medir a lematização numa execução registrada (skill `flexao-por-base`), citá-la na linha 'Lematização' da seção 1 e declarar `pela lematização` para ele. A pendência sai na primeira gravação de `procedimentos gerar`",
       "responsavel": "pesquisador"
     }
   ]

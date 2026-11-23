@@ -70,6 +70,15 @@ def _parser():
     novo(sub_sem, "planilha", "grava a planilha do teste de aderência e imprime o ensaio "
          "seco", "sementes", "cmd_planilha")
 
+    stg = sub.add_parser("strings", help="strings de busca por faceta geradas do quadro")
+    sub_stg = stg.add_subparsers(title="subcomandos", metavar="<subcomando>")
+    p = novo(sub_stg, "gerar", "calcula cada STR a partir do quadro terminológico e exibe "
+             "a diferença para a tabela do protocolo; sem --gravar, nada é gravado",
+             "geracao", "cmd_gerar")
+    p.add_argument("--gravar", action="store_true",
+                   help="substitui só as células de string da tabela do protocolo, de "
+                        "forma atômica; recusado se o quadro tiver termo em duas facetas")
+
     ter = sub.add_parser("termos", help="validação terminológica por instrumento")
     sub_ter = ter.add_subparsers(title="subcomandos", metavar="<subcomando>")
     novo(sub_ter, "sonda", "consulta de prova em cada cliente automatizado; não grava",
@@ -106,7 +115,7 @@ def _parser():
     p = novo(sub_bus, "sensibilidade", "mede a perda da sonda para a executada e grava a "
              "amostra a classificar", "busca.sensibilidade", "cmd_sensibilidade")
     p.add_argument("base", metavar="BASE", nargs="?", default=None)
-    return ap, {"sementes": sem, "termos": ter, "busca": bus}
+    return ap, {"sementes": sem, "strings": stg, "termos": ter, "busca": bus}
 
 
 def _mensagem(e, ctx):

@@ -49,7 +49,7 @@ Se o protocolo propuser expressão alternativa ou contingência, rodar o mesmo t
 
 ### 5. Declarar a adaptação por base
 
-Sem código de campo declarado por base, a busca não é reprodutível, e a omissão é comum. Produzir tabela com: campo e sintaxe da expressão por base, filtros de interface, e particularidades verificadas. Ver *Fatos de sintaxe por base*.
+Sem código de campo declarado por base, a busca não é reprodutível, e a omissão é comum. Produzir tabela com: campo e sintaxe da expressão por base, filtros de interface, e particularidades verificadas. Ver *Sintaxe: o que verificar em cada base*; o valor de cada base vem da ficha dela.
 
 ### 6. Registrar as emendas
 
@@ -93,15 +93,21 @@ Listar as pendências de verificação na execução, com o que fazer em cada de
 
 Nenhum dos onze é conclusivo antes da execução. Por isso prescrever sempre **auditoria de rendimento por termo** a posteriori: quantos registros cada termo recuperou sozinho e quantos deles sobreviveram à primeira filtragem. Termo de rendimento único nulo e volume alto é candidato à poda; termo de rendimento único positivo fica, mesmo com volume alto. A poda só se efetiva por emenda registrada e com reexecução.
 
-## Fatos de sintaxe por base
+## Sintaxe: o que verificar em cada base
 
-Verificados em documentação oficial. Reconferir quando a interface mudar.
+O fato de sintaxe é **da base**, não desta skill: vai para a ficha da base, com a fonte e o estado de verificação (skill `ficha-de-busca-por-base`), e se reconfere quando a interface muda. Esta seção lista as dimensões em que as bases divergem e o efeito de cada uma sobre a string. Nenhuma se presume igual de uma base para outra.
 
-**Web of Science Core Collection.** Aspas desligam a lematização e o localizador interno de sinônimos; curingas também desligam a lematização, de modo que `color*` recupera color e colors, mas não colour — daí a enumeração explícita dos pares ortográficos. Não há limite de operadores booleanos numa consulta, **exceto na busca em All Fields (AF), restrita a 49** — razão para nunca usar AF em revisão sistemática. Campos: `TS=` tópico, `TI=` título, `AK=` palavras-chave de autor, `KP=` KeyWords Plus. Executar por histórico de busca, combinando conjuntos numerados.
+**Locução, lematização e sinônimos.** Em algumas bases as aspas desligam a lematização e o localizador interno de sinônimos; em outras formam locução aproximada, que já inclui plurais e admite truncamento dentro dela, e há uma segunda forma de locução, exata, que não admite truncamento. O curinga também pode desligar a lematização: o radical truncado recupera as flexões, mas não a variante ortográfica (`color*` não alcança `colour`). Daí a enumeração explícita dos pares ortográficos, e daí o plural declarado por base na ficha, nunca presumido pela skill.
 
-**Scopus.** Aspas duplas formam locução aproximada, que já inclui plurais e admite truncamento dentro dela; chaves formam locução exata, que não admite truncamento. A precedência processa OR antes de AND, o que torna **obrigatório o parêntese em torno de cada faceta**. Campos: `TITLE-ABS-KEY`, `TITLE`, `KEY`. Filtros: `PUBYEAR >`, `LIMIT-TO(LANGUAGE,...)`, `DOCTYPE`.
+**Derivação automática e curinga.** Há base com derivação de radicais desativada, em que a correspondência é exata mesmo sem aspas, e base que exige um mínimo de letras antes do curinga. As duas coisas mudam o que o truncamento alcança e se verificam antes de truncar.
 
-**ERIC, interface livre eric.ed.gov.** A derivação automática de radicais está desativada, de modo que a correspondência exata dispensa aspas, e o curinga asterisco exige no mínimo três letras antes dele. Há API pública para exportação reprodutível; conferir os parâmetros na documentação vigente.
+**Precedência dos operadores.** Há base que processa OR antes de AND, e base que não declara a ordem. O **parêntese em torno de cada faceta é obrigatório** em todas: o que é inócuo onde a precedência ajuda é o que salva a expressão onde ela atrapalha.
+
+**Limite de operadores e campo de busca.** O limite de operadores booleanos pode variar com o campo pesquisado. Há busca em todos os campos com limite muito menor que o da busca por tópico, e ela, além disso, recupera por texto que não é título, resumo nem palavras-chave. Em revisão sistemática, usar o campo de tópico ou os campos nomeados, nunca o de todos os campos.
+
+**Campos e forma de execução.** Os rótulos de campo (tópico, título, palavras-chave de autor, palavras-chave atribuídas), os filtros de ano, idioma e tipo documental e a forma de execução (consulta única ou histórico de busca com conjuntos numerados) variam de base para base. A ficha declara os da base; a skill exige só que a estratificação por campo do critério 9 seja replicada no cálculo local.
+
+**Exportação reprodutível.** Onde houver API pública de exportação, preferi-la à exportação pela interface, conferindo os parâmetros na documentação vigente e registrando-os.
 
 **Bases monodomínio — inversão de âncora.** Em base integralmente dedicada a um domínio, exigir a faceta correspondente a esse domínio não acrescenta precisão e só subtrai sensibilidade, ao excluir o registro que não repete no resumo um vocabulário que a base pressupõe. Executar nelas a outra âncora isolada. A heterogeneidade entre bases não compromete a comparabilidade **desde que todas as facetas sejam reaplicadas uniformemente a todos os registros exportados no cálculo local** — a base decide o que é recuperado, o cálculo local decide o que é pertinente a cada expressão. É essa separação que autoriza a adaptação.
 

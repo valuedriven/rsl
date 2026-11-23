@@ -37,6 +37,12 @@ a supressão de dois problemas do escopo tornasse elegível o estudo que os crit
 (b) e (i) excluem. Quem lê o registro daqui a um ano precisa saber que a omissão foi
 decidida, não esquecida.
 
+**O que o registro não diz: contagem.** O registro nomeia o que mudou — os termos, as sementes,
+os critérios — e o valor de parâmetro decidido, não o tamanho do que mudou nem o resultado
+das conferências. Número transcrito diverge na alteração seguinte e passa a contradizer o
+artefato; quem precisa dele o recalcula. O que mais o registro não guarda está no
+`README.md`, seção Três registros.
+
 ## 3. Onde vive cada coisa
 
 - **O instrumento guarda a última definição.** Sem histórico, sem data.

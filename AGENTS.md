@@ -128,7 +128,9 @@ Em atividade que colete, transforme ou calcule dados, registrar entradas, proced
 parâmetros e resultados, de modo que outra pessoa chegue ao mesmo número.
 
 - **Número é calculado, não transcrito.** Contagem copiada de uma conversa, de uma medição
-  anterior ou da memória divergirá na alteração seguinte.
+  anterior ou da memória divergirá na alteração seguinte. Por isso o registro de decisões
+  guarda a decisão, não contagem nem resultado de conferência; onde o projeto mantém esse
+  registro e o que mais ele exclui está no `README.md`.
 - **Não exigir automatização** quando o procedimento manual for mais apropriado, ou quando
   houver restrição técnica, institucional ou contratual.
 

@@ -60,9 +60,9 @@ chave, não pelo caminho.
 | --- | --- | --- |
 | `docs/01_plano.md` | plano: contexto, objetivos, base metodológica, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | pesquisador |
 | `docs/02_protocolo_informacoes_gerais.md` | protocolo, informações gerais: tópicos preliminares, delimitação do assunto e objeto | pesquisador |
-| `docs/03_protocolo_estrategia_pesquisa.md` (`protocolo`) | protocolo, estratégias de pesquisa: questão, facetas, controle terminológico, strings, expressões, critérios, fontes, conjunto-semente, procedimentos, instrumentos e ferramentas; fonte única dos parâmetros que declara | pesquisador |
+| `docs/03_protocolo_estrategia_pesquisa.md` (`protocolo`) | protocolo, estratégias de pesquisa: questão, facetas, controle terminológico, strings, expressões, critérios, fontes, conjunto-semente, procedimentos, instrumentos e ferramentas; fonte única dos parâmetros que declara | pesquisador; a tabela "Strings de busca por faceta", `strings gerar --gravar`, a partir do quadro terminológico |
 | `docs/conjunto_semente.toml` (`[documentos] sementes`) | conjunto-semente, uma tabela `[[sementes]]` por estudo; único lugar de dado de semente | pesquisador; nenhum subcomando grava |
-| `docs/busca_base_<sigla>.md` (`[documentos] ficha`) | ficha de cada base: sintaxe, critérios, strings, expressões, execução, conjunto-semente e ressalvas | pesquisador e agente, a pedido |
+| `docs/procedimentos_busca_<sigla>.md` (`[documentos] ficha`) | ficha de cada base: sintaxe, critérios, strings com a declaração de cobertura (inclusive os parâmetros `plural` e `teto de caracteres`), expressões, estratégia de proximidade, execução, conjunto-semente e ressalvas | pesquisador e agente, a pedido |
 | `docs/parametros_complementares.md` | instrumento de extração e síntese: grupos de extração, cobertura conceitual, granularidade e grau de formalização | pesquisador |
 | `docs/procedimentos.md` | guia de procedimentos: módulos, etapas e passos, com fonte, script e skill | pesquisador e agente, a pedido |
 | `data/historico.md` | decisões, inclusive emendas | pesquisador; agente, a pedido |
@@ -92,7 +92,7 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 
 | Registro | Guarda | Não guarda |
 | --- | --- | --- |
-| `data/historico.md` | **decisões** relevantes — emendas, escolhas de método, de escopo e de instrumento —, com data, alcance e fundamento | ação por fazer; resultado de consulta |
+| `data/historico.md` | **decisões** relevantes sobre a revisão — emendas, escolhas de método, de escopo e de instrumento —, com data, alcance e fundamento | ação por fazer; resultado de consulta; contagem — de termos, de sementes, de caracteres, de casos — e resultado de conferência ou de autoteste |
 | `data/pendencias.json` | **ações ainda a executar**, e só elas, com `id`, `origem`, o que bloqueia, ação sugerida e responsável | ação concluída ou descartada; decisão; resultado de consulta |
 | `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens, retornos, exportações e conferências | decisão; ação por fazer |
 
@@ -102,6 +102,11 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
   pendência excluída não se reutiliza.
 - A pendência remete à sua `origem` (ficha, protocolo, plano, comando) em vez de copiar o
   conteúdo dela.
+- O histórico **não transcreve contagem**. Número se calcula do artefato quando se precisa
+  dele (`mostrar`, `conferir`, `autoteste`), e o transcrito diverge na alteração seguinte. A
+  entrada nomeia o que mudou — os termos, as sementes, os critérios — e o valor de
+  parâmetro decidido (limiar, teto, recorte), não o tamanho do que mudou. O resultado das
+  conferências vai ao relato da change ou da tarefa, não ao histórico.
 
 ## Precedência
 
@@ -122,6 +127,10 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
   rastro técnico.
 - Altera-se a fonte, não a saída: as planilhas e CSVs gravados pelos subcomandos se
   regeneram; a exceção é a planilha de validação, que é o registro do estatuto dos termos.
+- A tabela **"Strings de busca por faceta"** do protocolo é saída de geração: cada STR é a
+  união dos termos do quadro terminológico da faceta, menos os subsumidos. Altera-se o
+  quadro, e a ordem é quadro → `strings gerar` (ensaio) → `strings gerar --gravar` →
+  fichas → `conferir`. STR editada à mão, ou defasada do quadro, reprova em `conferir`.
 - A planilha de aderência é **artefato misto**: as colunas manuais — as que `sementes
   planilha` deixa vazias na primeira geração — editam-se no próprio arquivo e se conservam
   na regravação; as demais vêm do arquivo de sementes e da tabela de bases, e corrigem-se

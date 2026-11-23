@@ -104,9 +104,10 @@ def problemas_citacoes_registro(ctx, d, registro):
     """Citação do registro de execução sem lastro, por base.
 
     Toda menção ao caminho do registro — em tabela ou em prosa — nomeia a execução na forma
-    da gramática, com `BDn` da própria base e o id presente no registro. Menção sem
-    identificador, identificador de outra base ou execução inexistente reprova só a base da
-    ficha. Sem o registro, a menção já é citação sem lastro. As fichas vêm do contexto,
+    da gramática, com `BDn` da própria base e o id presente no registro; e toda citação
+    `(BDn/<id>)`, mesmo em linha sem o caminho (a linha "Lematização"), tem esse lastro.
+    Menção sem identificador, identificador de outra base ou execução inexistente reprova
+    só a base da ficha. Sem o registro, a menção já é citação sem lastro. As fichas vêm do contexto,
     que pode trazer cópias alteradas (autoteste).
     """
     caminho = str(ctx.config.valor("dados.registro"))
@@ -125,9 +126,13 @@ def problemas_citacoes_registro(ctx, d, registro):
             problemas.append(Problema(f"{sigla}: {e}", e.codigo))
             continue
         for n, linha in enumerate(t.splitlines(), 1):
-            if caminho not in linha:
-                continue
             citacoes = G.F_CITACAO.padrao.findall(linha)
+            # A citação `(BDn/<id>)` é afirmação de medição mesmo sem o caminho do registro
+            # na linha — a linha "Lematização" que sustenta `plural: pela lematização` cita
+            # só a execução. Toda citação se confere; a menção ao caminho, além disso, exige
+            # citação.
+            if caminho not in linha and not citacoes:
+                continue
             where = f"{sigla}: ficha {b['ficha']}:{n}"
             if not citacoes:
                 problemas.append(f"{where}: menção ao registro sem identificador de execução "

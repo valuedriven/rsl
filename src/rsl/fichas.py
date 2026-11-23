@@ -341,8 +341,10 @@ def filtros_base(execucao):
 def declaracao_base(t, idiomas_quadro, doc):
     """Idiomas, camadas, derivações e redução declarada — o que a string pode deixar de fora."""
     bloco = secao(t, G.SF_DECLARACAO, doc)
-    rotulos = {normaliza(r.texto): r for r in (G.RF_IDIOMAS, G.RF_CAMADAS, G.RF_DERIVACOES)}
+    rotulos = {normaliza(r.texto): r for r in (G.RF_IDIOMAS, G.RF_CAMADAS, G.RF_PLURAL,
+                                                G.RF_TETO, G.RF_DERIVACOES)}
     idiomas, camadas, derivacoes, exclusoes, achados = {}, None, "", [], set()
+    plural = teto = None
     for _, linha in linhas_de_tabela(bloco):
         cels = celulas(linha)
         if len(cels) < 2:
@@ -362,6 +364,12 @@ def declaracao_base(t, idiomas_quadro, doc):
         elif rot is G.RF_CAMADAS:
             achados.add(rot)
             camadas = normaliza(cels[1])
+        elif rot is G.RF_PLURAL:
+            achados.add(rot)
+            plural = normaliza(cels[1])
+        elif rot is G.RF_TETO:
+            achados.add(rot)
+            teto = desescapa(cels[1]).strip().strip("*").strip()
         elif rot is G.RF_DERIVACOES:
             achados.add(rot)
             derivacoes = normaliza(cels[1])
@@ -381,6 +389,19 @@ def declaracao_base(t, idiomas_quadro, doc):
         raise ProtocoloInvalido(G.D_CAMADAS, f"camadas {camadas!r} não é "
                                              f"{' nem '.join(map(repr, G.D_CAMADAS.valores))}",
                                 doc)
+    if G.RF_PLURAL not in achados:
+        raise ProtocoloInvalido(G.RF_PLURAL, "declaração de cobertura sem a linha de plural",
+                                doc)
+    admitidos = {normaliza(k): v for k, v in G.D_PLURAL.valores.items()}
+    if plural not in admitidos:
+        raise ProtocoloInvalido(G.D_PLURAL, f"plural {plural!r} não é "
+                                            f"{' nem '.join(map(repr, G.D_PLURAL.valores))}",
+                                doc)
+    plural = admitidos[plural]
+    if G.RF_TETO not in achados:
+        raise ProtocoloInvalido(G.RF_TETO, "declaração de cobertura sem a linha de teto de "
+                                           "caracteres", doc)
+    teto = _teto(teto, doc)
     for fid in idiomas:
         for i in idiomas[fid]:
             if i not in idiomas_quadro:
@@ -393,7 +414,57 @@ def declaracao_base(t, idiomas_quadro, doc):
                                                     f"{m!r}; admitidas: "
                                                     f"{tuple(G.D_DERIVACOES.valores)}", doc)
     return {"idiomas": idiomas, "camadas": G.D_CAMADAS.valores[camadas], "derivacoes": modos,
-            "exclusoes": exclusoes}
+            "plural": plural, "teto": teto, "exclusoes": exclusoes}
+
+
+def _teto(valor, doc):
+    """O teto de caracteres declarado: inteiro positivo, ou None para `nenhum`."""
+    if normaliza(valor or "") == G.TETO_NENHUM:
+        return None
+    if re.fullmatch(r"\d{1,3}(?:\.\d{3})+|\d+", valor or "") and int(valor.replace(".", "")):
+        return int(valor.replace(".", ""))
+    raise ProtocoloInvalido(G.D_TETO, f"teto de caracteres {valor!r} não é número inteiro "
+                                      f"de caracteres nem {G.TETO_NENHUM!r}", doc)
+
+
+def consultas_executaveis(base):
+    """[(expressão, rótulo, texto)] de cada consulta que vai à base: os blocos das expressões
+    da seção 4, salvo a forma longa e o bloco rotulado como não executado, e as consultas da
+    forma curada. É o que se cola na interface, e o que o teto de caracteres limita."""
+    saida = []
+    for ident, e in sorted(base["expressoes"].items()):
+        if e.get("forma_longa"):
+            continue
+        for b in e["blocos"]:
+            if G.ROTULO_NAO_EXECUTADA not in normaliza(b["rotulo"]):
+                saida.append((ident, b["rotulo"], b["texto"]))
+    if base["execucao"]["modo"] == MODO_CURADA:
+        for c in base["execucao"]["itens"]:
+            saida.append((base["execucao"]["expressao"], c["rotulo"], c["consulta"]))
+    return saida
+
+
+def lematizacao_base(t):
+    """A linha "Lematização" da seção 1 da ficha: (texto da linha, medida, citação).
+
+    Medida é o estado afirmado "verificado por medição", sem negação; citação, a referência
+    `(BDn/<id>)` a uma execução registrada. Sem a seção ou sem a linha: (None, False, None).
+    A existência da execução citada é conferida por `conferir-dados`.
+    """
+    try:
+        trecho = secao(t, G.SF_SINTAXE)
+    except ProtocoloInvalido:
+        return None, False, None
+    for _, linha in linhas_de_tabela(trecho):
+        cels = celulas(linha)
+        if not cels or not normaliza(cels[0]).startswith(normaliza(G.RF_LEMATIZACAO.texto)):
+            continue
+        estado = normaliza(" ".join(cels[1:]))
+        medida = (re.search(r"\bverificad[oa]s? por medicao\b", estado) is not None
+                  and not re.search(r"\bnao (verificad|medid)", estado))
+        citacao = G.F_CITACAO.padrao.search(linha)
+        return linha.strip(), medida, citacao.group(0) if citacao else None
+    return None, False, None
 
 
 def base_derivada(ctx, d, sigla, t_ficha=None):
@@ -414,4 +485,5 @@ def base_derivada(ctx, d, sigla, t_ficha=None):
         "execucao": execucao,
         "filtros": filtros_base(execucao),
         "declaracao": declaracao_base(t, d["idiomas"], doc),
+        "lematizacao": lematizacao_base(t),
     }
