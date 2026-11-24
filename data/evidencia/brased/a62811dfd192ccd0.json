@@ -1,0 +1,1150 @@
+{
+  "chave": "brased|pt|educacional",
+  "recuperado_em": "2026-11-24T18:31:49-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=educacional&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "3976": {
+          "term_id": 3976,
+          "string": "Abordagem Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|3830|3972|3973|3976",
+          "order": 1
+        },
+        "1279": {
+          "term_id": 1279,
+          "string": "Ação Judicial Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1278|1279",
+          "order": 2
+        },
+        "1998": {
+          "term_id": 1998,
+          "string": "Administrador Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|1998",
+          "order": 3
+        },
+        "178": {
+          "term_id": 178,
+          "string": "Anacronismo Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|177|178",
+          "order": 4
+        },
+        "6573": {
+          "term_id": 6573,
+          "string": "Antropologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573",
+          "order": 5
+        },
+        "7879": {
+          "term_id": 7879,
+          "string": "Áreas de Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7879",
+          "order": 6
+        },
+        "102": {
+          "term_id": 102,
+          "string": "Áreas de Pesquisa Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|102",
+          "order": 7
+        },
+        "71": {
+          "term_id": 71,
+          "string": "Autoridade Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|68|69|70|71",
+          "order": 8
+        },
+        "6575": {
+          "term_id": 6575,
+          "string": "Axiologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6574|6575",
+          "order": 9
+        },
+        "5861": {
+          "term_id": 5861,
+          "string": "Biologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|5861",
+          "order": 10
+        },
+        "1075": {
+          "term_id": 1075,
+          "string": "Campanha Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1075",
+          "order": 11
+        },
+        "396": {
+          "term_id": 396,
+          "string": "Centro de Documentação e Informação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|380|391|396",
+          "order": 12
+        },
+        "7867": {
+          "term_id": 7867,
+          "string": "Centro de Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7866|7867",
+          "order": 13
+        },
+        "2392": {
+          "term_id": 2392,
+          "string": "Centro de Pesquisa Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2392",
+          "order": 14
+        },
+        "2391": {
+          "term_id": 2391,
+          "string": "Centro de Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2389|2391",
+          "order": 15
+        },
+        "2282": {
+          "term_id": 2282,
+          "string": "Centro Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2243|2278|2282",
+          "order": 16
+        },
+        "6574": {
+          "term_id": 6574,
+          "string": "Consciência Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6574",
+          "order": 17
+        },
+        "1137": {
+          "term_id": 1137,
+          "string": "Cooperação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1136|1137",
+          "order": 18
+        },
+        "2211": {
+          "term_id": 2211,
+          "string": "Cooperativa Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2199|2208|2211",
+          "order": 19
+        },
+        "867": {
+          "term_id": 867,
+          "string": "Custo Educacional por Habitante",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866|867",
+          "order": 20
+        },
+        "217": {
+          "term_id": 217,
+          "string": "Debate Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|213|217",
+          "order": 21
+        },
+        "980": {
+          "term_id": 980,
+          "string": "Definição da Política Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|980",
+          "order": 22
+        },
+        "988": {
+          "term_id": 988,
+          "string": "Descentralização da Gestão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|985|986|988",
+          "order": 23
+        },
+        "1172": {
+          "term_id": 1172,
+          "string": "Direito Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172",
+          "order": 24
+        },
+        "1218": {
+          "term_id": 1218,
+          "string": "Diretrizes da Política Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1215|1216|1218",
+          "order": 25
+        },
+        "1050": {
+          "term_id": 1050,
+          "string": "Disseminação da Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033|1049|1050",
+          "order": 26
+        },
+        "793": {
+          "term_id": 793,
+          "string": "Distrito Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|768|769|789|790|791|793",
+          "order": 27
+        },
+        "791": {
+          "term_id": 791,
+          "string": "Distrito Geoeducacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|768|769|789|790|791",
+          "order": 28
+        },
+        "790": {
+          "term_id": 790,
+          "string": "Divisão Administrativo-Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|768|769|789|790",
+          "order": 29
+        },
+        "2174": {
+          "term_id": 2174,
+          "string": "Domínio da Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|2068|2163|2170|2174",
+          "order": 30
+        },
+        "1350": {
+          "term_id": 1350,
+          "string": "Eficiência da Gestão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1349|1350",
+          "order": 31
+        },
+        "994": {
+          "term_id": 994,
+          "string": "Espaço Geoeducacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|993|994",
+          "order": 32
+        },
+        "2017": {
+          "term_id": 2017,
+          "string": "Especialista em Avaliação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|2014|2017",
+          "order": 33
+        },
+        "2021": {
+          "term_id": 2021,
+          "string": "Especialista em Planejamento Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|2014|2021",
+          "order": 34
+        },
+        "514": {
+          "term_id": 514,
+          "string": "Estatísticas do Contexto Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|514",
+          "order": 35
+        },
+        "155": {
+          "term_id": 155,
+          "string": "Exclusão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|132|150|151|155",
+          "order": 36
+        },
+        "218": {
+          "term_id": 218,
+          "string": "Fórum Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|213|218",
+          "order": 37
+        },
+        "7866": {
+          "term_id": 7866,
+          "string": "Função da Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7866",
+          "order": 38
+        },
+        "2238": {
+          "term_id": 2238,
+          "string": "Fundação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2199|2235|2238",
+          "order": 39
+        },
+        "3161": {
+          "term_id": 3161,
+          "string": "Fundo Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3145|3161",
+          "order": 40
+        },
+        "2000": {
+          "term_id": 2000,
+          "string": "Gestor Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|1998|2000",
+          "order": 41
+        },
+        "2001": {
+          "term_id": 2001,
+          "string": "Habilidades do Gestor Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|1998|2000|2001",
+          "order": 42
+        },
+        "7038": {
+          "term_id": 7038,
+          "string": "Habilitação em Avaliação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7033|7036|7038",
+          "order": 43
+        },
+        "7040": {
+          "term_id": 7040,
+          "string": "Habilitação em Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7033|7036|7040",
+          "order": 44
+        },
+        "7041": {
+          "term_id": 7041,
+          "string": "Habilitação em Planejamento Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7033|7036|7041",
+          "order": 45
+        },
+        "7042": {
+          "term_id": 7042,
+          "string": "Habilitação em Psicologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7033|7036|7042",
+          "order": 46
+        },
+        "7044": {
+          "term_id": 7044,
+          "string": "Habilitação em Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7033|7036|7044",
+          "order": 47
+        },
+        "227": {
+          "term_id": 227,
+          "string": "Imprensa Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|219|227",
+          "order": 48
+        },
+        "1138": {
+          "term_id": 1138,
+          "string": "Inclusão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1136|1138",
+          "order": 49
+        },
+        "1056": {
+          "term_id": 1056,
+          "string": "Informatização da Gestão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033|1049|1052|1056",
+          "order": 50
+        },
+        "7296": {
+          "term_id": 7296,
+          "string": "Integração Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7227|7293|7295|7296",
+          "order": 51
+        },
+        "1136": {
+          "term_id": 1136,
+          "string": "Integração Socioeducacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1136",
+          "order": 52
+        },
+        "1154": {
+          "term_id": 1154,
+          "string": "Intercâmbio Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1154",
+          "order": 53
+        },
+        "1278": {
+          "term_id": 1278,
+          "string": "Justiça Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1278",
+          "order": 54
+        },
+        "8162": {
+          "term_id": 8162,
+          "string": "Limites da Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8157|8158|8162",
+          "order": 55
+        },
+        "122": {
+          "term_id": 122,
+          "string": "Marginalidade Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|105|119|122",
+          "order": 56
+        },
+        "5719": {
+          "term_id": 5719,
+          "string": "Marketing Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631|5632|5707|5716|5717|5719",
+          "order": 57
+        },
+        "1044": {
+          "term_id": 1044,
+          "string": "Melhoria da Gestão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033|1043|1044",
+          "order": 58
+        },
+        "1027": {
+          "term_id": 1027,
+          "string": "Mercado Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|1016|1026|1027",
+          "order": 59
+        },
+        "1166": {
+          "term_id": 1166,
+          "string": "Mercosul Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1166",
+          "order": 60
+        },
+        "7868": {
+          "term_id": 7868,
+          "string": "Métodos da Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7866|7868",
+          "order": 61
+        },
+        "6663": {
+          "term_id": 6663,
+          "string": "Modelo Geoeducacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657|6660|6661|6663",
+          "order": 62
+        },
+        "996": {
+          "term_id": 996,
+          "string": "Níveis da Política Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|996",
+          "order": 63
+        },
+        "7873": {
+          "term_id": 7873,
+          "string": "Objetivos da Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7866|7873",
+          "order": 64
+        },
+        "8166": {
+          "term_id": 8166,
+          "string": "Oficina de Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8157|8158|8163|8166",
+          "order": 65
+        },
+        "7816": {
+          "term_id": 7816,
+          "string": "Organização do Ambiente Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7719|7791|7804|7806|7816",
+          "order": 66
+        },
+        "7865": {
+          "term_id": 7865,
+          "string": "Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865",
+          "order": 67
+        },
+        "2028": {
+          "term_id": 2028,
+          "string": "Orientador Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|2024|2028",
+          "order": 68
+        },
+        "6564": {
+          "term_id": 6564,
+          "string": "Pensamento Educacional Brasileiro",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6563|6564",
+          "order": 69
+        },
+        "209": {
+          "term_id": 209,
+          "string": "Perfil Educacional Brasileiro",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|208|209",
+          "order": 70
+        },
+        "1169": {
+          "term_id": 1169,
+          "string": "Perfil Educacional do Mercosul",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1166|1169",
+          "order": 71
+        },
+        "1170": {
+          "term_id": 1170,
+          "string": "Política Educacional do Mercosul",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1166|1170",
+          "order": 72
+        },
+        "794": {
+          "term_id": 794,
+          "string": "Pólo Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|768|769|789|790|794",
+          "order": 73
+        },
+        "1065": {
+          "term_id": 1065,
+          "string": "Profissionalização da Gestão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033|1063|1065",
+          "order": 74
+        },
+        "234": {
+          "term_id": 234,
+          "string": "Programa de Legislação Educacional Integrada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|233|234",
+          "order": 75
+        },
+        "7876": {
+          "term_id": 7876,
+          "string": "Programa de Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7866|7876",
+          "order": 76
+        },
+        "1305": {
+          "term_id": 1305,
+          "string": "Programas de Avaliação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1305",
+          "order": 77
+        },
+        "2048": {
+          "term_id": 2048,
+          "string": "Psicólogo Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|2032|2045|2048",
+          "order": 78
+        },
+        "177": {
+          "term_id": 177,
+          "string": "Questão Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|177",
+          "order": 79
+        },
+        "199": {
+          "term_id": 199,
+          "string": "Revolução Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196|197|199",
+          "order": 80
+        },
+        "2767": {
+          "term_id": 2767,
+          "string": "Serviço de Assistência Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2754|2755|2762|2767",
+          "order": 81
+        },
+        "2762": {
+          "term_id": 2762,
+          "string": "Serviço de Orientação Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2754|2755|2762",
+          "order": 82
+        },
+        "2773": {
+          "term_id": 2773,
+          "string": "Serviço Educacional Especializado",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2754|2755|2773",
+          "order": 83
+        },
+        "1712": {
+          "term_id": 1712,
+          "string": "Sistema de Planejamento Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1697|1712",
+          "order": 84
+        },
+        "8163": {
+          "term_id": 8163,
+          "string": "Sistema de Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8157|8158|8163",
+          "order": 85
+        },
+        "376": {
+          "term_id": 376,
+          "string": "Site Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|345|370|373|375|376",
+          "order": 86
+        },
+        "537": {
+          "term_id": 537,
+          "string": "Taxa de Retorno de Alunos Ao Sistema Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|522|523|524|537",
+          "order": 87
+        },
+        "8157": {
+          "term_id": 8157,
+          "string": "Tecnologia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8157",
+          "order": 88
+        },
+        "204": {
+          "term_id": 204,
+          "string": "Tendências da Política Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196|203|204",
+          "order": 89
+        },
+        "6300": {
+          "term_id": 6300,
+          "string": "Terapia Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6249|6283|6300",
+          "order": 90
+        },
+        "1663": {
+          "term_id": 1663,
+          "string": "Transparência da Administração Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1663",
+          "order": 91
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educacional"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 91
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=suggestDetails&arg=educacional&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "3976": {
+            "term_id": "3976",
+            "string": "Abordagem Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 1
+          },
+          "1279": {
+            "term_id": "1279",
+            "string": "Ação Judicial Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 2
+          },
+          "1998": {
+            "term_id": "1998",
+            "string": "Administrador Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 3
+          },
+          "178": {
+            "term_id": "178",
+            "string": "Anacronismo Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 4
+          },
+          "6573": {
+            "term_id": "6573",
+            "string": "Antropologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 5
+          },
+          "7879": {
+            "term_id": "7879",
+            "string": "Áreas de Orientação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 6
+          },
+          "102": {
+            "term_id": "102",
+            "string": "Áreas de Pesquisa Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 7
+          },
+          "71": {
+            "term_id": "71",
+            "string": "Autoridade Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 8
+          },
+          "6575": {
+            "term_id": "6575",
+            "string": "Axiologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 9
+          },
+          "5861": {
+            "term_id": "5861",
+            "string": "Biologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 10
+          },
+          "1075": {
+            "term_id": "1075",
+            "string": "Campanha Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 11
+          },
+          "396": {
+            "term_id": "396",
+            "string": "Centro de Documentação e Informação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 12
+          },
+          "7867": {
+            "term_id": "7867",
+            "string": "Centro de Orientação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 13
+          },
+          "2392": {
+            "term_id": "2392",
+            "string": "Centro de Pesquisa Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 14
+          },
+          "2391": {
+            "term_id": "2391",
+            "string": "Centro de Tecnologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 15
+          },
+          "2282": {
+            "term_id": "2282",
+            "string": "Centro Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 16
+          },
+          "6574": {
+            "term_id": "6574",
+            "string": "Consciência Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 17
+          },
+          "1137": {
+            "term_id": "1137",
+            "string": "Cooperação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 18
+          },
+          "2211": {
+            "term_id": "2211",
+            "string": "Cooperativa Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 19
+          },
+          "867": {
+            "term_id": "867",
+            "string": "Custo Educacional por Habitante",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 20
+          },
+          "217": {
+            "term_id": "217",
+            "string": "Debate Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 21
+          },
+          "980": {
+            "term_id": "980",
+            "string": "Definição da Política Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 22
+          },
+          "988": {
+            "term_id": "988",
+            "string": "Descentralização da Gestão Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 23
+          },
+          "1172": {
+            "term_id": "1172",
+            "string": "Direito Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 24
+          },
+          "1218": {
+            "term_id": "1218",
+            "string": "Diretrizes da Política Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 25
+          },
+          "1050": {
+            "term_id": "1050",
+            "string": "Disseminação da Tecnologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 26
+          },
+          "793": {
+            "term_id": "793",
+            "string": "Distrito Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 27
+          },
+          "2174": {
+            "term_id": "2174",
+            "string": "Domínio da Tecnologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 28
+          },
+          "1350": {
+            "term_id": "1350",
+            "string": "Eficiência da Gestão Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 29
+          },
+          "2017": {
+            "term_id": "2017",
+            "string": "Especialista em Avaliação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 30
+          },
+          "2021": {
+            "term_id": "2021",
+            "string": "Especialista em Planejamento Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 31
+          },
+          "514": {
+            "term_id": "514",
+            "string": "Estatísticas do Contexto Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 32
+          },
+          "155": {
+            "term_id": "155",
+            "string": "Exclusão Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 33
+          },
+          "218": {
+            "term_id": "218",
+            "string": "Fórum Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 34
+          },
+          "7866": {
+            "term_id": "7866",
+            "string": "Função da Orientação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 35
+          },
+          "2238": {
+            "term_id": "2238",
+            "string": "Fundação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 36
+          },
+          "3161": {
+            "term_id": "3161",
+            "string": "Fundo Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 37
+          },
+          "2000": {
+            "term_id": "2000",
+            "string": "Gestor Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 38
+          },
+          "2001": {
+            "term_id": "2001",
+            "string": "Habilidades do Gestor Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 39
+          },
+          "7038": {
+            "term_id": "7038",
+            "string": "Habilitação em Avaliação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 40
+          },
+          "7040": {
+            "term_id": "7040",
+            "string": "Habilitação em Orientação Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 41
+          },
+          "7041": {
+            "term_id": "7041",
+            "string": "Habilitação em Planejamento Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 42
+          },
+          "7042": {
+            "term_id": "7042",
+            "string": "Habilitação em Psicologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 43
+          },
+          "7044": {
+            "term_id": "7044",
+            "string": "Habilitação em Tecnologia Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 44
+          },
+          "227": {
+            "term_id": "227",
+            "string": "Imprensa Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 45
+          },
+          "1138": {
+            "term_id": "1138",
+            "string": "Inclusão Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 46
+          },
+          "1056": {
+            "term_id": "1056",
+            "string": "Informatização da Gestão Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 47
+          },
+          "7296": {
+            "term_id": "7296",
+            "string": "Integração Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 48
+          },
+          "1154": {
+            "term_id": "1154",
+            "string": "Intercâmbio Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 49
+          },
+          "1278": {
+            "term_id": "1278",
+            "string": "Justiça Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 50
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "educacional"
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 50
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Thesaurus Brasileiro da Educação",
+          "author": "INEP.  Centro de Informação e Biblioteca em Educação",
+          "lang": "pt-BR",
+          "scope": "O Thesaurus Brased insere a educação dentro do contexto global, sem o qual não é possível compreendê-la. Na definição de seu âmbito temático foram levadas em consideração áreas que estão relacionadas com a educação. Incluye solo relaciones jerárquicas. Fonte: http://inep.gov.br/thesaurus-brasileiro-da-educacao",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/brased/",
+          "createDate": "2020-02-16",
+          "lastMod": "2020-02-16 16:12:48",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8327"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

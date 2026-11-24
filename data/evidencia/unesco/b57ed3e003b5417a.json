@@ -1,0 +1,287 @@
+{
+  "chave": "unesco|es|ontología",
+  "recuperado_em": "2026-11-24T17:03:38-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/es/services.php?task=search&arg=ontolog%C3%ADa&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "2714": {
+          "term_id": 2714,
+          "string": "Ontología",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1150|2679|2713|2714",
+          "order": 1
+        },
+        "2697": {
+          "term_id": 2697,
+          "string": "Deontología",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1150|2679|2690|2697",
+          "order": 2
+        },
+        "4938": {
+          "term_id": 4938,
+          "string": "Ética de la prensa",
+          "isMetaTerm": 0,
+          "no_term_string": "Deontología de la prensa",
+          "index": null,
+          "order": 3
+        },
+        "4935": {
+          "term_id": 4935,
+          "string": "Ética de la comunicación",
+          "isMetaTerm": 0,
+          "no_term_string": "Deontología de los medios de comunicación",
+          "index": null,
+          "order": 4
+        },
+        "2172": {
+          "term_id": 2172,
+          "string": "Ética médica",
+          "isMetaTerm": 0,
+          "no_term_string": "Deontología médica",
+          "index": null,
+          "order": 5
+        },
+        "2223": {
+          "term_id": 2223,
+          "string": "Gerontología",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|22|2147|2209|2223",
+          "order": 6
+        },
+        "2225": {
+          "term_id": 2225,
+          "string": "Odontología",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|22|2147|2209|2225",
+          "order": 7
+        },
+        "607": {
+          "term_id": 607,
+          "string": "Paleontología",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|22|536|607",
+          "order": 8
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "ontología"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 8
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchAlt&arg=2714&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 2714
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchUp&arg=2714&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1150": {
+            "term_id": "1150",
+            "string": "Cultura",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "2679": {
+            "term_id": "2679",
+            "string": "Filosofía y ética",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "2713": {
+            "term_id": "2713",
+            "string": "Metafísica",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          },
+          "2714": {
+            "term_id": "2714",
+            "string": "Ontología",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 4
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 2714
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchDown&arg=2714&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 2714
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchRelated&arg=2714&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "3051": {
+            "term_id": "3051",
+            "code": "concept13409",
+            "lang": "es",
+            "string": "Semántica",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2675": {
+            "term_id": "2675",
+            "code": "concept282",
+            "lang": "es",
+            "string": "Epistemología",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2716": {
+            "term_id": "2716",
+            "code": "concept286",
+            "lang": "es",
+            "string": "Filosofía",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2846": {
+            "term_id": "2846",
+            "code": "concept295",
+            "lang": "es",
+            "string": "Teología",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 2714
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchNotes&arg=2714&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1021": {
+            "term_id": "2714",
+            "string": "Ontología",
+            "note_id": "1021",
+            "note_type": "NA",
+            "note_lang": "es",
+            "note_text": "Estudio de las características del Ser en si mismo, al margen de la existencia de otras cosas.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 2714
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro de la UNESCO",
+          "author": "UNESCO",
+          "lang": "es",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com//unesco/es/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 19:45:45",
+          "status": "Publicado - Estable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8528"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

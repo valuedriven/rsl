@@ -1,0 +1,306 @@
+{
+  "chave": "unesco|en|educational practice",
+  "recuperado_em": "2026-11-24T18:53:22-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/en/services.php?task=search&arg=educational+practice&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "3075": {
+          "term_id": 3075,
+          "string": "Child rearing",
+          "isMetaTerm": 0,
+          "no_term_string": "Traditional educational practices",
+          "index": null,
+          "order": 1
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educational practice"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 1
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=suggestDetails&arg=educational+practice&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "3075": {
+            "term_id": "3075",
+            "string": "Child rearing",
+            "isMetaTerm": null,
+            "no_term_string": "Traditional educational practices",
+            "order": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "educational practice"
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchAlt&arg=3075&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "3077": {
+            "term_id": "3077",
+            "code": null,
+            "lang": "en",
+            "string": "Parenting",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3076": {
+            "term_id": "3076",
+            "code": null,
+            "lang": "en",
+            "string": "Traditional educational practices",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3078": {
+            "term_id": "3078",
+            "code": null,
+            "lang": "en",
+            "string": "Upbringing",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 3075
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchUp&arg=3075&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "5": {
+            "term_id": "5",
+            "string": "Education",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "3065": {
+            "term_id": "3065",
+            "string": "Educational systems and levels",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "3059": {
+            "term_id": "3059",
+            "string": "Educational levels",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          },
+          "3066": {
+            "term_id": "3066",
+            "string": "Early childhood education",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 4
+          },
+          "3075": {
+            "term_id": "3075",
+            "string": "Child rearing",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 5
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 3075
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchDown&arg=3075&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 3075
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchRelated&arg=3075&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "3864": {
+            "term_id": "3864",
+            "code": "concept1469",
+            "lang": "en",
+            "string": "Parent child relationship",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3171": {
+            "term_id": "3171",
+            "code": "concept1476",
+            "lang": "en",
+            "string": "Parent education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3295": {
+            "term_id": "3295",
+            "code": "concept5055",
+            "lang": "en",
+            "string": "Child development",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3461": {
+            "term_id": "3461",
+            "code": "concept5082",
+            "lang": "en",
+            "string": "Family education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3758": {
+            "term_id": "3758",
+            "code": "concept5083",
+            "lang": "en",
+            "string": "Preschool children",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 3075
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchNotes&arg=3075&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1209": {
+            "term_id": "3075",
+            "string": "Child rearing",
+            "note_id": "1209",
+            "note_type": "NA",
+            "note_lang": "en",
+            "note_text": "Refers to a set of culturally and socially determined practices, customs and beliefs.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 3075
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "UNESCO Thesaurus",
+          "author": "UNESCO",
+          "lang": "en",
+          "scope": null,
+          "keywords": null,
+          "uri": "https://vocabularyserver.com//unesco/en/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 14:32:56",
+          "status": "published - stable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": null,
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "7186"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

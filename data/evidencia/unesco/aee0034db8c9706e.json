@@ -1,0 +1,499 @@
+{
+  "chave": "unesco|es|método de enseñanza",
+  "recuperado_em": "2026-11-24T17:05:17-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/es/services.php?task=search&arg=m%C3%A9todo+de+ense%C3%B1anza&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "8220": {
+          "term_id": 8220,
+          "string": "Método de enseñanza",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8167|8220",
+          "order": 1
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "método de enseñanza"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 1
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchAlt&arg=8220&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "8221": {
+            "term_id": "8221",
+            "code": null,
+            "lang": "es",
+            "string": "Estrategia de enseñanza",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8222": {
+            "term_id": "8222",
+            "code": null,
+            "lang": "es",
+            "string": "Método educativo",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8224": {
+            "term_id": "8224",
+            "code": null,
+            "lang": "es",
+            "string": "Técnica de enseñanza",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8223": {
+            "term_id": "8223",
+            "code": null,
+            "lang": "es",
+            "string": "Técnica pedagógica",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 8220
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchUp&arg=8220&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6": {
+            "term_id": "6",
+            "string": "Educación",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "8167": {
+            "term_id": "8167",
+            "string": "Enseñanza y formación",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "8220": {
+            "term_id": "8220",
+            "string": "Método de enseñanza",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 8220
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchDown&arg=8220&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "8240": {
+            "term_id": "8240",
+            "string": "Clase magistral",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8251": {
+            "term_id": "8251",
+            "string": "Demostración pedagógica",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8253": {
+            "term_id": "8253",
+            "string": "Discusión (método pedagógico)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8229": {
+            "term_id": "8229",
+            "string": "Enseñanza centrada en el rendimiento",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8241": {
+            "term_id": "8241",
+            "string": "Enseñanza correctiva",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8275": {
+            "term_id": "8275",
+            "string": "Enseñanza en equipo",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8255": {
+            "term_id": "8255",
+            "string": "Enseñanza en grupo",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8243": {
+            "term_id": "8243",
+            "string": "Enseñanza individualizada",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8237": {
+            "term_id": "8237",
+            "string": "Enseñanza multimedia",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8276": {
+            "term_id": "8276",
+            "string": "Enseñanza mutua",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8252": {
+            "term_id": "8252",
+            "string": "Experimento (en clase)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8269": {
+            "term_id": "8269",
+            "string": "Interrogación (método pedagógico)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8231": {
+            "term_id": "8231",
+            "string": "Método de alfabetización",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8271": {
+            "term_id": "8271",
+            "string": "Método heurístico (enseñanza)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8273": {
+            "term_id": "8273",
+            "string": "Sugestopedia",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8225": {
+            "term_id": "8225",
+            "string": "Técnica didáctica",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8232": {
+            "term_id": "8232",
+            "string": "Visita escolar",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 8220
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 17
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchRelated&arg=8220&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "7813": {
+            "term_id": "7813",
+            "code": "concept14097",
+            "lang": "es",
+            "string": "Microenseñanza",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8183": {
+            "term_id": "8183",
+            "code": "concept17113",
+            "lang": "es",
+            "string": "Aprendizaje semipresencial",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "5247": {
+            "term_id": "5247",
+            "code": "concept7268",
+            "lang": "es",
+            "string": "Enseñanza por módulos",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8160": {
+            "term_id": "8160",
+            "code": "concept81",
+            "lang": "es",
+            "string": "Método de aprendizaje",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8217": {
+            "term_id": "8217",
+            "code": "concept82",
+            "lang": "es",
+            "string": "Enseñanza",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8292": {
+            "term_id": "8292",
+            "code": "concept85",
+            "lang": "es",
+            "string": "Método de formación",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8152": {
+            "term_id": "8152",
+            "code": "concept9267",
+            "lang": "es",
+            "string": "Innovación pedagógica",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "8420": {
+            "term_id": "8420",
+            "code": "concept9345",
+            "lang": "es",
+            "string": "Estudios en el extranjero",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 8220
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 8
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchNotes&arg=8220&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2913": {
+            "term_id": "8220",
+            "string": "Método de enseñanza",
+            "note_id": "2913",
+            "note_type": "NA",
+            "note_lang": "es",
+            "note_text": "Modelo de un profesor que es recurrente y aplicable a diversas materias, característico de más de un profesor y propicio para el aprendizaje.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 8220
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro de la UNESCO",
+          "author": "UNESCO",
+          "lang": "es",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com//unesco/es/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 19:45:45",
+          "status": "Publicado - Estable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8528"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

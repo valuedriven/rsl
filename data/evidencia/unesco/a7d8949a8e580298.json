@@ -1,0 +1,1474 @@
+{
+  "chave": "unesco|es|educación",
+  "recuperado_em": "2026-11-24T17:04:34-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/es/services.php?task=search&arg=educaci%C3%B3n&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "1592": {
+          "term_id": 1592,
+          "string": "Educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|1592",
+          "order": 1
+        },
+        "4": {
+          "term_id": 4,
+          "string": "Acceso a la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|1|2|4",
+          "order": 2
+        },
+        "2193": {
+          "term_id": 2193,
+          "string": "Acreditación (educación)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|2191|2193",
+          "order": 3
+        },
+        "1753": {
+          "term_id": 1753,
+          "string": "Administración de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|1753",
+          "order": 4
+        },
+        "8052": {
+          "term_id": 8052,
+          "string": "Administrador de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|321|8051|8052",
+          "order": 5
+        },
+        "2762": {
+          "term_id": 2762,
+          "string": "Agrupamiento educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|2548|2762",
+          "order": 6
+        },
+        "2864": {
+          "term_id": 2864,
+          "string": "Ambiente educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|2864",
+          "order": 7
+        },
+        "4032": {
+          "term_id": 4032,
+          "string": "Antropología de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4032",
+          "order": 8
+        },
+        "328": {
+          "term_id": 328,
+          "string": "Aporte educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|326|328",
+          "order": 9
+        },
+        "8188": {
+          "term_id": 8188,
+          "string": "Autoaprendizaje",
+          "isMetaTerm": 0,
+          "no_term_string": "Autoeducación",
+          "index": null,
+          "order": 10
+        },
+        "1765": {
+          "term_id": 1765,
+          "string": "Ayuda educativa",
+          "isMetaTerm": 0,
+          "no_term_string": "Ayuda a la educación",
+          "index": null,
+          "order": 11
+        },
+        "8424": {
+          "term_id": 8424,
+          "string": "Calidad de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8314|8424",
+          "order": 12
+        },
+        "4872": {
+          "term_id": 4872,
+          "string": "Escuela especial",
+          "isMetaTerm": 0,
+          "no_term_string": "Centro de educación especial",
+          "index": null,
+          "order": 13
+        },
+        "4023": {
+          "term_id": 4023,
+          "string": "Ciencias de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023",
+          "order": 14
+        },
+        "3916": {
+          "term_id": 3916,
+          "string": "Coeducación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3916",
+          "order": 15
+        },
+        "8057": {
+          "term_id": 8057,
+          "string": "Consejero de educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|321|8051|8052|8057",
+          "order": 16
+        },
+        "1763": {
+          "term_id": 1763,
+          "string": "Cooperación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|1753|1754|1763",
+          "order": 17
+        },
+        "1772": {
+          "term_id": 1772,
+          "string": "Coordinación de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|1753|1754|1772",
+          "order": 18
+        },
+        "357": {
+          "term_id": 357,
+          "string": "Costes educativos",
+          "isMetaTerm": 0,
+          "no_term_string": "Costes de educación",
+          "index": null,
+          "order": 19
+        },
+        "339": {
+          "term_id": 339,
+          "string": "Demanda de educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|339",
+          "order": 20
+        },
+        "18": {
+          "term_id": 18,
+          "string": "Democratización de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|1|18",
+          "order": 21
+        },
+        "1": {
+          "term_id": 1,
+          "string": "Derecho a la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|1",
+          "order": 22
+        },
+        "8141": {
+          "term_id": 8141,
+          "string": "Desarrollo de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141",
+          "order": 23
+        },
+        "4191": {
+          "term_id": 4191,
+          "string": "Desfavorecido educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3775|4144|4169|4191",
+          "order": 24
+        },
+        "8384": {
+          "term_id": 8384,
+          "string": "Discriminación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8384",
+          "order": 25
+        },
+        "8156": {
+          "term_id": 8156,
+          "string": "Diversificación de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8156",
+          "order": 26
+        },
+        "322": {
+          "term_id": 322,
+          "string": "Economía de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322",
+          "order": 27
+        },
+        "8201": {
+          "term_id": 8201,
+          "string": "Educación a distancia",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8167|8160|8201",
+          "order": 28
+        },
+        "6349": {
+          "term_id": 6349,
+          "string": "Educación a la vida familiar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342|6349",
+          "order": 29
+        },
+        "8420": {
+          "term_id": 8420,
+          "string": "Estudios en el extranjero",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación a través de las fronteras",
+          "index": null,
+          "order": 30
+        },
+        "8237": {
+          "term_id": 8237,
+          "string": "Enseñanza multimedia",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación a través de los medios de comunicación",
+          "index": null,
+          "order": 31
+        },
+        "8394": {
+          "term_id": 8394,
+          "string": "Educación alternativa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8394",
+          "order": 32
+        },
+        "6061": {
+          "term_id": 6061,
+          "string": "Educación ambiental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6061",
+          "order": 33
+        },
+        "6348": {
+          "term_id": 6348,
+          "string": "Educación antialcohólica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342|6348",
+          "order": 34
+        },
+        "6345": {
+          "term_id": 6345,
+          "string": "Educación antidrogadicción",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342|6345",
+          "order": 35
+        },
+        "5891": {
+          "term_id": 5891,
+          "string": "Educación artística",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|5889|5891",
+          "order": 36
+        },
+        "8229": {
+          "term_id": 8229,
+          "string": "Enseñanza centrada en el rendimiento",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación basada en las competencias",
+          "index": null,
+          "order": 37
+        },
+        "3914": {
+          "term_id": 3914,
+          "string": "Educación básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3914",
+          "order": 38
+        },
+        "8418": {
+          "term_id": 8418,
+          "string": "Educación bilingüe",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8417|8418",
+          "order": 39
+        },
+        "7225": {
+          "term_id": 7225,
+          "string": "Educación ciudadana",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7225",
+          "order": 40
+        },
+        "4050": {
+          "term_id": 4050,
+          "string": "Educación comparada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4048|4050",
+          "order": 41
+        },
+        "3918": {
+          "term_id": 3918,
+          "string": "Educación compensatoria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3918",
+          "order": 42
+        },
+        "3801": {
+          "term_id": 3801,
+          "string": "Educación complementaria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3801",
+          "order": 43
+        },
+        "4065": {
+          "term_id": 4065,
+          "string": "Educación comunitaria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|4063|4065",
+          "order": 44
+        },
+        "5889": {
+          "term_id": 5889,
+          "string": "Educación cultural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|5889",
+          "order": 45
+        },
+        "3731": {
+          "term_id": 3731,
+          "string": "Educación de adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3731",
+          "order": 46
+        },
+        "3738": {
+          "term_id": 3738,
+          "string": "Educación de chicas",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3737|3738",
+          "order": 47
+        },
+        "3912": {
+          "term_id": 3912,
+          "string": "Educación de ciegos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3906|3912",
+          "order": 48
+        },
+        "5893": {
+          "term_id": 5893,
+          "string": "Educación de la expresión oral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|5889|5893",
+          "order": 49
+        },
+        "3737": {
+          "term_id": 3737,
+          "string": "Educación de la mujer",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3737",
+          "order": 50
+        },
+        "3622": {
+          "term_id": 3622,
+          "string": "Educación de la primera infancia",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3614|3622",
+          "order": 51
+        },
+        "3919": {
+          "term_id": 3919,
+          "string": "Educación de los inmigrantes",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3919",
+          "order": 52
+        },
+        "3734": {
+          "term_id": 3734,
+          "string": "Educación de los padres",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3731|3734",
+          "order": 53
+        },
+        "3899": {
+          "term_id": 3899,
+          "string": "Educación de los presos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3899",
+          "order": 54
+        },
+        "3735": {
+          "term_id": 3735,
+          "string": "Educación de los trabajadores",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3731|3735",
+          "order": 55
+        },
+        "3615": {
+          "term_id": 3615,
+          "string": "Enseñanza superior",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación de tercer ciclo",
+          "index": null,
+          "order": 56
+        },
+        "4064": {
+          "term_id": 4064,
+          "string": "Educación del consumidor",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|4063|4064",
+          "order": 57
+        },
+        "6491": {
+          "term_id": 6491,
+          "string": "Enseñanza de economía doméstica",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación en economía familiar",
+          "index": null,
+          "order": 58
+        },
+        "1617": {
+          "term_id": 1617,
+          "string": "Educación en situación de emergencia",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|22|1153|1612|1617",
+          "order": 59
+        },
+        "3906": {
+          "term_id": 3906,
+          "string": "Educación especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3906",
+          "order": 60
+        },
+        "5890": {
+          "term_id": 5890,
+          "string": "Educación estética",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|5889|5890",
+          "order": 61
+        },
+        "4076": {
+          "term_id": 4076,
+          "string": "Educación extraescolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|4063|4076",
+          "order": 62
+        },
+        "4078": {
+          "term_id": 4078,
+          "string": "Educación familiar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|4063|4078",
+          "order": 63
+        },
+        "6878": {
+          "term_id": 6878,
+          "string": "Educación física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6878",
+          "order": 64
+        },
+        "3893": {
+          "term_id": 3893,
+          "string": "Educación formal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893",
+          "order": 65
+        },
+        "7212": {
+          "term_id": 7212,
+          "string": "Enseñanza de las ciencias sociales",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación general",
+          "index": null,
+          "order": 66
+        },
+        "2770": {
+          "term_id": 2770,
+          "string": "Educación inclusiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|2548|2762|2769|2770",
+          "order": 67
+        },
+        "4073": {
+          "term_id": 4073,
+          "string": "Aprendizaje informal",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación informal",
+          "index": null,
+          "order": 68
+        },
+        "5245": {
+          "term_id": 5245,
+          "string": "Plan de estudios integrado",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación integrada",
+          "index": null,
+          "order": 69
+        },
+        "8401": {
+          "term_id": 8401,
+          "string": "Educación intercultural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8400|8401",
+          "order": 70
+        },
+        "3634": {
+          "term_id": 3634,
+          "string": "Enseñanza secundaria (1er nivel)",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación intermedia",
+          "index": null,
+          "order": 71
+        },
+        "3752": {
+          "term_id": 3752,
+          "string": "Educación islámica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3751|3752",
+          "order": 72
+        },
+        "8030": {
+          "term_id": 8030,
+          "string": "Enseñanza jurídica",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación jurídica",
+          "index": null,
+          "order": 73
+        },
+        "3741": {
+          "term_id": 3741,
+          "string": "Educación masiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3741",
+          "order": 74
+        },
+        "7998": {
+          "term_id": 7998,
+          "string": "Educación militar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|7802|7992|7998",
+          "order": 75
+        },
+        "7232": {
+          "term_id": 7232,
+          "string": "Educación moral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7232",
+          "order": 76
+        },
+        "5892": {
+          "term_id": 5892,
+          "string": "Educación musical",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|5889|5892",
+          "order": 77
+        },
+        "4063": {
+          "term_id": 4063,
+          "string": "Educación no formal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|4063",
+          "order": 78
+        },
+        "6351": {
+          "term_id": 6351,
+          "string": "Educación nutricional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342|6351",
+          "order": 79
+        },
+        "7231": {
+          "term_id": 7231,
+          "string": "Educación para el desarme",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7225|7230|7231",
+          "order": 80
+        },
+        "1151": {
+          "term_id": 1151,
+          "string": "Educación para el desarrollo sostenible",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|1151",
+          "order": 81
+        },
+        "8405": {
+          "term_id": 8405,
+          "string": "Educación para la ciudadanía mundial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8405",
+          "order": 82
+        },
+        "7230": {
+          "term_id": 7230,
+          "string": "Educación para la paz",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7225|7230",
+          "order": 83
+        },
+        "6344": {
+          "term_id": 6344,
+          "string": "Educación para la prevención del sida",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342|6344",
+          "order": 84
+        },
+        "7227": {
+          "term_id": 7227,
+          "string": "Educación para los derechos humanos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7225|7227",
+          "order": 85
+        },
+        "4067": {
+          "term_id": 4067,
+          "string": "Aprendizaje a lo largo de la vida",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación permanente",
+          "index": null,
+          "order": 86
+        },
+        "8015": {
+          "term_id": 8015,
+          "string": "Enseñanza profesional",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación profesional",
+          "index": null,
+          "order": 87
+        },
+        "8193": {
+          "term_id": 8193,
+          "string": "Enseñanza programada",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación programada",
+          "index": null,
+          "order": 88
+        },
+        "4075": {
+          "term_id": 4075,
+          "string": "Educación recurrente",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|4063|4067|4075",
+          "order": 89
+        },
+        "7234": {
+          "term_id": 7234,
+          "string": "Educación religiosa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7234",
+          "order": 90
+        },
+        "3905": {
+          "term_id": 3905,
+          "string": "Educación rural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3905",
+          "order": 91
+        },
+        "6342": {
+          "term_id": 6342,
+          "string": "Educación sanitaria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342",
+          "order": 92
+        },
+        "6347": {
+          "term_id": 6347,
+          "string": "Educación sexual",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|6342|6347",
+          "order": 93
+        },
+        "7217": {
+          "term_id": 7217,
+          "string": "Educación sobre el desarrollo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|7212|7215|7217",
+          "order": 94
+        },
+        "688": {
+          "term_id": 688,
+          "string": "Educación sobre medios de comunicación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|691|688",
+          "order": 95
+        },
+        "8010": {
+          "term_id": 8010,
+          "string": "Enseñanza técnica",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación técnica",
+          "index": null,
+          "order": 96
+        },
+        "8001": {
+          "term_id": 8001,
+          "string": "Formación de ingenieros",
+          "isMetaTerm": 0,
+          "no_term_string": "Educación técnica superior",
+          "index": null,
+          "order": 97
+        },
+        "3751": {
+          "term_id": 3751,
+          "string": "Educación tradicional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3728|3751",
+          "order": 98
+        },
+        "10": {
+          "term_id": 10,
+          "string": "Educación universal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|1|2|10",
+          "order": 99
+        },
+        "3922": {
+          "term_id": 3922,
+          "string": "Educación urbana",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|3621|3893|3922",
+          "order": 100
+        },
+        "8400": {
+          "term_id": 8400,
+          "string": "Educación y cultura",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8400",
+          "order": 101
+        },
+        "345": {
+          "term_id": 345,
+          "string": "Educación y desarrollo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|345",
+          "order": 102
+        },
+        "346": {
+          "term_id": 346,
+          "string": "Educación y empleo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|346",
+          "order": 103
+        },
+        "8391": {
+          "term_id": 8391,
+          "string": "Educación y ocio",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8391",
+          "order": 104
+        },
+        "326": {
+          "term_id": 326,
+          "string": "Eficiencia de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|326",
+          "order": 105
+        },
+        "340": {
+          "term_id": 340,
+          "string": "Opciones educativas",
+          "isMetaTerm": 0,
+          "no_term_string": "Elección de la educación",
+          "index": null,
+          "order": 106
+        },
+        "4733": {
+          "term_id": 4733,
+          "string": "Escuela de profesores",
+          "isMetaTerm": 0,
+          "no_term_string": "Escuela de educación",
+          "index": null,
+          "order": 107
+        },
+        "669": {
+          "term_id": 669,
+          "string": "Estadísticas educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|669",
+          "order": 108
+        },
+        "8419": {
+          "term_id": 8419,
+          "string": "Estado y educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8419",
+          "order": 109
+        },
+        "2019": {
+          "term_id": 2019,
+          "string": "Estructura administrativa de la enseñanza",
+          "isMetaTerm": 0,
+          "no_term_string": "Estructura administrativa de la educación",
+          "index": null,
+          "order": 110
+        },
+        "8317": {
+          "term_id": 8317,
+          "string": "Evaluación de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8314|8317",
+          "order": 111
+        },
+        "8150": {
+          "term_id": 8150,
+          "string": "Experimento educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8148|8150",
+          "order": 112
+        },
+        "4054": {
+          "term_id": 4054,
+          "string": "Filosofía de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4054",
+          "order": 113
+        },
+        "354": {
+          "term_id": 354,
+          "string": "Financiación de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|354",
+          "order": 114
+        },
+        "7800": {
+          "term_id": 7800,
+          "string": "Formación de docentes de educación especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|7802|7797|7798|7800",
+          "order": 115
+        },
+        "7807": {
+          "term_id": 7807,
+          "string": "Formación de docentes de educación técnica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|7802|7797|7798|7807",
+          "order": 116
+        },
+        "2029": {
+          "term_id": 2029,
+          "string": "Fundación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|2015|2019|2029",
+          "order": 117
+        },
+        "3021": {
+          "term_id": 3021,
+          "string": "Gestión educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|2548|3021",
+          "order": 118
+        },
+        "4053": {
+          "term_id": 4053,
+          "string": "Historia de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4053",
+          "order": 119
+        },
+        "8410": {
+          "term_id": 8410,
+          "string": "Industria y educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8410",
+          "order": 120
+        },
+        "4786": {
+          "term_id": 4786,
+          "string": "Información educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|4742|4741|4768|4786",
+          "order": 121
+        },
+        "8148": {
+          "term_id": 8148,
+          "string": "Innovación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8148",
+          "order": 122
+        },
+        "2191": {
+          "term_id": 2191,
+          "string": "Inspección educativa",
+          "isMetaTerm": 0,
+          "no_term_string": "Inspección de la educación",
+          "index": null,
+          "order": 123
+        },
+        "4504": {
+          "term_id": 4504,
+          "string": "Instituciones de educación para adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|4506|4504",
+          "order": 124
+        },
+        "4048": {
+          "term_id": 4048,
+          "string": "Investigación pedagógica",
+          "isMetaTerm": 0,
+          "no_term_string": "Investigación sobre la educación",
+          "index": null,
+          "order": 125
+        },
+        "1939": {
+          "term_id": 1939,
+          "string": "Legislación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|1939",
+          "order": 126
+        },
+        "4061": {
+          "term_id": 4061,
+          "string": "Modelo educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4056|4061",
+          "order": 127
+        },
+        "323": {
+          "term_id": 323,
+          "string": "Necesidades educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|323",
+          "order": 128
+        },
+        "8413": {
+          "term_id": 8413,
+          "string": "Objetivo educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8413",
+          "order": 129
+        },
+        "2": {
+          "term_id": 2,
+          "string": "Oportunidades educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|1|2",
+          "order": 130
+        },
+        "2032": {
+          "term_id": 2032,
+          "string": "Organismo educacional gubernamental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|2015|2019|2032",
+          "order": 131
+        },
+        "446": {
+          "term_id": 446,
+          "string": "Planificación de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|446",
+          "order": 132
+        },
+        "8058": {
+          "term_id": 8058,
+          "string": "Planificador de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|321|8051|8052|8058",
+          "order": 133
+        },
+        "8382": {
+          "term_id": 8382,
+          "string": "Política educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382",
+          "order": 134
+        },
+        "484": {
+          "term_id": 484,
+          "string": "Programas de educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|484",
+          "order": 135
+        },
+        "681": {
+          "term_id": 681,
+          "string": "Prospección educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|669|681",
+          "order": 136
+        },
+        "554": {
+          "term_id": 554,
+          "string": "Proyecto de educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|554",
+          "order": 137
+        },
+        "4025": {
+          "term_id": 4025,
+          "string": "Psicología de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4025",
+          "order": 138
+        },
+        "4046": {
+          "term_id": 4046,
+          "string": "Psicosociología de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4046",
+          "order": 139
+        },
+        "8476": {
+          "term_id": 8476,
+          "string": "Publicación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8442|8476",
+          "order": 140
+        },
+        "8489": {
+          "term_id": 8489,
+          "string": "Publicación educacional periódica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8442|8476|8489",
+          "order": 141
+        },
+        "365": {
+          "term_id": 365,
+          "string": "Recursos educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|365",
+          "order": 142
+        },
+        "369": {
+          "term_id": 369,
+          "string": "Recursos financieros en educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|365|369",
+          "order": 143
+        },
+        "8286": {
+          "term_id": 8286,
+          "string": "Reciclaje profesional",
+          "isMetaTerm": 0,
+          "no_term_string": "Reeducación profesional",
+          "index": null,
+          "order": 144
+        },
+        "8153": {
+          "term_id": 8153,
+          "string": "Reforma de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8153",
+          "order": 145
+        },
+        "8398": {
+          "term_id": 8398,
+          "string": "Relación Iglesia-educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8398",
+          "order": 146
+        },
+        "338": {
+          "term_id": 338,
+          "string": "Rendimiento de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|326|338",
+          "order": 147
+        },
+        "8430": {
+          "term_id": 8430,
+          "string": "Responsabilidad (educación)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8314|8424|8430",
+          "order": 148
+        },
+        "3895": {
+          "term_id": 3895,
+          "string": "Servicio educativo itinerante",
+          "isMetaTerm": 0,
+          "no_term_string": "Servicio educacional itinerante",
+          "index": null,
+          "order": 149
+        },
+        "5314": {
+          "term_id": 5314,
+          "string": "Sistema de información sobre la administración de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|4742|5260|5277|5314",
+          "order": 150
+        },
+        "3728": {
+          "term_id": 3728,
+          "string": "Sistema educativo",
+          "isMetaTerm": 0,
+          "no_term_string": "Sistema educacional",
+          "index": null,
+          "order": 151
+        },
+        "4033": {
+          "term_id": 4033,
+          "string": "Sociología de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4033",
+          "order": 152
+        },
+        "8443": {
+          "term_id": 8443,
+          "string": "Taller educativo",
+          "isMetaTerm": 0,
+          "no_term_string": "Taller educacional",
+          "index": null,
+          "order": 153
+        },
+        "8496": {
+          "term_id": 8496,
+          "string": "Tecnología educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8442|8496",
+          "order": 154
+        },
+        "8157": {
+          "term_id": 8157,
+          "string": "Tendencia educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8157",
+          "order": 155
+        },
+        "4056": {
+          "term_id": 4056,
+          "string": "Teoría de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4056",
+          "order": 156
+        },
+        "3018": {
+          "term_id": 3018,
+          "string": "Terminología educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1150|2964|3009|3012|3018",
+          "order": 157
+        },
+        "8247": {
+          "term_id": 8247,
+          "string": "Tutoría (educación)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8167|8220|8243|8247",
+          "order": 158
+        },
+        "8520": {
+          "term_id": 8520,
+          "string": "Vídeo educativo",
+          "isMetaTerm": 0,
+          "no_term_string": "Vídeo educacional",
+          "index": null,
+          "order": 159
+        },
+        "8232": {
+          "term_id": 8232,
+          "string": "Visita escolar",
+          "isMetaTerm": 0,
+          "no_term_string": "Visita educacional",
+          "index": null,
+          "order": 160
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educación"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 160
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchAlt&arg=1592&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 1592
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchUp&arg=1592&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6": {
+            "term_id": "6",
+            "string": "Educación",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "1593": {
+            "term_id": "1593",
+            "string": "Ciencias de la educación y ambiente educacional",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "1592": {
+            "term_id": "1592",
+            "string": "Educación",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 1592
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchDown&arg=1592&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 1592
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchRelated&arg=1592&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2300": {
+            "term_id": "2300",
+            "code": "concept25",
+            "lang": "es",
+            "string": "Docencia",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "5378": {
+            "term_id": "5378",
+            "code": "concept5",
+            "lang": "es",
+            "string": "Aprendizaje",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 1592
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 2
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchNotes&arg=1592&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "631": {
+            "term_id": "1592",
+            "string": "Educación",
+            "note_id": "631",
+            "note_type": "NA",
+            "note_lang": "es",
+            "note_text": "Proceso por el cual uno desarrolla habilidades, actitudes y otras formas de comportamiento valoradas por la sociedad en la que vive. Utilizar un descriptor más preciso.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 1592
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro de la UNESCO",
+          "author": "UNESCO",
+          "lang": "es",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com//unesco/es/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 19:45:45",
+          "status": "Publicado - Estable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8528"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

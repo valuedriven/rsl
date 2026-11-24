@@ -101,7 +101,8 @@ sementes = "docs/conjunto_semente.toml"
 # Colunas da planilha de validação, na ordem em que é escrita.
 campos_validacao = [
     "instrumento", "consultado_em", "versao_instrumento", "url_consultada",
-    "status_proposto", "rotulo_autorizado", "uri_conceito",
+    "status_proposto", "rotulo_autorizado", "forma_no_instrumento", "sugestao_similar",
+    "uri_conceito",
     "equivalentes_USE_UP", "termos_genericos_TG", "termos_especificos_TE",
     "termos_relacionados_TR", "nota_de_escopo",
     "arquivo_evidencia", "observacao_tecnica",

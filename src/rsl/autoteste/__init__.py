@@ -8,7 +8,7 @@ motivo ou com outro código faz o autoteste falhar; mutação que não se aplica
 
 Grupos executados numa só chamada, cada um com a sua contagem: defeitos injetados no
 protocolo, precedência, configuração, arquivo de sementes, leitura estrutural que aprova,
-planejamento da validação, arquivos alimentados, cobertura por base, fonte do
+planejamento da validação, cliente TemaTres e reabertura, arquivos alimentados, cobertura por base, fonte do
 procedimento, geração dos procedimentos, sondagens, flexão dos termos,
 composição da derivação, aderência por papel, geração das strings, gramática do protocolo,
 catálogo de apoio e nomes antigos recusados.
@@ -101,6 +101,7 @@ def grupos():
         ("arquivo de sementes", sementes.casos),
         ("leitura estrutural que aprova", protocolo.estrutural),
         ("planejamento da validação", validacao.casos),
+        ("cliente TemaTres e reabertura", validacao.cliente),
         ("classificação do controle terminológico", validacao.classificacao),
         ("conferências dos arquivos alimentados", dados.casos),
         ("geração das strings", geracao.casos),

@@ -1,0 +1,177 @@
+{
+  "chave": "brased|pt|ensino-aprendizagem",
+  "recuperado_em": "2026-11-24T18:31:52-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=ensino-aprendizagem&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "7628": {
+          "term_id": 7628,
+          "string": "Atividades de Ensino-Aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7627|7628",
+          "order": 1
+        },
+        "2710": {
+          "term_id": 2710,
+          "string": "Condições Para Ensino-aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2653|2676|2710",
+          "order": 2
+        },
+        "6416": {
+          "term_id": 6416,
+          "string": "Eficiência do Ensino-Aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6414|6415|6416",
+          "order": 3
+        },
+        "7799": {
+          "term_id": 7799,
+          "string": "Integração Ensino-Aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7719|7791|7799",
+          "order": 4
+        },
+        "7415": {
+          "term_id": 7415,
+          "string": "Objetivos do Ensino-Aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7407|7408|7414|7415",
+          "order": 5
+        },
+        "7718": {
+          "term_id": 7718,
+          "string": "Processo de Ensino-Aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718",
+          "order": 6
+        },
+        "8038": {
+          "term_id": 8038,
+          "string": "Técnicas de Ensino-Aprendizagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|8038",
+          "order": 7
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "ensino-aprendizagem"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 7
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=suggestDetails&arg=ensino-aprendizagem&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "7628": {
+            "term_id": "7628",
+            "string": "Atividades de Ensino-Aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 1
+          },
+          "2710": {
+            "term_id": "2710",
+            "string": "Condições Para Ensino-aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 2
+          },
+          "6416": {
+            "term_id": "6416",
+            "string": "Eficiência do Ensino-Aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 3
+          },
+          "7799": {
+            "term_id": "7799",
+            "string": "Integração Ensino-Aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 4
+          },
+          "7415": {
+            "term_id": "7415",
+            "string": "Objetivos do Ensino-Aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 5
+          },
+          "7718": {
+            "term_id": "7718",
+            "string": "Processo de Ensino-Aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 6
+          },
+          "8038": {
+            "term_id": "8038",
+            "string": "Técnicas de Ensino-Aprendizagem",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 7
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "ensino-aprendizagem"
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 7
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Thesaurus Brasileiro da Educação",
+          "author": "INEP.  Centro de Informação e Biblioteca em Educação",
+          "lang": "pt-BR",
+          "scope": "O Thesaurus Brased insere a educação dentro do contexto global, sem o qual não é possível compreendê-la. Na definição de seu âmbito temático foram levadas em consideração áreas que estão relacionadas com a educação. Incluye solo relaciones jerárquicas. Fonte: http://inep.gov.br/thesaurus-brasileiro-da-educacao",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/brased/",
+          "createDate": "2020-02-16",
+          "lastMod": "2020-02-16 16:12:48",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8327"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

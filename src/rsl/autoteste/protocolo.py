@@ -333,11 +333,10 @@ def mutacoes(ctx, g):
                 mut = troca_celula(mut, L["instrumento"][s], coluna(t, cab_i, c_fcts),
                                    ", ".join(x for x in i["facetas"] if x != alvo))
     caso("faceta do quadro sem instrumento", mut, P, "sem instrumento")
-    automatico = next((s for s, i in d["instrumentos"].items()
-                       if i["modo"] == G.MODO_AUTOMATICO), None)
-    caso("instrumento Automático sem cliente",
-         cel_inst(automatico, c_i_sigla, automatico + "-sem-cliente") if automatico else None,
-         P, "sem cliente")
+    caminho0 = d["instrumentos"][insts[0]]["caminho"]
+    caso("instrumento com marcador desconhecido no Caminho",
+         cel_inst(insts[0], c_caminho, caminho0.rstrip("/") + "/{lingua}/services.php"), P,
+         (f"linha {insts[0]}:", "marcador desconhecido {lingua}"))
     caso("instrumento com Caminho que não é URL",
          cel_inst(insts[-1], c_caminho, "endereco sem esquema"), P, "não é URL")
 

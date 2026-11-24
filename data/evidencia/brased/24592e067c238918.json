@@ -1,0 +1,68 @@
+{
+  "chave": "brased|pt|fator contextual",
+  "recuperado_em": "2026-11-24T18:55:24-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=fator+contextual&output=json",
+    "status_http": 200,
+    "busca": {
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "fator contextual"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 0
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=suggestDetails&arg=fator+contextual&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "fator contextual"
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Thesaurus Brasileiro da Educação",
+          "author": "INEP.  Centro de Informação e Biblioteca em Educação",
+          "lang": "pt-BR",
+          "scope": "O Thesaurus Brased insere a educação dentro do contexto global, sem o qual não é possível compreendê-la. Na definição de seu âmbito temático foram levadas em consideração áreas que estão relacionadas com a educação. Incluye solo relaciones jerárquicas. Fonte: http://inep.gov.br/thesaurus-brasileiro-da-educacao",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/brased/",
+          "createDate": "2020-02-16",
+          "lastMod": "2020-02-16 16:12:48",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8327"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

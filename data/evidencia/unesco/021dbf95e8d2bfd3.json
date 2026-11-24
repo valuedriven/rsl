@@ -1,0 +1,255 @@
+{
+  "chave": "unesco|en|ontology",
+  "recuperado_em": "2026-11-24T17:03:19-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/en/services.php?task=search&arg=ontology&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "2246": {
+          "term_id": 2246,
+          "string": "Ontology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1003|2221|2245|2246",
+          "order": 1
+        },
+        "2235": {
+          "term_id": 2235,
+          "string": "Deontology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1003|2221|2229|2235",
+          "order": 2
+        },
+        "1828": {
+          "term_id": 1828,
+          "string": "Gerontology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|20|1773|1819|1828",
+          "order": 3
+        },
+        "527": {
+          "term_id": 527,
+          "string": "Palaeontology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|20|476|527",
+          "order": 4
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "ontology"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 4
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchAlt&arg=2246&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 2246
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchUp&arg=2246&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1003": {
+            "term_id": "1003",
+            "string": "Culture",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "2221": {
+            "term_id": "2221",
+            "string": "Philosophy and ethics",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "2245": {
+            "term_id": "2245",
+            "string": "Metaphysics",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          },
+          "2246": {
+            "term_id": "2246",
+            "string": "Ontology",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 4
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 2246
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchDown&arg=2246&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 2246
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchRelated&arg=2246&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2544": {
+            "term_id": "2544",
+            "code": "concept13409",
+            "lang": "en",
+            "string": "Semantics",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2218": {
+            "term_id": "2218",
+            "code": "concept282",
+            "lang": "en",
+            "string": "Epistemology",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2248": {
+            "term_id": "2248",
+            "code": "concept286",
+            "lang": "en",
+            "string": "Philosophy",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2358": {
+            "term_id": "2358",
+            "code": "concept295",
+            "lang": "en",
+            "string": "Theology",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 2246
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchNotes&arg=2246&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1019": {
+            "term_id": "2246",
+            "string": "Ontology",
+            "note_id": "1019",
+            "note_type": "NA",
+            "note_lang": "en",
+            "note_text": "The study of the essential characteristics of Being in itself apart from the study of particular existing things.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 2246
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "UNESCO Thesaurus",
+          "author": "UNESCO",
+          "lang": "en",
+          "scope": null,
+          "keywords": null,
+          "uri": "https://vocabularyserver.com//unesco/en/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 14:32:56",
+          "status": "published - stable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": null,
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "7186"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

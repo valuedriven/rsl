@@ -1,0 +1,584 @@
+{
+  "chave": "unesco|es|educacional",
+  "recuperado_em": "2026-11-24T18:32:39-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/es/services.php?task=search&arg=educacional&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "2762": {
+          "term_id": 2762,
+          "string": "Agrupamiento educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|2548|2762",
+          "order": 1
+        },
+        "2864": {
+          "term_id": 2864,
+          "string": "Ambiente educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|2864",
+          "order": 2
+        },
+        "328": {
+          "term_id": 328,
+          "string": "Aporte educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|326|328",
+          "order": 3
+        },
+        "1763": {
+          "term_id": 1763,
+          "string": "Cooperación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|1753|1754|1763",
+          "order": 4
+        },
+        "4191": {
+          "term_id": 4191,
+          "string": "Desfavorecido educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3775|4144|4169|4191",
+          "order": 5
+        },
+        "8384": {
+          "term_id": 8384,
+          "string": "Discriminación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8384",
+          "order": 6
+        },
+        "669": {
+          "term_id": 669,
+          "string": "Estadísticas educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|669",
+          "order": 7
+        },
+        "8150": {
+          "term_id": 8150,
+          "string": "Experimento educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8148|8150",
+          "order": 8
+        },
+        "2029": {
+          "term_id": 2029,
+          "string": "Fundación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|2015|2019|2029",
+          "order": 9
+        },
+        "3021": {
+          "term_id": 3021,
+          "string": "Gestión educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|2548|3021",
+          "order": 10
+        },
+        "4786": {
+          "term_id": 4786,
+          "string": "Información educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|4742|4741|4768|4786",
+          "order": 11
+        },
+        "8148": {
+          "term_id": 8148,
+          "string": "Innovación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8148",
+          "order": 12
+        },
+        "1939": {
+          "term_id": 1939,
+          "string": "Legislación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|1939",
+          "order": 13
+        },
+        "4061": {
+          "term_id": 4061,
+          "string": "Modelo educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1593|4023|4056|4061",
+          "order": 14
+        },
+        "323": {
+          "term_id": 323,
+          "string": "Necesidades educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|323",
+          "order": 15
+        },
+        "8413": {
+          "term_id": 8413,
+          "string": "Objetivo educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382|8413",
+          "order": 16
+        },
+        "2": {
+          "term_id": 2,
+          "string": "Oportunidades educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|1|2",
+          "order": 17
+        },
+        "2032": {
+          "term_id": 2032,
+          "string": "Organismo educacional gubernamental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|1762|2015|2019|2032",
+          "order": 18
+        },
+        "8382": {
+          "term_id": 8382,
+          "string": "Política educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8382",
+          "order": 19
+        },
+        "4056": {
+          "term_id": 4056,
+          "string": "Teoría de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": "Principio educacional",
+          "index": null,
+          "order": 20
+        },
+        "681": {
+          "term_id": 681,
+          "string": "Prospección educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|669|681",
+          "order": 21
+        },
+        "8476": {
+          "term_id": 8476,
+          "string": "Publicación educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8442|8476",
+          "order": 22
+        },
+        "8489": {
+          "term_id": 8489,
+          "string": "Publicación educacional periódica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8442|8476|8489",
+          "order": 23
+        },
+        "365": {
+          "term_id": 365,
+          "string": "Recursos educacionales",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|325|322|365",
+          "order": 24
+        },
+        "8153": {
+          "term_id": 8153,
+          "string": "Reforma de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": "Reforma educacional",
+          "index": null,
+          "order": 25
+        },
+        "3895": {
+          "term_id": 3895,
+          "string": "Servicio educativo itinerante",
+          "isMetaTerm": 0,
+          "no_term_string": "Servicio educacional itinerante",
+          "index": null,
+          "order": 26
+        },
+        "3728": {
+          "term_id": 3728,
+          "string": "Sistema educativo",
+          "isMetaTerm": 0,
+          "no_term_string": "Sistema educacional",
+          "index": null,
+          "order": 27
+        },
+        "4033": {
+          "term_id": 4033,
+          "string": "Sociología de la educación",
+          "isMetaTerm": 0,
+          "no_term_string": "Sociedad educacional",
+          "index": null,
+          "order": 28
+        },
+        "8443": {
+          "term_id": 8443,
+          "string": "Taller educativo",
+          "isMetaTerm": 0,
+          "no_term_string": "Taller educacional",
+          "index": null,
+          "order": 29
+        },
+        "8496": {
+          "term_id": 8496,
+          "string": "Tecnología educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|8442|8496",
+          "order": 30
+        },
+        "8157": {
+          "term_id": 8157,
+          "string": "Tendencia educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6|5|8141|8157",
+          "order": 31
+        },
+        "3018": {
+          "term_id": 3018,
+          "string": "Terminología educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1150|2964|3009|3012|3018",
+          "order": 32
+        },
+        "8520": {
+          "term_id": 8520,
+          "string": "Vídeo educativo",
+          "isMetaTerm": 0,
+          "no_term_string": "Vídeo educacional",
+          "index": null,
+          "order": 33
+        },
+        "8232": {
+          "term_id": 8232,
+          "string": "Visita escolar",
+          "isMetaTerm": 0,
+          "no_term_string": "Visita educacional",
+          "index": null,
+          "order": 34
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educacional"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 34
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=suggestDetails&arg=educacional&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2762": {
+            "term_id": "2762",
+            "string": "Agrupamiento educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 1
+          },
+          "2864": {
+            "term_id": "2864",
+            "string": "Ambiente educacional",
+            "isMetaTerm": null,
+            "no_term_string": "Entorno educacional",
+            "order": 7
+          },
+          "328": {
+            "term_id": "328",
+            "string": "Aporte educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 3
+          },
+          "1763": {
+            "term_id": "1763",
+            "string": "Cooperación educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 4
+          },
+          "4191": {
+            "term_id": "4191",
+            "string": "Desfavorecido educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 5
+          },
+          "8384": {
+            "term_id": "8384",
+            "string": "Discriminación educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 6
+          },
+          "669": {
+            "term_id": "669",
+            "string": "Estadísticas educacionales",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 8
+          },
+          "8150": {
+            "term_id": "8150",
+            "string": "Experimento educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 9
+          },
+          "8413": {
+            "term_id": "8413",
+            "string": "Objetivo educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 18
+          },
+          "2029": {
+            "term_id": "2029",
+            "string": "Fundación educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 11
+          },
+          "3021": {
+            "term_id": "3021",
+            "string": "Gestión educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 12
+          },
+          "4786": {
+            "term_id": "4786",
+            "string": "Información educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 13
+          },
+          "8148": {
+            "term_id": "8148",
+            "string": "Innovación educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 14
+          },
+          "1939": {
+            "term_id": "1939",
+            "string": "Legislación educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 15
+          },
+          "4061": {
+            "term_id": "4061",
+            "string": "Modelo educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 16
+          },
+          "323": {
+            "term_id": "323",
+            "string": "Necesidades educacionales",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 17
+          },
+          "2": {
+            "term_id": "2",
+            "string": "Oportunidades educacionales",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 19
+          },
+          "2032": {
+            "term_id": "2032",
+            "string": "Organismo educacional gubernamental",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 20
+          },
+          "8382": {
+            "term_id": "8382",
+            "string": "Política educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 21
+          },
+          "4056": {
+            "term_id": "4056",
+            "string": "Teoría de la educación",
+            "isMetaTerm": null,
+            "no_term_string": "Teoría educacional",
+            "order": 34
+          },
+          "681": {
+            "term_id": "681",
+            "string": "Prospección educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 23
+          },
+          "8476": {
+            "term_id": "8476",
+            "string": "Publicación educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 24
+          },
+          "8489": {
+            "term_id": "8489",
+            "string": "Publicación educacional periódica",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 25
+          },
+          "365": {
+            "term_id": "365",
+            "string": "Recursos educacionales",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 26
+          },
+          "8153": {
+            "term_id": "8153",
+            "string": "Reforma de la educación",
+            "isMetaTerm": null,
+            "no_term_string": "Reforma educacional",
+            "order": 27
+          },
+          "3895": {
+            "term_id": "3895",
+            "string": "Servicio educativo itinerante",
+            "isMetaTerm": null,
+            "no_term_string": "Servicio educacional itinerante",
+            "order": 28
+          },
+          "3728": {
+            "term_id": "3728",
+            "string": "Sistema educativo",
+            "isMetaTerm": null,
+            "no_term_string": "Sistema educacional",
+            "order": 29
+          },
+          "4033": {
+            "term_id": "4033",
+            "string": "Sociología de la educación",
+            "isMetaTerm": null,
+            "no_term_string": "Sociedad educacional",
+            "order": 30
+          },
+          "8443": {
+            "term_id": "8443",
+            "string": "Taller educativo",
+            "isMetaTerm": null,
+            "no_term_string": "Taller educacional",
+            "order": 31
+          },
+          "8496": {
+            "term_id": "8496",
+            "string": "Tecnología educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 32
+          },
+          "8157": {
+            "term_id": "8157",
+            "string": "Tendencia educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 33
+          },
+          "3018": {
+            "term_id": "3018",
+            "string": "Terminología educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 35
+          },
+          "8520": {
+            "term_id": "8520",
+            "string": "Vídeo educativo",
+            "isMetaTerm": null,
+            "no_term_string": "Vídeo educacional",
+            "order": 36
+          },
+          "8232": {
+            "term_id": "8232",
+            "string": "Visita escolar",
+            "isMetaTerm": null,
+            "no_term_string": "Visita educacional",
+            "order": 37
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "educacional"
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 34
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro de la UNESCO",
+          "author": "UNESCO",
+          "lang": "es",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com//unesco/es/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 19:45:45",
+          "status": "Publicado - Estable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8528"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,553 @@
+{
+  "chave": "eric|en|educational environment",
+  "recuperado_em": "2026-11-24T17:06:02-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/eric/services.php?task=search&arg=educational+environment&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "229": {
+          "term_id": 229,
+          "string": "Educational Environment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11879|728|229",
+          "order": 1
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educational environment"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 1
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchAlt&arg=229&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "212": {
+            "term_id": "212",
+            "code": null,
+            "lang": "en",
+            "string": "Academic Environment",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6885": {
+            "term_id": "6885",
+            "code": null,
+            "lang": "en",
+            "string": "Learning Environment",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6886": {
+            "term_id": "6886",
+            "code": null,
+            "lang": "en",
+            "string": "School Climate",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6887": {
+            "term_id": "6887",
+            "code": null,
+            "lang": "en",
+            "string": "School Conditions (1966 1980)",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6888": {
+            "term_id": "6888",
+            "code": null,
+            "lang": "en",
+            "string": "School Environment (1966 1980)",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 229
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchUp&arg=229&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "11879": {
+            "term_id": "11879",
+            "string": "Agriculture and Natural Resources",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "728": {
+            "term_id": "728",
+            "string": "Environment",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "229": {
+            "term_id": "229",
+            "string": "Educational Environment",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 229
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchDown&arg=229&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2163": {
+            "term_id": "2163",
+            "string": "Classroom Environment",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4480": {
+            "term_id": "4480",
+            "string": "College Environment",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4483": {
+            "term_id": "4483",
+            "string": "Teaching Conditions",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 229
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchRelated&arg=229&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "225": {
+            "term_id": "225",
+            "code": null,
+            "lang": "en",
+            "string": "Academic Freedom",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "357": {
+            "term_id": "357",
+            "code": null,
+            "lang": "en",
+            "string": "Barriers",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "202": {
+            "term_id": "202",
+            "code": null,
+            "lang": "en",
+            "string": "Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3010": {
+            "term_id": "3010",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Change",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2408": {
+            "term_id": "2408",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Facilities",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3645": {
+            "term_id": "3645",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Facilities Design",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6837": {
+            "term_id": "6837",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Innovation",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6840": {
+            "term_id": "6840",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Objectives",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "4930": {
+            "term_id": "4930",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Philosophy",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6029": {
+            "term_id": "6029",
+            "code": null,
+            "lang": "en",
+            "string": "Hidden Curriculum",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "5234": {
+            "term_id": "5234",
+            "code": null,
+            "lang": "en",
+            "string": "Influence of Technology",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "4805": {
+            "term_id": "4805",
+            "code": null,
+            "lang": "en",
+            "string": "Institutional Environment",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2480": {
+            "term_id": "2480",
+            "code": null,
+            "lang": "en",
+            "string": "Instruction",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "615": {
+            "term_id": "615",
+            "code": null,
+            "lang": "en",
+            "string": "Learning",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2465": {
+            "term_id": "2465",
+            "code": null,
+            "lang": "en",
+            "string": "Multiple Literacies",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3687": {
+            "term_id": "3687",
+            "code": null,
+            "lang": "en",
+            "string": "Organizational Climate",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3486": {
+            "term_id": "3486",
+            "code": null,
+            "lang": "en",
+            "string": "Role of Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6889": {
+            "term_id": "6889",
+            "code": null,
+            "lang": "en",
+            "string": "School Culture",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "782": {
+            "term_id": "782",
+            "code": null,
+            "lang": "en",
+            "string": "School Organization",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "4850": {
+            "term_id": "4850",
+            "code": null,
+            "lang": "en",
+            "string": "School Role",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "862": {
+            "term_id": "862",
+            "code": null,
+            "lang": "en",
+            "string": "Schools",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "460": {
+            "term_id": "460",
+            "code": null,
+            "lang": "en",
+            "string": "Stakeholders",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "236": {
+            "term_id": "236",
+            "code": null,
+            "lang": "en",
+            "string": "Student Rights",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6890": {
+            "term_id": "6890",
+            "code": null,
+            "lang": "en",
+            "string": "Student Satisfaction",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "274": {
+            "term_id": "274",
+            "code": null,
+            "lang": "en",
+            "string": "Student School Relationship",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "646": {
+            "term_id": "646",
+            "code": null,
+            "lang": "en",
+            "string": "Student Subcultures",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 229
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 26
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchNotes&arg=229&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "4195": {
+            "term_id": "229",
+            "string": "Educational Environment",
+            "note_id": "4195",
+            "note_type": "NA",
+            "note_lang": "EN",
+            "note_text": "Conditions, forces, or factors within or exogenous to an educational setting capable of influencing the setting or those within it (Note: Use a more specific term if possible)",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 229
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "ERIC Thesaurus",
+          "author": "USA. Institute of Education Science. Education Resources Information Center",
+          "lang": "en",
+          "scope": "The ERIC Thesaurus is a leading authority on the language used in the field of education. It is a controlled vocabulary with nearly 12,000 terms, including more than 4,500 descriptors and 7,000 synonyms. Descriptors from the Thesaurus are assigned to each of the 1.9 million records in ERIC to describe the main subjects of the content. Synonyms point searchers to the preferred term, or descriptor, in ERIC. This Tematres version is based on the source available at https://eric.ed.gov/?download",
+          "keywords": "education; United States",
+          "uri": "https://vocabularyserver.com/eric/",
+          "createDate": "2023-05-09",
+          "lastMod": "2023-05-09 11:56:57",
+          "status": "published - stable",
+          "status_date": "2023-05-09",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "11919"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

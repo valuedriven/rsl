@@ -90,12 +90,15 @@ def _parser():
          "origem", "relatorio", "cmd_mostrar")
 
     grupo("termos", "validação terminológica por instrumento")
-    novo("termos", "sondar", "consulta de prova em cada cliente automatizado; não grava",
+    novo("termos", "sondar", "consulta de prova em cada endereço resolvido dos instrumentos "
+         "Automático, um por idioma; não grava",
          "termos.validacao", "cmd_sonda")
     novo("termos", "exportar", "reconstrói a planilha de validação a partir do protocolo, "
-         "sem rede", "termos.validacao", "cmd_exportar")
-    p = novo("termos", "validar", "consulta, no instrumento Automático de sigla SIGLA (ou "
-             "em todos: `todos`), os termos ainda sem estatuto", "termos.validacao",
+         "sem rede, reabrindo as linhas que deixaram de valer", "termos.validacao",
+         "cmd_exportar")
+    p = novo("termos", "validar", "consulta, no endereço resolvido do instrumento "
+             "Automático de sigla SIGLA (ou de todos: `todos`), os termos ainda sem "
+             "estatuto", "termos.validacao",
              "cmd_validar")
     p.add_argument("sigla", metavar="SIGLA")
     p.add_argument("--faceta", type=int, help="restringe a uma faceta (número n de FCTn)")

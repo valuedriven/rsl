@@ -312,10 +312,9 @@ def instrumentos(t, ids_facetas, idiomas, locais):
     """Instrumentos da tabela de instrumentos, pelo nome da coluna.
 
     Devolve (por sigla, por faceta). Sem padrão: toda faceta do quadro tem de constar da
-    coluna FCTs de algum instrumento, e instrumento `Automático` tem de ter cliente com o
-    nome da sua sigla.
+    coluna FCTs de algum instrumento. `Caminho` é o endereço do serviço consultado e só
+    admite o marcador `{idioma}`, resolvido por `endereco()`.
     """
-    from .termos.clientes import siglas as clientes_automaticos          # noqa: PLC0415
     T = G.T_INSTRUMENTOS
     c_sigla, c_nome, c_modo, c_caminho, c_idiomas, c_fcts = T.colunas
     bloco, tabela = tabela_da_secao(t, T)
@@ -337,6 +336,12 @@ def instrumentos(t, ids_facetas, idiomas, locais):
         if url.scheme not in ("http", "https") or not url.netloc:
             raise ProtocoloInvalido(T, f"linha {sigla}: {c_caminho} {valores[c_caminho]!r} "
                                        f"não é URL http(s) bem formada")
+        marcadores = sorted(set(re.findall(r"\{[^{}]*\}", valores[c_caminho]))
+                            - {G.MARCADOR_IDIOMA})
+        if marcadores:
+            raise ProtocoloInvalido(T, f"linha {sigla}: {c_caminho} com marcador "
+                                       f"desconhecido {', '.join(marcadores)}; só se admite "
+                                       f"{G.MARCADOR_IDIOMA}")
         langs, fcts = lista(linha[c_idiomas]), lista(linha[c_fcts])
         for campo, itens in ((c_idiomas, langs), (c_fcts, fcts)):
             repetidos = sorted({x for x in itens if itens.count(x) > 1})
@@ -357,14 +362,6 @@ def instrumentos(t, ids_facetas, idiomas, locais):
         locais["instrumento"][sigla] = linha["_linha"]
     if not por_sigla:
         raise ProtocoloInvalido(T, "sem instrumento")
-    automaticos = [s for s, i in por_sigla.items() if i["modo"] == G.MODO_AUTOMATICO]
-    if automaticos:
-        clientes = clientes_automaticos()
-        sem = [s for s in automaticos if s not in clientes]
-        if sem:
-            raise ProtocoloInvalido(G.D_MODO, f"instrumento {G.MODO_AUTOMATICO} sem cliente "
-                                              f"automatizado: {sem}; clientes existentes: "
-                                              f"{clientes}")
     por_faceta = {fid: [i for i in por_sigla.values() if fid in i["facetas"]]
                   for fid in ids_facetas}
     faltam = [f for f, lista_ in por_faceta.items() if not lista_]
@@ -373,9 +370,16 @@ def instrumentos(t, ids_facetas, idiomas, locais):
     return por_sigla, por_faceta
 
 
+def endereco(instrumento, idioma):
+    """Endereço resolvido do instrumento no idioma: o `Caminho` com `{idioma}` trocado."""
+    return instrumento["caminho"].replace(G.MARCADOR_IDIOMA, idioma)
+
+
 def instrumentos_do_termo(d, fid, idioma):
-    """Instrumentos em que se valida um termo da faceta `fid` no `idioma`."""
-    return [i for i in d["instrumentos_por_faceta"][fid] if idioma in i["idiomas"]]
+    """Instrumentos em que se valida um termo da faceta `fid` no `idioma`, cada um com o
+    endereço resolvido para esse idioma (`endereco`)."""
+    return [{**i, "endereco": endereco(i, idioma)}
+            for i in d["instrumentos_por_faceta"][fid] if idioma in i["idiomas"]]
 
 
 # ------------------------------------------------------------------------- strings

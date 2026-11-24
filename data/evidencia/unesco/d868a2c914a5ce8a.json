@@ -1,0 +1,70 @@
+{
+  "chave": "unesco|es|factor situacional",
+  "recuperado_em": "2026-11-24T18:57:08-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/es/services.php?task=search&arg=factor+situacional&output=json",
+    "status_http": 200,
+    "busca": {
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "factor situacional"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 0
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=suggestDetails&arg=factor+situacional&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "factor situacional"
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/es/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro de la UNESCO",
+          "author": "UNESCO",
+          "lang": "es",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com//unesco/es/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 19:45:45",
+          "status": "Publicado - Estable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8528"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

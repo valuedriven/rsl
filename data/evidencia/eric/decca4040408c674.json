@@ -1,0 +1,4633 @@
+{
+  "chave": "eric|en|education",
+  "recuperado_em": "2026-11-24T17:04:15-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/eric/services.php?task=search&arg=education&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "202": {
+          "term_id": 202,
+          "string": "Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202",
+          "order": 1
+        },
+        "200": {
+          "term_id": 200,
+          "string": "Academic Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|200",
+          "order": 2
+        },
+        "334": {
+          "term_id": 334,
+          "string": "Acceleration (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11885|50|334",
+          "order": 3
+        },
+        "107": {
+          "term_id": 107,
+          "string": "Access to Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|2979|371|107",
+          "order": 4
+        },
+        "104": {
+          "term_id": 104,
+          "string": "Academic Accommodations (Disabilities)",
+          "isMetaTerm": 0,
+          "no_term_string": "Accommodations for Disabled (Educational Settings)",
+          "index": null,
+          "order": 5
+        },
+        "660": {
+          "term_id": 660,
+          "string": "Adapted Physical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|661|660",
+          "order": 6
+        },
+        "807": {
+          "term_id": 807,
+          "string": "Administrator Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|807",
+          "order": 7
+        },
+        "98": {
+          "term_id": 98,
+          "string": "College Entrance Examinations",
+          "isMetaTerm": 0,
+          "no_term_string": "Admission Tests (Higher Education)",
+          "index": null,
+          "order": 8
+        },
+        "922": {
+          "term_id": 922,
+          "string": "Adult Basic Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|922",
+          "order": 9
+        },
+        "924": {
+          "term_id": 924,
+          "string": "Adult Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924",
+          "order": 10
+        },
+        "953": {
+          "term_id": 953,
+          "string": "Adult Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "Adult Education Programs (1966 1980)",
+          "index": null,
+          "order": 11
+        },
+        "998": {
+          "term_id": 998,
+          "string": "Adult Vocational Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Adult Farmer Education (2004)",
+          "index": null,
+          "order": 12
+        },
+        "1453": {
+          "term_id": 1453,
+          "string": "Agricultural Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Adult Farmer Education (2004)",
+          "index": null,
+          "order": 13
+        },
+        "1052": {
+          "term_id": 1052,
+          "string": "Adventure Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1054|1052",
+          "order": 14
+        },
+        "1088": {
+          "term_id": 1088,
+          "string": "Aerospace Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1088",
+          "order": 15
+        },
+        "1100": {
+          "term_id": 1100,
+          "string": "Aesthetic Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1100",
+          "order": 16
+        },
+        "1145": {
+          "term_id": 1145,
+          "string": "Humanistic Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Affective Education",
+          "index": null,
+          "order": 17
+        },
+        "1189": {
+          "term_id": 1189,
+          "string": "African American Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1189",
+          "order": 18
+        },
+        "316": {
+          "term_id": 316,
+          "string": "After School Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|316",
+          "order": 19
+        },
+        "1381": {
+          "term_id": 1381,
+          "string": "Aging Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1381",
+          "order": 20
+        },
+        "3486": {
+          "term_id": 3486,
+          "string": "Role of Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Aims of Education (Function of Education)",
+          "index": null,
+          "order": 21
+        },
+        "4930": {
+          "term_id": 4930,
+          "string": "Educational Philosophy",
+          "isMetaTerm": 0,
+          "no_term_string": "Aims of Education (Philosophical Issues)",
+          "index": null,
+          "order": 22
+        },
+        "1595": {
+          "term_id": 1595,
+          "string": "Alcohol Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1595",
+          "order": 23
+        },
+        "1637": {
+          "term_id": 1637,
+          "string": "Alignment (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11885|1637",
+          "order": 24
+        },
+        "1658": {
+          "term_id": 1658,
+          "string": "Allied Health Occupations Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Allied Health Education",
+          "index": null,
+          "order": 25
+        },
+        "1764": {
+          "term_id": 1764,
+          "string": "Nontraditional Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Alternative Education",
+          "index": null,
+          "order": 26
+        },
+        "1779": {
+          "term_id": 1779,
+          "string": "Alumni",
+          "isMetaTerm": 0,
+          "no_term_string": "Alumni Education (2004)",
+          "index": null,
+          "order": 27
+        },
+        "1817": {
+          "term_id": 1817,
+          "string": "American Indian Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1817",
+          "order": 28
+        },
+        "2220": {
+          "term_id": 2220,
+          "string": "Architectural Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|2220",
+          "order": 29
+        },
+        "1102": {
+          "term_id": 1102,
+          "string": "Art Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1102",
+          "order": 30
+        },
+        "1034": {
+          "term_id": 1034,
+          "string": "Articulation (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|1034",
+          "order": 31
+        },
+        "2796": {
+          "term_id": 2796,
+          "string": "Audiovisual Instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "Audiovisual Education",
+          "index": null,
+          "order": 32
+        },
+        "1577": {
+          "term_id": 1577,
+          "string": "Aviation Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1088|1577",
+          "order": 33
+        },
+        "3021": {
+          "term_id": 3021,
+          "string": "Basic Business Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3021",
+          "order": 34
+        },
+        "11150": {
+          "term_id": 11150,
+          "string": "Young Farmer Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Beginning Farmer Education",
+          "index": null,
+          "order": 35
+        },
+        "6835": {
+          "term_id": 6835,
+          "string": "Educational Benefits",
+          "isMetaTerm": 0,
+          "no_term_string": "Benefits of Education (2004)",
+          "index": null,
+          "order": 36
+        },
+        "3250": {
+          "term_id": 3250,
+          "string": "Multicultural Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Bicultural Education",
+          "index": null,
+          "order": 37
+        },
+        "3268": {
+          "term_id": 3268,
+          "string": "Bilingual Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3268",
+          "order": 38
+        },
+        "3269": {
+          "term_id": 3269,
+          "string": "Bilingual Education Programs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|314|3269",
+          "order": 39
+        },
+        "2194": {
+          "term_id": 2194,
+          "string": "Board of Education Policy",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|786|749|2194",
+          "order": 40
+        },
+        "3484": {
+          "term_id": 3484,
+          "string": "Board of Education Role",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|833|3484",
+          "order": 41
+        },
+        "3473": {
+          "term_id": 3473,
+          "string": "Boards of Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2729|1268|756|3473",
+          "order": 42
+        },
+        "811": {
+          "term_id": 811,
+          "string": "Business Administration Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|811",
+          "order": 43
+        },
+        "468": {
+          "term_id": 468,
+          "string": "Business Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|468",
+          "order": 44
+        },
+        "3734": {
+          "term_id": 3734,
+          "string": "Business Education Teachers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|5091|6353|3995|850|716|1546|3734",
+          "order": 45
+        },
+        "3852": {
+          "term_id": 3852,
+          "string": "Career Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3852",
+          "order": 46
+        },
+        "3980": {
+          "term_id": 3980,
+          "string": "Case Studies",
+          "isMetaTerm": 0,
+          "no_term_string": "Case Studies (Education) (1966 1980)",
+          "index": null,
+          "order": 47
+        },
+        "4765": {
+          "term_id": 4765,
+          "string": "College Presidents",
+          "isMetaTerm": 0,
+          "no_term_string": "Chancellors (Education)",
+          "index": null,
+          "order": 48
+        },
+        "3023": {
+          "term_id": 3023,
+          "string": "Citizenship Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3023",
+          "order": 49
+        },
+        "5587": {
+          "term_id": 5587,
+          "string": "Student Teacher Supervisors",
+          "isMetaTerm": 0,
+          "no_term_string": "Clinical Professors (1967 1980) (Education)",
+          "index": null,
+          "order": 50
+        },
+        "1765": {
+          "term_id": 1765,
+          "string": "Professional Development Schools",
+          "isMetaTerm": 0,
+          "no_term_string": "Clinical Schools (Teacher Education)",
+          "index": null,
+          "order": 51
+        },
+        "4676": {
+          "term_id": 4676,
+          "string": "Coeducation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4676",
+          "order": 52
+        },
+        "4854": {
+          "term_id": 4854,
+          "string": "Partnerships in Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Collaboratives (Education)",
+          "index": null,
+          "order": 53
+        },
+        "6845": {
+          "term_id": 6845,
+          "string": "Schools of Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Colleges of Education",
+          "index": null,
+          "order": 54
+        },
+        "957": {
+          "term_id": 957,
+          "string": "Community Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|957",
+          "order": 55
+        },
+        "5130": {
+          "term_id": 5130,
+          "string": "Comparative Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5130",
+          "order": 56
+        },
+        "1368": {
+          "term_id": 1368,
+          "string": "Compensatory Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1368",
+          "order": 57
+        },
+        "298": {
+          "term_id": 298,
+          "string": "Competency Based Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|298",
+          "order": 58
+        },
+        "299": {
+          "term_id": 299,
+          "string": "Competency Based Teacher Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|298|299",
+          "order": 59
+        },
+        "4210": {
+          "term_id": 4210,
+          "string": "Comprehensive School Health Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|582|4210",
+          "order": 60
+        },
+        "5206": {
+          "term_id": 5206,
+          "string": "Compulsory Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5206",
+          "order": 61
+        },
+        "5270": {
+          "term_id": 5270,
+          "string": "Computer Science Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5302|5270",
+          "order": 62
+        },
+        "362": {
+          "term_id": 362,
+          "string": "Computer Uses in Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11900|5274|362",
+          "order": 63
+        },
+        "3352": {
+          "term_id": 3352,
+          "string": "Conservation Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1055|3352",
+          "order": 64
+        },
+        "4690": {
+          "term_id": 4690,
+          "string": "Constructivism (Learning)",
+          "isMetaTerm": 0,
+          "no_term_string": "Constructionism (Education)",
+          "index": null,
+          "order": 65
+        },
+        "3024": {
+          "term_id": 3024,
+          "string": "Consumer Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3024",
+          "order": 66
+        },
+        "5534": {
+          "term_id": 5534,
+          "string": "Continuation Education (1968 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5534",
+          "order": 67
+        },
+        "992": {
+          "term_id": 992,
+          "string": "Continuing Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|992",
+          "order": 68
+        },
+        "958": {
+          "term_id": 958,
+          "string": "Continuing Education Centers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|2456|2408|958",
+          "order": 69
+        },
+        "959": {
+          "term_id": 959,
+          "string": "Continuing Education Units",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11888|289|959",
+          "order": 70
+        },
+        "1640": {
+          "term_id": 1640,
+          "string": "Developmental Continuity",
+          "isMetaTerm": 0,
+          "no_term_string": "Continuity of Education",
+          "index": null,
+          "order": 71
+        },
+        "5551": {
+          "term_id": 5551,
+          "string": "Contract Training",
+          "isMetaTerm": 0,
+          "no_term_string": "Contract Education",
+          "index": null,
+          "order": 72
+        },
+        "1000": {
+          "term_id": 1000,
+          "string": "Cooperative Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|1000",
+          "order": 73
+        },
+        "3700": {
+          "term_id": 3700,
+          "string": "Corporate Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3700",
+          "order": 74
+        },
+        "960": {
+          "term_id": 960,
+          "string": "Correctional Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|960",
+          "order": 75
+        },
+        "5712": {
+          "term_id": 5712,
+          "string": "Counselor Training",
+          "isMetaTerm": 0,
+          "no_term_string": "Counselor Education",
+          "index": null,
+          "order": 76
+        },
+        "5892": {
+          "term_id": 5892,
+          "string": "Critical Theory",
+          "isMetaTerm": 0,
+          "no_term_string": "Critical Humanism in Education (2004)",
+          "index": null,
+          "order": 77
+        },
+        "9368": {
+          "term_id": 9368,
+          "string": "Noncategorical Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Cross Categorical Education",
+          "index": null,
+          "order": 78
+        },
+        "1866": {
+          "term_id": 1866,
+          "string": "Cultural Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1866",
+          "order": 79
+        },
+        "1861": {
+          "term_id": 1861,
+          "string": "Culturally Relevant Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11909|5952|1861",
+          "order": 80
+        },
+        "1104": {
+          "term_id": 1104,
+          "string": "Dance Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1102|1104",
+          "order": 81
+        },
+        "6150": {
+          "term_id": 6150,
+          "string": "Deafness",
+          "isMetaTerm": 0,
+          "no_term_string": "Deaf Education (1968 1980)",
+          "index": null,
+          "order": 82
+        },
+        "6164": {
+          "term_id": 6164,
+          "string": "Death",
+          "isMetaTerm": 0,
+          "no_term_string": "Death Education",
+          "index": null,
+          "order": 83
+        },
+        "6259": {
+          "term_id": 6259,
+          "string": "Demonstrations (Educational)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495|1021|6259",
+          "order": 84
+        },
+        "4104": {
+          "term_id": 4104,
+          "string": "Public Schools",
+          "isMetaTerm": 0,
+          "no_term_string": "Department of Defense Education Activity Schools (2004)",
+          "index": null,
+          "order": 85
+        },
+        "1382": {
+          "term_id": 1382,
+          "string": "Developmentally Appropriate Practices",
+          "isMetaTerm": 0,
+          "no_term_string": "Developmentally Inappropriate Education",
+          "index": null,
+          "order": 86
+        },
+        "1115": {
+          "term_id": 1115,
+          "string": "Discipline Based Art Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1102|1115",
+          "order": 87
+        },
+        "2557": {
+          "term_id": 2557,
+          "string": "Distance Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|2557",
+          "order": 88
+        },
+        "1459": {
+          "term_id": 1459,
+          "string": "Distributive Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|1459",
+          "order": 89
+        },
+        "591": {
+          "term_id": 591,
+          "string": "Drama Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1102|591",
+          "order": 90
+        },
+        "6674": {
+          "term_id": 6674,
+          "string": "Driver Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|6674",
+          "order": 91
+        },
+        "1602": {
+          "term_id": 1602,
+          "string": "Drug Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1602",
+          "order": 92
+        },
+        "4188": {
+          "term_id": 4188,
+          "string": "Early Childhood Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4188",
+          "order": 93
+        },
+        "3026": {
+          "term_id": 3026,
+          "string": "Economics Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3026",
+          "order": 94
+        },
+        "2242": {
+          "term_id": 2242,
+          "string": "Economics",
+          "isMetaTerm": 0,
+          "no_term_string": "Economics of Education",
+          "index": null,
+          "order": 95
+        },
+        "6832": {
+          "term_id": 6832,
+          "string": "Education Courses",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11885|2239|163|6832",
+          "order": 96
+        },
+        "4380": {
+          "term_id": 4380,
+          "string": "Emergency Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "Education in Emergencies",
+          "index": null,
+          "order": 97
+        },
+        "6833": {
+          "term_id": 6833,
+          "string": "Education Majors",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2729|848|991|193|6833",
+          "order": 98
+        },
+        "946": {
+          "term_id": 946,
+          "string": "Lifelong Learning",
+          "isMetaTerm": 0,
+          "no_term_string": "Education Permanente",
+          "index": null,
+          "order": 99
+        },
+        "1944": {
+          "term_id": 1944,
+          "string": "Education Service Centers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|2456|2408|1944",
+          "order": 100
+        },
+        "3828": {
+          "term_id": 3828,
+          "string": "Education Work Relationship",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|4466|3828",
+          "order": 101
+        },
+        "4": {
+          "term_id": 4,
+          "string": "Accountability",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Accountability (1970 1980)",
+          "index": null,
+          "order": 102
+        },
+        "3": {
+          "term_id": 3,
+          "string": "Academic Achievement",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Achievement",
+          "index": null,
+          "order": 103
+        },
+        "849": {
+          "term_id": 849,
+          "string": "Educational Administration",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|746|742|849",
+          "order": 104
+        },
+        "5131": {
+          "term_id": 5131,
+          "string": "Educational Anthropology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|209|565|2048|2041|5131",
+          "order": 105
+        },
+        "510": {
+          "term_id": 510,
+          "string": "Educational Assessment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11906|498|510",
+          "order": 106
+        },
+        "511": {
+          "term_id": 511,
+          "string": "Educational Attainment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|37|3|511",
+          "order": 107
+        },
+        "6834": {
+          "term_id": 6834,
+          "string": "Educational Attitudes",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|797|6834",
+          "order": 108
+        },
+        "2572": {
+          "term_id": 2572,
+          "string": "Educational Background",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|2977|2572",
+          "order": 109
+        },
+        "1125": {
+          "term_id": 1125,
+          "string": "Caring",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Caring",
+          "index": null,
+          "order": 110
+        },
+        "1762": {
+          "term_id": 1762,
+          "string": "Educational Certificates",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11911|2236|190|1762",
+          "order": 111
+        },
+        "3010": {
+          "term_id": 3010,
+          "string": "Educational Change",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|769|3010",
+          "order": 112
+        },
+        "860": {
+          "term_id": 860,
+          "string": "School Choice",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Choice",
+          "index": null,
+          "order": 113
+        },
+        "3789": {
+          "term_id": 3789,
+          "string": "Campuses",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Complexes (2004)",
+          "index": null,
+          "order": 114
+        },
+        "1406": {
+          "term_id": 1406,
+          "string": "Educational Cooperation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|723|8|1406",
+          "order": 115
+        },
+        "755": {
+          "term_id": 755,
+          "string": "Coordination",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Coordination (1967 1980)",
+          "index": null,
+          "order": 116
+        },
+        "161": {
+          "term_id": 161,
+          "string": "Educational Counseling",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11884|3909|726|161",
+          "order": 117
+        },
+        "374": {
+          "term_id": 374,
+          "string": "Educational Demand",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|374",
+          "order": 118
+        },
+        "3816": {
+          "term_id": 3816,
+          "string": "Educational Development",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2145|3816",
+          "order": 119
+        },
+        "2573": {
+          "term_id": 2573,
+          "string": "Educational Diagnosis",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11906|54|2573",
+          "order": 120
+        },
+        "375": {
+          "term_id": 375,
+          "string": "Educational Discrimination",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|1387|375",
+          "order": 121
+        },
+        "6619": {
+          "term_id": 6619,
+          "string": "Endowment Funds",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Endowments",
+          "index": null,
+          "order": 122
+        },
+        "229": {
+          "term_id": 229,
+          "string": "Educational Environment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11879|728|229",
+          "order": 123
+        },
+        "2801": {
+          "term_id": 2801,
+          "string": "Educational Equipment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11892|1489|2801",
+          "order": 124
+        },
+        "512": {
+          "term_id": 512,
+          "string": "Educational Equity (Finance)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11887|512",
+          "order": 125
+        },
+        "6836": {
+          "term_id": 6836,
+          "string": "Educational Experience",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|2977|2572|6836",
+          "order": 126
+        },
+        "6260": {
+          "term_id": 6260,
+          "string": "Educational Experiments",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|6106|6260",
+          "order": 127
+        },
+        "2408": {
+          "term_id": 2408,
+          "string": "Educational Facilities",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|2456|2408",
+          "order": 128
+        },
+        "3645": {
+          "term_id": 3645,
+          "string": "Educational Facilities Design",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11880|2231|3645",
+          "order": 129
+        },
+        "6916": {
+          "term_id": 6916,
+          "string": "Educational Facilities Improvement",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|501|3638|6916",
+          "order": 130
+        },
+        "5488": {
+          "term_id": 5488,
+          "string": "Educational Facilities Planning",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11904|763|2356|5488",
+          "order": 131
+        },
+        "376": {
+          "term_id": 376,
+          "string": "Educational Finance",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|209|565|2048|2242|376",
+          "order": 132
+        },
+        "6621": {
+          "term_id": 6621,
+          "string": "Philanthropic Foundations",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Foundations",
+          "index": null,
+          "order": 133
+        },
+        "2146": {
+          "term_id": 2146,
+          "string": "Futures (of Society)",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Futures",
+          "index": null,
+          "order": 134
+        },
+        "5252": {
+          "term_id": 5252,
+          "string": "Educational Games",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|648|2613|5252",
+          "order": 135
+        },
+        "944": {
+          "term_id": 944,
+          "string": "Educational Gerontology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|209|565|2048|945|944",
+          "order": 136
+        },
+        "6864": {
+          "term_id": 6864,
+          "string": "Educational History",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|6864",
+          "order": 137
+        },
+        "1641": {
+          "term_id": 1641,
+          "string": "Educational Improvement",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|501|1641",
+          "order": 138
+        },
+        "130": {
+          "term_id": 130,
+          "string": "Educational Indicators",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11900|6091|4054|130",
+          "order": 139
+        },
+        "6837": {
+          "term_id": 6837,
+          "string": "Educational Innovation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|16|6837",
+          "order": 140
+        },
+        "862": {
+          "term_id": 862,
+          "string": "Schools",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Institutions",
+          "index": null,
+          "order": 141
+        },
+        "6838": {
+          "term_id": 6838,
+          "string": "Educational Legislation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11894|4405|6838",
+          "order": 142
+        },
+        "300": {
+          "term_id": 300,
+          "string": "Educational Malpractice",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|300",
+          "order": 143
+        },
+        "863": {
+          "term_id": 863,
+          "string": "Student Recruitment",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Marketing",
+          "index": null,
+          "order": 144
+        },
+        "1013": {
+          "term_id": 1013,
+          "string": "Instructional Materials",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Materials",
+          "index": null,
+          "order": 145
+        },
+        "2795": {
+          "term_id": 2795,
+          "string": "Educational Media",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11883|2795",
+          "order": 146
+        },
+        "6045": {
+          "term_id": 6045,
+          "string": "Media Adaptation",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Media Adaptation",
+          "index": null,
+          "order": 147
+        },
+        "2812": {
+          "term_id": 2812,
+          "string": "Media Selection",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Media Selection",
+          "index": null,
+          "order": 148
+        },
+        "4495": {
+          "term_id": 4495,
+          "string": "Educational Methods",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495",
+          "order": 149
+        },
+        "131": {
+          "term_id": 131,
+          "string": "Educational Mobility",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11896|6967|131",
+          "order": 150
+        },
+        "6839": {
+          "term_id": 6839,
+          "string": "Educational Needs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|1084|6839",
+          "order": 151
+        },
+        "6840": {
+          "term_id": 6840,
+          "string": "Educational Objectives",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2443|6840",
+          "order": 152
+        },
+        "371": {
+          "term_id": 371,
+          "string": "Educational Opportunities",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|2979|371",
+          "order": 153
+        },
+        "6974": {
+          "term_id": 6974,
+          "string": "Educational Parks",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|6974",
+          "order": 154
+        },
+        "2356": {
+          "term_id": 2356,
+          "string": "Educational Planning",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11904|763|2356",
+          "order": 155
+        },
+        "108": {
+          "term_id": 108,
+          "string": "Educational Policy",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|786|108",
+          "order": 156
+        },
+        "6382": {
+          "term_id": 6382,
+          "string": "Educational Practices",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|6382",
+          "order": 157
+        },
+        "790": {
+          "term_id": 790,
+          "string": "Educational Principles",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|790",
+          "order": 158
+        },
+        "6982": {
+          "term_id": 6982,
+          "string": "Educational Problems (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6982",
+          "order": 159
+        },
+        "2165": {
+          "term_id": 2165,
+          "string": "Learning Processes",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Processes",
+          "index": null,
+          "order": 160
+        },
+        "24": {
+          "term_id": 24,
+          "string": "Productivity",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Production Functions",
+          "index": null,
+          "order": 161
+        },
+        "6985": {
+          "term_id": 6985,
+          "string": "Educational Programs (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6985",
+          "order": 162
+        },
+        "6865": {
+          "term_id": 6865,
+          "string": "Educational Psychology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|6865",
+          "order": 163
+        },
+        "817": {
+          "term_id": 817,
+          "string": "Educational Quality",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|817",
+          "order": 164
+        },
+        "2818": {
+          "term_id": 2818,
+          "string": "Educational Radio",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|466|2811|2738|2818",
+          "order": 165
+        },
+        "3172": {
+          "term_id": 3172,
+          "string": "Educational Research",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|601|3172",
+          "order": 166
+        },
+        "6990": {
+          "term_id": 6990,
+          "string": "Educational Researchers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|5091|6353|3995|850|6994|6990",
+          "order": 167
+        },
+        "6841": {
+          "term_id": 6841,
+          "string": "Educational Resources",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|6841",
+          "order": 168
+        },
+        "830": {
+          "term_id": 830,
+          "string": "Educational Responsibility",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|439|830",
+          "order": 169
+        },
+        "7001": {
+          "term_id": 7001,
+          "string": "Educational Retardation (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|7001",
+          "order": 170
+        },
+        "5897": {
+          "term_id": 5897,
+          "string": "Educational Sociology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|5897",
+          "order": 171
+        },
+        "7003": {
+          "term_id": 7003,
+          "string": "Educational Specifications (1967 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|7003",
+          "order": 172
+        },
+        "513": {
+          "term_id": 513,
+          "string": "Educational Status Comparison",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|603|3198|513",
+          "order": 173
+        },
+        "318": {
+          "term_id": 318,
+          "string": "Educational Strategies",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495|318",
+          "order": 174
+        },
+        "377": {
+          "term_id": 377,
+          "string": "Educational Supply",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|6841|377",
+          "order": 175
+        },
+        "838": {
+          "term_id": 838,
+          "string": "School Surveys",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Surveys",
+          "index": null,
+          "order": 176
+        },
+        "364": {
+          "term_id": 364,
+          "string": "Educational Technology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|466|364",
+          "order": 177
+        },
+        "2819": {
+          "term_id": 2819,
+          "string": "Educational Television",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|466|2811|2738|2819",
+          "order": 178
+        },
+        "530": {
+          "term_id": 530,
+          "string": "Educational Testing",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|2850|675|530",
+          "order": 179
+        },
+        "1956": {
+          "term_id": 1956,
+          "string": "Educational Theories",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|1956",
+          "order": 180
+        },
+        "2348": {
+          "term_id": 2348,
+          "string": "Educational Therapy",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11895|739|2348",
+          "order": 181
+        },
+        "6842": {
+          "term_id": 6842,
+          "string": "Educational Trends",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|6842",
+          "order": 182
+        },
+        "4931": {
+          "term_id": 4931,
+          "string": "Educational Vouchers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11887|5090|2953|4931",
+          "order": 183
+        },
+        "132": {
+          "term_id": 132,
+          "string": "Educationally Disadvantaged",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2729|848|1043|132",
+          "order": 184
+        },
+        "247": {
+          "term_id": 247,
+          "string": "Jargon",
+          "isMetaTerm": 0,
+          "no_term_string": "Educationese",
+          "index": null,
+          "order": 185
+        },
+        "925": {
+          "term_id": 925,
+          "string": "Elementary Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5208|925",
+          "order": 186
+        },
+        "5208": {
+          "term_id": 5208,
+          "string": "Elementary Secondary Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5208",
+          "order": 187
+        },
+        "5455": {
+          "term_id": 5455,
+          "string": "Energy Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5455",
+          "order": 188
+        },
+        "1093": {
+          "term_id": 1093,
+          "string": "Engineering Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|1093",
+          "order": 189
+        },
+        "7303": {
+          "term_id": 7303,
+          "string": "English Education (1967 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|7303",
+          "order": 190
+        },
+        "7290": {
+          "term_id": 7290,
+          "string": "English Teacher Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5170|7290",
+          "order": 191
+        },
+        "1055": {
+          "term_id": 1055,
+          "string": "Environmental Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1055",
+          "order": 192
+        },
+        "109": {
+          "term_id": 109,
+          "string": "Equal Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|1261|109",
+          "order": 193
+        },
+        "133": {
+          "term_id": 133,
+          "string": "Excellence in Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|133",
+          "order": 194
+        },
+        "7498": {
+          "term_id": 7498,
+          "string": "Exceptional Child Education (1968 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|7498",
+          "order": 195
+        },
+        "623": {
+          "term_id": 623,
+          "string": "Experiential Learning",
+          "isMetaTerm": 0,
+          "no_term_string": "Experience Based Education",
+          "index": null,
+          "order": 196
+        },
+        "1763": {
+          "term_id": 1763,
+          "string": "Extended Teacher Education Programs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|314|1767|1763",
+          "order": 197
+        },
+        "961": {
+          "term_id": 961,
+          "string": "Extension Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|961",
+          "order": 198
+        },
+        "5508": {
+          "term_id": 5508,
+          "string": "Family Life Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5508",
+          "order": 199
+        },
+        "7913": {
+          "term_id": 7913,
+          "string": "Financial Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3024|7913",
+          "order": 200
+        },
+        "5457": {
+          "term_id": 5457,
+          "string": "Fire Science Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|1096|5457",
+          "order": 201
+        },
+        "7270": {
+          "term_id": 7270,
+          "string": "Mechanics (Physics)",
+          "isMetaTerm": 0,
+          "no_term_string": "Fluid Power Education (1967 1980)",
+          "index": null,
+          "order": 202
+        },
+        "5132": {
+          "term_id": 5132,
+          "string": "Foundations of Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132",
+          "order": 203
+        },
+        "206": {
+          "term_id": 206,
+          "string": "General Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|206",
+          "order": 204
+        },
+        "930": {
+          "term_id": 930,
+          "string": "High School Equivalency Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "General Educational Development Programs",
+          "index": null,
+          "order": 205
+        },
+        "347": {
+          "term_id": 347,
+          "string": "Gifted Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|347",
+          "order": 206
+        },
+        "2246": {
+          "term_id": 2246,
+          "string": "Global Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|2246",
+          "order": 207
+        },
+        "14": {
+          "term_id": 14,
+          "string": "Global Approach",
+          "isMetaTerm": 0,
+          "no_term_string": "Globalization of Education",
+          "index": null,
+          "order": 208
+        },
+        "4804": {
+          "term_id": 4804,
+          "string": "Graduate Study",
+          "isMetaTerm": 0,
+          "no_term_string": "Graduate Education",
+          "index": null,
+          "order": 209
+        },
+        "4571": {
+          "term_id": 4571,
+          "string": "Graduate Medical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|167|166|4804|4571",
+          "order": 210
+        },
+        "582": {
+          "term_id": 582,
+          "string": "Health Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|582",
+          "order": 211
+        },
+        "5031": {
+          "term_id": 5031,
+          "string": "Heritage Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1866|5031",
+          "order": 212
+        },
+        "166": {
+          "term_id": 166,
+          "string": "Higher Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|167|166",
+          "order": 213
+        },
+        "1463": {
+          "term_id": 1463,
+          "string": "Colleges",
+          "isMetaTerm": 0,
+          "no_term_string": "Higher Education Institutions",
+          "index": null,
+          "order": 214
+        },
+        "8611": {
+          "term_id": 8611,
+          "string": "History Instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "History Education",
+          "index": null,
+          "order": 215
+        },
+        "4184": {
+          "term_id": 4184,
+          "string": "Family and Consumer Sciences",
+          "isMetaTerm": 0,
+          "no_term_string": "Home Economics Education",
+          "index": null,
+          "order": 216
+        },
+        "110": {
+          "term_id": 110,
+          "string": "Inclusion",
+          "isMetaTerm": 0,
+          "no_term_string": "Inclusion (Education)",
+          "index": null,
+          "order": 217
+        },
+        "663": {
+          "term_id": 663,
+          "string": "Individualized Instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "Individualized Education",
+          "index": null,
+          "order": 218
+        },
+        "2505": {
+          "term_id": 2505,
+          "string": "Individualized Education Programs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|314|8872|2505",
+          "order": 219
+        },
+        "8922": {
+          "term_id": 8922,
+          "string": "Industrial Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|8922",
+          "order": 220
+        },
+        "7547": {
+          "term_id": 7547,
+          "string": "Informal Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|7547",
+          "order": 221
+        },
+        "5302": {
+          "term_id": 5302,
+          "string": "Information Science Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5302",
+          "order": 222
+        },
+        "11779": {
+          "term_id": 11779,
+          "string": "Urban Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Inner City Education",
+          "index": null,
+          "order": 223
+        },
+        "7700": {
+          "term_id": 7700,
+          "string": "Inservice Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|7700",
+          "order": 224
+        },
+        "3082": {
+          "term_id": 3082,
+          "string": "Inservice Teacher Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|7700|3082",
+          "order": 225
+        },
+        "3854": {
+          "term_id": 3854,
+          "string": "Integrated Curriculum",
+          "isMetaTerm": 0,
+          "no_term_string": "Integrated Education",
+          "index": null,
+          "order": 226
+        },
+        "8738": {
+          "term_id": 8738,
+          "string": "Intergroup Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|8738",
+          "order": 227
+        },
+        "5133": {
+          "term_id": 5133,
+          "string": "International Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|2246|5133",
+          "order": 228
+        },
+        "5134": {
+          "term_id": 5134,
+          "string": "International Educational Exchange",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|5134",
+          "order": 229
+        },
+        "7575": {
+          "term_id": 7575,
+          "string": "Journalism Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|7575",
+          "order": 230
+        },
+        "5552": {
+          "term_id": 5552,
+          "string": "Labor Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|5552",
+          "order": 231
+        },
+        "4354": {
+          "term_id": 4354,
+          "string": "Law Related Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4354",
+          "order": 232
+        },
+        "9560": {
+          "term_id": 9560,
+          "string": "Legal Education (1977 1986)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|9560",
+          "order": 233
+        },
+        "5474": {
+          "term_id": 5474,
+          "string": "Legal Education (Professions)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5474",
+          "order": 234
+        },
+        "9576": {
+          "term_id": 9576,
+          "string": "Leisure Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|9576",
+          "order": 235
+        },
+        "8981": {
+          "term_id": 8981,
+          "string": "Library Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5302|8981",
+          "order": 236
+        },
+        "931": {
+          "term_id": 931,
+          "string": "Literacy Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|931",
+          "order": 237
+        },
+        "3502": {
+          "term_id": 3502,
+          "string": "School Districts",
+          "isMetaTerm": 0,
+          "no_term_string": "Local Education Agencies",
+          "index": null,
+          "order": 238
+        },
+        "4074": {
+          "term_id": 4074,
+          "string": "Mandatory Continuing Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|992|4074",
+          "order": 239
+        },
+        "7332": {
+          "term_id": 7332,
+          "string": "Marine Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|7332",
+          "order": 240
+        },
+        "4835": {
+          "term_id": 4835,
+          "string": "Mathematics Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4835",
+          "order": 241
+        },
+        "5899": {
+          "term_id": 5899,
+          "string": "Media Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5899",
+          "order": 242
+        },
+        "1670": {
+          "term_id": 1670,
+          "string": "Medical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|1670",
+          "order": 243
+        },
+        "3283": {
+          "term_id": 3283,
+          "string": "Mexican American Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3283",
+          "order": 244
+        },
+        "932": {
+          "term_id": 932,
+          "string": "Migrant Adult Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|932",
+          "order": 245
+        },
+        "3284": {
+          "term_id": 3284,
+          "string": "Migrant Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3284",
+          "order": 246
+        },
+        "7597": {
+          "term_id": 7597,
+          "string": "Mobile Educational Services",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|315|4531|1941|1938|7597",
+          "order": 247
+        },
+        "4353": {
+          "term_id": 4353,
+          "string": "Ethical Instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "Moral Education",
+          "index": null,
+          "order": 248
+        },
+        "3366": {
+          "term_id": 3366,
+          "string": "Movement Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|661|3366",
+          "order": 249
+        },
+        "1105": {
+          "term_id": 1105,
+          "string": "Music Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1102|1105",
+          "order": 250
+        },
+        "1160": {
+          "term_id": 1160,
+          "string": "Nondiscriminatory Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1160",
+          "order": 251
+        },
+        "5135": {
+          "term_id": 5135,
+          "string": "Nonformal Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5135",
+          "order": 252
+        },
+        "963": {
+          "term_id": 963,
+          "string": "Nonschool Educational Programs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|314|963",
+          "order": 253
+        },
+        "10328": {
+          "term_id": 10328,
+          "string": "Nursing Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|1670|10328",
+          "order": 254
+        },
+        "472": {
+          "term_id": 472,
+          "string": "Office Occupations Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|468|472",
+          "order": 255
+        },
+        "6511": {
+          "term_id": 6511,
+          "string": "Open Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|6511",
+          "order": 256
+        },
+        "382": {
+          "term_id": 382,
+          "string": "Open Educational Resources",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|6841|382",
+          "order": 257
+        },
+        "306": {
+          "term_id": 306,
+          "string": "Outcome Based Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|306",
+          "order": 258
+        },
+        "453": {
+          "term_id": 453,
+          "string": "Outcomes of Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|453",
+          "order": 259
+        },
+        "1054": {
+          "term_id": 1054,
+          "string": "Outdoor Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1054",
+          "order": 260
+        },
+        "7745": {
+          "term_id": 7745,
+          "string": "Parent Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|7745",
+          "order": 261
+        },
+        "5963": {
+          "term_id": 5963,
+          "string": "Parent Background",
+          "isMetaTerm": 0,
+          "no_term_string": "Parent Education Level",
+          "index": null,
+          "order": 262
+        },
+        "4202": {
+          "term_id": 4202,
+          "string": "Parenthood Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5508|4202",
+          "order": 263
+        },
+        "6544": {
+          "term_id": 6544,
+          "string": "Patient Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|6544",
+          "order": 264
+        },
+        "4573": {
+          "term_id": 4573,
+          "string": "Pharmaceutical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|1670|4573",
+          "order": 265
+        },
+        "661": {
+          "term_id": 661,
+          "string": "Physical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|661",
+          "order": 266
+        },
+        "2614": {
+          "term_id": 2614,
+          "string": "Physical Education Facilities",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|2456|2408|2614",
+          "order": 267
+        },
+        "2582": {
+          "term_id": 2582,
+          "string": "Physical Education Teachers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|5091|6353|3995|850|716|2582",
+          "order": 268
+        },
+        "2874": {
+          "term_id": 2874,
+          "string": "Place Based Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|2874",
+          "order": 269
+        },
+        "5878": {
+          "term_id": 5878,
+          "string": "Police Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5878",
+          "order": 270
+        },
+        "3471": {
+          "term_id": 3471,
+          "string": "Politics of Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11894|5042|3471",
+          "order": 271
+        },
+        "964": {
+          "term_id": 964,
+          "string": "Popular Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|964",
+          "order": 272
+        },
+        "6255": {
+          "term_id": 6255,
+          "string": "Population Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|6255",
+          "order": 273
+        },
+        "6608": {
+          "term_id": 6608,
+          "string": "Postdoctoral Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|167|166|6608",
+          "order": 274
+        },
+        "167": {
+          "term_id": 167,
+          "string": "Postsecondary Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|167",
+          "order": 275
+        },
+        "4809": {
+          "term_id": 4809,
+          "string": "Postsecondary Education as a Field of Study",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11885|2239|163|4809",
+          "order": 276
+        },
+        "6945": {
+          "term_id": 6945,
+          "string": "Preretirement Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|6945",
+          "order": 277
+        },
+        "4189": {
+          "term_id": 4189,
+          "string": "Preschool Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4188|4189",
+          "order": 278
+        },
+        "5586": {
+          "term_id": 5586,
+          "string": "Preservice Teacher Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5170|5586",
+          "order": 279
+        },
+        "3894": {
+          "term_id": 3894,
+          "string": "Prevocational Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|3894",
+          "order": 280
+        },
+        "933": {
+          "term_id": 933,
+          "string": "Primary Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4188|933",
+          "order": 281
+        },
+        "4022": {
+          "term_id": 4022,
+          "string": "Private Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4022",
+          "order": 282
+        },
+        "3168": {
+          "term_id": 3168,
+          "string": "Process Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3168",
+          "order": 283
+        },
+        "965": {
+          "term_id": 965,
+          "string": "Professional Continuing Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|992|965",
+          "order": 284
+        },
+        "810": {
+          "term_id": 810,
+          "string": "Professional Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810",
+          "order": 285
+        },
+        "6981": {
+          "term_id": 6981,
+          "string": "Progressive Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|6981",
+          "order": 286
+        },
+        "6881": {
+          "term_id": 6881,
+          "string": "Psychoeducational Clinics",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|4570|6881",
+          "order": 287
+        },
+        "735": {
+          "term_id": 735,
+          "string": "Psychoeducational Methods",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495|735",
+          "order": 288
+        },
+        "814": {
+          "term_id": 814,
+          "string": "Public Administration Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|814",
+          "order": 289
+        },
+        "4341": {
+          "term_id": 4341,
+          "string": "Public Affairs Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4341",
+          "order": 290
+        },
+        "5035": {
+          "term_id": 5035,
+          "string": "Public Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5035",
+          "order": 291
+        },
+        "934": {
+          "term_id": 934,
+          "string": "Public School Adult Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|934",
+          "order": 292
+        },
+        "112": {
+          "term_id": 112,
+          "string": "Regular and Special Education Relationship",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|4466|112",
+          "order": 293
+        },
+        "1949": {
+          "term_id": 1949,
+          "string": "Related Services (Special Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|315|1949",
+          "order": 294
+        },
+        "458": {
+          "term_id": 458,
+          "string": "Relevance (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|458",
+          "order": 295
+        },
+        "4016": {
+          "term_id": 4016,
+          "string": "Religious Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|4016",
+          "order": 296
+        },
+        "5153": {
+          "term_id": 5153,
+          "string": "Remedial Instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "Remedial Education",
+          "index": null,
+          "order": 297
+        },
+        "323": {
+          "term_id": 323,
+          "string": "Remedial Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "Remedial Education Programs",
+          "index": null,
+          "order": 298
+        },
+        "10447": {
+          "term_id": 10447,
+          "string": "Rural Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|10447",
+          "order": 299
+        },
+        "431": {
+          "term_id": 431,
+          "string": "Safety Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|431",
+          "order": 300
+        },
+        "1094": {
+          "term_id": 1094,
+          "string": "Science Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1094",
+          "order": 301
+        },
+        "11254": {
+          "term_id": 11254,
+          "string": "Science Education History",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|6864|11254",
+          "order": 302
+        },
+        "594": {
+          "term_id": 594,
+          "string": "Film Study",
+          "isMetaTerm": 0,
+          "no_term_string": "Screen Education",
+          "index": null,
+          "order": 303
+        },
+        "3917": {
+          "term_id": 3917,
+          "string": "Secondary Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5208|3917",
+          "order": 304
+        },
+        "585": {
+          "term_id": 585,
+          "string": "Sex Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|5508|585",
+          "order": 305
+        },
+        "5467": {
+          "term_id": 5467,
+          "string": "Dual Enrollment",
+          "isMetaTerm": 0,
+          "no_term_string": "Shared Time (Education)",
+          "index": null,
+          "order": 306
+        },
+        "662": {
+          "term_id": 662,
+          "string": "Special Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|662",
+          "order": 307
+        },
+        "6473": {
+          "term_id": 6473,
+          "string": "Special Education Teachers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|5091|6353|3995|850|716|6473",
+          "order": 308
+        },
+        "2973": {
+          "term_id": 2973,
+          "string": "Masters Degrees",
+          "isMetaTerm": 0,
+          "no_term_string": "Specialist in Education Degrees",
+          "index": null,
+          "order": 309
+        },
+        "11439": {
+          "term_id": 11439,
+          "string": "Speech Education (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11439",
+          "order": 310
+        },
+        "10892": {
+          "term_id": 10892,
+          "string": "State Boards of Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2729|1268|756|3473|10892",
+          "order": 311
+        },
+        "8297": {
+          "term_id": 8297,
+          "string": "State Departments of Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|760|748|6289|8297",
+          "order": 312
+        },
+        "11475": {
+          "term_id": 11475,
+          "string": "Statistics Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Statistical Education",
+          "index": null,
+          "order": 313
+        },
+        "7286": {
+          "term_id": 7286,
+          "string": "STEM Education",
+          "isMetaTerm": 0,
+          "no_term_string": "STEAM Education",
+          "index": null,
+          "order": 314
+        },
+        "1021": {
+          "term_id": 1021,
+          "string": "Teaching Methods",
+          "isMetaTerm": 0,
+          "no_term_string": "Steiner Education",
+          "index": null,
+          "order": 315
+        },
+        "515": {
+          "term_id": 515,
+          "string": "Student Educational Objectives",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2443|515",
+          "order": 316
+        },
+        "328": {
+          "term_id": 328,
+          "string": "Supplementary Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|328",
+          "order": 317
+        },
+        "5170": {
+          "term_id": 5170,
+          "string": "Teacher Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5170",
+          "order": 318
+        },
+        "6855": {
+          "term_id": 6855,
+          "string": "Teacher Centers",
+          "isMetaTerm": 0,
+          "no_term_string": "Teacher Education Centers",
+          "index": null,
+          "order": 319
+        },
+        "1766": {
+          "term_id": 1766,
+          "string": "Teacher Education Curriculum",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11885|2239|163|1766",
+          "order": 320
+        },
+        "7569": {
+          "term_id": 7569,
+          "string": "Knowledge Base for Teaching",
+          "isMetaTerm": 0,
+          "no_term_string": "Teacher Education Knowledge Base",
+          "index": null,
+          "order": 321
+        },
+        "1767": {
+          "term_id": 1767,
+          "string": "Teacher Education Programs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|314|1767",
+          "order": 322
+        },
+        "5589": {
+          "term_id": 5589,
+          "string": "Teacher Educator Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|5170|5589",
+          "order": 323
+        },
+        "716": {
+          "term_id": 716,
+          "string": "Teachers",
+          "isMetaTerm": 0,
+          "no_term_string": "Teachers (General Education) (2004)",
+          "index": null,
+          "order": 324
+        },
+        "1096": {
+          "term_id": 1096,
+          "string": "Technical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|1096",
+          "order": 325
+        },
+        "11828": {
+          "term_id": 11828,
+          "string": "Vocational Directors",
+          "isMetaTerm": 0,
+          "no_term_string": "Technical Education Directors",
+          "index": null,
+          "order": 326
+        },
+        "2910": {
+          "term_id": 2910,
+          "string": "Technology Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|2910",
+          "order": 327
+        },
+        "5352": {
+          "term_id": 5352,
+          "string": "Technology Uses in Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|5352",
+          "order": 328
+        },
+        "4315": {
+          "term_id": 4315,
+          "string": "Theological Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|4315",
+          "order": 329
+        },
+        "53": {
+          "term_id": 53,
+          "string": "Track System (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|53",
+          "order": 330
+        },
+        "1003": {
+          "term_id": 1003,
+          "string": "Trade and Industrial Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999|1003",
+          "order": 331
+        },
+        "1820": {
+          "term_id": 1820,
+          "string": "Tribally Controlled Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|1820",
+          "order": 332
+        },
+        "3277": {
+          "term_id": 3277,
+          "string": "Immersion Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "Two Way Bilingual Education Programs",
+          "index": null,
+          "order": 333
+        },
+        "2515": {
+          "term_id": 2515,
+          "string": "Undergraduate Study",
+          "isMetaTerm": 0,
+          "no_term_string": "Undergraduate Education",
+          "index": null,
+          "order": 334
+        },
+        "3957": {
+          "term_id": 3957,
+          "string": "Values Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|3957",
+          "order": 335
+        },
+        "7822": {
+          "term_id": 7822,
+          "string": "Veterans Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|924|7822",
+          "order": 336
+        },
+        "1978": {
+          "term_id": 1978,
+          "string": "Veterinary Medical Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|810|1670|1978",
+          "order": 337
+        },
+        "2504": {
+          "term_id": 2504,
+          "string": "Electronic Learning",
+          "isMetaTerm": 0,
+          "no_term_string": "Virtual Education",
+          "index": null,
+          "order": 338
+        },
+        "389": {
+          "term_id": 389,
+          "string": "Virtual Classrooms",
+          "isMetaTerm": 0,
+          "no_term_string": "Virtual Environments (Education and Training)",
+          "index": null,
+          "order": 339
+        },
+        "999": {
+          "term_id": 999,
+          "string": "Vocational Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|999",
+          "order": 340
+        },
+        "1546": {
+          "term_id": 1546,
+          "string": "Vocational Education Teachers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|5091|6353|3995|850|716|1546",
+          "order": 341
+        },
+        "269": {
+          "term_id": 269,
+          "string": "Withdrawal (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|269",
+          "order": 342
+        },
+        "969": {
+          "term_id": 969,
+          "string": "Womens Education",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|202|969",
+          "order": 343
+        },
+        "5606": {
+          "term_id": 5606,
+          "string": "Work Study Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "Work Education Programs",
+          "index": null,
+          "order": 344
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "education"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 344
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchAlt&arg=202&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "5022": {
+            "term_id": "5022",
+            "code": null,
+            "lang": "en",
+            "string": "Community Based Study",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6818": {
+            "term_id": "6818",
+            "code": null,
+            "lang": "en",
+            "string": "Education Economy Relationship",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6830": {
+            "term_id": "6830",
+            "code": null,
+            "lang": "en",
+            "string": "Free Education",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6831": {
+            "term_id": "6831",
+            "code": null,
+            "lang": "en",
+            "string": "Terminal Education (2004)",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 202
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchUp&arg=202&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "11891": {
+            "term_id": "11891",
+            "string": "Educational Process: Societal Perspectives",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "202": {
+            "term_id": "202",
+            "string": "Education",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 2
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 202
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 2
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchDown&arg=202&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "200": {
+            "term_id": "200",
+            "string": "Academic Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "924": {
+            "term_id": "924",
+            "string": "Adult Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1088": {
+            "term_id": "1088",
+            "string": "Aerospace Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1100": {
+            "term_id": "1100",
+            "string": "Aesthetic Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1189": {
+            "term_id": "1189",
+            "string": "African American Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "316": {
+            "term_id": "316",
+            "string": "After School Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1381": {
+            "term_id": "1381",
+            "string": "Aging Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1453": {
+            "term_id": "1453",
+            "string": "Agricultural Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1595": {
+            "term_id": "1595",
+            "string": "Alcohol Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1658": {
+            "term_id": "1658",
+            "string": "Allied Health Occupations Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1817": {
+            "term_id": "1817",
+            "string": "American Indian Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1102": {
+            "term_id": "1102",
+            "string": "Art Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "297": {
+            "term_id": "297",
+            "string": "Back to Basics",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3021": {
+            "term_id": "3021",
+            "string": "Basic Business Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3268": {
+            "term_id": "3268",
+            "string": "Bilingual Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3852": {
+            "term_id": "3852",
+            "string": "Career Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3023": {
+            "term_id": "3023",
+            "string": "Citizenship Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4676": {
+            "term_id": "4676",
+            "string": "Coeducation",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "957": {
+            "term_id": "957",
+            "string": "Community Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "5130": {
+            "term_id": "5130",
+            "string": "Comparative Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1368": {
+            "term_id": "1368",
+            "string": "Compensatory Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "298": {
+            "term_id": "298",
+            "string": "Competency Based Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "5206": {
+            "term_id": "5206",
+            "string": "Compulsory Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "3024": {
+            "term_id": "3024",
+            "string": "Consumer Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "3700": {
+            "term_id": "3700",
+            "string": "Corporate Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "960": {
+            "term_id": "960",
+            "string": "Correctional Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1866": {
+            "term_id": "1866",
+            "string": "Cultural Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1861": {
+            "term_id": "1861",
+            "string": "Culturally Relevant Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2557": {
+            "term_id": "2557",
+            "string": "Distance Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6674": {
+            "term_id": "6674",
+            "string": "Driver Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1602": {
+            "term_id": "1602",
+            "string": "Drug Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4188": {
+            "term_id": "4188",
+            "string": "Early Childhood Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "3026": {
+            "term_id": "3026",
+            "string": "Economics Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "5208": {
+            "term_id": "5208",
+            "string": "Elementary Secondary Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "5455": {
+            "term_id": "5455",
+            "string": "Energy Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1055": {
+            "term_id": "1055",
+            "string": "Environmental Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "109": {
+            "term_id": "109",
+            "string": "Equal Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "961": {
+            "term_id": "961",
+            "string": "Extension Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "5508": {
+            "term_id": "5508",
+            "string": "Family Life Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "206": {
+            "term_id": "206",
+            "string": "General Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "347": {
+            "term_id": "347",
+            "string": "Gifted Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2246": {
+            "term_id": "2246",
+            "string": "Global Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "582": {
+            "term_id": "582",
+            "string": "Health Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1145": {
+            "term_id": "1145",
+            "string": "Humanistic Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6573": {
+            "term_id": "6573",
+            "string": "In Person Learning",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8922": {
+            "term_id": "8922",
+            "string": "Industrial Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "7547": {
+            "term_id": "7547",
+            "string": "Informal Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "7700": {
+            "term_id": "7700",
+            "string": "Inservice Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8738": {
+            "term_id": "8738",
+            "string": "Intergroup Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "7575": {
+            "term_id": "7575",
+            "string": "Journalism Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4354": {
+            "term_id": "4354",
+            "string": "Law Related Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "9576": {
+            "term_id": "9576",
+            "string": "Leisure Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "931": {
+            "term_id": "931",
+            "string": "Literacy Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "7332": {
+            "term_id": "7332",
+            "string": "Marine Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4835": {
+            "term_id": "4835",
+            "string": "Mathematics Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "5899": {
+            "term_id": "5899",
+            "string": "Media Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3283": {
+            "term_id": "3283",
+            "string": "Mexican American Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3284": {
+            "term_id": "3284",
+            "string": "Migrant Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "9368": {
+            "term_id": "9368",
+            "string": "Noncategorical Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1160": {
+            "term_id": "1160",
+            "string": "Nondiscriminatory Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "5135": {
+            "term_id": "5135",
+            "string": "Nonformal Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1764": {
+            "term_id": "1764",
+            "string": "Nontraditional Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6511": {
+            "term_id": "6511",
+            "string": "Open Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "306": {
+            "term_id": "306",
+            "string": "Outcome Based Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1054": {
+            "term_id": "1054",
+            "string": "Outdoor Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6544": {
+            "term_id": "6544",
+            "string": "Patient Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "661": {
+            "term_id": "661",
+            "string": "Physical Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2874": {
+            "term_id": "2874",
+            "string": "Place Based Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "5878": {
+            "term_id": "5878",
+            "string": "Police Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "964": {
+            "term_id": "964",
+            "string": "Popular Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6255": {
+            "term_id": "6255",
+            "string": "Population Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "167": {
+            "term_id": "167",
+            "string": "Postsecondary Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "4022": {
+            "term_id": "4022",
+            "string": "Private Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3168": {
+            "term_id": "3168",
+            "string": "Process Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "810": {
+            "term_id": "810",
+            "string": "Professional Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6981": {
+            "term_id": "6981",
+            "string": "Progressive Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "4341": {
+            "term_id": "4341",
+            "string": "Public Affairs Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "5035": {
+            "term_id": "5035",
+            "string": "Public Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "4016": {
+            "term_id": "4016",
+            "string": "Religious Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "10447": {
+            "term_id": "10447",
+            "string": "Rural Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "431": {
+            "term_id": "431",
+            "string": "Safety Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1094": {
+            "term_id": "1094",
+            "string": "Science Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "662": {
+            "term_id": "662",
+            "string": "Special Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "7286": {
+            "term_id": "7286",
+            "string": "STEM Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "8022": {
+            "term_id": "8022",
+            "string": "Study Abroad",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "328": {
+            "term_id": "328",
+            "string": "Supplementary Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2910": {
+            "term_id": "2910",
+            "string": "Technology Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "1820": {
+            "term_id": "1820",
+            "string": "Tribally Controlled Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "11779": {
+            "term_id": "11779",
+            "string": "Urban Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "3957": {
+            "term_id": "3957",
+            "string": "Values Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "999": {
+            "term_id": "999",
+            "string": "Vocational Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "969": {
+            "term_id": "969",
+            "string": "Womens Education",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 202
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 92
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchRelated&arg=202&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "107": {
+            "term_id": "107",
+            "code": null,
+            "lang": "en",
+            "string": "Access to Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1034": {
+            "term_id": "1034",
+            "code": null,
+            "lang": "en",
+            "string": "Articulation (Education)",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2239": {
+            "term_id": "2239",
+            "code": null,
+            "lang": "en",
+            "string": "Curriculum",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6832": {
+            "term_id": "6832",
+            "code": null,
+            "lang": "en",
+            "string": "Education Courses",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6833": {
+            "term_id": "6833",
+            "code": null,
+            "lang": "en",
+            "string": "Education Majors",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1944": {
+            "term_id": "1944",
+            "code": null,
+            "lang": "en",
+            "string": "Education Service Centers",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3828": {
+            "term_id": "3828",
+            "code": null,
+            "lang": "en",
+            "string": "Education Work Relationship",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6834": {
+            "term_id": "6834",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Attitudes",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2572": {
+            "term_id": "2572",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Background",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6835": {
+            "term_id": "6835",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Benefits",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1762": {
+            "term_id": "1762",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Certificates",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3010": {
+            "term_id": "3010",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Change",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "161": {
+            "term_id": "161",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Counseling",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "374": {
+            "term_id": "374",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Demand",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3816": {
+            "term_id": "3816",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Development",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "375": {
+            "term_id": "375",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Discrimination",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "229": {
+            "term_id": "229",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Environment",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2801": {
+            "term_id": "2801",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Equipment",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6836": {
+            "term_id": "6836",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Experience",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6260": {
+            "term_id": "6260",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Experiments",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2408": {
+            "term_id": "2408",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Facilities",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "376": {
+            "term_id": "376",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Finance",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1641": {
+            "term_id": "1641",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Improvement",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6837": {
+            "term_id": "6837",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Innovation",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6838": {
+            "term_id": "6838",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Legislation",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "300": {
+            "term_id": "300",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Malpractice",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2795": {
+            "term_id": "2795",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Media",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "4495": {
+            "term_id": "4495",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Methods",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "131": {
+            "term_id": "131",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Mobility",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6839": {
+            "term_id": "6839",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Needs",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6840": {
+            "term_id": "6840",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Objectives",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "371": {
+            "term_id": "371",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Opportunities",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2356": {
+            "term_id": "2356",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Planning",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "108": {
+            "term_id": "108",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Policy",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6382": {
+            "term_id": "6382",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Practices",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "790": {
+            "term_id": "790",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Principles",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "817": {
+            "term_id": "817",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Quality",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3172": {
+            "term_id": "3172",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Research",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6841": {
+            "term_id": "6841",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Resources",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "830": {
+            "term_id": "830",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Responsibility",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "513": {
+            "term_id": "513",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Status Comparison",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "318": {
+            "term_id": "318",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Strategies",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "377": {
+            "term_id": "377",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Supply",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "364": {
+            "term_id": "364",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Technology",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "530": {
+            "term_id": "530",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Testing",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1956": {
+            "term_id": "1956",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Theories",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2348": {
+            "term_id": "2348",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Therapy",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6842": {
+            "term_id": "6842",
+            "code": null,
+            "lang": "en",
+            "string": "Educational Trends",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "132": {
+            "term_id": "132",
+            "code": null,
+            "lang": "en",
+            "string": "Educationally Disadvantaged",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "133": {
+            "term_id": "133",
+            "code": null,
+            "lang": "en",
+            "string": "Excellence in Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "5132": {
+            "term_id": "5132",
+            "code": null,
+            "lang": "en",
+            "string": "Foundations of Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "2480": {
+            "term_id": "2480",
+            "code": null,
+            "lang": "en",
+            "string": "Instruction",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "615": {
+            "term_id": "615",
+            "code": null,
+            "lang": "en",
+            "string": "Learning",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "453": {
+            "term_id": "453",
+            "code": null,
+            "lang": "en",
+            "string": "Outcomes of Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3471": {
+            "term_id": "3471",
+            "code": null,
+            "lang": "en",
+            "string": "Politics of Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "112": {
+            "term_id": "112",
+            "code": null,
+            "lang": "en",
+            "string": "Regular and Special Education Relationship",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3486": {
+            "term_id": "3486",
+            "code": null,
+            "lang": "en",
+            "string": "Role of Education",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "862": {
+            "term_id": "862",
+            "code": null,
+            "lang": "en",
+            "string": "Schools",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3942": {
+            "term_id": "3942",
+            "code": null,
+            "lang": "en",
+            "string": "Training",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "5702": {
+            "term_id": "5702",
+            "code": null,
+            "lang": "en",
+            "string": "Trauma Informed Approach",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 202
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 60
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchNotes&arg=202&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "4139": {
+            "term_id": "202",
+            "string": "Education",
+            "note_id": "4139",
+            "note_type": "NA",
+            "note_lang": "EN",
+            "note_text": "Process of imparting or obtaining knowledge, attitudes, skills, or socially valued qualities of character or behavior -- includes the philosophy, purposes, programs, methods, organizational patterns, etc., of the entire educational process as most broadly conceived (Note: The most general term -- use a more specific term if possible)",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 202
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "ERIC Thesaurus",
+          "author": "USA. Institute of Education Science. Education Resources Information Center",
+          "lang": "en",
+          "scope": "The ERIC Thesaurus is a leading authority on the language used in the field of education. It is a controlled vocabulary with nearly 12,000 terms, including more than 4,500 descriptors and 7,000 synonyms. Descriptors from the Thesaurus are assigned to each of the 1.9 million records in ERIC to describe the main subjects of the content. Synonyms point searchers to the preferred term, or descriptor, in ERIC. This Tematres version is based on the source available at https://eric.ed.gov/?download",
+          "keywords": "education; United States",
+          "uri": "https://vocabularyserver.com/eric/",
+          "createDate": "2023-05-09",
+          "lastMod": "2023-05-09 11:56:57",
+          "status": "published - stable",
+          "status_date": "2023-05-09",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "11919"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

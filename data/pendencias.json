@@ -20,10 +20,10 @@
     {
       "id": "PD03",
       "categoria": "validacao-terminologica",
-      "descricao": "Validação terminológica incompleta: TBCI e UNESCO consultados em 2026-11-24, com as propostas da máquina na planilha; nenhuma `decisao_ReT` preenchida, e ERIC Thesaurus e Brased/INEP pendentes de consulta manual. Até a decisão, todo termo fica em \"Termo livre\". A validação decide a linha de cada termo pela `decisao_ReT` (descritor em algum instrumento → \"Descritores correspondentes\"; senão sinônimo ou relacionado → \"Termos sinônimos ou relacionados\"; senão \"Termo livre\"), e `documentos conferir` reprova o termo fora da linha que a decisão determina.",
-      "origem": "python3 -m rsl projeto pendencias; data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
+      "descricao": "Validação terminológica sem decisão: TBCI, UNESCO Thesaurus, ERIC Thesaurus e Brased/INEP consultados pelo cliente TemaTres nos endereços do protocolo, com as propostas da máquina e a forma do termo no instrumento na planilha; nenhuma `decisao_ReT` preenchida. Até a decisão, todo termo fica em \"Termo livre\". A validação decide a linha de cada termo pela `decisao_ReT` (descritor em algum instrumento → \"Descritores correspondentes\"; senão sinônimo ou relacionado → \"Termos sinônimos ou relacionados\"; senão \"Termo livre\"), e `documentos conferir` reprova o termo fora da linha que a decisão determina.",
+      "origem": "python3 -m rsl projeto pendencias; data/validacao_terminologica.csv; data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
       "bloqueia": "validação terminológica (M3/E1, passo 2)",
-      "acao_sugerida": "preencher `decisao_ReT` em data/validacao_terminologica.csv a partir das propostas e da evidência; consultar à mão ERIC Thesaurus e Brased/INEP; mover cada termo para a linha que a decisão determina; strings gerar --gravar e procedimentos gerar <sigla> --gravar",
+      "acao_sugerida": "preencher `decisao_ReT` em data/validacao_terminologica.csv a partir das propostas e da evidência; mover cada termo para a linha que a decisão determina; strings gerar --gravar e procedimentos gerar <sigla> --gravar",
       "responsavel": "pesquisador"
     },
     {
@@ -33,24 +33,6 @@
       "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha tbci. Evidência da edição de 2014: descrição do IBICT reproduzida em edisciplinas.usp.br (id=1597195), edição de 2014 (Pinheiro & Ferrez), cerca de 1.800 termos, a maioria com versão em inglês e espanhol",
       "bloqueia": "uso do TBCI em en/es",
       "acao_sugerida": "consultar o servidor TemaTres e, se ele expuser os equivalentes, atualizar a coluna Idiomas da linha tbci na tabela de instrumentos do protocolo",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD05",
-      "categoria": "validacao-terminologica",
-      "descricao": "Brased/INEP: cobertura de idiomas (pt) inferida, não conferida; a busca de 2026-11-18 não encontrou descrição.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha brased; a busca de 2026-11-18 não encontrou descrição da cobertura de idiomas",
-      "bloqueia": "estatuto da cobertura de idiomas declarada no protocolo",
-      "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD06",
-      "categoria": "validacao-terminologica",
-      "descricao": "ERIC Thesaurus: cobertura de idiomas (en) inferida, não conferida na fonte.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha eric",
-      "bloqueia": "estatuto da cobertura de idiomas declarada no protocolo",
-      "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo",
       "responsavel": "pesquisador"
     },
     {
@@ -183,15 +165,6 @@
       "bloqueia": "passagem da busca (M3/E2) com as STRs vigentes",
       "acao_sugerida": "executar a busca de cada base com os procedimentos regenerados e refazer o teste de aderência (skill teste-de-aderencia; aderencia planilhar)",
       "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD32",
-      "categoria": "validacao-terminologica",
-      "descricao": "ERIC Thesaurus e Brased/INEP em modo Automático: o pesquisador quer a automação se for possível. Nenhum dos dois tem cliente, e não foram conferidos os termos de uso nem a existência de via programática (API) para cada um; até lá ficam Manual.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linhas eric e brased",
-      "bloqueia": "validação automatizada de FCT2, FCT3 e FCT4 em en (ERIC) e pt (Brased)",
-      "acao_sugerida": "conferir e registrar os termos de uso e a via de acesso de cada instrumento; se a automação for admitida, propor change com o cliente (termos/clientes/) e só então mudar o Modo",
-      "responsavel": "pesquisador; agente, a pedido"
     }
   ]
 }

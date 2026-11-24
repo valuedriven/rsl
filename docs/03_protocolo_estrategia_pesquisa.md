@@ -60,11 +60,10 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 
 | Sigla | Instrumento  | Modo | Caminho | Idiomas | FCTs |
 | ----- | ----- | ----- | ----- | ----- | ----- |
-| tbci | Tesauro Brasileiro de Ciência da Informação | Automático | https://vocabularyserver.com/tbci/br/| pt | FCT1 |
-| unesco |UNESCO Thesaurus | Automático | https://vocabularies.unesco.org/unesco/| en, es | FCT1, FCT2, FCT3, FCT4 |
-| eric |ERIC Thesaurus | Manual | https://eric.ed.gov/default.aspx?ti=all| en | FCT2, FCT3, FCT4 |
-| brased |Brased/INEP | Manual | https://brased.inep.gov.br/brased/termo-publico/| pt | FCT2, FCT3, FCT4 |
-
+| tbci | Tesauro Brasileiro de Ciência da Informação | Automático | https://www.vocabularyserver.com/tbci/br/services.php | pt | FCT1 |
+| unesco |UNESCO Thesaurus | Automático | https://www.vocabularyserver.com/unesco/{idioma}/services.php | en, es | FCT1, FCT2, FCT3, FCT4 |
+| eric |ERIC Thesaurus | Automático | https://www.vocabularyserver.com/eric/services.php | en | FCT2, FCT3, FCT4 |
+| brased |Brased/INEP | Automático | https://www.vocabularyserver.com/brased/services.php | pt | FCT2, FCT3, FCT4 |
 
 ## Strings de busca por faceta
 

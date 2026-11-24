@@ -305,12 +305,18 @@ S_INSTRUMENTOS = Secao("instrumentos", P, "Instrumentos para controle terminoló
 T_INSTRUMENTOS = Tabela(
     "instrumentos", P, S_INSTRUMENTOS,
     ("Sigla", "Instrumento", "Modo", "Caminho", "Idiomas", "FCTs"),
-    descricao="campo vazio, sigla repetida, Caminho que não é URL http(s), idioma fora do "
-              "quadro, faceta inexistente e faceta sem instrumento reprovam")
+    descricao="Caminho é o endereço do serviço consultado; admite o marcador {idioma}, "
+              "trocado por cada idioma da coluna Idiomas (sem ele, o mesmo endereço vale "
+              "para todos os idiomas). Campo vazio, sigla repetida, Caminho que não é URL "
+              "http(s), marcador entre chaves diferente de {idioma}, idioma fora do quadro, "
+              "faceta inexistente e faceta sem instrumento reprovam")
+# Marcador do Caminho trocado pelo código do idioma do termo: o endereço resolvido.
+MARCADOR_IDIOMA = "{idioma}"
 D_MODO = Dominio("modo", P, S_INSTRUMENTOS, "Modo",
                  {"Manual": "Manual", "Automático": "Automático"},
-                 descricao="Automático exige cliente com o nome da sigla; fora do domínio "
-                           "reprova")
+                 descricao="Automático: consultado pelo cliente TemaTres no endereço "
+                           "resolvido do Caminho, qualquer que seja a sigla; Manual: linha "
+                           "pendente de validação manual; fora do domínio reprova")
 MODO_MANUAL, MODO_AUTOMATICO = D_MODO.valores
 
 S_CONTROLE = Secao("controle", P, "Controle terminológico", 2)

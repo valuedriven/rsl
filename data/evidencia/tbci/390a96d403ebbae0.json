@@ -1,0 +1,288 @@
+{
+  "chave": "tbci|pt|ontologia",
+  "recuperado_em": "2026-11-24T18:30:48-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/tbci/br/services.php?task=search&arg=ontologia&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "318": {
+          "term_id": 318,
+          "string": "ética profissional",
+          "isMetaTerm": 0,
+          "no_term_string": "deontologia",
+          "index": null,
+          "order": 1
+        },
+        "707": {
+          "term_id": 707,
+          "string": "odontologia",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1862|234|237|707",
+          "order": 2
+        },
+        "155": {
+          "term_id": 155,
+          "string": "ontologias",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1823|1824|1826|157|155",
+          "order": 3
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "ontologia"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 3
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=suggestDetails&arg=ontologia&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "155": {
+            "term_id": "155",
+            "string": "ontologias",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "ontologia"
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchAlt&arg=155&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 155
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchUp&arg=155&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1823": {
+            "term_id": "1823",
+            "string": "Organização do Conhecimento e Recuperação da Informação",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "1824": {
+            "term_id": "1824",
+            "string": "Organização do Conhecimento",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "1826": {
+            "term_id": "1826",
+            "string": "Sistemas de organização do conhecimento",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 3
+          },
+          "157": {
+            "term_id": "157",
+            "string": "sistemas de organização do conhecimento",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 4
+          },
+          "155": {
+            "term_id": "155",
+            "string": "ontologias",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 5
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 155
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchDown&arg=155&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 155
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchRelated&arg=155&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "154": {
+            "term_id": "154",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "análise de domínio",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1183": {
+            "term_id": "1183",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "modelagem do conhecimento",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1446": {
+            "term_id": "1446",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "redes semânticas",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "743": {
+            "term_id": "743",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "representação do conhecimento",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1604": {
+            "term_id": "1604",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "web semântica",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 155
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchNotes&arg=155&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "224": {
+            "term_id": "155",
+            "string": "ontologias",
+            "note_id": "224",
+            "note_type": "NA",
+            "note_lang": "es",
+            "note_text": "Conceito originalmente filosófico adotado por diferentes áreas como inteligência artificial e engenharia do conhecimento. Na ciência da informação significa \"coleção de definições de palavras e conceitos que representam uma área do conhecimento e incluem relações, propriedades e funções, formatadas para facilitar o compartilhamento da informação, sobretudo, entre computadores, constituindo um componente essencial da web semântica\" - ASIST, p. 96.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 155
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro brasileiro de ciência da informação",
+          "author": "IBICT",
+          "lang": "pt-BR",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/tbci/br/",
+          "createDate": "2024-10-14",
+          "lastMod": "2024-11-07 12:30:17",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "1863"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

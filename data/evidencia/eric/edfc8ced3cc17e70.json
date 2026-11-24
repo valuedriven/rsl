@@ -1,0 +1,70 @@
+{
+  "chave": "eric|en|educational intervention",
+  "recuperado_em": "2026-11-24T18:54:18-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/eric/services.php?task=search&arg=educational+intervention&output=json",
+    "status_http": 200,
+    "busca": {
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educational intervention"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 0
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=suggestDetails&arg=educational+intervention&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "educational intervention"
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "ERIC Thesaurus",
+          "author": "USA. Institute of Education Science. Education Resources Information Center",
+          "lang": "en",
+          "scope": "The ERIC Thesaurus is a leading authority on the language used in the field of education. It is a controlled vocabulary with nearly 12,000 terms, including more than 4,500 descriptors and 7,000 synonyms. Descriptors from the Thesaurus are assigned to each of the 1.9 million records in ERIC to describe the main subjects of the content. Synonyms point searchers to the preferred term, or descriptor, in ERIC. This Tematres version is based on the source available at https://eric.ed.gov/?download",
+          "keywords": "education; United States",
+          "uri": "https://vocabularyserver.com/eric/",
+          "createDate": "2023-05-09",
+          "lastMod": "2023-05-09 11:56:57",
+          "status": "published - stable",
+          "status_date": "2023-05-09",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "11919"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

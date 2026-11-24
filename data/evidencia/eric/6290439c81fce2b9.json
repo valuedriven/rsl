@@ -1,0 +1,1274 @@
+{
+  "chave": "eric|en|educational",
+  "recuperado_em": "2026-11-24T18:32:06-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/eric/services.php?task=search&arg=educational&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "104": {
+          "term_id": 104,
+          "string": "Academic Accommodations (Disabilities)",
+          "isMetaTerm": 0,
+          "no_term_string": "Accommodations for Disabled (Educational Settings)",
+          "index": null,
+          "order": 1
+        },
+        "6259": {
+          "term_id": 6259,
+          "string": "Demonstrations (Educational)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495|1021|6259",
+          "order": 2
+        },
+        "107": {
+          "term_id": 107,
+          "string": "Access to Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Access",
+          "index": null,
+          "order": 3
+        },
+        "4": {
+          "term_id": 4,
+          "string": "Accountability",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Accountability (1970 1980)",
+          "index": null,
+          "order": 4
+        },
+        "3": {
+          "term_id": 3,
+          "string": "Academic Achievement",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Achievement",
+          "index": null,
+          "order": 5
+        },
+        "849": {
+          "term_id": 849,
+          "string": "Educational Administration",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|746|742|849",
+          "order": 6
+        },
+        "1764": {
+          "term_id": 1764,
+          "string": "Nontraditional Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Alternatives (1974 1980)",
+          "index": null,
+          "order": 7
+        },
+        "5131": {
+          "term_id": 5131,
+          "string": "Educational Anthropology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|209|565|2048|2041|5131",
+          "order": 8
+        },
+        "510": {
+          "term_id": 510,
+          "string": "Educational Assessment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11906|498|510",
+          "order": 9
+        },
+        "511": {
+          "term_id": 511,
+          "string": "Educational Attainment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|37|3|511",
+          "order": 10
+        },
+        "6834": {
+          "term_id": 6834,
+          "string": "Educational Attitudes",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|797|6834",
+          "order": 11
+        },
+        "2572": {
+          "term_id": 2572,
+          "string": "Educational Background",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|2977|2572",
+          "order": 12
+        },
+        "6835": {
+          "term_id": 6835,
+          "string": "Educational Benefits",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|453|6835",
+          "order": 13
+        },
+        "1125": {
+          "term_id": 1125,
+          "string": "Caring",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Caring",
+          "index": null,
+          "order": 14
+        },
+        "1762": {
+          "term_id": 1762,
+          "string": "Educational Certificates",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11911|2236|190|1762",
+          "order": 15
+        },
+        "3010": {
+          "term_id": 3010,
+          "string": "Educational Change",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|769|3010",
+          "order": 16
+        },
+        "860": {
+          "term_id": 860,
+          "string": "School Choice",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Choice",
+          "index": null,
+          "order": 17
+        },
+        "3789": {
+          "term_id": 3789,
+          "string": "Campuses",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Complexes (2004)",
+          "index": null,
+          "order": 18
+        },
+        "362": {
+          "term_id": 362,
+          "string": "Computer Uses in Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Computing",
+          "index": null,
+          "order": 19
+        },
+        "1406": {
+          "term_id": 1406,
+          "string": "Educational Cooperation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|723|8|1406",
+          "order": 20
+        },
+        "755": {
+          "term_id": 755,
+          "string": "Coordination",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Coordination (1967 1980)",
+          "index": null,
+          "order": 21
+        },
+        "161": {
+          "term_id": 161,
+          "string": "Educational Counseling",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11884|3909|726|161",
+          "order": 22
+        },
+        "374": {
+          "term_id": 374,
+          "string": "Educational Demand",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|374",
+          "order": 23
+        },
+        "3816": {
+          "term_id": 3816,
+          "string": "Educational Development",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2145|3816",
+          "order": 24
+        },
+        "2573": {
+          "term_id": 2573,
+          "string": "Educational Diagnosis",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11906|54|2573",
+          "order": 25
+        },
+        "375": {
+          "term_id": 375,
+          "string": "Educational Discrimination",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|1387|375",
+          "order": 26
+        },
+        "2242": {
+          "term_id": 2242,
+          "string": "Economics",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Economics",
+          "index": null,
+          "order": 27
+        },
+        "6619": {
+          "term_id": 6619,
+          "string": "Endowment Funds",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Endowments",
+          "index": null,
+          "order": 28
+        },
+        "229": {
+          "term_id": 229,
+          "string": "Educational Environment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11879|728|229",
+          "order": 29
+        },
+        "109": {
+          "term_id": 109,
+          "string": "Equal Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Equality (1966 1976)",
+          "index": null,
+          "order": 30
+        },
+        "2801": {
+          "term_id": 2801,
+          "string": "Educational Equipment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11892|1489|2801",
+          "order": 31
+        },
+        "512": {
+          "term_id": 512,
+          "string": "Educational Equity (Finance)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11887|512",
+          "order": 32
+        },
+        "133": {
+          "term_id": 133,
+          "string": "Excellence in Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Excellence Movement (United States)",
+          "index": null,
+          "order": 33
+        },
+        "6836": {
+          "term_id": 6836,
+          "string": "Educational Experience",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|2977|2572|6836",
+          "order": 34
+        },
+        "6260": {
+          "term_id": 6260,
+          "string": "Educational Experiments",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|6106|6260",
+          "order": 35
+        },
+        "2408": {
+          "term_id": 2408,
+          "string": "Educational Facilities",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|2456|2408",
+          "order": 36
+        },
+        "3645": {
+          "term_id": 3645,
+          "string": "Educational Facilities Design",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11880|2231|3645",
+          "order": 37
+        },
+        "6916": {
+          "term_id": 6916,
+          "string": "Educational Facilities Improvement",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|501|3638|6916",
+          "order": 38
+        },
+        "5488": {
+          "term_id": 5488,
+          "string": "Educational Facilities Planning",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11904|763|2356|5488",
+          "order": 39
+        },
+        "376": {
+          "term_id": 376,
+          "string": "Educational Finance",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|209|565|2048|2242|376",
+          "order": 40
+        },
+        "6621": {
+          "term_id": 6621,
+          "string": "Philanthropic Foundations",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Foundations",
+          "index": null,
+          "order": 41
+        },
+        "2146": {
+          "term_id": 2146,
+          "string": "Futures (of Society)",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Futures",
+          "index": null,
+          "order": 42
+        },
+        "5252": {
+          "term_id": 5252,
+          "string": "Educational Games",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11898|648|2613|5252",
+          "order": 43
+        },
+        "944": {
+          "term_id": 944,
+          "string": "Educational Gerontology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|209|565|2048|945|944",
+          "order": 44
+        },
+        "6864": {
+          "term_id": 6864,
+          "string": "Educational History",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|6864",
+          "order": 45
+        },
+        "1641": {
+          "term_id": 1641,
+          "string": "Educational Improvement",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|501|1641",
+          "order": 46
+        },
+        "130": {
+          "term_id": 130,
+          "string": "Educational Indicators",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11900|6091|4054|130",
+          "order": 47
+        },
+        "6837": {
+          "term_id": 6837,
+          "string": "Educational Innovation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|16|6837",
+          "order": 48
+        },
+        "862": {
+          "term_id": 862,
+          "string": "Schools",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Institutions",
+          "index": null,
+          "order": 49
+        },
+        "6838": {
+          "term_id": 6838,
+          "string": "Educational Legislation",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11894|4405|6838",
+          "order": 50
+        },
+        "300": {
+          "term_id": 300,
+          "string": "Educational Malpractice",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|300",
+          "order": 51
+        },
+        "863": {
+          "term_id": 863,
+          "string": "Student Recruitment",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Marketing",
+          "index": null,
+          "order": 52
+        },
+        "1013": {
+          "term_id": 1013,
+          "string": "Instructional Materials",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Materials",
+          "index": null,
+          "order": 53
+        },
+        "2795": {
+          "term_id": 2795,
+          "string": "Educational Media",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11883|2795",
+          "order": 54
+        },
+        "6045": {
+          "term_id": 6045,
+          "string": "Media Adaptation",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Media Adaptation",
+          "index": null,
+          "order": 55
+        },
+        "2812": {
+          "term_id": 2812,
+          "string": "Media Selection",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Media Selection",
+          "index": null,
+          "order": 56
+        },
+        "4495": {
+          "term_id": 4495,
+          "string": "Educational Methods",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495",
+          "order": 57
+        },
+        "131": {
+          "term_id": 131,
+          "string": "Educational Mobility",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11896|6967|131",
+          "order": 58
+        },
+        "6839": {
+          "term_id": 6839,
+          "string": "Educational Needs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|1084|6839",
+          "order": 59
+        },
+        "6840": {
+          "term_id": 6840,
+          "string": "Educational Objectives",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2443|6840",
+          "order": 60
+        },
+        "371": {
+          "term_id": 371,
+          "string": "Educational Opportunities",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|2979|371",
+          "order": 61
+        },
+        "453": {
+          "term_id": 453,
+          "string": "Outcomes of Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Outcomes",
+          "index": null,
+          "order": 62
+        },
+        "6974": {
+          "term_id": 6974,
+          "string": "Educational Parks",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11881|6974",
+          "order": 63
+        },
+        "4854": {
+          "term_id": 4854,
+          "string": "Partnerships in Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Partnerships",
+          "index": null,
+          "order": 64
+        },
+        "4930": {
+          "term_id": 4930,
+          "string": "Educational Philosophy",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|4930",
+          "order": 65
+        },
+        "2356": {
+          "term_id": 2356,
+          "string": "Educational Planning",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11904|763|2356",
+          "order": 66
+        },
+        "108": {
+          "term_id": 108,
+          "string": "Educational Policy",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|786|108",
+          "order": 67
+        },
+        "3471": {
+          "term_id": 3471,
+          "string": "Politics of Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Politics",
+          "index": null,
+          "order": 68
+        },
+        "6382": {
+          "term_id": 6382,
+          "string": "Educational Practices",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|6382",
+          "order": 69
+        },
+        "790": {
+          "term_id": 790,
+          "string": "Educational Principles",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|790",
+          "order": 70
+        },
+        "6982": {
+          "term_id": 6982,
+          "string": "Educational Problems (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6982",
+          "order": 71
+        },
+        "2165": {
+          "term_id": 2165,
+          "string": "Learning Processes",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Processes",
+          "index": null,
+          "order": 72
+        },
+        "24": {
+          "term_id": 24,
+          "string": "Productivity",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Production Functions",
+          "index": null,
+          "order": 73
+        },
+        "6985": {
+          "term_id": 6985,
+          "string": "Educational Programs (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6985",
+          "order": 74
+        },
+        "6865": {
+          "term_id": 6865,
+          "string": "Educational Psychology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|6865",
+          "order": 75
+        },
+        "817": {
+          "term_id": 817,
+          "string": "Educational Quality",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|817",
+          "order": 76
+        },
+        "2818": {
+          "term_id": 2818,
+          "string": "Educational Radio",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|466|2811|2738|2818",
+          "order": 77
+        },
+        "458": {
+          "term_id": 458,
+          "string": "Relevance (Education)",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Relevance",
+          "index": null,
+          "order": 78
+        },
+        "3172": {
+          "term_id": 3172,
+          "string": "Educational Research",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|601|3172",
+          "order": 79
+        },
+        "6990": {
+          "term_id": 6990,
+          "string": "Educational Researchers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|5091|6353|3995|850|6994|6990",
+          "order": 80
+        },
+        "6841": {
+          "term_id": 6841,
+          "string": "Educational Resources",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|6841",
+          "order": 81
+        },
+        "830": {
+          "term_id": 830,
+          "string": "Educational Responsibility",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|439|830",
+          "order": 82
+        },
+        "7001": {
+          "term_id": 7001,
+          "string": "Educational Retardation (1966 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|7001",
+          "order": 83
+        },
+        "1944": {
+          "term_id": 1944,
+          "string": "Education Service Centers",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Service Centers",
+          "index": null,
+          "order": 84
+        },
+        "5897": {
+          "term_id": 5897,
+          "string": "Educational Sociology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|5897",
+          "order": 85
+        },
+        "7003": {
+          "term_id": 7003,
+          "string": "Educational Specifications (1967 1980)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|7003",
+          "order": 86
+        },
+        "513": {
+          "term_id": 513,
+          "string": "Educational Status Comparison",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|603|3198|513",
+          "order": 87
+        },
+        "318": {
+          "term_id": 318,
+          "string": "Educational Strategies",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495|318",
+          "order": 88
+        },
+        "377": {
+          "term_id": 377,
+          "string": "Educational Supply",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|6841|377",
+          "order": 89
+        },
+        "838": {
+          "term_id": 838,
+          "string": "School Surveys",
+          "isMetaTerm": 0,
+          "no_term_string": "Educational Surveys",
+          "index": null,
+          "order": 90
+        },
+        "364": {
+          "term_id": 364,
+          "string": "Educational Technology",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|466|364",
+          "order": 91
+        },
+        "2819": {
+          "term_id": 2819,
+          "string": "Educational Television",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11914|466|2811|2738|2819",
+          "order": 92
+        },
+        "530": {
+          "term_id": 530,
+          "string": "Educational Testing",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|2850|675|530",
+          "order": 93
+        },
+        "1956": {
+          "term_id": 1956,
+          "string": "Educational Theories",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11918|5132|1956",
+          "order": 94
+        },
+        "2348": {
+          "term_id": 2348,
+          "string": "Educational Therapy",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11895|739|2348",
+          "order": 95
+        },
+        "6842": {
+          "term_id": 6842,
+          "string": "Educational Trends",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|6842",
+          "order": 96
+        },
+        "4931": {
+          "term_id": 4931,
+          "string": "Educational Vouchers",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11887|5090|2953|4931",
+          "order": 97
+        },
+        "132": {
+          "term_id": 132,
+          "string": "Educationally Disadvantaged",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2729|848|1043|132",
+          "order": 98
+        },
+        "930": {
+          "term_id": 930,
+          "string": "High School Equivalency Programs",
+          "isMetaTerm": 0,
+          "no_term_string": "General Educational Development Programs",
+          "index": null,
+          "order": 99
+        },
+        "5134": {
+          "term_id": 5134,
+          "string": "International Educational Exchange",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11891|5134",
+          "order": 100
+        },
+        "7597": {
+          "term_id": 7597,
+          "string": "Mobile Educational Services",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|315|4531|1941|1938|7597",
+          "order": 101
+        },
+        "963": {
+          "term_id": 963,
+          "string": "Nonschool Educational Programs",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|314|963",
+          "order": 102
+        },
+        "382": {
+          "term_id": 382,
+          "string": "Open Educational Resources",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|5089|6841|382",
+          "order": 103
+        },
+        "6881": {
+          "term_id": 6881,
+          "string": "Psychoeducational Clinics",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11893|4570|6881",
+          "order": 104
+        },
+        "735": {
+          "term_id": 735,
+          "string": "Psychoeducational Methods",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11913|1619|4495|735",
+          "order": 105
+        },
+        "515": {
+          "term_id": 515,
+          "string": "Student Educational Objectives",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|11916|2443|515",
+          "order": 106
+        },
+        "328": {
+          "term_id": 328,
+          "string": "Supplementary Education",
+          "isMetaTerm": 0,
+          "no_term_string": "Supplementary Educational Centers (1966 1980)",
+          "index": null,
+          "order": 107
+        },
+        "1021": {
+          "term_id": 1021,
+          "string": "Teaching Methods",
+          "isMetaTerm": 0,
+          "no_term_string": "Waldorf Educational Method",
+          "index": null,
+          "order": 108
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educational"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 108
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=suggestDetails&arg=educational&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "107": {
+            "term_id": "107",
+            "string": "Access to Education",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Access",
+            "order": 1
+          },
+          "4": {
+            "term_id": "4",
+            "string": "Accountability",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Accountability (1970 1980)",
+            "order": 2
+          },
+          "3": {
+            "term_id": "3",
+            "string": "Academic Achievement",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Achievement",
+            "order": 3
+          },
+          "849": {
+            "term_id": "849",
+            "string": "Educational Administration",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 4
+          },
+          "371": {
+            "term_id": "371",
+            "string": "Educational Opportunities",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Advantages",
+            "order": 5
+          },
+          "1764": {
+            "term_id": "1764",
+            "string": "Nontraditional Education",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Alternatives (1974 1980)",
+            "order": 6
+          },
+          "5131": {
+            "term_id": "5131",
+            "string": "Educational Anthropology",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 7
+          },
+          "510": {
+            "term_id": "510",
+            "string": "Educational Assessment",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 8
+          },
+          "511": {
+            "term_id": "511",
+            "string": "Educational Attainment",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 9
+          },
+          "6834": {
+            "term_id": "6834",
+            "string": "Educational Attitudes",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 10
+          },
+          "2572": {
+            "term_id": "2572",
+            "string": "Educational Background",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 11
+          },
+          "6835": {
+            "term_id": "6835",
+            "string": "Educational Benefits",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 12
+          },
+          "1125": {
+            "term_id": "1125",
+            "string": "Caring",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Caring",
+            "order": 13
+          },
+          "1762": {
+            "term_id": "1762",
+            "string": "Educational Certificates",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 14
+          },
+          "3010": {
+            "term_id": "3010",
+            "string": "Educational Change",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 15
+          },
+          "860": {
+            "term_id": "860",
+            "string": "School Choice",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Choice",
+            "order": 16
+          },
+          "3789": {
+            "term_id": "3789",
+            "string": "Campuses",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Complexes (2004)",
+            "order": 17
+          },
+          "362": {
+            "term_id": "362",
+            "string": "Computer Uses in Education",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Computing",
+            "order": 18
+          },
+          "1406": {
+            "term_id": "1406",
+            "string": "Educational Cooperation",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 19
+          },
+          "755": {
+            "term_id": "755",
+            "string": "Coordination",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Coordination (1967 1980)",
+            "order": 20
+          },
+          "161": {
+            "term_id": "161",
+            "string": "Educational Counseling",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Guidance (1966 1977)",
+            "order": 49
+          },
+          "374": {
+            "term_id": "374",
+            "string": "Educational Demand",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 22
+          },
+          "3816": {
+            "term_id": "3816",
+            "string": "Educational Development",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 23
+          },
+          "2573": {
+            "term_id": "2573",
+            "string": "Educational Diagnosis",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 24
+          },
+          "132": {
+            "term_id": "132",
+            "string": "Educationally Disadvantaged",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Disadvantagement (1966 1980)",
+            "order": 25
+          },
+          "375": {
+            "term_id": "375",
+            "string": "Educational Discrimination",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 26
+          },
+          "2242": {
+            "term_id": "2242",
+            "string": "Economics",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Economics",
+            "order": 27
+          },
+          "6619": {
+            "term_id": "6619",
+            "string": "Endowment Funds",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Endowments",
+            "order": 28
+          },
+          "229": {
+            "term_id": "229",
+            "string": "Educational Environment",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 29
+          },
+          "109": {
+            "term_id": "109",
+            "string": "Equal Education",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Equity (Opportunities)",
+            "order": 33
+          },
+          "2801": {
+            "term_id": "2801",
+            "string": "Educational Equipment",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 31
+          },
+          "512": {
+            "term_id": "512",
+            "string": "Educational Equity (Finance)",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 32
+          },
+          "817": {
+            "term_id": "817",
+            "string": "Educational Quality",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Excellence",
+            "order": 34
+          },
+          "133": {
+            "term_id": "133",
+            "string": "Excellence in Education",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Excellence Movement (United States)",
+            "order": 35
+          },
+          "6836": {
+            "term_id": "6836",
+            "string": "Educational Experience",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 36
+          },
+          "6260": {
+            "term_id": "6260",
+            "string": "Educational Experiments",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 37
+          },
+          "2408": {
+            "term_id": "2408",
+            "string": "Educational Facilities",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 38
+          },
+          "3645": {
+            "term_id": "3645",
+            "string": "Educational Facilities Design",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 39
+          },
+          "6916": {
+            "term_id": "6916",
+            "string": "Educational Facilities Improvement",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 40
+          },
+          "5488": {
+            "term_id": "5488",
+            "string": "Educational Facilities Planning",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 41
+          },
+          "376": {
+            "term_id": "376",
+            "string": "Educational Finance",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 42
+          },
+          "6621": {
+            "term_id": "6621",
+            "string": "Philanthropic Foundations",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Foundations",
+            "order": 43
+          },
+          "2146": {
+            "term_id": "2146",
+            "string": "Futures (of Society)",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Futures",
+            "order": 44
+          },
+          "5252": {
+            "term_id": "5252",
+            "string": "Educational Games",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 45
+          },
+          "944": {
+            "term_id": "944",
+            "string": "Educational Gerontology",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 46
+          },
+          "6840": {
+            "term_id": "6840",
+            "string": "Educational Objectives",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Goals",
+            "order": 47
+          },
+          "515": {
+            "term_id": "515",
+            "string": "Student Educational Objectives",
+            "isMetaTerm": null,
+            "no_term_string": "Educational Goals of Students",
+            "order": 48
+          },
+          "6864": {
+            "term_id": "6864",
+            "string": "Educational History",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 50
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "educational"
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 48
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/eric/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "ERIC Thesaurus",
+          "author": "USA. Institute of Education Science. Education Resources Information Center",
+          "lang": "en",
+          "scope": "The ERIC Thesaurus is a leading authority on the language used in the field of education. It is a controlled vocabulary with nearly 12,000 terms, including more than 4,500 descriptors and 7,000 synonyms. Descriptors from the Thesaurus are assigned to each of the 1.9 million records in ERIC to describe the main subjects of the content. Synonyms point searchers to the preferred term, or descriptor, in ERIC. This Tematres version is based on the source available at https://eric.ed.gov/?download",
+          "keywords": "education; United States",
+          "uri": "https://vocabularyserver.com/eric/",
+          "createDate": "2023-05-09",
+          "lastMod": "2023-05-09 11:56:57",
+          "status": "published - stable",
+          "status_date": "2023-05-09",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "11919"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

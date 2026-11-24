@@ -1,0 +1,159 @@
+{
+  "chave": "unesco|en|teaching method",
+  "recuperado_em": "2026-11-24T18:53:39-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/en/services.php?task=search&arg=teaching+method&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "6945": {
+          "term_id": 6945,
+          "string": "Discussions (teaching method)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917|6945",
+          "order": 1
+        },
+        "6936": {
+          "term_id": 6936,
+          "string": "Lectures (teaching method)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917|6936",
+          "order": 2
+        },
+        "6957": {
+          "term_id": 6957,
+          "string": "Questioning (teaching method)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917|6957",
+          "order": 3
+        },
+        "6885": {
+          "term_id": 6885,
+          "string": "Self instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "Self teaching methods",
+          "index": null,
+          "order": 4
+        },
+        "6951": {
+          "term_id": 6951,
+          "string": "Seminars (teaching method)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917|6947|6951",
+          "order": 5
+        },
+        "6859": {
+          "term_id": 6859,
+          "string": "Teaching method innovations",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|4|6847|6856|6859",
+          "order": 6
+        },
+        "6917": {
+          "term_id": 6917,
+          "string": "Teaching methods",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917",
+          "order": 7
+        },
+        "6949": {
+          "term_id": 6949,
+          "string": "Workshops (teaching method)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917|6947|6949",
+          "order": 8
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "teaching method"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 8
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=suggestDetails&arg=teaching+method&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6885": {
+            "term_id": "6885",
+            "string": "Self instruction",
+            "isMetaTerm": null,
+            "no_term_string": "Self teaching methods",
+            "order": 1
+          },
+          "6859": {
+            "term_id": "6859",
+            "string": "Teaching method innovations",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 2
+          },
+          "6917": {
+            "term_id": "6917",
+            "string": "Teaching methods",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "teaching method"
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "UNESCO Thesaurus",
+          "author": "UNESCO",
+          "lang": "en",
+          "scope": null,
+          "keywords": null,
+          "uri": "https://vocabularyserver.com//unesco/en/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 14:32:56",
+          "status": "published - stable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": null,
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "7186"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5569 @@
+{
+  "chave": "brased|pt|educação",
+  "recuperado_em": "2026-11-24T17:03:51-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=educa%C3%A7%C3%A3o&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "6413": {
+          "term_id": 6413,
+          "string": "Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413",
+          "order": 1
+        },
+        "1177": {
+          "term_id": 1177,
+          "string": "Acesso À Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1176|1177",
+          "order": 2
+        },
+        "1178": {
+          "term_id": 1178,
+          "string": "Acesso À Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1176|1177|1178",
+          "order": 3
+        },
+        "1179": {
+          "term_id": 1179,
+          "string": "Acesso à Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1176|1177|1179",
+          "order": 4
+        },
+        "1284": {
+          "term_id": 1284,
+          "string": "Administração da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284",
+          "order": 5
+        },
+        "1618": {
+          "term_id": 1618,
+          "string": "Administração da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618",
+          "order": 6
+        },
+        "1648": {
+          "term_id": 1648,
+          "string": "Administração da Educação Escolar Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1646|1647|1648",
+          "order": 7
+        },
+        "1650": {
+          "term_id": 1650,
+          "string": "Administração da Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1646|1647|1650",
+          "order": 8
+        },
+        "1651": {
+          "term_id": 1651,
+          "string": "Administração da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1646|1647|1651",
+          "order": 9
+        },
+        "2486": {
+          "term_id": 2486,
+          "string": "Administração das Instituições de Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2447|2486",
+          "order": 10
+        },
+        "3145": {
+          "term_id": 3145,
+          "string": "Apoio À Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3145",
+          "order": 11
+        },
+        "6343": {
+          "term_id": 6343,
+          "string": "Áreas da Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6343",
+          "order": 12
+        },
+        "7178": {
+          "term_id": 7178,
+          "string": "Áreas de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7178",
+          "order": 13
+        },
+        "7150": {
+          "term_id": 7150,
+          "string": "Áreas de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150",
+          "order": 14
+        },
+        "6677": {
+          "term_id": 6677,
+          "string": "Arte-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6677",
+          "order": 15
+        },
+        "6195": {
+          "term_id": 6195,
+          "string": "Articulação Saúde-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6153|6180|6194|6195",
+          "order": 16
+        },
+        "5490": {
+          "term_id": 5490,
+          "string": "Ascensão Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5452|5486|5489|5490",
+          "order": 17
+        },
+        "2209": {
+          "term_id": 2209,
+          "string": "Associação de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2199|2208|2209",
+          "order": 18
+        },
+        "2210": {
+          "term_id": 2210,
+          "string": "Associação de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2199|2208|2209|2210",
+          "order": 19
+        },
+        "2155": {
+          "term_id": 2155,
+          "string": "Associação de Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|2068|2154|2155",
+          "order": 20
+        },
+        "6592": {
+          "term_id": 6592,
+          "string": "Auto-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6591|6592",
+          "order": 21
+        },
+        "3170": {
+          "term_id": 3170,
+          "string": "Auxílio-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3169|3170",
+          "order": 22
+        },
+        "1286": {
+          "term_id": 1286,
+          "string": "Avaliação da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286",
+          "order": 23
+        },
+        "1289": {
+          "term_id": 1289,
+          "string": "Avaliação da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1289",
+          "order": 24
+        },
+        "1324": {
+          "term_id": 1324,
+          "string": "Avaliação da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1322|1323|1324",
+          "order": 25
+        },
+        "1327": {
+          "term_id": 1327,
+          "string": "Avaliação da Educação Extra-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1322|1323|1327",
+          "order": 26
+        },
+        "1294": {
+          "term_id": 1294,
+          "string": "Avaliação da Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1294",
+          "order": 27
+        },
+        "1295": {
+          "term_id": 1295,
+          "string": "Avaliação da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1295",
+          "order": 28
+        },
+        "1322": {
+          "term_id": 1322,
+          "string": "Avaliação da Eficácia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1322",
+          "order": 29
+        },
+        "1329": {
+          "term_id": 1329,
+          "string": "Avaliação da Eficiência da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1329",
+          "order": 30
+        },
+        "1321": {
+          "term_id": 1321,
+          "string": "Avaliação da Produtividade em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321",
+          "order": 31
+        },
+        "1333": {
+          "term_id": 1333,
+          "string": "Avaliação da Qualidade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1333",
+          "order": 32
+        },
+        "1307": {
+          "term_id": 1307,
+          "string": "Avaliação da Transparência em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1306|1307",
+          "order": 33
+        },
+        "1323": {
+          "term_id": 1323,
+          "string": "Avaliação do Rendimento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1322|1323",
+          "order": 34
+        },
+        "1304": {
+          "term_id": 1304,
+          "string": "Avaliação dos Planos de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1304",
+          "order": 35
+        },
+        "1290": {
+          "term_id": 1290,
+          "string": "Avaliação Nacional da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1289|1290",
+          "order": 36
+        },
+        "5565": {
+          "term_id": 5565,
+          "string": "Bem-Estar Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5564|5565",
+          "order": 37
+        },
+        "220": {
+          "term_id": 220,
+          "string": "Bibliografia Brasileira de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|219|220",
+          "order": 38
+        },
+        "221": {
+          "term_id": 221,
+          "string": "Biblioteca Virtual em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|219|221",
+          "order": 39
+        },
+        "1671": {
+          "term_id": 1671,
+          "string": "Câmara da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666|1670|1671",
+          "order": 40
+        },
+        "1672": {
+          "term_id": 1672,
+          "string": "Câmara da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666|1670|1672",
+          "order": 41
+        },
+        "583": {
+          "term_id": 583,
+          "string": "Censo da Educação Extraescolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|581|582|583",
+          "order": 42
+        },
+        "588": {
+          "term_id": 588,
+          "string": "Censo da Educação Indígena",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|581|582|587|588",
+          "order": 43
+        },
+        "584": {
+          "term_id": 584,
+          "string": "Censo da Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|581|582|584",
+          "order": 44
+        },
+        "585": {
+          "term_id": 585,
+          "string": "Censo da Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|581|582|585",
+          "order": 45
+        },
+        "586": {
+          "term_id": 586,
+          "string": "Censo da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|581|582|586",
+          "order": 46
+        },
+        "589": {
+          "term_id": 589,
+          "string": "Censo Financeiro da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|581|582|589",
+          "order": 47
+        },
+        "2434": {
+          "term_id": 2434,
+          "string": "Centro de Educação Aberta",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2433|2434",
+          "order": 48
+        },
+        "2438": {
+          "term_id": 2438,
+          "string": "Centro de Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2433|2438",
+          "order": 49
+        },
+        "2413": {
+          "term_id": 2413,
+          "string": "Centro de Educação e Recuperação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411|2413",
+          "order": 50
+        },
+        "2426": {
+          "term_id": 2426,
+          "string": "Centro de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411|2425|2426",
+          "order": 51
+        },
+        "2279": {
+          "term_id": 2279,
+          "string": "Centro de Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2243|2278|2279",
+          "order": 52
+        },
+        "2288": {
+          "term_id": 2288,
+          "string": "Centro de Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2286|2287|2288",
+          "order": 53
+        },
+        "2250": {
+          "term_id": 2250,
+          "string": "Centro de Educação Integral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2243|2249|2250",
+          "order": 54
+        },
+        "2443": {
+          "term_id": 2443,
+          "string": "Centro de Educação Permanente",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2433|2442|2443",
+          "order": 55
+        },
+        "2441": {
+          "term_id": 2441,
+          "string": "Centro de Educação Popular",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2433|2441",
+          "order": 56
+        },
+        "2370": {
+          "term_id": 2370,
+          "string": "Centro de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2369|2370",
+          "order": 57
+        },
+        "2361": {
+          "term_id": 2361,
+          "string": "Centro de Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2360|2361",
+          "order": 58
+        },
+        "2421": {
+          "term_id": 2421,
+          "string": "Centro de Reeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411|2421",
+          "order": 59
+        },
+        "2362": {
+          "term_id": 2362,
+          "string": "Centro Federal de Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2360|2361|2362",
+          "order": 60
+        },
+        "1693": {
+          "term_id": 1693,
+          "string": "Centro Regional de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1691|1692|1693",
+          "order": 61
+        },
+        "2433": {
+          "term_id": 2433,
+          "string": "Centros de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2433",
+          "order": 62
+        },
+        "4364": {
+          "term_id": 4364,
+          "string": "Ciência e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4329|4360|4364",
+          "order": 63
+        },
+        "6657": {
+          "term_id": 6657,
+          "string": "Ciências da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657",
+          "order": 64
+        },
+        "3717": {
+          "term_id": 3717,
+          "string": "Civilização e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3701|3702|3716|3717",
+          "order": 65
+        },
+        "6521": {
+          "term_id": 6521,
+          "string": "Civilização e História da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6520|6521",
+          "order": 66
+        },
+        "5472": {
+          "term_id": 5472,
+          "string": "Classe Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5452|5460|5461|5472",
+          "order": 67
+        },
+        "422": {
+          "term_id": 422,
+          "string": "Classificação Internacional Normalizada da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|415|421|422",
+          "order": 68
+        },
+        "6606": {
+          "term_id": 6606,
+          "string": "Co-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6605|6606",
+          "order": 69
+        },
+        "574": {
+          "term_id": 574,
+          "string": "Comparabilidade dos Resultados da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|522|568|569|570|574",
+          "order": 70
+        },
+        "5631": {
+          "term_id": 5631,
+          "string": "Comunicação e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631",
+          "order": 71
+        },
+        "31": {
+          "term_id": 31,
+          "string": "Comunidade e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|25|31",
+          "order": 72
+        },
+        "6673": {
+          "term_id": 6673,
+          "string": "Conceitos de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673",
+          "order": 73
+        },
+        "5590": {
+          "term_id": 5590,
+          "string": "Conceitos Sociológicos de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590",
+          "order": 74
+        },
+        "214": {
+          "term_id": 214,
+          "string": "Conferência de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|213|214",
+          "order": 75
+        },
+        "1145": {
+          "term_id": 1145,
+          "string": "Conferência Internacional da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1144|1145",
+          "order": 76
+        },
+        "1144": {
+          "term_id": 1144,
+          "string": "Conferência Mundial de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1144",
+          "order": 77
+        },
+        "6570": {
+          "term_id": 6570,
+          "string": "Conflito e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6565|6569|6570",
+          "order": 78
+        },
+        "215": {
+          "term_id": 215,
+          "string": "Congresso de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|213|215",
+          "order": 79
+        },
+        "1161": {
+          "term_id": 1161,
+          "string": "Conselho de Ministros da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1160|1161",
+          "order": 80
+        },
+        "1667": {
+          "term_id": 1667,
+          "string": "Conselho Estadual de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666|1667",
+          "order": 81
+        },
+        "1668": {
+          "term_id": 1668,
+          "string": "Conselho Federal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666|1668",
+          "order": 82
+        },
+        "1669": {
+          "term_id": 1669,
+          "string": "Conselho Municipal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666|1669",
+          "order": 83
+        },
+        "1670": {
+          "term_id": 1670,
+          "string": "Conselho Nacional de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666|1670",
+          "order": 84
+        },
+        "1666": {
+          "term_id": 1666,
+          "string": "Conselhos de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1666",
+          "order": 85
+        },
+        "70": {
+          "term_id": 70,
+          "string": "Constituição e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|68|69|70",
+          "order": 86
+        },
+        "2016": {
+          "term_id": 2016,
+          "string": "Consultor Internacional em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|2014|2016",
+          "order": 87
+        },
+        "3497": {
+          "term_id": 3497,
+          "string": "Conteúdo Cultural da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3495|3496|3497",
+          "order": 88
+        },
+        "6553": {
+          "term_id": 6553,
+          "string": "Conteúdo Filosófico da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553",
+          "order": 89
+        },
+        "6713": {
+          "term_id": 6713,
+          "string": "Conteúdos da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6713",
+          "order": 90
+        },
+        "7434": {
+          "term_id": 7434,
+          "string": "Conteúdos da Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7434",
+          "order": 91
+        },
+        "1": {
+          "term_id": 1,
+          "string": "Contexto da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1",
+          "order": 92
+        },
+        "6527": {
+          "term_id": 6527,
+          "string": "Contexto Histórico e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6526|6527",
+          "order": 93
+        },
+        "1912": {
+          "term_id": 1912,
+          "string": "Contratação de Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1900|1911|1912",
+          "order": 94
+        },
+        "1639": {
+          "term_id": 1639,
+          "string": "Controle da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1639",
+          "order": 95
+        },
+        "176": {
+          "term_id": 176,
+          "string": "Crise da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176",
+          "order": 96
+        },
+        "6525": {
+          "term_id": 6525,
+          "string": "Crítica À História da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6525",
+          "order": 97
+        },
+        "6655": {
+          "term_id": 6655,
+          "string": "Crítica da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655",
+          "order": 98
+        },
+        "3494": {
+          "term_id": 3494,
+          "string": "Cultura e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494",
+          "order": 99
+        },
+        "7345": {
+          "term_id": 7345,
+          "string": "Curso de Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7339|7340|7345",
+          "order": 100
+        },
+        "866": {
+          "term_id": 866,
+          "string": "Custos Totais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866",
+          "order": 101
+        },
+        "985": {
+          "term_id": 985,
+          "string": "Democratização da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|985",
+          "order": 102
+        },
+        "205": {
+          "term_id": 205,
+          "string": "Desafios da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|205",
+          "order": 103
+        },
+        "1033": {
+          "term_id": 1033,
+          "string": "Desenvolvimento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033",
+          "order": 104
+        },
+        "1053": {
+          "term_id": 1053,
+          "string": "Desenvolvimento da Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033|1049|1052|1053",
+          "order": 105
+        },
+        "1034": {
+          "term_id": 1034,
+          "string": "Desenvolvimento da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1033|1034",
+          "order": 106
+        },
+        "6568": {
+          "term_id": 6568,
+          "string": "Desenvolvimento e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6565|6568",
+          "order": 107
+        },
+        "7174": {
+          "term_id": 7174,
+          "string": "Desenvolvimento e Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7173|7174",
+          "order": 108
+        },
+        "3245": {
+          "term_id": 3245,
+          "string": "Despesas Com Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3190|3245",
+          "order": 109
+        },
+        "868": {
+          "term_id": 868,
+          "string": "Despesas Com Educação por Categoria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866|868",
+          "order": 110
+        },
+        "3254": {
+          "term_id": 3254,
+          "string": "Despesas Privadas Com Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3190|3245|3254",
+          "order": 111
+        },
+        "3255": {
+          "term_id": 3255,
+          "string": "Despesas Públicas Com Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3190|3245|3255",
+          "order": 112
+        },
+        "6407": {
+          "term_id": 6407,
+          "string": "Didática da Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6406|6407",
+          "order": 113
+        },
+        "7138": {
+          "term_id": 7138,
+          "string": "Dinâmica da Educação Extra-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7136|7137|7138",
+          "order": 114
+        },
+        "1173": {
+          "term_id": 1173,
+          "string": "Direito à Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173",
+          "order": 115
+        },
+        "1175": {
+          "term_id": 1175,
+          "string": "Direito À Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1174|1175",
+          "order": 116
+        },
+        "4258": {
+          "term_id": 4258,
+          "string": "Direitos Humanos e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4243|4255|4257|4258",
+          "order": 117
+        },
+        "1216": {
+          "term_id": 1216,
+          "string": "Diretrizes da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1215|1216",
+          "order": 118
+        },
+        "2880": {
+          "term_id": 2880,
+          "string": "Dispensa da Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2802|2872|2878|2880",
+          "order": 119
+        },
+        "292": {
+          "term_id": 292,
+          "string": "Documentação em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|287|292",
+          "order": 120
+        },
+        "7048": {
+          "term_id": 7048,
+          "string": "Doutorado em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7045|7047|7048",
+          "order": 121
+        },
+        "2934": {
+          "term_id": 2934,
+          "string": "Economia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934",
+          "order": 122
+        },
+        "7198": {
+          "term_id": 7198,
+          "string": "Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7198",
+          "order": 123
+        },
+        "6679": {
+          "term_id": 6679,
+          "string": "Educação Aberta",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6678|6679",
+          "order": 124
+        },
+        "7566": {
+          "term_id": 7566,
+          "string": "Educação Alimentar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7565|7566",
+          "order": 125
+        },
+        "6678": {
+          "term_id": 6678,
+          "string": "Educação Alternativa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6678",
+          "order": 126
+        },
+        "7554": {
+          "term_id": 7554,
+          "string": "Educação Ambiental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7554",
+          "order": 127
+        },
+        "6645": {
+          "term_id": 6645,
+          "string": "Educação Anarquista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6643|6644|6645",
+          "order": 128
+        },
+        "6644": {
+          "term_id": 6644,
+          "string": "Educação Anti-Autoritária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6643|6644",
+          "order": 129
+        },
+        "7567": {
+          "term_id": 7567,
+          "string": "Educação Antitóxicos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7565|7567",
+          "order": 130
+        },
+        "6680": {
+          "term_id": 6680,
+          "string": "Educação Ao Ar Livre",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6678|6680",
+          "order": 131
+        },
+        "5591": {
+          "term_id": 5591,
+          "string": "Educação Aristocrática",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5591",
+          "order": 132
+        },
+        "7609": {
+          "term_id": 7609,
+          "string": "Educação Artística",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7609",
+          "order": 133
+        },
+        "6617": {
+          "term_id": 6617,
+          "string": "Educação Ascética",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6617",
+          "order": 134
+        },
+        "7201": {
+          "term_id": 7201,
+          "string": "Educação Assistida por Rede",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7198|7200|7201",
+          "order": 135
+        },
+        "6618": {
+          "term_id": 6618,
+          "string": "Educação Atéia",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6618",
+          "order": 136
+        },
+        "6619": {
+          "term_id": 6619,
+          "string": "Educação Autoritária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6619",
+          "order": 137
+        },
+        "5353": {
+          "term_id": 5353,
+          "string": "Educação Baseada No Cérebro",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5350|5352|5353",
+          "order": 138
+        },
+        "6681": {
+          "term_id": 6681,
+          "string": "Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6681",
+          "order": 139
+        },
+        "6695": {
+          "term_id": 6695,
+          "string": "Educação Bilíngüe",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6694|6695",
+          "order": 140
+        },
+        "6563": {
+          "term_id": 6563,
+          "string": "Educação Brasileira",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6563",
+          "order": 141
+        },
+        "6536": {
+          "term_id": 6536,
+          "string": "Educação Brasileira Após 1930",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6531|6532|6536",
+          "order": 142
+        },
+        "5592": {
+          "term_id": 5592,
+          "string": "Educação Burguesa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5592",
+          "order": 143
+        },
+        "6615": {
+          "term_id": 6615,
+          "string": "Educação Burocrática",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6615",
+          "order": 144
+        },
+        "6616": {
+          "term_id": 6616,
+          "string": "Educação Carismática",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6616",
+          "order": 145
+        },
+        "6623": {
+          "term_id": 6623,
+          "string": "Educação Católica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6622|6623",
+          "order": 146
+        },
+        "6837": {
+          "term_id": 6837,
+          "string": "Educação Científica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6837",
+          "order": 147
+        },
+        "7535": {
+          "term_id": 7535,
+          "string": "Educação Cívica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7533|7534|7535",
+          "order": 148
+        },
+        "6620": {
+          "term_id": 6620,
+          "string": "Educação Clássica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6620",
+          "order": 149
+        },
+        "978": {
+          "term_id": 978,
+          "string": "Educação Como Ação Política",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978",
+          "order": 150
+        },
+        "6559": {
+          "term_id": 6559,
+          "string": "Educação Como Arte",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6558|6559",
+          "order": 151
+        },
+        "6598": {
+          "term_id": 6598,
+          "string": "Educação Como Humanização",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598",
+          "order": 152
+        },
+        "3099": {
+          "term_id": 3099,
+          "string": "Educação Como Investimento",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3099",
+          "order": 153
+        },
+        "415": {
+          "term_id": 415,
+          "string": "Educação Comparada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|415",
+          "order": 154
+        },
+        "6683": {
+          "term_id": 6683,
+          "string": "Educação Compensatória",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6683",
+          "order": 155
+        },
+        "6684": {
+          "term_id": 6684,
+          "string": "Educação Competitiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6684",
+          "order": 156
+        },
+        "7195": {
+          "term_id": 7195,
+          "string": "Educação Complementar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7194|7195",
+          "order": 157
+        },
+        "6685": {
+          "term_id": 6685,
+          "string": "Educação Compreensiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6685",
+          "order": 158
+        },
+        "32": {
+          "term_id": 32,
+          "string": "Educação Comunitária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|25|31|32",
+          "order": 159
+        },
+        "6554": {
+          "term_id": 6554,
+          "string": "Educação Conscientizadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6554",
+          "order": 160
+        },
+        "6555": {
+          "term_id": 6555,
+          "string": "Educação Conservadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6555",
+          "order": 161
+        },
+        "6621": {
+          "term_id": 6621,
+          "string": "Educação Construtivista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6621",
+          "order": 162
+        },
+        "7196": {
+          "term_id": 7196,
+          "string": "Educação Continuada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7194|7196",
+          "order": 163
+        },
+        "6686": {
+          "term_id": 6686,
+          "string": "Educação Corporativa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6686",
+          "order": 164
+        },
+        "7185": {
+          "term_id": 7185,
+          "string": "Educação Correcional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7178|7184|7185",
+          "order": 165
+        },
+        "6631": {
+          "term_id": 6631,
+          "string": "Educação Cósmica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6630|6631",
+          "order": 166
+        },
+        "6558": {
+          "term_id": 6558,
+          "string": "Educação Criadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6558",
+          "order": 167
+        },
+        "6622": {
+          "term_id": 6622,
+          "string": "Educação Cristã",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6622",
+          "order": 168
+        },
+        "6599": {
+          "term_id": 6599,
+          "string": "Educação da Criança",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6599",
+          "order": 169
+        },
+        "6600": {
+          "term_id": 6600,
+          "string": "Educação da Juventude",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6600",
+          "order": 170
+        },
+        "7435": {
+          "term_id": 7435,
+          "string": "Educação da Linguagem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7434|7435",
+          "order": 171
+        },
+        "6601": {
+          "term_id": 6601,
+          "string": "Educação da Mulher",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6601",
+          "order": 172
+        },
+        "5146": {
+          "term_id": 5146,
+          "string": "Educação da Percepção",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5114|5115|5145|5146",
+          "order": 173
+        },
+        "6840": {
+          "term_id": 6840,
+          "string": "Educação da Pessoa Humana",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6840",
+          "order": 174
+        },
+        "6888": {
+          "term_id": 6888,
+          "string": "Educação da Primeira Infância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6887|6888",
+          "order": 175
+        },
+        "2192": {
+          "term_id": 2192,
+          "string": "Educação da Voz",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|2068|2163|2190|2191|2192",
+          "order": 176
+        },
+        "6602": {
+          "term_id": 6602,
+          "string": "Educação das Moças",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6601|6602",
+          "order": 177
+        },
+        "7144": {
+          "term_id": 7144,
+          "string": "Educação das Pessoas Com Deficiência",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7143|7144",
+          "order": 178
+        },
+        "7151": {
+          "term_id": 7151,
+          "string": "Educação das Pessoas Com Problemas de Conduta",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150|7151",
+          "order": 179
+        },
+        "6603": {
+          "term_id": 6603,
+          "string": "Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6603",
+          "order": 180
+        },
+        "6687": {
+          "term_id": 6687,
+          "string": "Educação de Base",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6687",
+          "order": 181
+        },
+        "7223": {
+          "term_id": 7223,
+          "string": "Educação de Grupos Atípicos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7223",
+          "order": 182
+        },
+        "7224": {
+          "term_id": 7224,
+          "string": "Educação de Grupos Minoritários",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7223|7224",
+          "order": 183
+        },
+        "7172": {
+          "term_id": 7172,
+          "string": "Educação de Jovens e Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172",
+          "order": 184
+        },
+        "6692": {
+          "term_id": 6692,
+          "string": "Educação de Massa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6692",
+          "order": 185
+        },
+        "5593": {
+          "term_id": 5593,
+          "string": "Educação Demagógica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5593",
+          "order": 186
+        },
+        "6626": {
+          "term_id": 6626,
+          "string": "Educação Democrática",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6626",
+          "order": 187
+        },
+        "6569": {
+          "term_id": 6569,
+          "string": "Educação Dialética",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6565|6569",
+          "order": 188
+        },
+        "2985": {
+          "term_id": 2985,
+          "string": "Educação do Consumidor",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|2935|2936|2984|2985",
+          "order": 189
+        },
+        "6849": {
+          "term_id": 6849,
+          "string": "Educação do Futuro",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6849",
+          "order": 190
+        },
+        "6604": {
+          "term_id": 6604,
+          "string": "Educação do Homem",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6604",
+          "order": 191
+        },
+        "5825": {
+          "term_id": 5825,
+          "string": "Educação do Leitor",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631|5738|5823|5824|5825",
+          "order": 192
+        },
+        "413": {
+          "term_id": 413,
+          "string": "Educação do Usuário",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|380|412|413",
+          "order": 193
+        },
+        "7183": {
+          "term_id": 7183,
+          "string": "Educação dos Analfabetos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7178|7179|7183",
+          "order": 194
+        },
+        "7152": {
+          "term_id": 7152,
+          "string": "Educação dos Cegos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150|7152",
+          "order": 195
+        },
+        "7153": {
+          "term_id": 7153,
+          "string": "Educação dos Deficientes Físicos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150|7153",
+          "order": 196
+        },
+        "7154": {
+          "term_id": 7154,
+          "string": "Educação dos Deficientes Intelectuais",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150|7154",
+          "order": 197
+        },
+        "19": {
+          "term_id": 19,
+          "string": "Educação dos Filhos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|14|17|18|19",
+          "order": 198
+        },
+        "6611": {
+          "term_id": 6611,
+          "string": "Educação dos Negros",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6610|6611",
+          "order": 199
+        },
+        "20": {
+          "term_id": 20,
+          "string": "Educação dos Pais",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|14|17|18|20",
+          "order": 200
+        },
+        "7145": {
+          "term_id": 7145,
+          "string": "Educação dos Superdotados",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7143|7145",
+          "order": 201
+        },
+        "7156": {
+          "term_id": 7156,
+          "string": "Educação dos Surdos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150|7156",
+          "order": 202
+        },
+        "6627": {
+          "term_id": 6627,
+          "string": "Educação Eclética",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6627",
+          "order": 203
+        },
+        "2984": {
+          "term_id": 2984,
+          "string": "Educação Econômica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|2935|2936|2984",
+          "order": 204
+        },
+        "6647": {
+          "term_id": 6647,
+          "string": "Educação Economicista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6646|6647",
+          "order": 205
+        },
+        "3694": {
+          "term_id": 3694,
+          "string": "Educação Ecumênica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3634|3693|3694",
+          "order": 206
+        },
+        "5594": {
+          "term_id": 5594,
+          "string": "Educação Elitista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5594",
+          "order": 207
+        },
+        "1163": {
+          "term_id": 1163,
+          "string": "Educação em Faixa de Fronteira",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1160|1163",
+          "order": 208
+        },
+        "1128": {
+          "term_id": 1128,
+          "string": "Educação em Parceria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1126|1128",
+          "order": 209
+        },
+        "6706": {
+          "term_id": 6706,
+          "string": "Educação em Periferias Urbanas",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6705|6706",
+          "order": 210
+        },
+        "2986": {
+          "term_id": 2986,
+          "string": "Educação Empresarial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|2935|2936|2984|2986",
+          "order": 211
+        },
+        "6612": {
+          "term_id": 6612,
+          "string": "Educação Entre Primitivos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6610|6612",
+          "order": 212
+        },
+        "6872": {
+          "term_id": 6872,
+          "string": "Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872",
+          "order": 213
+        },
+        "6886": {
+          "term_id": 6886,
+          "string": "Educação Escolar Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886",
+          "order": 214
+        },
+        "7225": {
+          "term_id": 7225,
+          "string": "Educação Escolar Indígena",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7223|7225",
+          "order": 215
+        },
+        "1230": {
+          "term_id": 1230,
+          "string": "Educação Escolar Obrigatória",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1215|1229|1230",
+          "order": 216
+        },
+        "1188": {
+          "term_id": 1188,
+          "string": "Educação Escolar Privada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1188",
+          "order": 217
+        },
+        "1190": {
+          "term_id": 1190,
+          "string": "Educação Escolar Pública",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1190",
+          "order": 218
+        },
+        "6628": {
+          "term_id": 6628,
+          "string": "Educação Escolástica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6628",
+          "order": 219
+        },
+        "7142": {
+          "term_id": 7142,
+          "string": "Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142",
+          "order": 220
+        },
+        "7147": {
+          "term_id": 7147,
+          "string": "Educação Especial para o Trabalho",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7143|7146|7147",
+          "order": 221
+        },
+        "4322": {
+          "term_id": 4322,
+          "string": "Educação Estética",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4317|4322",
+          "order": 222
+        },
+        "6560": {
+          "term_id": 6560,
+          "string": "Educação Existencial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6560",
+          "order": 223
+        },
+        "6629": {
+          "term_id": 6629,
+          "string": "Educação Existencialista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6629",
+          "order": 224
+        },
+        "7137": {
+          "term_id": 7137,
+          "string": "Educação Extra-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7136|7137",
+          "order": 225
+        },
+        "18": {
+          "term_id": 18,
+          "string": "Educação Familiar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|14|17|18",
+          "order": 226
+        },
+        "6731": {
+          "term_id": 6731,
+          "string": "Educação Filosófica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6713|6731",
+          "order": 227
+        },
+        "6732": {
+          "term_id": 6732,
+          "string": "Educação Filosófica da Criança",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6713|6731|6732",
+          "order": 228
+        },
+        "6325": {
+          "term_id": 6325,
+          "string": "Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325",
+          "order": 229
+        },
+        "6408": {
+          "term_id": 6408,
+          "string": "Educação Física Adaptada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6406|6407|6408",
+          "order": 230
+        },
+        "6406": {
+          "term_id": 6406,
+          "string": "Educação Física e Educação Geral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6406",
+          "order": 231
+        },
+        "7603": {
+          "term_id": 7603,
+          "string": "Educação Física Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7603",
+          "order": 232
+        },
+        "6379": {
+          "term_id": 6379,
+          "string": "Educação Física Preventiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6368|6378|6379",
+          "order": 233
+        },
+        "6380": {
+          "term_id": 6380,
+          "string": "Educação Física Terapêutica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6368|6378|6380",
+          "order": 234
+        },
+        "7104": {
+          "term_id": 7104,
+          "string": "Educação Formal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7104",
+          "order": 235
+        },
+        "6688": {
+          "term_id": 6688,
+          "string": "Educação Funcional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6687|6688",
+          "order": 236
+        },
+        "6725": {
+          "term_id": 6725,
+          "string": "Educação Geral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6713|6723|6725",
+          "order": 237
+        },
+        "6630": {
+          "term_id": 6630,
+          "string": "Educação Holística",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6630",
+          "order": 238
+        },
+        "6854": {
+          "term_id": 6854,
+          "string": "Educação Humanística",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6854",
+          "order": 239
+        },
+        "417": {
+          "term_id": 417,
+          "string": "Educação Iberoamericana",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|415|416|417",
+          "order": 240
+        },
+        "6556": {
+          "term_id": 6556,
+          "string": "Educação Identificadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6555|6556",
+          "order": 241
+        },
+        "5595": {
+          "term_id": 5595,
+          "string": "Educação Inclusiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5595",
+          "order": 242
+        },
+        "6613": {
+          "term_id": 6613,
+          "string": "Educação Indígena",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6610|6613",
+          "order": 243
+        },
+        "6634": {
+          "term_id": 6634,
+          "string": "Educação Individualista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6634",
+          "order": 244
+        },
+        "6887": {
+          "term_id": 6887,
+          "string": "Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6887",
+          "order": 245
+        },
+        "7136": {
+          "term_id": 7136,
+          "string": "Educação Informal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7136",
+          "order": 246
+        },
+        "5597": {
+          "term_id": 5597,
+          "string": "Educação Integradora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5597",
+          "order": 247
+        },
+        "6582": {
+          "term_id": 6582,
+          "string": "Educação Integral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6580|6582",
+          "order": 248
+        },
+        "6843": {
+          "term_id": 6843,
+          "string": "Educação Intelectual",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6840|6843",
+          "order": 249
+        },
+        "6635": {
+          "term_id": 6635,
+          "string": "Educação Interativa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6635",
+          "order": 250
+        },
+        "6696": {
+          "term_id": 6696,
+          "string": "Educação Intercultural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6694|6696",
+          "order": 251
+        },
+        "94": {
+          "term_id": 94,
+          "string": "Educação Internacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|86|93|94",
+          "order": 252
+        },
+        "95": {
+          "term_id": 95,
+          "string": "Educação Internacionalizada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|86|93|94|95",
+          "order": 253
+        },
+        "6636": {
+          "term_id": 6636,
+          "string": "Educação Islâmica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6636",
+          "order": 254
+        },
+        "6624": {
+          "term_id": 6624,
+          "string": "Educação Jesuítica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6622|6623|6624",
+          "order": 255
+        },
+        "6638": {
+          "term_id": 6638,
+          "string": "Educação Laica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6637|6638",
+          "order": 256
+        },
+        "6637": {
+          "term_id": 6637,
+          "string": "Educação Liberal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6637",
+          "order": 257
+        },
+        "6650": {
+          "term_id": 6650,
+          "string": "Educação Libertadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6649|6650",
+          "order": 258
+        },
+        "7517": {
+          "term_id": 7517,
+          "string": "Educação Literária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7489|7516|7517",
+          "order": 259
+        },
+        "6632": {
+          "term_id": 6632,
+          "string": "Educação Logosófica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6630|6632",
+          "order": 260
+        },
+        "7441": {
+          "term_id": 7441,
+          "string": "Educação Lúdica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7434|7441",
+          "order": 261
+        },
+        "7473": {
+          "term_id": 7473,
+          "string": "Educação Matemática",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7472|7473",
+          "order": 262
+        },
+        "6907": {
+          "term_id": 6907,
+          "string": "Educação Média",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6907",
+          "order": 263
+        },
+        "6693": {
+          "term_id": 6693,
+          "string": "Educação Militar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6693",
+          "order": 264
+        },
+        "4275": {
+          "term_id": 4275,
+          "string": "Educação Moral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4243|4274|4275",
+          "order": 265
+        },
+        "7534": {
+          "term_id": 7534,
+          "string": "Educação Moral e Cívica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7533|7534",
+          "order": 266
+        },
+        "6694": {
+          "term_id": 6694,
+          "string": "Educação Multicultural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6694",
+          "order": 267
+        },
+        "7611": {
+          "term_id": 7611,
+          "string": "Educação Musical",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7609|7610|7611",
+          "order": 268
+        },
+        "7184": {
+          "term_id": 7184,
+          "string": "Educação Na Prisão",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7178|7184",
+          "order": 269
+        },
+        "7186": {
+          "term_id": 7186,
+          "string": "Educação Na Terceira Idade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7178|7186",
+          "order": 270
+        },
+        "7113": {
+          "term_id": 7113,
+          "string": "Educação Não-Formal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7113",
+          "order": 271
+        },
+        "6643": {
+          "term_id": 6643,
+          "string": "Educação Naturalista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6643",
+          "order": 272
+        },
+        "6697": {
+          "term_id": 6697,
+          "string": "Educação no Campo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6697",
+          "order": 273
+        },
+        "21": {
+          "term_id": 21,
+          "string": "Educação No Lar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|14|17|18|21",
+          "order": 274
+        },
+        "6702": {
+          "term_id": 6702,
+          "string": "Educação no Meio Rural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6701|6702",
+          "order": 275
+        },
+        "416": {
+          "term_id": 416,
+          "string": "Educação No Mundo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|415|416",
+          "order": 276
+        },
+        "7189": {
+          "term_id": 7189,
+          "string": "Educação No Serviço Militar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7178|7189",
+          "order": 277
+        },
+        "4594": {
+          "term_id": 4594,
+          "string": "Educação No Trabalho",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479|4589|4590|4594",
+          "order": 278
+        },
+        "418": {
+          "term_id": 418,
+          "string": "Educação Nos Vários Países",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|415|416|418",
+          "order": 279
+        },
+        "6641": {
+          "term_id": 6641,
+          "string": "Educação Nova",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6637|6640|6641",
+          "order": 280
+        },
+        "6522": {
+          "term_id": 6522,
+          "string": "Educação Ocidental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6520|6521|6522",
+          "order": 281
+        },
+        "6523": {
+          "term_id": 6523,
+          "string": "Educação Oriental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6520|6521|6523",
+          "order": 282
+        },
+        "6850": {
+          "term_id": 6850,
+          "string": "Educação para a Antecipação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6849|6850",
+          "order": 283
+        },
+        "6856": {
+          "term_id": 6856,
+          "string": "Educação para a Cidadania",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6855|6856",
+          "order": 284
+        },
+        "5662": {
+          "term_id": 5662,
+          "string": "Educação para a Comunicação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631|5632|5633|5659|5662",
+          "order": 285
+        },
+        "6844": {
+          "term_id": 6844,
+          "string": "Educação para a Criatividade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6840|6843|6844",
+          "order": 286
+        },
+        "3572": {
+          "term_id": 3572,
+          "string": "Educação para a Diversidade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3495|3567|3568|3571|3572",
+          "order": 287
+        },
+        "7569": {
+          "term_id": 7569,
+          "string": "Educação para a Fecundidade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7565|7568|7569",
+          "order": 288
+        },
+        "6851": {
+          "term_id": 6851,
+          "string": "Educação para a Inovação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6849|6851",
+          "order": 289
+        },
+        "4296": {
+          "term_id": 4296,
+          "string": "Educação para a Justiça",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4243|4279|4293|4295|4296",
+          "order": 290
+        },
+        "6845": {
+          "term_id": 6845,
+          "string": "Educação para a Liberdade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6840|6845",
+          "order": 291
+        },
+        "4188": {
+          "term_id": 4188,
+          "string": "Educação para a Morte",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4055|4133|4147|4176|4180|4182|4187|4188",
+          "order": 292
+        },
+        "6852": {
+          "term_id": 6852,
+          "string": "Educação para a Mudança",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6849|6852",
+          "order": 293
+        },
+        "6857": {
+          "term_id": 6857,
+          "string": "Educação para a Participação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6855|6857",
+          "order": 294
+        },
+        "4276": {
+          "term_id": 4276,
+          "string": "Educação para a Paz",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4243|4274|4276",
+          "order": 295
+        },
+        "6853": {
+          "term_id": 6853,
+          "string": "Educação para a Prevenção",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6849|6853",
+          "order": 296
+        },
+        "5182": {
+          "term_id": 5182,
+          "string": "Educação para a Responsabilidade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5114|5168|5180|5181|5182",
+          "order": 297
+        },
+        "6733": {
+          "term_id": 6733,
+          "string": "Educação para a Sabedoria",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6713|6731|6733",
+          "order": 298
+        },
+        "6242": {
+          "term_id": 6242,
+          "string": "Educação para a Saúde",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6153|6223|6242",
+          "order": 299
+        },
+        "4300": {
+          "term_id": 4300,
+          "string": "Educação para a Solidariedade",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4243|4279|4293|4299|4300",
+          "order": 300
+        },
+        "4277": {
+          "term_id": 4277,
+          "string": "Educação para a Tolerância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4243|4274|4276|4277",
+          "order": 301
+        },
+        "7148": {
+          "term_id": 7148,
+          "string": "Educação para a Vida Cotidiana",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7143|7146|7148",
+          "order": 302
+        },
+        "2988": {
+          "term_id": 2988,
+          "string": "Educação para o Cooperativismo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|2935|2936|2984|2988",
+          "order": 303
+        },
+        "6562": {
+          "term_id": 6562,
+          "string": "Educação para o Desenvolvimento",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6561|6562",
+          "order": 304
+        },
+        "6858": {
+          "term_id": 6858,
+          "string": "Educação para o Diálogo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6855|6858",
+          "order": 305
+        },
+        "8114": {
+          "term_id": 8114,
+          "string": "Educação para o Estudo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|8112|8113|8114",
+          "order": 306
+        },
+        "4152": {
+          "term_id": 4152,
+          "string": "Educação para o Perdão",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4055|4133|4147|4148|4150|4151|4152",
+          "order": 307
+        },
+        "4603": {
+          "term_id": 4603,
+          "string": "Educação para o Trabalho",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479|4589|4603",
+          "order": 308
+        },
+        "7558": {
+          "term_id": 7558,
+          "string": "Educação para o Trânsito",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7557|7558",
+          "order": 309
+        },
+        "1078": {
+          "term_id": 1078,
+          "string": "Educação para Todos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1075|1078",
+          "order": 310
+        },
+        "5598": {
+          "term_id": 5598,
+          "string": "Educação Paternalista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5598",
+          "order": 311
+        },
+        "3498": {
+          "term_id": 3498,
+          "string": "Educação Patrimonial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3495|3496|3497|3498",
+          "order": 312
+        },
+        "7139": {
+          "term_id": 7139,
+          "string": "Educação pela Mídia",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7136|7137|7139",
+          "order": 313
+        },
+        "8005": {
+          "term_id": 8005,
+          "string": "Educação Pela Pesquisa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7988|7989|8004|8005",
+          "order": 314
+        },
+        "8172": {
+          "term_id": 8172,
+          "string": "Educação Pelo Cinema",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8157|8171|8172",
+          "order": 315
+        },
+        "6375": {
+          "term_id": 6375,
+          "string": "Educação Pelo Esporte",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6368|6375",
+          "order": 316
+        },
+        "7442": {
+          "term_id": 7442,
+          "string": "Educação Pelo Fazer",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7434|7442",
+          "order": 317
+        },
+        "7194": {
+          "term_id": 7194,
+          "string": "Educação Permanente",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7194",
+          "order": 318
+        },
+        "6921": {
+          "term_id": 6921,
+          "string": "Educação Polimodal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6907|6920|6921",
+          "order": 319
+        },
+        "897": {
+          "term_id": 897,
+          "string": "Educação Política",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|887|888|897",
+          "order": 320
+        },
+        "6698": {
+          "term_id": 6698,
+          "string": "Educação Polivalente",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6698",
+          "order": 321
+        },
+        "6689": {
+          "term_id": 6689,
+          "string": "Educação Popular",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6687|6689",
+          "order": 322
+        },
+        "6909": {
+          "term_id": 6909,
+          "string": "Educação Pós-Média",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6907|6909",
+          "order": 323
+        },
+        "6699": {
+          "term_id": 6699,
+          "string": "Educação Pós-Secundária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6699",
+          "order": 324
+        },
+        "6646": {
+          "term_id": 6646,
+          "string": "Educação Pragmática",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6646",
+          "order": 325
+        },
+        "6889": {
+          "term_id": 6889,
+          "string": "Educação Pré-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6887|6889",
+          "order": 326
+        },
+        "6891": {
+          "term_id": 6891,
+          "string": "Educação Pré-Primária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6887|6889|6891",
+          "order": 327
+        },
+        "7155": {
+          "term_id": 7155,
+          "string": "Educação Precoce",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7150|7154|7155",
+          "order": 328
+        },
+        "7557": {
+          "term_id": 7557,
+          "string": "Educação Preventiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7557",
+          "order": 329
+        },
+        "6682": {
+          "term_id": 6682,
+          "string": "Educação Primária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6681|6682",
+          "order": 330
+        },
+        "6690": {
+          "term_id": 6690,
+          "string": "Educação Produtiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6687|6690",
+          "order": 331
+        },
+        "6926": {
+          "term_id": 6926,
+          "string": "Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6926",
+          "order": 332
+        },
+        "7205": {
+          "term_id": 7205,
+          "string": "Educação Profissional Integrada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7204|7205",
+          "order": 333
+        },
+        "6649": {
+          "term_id": 6649,
+          "string": "Educação Progressista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6649",
+          "order": 334
+        },
+        "6700": {
+          "term_id": 6700,
+          "string": "Educação Prospectiva",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6700",
+          "order": 335
+        },
+        "6625": {
+          "term_id": 6625,
+          "string": "Educação Protestante",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6622|6625",
+          "order": 336
+        },
+        "7443": {
+          "term_id": 7443,
+          "string": "Educação Psicomotora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7434|7443",
+          "order": 337
+        },
+        "6651": {
+          "term_id": 6651,
+          "string": "Educação Realística",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6651",
+          "order": 338
+        },
+        "7197": {
+          "term_id": 7197,
+          "string": "Educação Recorrente",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7194|7197",
+          "order": 339
+        },
+        "3695": {
+          "term_id": 3695,
+          "string": "Educação Religiosa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3634|3693|3695",
+          "order": 340
+        },
+        "1185": {
+          "term_id": 1185,
+          "string": "Educação Religiosa Na Escola",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1173|1176|1185",
+          "order": 341
+        },
+        "6640": {
+          "term_id": 6640,
+          "string": "Educação Renovada",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6637|6640",
+          "order": 342
+        },
+        "6557": {
+          "term_id": 6557,
+          "string": "Educação Reprodutora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6555|6557",
+          "order": 343
+        },
+        "6701": {
+          "term_id": 6701,
+          "string": "Educação Rural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6701",
+          "order": 344
+        },
+        "6703": {
+          "term_id": 6703,
+          "string": "Educação Secundária",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6703",
+          "order": 345
+        },
+        "5159": {
+          "term_id": 5159,
+          "string": "Educação Sensorial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5114|5115|5145|5158|5159",
+          "order": 346
+        },
+        "7568": {
+          "term_id": 7568,
+          "string": "Educação Sexual",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7565|7568",
+          "order": 347
+        },
+        "6633": {
+          "term_id": 6633,
+          "string": "Educação Significativa",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6630|6633",
+          "order": 348
+        },
+        "4625": {
+          "term_id": 4625,
+          "string": "Educação Sindical",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479|4620|4621|4623|4625",
+          "order": 349
+        },
+        "6662": {
+          "term_id": 6662,
+          "string": "Educação Sistemática em Família",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657|6660|6661|6662",
+          "order": 350
+        },
+        "7570": {
+          "term_id": 7570,
+          "string": "Educação Sobre População",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7565|7568|7570",
+          "order": 351
+        },
+        "6855": {
+          "term_id": 6855,
+          "string": "Educação Social",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6855",
+          "order": 352
+        },
+        "6652": {
+          "term_id": 6652,
+          "string": "Educação Socialista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6652",
+          "order": 353
+        },
+        "5599": {
+          "term_id": 5599,
+          "string": "Educação Socializadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5590|5599",
+          "order": 354
+        },
+        "7051": {
+          "term_id": 7051,
+          "string": "Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|7051",
+          "order": 355
+        },
+        "6648": {
+          "term_id": 6648,
+          "string": "Educação Tecnicista",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6646|6648",
+          "order": 356
+        },
+        "6838": {
+          "term_id": 6838,
+          "string": "Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6837|6838",
+          "order": 357
+        },
+        "3700": {
+          "term_id": 3700,
+          "string": "Educação Teológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3634|3693|3700",
+          "order": 358
+        },
+        "7146": {
+          "term_id": 7146,
+          "string": "Educação Terapêutica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7143|7146",
+          "order": 359
+        },
+        "6654": {
+          "term_id": 6654,
+          "string": "Educação Tradicional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6614|6654",
+          "order": 360
+        },
+        "6561": {
+          "term_id": 6561,
+          "string": "Educação Transformadora",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6553|6561",
+          "order": 361
+        },
+        "6704": {
+          "term_id": 6704,
+          "string": "Educação Universal",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6704",
+          "order": 362
+        },
+        "6705": {
+          "term_id": 6705,
+          "string": "Educação Urbana",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6705",
+          "order": 363
+        },
+        "6707": {
+          "term_id": 6707,
+          "string": "Educação Virtual",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6707",
+          "order": 364
+        },
+        "7883": {
+          "term_id": 7883,
+          "string": "Educação Vocacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7865|7879|7883",
+          "order": 365
+        },
+        "6565": {
+          "term_id": 6565,
+          "string": "Educação-Processo",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6565",
+          "order": 366
+        },
+        "1338": {
+          "term_id": 1338,
+          "string": "Eficácia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1338",
+          "order": 367
+        },
+        "1349": {
+          "term_id": 1349,
+          "string": "Eficiência da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1349",
+          "order": 368
+        },
+        "5605": {
+          "term_id": 5605,
+          "string": "Empresa e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5602|5605",
+          "order": 369
+        },
+        "6656": {
+          "term_id": 6656,
+          "string": "Epistemologia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656",
+          "order": 370
+        },
+        "1003": {
+          "term_id": 1003,
+          "string": "Eqüidade em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|1001|1003",
+          "order": 371
+        },
+        "8260": {
+          "term_id": 8260,
+          "string": "Equipamentos de Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8204|8255|8260",
+          "order": 372
+        },
+        "8263": {
+          "term_id": 8263,
+          "string": "Equipamentos para Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8204|8263",
+          "order": 373
+        },
+        "2440": {
+          "term_id": 2440,
+          "string": "Escola de Educação de Base",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2433|2438|2440",
+          "order": 374
+        },
+        "2425": {
+          "term_id": 2425,
+          "string": "Escola de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411|2425",
+          "order": 375
+        },
+        "2315": {
+          "term_id": 2315,
+          "string": "Escola Secundária de Educação Geral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2286|2305|2313|2315",
+          "order": 376
+        },
+        "2393": {
+          "term_id": 2393,
+          "string": "Escola Superior de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2393",
+          "order": 377
+        },
+        "1997": {
+          "term_id": 1997,
+          "string": "Especialistas em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997",
+          "order": 378
+        },
+        "7049": {
+          "term_id": 7049,
+          "string": "Especialização em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7045|7047|7049",
+          "order": 379
+        },
+        "64": {
+          "term_id": 64,
+          "string": "Esporte e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|50|64",
+          "order": 380
+        },
+        "6664": {
+          "term_id": 6664,
+          "string": "Essência da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6664",
+          "order": 381
+        },
+        "426": {
+          "term_id": 426,
+          "string": "Estatística da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426",
+          "order": 382
+        },
+        "570": {
+          "term_id": 570,
+          "string": "Estatísticas Comparativas em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|522|568|569|570",
+          "order": 383
+        },
+        "685": {
+          "term_id": 685,
+          "string": "Estatísticas da Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|619|684|685",
+          "order": 384
+        },
+        "619": {
+          "term_id": 619,
+          "string": "Estatísticas da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|619",
+          "order": 385
+        },
+        "686": {
+          "term_id": 686,
+          "string": "Estatísticas da Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|619|684|686",
+          "order": 386
+        },
+        "691": {
+          "term_id": 691,
+          "string": "Estatísticas da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|619|684|691",
+          "order": 387
+        },
+        "823": {
+          "term_id": 823,
+          "string": "Estatísticas dos Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|823",
+          "order": 388
+        },
+        "224": {
+          "term_id": 224,
+          "string": "Estudo Regional Sobre Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|219|222|224",
+          "order": 389
+        },
+        "6610": {
+          "term_id": 6610,
+          "string": "Etnoeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6610",
+          "order": 390
+        },
+        "1353": {
+          "term_id": 1353,
+          "string": "Excelência em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1351|1353",
+          "order": 391
+        },
+        "2394": {
+          "term_id": 2394,
+          "string": "Faculdade de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2394",
+          "order": 392
+        },
+        "2373": {
+          "term_id": 2373,
+          "string": "Faculdade de Educação e Comunicação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2369|2371|2373",
+          "order": 393
+        },
+        "2396": {
+          "term_id": 2396,
+          "string": "Faculdade de Filosofia e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2396",
+          "order": 394
+        },
+        "17": {
+          "term_id": 17,
+          "string": "Família e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|13|14|17",
+          "order": 395
+        },
+        "6608": {
+          "term_id": 6608,
+          "string": "Feminilização da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6605|6607|6608",
+          "order": 396
+        },
+        "6552": {
+          "term_id": 6552,
+          "string": "Filosofia Como Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552",
+          "order": 397
+        },
+        "6550": {
+          "term_id": 6550,
+          "string": "Filosofia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550",
+          "order": 398
+        },
+        "3755": {
+          "term_id": 3755,
+          "string": "Filosofia e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755",
+          "order": 399
+        },
+        "6835": {
+          "term_id": 6835,
+          "string": "Finalidades da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835",
+          "order": 400
+        },
+        "3096": {
+          "term_id": 3096,
+          "string": "Financiamento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096",
+          "order": 401
+        },
+        "3109": {
+          "term_id": 3109,
+          "string": "Financiamento da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3107|3108|3109",
+          "order": 402
+        },
+        "6836": {
+          "term_id": 6836,
+          "string": "Fins da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836",
+          "order": 403
+        },
+        "6863": {
+          "term_id": 6863,
+          "string": "Fins da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6862|6863",
+          "order": 404
+        },
+        "6862": {
+          "term_id": 6862,
+          "string": "Fins da Educação Brasileira",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6862",
+          "order": 405
+        },
+        "72": {
+          "term_id": 72,
+          "string": "Fins da Educação Nacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|68|69|70|72",
+          "order": 406
+        },
+        "6864": {
+          "term_id": 6864,
+          "string": "Fins da Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6862|6864",
+          "order": 407
+        },
+        "6866": {
+          "term_id": 6866,
+          "string": "Fins da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6836|6862|6866",
+          "order": 408
+        },
+        "7045": {
+          "term_id": 7045,
+          "string": "Formação de Especialistas em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7045",
+          "order": 409
+        },
+        "6994": {
+          "term_id": 6994,
+          "string": "Formação dos Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994",
+          "order": 410
+        },
+        "2543": {
+          "term_id": 2543,
+          "string": "Formas de Ingresso Na Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2446|2534|2535|2536|2543",
+          "order": 411
+        },
+        "6571": {
+          "term_id": 6571,
+          "string": "Função da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6552|6565|6571",
+          "order": 412
+        },
+        "3106": {
+          "term_id": 3106,
+          "string": "Função de Produção em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3099|3105|3106",
+          "order": 413
+        },
+        "923": {
+          "term_id": 923,
+          "string": "Função Política da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|887|888|921|922|923",
+          "order": 414
+        },
+        "5564": {
+          "term_id": 5564,
+          "string": "Função Social da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5564",
+          "order": 415
+        },
+        "3493": {
+          "term_id": 3493,
+          "string": "Fundamentos da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493",
+          "order": 416
+        },
+        "201": {
+          "term_id": 201,
+          "string": "Futuro da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196|201",
+          "order": 417
+        },
+        "850": {
+          "term_id": 850,
+          "string": "Gasto Público Com Educação em Relação Ao Gasto Público Total",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|847|850",
+          "order": 418
+        },
+        "851": {
+          "term_id": 851,
+          "string": "Gasto Público Com Educação em Relação Ao Pib",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|847|851",
+          "order": 419
+        },
+        "6605": {
+          "term_id": 6605,
+          "string": "Gênero e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6605",
+          "order": 420
+        },
+        "6711": {
+          "term_id": 6711,
+          "string": "Geoeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6673|6711",
+          "order": 421
+        },
+        "993": {
+          "term_id": 993,
+          "string": "Geopolítica da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|993",
+          "order": 422
+        },
+        "3191": {
+          "term_id": 3191,
+          "string": "Gestão Financeira da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3190|3191",
+          "order": 423
+        },
+        "1146": {
+          "term_id": 1146,
+          "string": "Globalização e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1146",
+          "order": 424
+        },
+        "6594": {
+          "term_id": 6594,
+          "string": "Heteroeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6591|6594",
+          "order": 425
+        },
+        "6517": {
+          "term_id": 6517,
+          "string": "História da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517",
+          "order": 426
+        },
+        "6531": {
+          "term_id": 6531,
+          "string": "História da Educação Brasileira",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6531",
+          "order": 427
+        },
+        "6518": {
+          "term_id": 6518,
+          "string": "História Geral da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518",
+          "order": 428
+        },
+        "6665": {
+          "term_id": 6665,
+          "string": "Ideologia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6665",
+          "order": 429
+        },
+        "6668": {
+          "term_id": 6668,
+          "string": "Imaginário e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6665|6668",
+          "order": 430
+        },
+        "575": {
+          "term_id": 575,
+          "string": "Indicadores Comparáveis em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|522|568|569|570|575",
+          "order": 431
+        },
+        "857": {
+          "term_id": 857,
+          "string": "Indicadores de Custos da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857",
+          "order": 432
+        },
+        "11": {
+          "term_id": 11,
+          "string": "Indicadores de Educação Ambiental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|2|9|10|11",
+          "order": 433
+        },
+        "847": {
+          "term_id": 847,
+          "string": "Indicadores de Financiamento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|847",
+          "order": 434
+        },
+        "855": {
+          "term_id": 855,
+          "string": "Indicadores de Investimentos em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|853|855",
+          "order": 435
+        },
+        "753": {
+          "term_id": 753,
+          "string": "Indicadores de Qualidade em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|619|735|753",
+          "order": 436
+        },
+        "853": {
+          "term_id": 853,
+          "string": "Indicadores de Receitas para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|853",
+          "order": 437
+        },
+        "846": {
+          "term_id": 846,
+          "string": "Indicadores Econômicos em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846",
+          "order": 438
+        },
+        "577": {
+          "term_id": 577,
+          "string": "Indicadores Mundiais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|522|568|569|577",
+          "order": 439
+        },
+        "754": {
+          "term_id": 754,
+          "string": "Índice de Desenvolvimento da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|619|735|753|754",
+          "order": 440
+        },
+        "186": {
+          "term_id": 186,
+          "string": "Ineficiência da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|177|186",
+          "order": 441
+        },
+        "128": {
+          "term_id": 128,
+          "string": "Influência da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|105|127|128",
+          "order": 442
+        },
+        "131": {
+          "term_id": 131,
+          "string": "Influência na Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|105|129|131",
+          "order": 443
+        },
+        "206": {
+          "term_id": 206,
+          "string": "Informação e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206",
+          "order": 444
+        },
+        "233": {
+          "term_id": 233,
+          "string": "Informações Legislativas em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|233",
+          "order": 445
+        },
+        "345": {
+          "term_id": 345,
+          "string": "Informática e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|345",
+          "order": 446
+        },
+        "3428": {
+          "term_id": 3428,
+          "string": "Instalações para Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3276|3420|3428",
+          "order": 447
+        },
+        "2351": {
+          "term_id": 2351,
+          "string": "Instituição Federal de Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2325|2342|2351",
+          "order": 448
+        },
+        "2385": {
+          "term_id": 2385,
+          "string": "Instituição Privada de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2385",
+          "order": 449
+        },
+        "2386": {
+          "term_id": 2386,
+          "string": "Instituição Pública de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2386",
+          "order": 450
+        },
+        "2387": {
+          "term_id": 2387,
+          "string": "Instituição Superior de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387",
+          "order": 451
+        },
+        "2286": {
+          "term_id": 2286,
+          "string": "Instituições de Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2286",
+          "order": 452
+        },
+        "786": {
+          "term_id": 786,
+          "string": "Instituições de Educação Básica (total)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|768|769|770|786",
+          "order": 453
+        },
+        "2411": {
+          "term_id": 2411,
+          "string": "Instituições de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411",
+          "order": 454
+        },
+        "2287": {
+          "term_id": 2287,
+          "string": "Instituições de Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2286|2287",
+          "order": 455
+        },
+        "2407": {
+          "term_id": 2407,
+          "string": "Instituições Não-Universitárias de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2407",
+          "order": 456
+        },
+        "2388": {
+          "term_id": 2388,
+          "string": "Instituto de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2388",
+          "order": 457
+        },
+        "2397": {
+          "term_id": 2397,
+          "string": "Instituto Superior de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2356|2387|2397",
+          "order": 458
+        },
+        "1115": {
+          "term_id": 1115,
+          "string": "Integração dos Planos de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1112|1115",
+          "order": 459
+        },
+        "7801": {
+          "term_id": 7801,
+          "string": "Integração Educação Escolar e Extra-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7719|7791|7799|7801",
+          "order": 460
+        },
+        "1131": {
+          "term_id": 1131,
+          "string": "Integração Empresa-Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1126|1130|1131",
+          "order": 461
+        },
+        "1139": {
+          "term_id": 1139,
+          "string": "Integração Ensino Regular-Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1136|1139",
+          "order": 462
+        },
+        "7301": {
+          "term_id": 7301,
+          "string": "Integração Formação Profissional-Educação Geral",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7227|7293|7300|7301",
+          "order": 463
+        },
+        "5521": {
+          "term_id": 5521,
+          "string": "Integração Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5494|5495|5515|5521",
+          "order": 464
+        },
+        "1110": {
+          "term_id": 1110,
+          "string": "Integração Universidade-Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1102|1103|1106|1107|1110",
+          "order": 465
+        },
+        "6658": {
+          "term_id": 6658,
+          "string": "Interdisciplinaridade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657|6658",
+          "order": 466
+        },
+        "1143": {
+          "term_id": 1143,
+          "string": "Internacionalização da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143",
+          "order": 467
+        },
+        "2431": {
+          "term_id": 2431,
+          "string": "Internato de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411|2425|2431",
+          "order": 468
+        },
+        "3097": {
+          "term_id": 3097,
+          "string": "Investimento em Educacão",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097",
+          "order": 469
+        },
+        "5635": {
+          "term_id": 5635,
+          "string": "Jornalismo e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631|5632|5633|5634|5635",
+          "order": 470
+        },
+        "40": {
+          "term_id": 40,
+          "string": "Justiça Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|34|36|37|38|40",
+          "order": 471
+        },
+        "2424": {
+          "term_id": 2424,
+          "string": "Lar de Reeducação e Assistência",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2198|2411|2421|2424",
+          "order": 472
+        },
+        "63": {
+          "term_id": 63,
+          "string": "Lazer e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|50|63",
+          "order": 473
+        },
+        "1238": {
+          "term_id": 1238,
+          "string": "Lei de Diretrizes e Bases da Educação Nacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1215|1229|1238",
+          "order": 474
+        },
+        "6609": {
+          "term_id": 6609,
+          "string": "Libertação e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6609",
+          "order": 475
+        },
+        "5738": {
+          "term_id": 5738,
+          "string": "Linguagem e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631|5738",
+          "order": 476
+        },
+        "6538": {
+          "term_id": 6538,
+          "string": "Manifesto dos Pioneiros da Educação Nova",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6531|6532|6536|6538",
+          "order": 477
+        },
+        "6153": {
+          "term_id": 6153,
+          "string": "Medicina e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6153",
+          "order": 478
+        },
+        "9": {
+          "term_id": 9,
+          "string": "Meio Ambiente e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1|2|9",
+          "order": 479
+        },
+        "5629": {
+          "term_id": 5629,
+          "string": "Meios de Comunicação e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5602|5629",
+          "order": 480
+        },
+        "7050": {
+          "term_id": 7050,
+          "string": "Mestrado em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7045|7047|7050",
+          "order": 481
+        },
+        "7963": {
+          "term_id": 7963,
+          "string": "Métodos de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7947|7963",
+          "order": 482
+        },
+        "7983": {
+          "term_id": 7983,
+          "string": "Métodos de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7947|7983",
+          "order": 483
+        },
+        "7948": {
+          "term_id": 7948,
+          "string": "Métodos de Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7947|7948",
+          "order": 484
+        },
+        "7947": {
+          "term_id": 7947,
+          "string": "Métodos e Modalidades de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7947",
+          "order": 485
+        },
+        "1675": {
+          "term_id": 1675,
+          "string": "Ministério da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1675",
+          "order": 486
+        },
+        "1678": {
+          "term_id": 1678,
+          "string": "Ministro da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1675|1678",
+          "order": 487
+        },
+        "1164": {
+          "term_id": 1164,
+          "string": "Missão de Especialistas em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1160|1164",
+          "order": 488
+        },
+        "991": {
+          "term_id": 991,
+          "string": "Mobilização Social Pro Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|985|991",
+          "order": 489
+        },
+        "7103": {
+          "term_id": 7103,
+          "string": "Modalidades de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103",
+          "order": 490
+        },
+        "7158": {
+          "term_id": 7158,
+          "string": "Modalidades de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7158",
+          "order": 491
+        },
+        "7204": {
+          "term_id": 7204,
+          "string": "Modalidades de Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7204",
+          "order": 492
+        },
+        "6661": {
+          "term_id": 6661,
+          "string": "Modelo de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657|6660|6661",
+          "order": 493
+        },
+        "7199": {
+          "term_id": 7199,
+          "string": "Modelo de Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7198|7199",
+          "order": 494
+        },
+        "7177": {
+          "term_id": 7177,
+          "string": "Modelo de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7172|7173|7177",
+          "order": 495
+        },
+        "3102": {
+          "term_id": 3102,
+          "string": "Modelo Econômico em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3099|3102",
+          "order": 496
+        },
+        "7143": {
+          "term_id": 7143,
+          "string": "Modelos de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7143",
+          "order": 497
+        },
+        "3585": {
+          "term_id": 3585,
+          "string": "Modernidade e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3495|3567|3584|3585",
+          "order": 498
+        },
+        "1911": {
+          "term_id": 1911,
+          "string": "Movimentação de Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1900|1911",
+          "order": 499
+        },
+        "5566": {
+          "term_id": 5566,
+          "string": "Movimento de Educação Popular",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5564|5565|5566",
+          "order": 500
+        },
+        "1029": {
+          "term_id": 1029,
+          "string": "Movimento Nacional de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|1028|1029",
+          "order": 501
+        },
+        "198": {
+          "term_id": 198,
+          "string": "Mudança em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196|197|198",
+          "order": 502
+        },
+        "5555": {
+          "term_id": 5555,
+          "string": "Mudança Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5494|5545|5555",
+          "order": 503
+        },
+        "6607": {
+          "term_id": 6607,
+          "string": "Mulher e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6598|6605|6607",
+          "order": 504
+        },
+        "6579": {
+          "term_id": 6579,
+          "string": "Necessidade de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6574|6579",
+          "order": 505
+        },
+        "942": {
+          "term_id": 942,
+          "string": "Neoliberalismo e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|887|924|939|940|942",
+          "order": 506
+        },
+        "6669": {
+          "term_id": 6669,
+          "string": "Neutralidade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6665|6669",
+          "order": 507
+        },
+        "6868": {
+          "term_id": 6868,
+          "string": "Objetivos da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6835|6868",
+          "order": 508
+        },
+        "1649": {
+          "term_id": 1649,
+          "string": "Objetivos da Educação Escolar Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1646|1647|1648|1649",
+          "order": 509
+        },
+        "6368": {
+          "term_id": 6368,
+          "string": "Objetivos da Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6368",
+          "order": 510
+        },
+        "6893": {
+          "term_id": 6893,
+          "string": "Objetivos da Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6887|6893",
+          "order": 511
+        },
+        "6925": {
+          "term_id": 6925,
+          "string": "Objetivos da Educação Média",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6907|6925",
+          "order": 512
+        },
+        "7052": {
+          "term_id": 7052,
+          "string": "Objetivos da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|7051|7052",
+          "order": 513
+        },
+        "4604": {
+          "term_id": 4604,
+          "string": "Ocupação e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479|4589|4603|4604",
+          "order": 514
+        },
+        "7556": {
+          "term_id": 7556,
+          "string": "Oficina de Educação Ambiental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7554|7555|7556",
+          "order": 515
+        },
+        "3125": {
+          "term_id": 3125,
+          "string": "Orçamento para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3116|3125",
+          "order": 516
+        },
+        "1686": {
+          "term_id": 1686,
+          "string": "Organismo de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1683|1684|1686",
+          "order": 517
+        },
+        "1687": {
+          "term_id": 1687,
+          "string": "Organismo Estadual de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1683|1684|1687",
+          "order": 518
+        },
+        "1688": {
+          "term_id": 1688,
+          "string": "Organismo Federal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1683|1684|1688",
+          "order": 519
+        },
+        "1689": {
+          "term_id": 1689,
+          "string": "Organismo Municipal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1683|1684|1689",
+          "order": 520
+        },
+        "1690": {
+          "term_id": 1690,
+          "string": "Organismo Regional de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1683|1684|1690",
+          "order": 521
+        },
+        "1684": {
+          "term_id": 1684,
+          "string": "Organismos Nacionais de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1683|1684",
+          "order": 522
+        },
+        "1692": {
+          "term_id": 1692,
+          "string": "Organização Governamental de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1691|1692",
+          "order": 523
+        },
+        "1160": {
+          "term_id": 1160,
+          "string": "Organização Internacional da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1160",
+          "order": 524
+        },
+        "1694": {
+          "term_id": 1694,
+          "string": "Organização Não-Governamental de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1682|1691|1694",
+          "order": 525
+        },
+        "2154": {
+          "term_id": 2154,
+          "string": "Organizações dos Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|2068|2154",
+          "order": 526
+        },
+        "5630": {
+          "term_id": 5630,
+          "string": "Organizações Sociais e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563|5602|5630",
+          "order": 527
+        },
+        "992": {
+          "term_id": 992,
+          "string": "Pacto Social em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|985|991|992",
+          "order": 528
+        },
+        "1354": {
+          "term_id": 1354,
+          "string": "Padrões em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1351|1353|1354",
+          "order": 529
+        },
+        "6660": {
+          "term_id": 6660,
+          "string": "Paradigmas de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657|6660",
+          "order": 530
+        },
+        "6745": {
+          "term_id": 6745,
+          "string": "Pedagogia da Educação Rural",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6735|6736|6743|6744|6745",
+          "order": 531
+        },
+        "6748": {
+          "term_id": 6748,
+          "string": "Pedagogia da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6735|6736|6743|6748",
+          "order": 532
+        },
+        "6735": {
+          "term_id": 6735,
+          "string": "Pedagogia e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6735",
+          "order": 533
+        },
+        "852": {
+          "term_id": 852,
+          "string": "Percentual do Gasto Público Com Educação por Tipo de Gasto (corrente e Capital)",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|847|852",
+          "order": 534
+        },
+        "6526": {
+          "term_id": 6526,
+          "string": "Periodização da História da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6526",
+          "order": 535
+        },
+        "4748": {
+          "term_id": 4748,
+          "string": "Personalidade e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|4745|4746|4747|4748",
+          "order": 536
+        },
+        "202": {
+          "term_id": 202,
+          "string": "Perspectivas da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196|201|202",
+          "order": 537
+        },
+        "191": {
+          "term_id": 191,
+          "string": "Pertinência da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|177|191",
+          "order": 538
+        },
+        "100": {
+          "term_id": 100,
+          "string": "Pesquisa da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100",
+          "order": 539
+        },
+        "3971": {
+          "term_id": 3971,
+          "string": "Pesquisa e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|3830|3901|3971",
+          "order": 540
+        },
+        "2023": {
+          "term_id": 2023,
+          "string": "Pesquisador em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|2023",
+          "order": 541
+        },
+        "1696": {
+          "term_id": 1696,
+          "string": "Planejamento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696",
+          "order": 542
+        },
+        "1705": {
+          "term_id": 1705,
+          "string": "Plano de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1697|1705",
+          "order": 543
+        },
+        "1707": {
+          "term_id": 1707,
+          "string": "Plano Estadual de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1697|1705|1707",
+          "order": 544
+        },
+        "1708": {
+          "term_id": 1708,
+          "string": "Plano Municipal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1697|1705|1708",
+          "order": 545
+        },
+        "1710": {
+          "term_id": 1710,
+          "string": "Plano Nacional de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1697|1705|1710",
+          "order": 546
+        },
+        "6659": {
+          "term_id": 6659,
+          "string": "Pluridisciplinaridade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6657|6658|6659",
+          "order": 547
+        },
+        "908": {
+          "term_id": 908,
+          "string": "Poder e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|887|888|904|908",
+          "order": 548
+        },
+        "886": {
+          "term_id": 886,
+          "string": "Política da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886",
+          "order": 549
+        },
+        "1083": {
+          "term_id": 1083,
+          "string": "Política da Educação Indígena",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1083",
+          "order": 550
+        },
+        "1089": {
+          "term_id": 1089,
+          "string": "Política de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1089",
+          "order": 551
+        },
+        "983": {
+          "term_id": 983,
+          "string": "Política de Produtividade em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|980|983",
+          "order": 552
+        },
+        "903": {
+          "term_id": 903,
+          "string": "Política e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|887|888|899|903",
+          "order": 553
+        },
+        "997": {
+          "term_id": 997,
+          "string": "Política Estadual de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|996|997",
+          "order": 554
+        },
+        "998": {
+          "term_id": 998,
+          "string": "Política Federal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|996|998",
+          "order": 555
+        },
+        "1084": {
+          "term_id": 1084,
+          "string": "Política Indígena da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1083|1084",
+          "order": 556
+        },
+        "1142": {
+          "term_id": 1142,
+          "string": "Política Mundial da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142",
+          "order": 557
+        },
+        "999": {
+          "term_id": 999,
+          "string": "Política Municipal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|996|999",
+          "order": 558
+        },
+        "979": {
+          "term_id": 979,
+          "string": "Política Nacional da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979",
+          "order": 559
+        },
+        "1085": {
+          "term_id": 1085,
+          "string": "Política Nacional de Educação Escolar Indígena",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1083|1085",
+          "order": 560
+        },
+        "1081": {
+          "term_id": 1081,
+          "string": "Política Nacional de Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1075|1081",
+          "order": 561
+        },
+        "1074": {
+          "term_id": 1074,
+          "string": "Políticas Públicas em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074",
+          "order": 562
+        },
+        "7047": {
+          "term_id": 7047,
+          "string": "Pós-Graduação em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6994|7045|7047",
+          "order": 563
+        },
+        "7555": {
+          "term_id": 7555,
+          "string": "Prática de Educação Ambiental",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7226|7433|7552|7554|7555",
+          "order": 564
+        },
+        "6898": {
+          "term_id": 6898,
+          "string": "Primeiro Ciclo da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6894|6898",
+          "order": 565
+        },
+        "6918": {
+          "term_id": 6918,
+          "string": "Primeiro Ciclo da Educação Média",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6907|6912|6918",
+          "order": 566
+        },
+        "6551": {
+          "term_id": 6551,
+          "string": "Princípios da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551",
+          "order": 567
+        },
+        "132": {
+          "term_id": 132,
+          "string": "Problemática da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|132",
+          "order": 568
+        },
+        "162": {
+          "term_id": 162,
+          "string": "Problemática da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|132|162",
+          "order": 569
+        },
+        "174": {
+          "term_id": 174,
+          "string": "Problemática da Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|132|174",
+          "order": 570
+        },
+        "164": {
+          "term_id": 164,
+          "string": "Problemática da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|132|164",
+          "order": 571
+        },
+        "166": {
+          "term_id": 166,
+          "string": "Problemática do Financiamento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|132|166",
+          "order": 572
+        },
+        "1662": {
+          "term_id": 1662,
+          "string": "Processo da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1646|1660|1661|1662",
+          "order": 573
+        },
+        "1337": {
+          "term_id": 1337,
+          "string": "Produtividade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337",
+          "order": 574
+        },
+        "1285": {
+          "term_id": 1285,
+          "string": "Produtividade e Avaliação da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285",
+          "order": 575
+        },
+        "1958": {
+          "term_id": 1958,
+          "string": "Professor de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1954|1958",
+          "order": 576
+        },
+        "1959": {
+          "term_id": 1959,
+          "string": "Professor de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1954|1959",
+          "order": 577
+        },
+        "1960": {
+          "term_id": 1960,
+          "string": "Professor de Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1954|1960",
+          "order": 578
+        },
+        "1961": {
+          "term_id": 1961,
+          "string": "Professor de Educação Infantil",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1954|1961",
+          "order": 579
+        },
+        "1970": {
+          "term_id": 1970,
+          "string": "Professor de Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1967|1970",
+          "order": 580
+        },
+        "1954": {
+          "term_id": 1954,
+          "string": "Professores de Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1954",
+          "order": 581
+        },
+        "1967": {
+          "term_id": 1967,
+          "string": "Professores de Educação Profissional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1967",
+          "order": 582
+        },
+        "1973": {
+          "term_id": 1973,
+          "string": "Professores de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1930|1973",
+          "order": 583
+        },
+        "1899": {
+          "term_id": 1899,
+          "string": "Profissionais da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899",
+          "order": 584
+        },
+        "1724": {
+          "term_id": 1724,
+          "string": "Programa de Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1713|1723|1724",
+          "order": 585
+        },
+        "1723": {
+          "term_id": 1723,
+          "string": "Programa de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1713|1723",
+          "order": 586
+        },
+        "1725": {
+          "term_id": 1725,
+          "string": "Programa de Educação de Pais",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1713|1723|1725",
+          "order": 587
+        },
+        "1727": {
+          "term_id": 1727,
+          "string": "Programa de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1696|1713|1727",
+          "order": 588
+        },
+        "1159": {
+          "term_id": 1159,
+          "string": "Programa Internacional de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1154|1159",
+          "order": 589
+        },
+        "7085": {
+          "term_id": 7085,
+          "string": "Programas de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|7051|7085",
+          "order": 590
+        },
+        "5357": {
+          "term_id": 5357,
+          "string": "Psicanálise em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5350|5357",
+          "order": 591
+        },
+        "5350": {
+          "term_id": 5350,
+          "string": "Psicologia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5350",
+          "order": 592
+        },
+        "4637": {
+          "term_id": 4637,
+          "string": "Psicologia e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637",
+          "order": 593
+        },
+        "5358": {
+          "term_id": 5358,
+          "string": "Psicossociologia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4637|5350|5358",
+          "order": 594
+        },
+        "1016": {
+          "term_id": 1016,
+          "string": "Público e Privado em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|1016",
+          "order": 595
+        },
+        "1351": {
+          "term_id": 1351,
+          "string": "Qualidade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1351",
+          "order": 596
+        },
+        "6532": {
+          "term_id": 6532,
+          "string": "Raízes da Educação Brasileira",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6531|6532",
+          "order": 597
+        },
+        "101": {
+          "term_id": 101,
+          "string": "Realidade da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101",
+          "order": 598
+        },
+        "3223": {
+          "term_id": 3223,
+          "string": "Receitas para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3190|3223",
+          "order": 599
+        },
+        "3242": {
+          "term_id": 3242,
+          "string": "Receitas Públicas para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3190|3223|3242",
+          "order": 600
+        },
+        "7169": {
+          "term_id": 7169,
+          "string": "Recuperação e Reeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7142|7158|7169",
+          "order": 601
+        },
+        "3142": {
+          "term_id": 3142,
+          "string": "Recursos da Família para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3134|3142",
+          "order": 602
+        },
+        "3144": {
+          "term_id": 3144,
+          "string": "Recursos das Empresas para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3134|3144",
+          "order": 603
+        },
+        "3107": {
+          "term_id": 3107,
+          "string": "Recursos Financeiros para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3107",
+          "order": 604
+        },
+        "3134": {
+          "term_id": 3134,
+          "string": "Recursos Privados para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3134",
+          "order": 605
+        },
+        "3116": {
+          "term_id": 3116,
+          "string": "Recursos Públicos para Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3116",
+          "order": 606
+        },
+        "1625": {
+          "term_id": 1625,
+          "string": "Rede Federal de Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1621|1624|1625",
+          "order": 607
+        },
+        "8167": {
+          "term_id": 8167,
+          "string": "Rede Virtual de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|8155|8157|8158|8163|8167",
+          "order": 608
+        },
+        "6596": {
+          "term_id": 6596,
+          "string": "Reeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6591|6596",
+          "order": 609
+        },
+        "6671": {
+          "term_id": 6671,
+          "string": "Reforma da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6671",
+          "order": 610
+        },
+        "2116": {
+          "term_id": 2116,
+          "string": "Registro de Especialista em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|2068|2069|2108|2114|2116",
+          "order": 611
+        },
+        "5659": {
+          "term_id": 5659,
+          "string": "Relação Comunicação-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5631|5632|5633|5659",
+          "order": 612
+        },
+        "1335": {
+          "term_id": 1335,
+          "string": "Relação Educação Escolar/Comportamento Social",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1321|1333|1335",
+          "order": 613
+        },
+        "4589": {
+          "term_id": 4589,
+          "string": "Relação Educação/Trabalho",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479|4589",
+          "order": 614
+        },
+        "3693": {
+          "term_id": 3693,
+          "string": "Religião e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3494|3634|3693",
+          "order": 615
+        },
+        "1339": {
+          "term_id": 1339,
+          "string": "Rendimento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1338|1339",
+          "order": 616
+        },
+        "1340": {
+          "term_id": 1340,
+          "string": "Rendimento da Educação Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1338|1339|1340",
+          "order": 617
+        },
+        "1343": {
+          "term_id": 1343,
+          "string": "Rendimento da Educação Extra-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1337|1338|1339|1343",
+          "order": 618
+        },
+        "1204": {
+          "term_id": 1204,
+          "string": "Responsabilidade Pela Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1172|1194|1204",
+          "order": 619
+        },
+        "3103": {
+          "term_id": 3103,
+          "string": "Retorno em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3099|3103",
+          "order": 620
+        },
+        "1162": {
+          "term_id": 1162,
+          "string": "Reunião de Ministros de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|1142|1143|1160|1161|1162",
+          "order": 621
+        },
+        "228": {
+          "term_id": 228,
+          "string": "Revistas de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|219|227|228",
+          "order": 622
+        },
+        "1082": {
+          "term_id": 1082,
+          "string": "Ruralização da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|1074|1075|1082",
+          "order": 623
+        },
+        "3119": {
+          "term_id": 3119,
+          "string": "Salário-Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3116|3117|3119",
+          "order": 624
+        },
+        "5860": {
+          "term_id": 5860,
+          "string": "Saúde e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860",
+          "order": 625
+        },
+        "1679": {
+          "term_id": 1679,
+          "string": "Secretaria Estadual da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1679",
+          "order": 626
+        },
+        "1681": {
+          "term_id": 1681,
+          "string": "Secretaria Municipal de Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1681",
+          "order": 627
+        },
+        "6919": {
+          "term_id": 6919,
+          "string": "Segundo Ciclo da Educação Média",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6872|6886|6907|6912|6919",
+          "order": 628
+        },
+        "1654": {
+          "term_id": 1654,
+          "string": "Serviço de Apoio À Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1638|1646|1647|1653|1654",
+          "order": 629
+        },
+        "211": {
+          "term_id": 211,
+          "string": "Sinopse Estatística da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|208|211",
+          "order": 630
+        },
+        "212": {
+          "term_id": 212,
+          "string": "Sinopse Estatística da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|207|208|212",
+          "order": 631
+        },
+        "7200": {
+          "term_id": 7200,
+          "string": "Sistema de Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7198|7200",
+          "order": 632
+        },
+        "1634": {
+          "term_id": 1634,
+          "string": "Sistema de Educação de Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1633|1634",
+          "order": 633
+        },
+        "1635": {
+          "term_id": 1635,
+          "string": "Sistema de Educação Especial",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1633|1635",
+          "order": 634
+        },
+        "1620": {
+          "term_id": 1620,
+          "string": "Sistema de Educação Extra-Escolar",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1620",
+          "order": 635
+        },
+        "7202": {
+          "term_id": 7202,
+          "string": "Sistema Interativo de Educação a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7103|7198|7200|7202",
+          "order": 636
+        },
+        "1293": {
+          "term_id": 1293,
+          "string": "Sistema Nacional de Avaliação da Educação Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1289|1293",
+          "order": 637
+        },
+        "1301": {
+          "term_id": 1301,
+          "string": "Sistema Nacional de Avaliação da Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1285|1286|1287|1295|1301",
+          "order": 638
+        },
+        "1626": {
+          "term_id": 1626,
+          "string": "Sistema Nacional de Educação Escolar Básica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1626",
+          "order": 639
+        },
+        "1627": {
+          "term_id": 1627,
+          "string": "Sistema Nacional de Educação Superior",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1627",
+          "order": 640
+        },
+        "1624": {
+          "term_id": 1624,
+          "string": "Sistema Nacional de Educação Tecnológica",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1284|1618|1619|1621|1624",
+          "order": 641
+        },
+        "6524": {
+          "term_id": 6524,
+          "string": "Sistemas Filosóficos e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519|6520|6524",
+          "order": 642
+        },
+        "6519": {
+          "term_id": 6519,
+          "string": "Sistematização da História da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6517|6518|6519",
+          "order": 643
+        },
+        "5371": {
+          "term_id": 5371,
+          "string": "Sociedade e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5361|5362|5371",
+          "order": 644
+        },
+        "5563": {
+          "term_id": 5563,
+          "string": "Sociologia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5563",
+          "order": 645
+        },
+        "5360": {
+          "term_id": 5360,
+          "string": "Sociologia e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360",
+          "order": 646
+        },
+        "5430": {
+          "term_id": 5430,
+          "string": "Status Social e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5360|5361|5418|5419|5429|5430",
+          "order": 647
+        },
+        "194": {
+          "term_id": 194,
+          "string": "Subeducação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|177|194",
+          "order": 648
+        },
+        "6597": {
+          "term_id": 6597,
+          "string": "Sujeito da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6551|6573|6591|6597",
+          "order": 649
+        },
+        "872": {
+          "term_id": 872,
+          "string": "Taxa de Custos da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866|872",
+          "order": 650
+        },
+        "873": {
+          "term_id": 873,
+          "string": "Taxa de Despesas Públicas Com Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866|873",
+          "order": 651
+        },
+        "535": {
+          "term_id": 535,
+          "string": "Taxa de Ingresso de Alunos Provenientes da Educação de Jovens e Adultos",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|521|522|523|524|535",
+          "order": 652
+        },
+        "874": {
+          "term_id": 874,
+          "string": "Taxa de Retorno em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866|874",
+          "order": 653
+        },
+        "875": {
+          "term_id": 875,
+          "string": "Taxa do Pib Com Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|846|857|866|875",
+          "order": 654
+        },
+        "2024": {
+          "term_id": 2024,
+          "string": "Técnicos em Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|1899|1996|1997|2024",
+          "order": 655
+        },
+        "4476": {
+          "term_id": 4476,
+          "string": "Tecnologia e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|3755|4242|4329|4446|4476",
+          "order": 656
+        },
+        "196": {
+          "term_id": 196,
+          "string": "Tendências da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196",
+          "order": 657
+        },
+        "203": {
+          "term_id": 203,
+          "string": "Tendências do Desenvolvimento da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|101|176|196|203",
+          "order": 658
+        },
+        "6672": {
+          "term_id": 6672,
+          "string": "Teorias da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6672",
+          "order": 659
+        },
+        "255": {
+          "term_id": 255,
+          "string": "Terminologia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|100|206|242|248|253|254|255",
+          "order": 660
+        },
+        "4590": {
+          "term_id": 4590,
+          "string": "Trabalho Como Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479|4589|4590",
+          "order": 661
+        },
+        "4479": {
+          "term_id": 4479,
+          "string": "Trabalho e Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|4479",
+          "order": 662
+        },
+        "1030": {
+          "term_id": 1030,
+          "string": "Universalização da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|1028|1030",
+          "order": 663
+        },
+        "6670": {
+          "term_id": 6670,
+          "string": "Utopia da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|6550|6655|6656|6665|6670",
+          "order": 664
+        },
+        "3105": {
+          "term_id": 3105,
+          "string": "Valor Econômico da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|2934|3096|3097|3099|3105",
+          "order": 665
+        },
+        "6409": {
+          "term_id": 6409,
+          "string": "Valor Pedagógico da Educação Física",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|3493|5860|6325|6406|6407|6409",
+          "order": 666
+        },
+        "1028": {
+          "term_id": 1028,
+          "string": "Valorização da Educação",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|886|978|979|1028",
+          "order": 667
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educação"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 667
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchAlt&arg=6413&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 6413
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchUp&arg=6413&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6413": {
+            "term_id": "6413",
+            "string": "Educação",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 6413
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchDown&arg=6413&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "7226": {
+            "term_id": "7226",
+            "string": "Curso e Currículo",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6872": {
+            "term_id": "6872",
+            "string": "Educação Escolar",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6550": {
+            "term_id": "6550",
+            "string": "Filosofia da Educação",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6517": {
+            "term_id": "6517",
+            "string": "História da Educação",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8155": {
+            "term_id": "8155",
+            "string": "Meios de Ensino",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "7103": {
+            "term_id": "7103",
+            "string": "Modalidades de Educação",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "7718": {
+            "term_id": "7718",
+            "string": "Processo de Ensino-Aprendizagem",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6414": {
+            "term_id": "6414",
+            "string": "Produtividade e Avaliação Escolar",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 6413
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 8
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchRelated&arg=6413&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 6413
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchNotes&arg=6413&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 6413
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Thesaurus Brasileiro da Educação",
+          "author": "INEP.  Centro de Informação e Biblioteca em Educação",
+          "lang": "pt-BR",
+          "scope": "O Thesaurus Brased insere a educação dentro do contexto global, sem o qual não é possível compreendê-la. Na definição de seu âmbito temático foram levadas em consideração áreas que estão relacionadas com a educação. Incluye solo relaciones jerárquicas. Fonte: http://inep.gov.br/thesaurus-brasileiro-da-educacao",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/brased/",
+          "createDate": "2020-02-16",
+          "lastMod": "2020-02-16 16:12:48",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8327"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

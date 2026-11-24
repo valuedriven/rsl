@@ -1,0 +1,337 @@
+{
+  "chave": "unesco|en|educational environment",
+  "recuperado_em": "2026-11-24T17:05:51-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/en/services.php?task=search&arg=educational+environment&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "2376": {
+          "term_id": 2376,
+          "string": "Educational environment",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|1334|2376",
+          "order": 1
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "educational environment"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 1
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchAlt&arg=2376&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2377": {
+            "term_id": "2377",
+            "code": null,
+            "lang": "en",
+            "string": "Learning environment",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 2376
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchUp&arg=2376&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "5": {
+            "term_id": "5",
+            "string": "Education",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "1334": {
+            "term_id": "1334",
+            "string": "Educational sciences and environment",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "2376": {
+            "term_id": "2376",
+            "string": "Educational environment",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 2376
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchDown&arg=2376&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2378": {
+            "term_id": "2378",
+            "string": "Academic fraud",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2386": {
+            "term_id": "2386",
+            "string": "Classroom environment",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2406": {
+            "term_id": "2406",
+            "string": "Parent school relationship",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2408": {
+            "term_id": "2408",
+            "string": "Peer relationship",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2391": {
+            "term_id": "2391",
+            "string": "School community relationship",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2399": {
+            "term_id": "2399",
+            "string": "School discipline",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2413": {
+            "term_id": "2413",
+            "string": "School student relationship",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2392": {
+            "term_id": "2392",
+            "string": "Student behaviour",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2387": {
+            "term_id": "2387",
+            "string": "Student teacher relationship",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "2405": {
+            "term_id": "2405",
+            "string": "Teacher administration relationship",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "2395": {
+            "term_id": "2395",
+            "string": "Teacher behaviour",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 2376
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 11
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchRelated&arg=2376&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "3429": {
+            "term_id": "3429",
+            "code": "concept17172",
+            "lang": "en",
+            "string": "Social pedagogy",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3389": {
+            "term_id": "3389",
+            "code": "concept397",
+            "lang": "en",
+            "string": "Social environment",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "3436": {
+            "term_id": "3436",
+            "code": "concept9188",
+            "lang": "en",
+            "string": "Educational psychosociology",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 2376
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchNotes&arg=2376&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 2376
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "UNESCO Thesaurus",
+          "author": "UNESCO",
+          "lang": "en",
+          "scope": null,
+          "keywords": null,
+          "uri": "https://vocabularyserver.com//unesco/en/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 14:32:56",
+          "status": "published - stable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": null,
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "7186"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

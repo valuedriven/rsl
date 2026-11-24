@@ -3,8 +3,17 @@ instrumentos que o protocolo declara na tabela de instrumentos.
 
 Sigla, modo, idiomas e facetas de cada instrumento vêm do protocolo. Um termo é planejado
 para cada instrumento da sua faceta que cubra o seu idioma (`planejamento.py`). Instrumento
-`Automático` é consultado pelo cliente da sua sigla (`clientes/`); instrumento `Manual`
-não tem cliente, e as suas linhas nascem pendentes de validação manual.
+`Automático` é consultado pelo cliente TemaTres (`tematres.py`) no endereço resolvido do seu
+`Caminho`; instrumento `Manual` não é consultado, e as suas linhas nascem pendentes de
+validação manual.
+
+REABERTURA (`carrega`): linha sem decisão do ReT, de instrumento `Automático`, que esteja
+pendente de validação manual, cuja `url_consultada` não pertença ao endereço resolvido
+vigente, ou que seja termo livre não localizado sem `sugestao_similar` (consultada antes da
+consulta de similaridade) volta a aguardar consulta; a evidência anterior fica na pasta de
+evidência até a reconsulta, que a substitui no mesmo arquivo (o nome vem de instrumento,
+idioma e termo). Linha nessa situação com decisão é preservada e listada na saída. A regra mora na reconstrução da
+planilha: mudar o `Caminho` reabre as linhas afetadas sem passo manual.
 
 FRONTEIRA DE USO (protocolo): este módulo RECUPERA e REGISTRA. Não decide.
   - nenhum termo é excluído, reescrito ou incorporado automaticamente;
@@ -32,18 +41,26 @@ import time
 
 from .. import gramatica as G
 from ..config import relativo
-from ..erros import DadosInvalidos, FonteExterna, Reprovado, Uso
-from ..leitura import instrumentos_do_termo
+from ..erros import ConfiguracaoInvalida, DadosInvalidos, FonteExterna, Reprovado, Uso
+from ..leitura import endereco, instrumentos_do_termo
 from ..markdown import normaliza
 from ..saida import Saida
-from . import clientes
+from . import tematres
 from .decisao import fora_do_dominio
-from .planejamento import STATUS_MANUAL, estado_inicial
+from .planejamento import (STATUS_CANDIDATO, STATUS_MANUAL, STATUS_NAO_LOCALIZADO,
+                           estado_inicial)
 
 CAMPOS_DECISAO = ("decisao_ReT", "justificativa_ReT", "data_decisao")
-CAMPOS_RESPOSTA = ("rotulo_autorizado", "uri_conceito", "equivalentes_USE_UP",
-                   "termos_genericos_TG", "termos_especificos_TE",
+CAMPOS_RESPOSTA = ("rotulo_autorizado", "forma_no_instrumento", "sugestao_similar",
+                   "uri_conceito",
+                   "equivalentes_USE_UP", "termos_genericos_TG", "termos_especificos_TE",
                    "termos_relacionados_TR", "nota_de_escopo")
+# Campos que a consulta preenche: limpos quando a linha volta a aguardar consulta.
+CAMPOS_CONSULTA = ("consultado_em", "versao_instrumento", "url_consultada", "status_proposto",
+                   "arquivo_evidencia", "observacao_tecnica") + CAMPOS_RESPOSTA
+# Sem esta coluna, toda linha não localizada pareceria nunca consultada pela similaridade e
+# seria reaberta a cada execução: a configuração que não a traz é recusada.
+COLUNA_SIMILAR = "sugestao_similar"
 GRAVA_A_CADA = 20
 
 
@@ -58,7 +75,14 @@ class Planilha:
         self.caminho = ctx.config.caminho("dados.validacao")
         self.evidencia = ctx.config.caminho("dados.evidencia")
         self.campos = list(ctx.config.valor("planilha.campos_validacao"))
+        if COLUNA_SIMILAR not in self.campos:
+            raise ConfiguracaoInvalida(
+                f"planilha.campos_validacao não traz {COLUNA_SIMILAR!r}: sem ela, a linha "
+                f"não localizada já consultada não se distingue da nunca consultada")
         self.colunas = ["faceta", "faceta_nome", "ancora", "idioma", "termo"] + self.campos
+        self.reabertas = 0
+        self.preservadas = []      # (termo, instrumento, idioma, motivo, evidência)
+        self._relatado = False
 
     @staticmethod
     def chave(faceta, idioma, termo, instrumento):
@@ -84,14 +108,35 @@ class Planilha:
         return str(caminho.relative_to(self.evidencia.parent))
 
 
+def pertence(url, endereco_):
+    """A `url_consultada` é do endereço resolvido: ele mesmo ou ele com consulta."""
+    return url == endereco_ or url.startswith(endereco_ + "?")
+
+
+def motivo_reabertura(v, instrumento):
+    """Por que a linha de um instrumento `Automático` não vale como consulta vigente, ou
+    None. `instrumento` traz o endereço resolvido para o idioma da linha."""
+    if instrumento["modo"] != G.MODO_AUTOMATICO:
+        return None
+    if v.get("status_proposto") == STATUS_MANUAL:
+        return STATUS_MANUAL
+    url = v.get("url_consultada", "")
+    if url and not pertence(url, instrumento["endereco"]):
+        return f"consultada fora do endereço vigente {instrumento['endereco']}"
+    if v.get("status_proposto") == STATUS_NAO_LOCALIZADO and not v.get(COLUNA_SIMILAR):
+        return f"{STATUS_NAO_LOCALIZADO} sem consulta de similaridade"
+    return None
+
+
 def carrega(ctx, d, planilha):
     """O registro reconstruído do protocolo e da planilha existente.
 
     Termo novo nasce aguardando consulta, ou pendente de validação manual se o instrumento
-    não tem cliente; linha já registrada é preservada campo a campo, inclusive decisão do
-    ReT e evidência. Devolve as linhas na ordem do protocolo: faceta, idioma, termo,
-    instrumento.
+    é `Manual`; linha já registrada é preservada campo a campo, inclusive decisão do ReT e
+    evidência, salvo a reabertura (docstring do módulo). Devolve as linhas na ordem do
+    protocolo: faceta, idioma, termo, instrumento; cada uma com o endereço resolvido.
     """
+    planilha.reabertas, planilha.preservadas = 0, []
     existente = planilha.existente()
     info = {f["id"]: f for f in d["facetas"]}
     linhas = []
@@ -106,9 +151,20 @@ def carrega(ctx, d, planilha):
                     v["instrumento"] = i["sigla"]
                     if r is None:
                         v.update(estado_inicial(i))
+                    elif (motivo := motivo_reabertura(v, i)):
+                        if v.get("decisao_ReT"):
+                            planilha.preservadas.append(
+                                (termo, i["sigla"], idioma, motivo,
+                                 v.get("url_consultada") or v.get("arquivo_evidencia")))
+                        else:
+                            for c in CAMPOS_CONSULTA:
+                                v[c] = ""
+                            v.update(estado_inicial(i))
+                            planilha.reabertas += 1
                     linhas.append({"faceta": f["id"], "faceta_nome": meta.get("nome", ""),
                                    "ancora": "sim" if meta.get("ancora") else "não",
-                                   "idioma": idioma, "termo": termo, "_v": v})
+                                   "idioma": idioma, "termo": termo,
+                                   "endereco": i["endereco"], "_v": v})
     return linhas
 
 
@@ -128,11 +184,28 @@ def grava_planilha(planilha, linhas):
             w.writerow({c: r.get(c, "") for c in planilha.colunas})
     manuais = sum(1 for l in saida if l["status_proposto"] == STATUS_MANUAL)
     a_validar = sum(1 for l in saida if not l["status_proposto"])
+    candidatas = sum(1 for l in saida if l["status_proposto"] == STATUS_CANDIDATO)
     print(f"{relativo(planilha.caminho)}: {len(saida)} linhas — {a_validar} a validar por "
-          f"cliente automatizado, {manuais} {STATUS_MANUAL}.")
+          f"cliente automatizado, {manuais} {STATUS_MANUAL}, {candidatas} "
+          f"{STATUS_CANDIDATO}.")
     if orfaos:
         print(f"  {len(orfaos)} linha(s) fora do protocolo preservada(s) na planilha — "
               f"decidir: manter com registro ou retirar à mão.")
+    if planilha._relatado:
+        return
+    planilha._relatado = True
+    if planilha.reabertas:
+        print(f"  {planilha.reabertas} linha(s) sem decisão voltaram a aguardar consulta "
+              f"(pendentes de validação manual, consultadas fora do endereço vigente ou "
+              f"não localizadas sem consulta de similaridade); a evidência anterior fica "
+              f"em {relativo(planilha.evidencia)}/ até a reconsulta, que a substitui.")
+    if planilha.preservadas:
+        print(f"  {len(planilha.preservadas)} linha(s) com decisão do ReT tomada sobre "
+              f"consulta que hoje seria refeita (motivo em cada linha), preservada(s) sem "
+              f"reconsulta — decidir se mantêm a decisão:")
+        for termo, sigla, idioma, motivo, evid in planilha.preservadas:
+            print(f"    - {termo!r} ({idioma}) em {sigla}: {motivo}; evidência: "
+                  f"{evid or 'sem registro'}")
 
 
 def automaticos(d):
@@ -150,13 +223,17 @@ def validar(ctx, quais, faceta=None):
                  and (not faceta or ln["faceta"] == f"{G.I_FCT.prefixo}{faceta}")
                  and ln["_v"].get("instrumento") in quais]
     feitos = 0
+    versoes = {}
     for k, ln in enumerate(pendentes):
         v = ln["_v"]
-        inst, termo = v["instrumento"], ln["termo"]
-        cliente = clientes.cliente(inst)
+        inst, termo, end = v["instrumento"], ln["termo"], ln["endereco"]
         try:
-            reg, status, dados_inst, obs, url, versao = cliente.valida(
-                termo, d["instrumentos"][inst])
+            if end not in versoes:
+                versoes[end] = tematres.versao(end)
+                time.sleep(tematres.PAUSA)
+            versao_, reg_versao = versoes[end]
+            reg, status, dados_inst, obs, url, versao = tematres.valida(termo, end, versao_)
+            reg["fetchVocabularyData"] = reg_versao
         except FonteExterna as e:
             v["observacao_tecnica"] = f"CONSULTA INTERROMPIDA em {agora()}: {e}"
             grava_planilha(planilha, linhas)
@@ -165,7 +242,7 @@ def validar(ctx, quais, faceta=None):
                 f"instrumento {inst}, termo {termo!r}: {e}. Validação interrompida sem nova "
                 f"tentativa; {feitos} termo(s) consultado(s) e gravado(s) nesta execução, "
                 f"{restantes} sem consulta (inclusive este). Rode  python3 -m rsl termos "
-                f"sonda  antes de retomar.") from None
+                f"sondar  antes de retomar.") from None
         v["url_consultada"] = url
         v["versao_instrumento"] = versao
         v["consultado_em"] = agora()
@@ -173,12 +250,13 @@ def validar(ctx, quais, faceta=None):
         v["observacao_tecnica"] = obs
         for c in CAMPOS_RESPOSTA:
             v[c] = dados_inst.get(c, "")
-        v["arquivo_evidencia"] = planilha.grava_evidencia(inst.lower(), f"{inst}|{termo}", reg)
+        v["arquivo_evidencia"] = planilha.grava_evidencia(
+            inst.lower(), f"{inst}|{ln['idioma']}|{termo}", reg)
         feitos += 1
         print(f"[{feitos:>3}] {inst:<7} {termo[:48]:<50} {status}")
         if feitos % GRAVA_A_CADA == 0:
             grava_planilha(planilha, linhas)
-        time.sleep(cliente.PAUSA)
+        time.sleep(tematres.PAUSA)
 
     grava_planilha(planilha, linhas)
     print(f"\n{feitos} termos consultados. Evidência bruta em {relativo(planilha.evidencia)}/.")
@@ -189,12 +267,21 @@ def validar(ctx, quais, faceta=None):
 
 # ----------------------------------------------------------------------- comandos
 def cmd_sonda(ctx, a=None):
+    """Cada endereço resolvido de cada instrumento `Automático`, um por idioma, em ordem e
+    com pausa; o primeiro FonteExterna interrompe a sonda inteira."""
     d = ctx.protocolo()
     print("SONDAGEM — nada é gravado. Confira cada resposta antes de validar.\n")
+    primeiro = True
     for sigla in automaticos(d):
-        print(f"== {sigla} ==")
-        clientes.cliente(sigla).sonda(d, d["instrumentos"][sigla], print)
-        print()
+        i = d["instrumentos"][sigla]
+        for idioma in i["idiomas"]:
+            if not primeiro:
+                time.sleep(tematres.PAUSA)
+            primeiro = False
+            end = endereco(i, idioma)
+            print(f"== {sigla} ({idioma}) — {end} ==")
+            tematres.sonda(d, i, idioma, end, print)
+            print()
     return Saida.OK
 
 

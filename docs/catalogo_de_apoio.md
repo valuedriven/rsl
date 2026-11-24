@@ -193,10 +193,10 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 | `projeto pendencias` | relata as pendências dos artefatos, sem escrever | — | — | transversal |
 | `sondagens registrar` | grava no registro de execução o resultado da sondagem SDn da base SIGLA e exibe a citação e a mudança a aplicar na fonte; não altera a fonte | M3/E2 › Executar as sondagens de sintaxe pelo roteiro de cada base | `execucao-da-busca`; `sondagens-de-sintaxe` | passo |
 | `strings gerar` | calcula cada STR a partir do quadro terminológico e exibe a diferença para a tabela do protocolo; sem --gravar, nada é gravado | M3/E1 › Gerar as strings de busca por faceta a partir do quadro terminológico | `auditoria-das-strings`; `facetacao-e-termos-livres` | passo |
-| `termos exportar` | reconstrói a planilha de validação a partir do protocolo, sem rede | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
+| `termos exportar` | reconstrói a planilha de validação a partir do protocolo, sem rede, reabrindo as linhas que deixaram de valer | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
 | `termos importar` | reconcilia a planilha com o protocolo, preservando as decisões | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
-| `termos sondar` | consulta de prova em cada cliente automatizado; não grava | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
-| `termos validar` | consulta, no instrumento Automático de sigla SIGLA (ou em todos: `todos`), os termos ainda sem estatuto | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
+| `termos sondar` | consulta de prova em cada endereço resolvido dos instrumentos Automático, um por idioma; não grava | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
+| `termos validar` | consulta, no endereço resolvido do instrumento Automático de sigla SIGLA (ou de todos: `todos`), os termos ainda sem estatuto | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
 
 ## Cobertura por etapa
 

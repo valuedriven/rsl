@@ -6,7 +6,8 @@ Cada chamada faz uma requisição e classifica o resultado em três tipos: respo
 
   - erro de rede (DNS, conexão, TLS, tempo esgotado);
   - resposta HTTP diferente de 200 (403 bloqueio, 429 limite, 5xx, e qualquer outra);
-  - resposta 200 com marca de captcha ou de aviso de atividade atípica no corpo;
+  - resposta 200 com marca de captcha, de verificação anti-robô ou de aviso de atividade
+    atípica no corpo;
   - resposta 200 cujo corpo não está no formato esperado (JSON, SPARQL JSON).
 
 A detecção de captcha é HEURÍSTICA, por marcadores no corpo: ela pode falhar. O caminho
@@ -14,7 +15,7 @@ conservador é o último item — corpo fora do formato esperado também interro
 que a falha de reconhecimento para a validação em vez de seguir adiante.
 
 Não há concorrência, nem nova tentativa, nem outra rota ou endereço depois da falha
-(AGENTS.md §9). A pausa entre requisições é do cliente de cada instrumento.
+(AGENTS.md §9). A pausa entre requisições é do cliente (`tematres.py`).
 """
 
 import json
@@ -25,10 +26,11 @@ from ..erros import FonteExterna
 
 TIMEOUT = 45
 UA = "validacao-terminologica-RSL/1.0 (pesquisa academica; uso nao comercial)"
-# Marcadores de captcha ou de aviso de atividade atípica, procurados no corpo em minúsculas.
+# Marcadores de captcha, de verificação anti-robô ou de aviso de atividade atípica,
+# procurados no corpo em minúsculas.
 MARCAS_BLOQUEIO = ("captcha", "unusual traffic", "atividade atípica", "atividade incomum",
                    "are you a robot", "are you human", "access denied", "too many requests",
-                   "rate limit")
+                   "rate limit", "verifying your browser", "just a moment")
 
 
 def requisicao(url, dados=None, cabecalhos=None):
@@ -47,11 +49,16 @@ def requisicao(url, dados=None, cabecalhos=None):
         raise FonteExterna(f"erro de rede em {url}: {e!r}") from None
     if status != 200:
         raise FonteExterna(f"resposta HTTP {status} em {url}")
+    return sem_bloqueio(corpo, url)
+
+
+def sem_bloqueio(corpo, url):
+    """O corpo, se não trouxer marca de bloqueio; senão, FonteExterna."""
     baixo = corpo.lower()
     marca = next((m for m in MARCAS_BLOQUEIO if m in baixo), None)
     if marca:
-        raise FonteExterna(f"página com marca de captcha ou de atividade atípica "
-                           f"({marca!r}) em {url}")
+        raise FonteExterna(f"página com marca de captcha, de verificação anti-robô ou de "
+                           f"atividade atípica ({marca!r}) em {url}")
     return corpo
 
 

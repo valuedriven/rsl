@@ -1,0 +1,225 @@
+{
+  "chave": "brased|pt|contexto educacional",
+  "recuperado_em": "2026-11-24T18:55:12-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=contexto+educacional&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "514": {
+          "term_id": 514,
+          "string": "Estatísticas do Contexto Educacional",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|99|426|514",
+          "order": 1
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "contexto educacional"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 1
+      }
+    },
+    "suggestDetails": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=suggestDetails&arg=contexto+educacional&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "514": {
+            "term_id": "514",
+            "string": "Estatísticas do Contexto Educacional",
+            "isMetaTerm": null,
+            "no_term_string": false,
+            "order": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "suggestDetails",
+            "arg": "contexto educacional"
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchAlt&arg=514&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 514
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchUp&arg=514&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "99": {
+            "term_id": "99",
+            "string": "Escola-Instituição",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "426": {
+            "term_id": "426",
+            "string": "Estatística da Educação",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "514": {
+            "term_id": "514",
+            "string": "Estatísticas do Contexto Educacional",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 514
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchDown&arg=514&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "515": {
+            "term_id": "515",
+            "string": "Estatísticas Demográficas",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "516": {
+            "term_id": "516",
+            "string": "Estatísticas Socioculturais",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "518": {
+            "term_id": "518",
+            "string": "Estatísticas Socioeconômicas",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 514
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchRelated&arg=514&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 514
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchNotes&arg=514&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 514
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Thesaurus Brasileiro da Educação",
+          "author": "INEP.  Centro de Informação e Biblioteca em Educação",
+          "lang": "pt-BR",
+          "scope": "O Thesaurus Brased insere a educação dentro do contexto global, sem o qual não é possível compreendê-la. Na definição de seu âmbito temático foram levadas em consideração áreas que estão relacionadas com a educação. Incluye solo relaciones jerárquicas. Fonte: http://inep.gov.br/thesaurus-brasileiro-da-educacao",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/brased/",
+          "createDate": "2020-02-16",
+          "lastMod": "2020-02-16 16:12:48",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8327"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

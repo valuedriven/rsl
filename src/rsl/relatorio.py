@@ -4,7 +4,7 @@
 from . import gramatica as G
 from .erros import ProtocoloInvalido
 from .fichas import forma_execucao
-from .leitura import referencia
+from .leitura import endereco, referencia
 from .saida import Saida
 
 
@@ -78,6 +78,10 @@ def relatorio(ctx, d):
     L.append("  sementes (referência montada dos campos do arquivo de sementes; só exibição):")
     for e in d["sementes"]:
         L.append(f"    {e['id']:>4} [{e['papel']}] {referencia(e)}")
+    L.append("  instrumentos (endereço resolvido por idioma):")
+    for s, i in d["instrumentos"].items():
+        for x in i["idiomas"]:
+            L.append(f"    {s:<8} {i['modo']:<11} {x:<3} {endereco(i, x)}")
     L.append("  expressões: " + ", ".join(
         f"{n}=" + composicao_legivel(c)
         for n, c in sorted(d["expressoes"].items())) +
