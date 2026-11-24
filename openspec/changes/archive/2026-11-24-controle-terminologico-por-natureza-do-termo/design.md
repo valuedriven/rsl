@@ -59,6 +59,11 @@ Decisões acrescentadas pelo pesquisador na verificação, em 2026-11-24:
 | 12 | Na linha "Termo livre", as colunas en e es passam a conter só os equivalentes dos termos pt |
 | 13 | Validação automática (TBCI, UNESCO) executada pelo agente; `decisao_ReT` preenchida pelo pesquisador |
 
+**Retificação da decisão 13** (pelo pesquisador, em 2026-11-24): a execução da validação
+terminológica e o preenchimento de `decisao_ReT` ficam fora do escopo da change, como já
+declaravam os Non-Goals. A validação automática executada durante a verificação é trabalho
+posterior antecipado, e não critério de conclusão da change.
+
 **Retificação do terceiro objetivo** ("manter as STRs, como conjunto de termos, idênticas
 às de antes da change"): deixou de valer. Depois da implementação o pesquisador editou o
 quadro (termos retirados e acrescentados em pt), e as decisões 9 e 12 mudam o conteúdo das

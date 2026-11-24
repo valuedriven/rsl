@@ -55,7 +55,8 @@ na validação terminológica.
 - **Acrescentado na verificação (decisões 9 a 13 do design):** a STR é composta só pelas
   linhas "Termo livre" e "Descritores correspondentes"; o mínimo de termos por STR sai da
   configuração; a primeira célula do cabeçalho do CT é `Termo`; en/es da linha "Termo livre"
-  passam a conter os equivalentes dos termos pt; a validação automática é executada.
+  passam a conter os equivalentes dos termos pt. A decisão 13 (executar a validação
+  automática) foi retificada: a validação fica fora do escopo (ver abaixo e o design).
 - **Conteúdo do protocolo.** Não existe planilha de validação. Pela regra, todo termo vai
   hoje para "Termo livre", e as outras duas linhas ficam vazias. O conjunto de termos de cada
   faceta não muda. As STRs mudam só de ordem e são regeneradas, assim como os procedimentos

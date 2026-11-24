@@ -80,7 +80,7 @@ def _celula_da_primeira(locais_chave, cabecalho_chave, nome_coluna):
 
 
 def _quadro(e, t, d):
-    """A primeira célula do cabeçalho do quadro não é lida: o defeito é o CT sem tabela."""
+    """Quadro fora da forma: o defeito injetado é o CT sem tabela."""
     from .textos import remove_tabela                               # noqa: PLC0415
     primeiro = next(iter(d["locais"]["quadro"].values()))
     return remove_tabela(t, primeiro["cabecalho"]), e

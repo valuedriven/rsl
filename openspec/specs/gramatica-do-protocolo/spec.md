@@ -2,22 +2,20 @@
 
 ## Purpose
 
-
 Tornar explícito, numa fonte única, o contrato de forma que o leitor exige do protocolo e
 dos procedimentos de busca, para que quem edita esses documentos saiba o que pode mudar sem
 quebrar a leitura e o que não pode.
 
 ## Requirements
 
-
 ### Requirement: Fonte única da gramática
 Todo literal de forma que o leitor exige SHALL ser declarado num único lugar do código:
 
 - título de seção e o seu nível;
 - cabeçalho e colunas exigidas de cada tabela;
-- rótulo de linha (por exemplo, as camadas do quadro terminológico);
+- rótulo de linha (por exemplo, as linhas do controle terminológico);
 - marcador de lista (por exemplo, `- QGR:` e `- Execução:`);
-- forma de identificador (`QERn`, `FCTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn`);
+- forma de identificador (`QERn`, `FCTn`, `CTn`, `STRn`, `EBn`, `CEn`, `BDn`, `SEn`);
 - frase-padrão de onde se lê um parâmetro (por exemplo, "recuperação inferior a N%").
 
 Os leitores MUST usar essas declarações e MUST NOT repetir o literal.
@@ -26,6 +24,12 @@ Os leitores MUST usar essas declarações e MUST NOT repetir o literal.
 - **WHEN** se procura, nos módulos de leitura, o título "Strings de busca por faceta" como
   literal
 - **THEN** ele aparece só na declaração da gramática
+
+#### Scenario: Título do controle terminológico no contrato
+- **WHEN** se executa `rsl documentos gramatica`
+- **THEN** a saída traz a forma `### CTn (FCTn)`, o cabeçalho `| Termo | <idioma> | … |` e
+  os três rótulos de linha do controle terminológico, cada um com o nome interno, e não traz
+  o campo `camadas` da cobertura
 
 ### Requirement: Contrato exibido a partir do leitor
 `python3 -m rsl documentos gramatica` SHALL exibir o contrato completo a partir dessas

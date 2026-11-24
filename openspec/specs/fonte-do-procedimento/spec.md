@@ -149,9 +149,9 @@ ser medida.
 #### Scenario: O que vem preenchido
 - **WHEN** se executa `procedimentos iniciar lisa` para base registrada no protocolo
 - **THEN** a fonte traz preenchidos uma linha de `[[criterios]]` por critério do protocolo
-  (`ids` e `rotulo`), os idiomas do quadro por faceta, `camadas = "todas"`, `plural =
-  "explícito"`, uma linha de `[[sementes]]` por semente com `lisa` em `bases` e um elemento
-  de `[[sintaxe]]` por categoria mínima, `nao_verificado`
+  (`ids` e `rotulo`), os idiomas do quadro por faceta, `plural = "explícito"`, uma linha de
+  `[[sementes]]` por semente com `lisa` em `bases` e um elemento de `[[sintaxe]]` por
+  categoria mínima, `nao_verificado`; e não traz o campo `camadas`
 
 #### Scenario: O que vem pendente
 - **WHEN** se executa `procedimentos iniciar lisa`

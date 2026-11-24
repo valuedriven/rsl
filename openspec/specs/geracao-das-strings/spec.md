@@ -8,22 +8,23 @@ de modo que a STR seja reprodutível a partir do quadro e não divirja dele sem 
 ## Requirements
 
 ### Requirement: STR é a união do quadro da faceta
-A STR esperada de uma faceta SHALL conter todo termo do quadro dessa faceta, nas três camadas
-e nos idiomas do cabeçalho do quadro, uma única vez, exceto o subsumido. A ordem SHALL ser a
-dos idiomas do cabeçalho; dentro do idioma, a das camadas (núcleo, próximos, relacionados);
-dentro da camada, a do quadro.
+A STR esperada de uma faceta SHALL conter todo termo das linhas "Termo livre" e
+"Descritores correspondentes" do CT dessa faceta, nos idiomas do cabeçalho, uma única vez,
+exceto o subsumido. A linha "Termos sinônimos ou relacionados" MUST NOT entrar na STR. A
+ordem SHALL ser a dos idiomas do cabeçalho; dentro do idioma, a das linhas (termo livre,
+descritores correspondentes); dentro da linha, a do CT.
 
 #### Scenario: Termo acrescentado ao quadro
-- **WHEN** o pesquisador acrescenta `taxonomía facetada` à camada de próximos de FCT1, em es
-- **THEN** a STR esperada de FCT1 contém `"taxonomía facetada"` na posição dos termos es de
-  próximos
+- **WHEN** o pesquisador acrescenta `taxonomía facetada` à linha "Termo livre" do CT1, em es
+- **THEN** a STR esperada de FCT1 contém `"taxonomía facetada"` na posição dos termos es da
+  linha "Termo livre"
 
 #### Scenario: Termo retirado do quadro
-- **WHEN** `practice` sai do quadro de FCT3
+- **WHEN** `practice` sai do CT3
 - **THEN** a STR esperada de FCT3 não contém `"practice"`
 
 #### Scenario: Mesma forma em dois idiomas
-- **WHEN** `educacional` consta das colunas pt e es do quadro de FCT2
+- **WHEN** `educacional` consta das colunas pt e es do CT2
 - **THEN** a STR esperada contém `"educacional"` uma vez
 
 #### Scenario: Termo em duplicidade na STR do protocolo
@@ -32,6 +33,20 @@ dentro da camada, a do quadro.
 - **THEN** `documentos conferir` e `strings gerar` reprovam a STR1 com a mesma mensagem, que diz
   `'ontology'` em DUPLICIDADE e o número de ocorrências; e `strings gerar --gravar` grava a
   STR com o termo uma vez
+
+#### Scenario: Termo reclassificado
+- **WHEN** `ontology` passa da linha "Termo livre" para "Descritores correspondentes" do CT1
+- **THEN** a STR esperada de FCT1 tem os mesmos termos, e `ontology` muda de posição
+
+#### Scenario: Termo em sinônimos ou relacionados
+- **WHEN** `thesauri` está na linha "Termos sinônimos ou relacionados" do CT1, em `en`
+- **THEN** a STR esperada de FCT1 não contém `"thesauri"`, e a ausência não reprova
+
+#### Scenario: Termo de sinônimos ou relacionados posto na STR
+- **WHEN** a STR1 do protocolo traz `"thesauri"`, que está só na linha "Termos sinônimos ou
+  relacionados" do CT1
+- **THEN** `documentos conferir` reprova a STR1, dizendo que o termo está numa linha que não
+  entra na STR, e `strings gerar --gravar` grava a STR sem ele
 
 ### Requirement: Termo subsumido sai da STR
 Um termo SHALL ficar fora da STR quando outro termo da mesma STR estiver contido nele como

@@ -69,10 +69,11 @@ de n" das partições é a única exceção.
   sensibilidade, porque a sonda se executa
 
 ### Requirement: Composição dos blocos a partir da STR
-O bloco de string de cada faceta SHALL conter os termos da STR nos idiomas e camadas que
-`[cobertura]` declara, menos a redução. Somam-se a eles as formas de número da flexão
-(`flexao-dos-termos`), na ordem da STR, cada uma logo depois do seu termo. Termo repetido
-entra uma vez. O campo, a forma do campo e as aspas SHALL ser os de `[composicao]`.
+O bloco de string de cada faceta SHALL conter os termos da STR nos idiomas que
+`[cobertura]` declara, menos a redução, sem filtro por linha do controle terminológico.
+Somam-se a eles as formas de número da flexão (`flexao-dos-termos`), na ordem da STR, cada
+uma logo depois do seu termo. Termo repetido entra uma vez. O campo, a forma do campo e as
+aspas SHALL ser os de `[composicao]`.
 
 #### Scenario: Termo novo na STR
 - **WHEN** a STR2 ganha `plataforma educacional`, sem exceção, e a fonte da Scopus declara
@@ -88,6 +89,10 @@ entra uma vez. O campo, a forma do campo e as aspas SHALL ser os de `[composicao
 - **WHEN** a fonte da ERIC declara FCT3 com campo `abstract`, `forma = "prefixa"` e
   `aspas = "locucao"`
 - **THEN** o bloco de STR3 traz `abstract:pedagogy` e `abstract:"teaching strategy"`
+
+#### Scenario: Procedimento gerado sem camadas
+- **WHEN** se executa `procedimentos gerar wos`
+- **THEN** a tabela de cobertura do procedimento gerado não traz a linha `camadas`
 
 ### Requirement: Composição dos blocos de expressão
 O bloco de cada expressão que se executa SHALL ser a composição do protocolo, com:

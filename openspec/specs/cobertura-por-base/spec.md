@@ -2,27 +2,30 @@
 
 ## Purpose
 
-
 Conferir a string de busca de cada procedimento de busca contra o vocabulário vigente do protocolo,
 de modo que termo retirado não volte e termo vigente não falte sem redução declarada.
 
 ## Requirements
 
-
 ### Requirement: Vocabulário vigente é a string do protocolo
 O termo vigente de uma faceta SHALL ser o que consta da STR correspondente no protocolo,
-filtrado pelos idiomas e camadas que o procedimento de busca declara. O quadro terminológico MUST servir
-apenas para classificar o termo por idioma e camada, e nenhuma lista de retirados SHALL ser
-mantida no código ou no procedimento de busca.
+filtrado pelos idiomas que o procedimento de busca declara. O controle terminológico MUST
+servir apenas para classificar o termo por idioma, e nenhuma lista de retirados SHALL ser
+mantida no código ou no procedimento de busca. Nenhum filtro por linha do CT SHALL ser
+aplicado.
 
 #### Scenario: Termo vigente ausente da base
-- **WHEN** um termo da STR, nos idiomas e camadas declarados, falta na string da base e não
+- **WHEN** um termo da STR, nos idiomas declarados, falta na string da base e não
   consta da redução declarada nem é alcançado por derivação declarada
 - **THEN** a conferência daquela base reprova, nomeando faceta e termo
 
 #### Scenario: Termo do quadro fora da STR
 - **WHEN** um termo consta do quadro mas não da STR
 - **THEN** ele não é esperado na string da base e a ausência não reprova
+
+#### Scenario: Campo camadas declarado
+- **WHEN** a `[cobertura]` de uma fonte de procedimento declara `camadas = "todas"`
+- **THEN** a leitura da fonte reprova o campo como desconhecido, nomeando a base e o campo
 
 ### Requirement: Termo da base deriva da STR
 Todo termo da string de uma base SHALL corresponder, em flexão ou pela derivação declarada, a

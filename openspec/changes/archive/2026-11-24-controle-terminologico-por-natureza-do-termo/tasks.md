@@ -29,7 +29,7 @@
 
 ## 5. Integração
 
-- [ ] 5.1 Executar `projeto autoteste`, `documentos conferir`, `strings gerar` (ensaio) e `procedimentos gerar <sigla>` (ensaio) para as quatro bases. Verificar código OK em todos e nenhuma diferença pendente.
+- [x] 5.1 Executar `projeto autoteste`, `documentos conferir`, `strings gerar` (ensaio) e `procedimentos gerar <sigla>` (ensaio) para as quatro bases. Verificar código OK em todos e nenhuma diferença pendente. Executados em 2026-11-24 e aceitos pelo pesquisador. `documentos conferir`, `strings gerar` e `procedimentos gerar` saíram com código OK e sem diferença. `projeto autoteste` saiu PARCIAL (código 6), porque `data/registro_execucao.json` não existe, também no `HEAD`; isso fica fora desta change.
 
 ## 6. Acréscimos da verificação (decisões 9 a 13)
 
@@ -38,7 +38,7 @@
 - [x] 6.3 Exigir `Termo` na primeira célula do cabeçalho de cada CT. Verificar com autoteste que reprova ao reverter.
 - [x] 6.4 Substituir en e es da linha "Termo livre" pelos equivalentes dos termos pt; regenerar STRs e procedimentos. Verificar com `documentos conferir`.
 - [x] 6.5 Tornar construtivo o caso "forma única com partição necessária" do autoteste, que dependia do comprimento corrente das STRs.
-- [ ] 6.6 Executar `termos sondar`, `termos exportar`, `termos validar tbci` e `termos validar unesco`, em sequência, e apresentar as propostas ao pesquisador, que preenche `decisao_ReT`. Mover os termos pela regra, regenerar e conferir.
+- 6.6 Retirada da change (retificação da decisão 13, 2026-11-24): fora do escopo, segue no follow-up. Texto original: Executar `termos sondar`, `termos exportar`, `termos validar tbci` e `termos validar unesco`, em sequência, e apresentar as propostas ao pesquisador, que preenche `decisao_ReT`. Mover os termos pela regra, regenerar e conferir.
 - [x] 6.7 Registrar as decisões 9 a 13 em `data/historico.md` e atualizar PD31.
 
 ## Workflow follow-up
