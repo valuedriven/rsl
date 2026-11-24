@@ -55,8 +55,8 @@ fica ao lado dele e muda à medida que a consulta ocorra.
    designado — **não preencher**.
 3. Registrar na fonte única: os dados conferidos, o estado e onde se conferiu.
 4. Atualizar o instrumento correspondente e conferir o texto final nele.
-5. Havendo divergência com o que estava escrito, **retificar explicitamente** e registrar a
-   emenda no histórico (`data/historico.md`). Não corrigir em silêncio.
+5. Havendo divergência com o que estava escrito, **retificar explicitamente** no relato ao
+   pesquisador. Não corrigir em silêncio.
 
 ## Casos que já ocorreram, e o que ensinaram
 

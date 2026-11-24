@@ -29,8 +29,8 @@ pesquisador. Não há exceção, não há urgência que justifique.
 As expressões vivem nos quatro procedimentos de busca, uma por base, em `docs/`:
 `procedimentos_busca_wos.md`, `procedimentos_busca_scopus.md`,
 `procedimentos_busca_eric.md` e `procedimentos_busca_brapci.md`. **Nunca ditar uma expressão de
-memória nem reescrevê-la na conversa.** Se o procedimento de busca estiver defasado, corrigi-lo e registrar
-a correção no histórico (`data/historico.md`).
+memória nem reescrevê-la na conversa.** Se o procedimento de busca estiver defasado, corrigir a fonte e
+regenerar; só a mudança que altere a recuperação é emenda e vai ao histórico.
 
 Só **EB4** é busca definitiva nas bases. EB1 tem a pertinência calculada localmente sobre os
 registros exportados; EB2 e EB3 vão à base apenas no teste de fidelidade da derivação; e

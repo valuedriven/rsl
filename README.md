@@ -70,7 +70,7 @@ chave, não pelo caminho.
 | `docs/parametros_complementares.md` | instrumento de extração e síntese: grupos de extração, cobertura conceitual, granularidade e grau de formalização | pesquisador |
 | `docs/procedimentos.md` | guia de procedimentos: módulos, etapas e passos, com fonte, script, skill e apoio; fonte do catálogo de apoio | pesquisador e agente, a pedido |
 | `docs/catalogo_de_apoio.md` | catálogo de apoio: skills e comandos por passo, por skill e por comando, e cobertura por etapa; saída de geração, não se edita à mão | `catalogo gerar --gravar`, a partir do guia de procedimentos |
-| `data/historico.md` | decisões, inclusive emendas | pesquisador; agente, a pedido |
+| `data/historico.md` | decisões arquiteturais, inclusive emendas | pesquisador; agente, a pedido |
 | `data/pendencias.json` | ações ainda a executar, `PDnn` | pesquisador; agente, a pedido |
 | `data/registro_execucao.json` (`[dados] registro`) — *sob demanda* | resultados das consultas nas bases, por base: execuções (`execucoes`) e sondagens de sintaxe (`sondagens`) | pesquisador, `busca registrar` e `sondagens registrar` |
 | `data/execucoes/<base>/` (`[dados] execucoes`) — *sob demanda* | exportações intactas das bases | pesquisador |
@@ -97,10 +97,12 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 
 | Registro | Guarda | Não guarda |
 | --- | --- | --- |
-| `data/historico.md` | **decisões** relevantes sobre a revisão — emendas, escolhas de método, de escopo e de instrumento —, com data, alcance e fundamento | ação por fazer; resultado de consulta; contagem — de termos, de sementes, de caracteres, de casos — e resultado de conferência ou de autoteste |
+| `data/historico.md` | só **decisões arquiteturais** da revisão — questão, escopo, critérios, método, estratégia de busca e emendas do protocolo —, em entrada curta: data, decisão, alcance e fundamento | decisão de instrumento, de ferramenta ou de redação; curadoria e manutenção de artefatos; correção de defeito; ação por fazer; resultado de consulta; contagem — de termos, de sementes, de caracteres, de casos — e resultado de conferência ou de autoteste |
 | `data/pendencias.json` | **ações ainda a executar**, e só elas, com `id`, `origem`, o que bloqueia, ação sugerida e responsável | ação concluída ou descartada; decisão; resultado de consulta |
 | `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens de sintaxe (`bases.BDn.sondagens`, por `sondagens registrar`), retornos, exportações e conferências | decisão; ação por fazer |
 
+- **Nenhum artefato guarda registro histórico** em cabeçalho ou comentário (quem aprovou,
+  quando, o que se retirou): o artefato traz só o conteúdo vigente.
 - Pendência resolvida ou descartada **sai** de `data/pendencias.json`; não se arquiva. O que
   a encerrou vai ao seu registro antes da exclusão: a decisão, inclusive a de descartar, ao
   histórico, que cita o `id`; o resultado de consulta, ao registro de execução. O `id` de

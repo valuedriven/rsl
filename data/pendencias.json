@@ -11,11 +11,11 @@
       "id": "PD01",
       "categoria": "dados",
       "descricao": "Os campos `tipo` e `alinhamento` estão vazios nas 10 sementes do arquivo de sementes (`[documentos] sementes` do config.toml). São juízos autorais, não dados bibliográficos. O campo `eric` também está vazio.",
-      "origem": "arquivo de sementes (`[documentos] sementes`); data/historico.md, 2026-11-19 e 2026-11-20; python3 -m rsl projeto pendencias",
+      "origem": "arquivo de sementes (`[documentos] sementes`); python3 -m rsl projeto pendencias",
       "bloqueia": "teste de aderência (M3/E2): a planilha sai com `tipo` em branco",
       "acao_sugerida": "preencher `tipo` e `alinhamento` de cada semente no arquivo de sementes (`[documentos] sementes`); são juízos autorais, não dados bibliográficos",
       "responsavel": "pesquisador",
-      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento. 2026-11-20: os dados de conferência passaram de data/sementes.json, removido, ao arquivo de sementes, com o mesmo conteúdo; o campo escopo foi retirado por decisão do pesquisador; restam tipo e alinhamento. 2026-11-22: descrição reduzida ao que falta; a verificação bibliográfica, o veículo e o DOI do capítulo da SE10 constam do arquivo de sementes e do histórico."
+      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento. 2026-11-20: os dados de conferência passaram de data/sementes.json, removido, ao arquivo de sementes, com o mesmo conteúdo; o campo escopo foi retirado por decisão do pesquisador; restam tipo e alinhamento. 2026-11-22: descrição reduzida ao que falta; a verificação bibliográfica, o veículo e o DOI do capítulo da SE10 constam do arquivo de sementes."
     },
     {
       "id": "PD03",
@@ -41,7 +41,7 @@
       "descricao": "Brased/INEP: cobertura de idiomas (pt) inferida, não conferida; a busca de 2026-11-18 não encontrou descrição.",
       "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha brased; a busca de 2026-11-18 não encontrou descrição da cobertura de idiomas",
       "bloqueia": "estatuto da cobertura de idiomas declarada no protocolo",
-      "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo, registrando a conferência no histórico",
+      "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo",
       "responsavel": "pesquisador"
     },
     {
@@ -50,7 +50,7 @@
       "descricao": "ERIC Thesaurus: cobertura de idiomas (en) inferida, não conferida na fonte.",
       "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha eric",
       "bloqueia": "estatuto da cobertura de idiomas declarada no protocolo",
-      "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo, registrando a conferência no histórico",
+      "acao_sugerida": "conferir na fonte do instrumento e atualizar a coluna Idiomas da sua linha na tabela de instrumentos do protocolo",
       "responsavel": "pesquisador"
     },
     {

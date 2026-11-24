@@ -80,7 +80,7 @@ expressões é de `expressoes-de-busca`; a execução e o registro dos retornos,
   de aderência: é emenda de busca;
 - **só a declaração** → conferir; não há execução a repetir, mas há decisão a registrar.
 
-Nos dois casos, registrar no histórico (`data/historico.md`). Divergência fechada em silêncio volta na execução
+No primeiro caso, registrar a emenda no histórico (`data/historico.md`). Divergência fechada em silêncio volta na execução
 seguinte.
 
 **Base nova é decisão de escopo** — fontes de informação são do protocolo, e o pesquisador

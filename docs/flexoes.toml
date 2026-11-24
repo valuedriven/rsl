@@ -1,102 +1,98 @@
-# Exceções de flexão de número dos termos das STR, por idioma. Esquema: `python3 -m rsl documentos gramatica`.
-# Lista revisada e aprovada pelo pesquisador em 2026-11-23 (migração das quatro bases).
-# Exceções órfãs (de termo ausente das STR e das listas escritas à mão) retiradas por decisão do pesquisador em 2026-11-24.
-
 [[excecoes]]
 termo = "ontology engineering"
 idioma = "en"
 tipo = "nao_contavel"
-origem = "gerúndio usado como substantivo de processo, sem plural em uso nos procedimentos atuais; proposta do agente"
+origem = "substantivo de processo, sem plural"
 
 [[excecoes]]
 termo = "representação do conhecimento"
 idioma = "pt"
 tipo = "nao_contavel"
-origem = "proposta do agente: processo ou área, sem plural em uso nos procedimentos atuais"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "organização do conhecimento"
 idioma = "pt"
 tipo = "nao_contavel"
-origem = "proposta do agente: processo ou área, sem plural em uso nos procedimentos atuais"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "educação"
 idioma = "pt"
 tipo = "nao_contavel"
-origem = "proposta do agente: processo ou área, sem plural em uso nos procedimentos atuais"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "educacional"
 idioma = "pt"
 tipo = "irregular"
 formas = ["educacionais"]
-origem = "adjetivo isolado, que a regra passou a recusar (decisão do pesquisador de 2026-11-24, na verificação da change geracao-das-fichas-de-busca); mantém a forma que a regra gerava; proposta do agente"
+origem = "adjetivo isolado, que a regra não decide; plural do adjetivo"
 
 [[excecoes]]
 termo = "educacional"
 idioma = "es"
 tipo = "irregular"
 formas = ["educacionales"]
-origem = "adjetivo isolado, que a regra passou a recusar (decisão do pesquisador de 2026-11-24, na verificação da change geracao-das-fichas-de-busca); mantém a forma que a regra gerava; proposta do agente"
+origem = "adjetivo isolado, que a regra não decide; plural do adjetivo"
 
 [[excecoes]]
 termo = "ensino e aprendizagem"
 idioma = "pt"
 tipo = "nao_contavel"
-origem = "proposta do agente: locução coordenada que nomeia um processo, sem plural em uso nos procedimentos atuais"
+origem = "locução coordenada que nomeia um processo, sem plural"
 
 [[excecoes]]
 termo = "intervenção educacional"
 idioma = "pt"
 tipo = "irregular"
 formas = ["intervenções educacionais"]
-origem = "proposta do agente: plural regular do núcleo, com a concordância do modificador, que a regra não decide"
+origem = "plural do núcleo com a concordância do modificador, que a regra não decide"
 
 [[excecoes]]
 termo = "educational"
 idioma = "en"
 tipo = "nao_contavel"
-origem = "adjetivo, sem número; proposta do agente"
+origem = "adjetivo, sem número"
 
 [[excecoes]]
 termo = "teaching and learning"
 idioma = "en"
 tipo = "nao_contavel"
-origem = "proposta do agente: locução coordenada que nomeia um processo, sem plural em uso nos procedimentos atuais"
+origem = "locução coordenada que nomeia um processo, sem plural"
 
 [[excecoes]]
 termo = "enseñanza y aprendizaje"
 idioma = "es"
 tipo = "nao_contavel"
-origem = "proposta do agente: locução coordenada que nomeia um processo, sem plural em uso nos procedimentos atuais"
+origem = "locução coordenada que nomeia um processo, sem plural"
 
 [[excecoes]]
 termo = "educación"
 idioma = "es"
 tipo = "nao_contavel"
-origem = "substantivo de processo ou de área, sem plural em uso; decisão do pesquisador de 2026-11-23 (não contável em pt, es e en), sobre proposta do agente"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "representación del conocimiento"
 idioma = "es"
 tipo = "nao_contavel"
-origem = "substantivo de processo ou de área, sem plural em uso; decisão do pesquisador de 2026-11-23 (não contável em pt, es e en), sobre proposta do agente"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "organización del conocimiento"
 idioma = "es"
 tipo = "nao_contavel"
-origem = "substantivo de processo ou de área, sem plural em uso; decisão do pesquisador de 2026-11-23 (não contável em pt, es e en), sobre proposta do agente"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "education"
 idioma = "en"
 tipo = "nao_contavel"
-origem = "substantivo de processo ou de área, sem plural em uso; decisão do pesquisador de 2026-11-23 (não contável em pt, es e en), sobre proposta do agente"
+origem = "substantivo de processo ou de área, sem plural"
 
 [[excecoes]]
 termo = "teaching-learning"
 idioma = "en"
 tipo = "nao_contavel"
-origem = "forma composta de processo, sem plural; termo incluído na STR2 por decisão do pesquisador de 2026-11-23 (estava escrito à mão nos procedimentos da WoS e da Scopus)"
+origem = "forma composta de processo, sem plural"
