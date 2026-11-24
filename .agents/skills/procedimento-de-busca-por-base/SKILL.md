@@ -11,7 +11,7 @@ aceita o que se submete. Não é cópia do protocolo com outra sintaxe, nem manu
 
 A string de uma base **não é a do protocolo com outro invólucro**. As bases divergem do
 vocabulário canônico em conteúdo: uma acrescenta flexão morfológica, outra reduz a radicais,
-outra usa só o núcleo e executa por consultas curadas. Tratá-las como cópias produziria a
+outra deixa termos fora da string, declarados um a um, e executa por consultas curadas. Tratá-las como cópias produziria a
 sintaxe de uma com o vocabulário suposto de outra.
 
 > **Duas fontes, com papéis distintos.** O **vocabulário** é do protocolo; a **forma** é da
@@ -94,7 +94,7 @@ desde a última leitura, e essa edição é o ponto de partida:
 
 1. `README.md` — mapa, nomes de arquivo e precedência; `docs/procedimentos.md` — comandos;
    `python3 -m rsl configuracao mostrar` — limiares em uso e a origem de cada um.
-2. O protocolo de estratégia: questão, facetas e âncoras, quadro terminológico por camada e
+2. O protocolo de estratégia: questão, facetas e âncoras, controle terminológico por linha e
    idioma, strings, expressões (a executada e a sonda, identificadas pela composição) e as
    suas notas, critérios de elegibilidade e fontes; o conjunto-semente vem do arquivo de
    sementes (`[documentos] sementes`). **É a fonte do vocabulário**; nada dele se reescreve
@@ -204,7 +204,7 @@ na fonte, nunca na memória de quem executa. Os blocos se geram.
 chave, título, resumo, descritor); **proximidade** e a distância medida; **truncamento** — há
 base em que o curinga devolve zero; **teto de caracteres** e **teto de retorno**, que vira
 partição ou lista curada; **filtro de ano**, na consulta ou na página; **idioma indexado**;
-**camada do vocabulário**, integral, núcleo ou radicais; **morfologia**, sobre termo que já
+**alcance do vocabulário**, integral, com redução termo a termo ou por radicais; **morfologia**, sobre termo que já
 consta; **forma de execução**, uma consulta, várias de campo único unidas por deduplicação,
 ou lista curada executada consulta a consulta.
 
@@ -219,8 +219,8 @@ ou lista curada executada consulta a consulta.
 - **termo que não derive do protocolo** — palavra nova só com decisão registrada, e isso vale
   também para variantes, contingências e camadas.
 
-**A declaração de cobertura** é `[cobertura]`: `idiomas` por faceta, `camadas` (`todas` ou
-`nucleo`), `plural`, `teto` e `derivacoes` — e, só quando a base deixa fora da string um
+**A declaração de cobertura** é `[cobertura]`: `idiomas` por faceta, `plural`, `teto` e
+`derivacoes` (entram todos os termos da STR, que vem das linhas "Termo livre" e "Descritores correspondentes"; não há corte por linha) — e, só quando a base deixa fora da string um
 termo vigente (da STR do protocolo), `[[reducao]]` termo a termo. Termo fora da STR e termo
 alcançado pela forma radical não entram na redução.
 
@@ -255,8 +255,8 @@ envolve o grupo ou prefixa cada termo. Campo diferente por parte da faceta (tít
 STR inteira, resumo para um subconjunto específico) vai a `[[consultas_de_campo]]` e a
 `[[subconjuntos]]`; o subconjunto só leva termos da STR da faceta.
 
-**Decisões metodológicas desta seção são do pesquisador**: usar só o núcleo, restringir
-idiomas, reduzir a radicais, mover parte da faceta para outro campo. O agente propõe com a
+**Decisões metodológicas desta seção são do pesquisador**: deixar termos fora da string,
+restringir idiomas, reduzir a radicais, mover parte da faceta para outro campo. O agente propõe com a
 razão medida — teto de caracteres, teto de retorno, idioma de indexação — e o custo
 esperado em recall, e pede a decisão.
 

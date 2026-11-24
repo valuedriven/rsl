@@ -1,0 +1,300 @@
+{
+  "chave": "tbci|organização do conhecimento",
+  "recuperado_em": "2026-11-24T12:30:23-03:00",
+  "payload": {
+    "url_consultada": "https://vocabularyserver.com/tbci/br/services.php?task=search&arg=organiza%C3%A7%C3%A3o+do+conhecimento&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "613": {
+          "term_id": 613,
+          "string": "organização do conhecimento",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1823|1824|613",
+          "order": 1
+        },
+        "157": {
+          "term_id": 157,
+          "string": "sistemas de organização do conhecimento",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|1823|1824|1826|157",
+          "order": 2
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "organização do conhecimento"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 2
+      }
+    },
+    "fetchAlt": {
+      "url": "https://vocabularyserver.com/tbci/br/services.php?task=fetchAlt&arg=613&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1607": {
+            "term_id": "1607",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "organização da informação",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 613
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://vocabularyserver.com/tbci/br/services.php?task=fetchUp&arg=613&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "1823": {
+            "term_id": "1823",
+            "string": "Organização do Conhecimento e Recuperação da Informação",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "1824": {
+            "term_id": "1824",
+            "string": "Organização do Conhecimento",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "613": {
+            "term_id": "613",
+            "string": "organização do conhecimento",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 613
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://vocabularyserver.com/tbci/br/services.php?task=fetchDown&arg=613&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "612": {
+            "term_id": "612",
+            "string": "catalogação",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "290": {
+            "term_id": "290",
+            "string": "classificação",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "1155": {
+            "term_id": "1155",
+            "string": "elaboração de resumos",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "172": {
+            "term_id": "172",
+            "string": "indexação",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 613
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 4
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://vocabularyserver.com/tbci/br/services.php?task=fetchRelated&arg=613&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "314": {
+            "term_id": "314",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "normas e protocolos",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1390": {
+            "term_id": "1390",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "OpenURL",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "1114": {
+            "term_id": "1114",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "padrões de metadados",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "614": {
+            "term_id": "614",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "processamento técnico",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "572": {
+            "term_id": "572",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "protocolos de interoperalidade",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "407": {
+            "term_id": "407",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "representação da informação",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "157": {
+            "term_id": "157",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "sistemas de organização do conhecimento",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "682": {
+            "term_id": "682",
+            "code": "",
+            "lang": "pt-BR",
+            "string": "tecnologias da informação e comunicação",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 613
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 8
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://vocabularyserver.com/tbci/br/services.php?task=fetchNotes&arg=613&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "228": {
+            "term_id": "613",
+            "string": "organização do conhecimento",
+            "note_id": "228",
+            "note_type": "NA",
+            "note_lang": "es",
+            "note_text": "Processo que envolve a organização e descrição física e de conteúdo de artefatos/objetos informacionais por meio dos quais o conhecimento é representado e compartilhado de forma concisa, como catalogação, classificação etc. com o objetivo de sua recuperação. No contexto da biblioteconomia e da ciência da informação, a organização do conhecimento, também chamada de organização da informação, é uma forma sintética para expressar \"organização de recursos do conhecimento\" ou \"organização das representações do conhecimento\". Os produtos resultantes desse processo descritivo são \"representações da informação\", quais sejam catálogos, índices, bases de dados etc. - BRASCHER e CAF+; IEILS, p. 471. Atualmente, a tendência é adotar o termo organização do conhecimento por sua institucionalização em instâncias acadêmicas e profissionais como, por exemplo, a ISKO (International Society of Knowledge Organization).",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 613
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    }
+  }
+}

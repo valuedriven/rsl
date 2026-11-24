@@ -41,8 +41,6 @@ divergencia_fidelidade = 0.10
 
 # ------------------------------------------------------- parâmetros só desta configuração
 [conferencia]
-# Mínimo de termos distintos por string de faceta.
-minimo_termos_string = 20
 # Dimensões que a tabela de critérios de elegibilidade tem de declarar, com a grafia do
 # protocolo (coluna Dimensão).
 dimensoes_criterio = [

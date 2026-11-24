@@ -72,6 +72,12 @@ def fonte(ctx, g):
         g.testa(f"reprovou ({codigo.name}): {nome} [{alvo}]", cod == codigo and not faltam,
                 f"{cod.name}, faltou {faltam} — {texto[-160:]}")
 
+    # O corte por camada foi retirado: a fonte que ainda o declara reprova como campo
+    # desconhecido, pela regra geral do esquema, e não é lida em silêncio.
+    caso("campo `camadas` na [cobertura], retirado do esquema",
+         lambda x: x["cobertura"].__setitem__("camadas", "todas"),
+         trechos=("campo desconhecido", "'camadas'"))
+
     nao_verif = next(s for s in dado0["sintaxe"]
                      if s["situacao"] == G.SITUACAO_NAO_VERIFICADO and s.get("sondagem"))
     i_nv = dado0["sintaxe"].index(nao_verif)
@@ -174,8 +180,17 @@ def geracao(ctx, g):
             mutar(x)
             return com_fonte(ctx, part, x, frag, arqs)
 
-        cod, texto = _codigo(lambda: gera_base(com(
-            lambda x: x["execucao"].update(forma="unica")), d, part))
+        # A partição se torna necessária por construção: o teto passa a ficar um caractere
+        # abaixo da maior consulta gerada. Sem isso, o caso dependeria do comprimento
+        # corrente das STRs, que pode caber no teto declarado.
+        _, comp0, _ = gera_base(ctx, d, part)
+        justo = max(len(c["texto"]) for e in comp0.expressoes.values()
+                    for c in e["consultas"]) - 1
+
+        def unica(x):
+            x["execucao"].update(forma="unica")
+            x["cobertura"]["teto"] = justo
+        cod, texto = _codigo(lambda: gera_base(com(unica), d, part))
         g.testa(f"forma única com partição necessária reprova [{part}]",
                 cod == Saida.REPROVADO and 'forma = "unica"' in texto, texto[-140:])
         cod, texto = _codigo(lambda: gera_base(com(

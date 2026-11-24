@@ -34,6 +34,30 @@ def achata(obj, chaves):
     return saida
 
 
+ROTULOS = {"term", "string", "value", "nombre", "term_name", "label"}
+IDS = {"id", "key", "term_id", "tema"}
+
+
+def item_exato(achado, termo):
+    """(rótulo, identificador) do item da busca cujo rótulo casa exatamente com o termo.
+
+    O identificador é colhido do mesmo item que casou, e não da resposta inteira: a busca
+    devolve vários conceitos (`organização do conhecimento` traz também `sistemas de
+    organização do conhecimento`), e o primeiro identificador da resposta pode ser de outro.
+    Item sem identificador próprio devolve (rótulo, None). Nenhum casamento: (None, None)."""
+    itens = achado.get("result") if isinstance(achado, dict) else None
+    itens = list(itens.values()) if isinstance(itens, dict) else \
+        (itens if isinstance(itens, list) else [])
+    for item in itens:
+        if not isinstance(item, dict):
+            continue
+        for r in achata(item, ROTULOS):
+            if norm(r) == norm(termo):
+                ids = achata(item, IDS)
+                return r, (ids[0] if ids else None)
+    return None, None
+
+
 def chamada(task, arg):
     url = f"{ENDERECO}?{urllib.parse.urlencode({'task': task, 'arg': arg, 'output': 'json'})}"
     return url, http.json_de(http.requisicao(url), url)
@@ -43,14 +67,11 @@ def valida(termo, instrumento):
     """Procura o termo, identifica o conceito e colhe USE/UP, TG, TE, TR e nota."""
     url, achado = chamada("search", termo)
     reg = {"url_consultada": url, "status_http": 200, "busca": achado}
-    rotulos = achata(achado, {"term", "string", "value", "nombre", "term_name", "label"})
-    ids = achata(achado, {"id", "key", "term_id", "tema"})
-    exato = [r for r in rotulos if norm(r) == norm(termo)]
+    exato, cid = item_exato(achado, termo)
     if not exato:
         return (reg, STATUS_NAO_LOCALIZADO, {}, "sem correspondência exata de rótulo", url,
                 VERSAO)
 
-    cid = ids[0] if ids else None
     dados = {}
     if cid:
         for rotulo, task in (("equivalentes_USE_UP", "fetchAlt"),
@@ -65,7 +86,7 @@ def valida(termo, instrumento):
             dados[rotulo] = "; ".join(dict.fromkeys(v for v in vals if norm(v) != norm(termo)))
 
     status = STATUS_AUTORIZADO if cid else "localizado, identificador não extraído"
-    dados["rotulo_autorizado"] = exato[0]
+    dados["rotulo_autorizado"] = exato
     dados["uri_conceito"] = f"{ENDERECO}?task=fetchTerm&arg={cid}" if cid else ""
     obs = "" if cid else "identificador do conceito não extraído do JSON: conferir o payload"
     return reg, status, dados, obs, url, VERSAO

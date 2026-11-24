@@ -10,11 +10,11 @@ conferidas. O procedimento gravado é saída: confere-se por igualdade com a ger
 
 from . import gramatica as G
 from .cobertura import listas_a_mao, cobertura_base, maior_consulta, subsumidos_na_base
-from .erros import ProtocoloInvalido
+from .erros import DadosInvalidos, ProtocoloInvalido
 from .fichas import base_derivada
 from .flexao import le_excecoes, orfas
-from .geracao import problemas_atribuicao, problemas_str
-from .leitura import CAMADAS
+from .geracao import candidatos, problemas_atribuicao, problemas_str
+from .leitura import LINHAS
 from .markdown import normaliza
 from .saida import Saida, mais_grave
 
@@ -95,41 +95,79 @@ def problemas_bases(ctx, d, igualdade=True):
     return problemas
 
 
+def problemas_classificacao(ctx, d):
+    """A linha de cada termo do CT confere com a decisão do ReT (`termos/decisao.py`).
+
+    Cada termo tem uma única linha esperada por idioma: a repetição entre linhas do mesmo CT
+    e idioma reprova. Termo fora da linha esperada reprova; sem planilha a linha esperada é
+    "Termo livre", e o termo em outra linha reprova, porque o protocolo afirmaria uma
+    classificação não verificada. Planilha ilegível não é planilha ausente: DADOS.
+    """
+    from .termos.decisao import ROTULO, esperada, fora_do_dominio, linhas_esperadas, planilha
+    saida = []
+    for f in d["tabelas"]:
+        for i in d["idiomas"]:
+            onde = {}
+            for c in LINHAS:
+                for termo in f["linhas"][i][c]:
+                    onde.setdefault(normaliza(termo), (termo, []))
+                    if c not in onde[normaliza(termo)][1]:
+                        onde[normaliza(termo)][1].append(c)
+            for termo, cs in onde.values():
+                if len(cs) > 1:
+                    saida.append(Problema(
+                        f"faceta {f['id']} {i}: {termo!r} em mais de uma linha do "
+                        f"{f['ct']} ({', '.join(repr(ROTULO[c]) for c in cs)}); cada termo "
+                        f"tem uma única linha"))
+    try:
+        linhas = planilha(ctx)
+    except DadosInvalidos as e:
+        return saida + [Problema(str(e), Saida.DADOS)]
+    origem = "pela decisão do ReT" if linhas is not None else \
+        "sem planilha de validação, todo termo é termo livre"
+    saida += [Problema(f"planilha de validação: {x}") for x in fora_do_dominio(linhas or [])]
+    mapa = linhas_esperadas(d, linhas)
+    for f in d["tabelas"]:
+        for i in d["idiomas"]:
+            for c in LINHAS:
+                for termo in f["linhas"][i][c]:
+                    e = esperada(mapa, f["id"], i, termo)
+                    if e != c:
+                        saida.append(Problema(
+                            f"faceta {f['id']} {i}: {termo!r} na linha {ROTULO[c]!r} do "
+                            f"{f['ct']}; a linha esperada é {ROTULO[e]!r} ({origem})"))
+    return saida
+
+
 def conferir(ctx):
     """Problemas encontrados (Resultado). ProtocoloInvalido sobe: é outro código."""
     d = ctx.protocolo()
     problemas = []
 
+    # Célula vazia é admitida: sem decisão de validação, as linhas de descritores e de
+    # sinônimos ou relacionados ficam vazias, e essa é a classificação correta.
     for f in d["tabelas"]:
         for i in d["idiomas"]:
-            for c in CAMADAS:
-                if not f["camadas"][i][c]:
-                    problemas.append(f"faceta {f['id']}: camada {c} vazia em {i}")
-        # Repetição entre camadas é legítima (o mesmo termo em núcleo e em relacionados);
-        # a lista final é deduplicada. Dentro da mesma camada, é defeito.
-        for i in d["idiomas"]:
-            for c in CAMADAS:
+            for c in LINHAS:
                 vistos = set()
-                for termo in f["camadas"][i][c]:
+                for termo in f["linhas"][i][c]:
                     k = normaliza(termo)
                     if k in vistos:
                         problemas.append(
-                            f"faceta {f['id']} {i}/{c}: {termo!r} repetido na mesma camada")
+                            f"faceta {f['id']} {i}/{c}: {termo!r} repetido na mesma linha do CT")
                     vistos.add(k)
 
-    # A string só pode usar termo que o quadro da própria faceta contém. É a remissão que
-    # impede string e vocabulário de divergirem em silêncio.
-    minimo = d["parametros"]["minimo_termos_string"]["valor"]
-    quadro = {f["id"]: {normaliza(x) for i in d["idiomas"] for x in f["termos"][i]}
+    # A string só pode usar termo das linhas do CT da própria faceta que compõem a STR
+    # (termo livre e descritores). É a remissão que impede string e vocabulário de
+    # divergirem em silêncio. Não há mínimo de termos por string (retirado em 2026-11-24).
+    rotulos = " e ".join(repr(r.texto) for r in G.LINHAS_STR)
+    quadro = {f["id"]: {normaliza(x) for x in candidatos(f, d["idiomas"])}
               for f in d["tabelas"]}
     for n, s in d["strings"].items():
-        if len(s["termos"]) < minimo:
-            problemas.append(f"faceta {n}: string com {len(s['termos'])} termos "
-                             f"(mínimo {minimo})")
         for termo in s["termos"]:
             if normaliza(termo) not in quadro[n]:
-                problemas.append(f"faceta {n}: termo {termo!r} da string não consta do "
-                                 f"quadro da faceta")
+                problemas.append(f"faceta {n}: termo {termo!r} da string não consta das "
+                                 f"linhas {rotulos} do CT da faceta")
 
     # A STR é saída de geração a partir do quadro: a editada à mão, ou a que ficou para trás
     # de uma alteração do quadro, reprova mesmo sem que ninguém rode o gerador. E o quadro
@@ -179,6 +217,7 @@ def conferir(ctx):
                          "a passagem não teria denominador")
 
     resultado = Resultado(Problema(p) for p in problemas)
+    resultado += problemas_classificacao(ctx, d)
     # A forma de cada base é parte da coerência do documento: procedimento de busca ilegível
     # ou fora do protocolo reprova só a sua base.
     resultado += problemas_bases(ctx, d)

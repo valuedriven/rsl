@@ -1,6 +1,6 @@
 ---
 name: facetacao-e-termos-livres
-description: Extrai expressões-chave da questão de revisão e monta a estrutura de termos livres por faceta, com descritores, sinónimos, termos derivados e as camadas núcleo, próximos e relacionados nos três idiomas. Use ao criar, acrescentar, retirar, traduzir ou reorganizar termo de busca e vocabulário das facetas.
+description: Extrai expressões-chave da questão de revisão e monta a estrutura de termos livres por faceta, com descritores, sinónimos, termos derivados e as linhas do controle terminológico pela natureza do termo (termo livre, descritores correspondentes, sinônimos ou relacionados) nos três idiomas. Use ao criar, acrescentar, retirar, traduzir ou reorganizar termo de busca e vocabulário das facetas.
 ---
 
 # Facetação e termos livres
@@ -26,14 +26,35 @@ mais facetas restringe. "Geral" nomeia a composição, não o alcance: a express
 quatro facetas é a **mais restritiva**, e serve de sonda de precisão, nunca de critério
 de exclusão.
 
-## 2. Três camadas, três idiomas
+## 2. Três linhas pela natureza do termo, três idiomas
 
-`nucleo` · `proximos` · `relacionados`, em `pt`, `en`, `es`, nas tabelas de controle
-terminológico de `docs/03_protocolo_estrategia_pesquisa.md`.
+Cada faceta tem uma tabela sob `### CTn (FCTn)` em `docs/03_protocolo_estrategia_pesquisa.md`,
+com o cabeçalho `| Termo | pt | en | es |` e as linhas "Termo livre", "Descritores correspondentes" e "Termos sinônimos ou
+relacionados" (`livre` · `descritores` · `relacionados`), em `pt`, `en`, `es`. A forma exata
+está em `python3 -m rsl documentos gramatica`.
 
-A camada não é grau de confiança: é **distância conceitual ao termo livre**. Ela
-decide o que se corta primeiro quando uma consulta encosta no teto de caracteres de
-uma base, e é por camada que se discute precisão.
+A linha **não é distância conceitual nem grau de confiança**: é a **natureza do termo**, e
+resulta da decisão do ReT (`decisao_ReT`) na planilha de validação, sobre os instrumentos
+planejados para a faceta e o idioma do termo:
+
+- descritor autorizado em pelo menos um instrumento → "Descritores correspondentes";
+- senão, USE/UP ou TR de um descritor em pelo menos um → "Termos sinônimos ou relacionados";
+- senão → "Termo livre".
+
+**Termo sem decisão do ReT é termo livre** — inclusive o de instrumento manual ainda não
+consultado, o que só tem proposta da máquina (`status_proposto`) e todo termo enquanto a
+planilha não existe. Linhas de descritores e de sinônimos vazias significam "não validado",
+não "inexistente". Mover um termo de linha sem a decisão correspondente reprova em
+`documentos conferir`; a reclassificação vem da validação
+(`validacao-vocabulario-controlado`), e depois dela se regeneram STRs e procedimentos. O mesmo
+termo não fica em duas linhas do mesmo CT e idioma.
+
+**A STR da faceta é composta pelas linhas "Termo livre" e "Descritores correspondentes"**,
+e só por elas: "Termos sinônimos ou relacionados" documenta a relação do termo com o
+vocabulário controlado e não entra na STR. Termo dessa linha posto na STR reprova em
+`documentos conferir`; levá-lo à busca é decidir que ele é termo livre, e isso se registra.
+Não há mínimo de termos por STR: o tamanho resulta do quadro. Se um corte por teto de
+caracteres voltar a ser necessário, decide-se sob este critério, por change.
 
 Controle terminológico **paralelo**, e não substitutivo, entre Ciência da Informação
 e Educação: as duas tradições nomeiam a mesma coisa de modos diferentes, e usar o

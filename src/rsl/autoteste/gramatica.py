@@ -79,6 +79,13 @@ def _celula_da_primeira(locais_chave, cabecalho_chave, nome_coluna):
     return gera
 
 
+def _quadro(e, t, d):
+    """A primeira célula do cabeçalho do quadro não é lida: o defeito é o CT sem tabela."""
+    from .textos import remove_tabela                               # noqa: PLC0415
+    primeiro = next(iter(d["locais"]["quadro"].values()))
+    return remove_tabela(t, primeiro["cabecalho"]), e
+
+
 def _acao(e, t, d):
     idx = next(iter(d["locais"]["criterio"].values()))
     return troca_celula(t, idx, G.COL_CRIT_ACAO, FORA_DA_FORMA), e
@@ -125,6 +132,7 @@ ESPECIFICOS = {
     G.F_QER: _com_nomeado(_frase, G.I_QER),
     G.D_ANCORA: _celula_da_primeira("faceta", "cabecalho_facetas", G.D_ANCORA.campo),
     G.T_CRITERIOS: _com_nomeado(_tabela, G.I_CE),
+    G.T_QUADRO: _quadro,
 }
 
 

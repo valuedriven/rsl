@@ -22,7 +22,7 @@ from .erros import ProtocoloInvalido, Reprovado, Uso
 from .flexao import Indecidivel, formas, formas_de_numero, le_excecoes
 from .fonte import le_fonte, ordem_das_sondagens
 from .geracao import grava_atomico
-from .leitura import CAMADAS
+from .leitura import LINHAS
 from .saida import Saida, mais_grave
 
 
@@ -32,8 +32,8 @@ def idiomas_do_termo(d, fid):
     f = next(x for x in d["tabelas"] if x["id"] == fid)
     saida = {}
     for i in d["idiomas"]:
-        for c in CAMADAS:
-            for t in f["camadas"][i][c]:
+        for c in LINHAS:
+            for t in f["linhas"][i][c]:
                 saida.setdefault(t, [])
                 if i not in saida[t]:
                     saida[t].append(i)
@@ -41,13 +41,12 @@ def idiomas_do_termo(d, fid):
 
 
 def vigentes(fonte, d, fid):
-    """Termos da STR da faceta nos idiomas e camadas que a fonte declara, na ordem da STR,
-    menos a redução declarada."""
+    """Termos da STR da faceta nos idiomas que a fonte declara, em todas as linhas do CT, na
+    ordem da STR, menos a redução declarada."""
     cob = fonte["dado"]["cobertura"]
     idiomas = cob["idiomas"].get(fid, [])
-    camadas = CAMADAS if cob["camadas"] == G.CAMADAS_TODAS else (CAMADAS[0],)
     f = next(x for x in d["tabelas"] if x["id"] == fid)
-    admitidos = {t for i in idiomas for c in camadas for t in f["camadas"][i][c]}
+    admitidos = {t for i in idiomas for c in LINHAS for t in f["linhas"][i][c]}
     reduzidos = {r["termo"] for r in fonte["dado"].get("reducao", []) if r["faceta"] == fid}
     return [t for t in d["strings"][fid]["literais"] if t in admitidos and t not in reduzidos]
 
@@ -426,7 +425,7 @@ def texto_procedimento(ctx, d, fonte, comp, registro=None):
     derivacoes = cob.get("derivacoes") or []
     L += _tabela(("Parâmetro", "Valor"), [
         ("idiomas", "; ".join(f"{fid}: {', '.join(v)}" for fid, v in cob["idiomas"].items())),
-        ("camadas", cob["camadas"]), ("plural", plural),
+        ("plural", plural),
         ("teto de caracteres", str(cob["teto"])),
         ("derivações", " e ".join(derivacoes) if derivacoes else "nenhuma")]) + [""]
     if dado.get("reducao"):

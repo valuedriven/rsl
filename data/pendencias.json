@@ -20,10 +20,10 @@
     {
       "id": "PD03",
       "categoria": "validacao-terminologica",
-      "descricao": "data/validacao_terminologica.csv ausente: nenhum termo tem consulta registrada, e pela regra do protocolo todos são termos livres até a validação.",
-      "origem": "python3 -m rsl projeto pendencias",
+      "descricao": "Validação terminológica incompleta: TBCI e UNESCO consultados em 2026-11-24, com as propostas da máquina na planilha; nenhuma `decisao_ReT` preenchida, e ERIC Thesaurus e Brased/INEP pendentes de consulta manual. Até a decisão, todo termo fica em \"Termo livre\". A validação decide a linha de cada termo pela `decisao_ReT` (descritor em algum instrumento → \"Descritores correspondentes\"; senão sinônimo ou relacionado → \"Termos sinônimos ou relacionados\"; senão \"Termo livre\"), e `documentos conferir` reprova o termo fora da linha que a decisão determina.",
+      "origem": "python3 -m rsl projeto pendencias; data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
       "bloqueia": "validação terminológica (M3/E1, passo 2)",
-      "acao_sugerida": "PYTHONPATH=src python3 -m rsl termos sondar, depois termos exportar, termos validar tbci e termos validar unesco; ERIC Thesaurus e Brased/INEP validados à mão",
+      "acao_sugerida": "preencher `decisao_ReT` em data/validacao_terminologica.csv a partir das propostas e da evidência; consultar à mão ERIC Thesaurus e Brased/INEP; mover cada termo para a linha que a decisão determina; strings gerar --gravar e procedimentos gerar <sigla> --gravar",
       "responsavel": "pesquisador"
     },
     {
@@ -174,6 +174,24 @@
       "bloqueia": "execução definitiva na ERIC, junto com a PD09",
       "acao_sugerida": "executar as sondagens SD1 a SD9 do roteiro da ERIC, registrá-las por `sondagens registrar` e corrigir a afirmação da skill `execucao-da-busca` pelo resultado registrado",
       "responsavel": "pesquisador"
+    },
+    {
+      "id": "PD31",
+      "categoria": "aderencia",
+      "descricao": "Teste de aderência a refazer: as STRs mudaram de conteúdo em 2026-11-24 (termos retirados e acrescentados ao controle terminológico; en/es da linha \"Termo livre\" reduzidos aos equivalentes dos termos pt; \"Termos sinônimos ou relacionados\" fora da STR), e o pesquisador decidiu refazer o teste.",
+      "origem": "data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
+      "bloqueia": "passagem da busca (M3/E2) com as STRs vigentes",
+      "acao_sugerida": "executar a busca de cada base com os procedimentos regenerados e refazer o teste de aderência (skill teste-de-aderencia; aderencia planilhar)",
+      "responsavel": "pesquisador"
+    },
+    {
+      "id": "PD32",
+      "categoria": "validacao-terminologica",
+      "descricao": "ERIC Thesaurus e Brased/INEP em modo Automático: o pesquisador quer a automação se for possível. Nenhum dos dois tem cliente, e não foram conferidos os termos de uso nem a existência de via programática (API) para cada um; até lá ficam Manual.",
+      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linhas eric e brased",
+      "bloqueia": "validação automatizada de FCT2, FCT3 e FCT4 em en (ERIC) e pt (Brased)",
+      "acao_sugerida": "conferir e registrar os termos de uso e a via de acesso de cada instrumento; se a automação for admitida, propor change com o cliente (termos/clientes/) e só então mudar o Modo",
+      "responsavel": "pesquisador; agente, a pedido"
     }
   ]
 }

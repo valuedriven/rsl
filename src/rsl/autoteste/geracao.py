@@ -15,7 +15,7 @@ import tempfile
 from .. import geracao
 from .. import gramatica as G
 from ..geracao import esperada, gera, subsume
-from ..leitura import CAMADAS
+from ..leitura import LINHAS
 from ..saida import Saida
 from . import conferir_texto
 from .textos import coluna, edita_celula, sub_na_linha
@@ -83,19 +83,29 @@ def casos(ctx, g):
             repetida != t and cod == OK and depois == t,
             f"código {cod.name}, {'igual' if depois == t else 'diferente'} do corrente")
 
-    # Termo do núcleo da primeira faceta acrescentado ao núcleo da última: atribuição
+    # Termo livre da primeira faceta acrescentado à linha "Termo livre" da última: atribuição
     # única violada, e a gravação recusada sem tocar no arquivo.
     q1, qn = L["quadro"][f1], L["quadro"][fn]
-    nucleo = G.R_NUCLEO.interno
+    livre = G.R_LIVRE.interno
     idioma = d["idiomas"][0]
-    termo_f1 = next(f for f in d["tabelas"] if f["id"] == f1)["camadas"][idioma][nucleo][0]
-    dup = edita_celula(t, qn[nucleo], coluna(t, qn["cabecalho"], idioma),
+    termo_f1 = next(f for f in d["tabelas"] if f["id"] == f1)["linhas"][idioma][livre][0]
+    dup = edita_celula(t, qn[livre], coluna(t, qn["cabecalho"], idioma),
                        lambda c: f"{c}, {termo_f1}")
     g.espera("termo em duas facetas do quadro", dup, t, executa, R,
              ("atribuição única", repr(termo_f1), f1, fn))
     cod, depois = _grava_em_copia(ctx, dup)
     g.testa("gravação recusada com termo em duas facetas", cod == R and depois == dup,
             f"código {cod.name}, arquivo {'intacto' if depois == dup else 'ALTERADO'}")
+
+    # Termo de "Termos sinônimos ou relacionados" na STR: a linha não entra na STR, e o termo
+    # posto também na STR reprova pela remissão e pela igualdade com a STR gerada.
+    rel = G.R_RELACIONADOS.interno
+    so_rel = "termo relacionado do autoteste"
+    com_rel = edita_celula(t, q1[rel], coluna(t, q1["cabecalho"], idioma),
+                           lambda c: f"{c}, {so_rel}" if c.strip() else so_rel)
+    com_rel = sub_na_linha(com_rel, idx_str1, r'\("', f'("{so_rel}" OR "')
+    g.espera("termo de 'Termos sinônimos ou relacionados' posto na STR", com_rel, t, executa,
+             R, ("difere da STR gerada", repr(so_rel), "que não entra na STR"))
 
     # Gravação: STR defasada regravada volta a ser, byte a byte, o documento corrente —
     # que o autoteste só roda sobre documento aprovado, com as STRs iguais às geradas.
@@ -125,13 +135,24 @@ def casos(ctx, g):
     if len(idiomas) < 2:
         g.falha("mutação não aplicável: mesma forma em dois idiomas — o quadro tem um idioma")
     else:
-        vazio = {c: [] for c in CAMADAS}
-        faceta = {"camadas": {i: dict(vazio) for i in idiomas}}
-        faceta["camadas"][idiomas[0]] = {**vazio, CAMADAS[0]: ["educacional"]}
-        faceta["camadas"][idiomas[-1]] = {**vazio, CAMADAS[0]: ["educacional"]}
+        vazio = {c: [] for c in LINHAS}
+        faceta = {"linhas": {i: dict(vazio) for i in idiomas}}
+        faceta["linhas"][idiomas[0]] = {**vazio, LINHAS[0]: ["educacional"]}
+        faceta["linhas"][idiomas[-1]] = {**vazio, LINHAS[0]: ["educacional"]}
         termos = esperada(faceta, idiomas)[0]
         g.testa("mesma forma em dois idiomas entra uma vez na STR esperada",
                 termos == ["educacional"], f"STR esperada {termos}")
+
+    # Linhas da STR: termo livre e descritores entram, nessa ordem; relacionados não.
+    vazio = {c: [] for c in LINHAS}
+    faceta = {"linhas": {i: dict(vazio) for i in idiomas}}
+    faceta["linhas"][idiomas[0]] = {G.R_LIVRE.interno: ["livre do autoteste"],
+                                    G.R_DESCRITORES.interno: ["descritor do autoteste"],
+                                    G.R_RELACIONADOS.interno: ["relacionado do autoteste"]}
+    termos = esperada(faceta, idiomas)[0]
+    g.testa("STR esperada: termo livre e descritores, sem 'Termos sinônimos ou relacionados'",
+            termos == ["livre do autoteste", "descritor do autoteste"],
+            f"STR esperada {termos}")
 
 
 PARES_SUBSUNCAO = (

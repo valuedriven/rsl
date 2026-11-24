@@ -53,7 +53,7 @@ def base_derivada(ctx, d, sigla, flexao=True, composicao=None):
     itens = [{"rotulo": c["rotulo"] or c["id"], "consulta": c["texto"], "id": c["id"]}
              for c in comp.expressoes[executada]["consultas"]]
     cob = dado["cobertura"]
-    declaracao = {"idiomas": cob["idiomas"], "camadas": cob["camadas"],
+    declaracao = {"idiomas": cob["idiomas"],
                   "derivacoes": cob.get("derivacoes") or [], "plural": fonte["plural"],
                   "teto": fonte["teto"], "exclusoes": dado.get("reducao", [])}
     criterios = sorted({i for c in dado["criterios"] for i in c["ids"]},

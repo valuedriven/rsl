@@ -1,0 +1,21 @@
+{
+  "chave": "unesco|learning context",
+  "recuperado_em": "2026-11-24T12:32:28-03:00",
+  "payload": {
+    "consulta": "SELECT ?c ?tipo ?rotulo ?lang WHERE {\n  GRAPH <http://vocabularies.unesco.org/thesaurus/> {\n    { ?c skos:prefLabel ?l . BIND(\"prefLabel\" AS ?tipo) }\n    UNION\n    { ?c skos:altLabel ?l . BIND(\"altLabel\" AS ?tipo) }\n    FILTER(LCASE(STR(?l)) = \"learning context\")\n    ?c skos:prefLabel ?rotulo .\n    BIND(LANG(?rotulo) AS ?lang)\n  }\n} LIMIT 60",
+    "status_http": 200,
+    "resposta": {
+      "head": {
+        "vars": [
+          "c",
+          "tipo",
+          "rotulo",
+          "lang"
+        ]
+      },
+      "results": {
+        "bindings": []
+      }
+    }
+  }
+}

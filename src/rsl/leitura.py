@@ -21,7 +21,7 @@ from .markdown import (blocos_de_tabela, celulas, desescapa, le_tabela, linhas,
                        linhas_de_tabela, lista, normaliza, paragrafos, secao,
                        tabela_da_secao)
 
-CAMADAS = tuple(r.interno for r in G.CAMADAS)
+LINHAS = tuple(r.interno for r in G.LINHAS_CT)
 ORIGEM_PROTOCOLO = "protocolo"
 
 
@@ -163,66 +163,147 @@ def _termos_celula(celula, onde):
     return [desescapa(p).strip() for p in partes if p.strip()]
 
 
-def tabelas(t, pal, locais):
-    """As tabelas do controle terminológico, uma por faceta, com as camadas por idioma.
+def _subsecoes_ct(trecho):
+    """[(título ou None, índice da linha do título, [blocos de tabela])] da seção do controle
+    terminológico, divididas pelos títulos de nível 3. O primeiro item, de título None, é o
+    que vem antes do primeiro título."""
+    partes = [(None, None, [])]
+    atual = []
+    for idx, linha in linhas(trecho):
+        m = G.F_TITULO_CT.padrao.match(linha)
+        if m:
+            partes[-1][2].extend(blocos_de_tabela(_trecho_de(atual)))
+            partes.append((m.group(1), idx, []))
+            atual = []
+        else:
+            atual.append((idx, linha))
+    partes[-1][2].extend(blocos_de_tabela(_trecho_de(atual)))
+    return partes
 
-    O cabeçalho `| FCTn | pt | en | es |` dá a faceta e os idiomas: o idioma de cada coluna
-    é o nome no cabeçalho, não a posição. O primeiro quadro fixa a ordem dos idiomas do
-    projeto; os demais têm de ter o mesmo conjunto, em qualquer ordem. As três camadas são
-    linhas exigidas, pelo rótulo.
+
+def _trecho_de(pares):
+    """Trecho com as linhas (índice, linha) consecutivas, preservando o índice da primeira."""
+    from .markdown import Trecho                                    # noqa: PLC0415
+    if not pares:
+        return Trecho("", 0)
+    return Trecho("\n".join(l for _, l in pares), pares[0][0])
+
+
+def _faceta_do_titulo(titulo, nomes):
+    """(CTn, FCTn) do título `CTn (FCTn)`; reprova título fora da forma, mais de uma faceta,
+    faceta inexistente e número divergente."""
+    forma = G.F_TITULO_CT.texto
+    m = G.FORMA_TITULO_CT.fullmatch(titulo)
+    if not m or not G.I_CT.casa(m.group(1)):
+        raise ProtocoloInvalido(G.F_TITULO_CT, f"título {titulo!r} fora da forma `{forma}`")
+    ct = m.group(1)
+    dentro = [x.strip() for x in m.group(2).split(",")]
+    if len(dentro) != 1:
+        raise ProtocoloInvalido(G.F_TITULO_CT, f"{ct} declara {dentro}: cada CT tem uma "
+                                               f"única faceta")
+    fct = dentro[0]
+    if not G.I_FCT.casa(fct):
+        raise ProtocoloInvalido(G.F_TITULO_CT, f"título {titulo!r}: {fct!r} fora da forma "
+                                               f"{G.I_FCT.prefixo}n")
+    if fct not in nomes:
+        raise ProtocoloInvalido(G.F_TITULO_CT, f"{ct} cita a faceta {fct}, sem linha na "
+                                               f"{G.T_FACETAS.rotulo}")
+    if int(G.I_CT.casa(ct).group(1)) != int(G.I_FCT.casa(fct).group(1)):
+        raise ProtocoloInvalido(G.I_CT, f"{ct} e {fct} com números diferentes: o CT tem o "
+                                        f"número da sua faceta")
+    return ct, fct
+
+
+def tabelas(t, pal, locais):
+    """As tabelas do controle terminológico, uma por faceta, com as linhas por idioma.
+
+    Cada tabela fica sob um título `### CTn (FCTn)`, que dá a faceta. O cabeçalho
+    `| Termo | pt | en | es |` dá os idiomas, a partir da segunda célula: o idioma de cada coluna é
+    o nome no cabeçalho, não a posição. O primeiro quadro fixa a ordem dos idiomas do
+    projeto; os demais têm de ter o mesmo conjunto, em qualquer ordem. As três linhas são
+    exigidas, pelo rótulo inteiro. Nenhuma tabela da seção é ignorada: a que está fora da
+    forma reprova.
 
     Devolve (tabelas, idiomas).
     """
     nomes = {f["id"]: f for f in pal}
     locais["quadro"] = {}
-    saida, idiomas = [], None
-    for bloco in blocos_de_tabela(secao(t, G.S_CONTROLE)):
-        m = G.I_FCT.casa(celulas(bloco[0])[0])
-        if not m:
-            continue
-        ident = f"{G.I_FCT.prefixo}{int(m.group(1))}"
-        if ident not in nomes:
-            raise ProtocoloInvalido(G.T_QUADRO, f"tabela da faceta {ident} sem linha na "
-                                                f"{G.T_FACETAS.rotulo}")
+    saida, idiomas, por_ct = [], None, {}
+    forma = G.F_TITULO_CT.texto
+    for titulo, idx_titulo, blocos in _subsecoes_ct(secao(t, G.S_CONTROLE)):
+        if titulo is None or len(blocos) > 1:
+            if titulo is None and not blocos:
+                continue
+            bloco = blocos[0 if titulo is None else 1]
+            antiga = G.I_FCT.casa(desescapa(celulas(bloco[0])[0]).strip())
+            onde = f"tabela da linha {bloco.primeira + 1}"
+            raise ProtocoloInvalido(
+                G.F_TITULO_CT, f"{onde} sem título `{forma}`" +
+                (" (cabeçalho na forma antiga `| FCTn | … |`)" if antiga else ""))
+        ct, ident = _faceta_do_titulo(titulo, nomes)
+        if ct in por_ct:
+            raise ProtocoloInvalido(G.I_CT, f"{ct} repetido")
+        por_ct[ct] = ident
+        if not blocos:
+            raise ProtocoloInvalido(G.T_QUADRO, f"{ct} ({ident}) sem tabela")
+        bloco = blocos[0]
+        primeira = desescapa(celulas(bloco[0])[0]).strip()
+        if G.I_FCT.casa(primeira):
+            raise ProtocoloInvalido(G.T_QUADRO, f"{ct}: cabeçalho na forma antiga "
+                                                f"`| {primeira} | … |`; a faceta vem do "
+                                                f"título `{forma}`, e a primeira célula do "
+                                                f"cabeçalho é `{G.CAB_QUADRO}`")
+        if primeira.strip("*_ \t") != G.CAB_QUADRO:
+            raise ProtocoloInvalido(G.T_QUADRO, f"{ct}: primeira célula do cabeçalho "
+                                                f"{primeira!r}; a forma é "
+                                                f"`| {G.CAB_QUADRO} | idioma | … |`")
         cab, linhas_ = le_tabela(bloco, G.T_QUADRO, exigidas=())
         proprios = cab[1:]
         if not proprios or any(not i for i in proprios):
-            raise ProtocoloInvalido(G.T_QUADRO, f"quadro de {ident}: coluna de idioma sem "
-                                                f"nome no cabeçalho {cab}")
+            raise ProtocoloInvalido(G.T_QUADRO, f"{ct}: coluna de idioma sem nome no "
+                                                f"cabeçalho {cab}")
         if idiomas is None:
             idiomas = tuple(proprios)
         elif set(proprios) != set(idiomas):
             raise ProtocoloInvalido(
-                G.T_QUADRO, f"quadro de {ident}: idiomas {sorted(proprios)} diferem dos "
+                G.T_QUADRO, f"{ct} ({ident}): idiomas {sorted(proprios)} diferem dos "
                             f"idiomas {sorted(idiomas)} do quadro de {saida[0]['id']} — "
                             f"faltam {sorted(set(idiomas) - set(proprios))}, sobram "
                             f"{sorted(set(proprios) - set(idiomas))}")
-        atual = {"id": ident, "nome": nomes[ident]["nome"], "ancora": nomes[ident]["ancora"],
-                 "camadas": {i: {c: [] for c in CAMADAS} for i in idiomas}}
+        atual = {"id": ident, "ct": ct, "nome": nomes[ident]["nome"],
+                 "ancora": nomes[ident]["ancora"],
+                 "linhas": {i: {c: [] for c in LINHAS} for i in idiomas}}
         saida.append(atual)
-        local = {"cabecalho": bloco.primeira}
+        local = {"titulo": idx_titulo, "cabecalho": bloco.primeira}
+        desconhecidos = []
         for linha in linhas_:
-            rotulo = linha[cab[0]].strip("* ").strip()
-            camada = next((r for r in G.CAMADAS if rotulo.startswith(r.texto)), None)
-            if camada is None:
+            bruto = desescapa(celulas(bloco[linha["_linha"] - bloco.primeira])[0])
+            rotulo = next((r for r in G.LINHAS_CT if r.casa(bruto)), None)
+            if rotulo is None:
+                desconhecidos.append(G.rotulo_da_celula(bruto))
                 continue
-            local[camada.interno] = linha["_linha"]
+            if rotulo.interno in local:
+                raise ProtocoloInvalido(rotulo, f"{ct}: linha '{rotulo.texto}' repetida")
+            local[rotulo.interno] = linha["_linha"]
             for idioma in idiomas:
-                atual["camadas"][idioma][camada.interno] = _termos_celula(
-                    linha[idioma], f"quadro de {ident}, {camada.texto}, {idioma}")
-        faltam = [r for r in G.CAMADAS if r.interno not in local]
+                atual["linhas"][idioma][rotulo.interno] = _termos_celula(
+                    linha[idioma], f"{ct} ({ident}), {rotulo.texto}, {idioma}")
+        faltam = [r for r in G.LINHAS_CT if r.interno not in local]
         if faltam:
-            raise ProtocoloInvalido(faltam[0], f"quadro de {ident}: falta a linha "
-                                               f"'{faltam[0].texto}…'")
+            raise ProtocoloInvalido(faltam[0], f"{ct}: falta a linha '{faltam[0].texto}'")
+        if desconhecidos:
+            raise ProtocoloInvalido(G.T_QUADRO, f"{ct}: rótulo de linha desconhecido "
+                                                f"{desconhecidos[0]!r}; admitidos "
+                                                f"{[r.texto for r in G.LINHAS_CT]}")
         locais["quadro"][ident] = local
 
     ids = [f["id"] for f in saida]
-    if sorted(ids) != sorted(nomes) or len(set(ids)) != len(ids):
+    if sorted(ids) != sorted(nomes):
         raise ProtocoloInvalido(G.T_QUADRO, f"esperava uma tabela por faceta "
                                             f"({sorted(nomes)}), achei {ids}")
     for f in saida:
         f["termos"] = {i: sem_repeticao(
-            [x for c in CAMADAS for x in f["camadas"][i][c]]) for i in idiomas}
+            [x for c in LINHAS for x in f["linhas"][i][c]]) for i in idiomas}
     return saida, idiomas
 
 
@@ -825,6 +906,11 @@ def analisa(ctx):
     """O protocolo lido. ProtocoloInvalido na primeira violação da gramática."""
     t = ctx.texto
     params, locais = {}, {}
+    # Toda seção exigida, antes de qualquer tabela: sem o cabeçalho de uma seção, as tabelas
+    # dela caem na seção anterior, e a reprovação nomearia a tabela, não a seção que falta.
+    for e in G.exigidos(G.PROTOCOLO):
+        if isinstance(e, G.Secao):
+            secao(t, e)
     pal = facetas(t, locais)
     tb, idiomas = tabelas(t, pal, locais)
     _estrutural(params, "idiomas", list(idiomas))
@@ -835,7 +921,7 @@ def analisa(ctx):
         for s, i in insts.items()])
     st = strings(t, set(ids_facetas), locais)
     for n in st:
-        # A string repete termo entre camadas; a lista executada é deduplicada. É ela
+        # A string repete termo entre idiomas; a lista executada é deduplicada. É ela
         # que a derivação local usa, e é ela que o relatório conta.
         # A grafia lida, sem a deduplicação sem acento, é a que se compara com a STR
         # gerada do quadro (`geracao.py`): lá o acento distingue.
@@ -880,7 +966,6 @@ def analisa(ctx):
     # O protocolo não declara estes; valem os do config.toml, com a origem registrada.
     d["divergencia"] = _parametro(ctx, params, "divergencia_fidelidade", None,
                                   "padroes.divergencia_fidelidade")
-    _parametro(ctx, params, "minimo_termos_string", None, "conferencia.minimo_termos_string")
     _parametro(ctx, params, "dimensoes_criterio", None, "conferencia.dimensoes_criterio")
     d["parametros"] = params
     d["papeis"] = papeis(d)

@@ -8,7 +8,7 @@ compositor deveria ter posto é recalculado aqui, da STR, da fonte e da flexão,
 compositor errado reprove.
 
 A cobertura é medida contra o vocabulário vigente — os termos da STR do protocolo, nos
-idiomas e camadas que o procedimento de busca declara — e contra a redução própria da base,
+idiomas que o procedimento de busca declara, sem filtro por linha do CT — e contra a redução própria da base,
 declarada termo a termo: termo vigente ausente e não declarado reprova, e termo da base que
 não derive da STR também, inclusive o que só conste do quadro terminológico. A cobertura por
 faceta sai como número, porque é ela que mede o preço da forma de cada base.
@@ -20,7 +20,7 @@ from . import gramatica as G
 from .flexao import Indecidivel, formas, formas_de_numero, nao_contavel, vetadas
 from .geracao import subsume
 from .fichas import MODO_CURADA, MODOS_EXECUCAO
-from .leitura import CAMADAS, sem_repeticao
+from .leitura import LINHAS, sem_repeticao
 from .markdown import normaliza
 
 # Palavras de ligação não distinguem termo de termo: "característica do aluno" e
@@ -108,21 +108,20 @@ def _vocabulario(fid, d, decl):
     """Vocabulário de uma faceta para uma base.
 
     Devolve (vigentes, fora_da_string): `vigentes` são os termos da STR do protocolo nos
-    idiomas e camadas que o procedimento de busca declara, classificados pelo quadro;
-    `fora_da_string` são os termos do quadro da faceta, em qualquer idioma ou camada, que a
+    idiomas que o procedimento de busca declara, em todas as linhas do CT, classificados pelo
+    quadro; `fora_da_string` são os termos do quadro da faceta, em qualquer idioma, que a
     STR não traz. O quadro é vocabulário de referência; o que vale para a busca é a STR.
     """
     f = next(x for x in d["tabelas"] if x["id"] == fid)
     idiomas = decl.get("idiomas", {}).get(fid) or list(d["idiomas"])
-    camadas = CAMADAS if decl.get("camadas") == G.CAMADAS_TODAS else (G.R_NUCLEO.interno,)
     na_str = {normaliza(x) for x in d["strings"][fid]["termos"]}
     # Repetição exata, não normalizada: `ontologia` (pt) e `ontología` (es) são termos
     # distintos da STR, e a base pode distinguir o acento.
-    tabela = list(dict.fromkeys(x for i in idiomas for c in camadas
-                                for x in f["camadas"][i][c]))
+    tabela = list(dict.fromkeys(x for i in idiomas for c in LINHAS
+                                for x in f["linhas"][i][c]))
     vigentes = [x for x in tabela if normaliza(x) in na_str]
-    quadro = sem_repeticao([x for i in d["idiomas"] for c in CAMADAS
-                             for x in f["camadas"][i][c]])
+    quadro = sem_repeticao([x for i in d["idiomas"] for c in LINHAS
+                             for x in f["linhas"][i][c]])
     fora = [x for x in quadro if normaliza(x) not in na_str]
     return vigentes, fora
 
@@ -167,8 +166,8 @@ def _idiomas_do_termo(d, fid):
     f = next(x for x in d["tabelas"] if x["id"] == fid)
     saida = {}
     for i in d["idiomas"]:
-        for c in CAMADAS:
-            for x in f["camadas"][i][c]:
+        for c in LINHAS:
+            for x in f["linhas"][i][c]:
                 saida.setdefault(x, set()).add(i)
     return saida
 

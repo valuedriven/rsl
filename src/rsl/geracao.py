@@ -1,7 +1,8 @@
 """Geração das strings de busca por faceta (STR) a partir do quadro terminológico.
 
-A STR esperada de uma faceta é a união dos termos do quadro dessa faceta — três camadas,
-idiomas do cabeçalho — menos os subsumidos por outro termo da mesma STR. O quadro é a fonte;
+A STR esperada de uma faceta é a união dos termos das linhas "Termo livre" e "Descritores
+correspondentes" do CT dessa faceta, nos idiomas do cabeçalho, menos os subsumidos por outro
+termo da mesma STR. A linha "Termos sinônimos ou relacionados" não entra (G.LINHAS_STR). O quadro é a fonte;
 a tabela "Strings de busca por faceta" do protocolo é saída de geração, regravada por
 `strings gerar --gravar` e conferida por `documentos conferir`.
 
@@ -17,7 +18,10 @@ import tempfile
 
 from . import gramatica as G
 from .erros import ProtocoloInvalido
-from .leitura import CAMADAS
+from .leitura import LINHAS
+
+# Linhas do CT que compõem a STR, na ordem da STR.
+LINHAS_STR = tuple(r.interno for r in G.LINHAS_STR)
 from .markdown import celulas, linhas_de_tabela, normaliza, secao
 from .saida import Saida
 
@@ -51,14 +55,15 @@ def subsumidos(termos):
 
 
 # ------------------------------------------------------------------- STR esperada
-def candidatos(f, idiomas):
-    """Termos do quadro da faceta na ordem da STR: idioma do cabeçalho, camada, célula.
+def candidatos(f, idiomas, linhas=LINHAS_STR):
+    """Termos das `linhas` do CT da faceta na ordem da STR: idioma do cabeçalho, linha do CT
+    (termo livre, descritores), célula. Com `linhas=LINHAS`, o quadro inteiro.
 
-    A forma repetida — entre camadas ou entre idiomas — entra uma vez. A repetição se
-    reconhece pela grafia exata, como a subsunção: `ontologia` e `ontología` são duas
-    formas, porque o tratamento de diacrítico pelas bases não está medido.
+    A forma repetida entre idiomas entra uma vez. A repetição se reconhece pela grafia exata,
+    como a subsunção: `ontologia` e `ontología` são duas formas, porque o tratamento de
+    diacrítico pelas bases não está medido.
     """
-    return list(dict.fromkeys(x for i in idiomas for c in CAMADAS for x in f["camadas"][i][c]))
+    return list(dict.fromkeys(x for i in idiomas for c in linhas for x in f["linhas"][i][c]))
 
 
 def esperada(f, idiomas):
@@ -117,21 +122,32 @@ def descreve(fid, dif, d):
         if t in dif["subsumidos"]:
             motivo = f"subsumido por {dif['subsumidos'][t]!r}"
         else:
-            motivo = "não consta do quadro da faceta"
+            motivo = fora_da_str(t, d, fid) or "não consta do quadro da faceta"
         saida.append(f"    - {t!r} ({motivo})")
     return saida
+
+
+def fora_da_str(termo, d, fid):
+    """Motivo de um termo da STR do protocolo que a STR esperada não traz e que não é
+    subsumido, quando ele está em "Termos sinônimos ou relacionados"; senão, None."""
+    f = next(x for x in d["tabelas"] if x["id"] == fid)
+    k = normaliza(termo)
+    rel = G.R_RELACIONADOS.interno
+    if any(normaliza(x) == k for i in d["idiomas"] for x in f["linhas"][i][rel]):
+        return f"na linha {G.R_RELACIONADOS.texto!r} do {f['ct']}, que não entra na STR"
+    return None
 
 
 # ------------------------------------------------------------- atribuição única
 def atribuicao_unica(d):
     """Formas normalizadas presentes no quadro de mais de uma faceta.
 
-    Devolve [(forma do primeiro quadro, [facetas])]. A mesma forma em idiomas ou camadas
-    da mesma faceta não conta: a regra incide entre facetas.
+    Devolve [(forma do primeiro quadro, [facetas])]. A mesma forma em idiomas da mesma
+    faceta não conta: a regra incide entre facetas.
     """
     onde, grafia = {}, {}
     for f in d["tabelas"]:
-        for x in candidatos(f, d["idiomas"]):
+        for x in candidatos(f, d["idiomas"], LINHAS):
             k = normaliza(x)
             grafia.setdefault(k, x)
             onde.setdefault(k, [])
@@ -156,8 +172,13 @@ def problemas_str(d):
             continue
         partes = [duplicidade(t, n) for t, n in dif["duplicados"].items()]
         if dif["retirar"]:
-            itens = [f"{t!r} (subsumido por {dif['subsumidos'][t]!r})"
-                     if t in dif["subsumidos"] else repr(t) for t in dif["retirar"]]
+            itens = []
+            for t in dif["retirar"]:
+                if t in dif["subsumidos"]:
+                    itens.append(f"{t!r} (subsumido por {dif['subsumidos'][t]!r})")
+                else:
+                    motivo = fora_da_str(t, d, fid)
+                    itens.append(f"{t!r} ({motivo})" if motivo else repr(t))
             partes.append(f"a mais: {', '.join(itens)}")
         if dif["acrescentar"]:
             partes.append(f"a menos: {', '.join(repr(t) for t in dif['acrescentar'])}")

@@ -26,6 +26,72 @@ def _numero(ident, prefixo):
     return int(ident[len(prefixo):])
 
 
+def _titulo_ct(ct, *facetas):
+    return f"{'#' * G.NIVEL_CT} {ct} ({', '.join(facetas)})"
+
+
+def casos_forma_ct(t, d):
+    """[(nome, mutante, trecho)] dos defeitos de forma do controle terminológico, todos com
+    PROTOCOLO_ILEGIVEL: título fora da forma, número divergente, duas facetas, faceta
+    inexistente, CT repetido, tabela sem título, forma antiga, primeira célula do cabeçalho
+    fora da forma, rótulo desconhecido, linha
+    repetida e linha ausente. Gerados da estrutura lida: a primeira, a segunda e a última
+    faceta."""
+    L = d["locais"]
+    tabs = d["tabelas"]
+    p_ct, p_fct = G.I_CT.prefixo, G.I_FCT.prefixo
+    a, b, z = tabs[0], tabs[min(1, len(tabs) - 1)], tabs[-1]
+    qa, qb = L["quadro"][a["id"]], L["quadro"][b["id"]]
+    forma = G.F_TITULO_CT.texto
+    saida = []
+
+    def caso(nome, mutante, trecho):
+        saida.append((nome, mutante, trecho))
+
+    caso("título do CT fora da forma",
+         troca_linha(t, qa["titulo"], f"{'#' * G.NIVEL_CT} Quadro de {a['id']}"),
+         (G.F_TITULO_CT.rotulo, "fora da forma"))
+    outra = z if z is not b else a
+    caso("CT com o número de outra faceta",
+         troca_linha(t, qb["titulo"], _titulo_ct(b["ct"], outra["id"]))
+         if outra is not b else None, (G.I_CT.rotulo, b["ct"], outra["id"]))
+    caso("CT com duas facetas",
+         troca_linha(t, qb["titulo"], _titulo_ct(b["ct"], b["id"], outra["id"]))
+         if outra is not b else None, (G.F_TITULO_CT.rotulo, "única faceta"))
+    n = len(tabs) + 90
+    caso("CT de faceta inexistente",
+         troca_linha(t, qa["titulo"], _titulo_ct(f"{p_ct}{n}", f"{p_fct}{n}")),
+         (G.F_TITULO_CT.rotulo, f"{p_fct}{n}", "sem linha"))
+    caso("CT repetido",
+         troca_linha(t, qb["titulo"], _titulo_ct(a["ct"], a["id"])) if b is not a else None,
+         (G.I_CT.rotulo, f"{a['ct']} repetido"))
+    caso("tabela do CT sem título", remove_linhas(t, [qb["titulo"]]),
+         (G.F_TITULO_CT.rotulo, "sem título", forma))
+    caso("forma antiga: tabela sem título, faceta na primeira célula do cabeçalho",
+         remove_linhas(troca_celula(t, qb["cabecalho"], 0, b["id"]), [qb["titulo"]]),
+         (G.F_TITULO_CT.rotulo, forma, "forma antiga"))
+    caso("cabeçalho antigo sob o título CT", troca_celula(t, qa["cabecalho"], 0, a["id"]),
+         (G.T_QUADRO.rotulo, "forma antiga"))
+    caso(f"primeira célula do cabeçalho diferente de `{G.CAB_QUADRO}`",
+         troca_celula(t, qa["cabecalho"], 0, "Linha"),
+         (G.T_QUADRO.rotulo, "primeira célula do cabeçalho", repr("Linha")))
+    caso("rótulo de linha desconhecido (o antigo `Termos centrais (núcleo)`)",
+         insere_depois(t, qa[G.R_RELACIONADOS.interno],
+                       monta_linha(["*Termos centrais (núcleo)*"] +
+                                   [""] * len(d["idiomas"]))),
+         (G.T_QUADRO.rotulo, "desconhecido", "Termos centrais (núcleo)"))
+    # Casamento pelo início aceitaria o rótulo com sufixo: a comparação é do rótulo inteiro.
+    caso("rótulo de linha com sufixo (`Termo livre e variantes`)",
+         troca_celula(t, qa[G.R_LIVRE.interno], 0, f"*{G.R_LIVRE.texto} e variantes*"),
+         (G.R_LIVRE.rotulo, "falta a linha"))
+    caso("linha do CT repetida",
+         insere_depois(t, qa[G.R_DESCRITORES.interno], linhas(t)[qa[G.R_DESCRITORES.interno]]),
+         (G.R_DESCRITORES.rotulo, "repetida"))
+    caso("linha do CT ausente", remove_linhas(t, [qb[G.R_RELACIONADOS.interno]]),
+         (G.R_RELACIONADOS.rotulo, b["ct"], "falta a linha"))
+    return saida
+
+
 def mutacoes(ctx, g):
     t, d = ctx.texto, ctx.protocolo()
     L = d["locais"]
@@ -58,25 +124,22 @@ def mutacoes(ctx, g):
     def cel_inst(sigla, nome_col, valor):
         return troca_celula(t, L["instrumento"][sigla], coluna(t, cab_i, nome_col), valor)
 
-    # --- quadro terminológico (coerência)
+    # --- controle terminológico: forma (título CT, cabeçalho, rótulos) e coerência
     q1 = L["quadro"][f1]
-    rel = q1[G.R_RELACIONADOS.interno]
-    mut = t
-    for k in range(1, len(cabecalho(t, q1["cabecalho"]))):
-        mut = troca_celula(mut, rel, k, "")
-    caso("camada do quadro esvaziada", mut, R, f"camada {G.R_RELACIONADOS.interno} vazia")
     k_id0 = coluna(t, q1["cabecalho"], idiomas[0])
-    nuc = q1[G.R_NUCLEO.interno]
-    primeiro = re.split(G.SEPARADOR_TERMOS, celula(t, nuc, k_id0))
+    livre = q1[G.R_LIVRE.interno]
+    primeiro = re.split(G.SEPARADOR_TERMOS, celula(t, livre, k_id0))
     primeiro = next((x.strip() for x in primeiro if x.strip()), "")
-    caso("termo duplicado na mesma camada",
-         edita_celula(t, nuc, k_id0, lambda c: f"{primeiro}, {c}"), R,
-         "repetido na mesma camada")
+    caso("termo duplicado na mesma linha do CT",
+         edita_celula(t, livre, k_id0, lambda c: f"{primeiro}, {c}"), R,
+         "repetido na mesma linha")
     caso("quadro com o separador antigo `\\- `",
-         edita_celula(t, nuc, k_id0,
+         edita_celula(t, livre, k_id0,
                       lambda c: " ".join(f"\\- {x.strip()}"
                                          for x in re.split(G.SEPARADOR_TERMOS, c))), P,
          ("separados por", "a vírgula"))
+    for nome, mutante, trecho in casos_forma_ct(t, d):
+        caso(nome, mutante, P, trecho)
 
     # --- questões
     caso("questão geral removida",
@@ -121,7 +184,7 @@ def mutacoes(ctx, g):
          troca_celula(t, L["string"][f2], 1, outra), P, "não casam")
     caso("termo da string fora do quadro",
          sub_na_linha(t, L["string"][f1], r'\("', '("termo inventado" OR "'), R,
-         "não consta do quadro")
+         "não consta das linhas")
 
     # --- critérios
     dim_recorte = ctx.config.valor("conferencia.dimensao_recorte")
@@ -385,6 +448,17 @@ def estrutural(ctx, g):
                 f"cada idioma pelo nome", mut != t and cod == Saida.OK and mesmos, f"{msgs[:1]}")
     else:
         g.falha("quadro com colunas de idioma em outra ordem: o protocolo tem um só idioma")
+
+    # Rótulos do CT sem a ênfase e com espaços nas pontas: lidos como as mesmas linhas.
+    mut = t
+    for q in L["quadro"].values():
+        for r in G.LINHAS_CT:
+            mut = troca_celula(mut, q[r.interno], 0, f"  {r.texto}  ")
+    cod, msgs = resultado(lambda: ctx.com_texto(mut).protocolo())
+    iguais = cod == Saida.OK and [f["linhas"] for f in ctx.com_texto(mut).protocolo()[
+        "tabelas"]] == [f["linhas"] for f in d["tabelas"]]
+    g.testa("rótulos do CT sem ênfase são lidos como as mesmas linhas", mut != t and iguais,
+            f"{cod.name} {msgs[:1]}")
 
     # Critério "Não aplicável": é lido e fica fora da seleção. O critério que declara o
     # recorte, com a ação trocada, deixa de declará-lo, e o recorte cai no padrão.

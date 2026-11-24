@@ -112,7 +112,8 @@ class Tabela(Elemento):
 
 
 class RotuloLinha(Elemento):
-    """Rótulo da primeira célula de uma linha de tabela; casa pelo início do texto."""
+    """Rótulo da primeira célula de uma linha de tabela; comparado inteiro, sem a ênfase
+    (`*`, `_`) e sem os espaços das pontas."""
 
     tipo = "rótulo de linha"
 
@@ -128,7 +129,16 @@ class RotuloLinha(Elemento):
         return f"rótulo de linha '{self.texto}' da {self.tabela.rotulo}"
 
     def forma(self):
-        return f"| {self.texto}… | …   (lido como `{self.interno}`)"
+        return f"| {self.texto} | …   (rótulo inteiro, com ou sem ênfase; lido como " \
+               f"`{self.interno}`)"
+
+    def casa(self, celula):
+        return rotulo_da_celula(celula) == self.texto
+
+
+def rotulo_da_celula(celula):
+    """O rótulo de uma primeira célula, sem a ênfase e sem os espaços das pontas."""
+    return re.sub(r"^[\s*_]+|[\s*_]+$", "", celula or "")
 
 
 class Marcador(Elemento):
@@ -304,23 +314,55 @@ D_MODO = Dominio("modo", P, S_INSTRUMENTOS, "Modo",
 MODO_MANUAL, MODO_AUTOMATICO = D_MODO.valores
 
 S_CONTROLE = Secao("controle", P, "Controle terminológico", 2)
+# Cada tabela do controle terminológico (CT) fica sob um título de nível 3 que a liga a uma
+# única faceta, com o mesmo número: `### CT2 (FCT2)`. O padrão casa todo título de nível 3
+# da seção; a forma do texto do título é FORMA_TITULO_CT.
+NIVEL_CT = 3
+F_TITULO_CT = FrasePadrao(
+    "titulo_ct", P, S_CONTROLE, f"{'#' * NIVEL_CT} CTn (FCTn)",
+    rf"^#{{{NIVEL_CT}}}[ \t]+(.*?)[ \t]*$",
+    descricao="um título por tabela, de nível 3, com uma única faceta; tabela sem título, "
+              "título fora da forma, faceta inexistente ou mais de uma faceta reprovam")
+FORMA_TITULO_CT = re.compile(r"(\S+?)\s*\(\s*(.*?)\s*\)")
+I_CT = Identificador("ct", P, S_CONTROLE, "CT", sequencia=False,
+                     descricao="CTn tem o número da faceta FCTn do título; CT repetido "
+                               "reprova")
+# Primeira célula do cabeçalho de cada CT: a coluna dos rótulos de linha.
+CAB_QUADRO = "Termo"
 T_QUADRO = Tabela(
-    "quadro", P, S_CONTROLE, ("FCTn", "<idioma>", "…"), modo="por_nome",
-    linhas="uma linha por camada; termos separados por vírgula",
-    descricao="uma tabela por faceta, com o identificador na primeira célula do cabeçalho; "
-              "as demais células nomeiam os idiomas, os mesmos em todas as tabelas, em "
-              "qualquer ordem; célula com o separador antigo `\\- ` reprova")
+    "quadro", P, S_CONTROLE, (CAB_QUADRO, "<idioma>", "…"), modo="por_nome",
+    linhas="uma linha por rótulo; termos separados por vírgula; célula vazia admitida",
+    descricao="uma tabela por faceta, logo abaixo do seu título CT; a primeira célula do "
+              f"cabeçalho é `{CAB_QUADRO}` (sem ênfase nem espaços nas pontas), e outra "
+              "primeira célula, inclusive a do cabeçalho antigo `| FCTn | … |`, reprova; as "
+              "demais células nomeiam os idiomas, os mesmos em todas as tabelas, em qualquer "
+              "ordem; rótulo de linha desconhecido e célula com o separador antigo `\\- ` "
+              "reprovam")
 SEPARADOR_TERMOS = r"\s*,\s*"
 # Forma antiga da lista de termos (`\- termo \- termo`): reprova, em vez de virar um termo só.
 SEPARADOR_ANTIGO = r"(?:^|\s)\\-\s"
-R_NUCLEO = RotuloLinha("nucleo", P, T_QUADRO, "Termos centrais", "nucleo",
-                       descricao="linha ausente reprova; célula vazia é reprovada pela "
-                                 "conferência")
-R_PROXIMOS = RotuloLinha("proximos", P, T_QUADRO, "Descritores potenciais", "proximos",
-                         descricao=R_NUCLEO.descricao)
-R_RELACIONADOS = RotuloLinha("relacionados", P, T_QUADRO, "Termos relacionados",
-                             "relacionados", descricao=R_NUCLEO.descricao)
-CAMADAS = (R_NUCLEO, R_PROXIMOS, R_RELACIONADOS)
+# As linhas classificam o termo pela natureza dele, e a linha de cada termo resulta da
+# decisão do ReT na planilha de validação (DECISAO_RET, abaixo).
+R_LIVRE = RotuloLinha("livre", P, T_QUADRO, "Termo livre", "livre",
+                      descricao="linha ausente ou repetida reprova")
+R_DESCRITORES = RotuloLinha("descritores", P, T_QUADRO, "Descritores correspondentes",
+                            "descritores", descricao=R_LIVRE.descricao)
+R_RELACIONADOS = RotuloLinha("relacionados", P, T_QUADRO,
+                             "Termos sinônimos ou relacionados", "relacionados",
+                             descricao="linha ausente ou repetida reprova; os termos desta "
+                                       "linha não entram na STR")
+LINHAS_CT = (R_LIVRE, R_DESCRITORES, R_RELACIONADOS)
+# Linhas que compõem a STR da faceta, na ordem da STR. "Termos sinônimos ou relacionados"
+# documenta a relação do termo com o vocabulário controlado e não entra na STR (decisão do
+# pesquisador, 2026-11-24).
+LINHAS_STR = (R_LIVRE, R_DESCRITORES)
+# Domínio de `decisao_ReT` na planilha de validação, sem distinção de caixa: decisão → linha
+# do CT. O vazio é "sem decisão". Entre os instrumentos do termo vale PRECEDENCIA_LINHA:
+# descritor em algum, senão sinônimo ou relacionado em algum, senão termo livre.
+DECISAO_RET = {"descritor": R_DESCRITORES.interno,
+               "sinônimo ou relacionado": R_RELACIONADOS.interno,
+               "termo livre": R_LIVRE.interno}
+PRECEDENCIA_LINHA = (R_DESCRITORES.interno, R_RELACIONADOS.interno, R_LIVRE.interno)
 
 S_STRINGS = Secao("strings", P, "Strings de busca por faceta", 2)
 T_STRINGS = Tabela("strings", P, S_STRINGS, ("ID String", "Faceta", "String"),
@@ -638,8 +680,6 @@ T_COBERTURA = TabelaFonte("fonte.cobertura", F, "cobertura",
                           descricao="§3, declaração de cobertura")
 CampoFonte(T_COBERTURA, "idiomas", "tabela de listas",
            descricao="FCTn = [idiomas]; faceta ou idioma desconhecido reprova")
-D_CAMADAS_F = CampoFonte(T_COBERTURA, "camadas", "texto", dominio=("todas", "nucleo"))
-CAMADAS_TODAS, CAMADAS_NUCLEO = D_CAMADAS_F.dominio
 PLURAL_EXPLICITO, PLURAL_LEMATIZACAO = "explícito", "pela lematização"
 D_PLURAL_F = CampoFonte(T_COBERTURA, "plural", "texto ou tabela",
                         dominio=(PLURAL_EXPLICITO, PLURAL_LEMATIZACAO),
@@ -881,7 +921,6 @@ ressalvas = []
 {sintaxe}
 {criterios}
 [cobertura]
-camadas = "todas"
 plural = "explícito"
 teto = "{pendente}"
 derivacoes = ["{pendente}"]

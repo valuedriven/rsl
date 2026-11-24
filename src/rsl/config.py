@@ -24,7 +24,7 @@ ESQUEMA = {
     "": ("protocolo",),
     "padroes": ("recorte_ano_min", "limiar_aderencia", "sensibilidade",
                 "divergencia_fidelidade"),
-    "conferencia": ("minimo_termos_string", "dimensoes_criterio", "dimensao_recorte"),
+    "conferencia": ("dimensoes_criterio", "dimensao_recorte"),
     "busca": ("ano_recencia", "amostra_sensibilidade"),
     "dados": ("registro", "validacao", "execucoes", "evidencia"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
@@ -49,6 +49,9 @@ RETIRADAS = {
                          "com grupo OR)" + _RETIRAR,
     "padroes.sonda": "a sonda é identificada pela composição (a única expressão formada "
                      "só pelas âncoras)" + _RETIRAR,
+    "conferencia.minimo_termos_string": "o mínimo de termos por string foi retirado, e o "
+                                        "tamanho da STR resulta do controle terminológico "
+                                        "(decisão de 2026-11-24)" + _RETIRAR,
     "documentos.ficha": "renomeada para `[documentos] procedimento`; renomeá-la, mantendo "
                         "o valor",
 }

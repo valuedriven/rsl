@@ -9,16 +9,20 @@ alterada) sem reimportar nada.
 
 from . import config as _config
 
+# Planilha de validação ainda não lida (None quer dizer "ausente").
+_NAO_LIDA = object()
+
 
 class Contexto:
     def __init__(self, cfg, texto=None, fichas=None, sementes=None, fontes=None,
-                 flexoes=None):
+                 flexoes=None, validacao=_NAO_LIDA):
         self.config = cfg
         self._texto = texto
         self._fichas = dict(fichas or {})
         self._sementes = sementes
         self._fontes = dict(fontes or {})
         self._flexoes = flexoes
+        self._validacao = validacao
         self._protocolo = None
 
     @classmethod
@@ -82,6 +86,21 @@ class Contexto:
             self._flexoes = arquivo.read_text(encoding="utf-8") if arquivo.exists() else ""
         return self._flexoes
 
+    @property
+    def texto_validacao(self):
+        """Texto da planilha de validação terminológica; None se não existe.
+        DadosInvalidos se existe e não pode ser lida como texto."""
+        if self._validacao is _NAO_LIDA:
+            from .erros import DadosInvalidos                       # noqa: PLC0415
+            arquivo = self.config.caminho("dados.validacao")
+            try:
+                self._validacao = (arquivo.read_text(encoding="utf-8-sig")
+                                   if arquivo.exists() else None)
+            except (OSError, UnicodeDecodeError) as e:
+                raise DadosInvalidos(f"{_config.relativo(arquivo)}: planilha de validação "
+                                     f"ilegível ({e})") from None
+        return self._validacao
+
     def protocolo(self):
         """O protocolo lido, uma vez por contexto (ProtocoloInvalido se ilegível)."""
         if self._protocolo is None:
@@ -93,7 +112,7 @@ class Contexto:
     def _copia(self, **mudou):
         atual = {"cfg": self.config, "texto": self._texto, "fichas": self._fichas,
                  "sementes": self._sementes, "fontes": self._fontes,
-                 "flexoes": self._flexoes}
+                 "flexoes": self._flexoes, "validacao": self._validacao}
         atual.update(mudou)
         return Contexto(**atual)
 
@@ -110,6 +129,10 @@ class Contexto:
 
     def com_flexoes(self, texto):
         return self._copia(flexoes=texto)
+
+    def com_validacao(self, texto):
+        """Cópia com a planilha de validação em memória; None: planilha ausente."""
+        return self._copia(validacao=texto)
 
     def com_sementes(self, texto):
         return self._copia(sementes=texto)

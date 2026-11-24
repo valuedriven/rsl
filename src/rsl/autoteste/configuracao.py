@@ -50,6 +50,10 @@ def casos(ctx, g):
     for chave in (c for c in C.RETIRADAS if c != "fichas"):
         testa(f"chave retirada `{chave}` na configuração",
               valida(cfg.com(chave, ["valor do autoteste"])), f"`{chave}`")
+    # Caso nomeado, e não só o laço acima: o laço percorre RETIRADAS e deixaria de ver a chave
+    # que voltasse ao esquema saindo de RETIRADAS.
+    testa("mínimo de termos por string, retirado, na configuração",
+          valida(cfg.com("conferencia.minimo_termos_string", 20)), "minimo_termos_string")
     testa("chave fora do esquema", valida(cfg.com("padroes.chave_inventada", 1)),
           "chave desconhecida")
     testa("faixa padrão invertida",

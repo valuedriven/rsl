@@ -442,3 +442,48 @@ O que não se alterou e por quê:
 
 - **Nenhum termo de busca mudou.** A diferença da regeneração ficou na linha da §5.
 - **Nenhuma sondagem foi registrada no projeto.** O registro só foi exercitado em cópias, fora da pasta corrente.
+
+## 2026-11-24 — Controle terminológico pela natureza do termo (change `controle-terminologico-por-natureza-do-termo`)
+
+O que estava e por que mudou: as linhas do controle terminológico classificavam o termo pela **distância conceitual** ao conceito central (núcleo, próximos, relacionados), e cada tabela se identificava pela primeira célula do cabeçalho. O pesquisador reestruturou a seção, e trocar só os rótulos faria o protocolo afirmar como descritor termo que nenhum instrumento validou, contra a regra do plano (`docs/01_plano.md`, riscos e M3/E1: termo sem consulta registrada é termo livre).
+
+O que passa a valer (decisões do pesquisador):
+
+1. **Título `### CTn (FCTn)`.** Cada tabela fica sob o seu título, o CT tem o número da faceta, e cada CT tem uma única faceta. A primeira célula do cabeçalho não é lida. Tabela sem título, título fora da forma e cabeçalho antigo `| FCTn | … |` reprovam. Alcance: **instrumento**.
+2. **Linhas "Termo livre", "Descritores correspondentes" e "Termos sinônimos ou relacionados".** Retificação, na implementação: o rótulo planejado era "Termos sinônimos e/ou relacionados", e o pesquisador manteve "ou", como já estava no protocolo. Alcance: **redação**.
+3. **Nomes internos `livre`, `descritores` e `relacionados`.** Alcance: **instrumento**.
+4. **Critério pela natureza do termo.** A linha resulta da `decisao_ReT` da planilha de validação, nos instrumentos planejados para a faceta e o idioma do termo: descritor em algum → "Descritores correspondentes"; senão, sinônimo ou relacionado em algum → "Termos sinônimos ou relacionados"; senão → "Termo livre". `status_proposto` não classifica. `decisao_ReT` tem domínio fechado (`descritor`, `sinônimo ou relacionado`, `termo livre` ou vazio, sem distinção de caixa), e valor fora dele reprova. Alcance: **método**.
+5. **Termo sem decisão do ReT vai para "Termo livre"** (regra do plano), e a célula vazia é admitida. Retificação: na exploração, o agente propôs antes que o termo pendente ficasse na linha atual, o que contrariava a regra do plano. Alcance: **método**.
+6. **Uma change só** para a forma e o critério. Alcance: **processo**.
+7. **Corte `camadas` retirado** da declaração de cobertura das fontes de procedimento. Toda base usa todas as linhas, e um corte por teto de caracteres, se voltar a ser necessário, será decidido sob o critério novo. Alcance: **instrumento**.
+8. **Planilha de validação ausente** gera pendência, e não reprova o termo em "Termo livre". O termo em outra linha reprova, porque o protocolo afirmaria uma classificação não verificada. Alcance: **instrumento**.
+
+Consequência no protocolo: sem planilha de validação, todo termo foi para "Termo livre" do seu CT e idioma, na ordem em que estava. **As linhas de descritores e de sinônimos ou relacionados vazias significam "não validado", e não "inexistente".** A reclassificação vem da validação terminológica (PD03).
+
+Também decidido pelo pesquisador: **o teste de aderência será refeito**, porque as STRs mudaram de conteúdo nesta data, além da ordem. Alcance: **busca**.
+
+O que não se alterou e por quê:
+
+- **Nenhuma decisão do ReT foi tomada nem simulada.** A validação terminológica continua por fazer (PD03).
+- **A tabela de instrumentos manteve `eric` e `brased` como `Manual`.** O pesquisador quer o modo `Automático` se for possível, mas nenhum dos dois tem cliente, e os termos de uso não foram conferidos.
+
+## 2026-11-24 — Ajustes da verificação da change `controle-terminologico-por-natureza-do-termo`
+
+O que estava e por que mudou: a STR era a união das três linhas do controle terminológico; a conferência exigia ao menos 20 termos por STR (`[conferencia] minimo_termos_string`); a primeira célula do cabeçalho de cada CT não era lida; e, na linha "Termo livre", as colunas en e es traziam termos sem par na coluna pt, que o pesquisador havia reduzido. Na verificação, o pesquisador decidiu:
+
+9. **A STR é composta só pelas linhas "Termo livre" e "Descritores correspondentes".** "Termos sinônimos ou relacionados" documenta a relação do termo com o vocabulário controlado e não entra na STR; termo dessa linha posto na STR reprova em `documentos conferir`. Alcance: **busca**.
+10. **Retirado o mínimo de termos por STR.** A chave `[conferencia] minimo_termos_string` sai do `config.toml` e, se voltar, reprova como chave retirada. Alcance: **instrumento**.
+11. **A primeira célula do cabeçalho de cada CT é `Termo`**, e outra reprova. Retifica, nesse ponto, a decisão de que a primeira célula não era lida. Alcance: **instrumento**.
+12. **En e es da linha "Termo livre" passam a conter só os equivalentes dos termos pt**, na ordem dos termos pt; os termos en e es sem par em pt saem do quadro e das STRs. Os equivalentes foram propostos pelo agente como tradução e não foram conferidos em fonte de autoridade. Alcance: **busca**.
+13. **Validação automática executada** em TBCI e UNESCO (`termos sondar`, `termos exportar`, `termos validar tbci`, `termos validar unesco`), em sequência, sem erro de acesso. A planilha `data/validacao_terminologica.csv` passa a existir, com as propostas da máquina (`status_proposto`) e a evidência bruta em `data/evidencia/`. Alcance: **instrumento**.
+
+14. **Retiradas de `docs/flexoes.toml` as exceções de flexão órfãs**, isto é, as de termo que não está em STR alguma nem em subconjunto ou forma curada de base alguma, depois da decisão 12. Decisão do pesquisador. Se um termo voltar a uma STR, a exceção volta com ele, e a geração reprova enquanto a exceção faltar ao termo indecidível. Alcance: **instrumento**.
+
+Também corrigido: o cliente do TBCI tomava o identificador do primeiro conceito da resposta da busca, e não o do item que casou com o termo; a evidência de TG, TE, TR e USE/UP podia vir de outro conceito. Corrigido antes da validação.
+
+O que não se alterou e por quê:
+
+- **Nenhuma `decisao_ReT` foi preenchida.** As propostas da máquina não classificam (decisão 4); todo termo continua em "Termo livre" até a decisão do ReT.
+- **ERIC Thesaurus e Brased/INEP não foram consultados**: são `Manual` (PD32).
+- **"Não localizado" não é ausência.** O casamento é por rótulo exato: o TBCI tem "sistemas de organização do conhecimento" e a UNESCO tem "Teaching methods", no plural, que não casam com as formas singulares do quadro.
+- **Nenhuma exceção de flexão de termo que continua nas STRs mudou.**

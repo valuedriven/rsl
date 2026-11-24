@@ -74,8 +74,8 @@ def _sem_flexao(*a, **k):
 def _termo_regular(d, fid, idioma):
     """Um termo da STR de `fid` em `idioma` com plural regular decidível."""
     tabela = next(f for f in d["tabelas"] if f["id"] == fid)
-    for camada in tabela["camadas"][idioma].values():
-        for t in camada:
+    for linha in tabela["linhas"][idioma].values():
+        for t in linha:
             if t in d["strings"][fid]["literais"] and " " in t:
                 try:
                     plural_por_regra(t, idioma)

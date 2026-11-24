@@ -10,7 +10,8 @@ FRONTEIRA DE USO (protocolo): este módulo RECUPERA e REGISTRA. Não decide.
   - nenhum termo é excluído, reescrito ou incorporado automaticamente;
   - termo não localizado NÃO é erro: é termo livre, e assim é classificado;
   - TR e TE revelados pela consulta entram como CANDIDATOS, nunca nas strings;
-  - a coluna `decisao_ReT` sai em branco: a decisão é do pesquisador, com o VT.
+  - a coluna `decisao_ReT` sai em branco: a decisão é do pesquisador, com o VT, e o seu
+    domínio é fechado (`decisao.py`): dela resulta a linha do termo no CT.
 
 O REGISTRO é a própria planilha de validação (`[dados] validacao`). Toda resposta bruta é
 gravada na pasta de evidência (`[dados] evidencia`), por instrumento; linha sem evidência
@@ -31,11 +32,12 @@ import time
 
 from .. import gramatica as G
 from ..config import relativo
-from ..erros import DadosInvalidos, FonteExterna, Uso
+from ..erros import DadosInvalidos, FonteExterna, Reprovado, Uso
 from ..leitura import instrumentos_do_termo
 from ..markdown import normaliza
 from ..saida import Saida
 from . import clientes
+from .decisao import fora_do_dominio
 from .planejamento import STATUS_MANUAL, estado_inicial
 
 CAMPOS_DECISAO = ("decisao_ReT", "justificativa_ReT", "data_decisao")
@@ -214,6 +216,12 @@ def cmd_importar(ctx, a=None):
                           ln["_v"].get("instrumento")): ln["_v"] for ln in linhas_}
     with planilha.caminho.open(encoding="utf-8-sig", newline="") as fh:
         lidas = list(csv.DictReader(fh, delimiter=";"))
+    # Decisão fora do domínio reprova antes de qualquer gravação: preservá-la seria levar
+    # adiante uma classificação que a conferência do CT não sabe ler.
+    invalidas = fora_do_dominio(lidas)
+    if invalidas:
+        raise Reprovado("planilha de validação com decisão do ReT fora do domínio; nada "
+                        "foi gravado:\n  - " + "\n  - ".join(invalidas))
     casadas, sem_casa, com_decisao = 0, [], 0
     for r in lidas:
         k = planilha.chave(r.get("faceta", ""), r.get("idioma", ""), r.get("termo", ""),

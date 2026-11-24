@@ -211,7 +211,6 @@ como = "não se aplica: critério só documental"
 
 # ------------------------------------------------------------------ §3 cobertura
 [cobertura]
-camadas = "todas"
 plural = "explícito"
 teto = "nenhum"
 derivacoes = ["morfologia"]

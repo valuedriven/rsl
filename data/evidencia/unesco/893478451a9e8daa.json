@@ -1,0 +1,350 @@
+{
+  "chave": "unesco|ontology",
+  "recuperado_em": "2026-11-24T12:30:52-03:00",
+  "payload": {
+    "consulta": "SELECT ?c ?tipo ?rotulo ?lang WHERE {\n  GRAPH <http://vocabularies.unesco.org/thesaurus/> {\n    { ?c skos:prefLabel ?l . BIND(\"prefLabel\" AS ?tipo) }\n    UNION\n    { ?c skos:altLabel ?l . BIND(\"altLabel\" AS ?tipo) }\n    FILTER(LCASE(STR(?l)) = \"ontology\")\n    ?c skos:prefLabel ?rotulo .\n    BIND(LANG(?rotulo) AS ?lang)\n  }\n} LIMIT 60",
+    "status_http": 200,
+    "resposta": {
+      "head": {
+        "vars": [
+          "c",
+          "tipo",
+          "rotulo",
+          "lang"
+        ]
+      },
+      "results": {
+        "bindings": [
+          {
+            "c": {
+              "type": "uri",
+              "value": "http://vocabularies.unesco.org/thesaurus/concept10081"
+            },
+            "tipo": {
+              "type": "literal",
+              "value": "prefLabel"
+            },
+            "rotulo": {
+              "type": "literal",
+              "xml:lang": "ar",
+              "value": "انطولوجيا"
+            },
+            "lang": {
+              "type": "literal",
+              "value": "ar"
+            }
+          },
+          {
+            "c": {
+              "type": "uri",
+              "value": "http://vocabularies.unesco.org/thesaurus/concept10081"
+            },
+            "tipo": {
+              "type": "literal",
+              "value": "prefLabel"
+            },
+            "rotulo": {
+              "type": "literal",
+              "xml:lang": "en",
+              "value": "Ontology"
+            },
+            "lang": {
+              "type": "literal",
+              "value": "en"
+            }
+          },
+          {
+            "c": {
+              "type": "uri",
+              "value": "http://vocabularies.unesco.org/thesaurus/concept10081"
+            },
+            "tipo": {
+              "type": "literal",
+              "value": "prefLabel"
+            },
+            "rotulo": {
+              "type": "literal",
+              "xml:lang": "es",
+              "value": "Ontología"
+            },
+            "lang": {
+              "type": "literal",
+              "value": "es"
+            }
+          },
+          {
+            "c": {
+              "type": "uri",
+              "value": "http://vocabularies.unesco.org/thesaurus/concept10081"
+            },
+            "tipo": {
+              "type": "literal",
+              "value": "prefLabel"
+            },
+            "rotulo": {
+              "type": "literal",
+              "xml:lang": "fr",
+              "value": "Ontologie"
+            },
+            "lang": {
+              "type": "literal",
+              "value": "fr"
+            }
+          },
+          {
+            "c": {
+              "type": "uri",
+              "value": "http://vocabularies.unesco.org/thesaurus/concept10081"
+            },
+            "tipo": {
+              "type": "literal",
+              "value": "prefLabel"
+            },
+            "rotulo": {
+              "type": "literal",
+              "xml:lang": "ru",
+              "value": "Онтология"
+            },
+            "lang": {
+              "type": "literal",
+              "value": "ru"
+            }
+          }
+        ]
+      }
+    },
+    "relacoes": {
+      "consulta": "SELECT ?rel ?alvo ?rot WHERE {\n  GRAPH <http://vocabularies.unesco.org/thesaurus/> {\n    VALUES ?rel { skos:broader skos:narrower skos:related skos:altLabel skos:scopeNote }\n    <http://vocabularies.unesco.org/thesaurus/concept10081> ?rel ?alvo .\n    OPTIONAL { ?alvo skos:prefLabel ?rot . FILTER(LANG(?rot) IN (\"en\",\"es\")) }\n  }\n} LIMIT 300",
+      "status_http": 200,
+      "resposta": {
+        "head": {
+          "vars": [
+            "rel",
+            "alvo",
+            "rot"
+          ]
+        },
+        "results": {
+          "bindings": [
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#broader"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept285"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "en",
+                "value": "Metaphysics"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#broader"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept285"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "es",
+                "value": "Metafísica"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept282"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "en",
+                "value": "Epistemology"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept282"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "es",
+                "value": "Epistemología"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept286"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "en",
+                "value": "Philosophy"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept286"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "es",
+                "value": "Filosofía"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept295"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "en",
+                "value": "Theology"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept295"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "es",
+                "value": "Teología"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept13409"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "en",
+                "value": "Semantics"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#related"
+              },
+              "alvo": {
+                "type": "uri",
+                "value": "http://vocabularies.unesco.org/thesaurus/concept13409"
+              },
+              "rot": {
+                "type": "literal",
+                "xml:lang": "es",
+                "value": "Semántica"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#altLabel"
+              },
+              "alvo": {
+                "type": "literal",
+                "xml:lang": "ar",
+                "value": "علم الوجود"
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#scopeNote"
+              },
+              "alvo": {
+                "type": "literal",
+                "xml:lang": "ar",
+                "value": "دراسة الخصائص الأساسية للوجود في حد ذاته بصرف النظر عن دراسة بعض أشياء موجودة محددة."
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#scopeNote"
+              },
+              "alvo": {
+                "type": "literal",
+                "xml:lang": "en",
+                "value": "The study of the essential characteristics of Being in itself apart from the study of particular existing things."
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#scopeNote"
+              },
+              "alvo": {
+                "type": "literal",
+                "xml:lang": "es",
+                "value": "Estudio de las características del Ser en si mismo, al margen de la existencia de otras cosas."
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#scopeNote"
+              },
+              "alvo": {
+                "type": "literal",
+                "xml:lang": "fr",
+                "value": "Étude des caractéristiques essentielles de l'Être en tant qu'Être, indépendamment de l'étude de choses existantes particulières."
+              }
+            },
+            {
+              "rel": {
+                "type": "uri",
+                "value": "http://www.w3.org/2004/02/skos/core#scopeNote"
+              },
+              "alvo": {
+                "type": "literal",
+                "xml:lang": "ru",
+                "value": "Изучение основ бытия в отличие от изучения существования отдельных вещей."
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

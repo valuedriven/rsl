@@ -101,6 +101,7 @@ def grupos():
         ("arquivo de sementes", sementes.casos),
         ("leitura estrutural que aprova", protocolo.estrutural),
         ("planejamento da validação", validacao.casos),
+        ("classificação do controle terminológico", validacao.classificacao),
         ("conferências dos arquivos alimentados", dados.casos),
         ("geração das strings", geracao.casos),
         ("cobertura por base, sobre a fonte", fichas.casos),

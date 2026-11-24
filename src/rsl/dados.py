@@ -372,7 +372,9 @@ def cmd_pendencias(ctx, a=None):
                           f"{CMD_REGISTRAR}")
 
     if not validacao.exists():
-        linhas.append(f"[validação] {relativo(validacao)} ausente — rode  {CMD_EXPORTAR}")
+        linhas.append(f"[validação] {relativo(validacao)} ausente: nenhum termo tem decisão do "
+                      f"ReT, e todo termo do controle terminológico fica em 'Termo livre' "
+                      f"até a validação — rode  {CMD_EXPORTAR}")
     else:
         with validacao.open(encoding="utf-8-sig", newline="") as fh:
             linhas_validacao = list(csv.DictReader(fh, delimiter=";"))
