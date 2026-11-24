@@ -3,7 +3,7 @@
 
 from . import gramatica as G
 from .erros import ProtocoloInvalido
-from .fichas import ficha, forma_execucao
+from .fichas import forma_execucao
 from .leitura import referencia
 from .saida import Saida
 
@@ -31,17 +31,17 @@ def _legivel(valor):
 
 
 def execucao_das_fichas(ctx, d):
-    """Forma de execução de cada base, com origem no procedimento de busca: (nome, valor, origem).
+    """Forma de execução de cada base, com origem na fonte: (nome, valor, origem).
 
-    Procedimento de busca ilegível nesse ponto aparece como tal, sem derrubar a exibição das demais.
+    Fonte ilegível nesse ponto aparece como tal, sem derrubar a exibição das demais.
     """
     saida = []
     for b in d["bases"]:
         try:
-            valor = forma_execucao(ficha(ctx, d, b["sigla"]), b["ficha"])
+            valor = forma_execucao(ctx, d, b["sigla"])
         except (ProtocoloInvalido, OSError) as e:
             valor = f"ILEGÍVEL — {e}"
-        saida.append((f"execucao.{b['sigla']}", valor, f"procedimento de busca {b['ficha']}"))
+        saida.append((f"execucao.{b['sigla']}", valor, f"fonte {b['fonte']}"))
     return saida
 
 

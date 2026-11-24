@@ -8,9 +8,9 @@ sigla, termo ou valor do protocolo vigente.
 import re
 
 from .. import gramatica as G
-from ..fichas import _expressoes_em_negrito, consultas_curadas
 from ..markdown import celulas, desescapa, linha_do_cabecalho, lista
 from ..saida import Saida
+from ..conferencia import conferir
 from . import conferir_texto, resultado
 from .textos import (cabecalho, celula, coluna, edita_celula, linhas, monta_linha,
                      insere_depois, remove_coluna, remove_linhas, remove_tabela, sub_na_linha,
@@ -235,9 +235,9 @@ def mutacoes(ctx, g):
              troca_celula(t, L["base"][bases[-1]], coluna(t, cab_b, c_sigla),
                           d["bases"][0]["sigla"]), P, "sigla repetida")
     sigla_ult = d["bases"][-1]["sigla"]
-    caso("sigla de base sem procedimento de busca",
-         troca_celula(t, L["base"][bases[-1]], coluna(t, cab_b, c_sigla), sigla_ult + "x"), P,
-         f"procedimento de busca da sigla '{sigla_ult}x' não existe")
+    # Sigla trocada no protocolo e no arquivo de sementes: falta a fonte da sigla nova.
+    sem_fonte = troca_celula(t, L["base"][bases[-1]], coluna(t, cab_b, c_sigla),
+                             sigla_ult + "x")
     caso(f"coluna {c_sigla} retirada da tabela de bases",
          remove_coluna(t, cab_b, coluna(t, cab_b, c_sigla)), P, f"falta a coluna ['{c_sigla}']")
     caso("tabela de bases ausente", remove_tabela(t, cab_b), P, "tabela ausente")
@@ -293,6 +293,10 @@ def mutacoes(ctx, g):
 
     for nome, mutante, codigo, trecho in casos:
         g.espera(nome, mutante, t, executa, codigo, trecho)
+    sementes_x = ctx.texto_sementes.replace(f'"{sigla_ult}"', f'"{sigla_ult}x"')
+    g.espera("sigla de base sem fonte do procedimento", sem_fonte, t,
+             lambda m: conferir(ctx.com_texto(m).com_sementes(sementes_x)), P,
+             (f"'{sigla_ult}x': fonte inexistente",))
 
 
 def precedencia(ctx, g):
@@ -381,21 +385,6 @@ def estrutural(ctx, g):
                 f"cada idioma pelo nome", mut != t and cod == Saida.OK and mesmos, f"{msgs[:1]}")
     else:
         g.falha("quadro com colunas de idioma em outra ordem: o protocolo tem um só idioma")
-
-    # Forma curada: símbolo gráfico sem FCTn não atribui faceta.
-    f1 = d["facetas"][0]["id"]
-    curadas = consultas_curadas("#### Grupo\n| n | Consulta | Facetas |\n| - | - | - |\n"
-                                f"| 1 | `consulta` | 🟦 |\n| 2 | `consulta` | {f1} |\n")
-    g.testa("consulta curada marcada só por símbolo fica sem faceta; FCTn atribui",
-            "facetas" not in curadas[0] and curadas[1].get("facetas") == [f1], repr(curadas))
-
-    # Forma longa: representação não executada, marcada para ficar fora da conferência
-    # de bloco que recusa a derivada padrão.
-    eb = sorted(d["expressoes"])[0]
-    longa = _expressoes_em_negrito(f"**{eb}** geral\n\n```\nconsulta\n```\n")
-    g.testa("forma longa é derivada marcada e não entra na conferência de bloco",
-            eb in longa and longa[eb]["estatuto"] == "derivada"
-            and longa[eb].get("forma_longa") is True, repr(longa))
 
     # Critério "Não aplicável": é lido e fica fora da seleção. O critério que declara o
     # recorte, com a ação trocada, deixa de declará-lo, e o recorte cai no padrão.

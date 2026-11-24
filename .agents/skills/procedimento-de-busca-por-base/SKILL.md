@@ -1,6 +1,6 @@
 ---
 name: procedimento-de-busca-por-base
-description: Cria ou atualiza o procedimento de busca de uma base (docs/procedimentos_busca_<sigla>.md, sigla da tabela "Bases de dados" do protocolo) a partir do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, compõe strings, expressões, forma de execução, variantes, conjunto-semente e ressalvas, declara o que a forma da base muda no vocabulário e confere o procedimento contra o protocolo. Use ao montar o procedimento de busca de uma base nova, ao propagar emenda do protocolo aos procedimentos de busca, ao incorporar sintaxe recém-verificada, ao auditar se um procedimento está completo e na forma que a conferência lê, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre o procedimento e o vocabulário do protocolo.
+description: Cria ou atualiza o procedimento de busca de uma base — escreve a fonte do procedimento (pasta da base, `[documentos] procedimento_fonte`; sigla da tabela "Bases de dados" do protocolo) e gera o procedimento a partir dela e do protocolo — apura a sintaxe da base em fonte oficial e por medição, leva cada critério de elegibilidade ao lugar em que a base o permite aplicar, declara a forma da base (campo, aspas, proximidade, partição), o roteiro de sondagens, a forma de execução, as variantes, o conjunto-semente e as ressalvas, e confere o procedimento gerado contra o protocolo. Use ao montar o procedimento de busca de uma base nova, ao propagar emenda do protocolo aos procedimentos de busca, ao incorporar sintaxe recém-verificada, ao auditar se uma fonte está completa, ao decidir se um termo ausente da string é omissão ou redução declarada, e ao tratar de divergência entre o procedimento e o vocabulário do protocolo.
 ---
 
 # Procedimento de busca por base
@@ -15,8 +15,29 @@ outra usa só o núcleo e executa por consultas curadas. Tratá-las como cópias
 sintaxe de uma com o vocabulário suposto de outra.
 
 > **Duas fontes, com papéis distintos.** O **vocabulário** é do protocolo; a **forma** é da
-> procedimento de busca da base. Mudar uma sem revisitar a outra é defeito que só aparece depois de a busca
-> já ter sido executada.
+> fonte do procedimento da base. Mudar uma sem revisitar a outra é defeito que só aparece
+> depois de a busca já ter sido executada.
+
+## Fonte e procedimento: escreve-se a fonte, gera-se o procedimento
+
+O procedimento de busca (`docs/procedimentos_busca_<sigla>.md`) é **saída de geração** e
+**nunca se edita**. Edita-se a **fonte** da base — a pasta que `[documentos]
+procedimento_fonte` aponta —, com dois tipos de arquivo:
+
+- `procedimento.toml`, de esquema fechado: sintaxe e roteiro de sondagens, critérios,
+  declaração de cobertura, composição, execução, regras de montagem, sementes e ressalvas;
+- fragmentos de prosa com nome fixo (`como_executar.md`, obrigatório; `variantes.md`,
+  `estrategia_de_proximidade.md`, `notas_sintaxe.md`, `notas_execucao.md`,
+  `notas_sementes.md`), que entram em lugar fixo do procedimento.
+
+O esquema, os domínios, os fragmentos admitidos e o que reprova cada um estão em `python3 -m
+rsl documentos gramatica`; não se repetem aqui. Os blocos de termos (strings e expressões)
+**não se escrevem**: o gerador os compõe da STR do protocolo, com a flexão de número
+(`flexao-por-base`) e a forma declarada na fonte.
+
+A ordem é sempre: quadro terminológico → `strings gerar` → fonte → `procedimentos gerar`
+(ensaio, revisado) → `procedimentos gerar --gravar` → `documentos conferir`. O procedimento
+editado à mão reprova na conferência por igualdade; a correção é na fonte.
 
 ## O procedimento de busca é operacional
 
@@ -27,21 +48,18 @@ Quem o abre para executar não deve ter de separar a instrução do racional.
   "retirado em", sem forma anterior, sem retornos vencidos, sem numeração explicada por
   consulta removida. O histórico vai a `data/historico.md`; o estado da execução, ao
   registro de execução.
-- **Sem cabeçalho.** O arquivo começa pelo título `# Strings de busca — <base>` e segue
-  direto para a seção 1.
-- **Sem informação de exclusão.** Termo retirado por emenda **não se lista** no procedimento: o
-  leitor o desconta por construção, porque o vigente é a string (STR) do protocolo e o termo
-  que só consta do quadro terminológico não é esperado na base. Termo
-  alcançado pela forma radical também não se lista: o leitor calcula o alcance. A tabela de
-  redução só existe quando a **própria base** deixa fora da string um termo vigente, uma
-  linha por termo, motivo curto.
+- **Sem informação de exclusão.** Termo retirado por emenda **não se lista** na fonte: o
+  vigente é a string (STR) do protocolo, e o termo que só consta do quadro terminológico não
+  é esperado na base. Termo alcançado pela forma radical também não se lista. `[[reducao]]`
+  só existe quando a **própria base** deixa fora da string um termo vigente, uma linha por
+  termo, motivo curto.
 - **Sem justificativa.** Regra, disparo, forma e limiar — não o porquê. O racional de uma
   decisão está no protocolo ou no histórico; o procedimento não o repete. Uma frase de contexto só
   entra quando sem ela a instrução seria executada errado.
-- **Número em prosa não entra** se o leitor o calcula (quantos termos, quantas consultas,
-  comprimento de cada consulta): a cópia defasa.
+- **Número em prosa não entra** nos fragmentos se o gerador o calcula (quantos termos,
+  quantas consultas, comprimento de cada consulta): a cópia defasa.
 
-Esta skill cuida da **procedimento de busca inteiro**: o que pesquisar, o que registrar, em que ordem montar,
+Esta skill cuida do **procedimento de busca inteiro**, pela fonte: o que pesquisar, o que registrar, em que ordem montar,
 o que a forma da base pode mudar no vocabulário e como conferir. A lógica das cinco
 expressões é de `expressoes-de-busca`; a execução e o registro dos retornos, de
 `execucao-da-busca`. Ler a que couber antes do passo correspondente.
@@ -50,9 +68,9 @@ expressões é de `expressoes-de-busca`; a execução e o registro dos retornos,
 
 | Operação | Disparo | O que muda no procedimento |
 | --- | --- | --- |
-| **Procedimento novo** | base nova nas fontes do protocolo | tudo; exige a base já registrada no protocolo |
+| **Procedimento novo** | base nova nas fontes do protocolo | tudo; exige a base já registrada no protocolo; começa por `python3 -m rsl procedimentos iniciar <sigla>`, e a lista de marcas `PENDENTE` da fonte criada é a lista de trabalho |
 | **Propagação de emenda** | mudou vocabulário, expressão, critério ou recorte no protocolo | as seções afetadas; mudança que altere a recuperação é emenda de busca |
-| **Sintaxe nova** | documentação consultada ou sondagem medida | seção 1 e o que dela depende |
+| **Sintaxe nova** | documentação consultada ou sondagem registrada | `[[sintaxe]]` e o que dela depende |
 | **Auditoria** | pedido de revisão ou divergência encontrada | nada, até o pesquisador decidir; relatar |
 
 **Quando o procedimento divergir do protocolo**, identificar primeiro o que mudou:
@@ -85,29 +103,35 @@ desde a última leitura, e essa edição é o ponto de partida:
 4. O histórico: decisões já tomadas sobre esta base — reduções, variantes adotadas, defeitos
    que já ocorreram.
 5. O registro de execução da base: sondagens medidas, estado da interface, retornos.
-6. O procedimento de busca atual da base, se existir, e **o de outra base** como referência de
-   estrutura — sem lhe copiar a sintaxe.
+6. A fonte atual da base, se existir, e **a de outra base** como referência de estrutura —
+   sem lhe copiar a sintaxe. O procedimento gerado mostra o resultado, não o que se edita.
 
-## Passo 1 — apurar a sintaxe da base
+## Passo 1 — apurar a sintaxe da base: `[[sintaxe]]` e `[[sondagens]]`
 
-A seção 1 do procedimento é uma tabela **elemento · situação**. A fonte se diz uma vez, acima da
-tabela, quando todo o documento se apoia numa só fonte; ganha coluna própria quando as fontes
-diferem de elemento para elemento. Cada elemento tem um de quatro estados, e o estado é o
-que se registra:
+Cada elemento de sintaxe é uma entrada de `[[sintaxe]]` com **categoria** (as categorias
+mínimas estão no domínio da gramática; toda base tem ao menos um elemento de cada) e
+**situação**, que é o que se registra:
 
-| Estado | Evidência exigida |
+| Situação | Evidência exigida |
 | --- | --- |
-| **Verificado em fonte oficial** | página de ajuda ou documentação do provedor; no procedimento, o título da página; a data da consulta, no registro de execução |
-| **Verificado em fonte secundária** | material de terceiro — treinamento, guia de biblioteca; declarar como secundário |
-| **Verificado por medição** | sondagem registrada com consulta, retorno e captura, no registro de execução |
-| **Não verificado** | escreve-se assim; nunca se presume pela documentação de outra base |
+| `oficial` | página de ajuda ou documentação do provedor; em `fonte`, o título da página |
+| `secundaria` | material de terceiro — treinamento, guia de biblioteca |
+| `medicao` | sondagem ou execução registrada, citada em `citacao = "BDn/<id>"` da própria base |
+| `nao_verificado` | com `sondagem = "SDn"` do roteiro, ou `sem_sondagem` com o motivo |
+| `inexistente` | a fonte da ausência; não localizar não é não existir |
 
-**Toda menção ao arquivo de registro de execução nomeia a execução.** Escrever o caminho do
-registro — `data/registro_execucao.json` — em qualquer linha do procedimento, em tabela ou em prosa,
-só é correto junto da citação `(BDn/<id>)`, com `BDn` da própria base e a execução existente
-no registro; a conferência dos dados reprova o procedimento sem esse lastro, e só aquela base.
-Instrução que apenas manda registrar diz "registro de execução", sem o caminho. O estado
-**Verificado por medição** exige essa citação; sem ela, o estado é **Não verificado**.
+**Toda menção ao registro de execução nomeia a execução ou a sondagem** `(BDn/<id>)`, com
+`BDn` da própria base e o `id` existente no registro; a conferência dos dados reprova a fonte
+sem esse lastro, e só aquela base. Instrução que apenas manda registrar diz "registro de
+execução", sem o caminho.
+
+**Roteiro de sondagens.** Todo elemento `nao_verificado` que se possa testar ganha uma
+sondagem em `[[sondagens]]`: objetivo, pré-requisitos, consultas de controle e de teste,
+passos, o que observar, leituras (uma delas inconclusiva) e evidência. O desenho segue a
+skill `sondagens-de-sintaxe`. O resultado se registra pelo comando do projeto (sinopse em
+`docs/procedimentos.md`), que imprime a mudança a aplicar na fonte; o elemento passa a
+`medicao` com a citação, e a fonte se regenera. Regra de montagem que a composição
+pressupõe vai a `[[regras_de_montagem]]`, com a mesma exigência de situação.
 
 **Documentação não é comportamento.** Bases já contradisseram a própria documentação —
 curinga que devolve zero, operador que zera o retorno quando há grupo, teto de retorno não
@@ -125,13 +149,11 @@ fonte da ausência:
 - **truncamento e curinga**: símbolo, mínimo de caracteres, e se o curinga desliga a
   lematização;
 - **lematização**: plural regular, irregular, idiomas em que é documentada — e, até ser
-  **medida na primeira execução da base** (sonda do singular contra o plural, registrada e
-  citada `(BDn/<id>)` na linha "Lematização" da seção 1), o estado é **Não verificado** e o
-  procedimento declara `plural: explícito`;
+  **medida** por sondagem registrada (`flexao-por-base`), o elemento é `nao_verificado` e a
+  fonte declara `plural = "explícito"`;
 - **proximidade**: operador, distância padrão, se aceita grupos de cada lado;
 - **agrupamento**: parênteses, mistura de campos num grupo, grupo isolado;
-- **limites**: teto de caracteres da consulta — que alimenta o parâmetro `teto de
-  caracteres` da declaração de cobertura —, de conjuntos por sessão, de **retorno exibido** e
+- **limites**: teto de caracteres da consulta — que alimenta `teto` em `[cobertura]` —, de conjuntos por sessão, de **retorno exibido** e
   de **exportação**;
 - **filtros**: ano, idioma, tipo documental, revisão por pares, texto completo — e para cada
   um **se vai na consulta ou só na interface**, e se convive com o resto da sintaxe;
@@ -148,16 +170,19 @@ que não abriu é pendência registrada, nunca "a base não tem".
 
 ## Passo 2 — levar cada critério de elegibilidade à base
 
-A seção 2 é uma tabela com **todos** os critérios do protocolo, inclusive os que a base não
-aplica. Para cada um, um de quatro destinos e o *como*; a razão, quando houver, vai ao
-histórico, não ao procedimento:
+`[[criterios]]` cobre **todos** os critérios do protocolo, inclusive os que a base não
+aplica (um ou mais IDs por entrada). Para cada um, um destino e o *como*; a razão, quando
+houver, vai ao histórico, não à fonte:
 
 | Destino | Quando | Exemplo de razão |
 | --- | --- | --- |
-| **na consulta** | a sintaxe o expressa e convive com o resto | cláusula de ano verificada |
-| **no filtro da interface** | a base só o oferece na página, ou a cláusula quebra a consulta | operador de ano que zera consulta com grupo |
-| **dispensado pela cobertura da base** | a base, por constituição, já satisfaz o critério | base só de artigos de periódico; base de um só idioma |
-| **não na busca** | critério de leitura | adequação temática, texto completo, tipos excluídos na 2ª filtragem |
+| `consulta` | a sintaxe o expressa e convive com o resto; exige `clausula`, a única fonte do filtro nos blocos | cláusula de ano verificada |
+| `ancora` | o critério se aplica pela faceta âncora | domínio de aplicação |
+| `interface` | a base só o oferece na página, ou a cláusula quebra a consulta | operador de ano que zera consulta com grupo |
+| `variante` | cláusula prevista numa variante; exige `clausula` | idioma, depois de sondado |
+| `aproximado` | a busca o aproxima, e a triagem decide | inclusão temática |
+| `dispensado` | a base, por constituição, já satisfaz o critério | base de um só idioma |
+| `nao` | critério de leitura | adequação temática, texto completo, tipos excluídos na 2ª filtragem |
 
 Três regras:
 
@@ -167,13 +192,13 @@ Três regras:
 - **Critério de domínio vai por âncora**, não por filtro de categoria; categoria de assunto
   é camada de precisão, último recurso, declarada no relatório.
 - **Dispensar um critério ou movê-lo para a interface é decisão registrada** no histórico,
-  com o que se perde; no procedimento fica só o destino e o *como*. Onde há filtro de ano na
+  com o que se perde; na fonte fica só o destino e o *como*. Onde há filtro de ano na
   consulta e na página, o ano confere-se no **retorno**.
 
-## Passo 3 — strings por faceta e declaração de cobertura
+## Passo 3 — declaração de cobertura e composição
 
 O vocabulário vem do protocolo; a forma da base decide o resto, e toda mudança se declara
-no procedimento, nunca na memória de quem executa.
+na fonte, nunca na memória de quem executa. Os blocos se geram.
 
 **O que a forma pode mudar**, sempre declarado: **campo** (tópico, título-resumo-palavras-
 chave, título, resumo, descritor); **proximidade** e a distância medida; **truncamento** — há
@@ -194,46 +219,41 @@ ou lista curada executada consulta a consulta.
 - **termo que não derive do protocolo** — palavra nova só com decisão registrada, e isso vale
   também para variantes, contingências e camadas.
 
-**A declaração de cobertura** é tabela legível por máquina, com cinco parâmetros —
-**idiomas** por faceta, **camadas** (integral ou núcleo), **plural**, **teto de caracteres** e
-**derivações** — e, só quando a base deixa fora da string um termo vigente (da STR do
-protocolo), a **redução** termo a termo. Termo fora da STR e termo alcançado pela forma
-radical não entram na redução: o leitor os trata.
+**A declaração de cobertura** é `[cobertura]`: `idiomas` por faceta, `camadas` (`todas` ou
+`nucleo`), `plural`, `teto` e `derivacoes` — e, só quando a base deixa fora da string um
+termo vigente (da STR do protocolo), `[[reducao]]` termo a termo. Termo fora da STR e termo
+alcançado pela forma radical não entram na redução.
 
-**Parâmetros da geração da busca.** É aqui, e não na skill, que a base difere das outras.
-`plural` e `teto de caracteres` governam a composição: a string e as consultas se montam a
-partir da STR aplicando o valor declarado, e `documentos conferir` confere o resultado contra ele. Base
-nova ou sintaxe recém-medida muda o valor do parâmetro, nunca uma regra escrita para uma
-base só.
+**Parâmetros da geração.** É aqui, e não na skill nem no código, que a base difere das
+outras. A base nova ou a sintaxe recém-medida muda o valor do parâmetro, nunca uma regra
+escrita para uma base só.
 
-- `plural` diz quem alcança o plural: `explícito` — a string traz as duas formas de número,
-  ou um truncamento que as alcance — ou `pela lematização` — a base o alcança sozinha. `pela
-  lematização` só vale com a linha "Lematização" da seção 1 **verificada por medição** e
-  com a execução citada `(BDn/<id>)`; sem isso, `documentos conferir` reprova a base. Em `explícito`,
-  `documentos conferir` relata, sem reprovar, os termos numa só forma de número: substantivo não
-  contável não tem plural de uso; o agente propõe o plural termo a termo e o pesquisador decide.
-- `teto de caracteres` é o comprimento máximo de cada consulta executável, em caracteres
-  do bloco tal como se cola na interface: um número inteiro (`1400` ou `1.400`) ou
-  `nenhum`. Com número, a consulta que passa dele se particiona sem retirar termo
-  (`expressoes-de-busca`), e `documentos conferir` reprova a base em que alguma passe. Com `nenhum`,
-  `documentos conferir` relata a maior consulta. A origem do número — medido, documentado ou regra de
-  bolso — fica na linha "Comprimento máximo da consulta" da seção 1. Sem medição, o teto é
-  escolha conservadora proposta ao pesquisador. Valor alto demais aparece como recusa da
-  interface; valor baixo demais custa partição, não recall.
+- `plural` diz quem alcança o plural, com valor único ou por idioma: `explícito` — o gerador
+  acrescenta a forma de número por regra e pelas exceções declaradas (`flexao-por-base`) —
+  ou `pela lematização` — a base o alcança sozinha, e isso exige o elemento de
+  `lematizacao` medido e citado para aquele idioma; sem isso, `documentos conferir` reprova
+  a base. O termo que a regra não decide reprova a geração até ter exceção declarada.
+- `teto` é o comprimento máximo de cada consulta, em caracteres do bloco tal como se cola na
+  interface: um inteiro ou `"nenhum"`. Com número, o gerador parte a expressão sem retirar
+  termo, mantendo as âncoras íntegras; com `execucao.forma = "unica"`, partição necessária
+  reprova. Com `"nenhum"`, `documentos conferir` relata a maior consulta. A origem do número
+  — medido, documentado ou regra de bolso — fica no elemento de `limite_consulta`.
 - `morfologia` reconhece flexão de número e gênero, não lematização.
 - `radical` declara que um termo da string alcança os termos do protocolo que o **contêm**
   por inteiro e na mesma ordem: `ontology` alcança `domain ontology`, mas
   `"ontology engineering"` não alcança `ontological engineering`. É regra declarada, não
-  equivalência, e vale só onde o comportamento medido da base a sustenta.
+  equivalência, e vale só onde o comportamento medido da base a sustenta. A forma radical
+  que substitui a STR de uma faceta vai a `[[radical]]`.
 - **Toda linha da redução tem motivo verdadeiro e curto** — "redução desta base" basta;
   motivo que ainda não é decisão se escreve com a palavra "pendente", que o relato de
   pendências lê. O argumento da redução vai ao histórico.
 
-**Compor por construção, não por digitação.** Strings de dezenas de termos copiadas à mão
-perdem termo sem aviso. Montá-las a partir do quadro terminológico lido do protocolo — com o
-leitor do projeto, num roteiro descartável no diretório temporário, ou com conferência termo
-a termo — e só depois aplicar a forma da base. O que se retira por decisão da
-base fica na redução declarada; o resto se confere pelo leitor, não pela prosa.
+**Composição.** `[composicao]` declara as aspas (em todo termo ou só na locução), a
+proximidade entre as âncoras e se a disjunção de grupos vai na mesma consulta ou em
+consultas separadas; `[[composicao.facetas]]` dá, por faceta, o campo literal e se ele
+envolve o grupo ou prefixa cada termo. Campo diferente por parte da faceta (título para a
+STR inteira, resumo para um subconjunto específico) vai a `[[consultas_de_campo]]` e a
+`[[subconjuntos]]`; o subconjunto só leva termos da STR da faceta.
 
 **Decisões metodológicas desta seção são do pesquisador**: usar só o núcleo, restringir
 idiomas, reduzir a radicais, mover parte da faceta para outro campo. O agente propõe com a
@@ -243,24 +263,20 @@ esperado em recall, e pede a decisão.
 ## Passo 4 — expressões, forma de execução e variantes
 
 - As **cinco expressões** mantêm a composição e a contenção do protocolo
-  (`expressoes-de-busca`). Proximidade e filtros, se usados, valem **para todas**.
-- Cada expressão que se executa — a executada, as de fidelidade e a sonda — é **bloco
-  literal único**, com as âncoras em proximidade inline. Não se definem conjuntos `#n`: a
-  numeração é atribuída pela sessão e não se reproduz a partir do procedimento. O bloco é o que se
-  submete; não há receita de montagem.
-- A **segunda cópia** — o bloco contra a seção 3 — não é tolerada por convenção: é conferida.
-  O conjunto de termos do bloco tem de ser o das strings das facetas declaradas; termo
-  defasado ou estranho reprova a conferência daquela base.
-- Cada expressão declara o seu **estatuto** (executada e exportada, teste de fidelidade,
-  derivada localmente, sonda de sensibilidade) e as **facetas** que compõe. Expressão
-  derivada que não se executa não leva bloco; bloco presente na derivada padrão reprova a
-  conferência, e a forma longa é exceção declarada.
-- **Forma de execução**: única, particionada em consultas de campo único unidas por
-  deduplicação, ou lista curada executada consulta a consulta. Partição tem de ser exata:
-  as mesmas âncoras em todas as partes. Lista curada não lê as facetas, e o procedimento diz isso.
+  (`expressoes-de-busca`); o gerador as compõe, com proximidade e filtros iguais em todas.
+  `[[execucao.expressoes]]` dá o título de cada uma e, só quando difere do papel lido do
+  protocolo, o `estatuto` (executada, fidelidade, derivada, sonda). Expressão derivada não
+  leva bloco.
+- **Forma de execução** (`[execucao] forma`): `unica`, `particionada` (o gerador parte pelo
+  teto, com as mesmas âncoras em todas as partes) ou `curada`, com as consultas escritas à
+  mão em `[[curadas]]`, cada uma com as facetas que compõe. A forma curada é a única parte em
+  que termos se escrevem à mão, e o termo só no singular nela reprova.
+- **Regras de montagem** que a base impõe (grupo que exige condição externa, campo que não
+  se mistura num grupo) vão a `[[regras_de_montagem]]`, com situação e sondagem.
 - **Estratégia de proximidade**, quando a base tem operador de proximidade ou quando a
-  expressão o usa: subseção `### Estratégia de proximidade` na seção 4. É discussão, não
-  forma executável: o leitor a ignora, e bloco cercado nela não se executa nem se confere.
+  expressão o usa: fragmento `estrategia_de_proximidade.md`, que o gerador põe na seção 4.
+  É discussão, não forma executável: bloco cercado nele não entra no derivado, não se
+  executa nem se confere.
   Discute, com o estado de verificação de cada afirmação:
   - **o que a proximidade restringe**: entre que grupos se aplica (as âncoras, uma âncora e
     uma temática) e que ruído pretende cortar. Proximidade sem ruído identificado é
@@ -277,80 +293,44 @@ esperado em recall, e pede a decisão.
     de fidelidade diz se a derivação local reproduz a expressão executada com proximidade;
   - **o que fica para o pesquisador**: usar ou não a proximidade, e com que distância. O
     agente propõe com a medida e o custo esperado.
-- **Como executar**: passos numerados, do controle da sessão ao registro, com o comando do
-  projeto para registrar a execução.
-- **Variantes previstas**: cada uma com o **disparo** (o que se observa para adotá-la), a
+- **Como executar** (`como_executar.md`): passos numerados, do controle da sessão ao
+  registro, com o comando do projeto para registrar a execução. Sem contagem de consultas:
+  o gerador a mostra.
+- **Variantes previstas** (`variantes.md`, o único fragmento com subtítulos `####`): cada
+  uma com o **disparo** (o que se observa para adotá-la), a
   **forma** e, quando houver, o limiar ou a exigência de emenda — em uma ou duas frases.
-  Quando a variante muda a forma de execução, a emenda declara `- Execução:` com o novo
-  valor e escreve as partes literais. Nenhuma variante se adota por reduzir o número;
+  Quando a variante muda a forma de execução, a emenda muda `[execucao] forma` na fonte. Nenhuma variante se adota por reduzir o número;
   mede-se contra o conjunto-semente.
   Consulta removida sai da tabela sem nota; os identificadores das demais não mudam.
 
 ## Passo 5 — conjunto-semente e ressalvas
 
-- **Conjunto-semente**: as sementes que o protocolo atribui a esta base, com identificador,
-  DOI ou outro identificador **conferido na fonte**, e o procedimento em duas etapas —
-  indexação primeiro, recuperação depois. Contagens **não se transcrevem**: leem-se do
-  protocolo. O **estado** da aderência não entra no procedimento: está no registro de execução.
-- **Ressalvas**: só o que muda a execução ou o relato — estatuto dos termos, o que foi
+- **Conjunto-semente**: o gerador lista as sementes que o arquivo de sementes atribui a esta
+  base, com o DOI de lá; a fonte só acrescenta a observação por semente (`[[sementes]]`) e,
+  quando preciso, `notas_sementes.md`. O **estado** da aderência não entra: está no registro
+  de execução.
+- **Ressalvas** (`ressalvas`, uma por item): só o que muda a execução ou o relato — estatuto dos termos, o que foi
   verificado só em fonte secundária, o que a base não cobre e quem cobre —, um item curto
   cada.
 
-## Contrato de forma — o que a conferência lê
+## Forma: o que a gramática exige
 
-O procedimento de busca é fonte autoral e é **lido pelo leitor do protocolo** do projeto. O que está abaixo
-não é estilo: fora disso a conferência daquela base reprova ou, pior, lê errado. Antes de
-alterar, conferir no leitor se o contrato ainda é este.
+O esquema da fonte, os domínios, os fragmentos admitidos e o esqueleto do procedimento
+gerado estão em `python3 -m rsl documentos gramatica`, e o leitor reprova o que sair deles.
+Antes de escrever uma fonte, ler ali o que se exige; não copiar a forma de outra fonte como
+se fosse o contrato.
 
-| Elemento | Forma exigida |
-| --- | --- |
-| seções lidas | cabeçalhos exatos `## 3. Strings por faceta`, `## 4. Expressões de busca` e `### Declaração de cobertura` |
-| declaração | tabela com as linhas `idiomas` (`FCTn: pt, en, es;` …), `camadas` (`todas` ou `nucleo`), `plural` (`explícito` ou `pela lematização`), `teto de caracteres` (número inteiro ou `nenhum`) e `derivações` (`morfologia` e/ou `radical`); sem `idiomas`, `camadas`, `plural` ou `teto de caracteres`, ou com valor fora do domínio, a leitura daquela base reprova |
-| redução termo a termo | só para termo vigente que a base deixa fora; linhas `\| FCTn \| termo \| motivo \|` dentro da seção da declaração. Termo retirado por emenda e termo alcançado pela forma radical não se declaram |
-| string por faceta | `### \`STRn\` — string \`#n\` — <cor> FCTn — <nome>`, com **um único** bloco cercado |
-| campo da string | lido do texto: início `TS=` ou `TITLE-ABS-KEY`, ou prefixo `title:`, `abstract:`, `descriptor:`; campo de outra forma é lido como "todos os campos", e prefixos diferentes na mesma string, como "misto" |
-| termo da string | entre aspas, separado por `OR`; sem proximidade nem aspas aninhadas dentro da string da faceta |
-| expressão | `### EBn ...` com uma linha `**Facetas:** FCT1 (…) AND …` e o estatuto por extenso nas primeiras linhas |
-| bloco da expressão | literal para executada, fidelidade e sonda: sem referência a conjunto `#n`; o conjunto de termos confere com as strings das facetas declaradas, e operador, campo, proximidade (`NEAR/n`, `W/n`) e valor de filtro não contam como termo. Ausência de bloco só passa na expressão derivada que não se executa; bloco presente na derivada padrão reprova. A forma longa, quando declarada, é representação não executada e fica fora da conferência de bloco |
-| forma de execução | exatamente uma linha `- Execução: única` ou `- Execução: particionada`; ausente, repetida ou com outro valor reprova a conferência desta base — não há padrão |
-| âncoras | inline no bloco de cada expressão; a subseção de proximidade não é exigida e não é forma executável |
-| forma curada | subseção com "curadas" no título; consultas em `####` grupos, linhas `\| n \| \`consulta\` \| facetas \|`; a faceta se reconhece só pelo código `FCTn` — emoji ou cor não identifica faceta |
-| forma longa não executada | subseção "forma longa", expressões em `**EBn**`; não executada e fora da conferência de bloco |
-| ignoradas pela leitura | subseções iniciadas por "Como executar", "Variantes", "Como esta base" e "Estratégia de proximidade" |
-| filtros reconhecidos | `PY=(…)`, `PUBYEAR`, `LA=`/`LANGUAGE`, `DT=`/`DOCTYPE`; filtro fora disso é lido como "na interface" |
-
-**Base nova exige mudança no leitor**, além do procedimento: o mapa de procedimentos por base e, se a
-sintaxe trouxer campo ou filtro novo, o reconhecimento correspondente. Isso é alteração
-técnica a propor e a provar com o autoteste, não algo que o procedimento resolva sozinho.
-
-## Estrutura do procedimento de busca
-
-```
-# Strings de busca — <base>                sem cabeçalho: direto para a seção 1
-## 1. Estado de verificação da sintaxe     elemento · situação; fonte
-## 2. Critérios de elegibilidade           todos os CE · na consulta? · como
-## 3. Strings por faceta                   mapa das facetas; forma da base em uma frase
-### Declaração de cobertura                tabela; redução própria da base, se houver
-### `STRn` — string `#n` — …                uma por faceta, um bloco cada
-## 4. Expressões de busca                  composição, execução de cada EB, limiares, leitura de zero
-### (forma curada | como esta base exige a montagem)
-### EB1 … EB5                              facetas, estatuto, bloco literal quando se executa
-### Estratégia de proximidade              opcional; discussão, não lida como forma
-### Como executar
-### Variantes previstas                    disparo · forma · regra de medida
-## 5. Conjunto-semente                     sementes da base; procedimento; limiar
-## 6. Ressalvas                            itens curtos, só o que muda execução ou relato
-```
-
-O texto que se repete entre procedimentos — composição, execução de cada expressão, leitura de
-zero — pode ser o mesmo, e é curto; o que **não** se repete é qualquer afirmação sobre
-sintaxe, que é sempre desta base e com a sua fonte.
+**Base nova não exige mudança no código**: a sintaxe, o campo, a proximidade e a partição
+são valores da fonte. Recurso que a fonte não exprima é alteração técnica a propor e a
+provar com o autoteste, não algo a contornar no procedimento.
 
 ## Conferir e registrar
 
-1. Rodar a conferência do documento, a dos dados e o autoteste do projeto (comandos em
-   `docs/procedimentos.md`, seção Conferências transversais). Reprovação aponta incoerência: corrige-se o procedimento ou se registra a redução
-   com motivo — **nunca se afrouxa a conferência** para o procedimento passar.
+1. Gerar em ensaio e revisar a diferença: cada forma de número acrescentada, com a origem;
+   cada mudança de texto. Gravar só depois. Rodar a conferência do documento, a dos dados e
+   o autoteste do projeto (comandos em `docs/procedimentos.md`, seção Conferências
+   transversais). Reprovação aponta incoerência: corrige-se a fonte ou se registra a
+   redução com motivo — **nunca se afrouxa a conferência** para a fonte passar.
 2. Relatar a **cobertura por faceta** como número, decomposta em literal, alcançado por
    radical, declarado e descoberto. **Cobertura não é recall**: mede quanto do vocabulário
    declarado está na string, com outro denominador. Cobertura alta não é aderência, nem
@@ -363,35 +343,36 @@ sintaxe, que é sempre desta base e com a sua fonte.
      comportamento medido da base**: frase entre aspas só alcança o termo que a contém
      inteira, lematização não alcança derivação adjetival, e o hífen como separador é
      suposição do leitor, a medir em cada base;
-   - **as variantes, a contingência e as camadas** — o leitor salta as subseções
-     "Variantes", "Como executar" e "Estratégia de proximidade". Usam só termos da STR do protocolo, sem termo que
+   - **as variantes, a contingência e as camadas** — os fragmentos são prosa, e a
+     conferência não lê os termos deles. Usam só termos da STR do protocolo, sem termo que
      só conste do quadro? A relação que afirmam com a forma executada (subconjunto, partição exata)
      vale de fato, pela lógica da consulta?
    - **número escrito em prosa** — quantos termos, quantas palavras-raiz, quantas
-     consultas — não deveria existir; se for indispensável, recalcula-se a partir das
-     strings do próprio procedimento;
-   - **propagação entre seções**: mudança na forma de execução (partição, nomes das
-     consultas, arquivos de exportação) chega a "Como executar", às ressalvas e ao registro
-     de execução, e não só à seção 4;
+     consultas — não deveria existir nos fragmentos; se for indispensável, recalcula-se a
+     partir do procedimento gerado;
+   - **propagação entre partes**: mudança na forma de execução (partição, nomes das
+     consultas, arquivos de exportação) chega a `como_executar.md`, às ressalvas e ao
+     registro de execução, e não só a `[execucao]`;
    - que cada critério tem destino, que cada elemento de sintaxe usado nas expressões tem
      estado e fonte, e que as variantes têm disparo.
 4. Registrar no histórico o que mudou e por quê (`registrar-decisao`). Mudança que altere a
    recuperação torna vencidos os retornos anteriores daquela base: isso se registra no
-   histórico e no registro de execução, **não no procedimento**, que passa a mostrar só a forma
+   histórico e no registro de execução, **não na fonte**, que passa a declarar só a forma
    nova.
-5. Reler o procedimento procurando o que não é operacional — data, "antes", "passou a", "retirado
+5. Reler a fonte, fragmentos inclusive, procurando o que não é operacional — data, "antes", "passou a", "retirado
    em", justificativa, estado — e levar ao histórico o que ainda não estiver lá.
 
 ## Ao entregar
 
-Começar pelo que o procedimento passou a dizer; depois, separadamente: o que se verificou e em que
-fonte, o que ficou **não verificado** e precisa de sondagem pelo pesquisador, as decisões
+Começar pelo que o procedimento gerado passou a dizer; depois, separadamente: o que se verificou e em que
+fonte, o que ficou **não verificado** e as sondagens do roteiro a executar pelo pesquisador, as decisões
 metodológicas propostas e ainda pendentes, e o resultado das conferências com a saída.
 
 ## Remissões
 
 Lógica das expressões:
-`expressoes-de-busca`. Sondagem, execução e registro sob as regras de acesso:
+`expressoes-de-busca`. Desenho e leitura das sondagens: `sondagens-de-sintaxe`. Plural e
+exceções de flexão: `flexao-por-base`. Sondagem, execução e registro sob as regras de acesso:
 `execucao-da-busca`. Coerência e fidelidade: `conferencias-da-busca`. Recall:
 `teste-de-aderencia`. Sementes: `conjunto-semente`. Critérios: `criterios-de-elegibilidade`.
 Emenda: `registrar-decisao`. Nomes de arquivo deste projeto estão

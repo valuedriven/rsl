@@ -1,22 +1,28 @@
 # Strings de busca — BRAPCI
 
+<!-- Gerado por `python3 -m rsl procedimentos gerar brapci --gravar` a partir de `docs/procedimentos/brapci`, do protocolo e do arquivo de sementes. Não editar: a edição à mão reprova em `documentos conferir`. -->
+
 ## 1. Estado de verificação da sintaxe
 
-Sintaxe não documentada em fonte alguma: **não verificada por medição** — sondar antes da primeira execução e registrar a execução.
+| Elemento | Categoria | Situação | Fonte | Sondagem |
+| :--- | :--- | :--- | :--- | :--- |
+| Aspas como frase | frase | **Não verificado** | — | SD2 |
+| `AND`, `OR` e parênteses | operadores | **Não verificado** | — | SD1 |
+| Truncamento `*` | truncamento | **Não verificado** | — | sem sondagem: não se usa |
+| Lematização | lematizacao | **Não verificado**; flexões explícitas nas strings | — | SD3 |
+| Comprimento máximo da consulta | limite_consulta | **Não verificado**; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres | — | SD4 |
+| Proximidade | proximidade | **Não verificado** | — | sem sondagem: nenhuma consulta usa proximidade |
+| Exportação — formatos e lote | exportacao | **Não verificado** | — | SD8 |
+| Local de pesquisa | campos | **Não verificado** | — | SD5 |
+| Campos diferentes na mesma consulta | campos | **Não verificado** | — | SD5 |
+| Filtros | filtros | **Não verificado** | — | SD6 |
+| Teto de exibição | limite_retorno | **Não verificado**; retorno de exatamente 1.000 será tratado como **corte** até medir | — | SD7 |
+| Parênteses para agrupamento | agrupamento | **Não verificado** | — | SD1 |
+| Teto de exportação por lote | limite_exportacao | **Não verificado** | — | SD8 |
+| Vocabulário controlado de assunto | vocabulario_controlado | **Não verificado** | — | sem sondagem: verificação documental: a BRAPCI não foi conferida quanto a vocabulário de assunto; nenhuma consulta depende dele |
+| Idioma do título, do resumo e das palavras-chave indexados | idioma_indexacao | **Não verificado** | — | SD9 |
 
-| Elemento | Situação |
-| :--- | :--- |
-| Aspas como frase | **Não verificado**; sondar antes da primeira execução |
-| `AND`, `OR` e parênteses | **Não verificado**; sondar antes da primeira execução |
-| Truncamento `*` | **Não verificado**; não se usa |
-| Lematização | **Não medida**; flexões explícitas nas strings |
-| Comprimento máximo da consulta | **Não verificado**; sondar antes da primeira execução; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres |
-| Proximidade | **Não verificada** |
-| Exportação — formatos e lote | **Não verificada** |
-| Local de pesquisa | **Não verificado**; conferir na interface antes da primeira execução |
-| Campos diferentes na mesma consulta | **Não verificado**; conferir na interface antes da primeira execução |
-| Filtros | **Não verificado**; conferir na interface antes da primeira execução |
-| Teto de exibição | **Não verificado**; retorno de exatamente 1.000 será tratado como **corte** até medir |
+Sintaxe não documentada em fonte alguma: **não verificada por medição** — sondar pelas sondagens abaixo e registrar cada uma.
 
 **Regra de execução, para toda consulta deste procedimento de busca.**
 
@@ -28,6 +34,388 @@ Sintaxe não documentada em fonte alguma: **não verificada por medição** — 
 6. Retorno de 1.000: consulta truncada; partir conforme a variante "Partição".
 
 **Outros campos do seletor**, só como instrumento: *Título*, para precisão e partição; *Resumo* e *Palavras-chave*, para medir onde a base indexa; *Autor*, para *backward search* e conferência de duplicatas.
+
+### Sondagens a executar
+
+Uma consulta por vez, sem nova tentativa automática; parar diante de captcha, aviso de atividade atípica ou bloqueio, e registrar.
+
+#### SD1 — saber se `AND`, `OR` e os parênteses se comportam como booleanos
+
+**Elementos verificados:** `AND`, `OR` e parênteses (Não verificado); Parênteses para agrupamento (Não verificado).
+
+**Pré-requisitos.**
+
+- busca da BRAPCI aberta no navegador do pesquisador, com Local de pesquisa = Todos os campos e método ponderado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+ontologia
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: conjunção com `AND`.
+
+```
+ontologia AND educação
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: disjunção com `OR`.
+
+```
+ontologia OR taxonomia
+```
+
+**Consulta 4 — teste**, em caixa de busca. Muda em relação ao controle: grupo entre parênteses.
+
+```
+(ontologia OR taxonomia) AND educação
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, e anotar o retorno exibido
+2. abrir três registros do primeiro teste e conferir se trazem as duas palavras
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < `AND` < controle ≤ `OR`, 0 < grupo ≤ `OR`, e os registros abertos trazem as duas palavras | os operadores e os parênteses se comportam como booleanos | Verificado por medição |
+| 2 | qualquer outra relação, ou mensagem de erro | não se confirma o comportamento booleano; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD2 — saber se as aspas exigem a sequência exata das palavras
+
+**Elementos verificados:** Aspas como frase (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com os operadores verificados
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+organização AND conhecimento
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: a locução entre aspas.
+
+```
+"organização do conhecimento"
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, e anotar o retorno
+2. abrir três registros do controle que não estejam no teste e conferir se trazem as palavras separadas
+
+**Observar.**
+
+- retorno exibido de cada consulta
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle, e os registros só do controle trazem as palavras separadas | as aspas exigem a sequência exata | Verificado por medição |
+| 2 | teste = controle, ou teste = 0 | não se distingue o efeito das aspas; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD3 — saber se a base casa singular e plural sem que a consulta os traga
+
+**Elementos verificados:** Lematização (Não verificado).
+**Depende de:** SD2.
+
+**Pré-requisitos.**
+
+- SD2 registrada com as aspas verificadas
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+"ontologia"
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o plural no lugar do singular.
+
+```
+"ontologias"
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, e anotar o retorno
+2. abrir três registros do teste e conferir se trazem só o plural
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- forma do termo nos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste ≠ controle, e os registros abertos trazem só o plural | a base não lematiza em português: as flexões explícitas são necessárias | Verificado por medição |
+| 2 | teste = controle, ou registros com só o singular | pode haver lematização; levar ao pesquisador antes de declarar `pela lematização` | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD4 — saber se a base aceita inteira a consulta longa
+
+**Elementos verificados:** Comprimento máximo da consulta (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com os operadores verificados
+- o procedimento gerado, para copiar as consultas
+
+**Consulta 1 — teste**, em caixa de busca.
+
+```
+o bloco de EB5 no procedimento gerado
+```
+
+**Consulta 2 — controle**, em caixa de busca.
+
+```
+a primeira metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado
+```
+
+**Consulta 3 — controle**, em caixa de busca.
+
+```
+a segunda metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado
+```
+
+**Passos.**
+
+1. submeter o bloco de EB5 da seção 4 e anotar o retorno
+2. partir a faceta 🟦 em duas metades, cada metade com a faceta 🟨, submeter as duas e anotar os retornos
+3. comparar o retorno de EB5 com a união das metades
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- se o texto mostrado depois da submissão é a consulta inteira
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | EB5 ≥ cada metade, e o texto mostrado é a consulta inteira | a base aceita a consulta longa inteira | Verificado por medição |
+| 2 | EB5 < alguma metade, texto cortado, ou mensagem de erro | a consulta longa não é aceita inteira; levar ao pesquisador (variante "Partição") | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com o fim da consulta e o retorno visíveis
+
+#### SD5 — saber o que o seletor Local de pesquisa restringe e se uma consulta combina campos diferentes
+
+**Elementos verificados:** Local de pesquisa (Não verificado); Campos diferentes na mesma consulta (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com os operadores verificados
+
+**Consulta 1 — controle**, em caixa de busca, Local de pesquisa = Todos os campos.
+
+```
+"ontologia"
+```
+
+**Consulta 2 — teste**, em caixa de busca, Local de pesquisa = Título. Muda em relação ao controle: o Local de pesquisa.
+
+```
+"ontologia"
+```
+
+**Passos.**
+
+1. submeter a mesma consulta com Local de pesquisa = Todos os campos e depois = Título, e anotar os retornos
+2. abrir três registros da busca em Título e conferir o termo no título
+3. conferir se a interface oferece mais de um campo na mesma consulta e anotar como
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- presença do termo no título
+- opções do seletor
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle, os registros abertos têm o termo no título, e a combinação de campos está anotada | o Local de pesquisa restringe; a combinação de campos fica descrita | Verificado por medição |
+| 2 | teste = controle, teste = 0, ou registro sem o termo no título | não se distingue o efeito do seletor; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta e do seletor
+
+#### SD6 — saber se o filtro de ano recorta o retorno
+
+**Elementos verificados:** Filtros (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com os operadores verificados
+
+**Consulta 1 — controle**, em caixa de busca, sem filtro de ano.
+
+```
+"ontologia"
+```
+
+**Consulta 2 — teste**, em caixa de busca, filtro de ano 2017 a 2026. Muda em relação ao controle: o filtro de ano.
+
+```
+"ontologia"
+```
+
+**Passos.**
+
+1. submeter a consulta sem filtro e anotar o retorno
+2. aplicar o filtro de ano 2017 a 2026 antes de executar, submeter de novo e anotar o retorno
+3. conferir o ano de dez registros do teste
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- ano dos registros conferidos
+- rótulo do filtro
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle, e os registros conferidos estão entre 2017 e 2026 | o filtro de ano recorta o retorno | Verificado por medição |
+| 2 | teste = controle, ou registro conferido fora do intervalo | o filtro de ano não se confirma; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com o filtro e o retorno visíveis
+
+#### SD7 — saber se a base corta o retorno em 1.000 ou no limite de resultados escolhido
+
+**Elementos verificados:** Teto de exibição (Não verificado).
+
+**Pré-requisitos.**
+
+- busca da BRAPCI aberta no navegador do pesquisador
+
+**Consulta 1 — controle**, em caixa de busca, limite de resultados 1.000.
+
+```
+educação
+```
+
+**Consulta 2 — teste**, em caixa de busca, limite de resultados 5.000. Muda em relação ao controle: o limite de resultados.
+
+```
+educação
+```
+
+**Passos.**
+
+1. submeter a consulta com o limite de resultados em 1.000 e anotar o retorno
+2. repetir com o limite em 5.000 e anotar o retorno
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- aviso de limite, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | controle = 1.000 e teste > 1.000 | o retorno é cortado no limite de resultados escolhido | Verificado por medição |
+| 2 | controle = teste < 1.000 | a consulta não alcança o teto; repetir com consulta mais larga | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com o limite e o retorno visíveis
+
+#### SD8 — saber em que formatos e com quantos registros por vez a base exporta
+
+**Elementos verificados:** Exportação — formatos e lote (Não verificado); Teto de exportação por lote (Não verificado).
+
+**Pré-requisitos.**
+
+- busca da BRAPCI aberta no navegador do pesquisador
+
+**Consulta 1 — teste**, em caixa de busca.
+
+```
+"ontologia" AND "educação"
+```
+
+**Passos.**
+
+1. submeter a consulta e anotar o retorno
+2. abrir a exportação e anotar os formatos e o número máximo de registros
+3. exportar uma vez em RIS ou BibTeX e contar os registros do arquivo
+
+**Observar.**
+
+- formatos oferecidos
+- número máximo de registros
+- número de registros no arquivo
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | o arquivo traz todos os registros do retorno, no formato escolhido | a exportação funciona no formato anotado, sem teto até esse tamanho | Verificado por medição |
+| 2 | o arquivo traz menos registros que o retorno, no número que a exportação anuncia | há teto de exportação por lote, no número anotado | Verificado por medição |
+| 3 | não há exportação, ou ela falha | sem exportação utilizável; registrar no Zotero e levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela da opção de exportação
+- o arquivo exportado
+
+#### SD9 — saber se os registros trazem título, resumo e palavras-chave também em inglês, buscáveis pela faceta 🟦 em inglês
+
+**Elementos verificados:** Idioma do título, do resumo e das palavras-chave indexados (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com os operadores verificados
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+"ontologia"
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o termo em inglês.
+
+```
+"ontology"
+```
+
+**Passos.**
+
+1. submeter cada consulta e anotar o retorno
+2. abrir três registros do teste e anotar em que idioma estão título, resumo e palavras-chave
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- idiomas dos campos nos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste > 0, e os registros abertos trazem o resumo ou as palavras-chave em inglês | a base indexa campos em inglês; a faceta 🟦 em inglês alcança registros | Verificado por medição |
+| 2 | teste = 0, ou registros só em português | não se confirma a indexação em inglês; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta e de cada registro aberto
 
 ---
 
@@ -48,11 +436,11 @@ Sintaxe não documentada em fonte alguma: **não verificada por medição** — 
 
 ## 3. Strings por faceta
 
-`STRn` é o identificador do protocolo e `#n` a string correspondente. Flexões de número explícitas, sem truncamento. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
+`STRn` é o identificador do protocolo e `#n` o número da string na composição. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
 
 ### Declaração de cobertura
 
-Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca em `src/rsl/fichas.py`).
+Declarada em `docs/procedimentos/brapci/procedimento.toml`, `[cobertura]`; conferida por `python3 -m rsl documentos conferir`.
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -65,25 +453,25 @@ Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca
 ### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
 ```
-("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering")
+("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "modelos ontológicos educacionais" OR "vocabulário controlado" OR "vocabulários controlados" OR "tesauro" OR "tesauros" OR "taxonomia" OR "taxonomias" OR "esquema de classificação" OR "esquemas de classificação" OR "esquema de metadados" OR "esquemas de metadados" OR "classificação facetada" OR "classificações facetadas" OR "modelo conceitual" OR "modelos conceituais" OR "modelagem conceitual" OR "esquema conceitual" OR "esquemas conceituais" OR "modelo de domínio" OR "modelos de domínio" OR "modelo semântico" OR "modelos semânticos" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "padrões de projeto ontológicos" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "ontology" OR "ontologies" OR "educational ontological model" OR "educational ontological models" OR "controlled vocabulary" OR "controlled vocabularies" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "taxonomies" OR "classification scheme" OR "classification schemes" OR "metadata schema" OR "metadata schemas" OR "faceted classification" OR "faceted classifications" OR "conceptual model" OR "conceptual models" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "conceptual schemas" OR "domain model" OR "domain models" OR "semantic model" OR "semantic models" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering")
 ```
 
 ### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
 
 ```
-("educação" OR "educacional" OR "educacionais" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz")
+("educação" OR "educacional" OR "educacionais" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "trilhas de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "sistemas de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambientes de aprendizagem" OR "ambiente virtual de aprendizagem" OR "ambientes virtuais de aprendizagem" OR "objeto de aprendizagem" OR "objetos de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "cursos online abertos e massivos" OR "instituição de ensino" OR "instituições de ensino" OR "nível de ensino" OR "níveis de ensino" OR "modalidade de ensino" OR "modalidades de ensino" OR "aprendiz" OR "aprendizes")
 ```
 
 ### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
 ```
-("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino")
+("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "práticas pedagógicas" OR "prática docente" OR "práticas docentes" OR "estratégia de ensino" OR "estratégias de ensino" OR "estratégia instrucional" OR "estratégias instrucionais" OR "método de ensino" OR "métodos de ensino" OR "método instrucional" OR "métodos instrucionais" OR "técnica de ensino" OR "técnicas de ensino" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "tarefa de aprendizagem" OR "tarefas de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "intervenção pedagógica" OR "intervenções pedagógicas" OR "sequência didática" OR "sequências didáticas" OR "sequência instrucional" OR "sequências instrucionais" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagens pedagógicas" OR "abordagem instrucional" OR "abordagens instrucionais" OR "design instrucional" OR "desenho da aprendizagem" OR "desenhos da aprendizagem" OR "desenho didático" OR "desenhos didáticos" OR "padrão pedagógico" OR "padrões pedagógicos" OR "padrão de projeto pedagógico" OR "padrões de projeto pedagógicos" OR "método ativo" OR "métodos ativos" OR "metodologia de ensino" OR "metodologias de ensino")
 ```
 
 ### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
 
 ```
-("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "sensível ao contexto" OR "contextualização")
+("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "situações de uso" OR "contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "situações de aprendizagem" OR "cenário educacional" OR "cenários educacionais" OR "contexto institucional" OR "contextos institucionais" OR "contexto sociocultural" OR "contextos socioculturais" OR "perfil da turma" OR "perfis da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "representações de contexto" OR "contexto sensível" OR "contextos sensíveis" OR "sensível ao contexto" OR "sensíveis ao contexto" OR "contextualização")
 ```
 
 ---
@@ -102,10 +490,12 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 | :--- | :--- |
 | **EB4** | executar e exportar: é o corpus desta base |
 | **EB5** | executar uma única vez, na mesma data; não compõe o corpus |
-| **EB2**, **EB3** | não executar; derivação local |
-| **EB1** | não executar; derivação local |
+| **EB1**, **EB2**, **EB3** | não executar; derivação local |
 
 - Execução: única
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`python3 -m rsl configuracao mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
+- **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
+
 **Forma de execução.** Submeter o bloco de EB4 da seção 4 como está, sem definir conjunto.
 
 **Retorno zero.** EB4 = 0 ou EB5 = 0 é defeito de execução até provado que a consulta longa foi aceita inteira. Contagem derivada nula, com execução válida, registra-se como achado; não relaxar a âncora 🟦 por causa dela.
@@ -127,7 +517,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
 ```
-("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering") AND ("educação" OR "educacional" OR "educacionais" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz") AND (("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "prática docente" OR "estratégia de ensino" OR "estratégia instrucional" OR "método de ensino" OR "método instrucional" OR "técnica de ensino" OR "atividade de aprendizagem" OR "tarefa de aprendizagem" OR "intervenção educacional" OR "intervenção pedagógica" OR "sequência didática" OR "sequência instrucional" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagem instrucional" OR "design instrucional" OR "desenho da aprendizagem" OR "desenho didático" OR "padrão pedagógico" OR "padrão de projeto pedagógico" OR "método ativo" OR "metodologia de ensino") OR ("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "cenário educacional" OR "contexto institucional" OR "contexto sociocultural" OR "perfil da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "contexto sensível" OR "sensível ao contexto" OR "contextualização"))
+("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "modelos ontológicos educacionais" OR "vocabulário controlado" OR "vocabulários controlados" OR "tesauro" OR "tesauros" OR "taxonomia" OR "taxonomias" OR "esquema de classificação" OR "esquemas de classificação" OR "esquema de metadados" OR "esquemas de metadados" OR "classificação facetada" OR "classificações facetadas" OR "modelo conceitual" OR "modelos conceituais" OR "modelagem conceitual" OR "esquema conceitual" OR "esquemas conceituais" OR "modelo de domínio" OR "modelos de domínio" OR "modelo semântico" OR "modelos semânticos" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "padrões de projeto ontológicos" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "ontology" OR "ontologies" OR "educational ontological model" OR "educational ontological models" OR "controlled vocabulary" OR "controlled vocabularies" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "taxonomies" OR "classification scheme" OR "classification schemes" OR "metadata schema" OR "metadata schemas" OR "faceted classification" OR "faceted classifications" OR "conceptual model" OR "conceptual models" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "conceptual schemas" OR "domain model" OR "domain models" OR "semantic model" OR "semantic models" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering") AND ("educação" OR "educacional" OR "educacionais" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "trilhas de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "sistemas de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambientes de aprendizagem" OR "ambiente virtual de aprendizagem" OR "ambientes virtuais de aprendizagem" OR "objeto de aprendizagem" OR "objetos de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "cursos online abertos e massivos" OR "instituição de ensino" OR "instituições de ensino" OR "nível de ensino" OR "níveis de ensino" OR "modalidade de ensino" OR "modalidades de ensino" OR "aprendiz" OR "aprendizes") AND (("prática educacional" OR "práticas educacionais" OR "prática pedagógica" OR "práticas pedagógicas" OR "prática docente" OR "práticas docentes" OR "estratégia de ensino" OR "estratégias de ensino" OR "estratégia instrucional" OR "estratégias instrucionais" OR "método de ensino" OR "métodos de ensino" OR "método instrucional" OR "métodos instrucionais" OR "técnica de ensino" OR "técnicas de ensino" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "tarefa de aprendizagem" OR "tarefas de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "intervenção pedagógica" OR "intervenções pedagógicas" OR "sequência didática" OR "sequências didáticas" OR "sequência instrucional" OR "sequências instrucionais" OR "pedagogia" OR "pedagogias" OR "boa prática" OR "boas práticas" OR "prática recomendada" OR "práticas recomendadas" OR "abordagem pedagógica" OR "abordagens pedagógicas" OR "abordagem instrucional" OR "abordagens instrucionais" OR "design instrucional" OR "desenho da aprendizagem" OR "desenhos da aprendizagem" OR "desenho didático" OR "desenhos didáticos" OR "padrão pedagógico" OR "padrões pedagógicos" OR "padrão de projeto pedagógico" OR "padrões de projeto pedagógicos" OR "método ativo" OR "métodos ativos" OR "metodologia de ensino" OR "metodologias de ensino") OR ("fator situacional" OR "fatores situacionais" OR "situação de uso" OR "situações de uso" OR "contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator de contexto" OR "fatores de contexto" OR "condição de aplicação" OR "condições de aplicação" OR "condição de implementação" OR "condições de implementação" OR "situação de aprendizagem" OR "situações de aprendizagem" OR "cenário educacional" OR "cenários educacionais" OR "contexto institucional" OR "contextos institucionais" OR "contexto sociocultural" OR "contextos socioculturais" OR "perfil da turma" OR "perfis da turma" OR "característica do aluno" OR "características dos alunos" OR "restrição contextual" OR "restrições contextuais" OR "modelagem de contexto" OR "representação de contexto" OR "representações de contexto" OR "contexto sensível" OR "contextos sensíveis" OR "sensível ao contexto" OR "sensíveis ao contexto" OR "contextualização"))
 ```
 
 ### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
@@ -135,7 +525,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
 
 ```
-("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "vocabulário controlado" OR "tesauro" OR "taxonomia" OR "esquema de classificação" OR "esquema de metadados" OR "classificação facetada" OR "modelo conceitual" OR "modelagem conceitual" OR "esquema conceitual" OR "modelo de domínio" OR "modelo semântico" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "ontologies" OR "educational ontological model" OR "controlled vocabulary" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "classification scheme" OR "metadata schema" OR "faceted classification" OR "conceptual model" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "domain model" OR "semantic model" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering") AND ("educação" OR "educacional" OR "educacionais" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambiente virtual de aprendizagem" OR "objeto de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "instituição de ensino" OR "nível de ensino" OR "modalidade de ensino" OR "aprendiz")
+("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo ontológico educacional" OR "modelos ontológicos educacionais" OR "vocabulário controlado" OR "vocabulários controlados" OR "tesauro" OR "tesauros" OR "taxonomia" OR "taxonomias" OR "esquema de classificação" OR "esquemas de classificação" OR "esquema de metadados" OR "esquemas de metadados" OR "classificação facetada" OR "classificações facetadas" OR "modelo conceitual" OR "modelos conceituais" OR "modelagem conceitual" OR "esquema conceitual" OR "esquemas conceituais" OR "modelo de domínio" OR "modelos de domínio" OR "modelo semântico" OR "modelos semânticos" OR "engenharia de ontologias" OR "desenvolvimento de ontologias" OR "padrão de projeto ontológico" OR "padrões de projeto ontológicos" OR "modelagem baseada em ontologias" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "ontology" OR "ontologies" OR "educational ontological model" OR "educational ontological models" OR "controlled vocabulary" OR "controlled vocabularies" OR "thesaurus" OR "thesauri" OR "taxonomy" OR "taxonomies" OR "classification scheme" OR "classification schemes" OR "metadata schema" OR "metadata schemas" OR "faceted classification" OR "faceted classifications" OR "conceptual model" OR "conceptual models" OR "conceptual modeling" OR "conceptual modelling" OR "conceptual schema" OR "conceptual schemas" OR "domain model" OR "domain models" OR "semantic model" OR "semantic models" OR "ontology-based modeling" OR "ontology-based modelling" OR "ontological engineering") AND ("educação" OR "educacional" OR "educacionais" OR "ensino superior" OR "ensino básico" OR "ensino e aprendizagem" OR "trilha de aprendizagem" OR "trilhas de aprendizagem" OR "aprendizagem do estudante" OR "ensino híbrido" OR "aprendizagem online" OR "aprendizagem ao longo da vida" OR "sistema de gestão da aprendizagem" OR "sistemas de gestão da aprendizagem" OR "ensino fundamental" OR "ensino médio" OR "ambiente de aprendizagem" OR "ambientes de aprendizagem" OR "ambiente virtual de aprendizagem" OR "ambientes virtuais de aprendizagem" OR "objeto de aprendizagem" OR "objetos de aprendizagem" OR "aprendizagem eletrônica" OR "curso online aberto e massivo" OR "cursos online abertos e massivos" OR "instituição de ensino" OR "instituições de ensino" OR "nível de ensino" OR "níveis de ensino" OR "modalidade de ensino" OR "modalidades de ensino" OR "aprendiz" OR "aprendizes")
 ```
 
 ### Como executar
@@ -166,14 +556,14 @@ Disparo: consulta que encosta no teto de 1.000 mesmo com o recorte temporal. For
 
 ## 5. Conjunto-semente
 
-Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/sementes.json`; aferição em `data/semente_aderencia.csv`.
+Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de sementes (`[documentos] sementes`); aferição em `data/semente_aderencia.csv`.
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |
-| SE1 | Alvarenga & Cristovão (2023) | — | — |
+| SE1 | Alvarenga & Cristovão (2023) | `10.26512/rici.v16.n1.2023.47618` | — |
 | SE5 | Sousa & Duque (2018) | `10.5433/1981-8920.2018v23n1p271` | **caso-teste de cobertura de campo**: o artefato está fora do título |
 
-**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação por DOI e depois por título, sem reexecutar a busca.
+**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 
 **Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 

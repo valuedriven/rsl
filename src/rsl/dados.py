@@ -18,7 +18,8 @@ from . import gramatica as G
 from .config import RAIZ, relativo
 from .conferencia import Problema, Resultado, imprime_problemas, problemas_bases
 from .erros import DadosInvalidos, ProtocoloInvalido
-from .fichas import base_derivada, ficha
+from .fichas import base_derivada
+from .fonte import le_fonte
 from .markdown import normaliza
 from .saida import Saida
 
@@ -69,7 +70,7 @@ def problemas_registro(ctx, dado, bds):
     problemas = []
     for bd in bds:
         base = bases[bd]
-        execucoes = base.get("execucoes")
+        execucoes = base.get("execucoes", [] if "sondagens" in base else None)
         if not isinstance(execucoes, list):
             problemas.append(f"{nome}: {bd} sem a lista `execucoes`")
             continue
@@ -100,57 +101,141 @@ def problemas_registro(ctx, dado, bds):
     return problemas
 
 
-def problemas_citacoes_registro(ctx, d, registro):
-    """Citação do registro de execução sem lastro, por base.
-
-    Toda menção ao caminho do registro — em tabela ou em prosa — nomeia a execução na forma
-    da gramática, com `BDn` da própria base e o id presente no registro; e toda citação
-    `(BDn/<id>)`, mesmo em linha sem o caminho (a linha "Lematização"), tem esse lastro.
-    Menção sem identificador, identificador de outra base ou execução inexistente reprova só
-    a base do procedimento de busca. Sem o registro, a menção já é citação sem lastro. Os
-    procedimentos de busca vêm do contexto, que pode trazer cópias alteradas (autoteste).
-    """
-    caminho = str(ctx.config.valor("dados.registro"))
-    execucoes = {}
+def _ids_do_registro(registro):
+    """{BDn: ids de `execucoes` e de `sondagens`} do registro de execução."""
+    ids = {}
     if isinstance(registro, dict) and isinstance(registro.get("bases"), dict):
         for bd, base in registro["bases"].items():
-            if isinstance(base, dict) and isinstance(base.get("execucoes"), list):
-                execucoes[bd] = {e.get("id") for e in base["execucoes"]
-                                 if isinstance(e, dict)}
+            if not isinstance(base, dict):
+                continue
+            for chave in ("execucoes", "sondagens"):
+                if isinstance(base.get(chave), list):
+                    ids.setdefault(bd, set()).update(
+                        e.get("id") for e in base[chave] if isinstance(e, dict))
+    return ids
+
+
+def _textos_da_fonte(ctx, d, sigla):
+    """[(onde, texto)] de toda a fonte da base: cada campo de texto de `procedimento.toml`
+    e cada linha dos fragmentos."""
+    fonte = le_fonte(ctx, d, sigla)
+    saida = []
+
+    def percorre(valor, caminho):
+        if isinstance(valor, str):
+            saida.append((caminho, valor))
+        elif isinstance(valor, list):
+            for i, x in enumerate(valor, 1):
+                percorre(x, f"{caminho}[{i}]")
+        elif isinstance(valor, dict):
+            for k, v in valor.items():
+                percorre(v, f"{caminho}.{k}" if caminho else k)
+    percorre(fonte["dado"], "")
+    for nome, texto in sorted(fonte["fragmentos"].items()):
+        for n, linha in enumerate(texto.splitlines(), 1):
+            saida.append((f"{nome}:{n}", linha))
+    return fonte, saida
+
+
+def problemas_citacoes_registro(ctx, d, registro):
+    """Citação do registro de execução sem lastro, por base, em toda a fonte.
+
+    Toda menção ao caminho do registro nomeia a execução ou a sondagem na forma
+    `BDn/<id>`, com `BDn` da própria base e o id presente em `execucoes` ou em `sondagens`;
+    toda citação tem esse lastro. Sem o registro, a citação já é sem lastro. As fontes vêm
+    do contexto, que pode trazer cópias alteradas (autoteste).
+    """
+    caminho = str(ctx.config.valor("dados.registro"))
+    ids = _ids_do_registro(registro)
     problemas = []
     for b in d["bases"]:
         sigla, bd = b["sigla"], b["id"]
         try:
-            t = ficha(ctx, d, sigla)
+            fonte, textos = _textos_da_fonte(ctx, d, sigla)
         except ProtocoloInvalido as e:
             problemas.append(Problema(f"{sigla}: {e}", e.codigo))
             continue
-        for n, linha in enumerate(t.splitlines(), 1):
-            citacoes = G.F_CITACAO.padrao.findall(linha)
-            # A citação `(BDn/<id>)` é afirmação de medição mesmo sem o caminho do registro
-            # na linha — a linha "Lematização" que sustenta `plural: pela lematização` cita
-            # só a execução. Toda citação se confere; a menção ao caminho, além disso, exige
-            # citação.
-            if caminho not in linha and not citacoes:
+        for onde, texto in textos:
+            citacoes = G.F_CITACAO.padrao.findall(texto)
+            if caminho not in texto and not citacoes:
                 continue
-            where = f"{sigla}: procedimento de busca {b['ficha']}:{n}"
+            where = f"{sigla}: fonte {fonte['pasta']} ({onde})"
             if not citacoes:
-                problemas.append(f"{where}: menção ao registro sem identificador de execução "
-                                 f"`{G.F_CITACAO.texto.split()[0]}`")
+                problemas.append(f"{where}: menção ao registro sem identificador "
+                                 f"`BDn/<id>`")
                 continue
             for cit_bd, ident in citacoes:
                 ref = f"{cit_bd}/{ident}"
                 if cit_bd != bd:
-                    problemas.append(f"{where}: cita a execução {ref}, de outra base; a "
-                                     f"execução tem de ser de {bd}")
-                elif ident not in execucoes.get(bd, set()):
+                    problemas.append(f"{where}: cita {ref}, de outra base; a citação tem de "
+                                     f"ser de {bd}")
+                elif ident not in ids.get(bd, set()):
                     if registro is None:
-                        problemas.append(f"{where}: cita a execução {ref} sem lastro — "
-                                         f"registro de execução ausente")
+                        problemas.append(f"{where}: cita {ref} sem lastro — registro de "
+                                         f"execução ausente")
                     else:
-                        problemas.append(f"{where}: cita a execução {ref}, inexistente no "
-                                         f"registro")
+                        problemas.append(f"{where}: cita {ref}, inexistente em `execucoes` e "
+                                         f"em `sondagens` do registro")
     return [p if isinstance(p, Problema) else Problema(p) for p in problemas]
+
+
+def problemas_sondagens_registradas(ctx, d, registro):
+    """(problemas, relatos) dos resultados de `bases.BDn.sondagens`: campos, id único,
+    sondagem existente na fonte, leitura declarada; e o resultado ainda não levado à
+    fonte (relato)."""
+    problemas, relatos = [], []
+    if not isinstance(registro, dict) or not isinstance(registro.get("bases"), dict):
+        return problemas, relatos
+    exigidos = [c.chave for c in G.T_RES_SONDAGEM.campos if c.exigido]
+    for b in d["bases"]:
+        sigla, bd = b["sigla"], b["id"]
+        lista = (registro["bases"].get(bd) or {}).get("sondagens")
+        if lista is None:
+            continue
+        if not isinstance(lista, list):
+            problemas.append(f"{sigla}: `bases.{bd}.sondagens` não é lista")
+            continue
+        try:
+            fonte = le_fonte(ctx, d, sigla)
+        except ProtocoloInvalido:
+            continue                      # a base já reprova pela leitura
+        situacao = {s["elemento"]: s for s in fonte["dado"]["sintaxe"]}
+        situacao.update({r["texto"]: r for r in fonte["dado"].get("regras_de_montagem", [])})
+        vistos = set()
+        for r in lista:
+            if not isinstance(r, dict):
+                problemas.append(f"{sigla}: resultado de sondagem que não é objeto")
+                continue
+            rid = r.get("id")
+            faltam = [c for c in exigidos if c not in r]
+            if faltam:
+                problemas.append(f"{sigla}: sondagem registrada {rid!r} sem {faltam}")
+                continue
+            if rid in vistos:
+                problemas.append(f"{sigla}: sondagem registrada {rid!r} repetida em {bd}")
+            vistos.add(rid)
+            sd = fonte["sondagens"].get(r["sondagem"])
+            if sd is None:
+                problemas.append(f"{sigla}: resultado {rid!r} da sondagem {r['sondagem']!r}, "
+                                 f"que não existe na fonte")
+                continue
+            leitura = r["leitura"] if isinstance(r["leitura"], dict) else {}
+            k = leitura.get("numero")
+            if not isinstance(k, int) or not 1 <= k <= len(sd["leituras"]):
+                problemas.append(f"{sigla}: resultado {rid!r}: leitura {k!r} não é nenhuma "
+                                 f"das {len(sd['leituras'])} declaradas em {r['sondagem']}")
+                continue
+            estado = sd["leituras"][k - 1]["estado"]
+            for el in sd["elementos"]:
+                item = situacao.get(el)
+                cit = f"{bd}/{rid}"
+                if item and (item["situacao"] != estado or (
+                        estado == G.SITUACAO_MEDICAO and item.get("citacao") != cit)):
+                    relatos.append(f"{sigla}: resultado {cit} ({r['sondagem']}, leitura {k}) "
+                                   f"ainda não levado à fonte — {el!r}: situacao = "
+                                   f"{estado!r}" + (f", citacao = {cit!r}"
+                                                    if estado == G.SITUACAO_MEDICAO else ""))
+    return problemas, relatos
 
 
 def problemas_evidencia(d, pasta):
@@ -191,8 +276,11 @@ def conferir_dados(ctx):
 
     problemas += [Problema(x) for x in problemas_evidencia(
         d, ctx.config.caminho("dados.evidencia"))]
-    problemas += problemas_bases(ctx, d)
+    problemas += problemas_bases(ctx, d, igualdade=False)
     problemas += problemas_citacoes_registro(ctx, d, registro)
+    sond, relatos = problemas_sondagens_registradas(ctx, d, registro)
+    problemas += [Problema(x) for x in sond]
+    avisos += relatos
     return problemas, avisos
 
 

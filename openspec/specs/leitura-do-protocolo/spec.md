@@ -2,11 +2,13 @@
 
 ## Purpose
 
+
 Ler o protocolo de estratégia de pesquisa como fonte única de verdade, com valores padrão num
 arquivo de configuração que o protocolo sobrescreve, e conferir a coerência interna do
 documento sem fixar valores esperados no código.
 
 ## Requirements
+
 
 ### Requirement: Nenhum parâmetro fixado no código
 O código de `src/` MUST NOT conter valor de parâmetro do projeto. São parâmetros:
@@ -271,16 +273,26 @@ vazia.
 
 ### Requirement: Bases lidas da tabela do protocolo
 As bases SHALL ser lidas da tabela "Bases de dados": identificador `BDn`, sigla e nome. Sigla
-e identificador MUST ser únicos. O procedimento de busca de cada base SHALL ser localizada pela sigla, no
-padrão de caminho do `config.toml`; procedimento de busca inexistente MUST reprovar, nomeando base e caminho.
+e identificador MUST ser únicos. A fonte do procedimento de busca de cada base SHALL ser
+localizada pela sigla, no padrão `[documentos] procedimento_fonte` do `config.toml`. Fonte
+inexistente MUST reprovar, nomeando a base e o caminho. O procedimento de busca gerado SHALL
+ser gravado no padrão `[documentos] procedimento`. A ausência do procedimento gerado MUST
+reprovar `documentos conferir` só naquela base, com `procedimentos gerar <sigla> --gravar`
+como correção, e MUST NOT impedir a leitura da fonte.
 
 #### Scenario: Procedimento de busca da sigla não existe
-- **WHEN** o padrão é `docs/procedimentos_busca_{sigla}.md` e não existe
-  `docs/procedimentos_busca_eric.md`
+- **WHEN** o padrão é `docs/procedimentos/{sigla}` e não existe
+  `docs/procedimentos/eric/procedimento.toml`
 - **THEN** a leitura reprova, nomeando BD3, a sigla `eric` e o caminho procurado
 
+#### Scenario: Procedimento ainda não gerado
+- **WHEN** a fonte da ERIC existe e `docs/procedimentos_busca_eric.md` não existe
+- **THEN** `documentos conferir` reprova só a ERIC, indicando `procedimentos gerar eric
+  --gravar`
+
 #### Scenario: Padrão sem a sigla
-- **WHEN** o padrão de caminho do `config.toml` não contém `{sigla}`
+- **WHEN** `[documentos] procedimento` ou `[documentos] procedimento_fonte` não contém
+  `{sigla}`
 - **THEN** o script termina com erro de configuração que nomeia a chave
 
 #### Scenario: Sigla repetida

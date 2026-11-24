@@ -1,4 +1,6 @@
-"""Gramática do protocolo e dos procedimentos de busca: a única fonte dos literais de forma.
+"""Gramática do protocolo, da fonte do procedimento de busca de cada base, do arquivo de
+sementes, do arquivo de exceções de flexão e do resultado de sondagem: a única fonte dos
+literais de forma. Declara também o esqueleto e o texto fixo do procedimento gerado.
 
 Cada elemento declara o que o leitor exige de um documento — seção, tabela, coluna, rótulo
 de linha, marcador, forma de identificador, frase-padrão de onde se lê um parâmetro, domínio
@@ -20,9 +22,13 @@ ele deformado: elemento exigido sem gerador de defeito faz o autoteste falhar.
 import re
 
 PROTOCOLO = "protocolo"
-FICHA = "procedimento de busca"
+FONTE = "fonte do procedimento de busca"
 SEMENTES = "arquivo de sementes"
-DOCUMENTOS = (PROTOCOLO, FICHA, SEMENTES)
+FLEXOES = "arquivo de exceções de flexão"
+SONDAGEM = "resultado de sondagem no registro de execução"
+DOCUMENTOS = (PROTOCOLO, FONTE, SEMENTES, FLEXOES, SONDAGEM)
+# O procedimento de busca de cada base é saída de geração: não tem grupo no contrato.
+PROCEDIMENTO = "procedimento de busca"
 
 EXIGIDO = "exigido"
 OPCIONAL = "opcional"
@@ -373,8 +379,9 @@ F_RECORTE = FrasePadrao(
 S_FONTES = Secao("fontes", P, "Fontes de informação", 3)
 S_BASES = Secao("bases", P, "Bases de dados", 4, pai=S_FONTES)
 T_BASES = Tabela("bases", P, S_BASES, ("ID Base", "Sigla", "Nome da base"),
-                 descricao="campo vazio, sigla repetida, sigla com caractere fora de "
-                           "[A-Za-z0-9_-] e sigla sem procedimento de busca reprovam")
+                 descricao="campo vazio, sigla repetida e sigla com caractere fora de "
+                           "[A-Za-z0-9_-] reprovam; sigla sem fonte do procedimento de busca "
+                           "reprova só aquela base")
 I_BD = Identificador("bd", P, S_BASES, "BD")
 F_ORDEM = FrasePadrao(
     "ordem_execucao", P, S_BASES, "Ordem de execução: <base>, <base> e <base>, nesta "
@@ -391,125 +398,6 @@ F_LIMIAR = FrasePadrao(
     "limiar_aderencia", P, S_SEMENTES, "recuperação inferior a N%  (na Regra de ajuste)",
     r"recuperação inferior a\s+(\d+(?:[.,]\d+)?)\s*%",
     descricao="exigida quando há Regra de ajuste: regra sem limiar legível reprova")
-
-# ============================================================================ procedimento de busca
-F = FICHA
-
-SF_CRITERIOS = Secao("procedimento.criterios", F, "2. Critérios de elegibilidade", 2)
-TF_CRITERIOS = Tabela("procedimento.criterios", F, SF_CRITERIOS, ("Critério", "ID"),
-                      modo="posicional",
-                      descricao="IDs CEn na segunda coluna (`CEn / CEm` conta os dois); "
-                                "sem nenhum ID, reprova")
-SF_STRINGS = Secao("procedimento.strings", F, "3. Strings por faceta", 2)
-SF_DECLARACAO = Secao("procedimento.declaracao", F, "Declaração de cobertura", 3, pai=SF_STRINGS)
-TF_DECLARACAO = Tabela(
-    "procedimento.declaracao", F, SF_DECLARACAO, ("Declaração", "Valor"), modo="posicional",
-    linhas="rótulos idiomas, camadas, plural, teto de caracteres, derivações; e a redução declarada, uma linha por "
-           "termo: `| FCTn | termo | motivo |`")
-RF_IDIOMAS = RotuloLinha("procedimento.idiomas", F, TF_DECLARACAO, "idiomas", "idiomas",
-                         descricao="`FCTn: <idioma>, <idioma>; FCTm: …`; ausente, ilegível ou com idioma "
-                                   "fora do quadro reprova")
-RF_CAMADAS = RotuloLinha("procedimento.camadas", F, TF_DECLARACAO, "camadas", "camadas",
-                         descricao="ausente reprova")
-RF_DERIVACOES = RotuloLinha("procedimento.derivacoes", F, TF_DECLARACAO, "derivações",
-                            "derivacoes", exigencia=OPCIONAL,
-                            descricao="ausente, nenhuma derivação declarada")
-RF_PLURAL = RotuloLinha("procedimento.plural", F, TF_DECLARACAO, "plural", "plural",
-                        descricao="ausente reprova")
-D_PLURAL = Dominio("procedimento.plural", F, SF_DECLARACAO, "plural",
-                   {"explícito": "explicito", "pela lematização": "lematizacao"},
-                   descricao="valor fora reprova; `pela lematização` exige a linha "
-                             "'Lematização' da seção 1 verificada por medição, com "
-                             "`(BDn/<id>)` (conferir)")
-PLURAL_EXPLICITO, PLURAL_LEMATIZACAO = D_PLURAL.valores.values()
-RF_TETO = RotuloLinha("procedimento.teto", F, TF_DECLARACAO, "teto de caracteres", "teto",
-                      descricao="ausente reprova")
-D_TETO = Dominio("procedimento.teto", F, SF_DECLARACAO, "teto de caracteres", {"nenhum": None},
-                 descricao="número inteiro de caracteres (`1400` ou `1.400`) ou `nenhum`; "
-                           "outro valor reprova. Com número, consulta executável mais longa "
-                           "reprova a base; com `nenhum`, a maior consulta é relatada "
-                           "(conferir)")
-TETO_NENHUM = "nenhum"
-SF_SINTAXE = Secao("procedimento.sintaxe", F, "1. Estado de verificação da sintaxe", 2,
-                   exigencia=OPCIONAL)
-TF_SINTAXE = Tabela("procedimento.sintaxe", F, SF_SINTAXE, ("Elemento", "Situação"),
-                    modo="posicional", exigencia=OPCIONAL)
-RF_LEMATIZACAO = RotuloLinha(
-    "procedimento.lematizacao", F, TF_SINTAXE, "Lematização", "lematizacao", exigencia=OPCIONAL,
-    descricao="exigida com `plural: pela lematização`: estado 'verificado por medição' e "
-              "citação `(BDn/<id>)`, ou a base reprova (conferir)")
-D_CAMADAS = Dominio("procedimento.camadas", F, SF_DECLARACAO, "camadas",
-                    {"todas": "todas", "nucleo": "nucleo"})
-CAMADAS_TODAS, CAMADAS_NUCLEO = D_CAMADAS.valores
-D_DERIVACOES = Dominio("procedimento.derivacoes", F, SF_DECLARACAO, "derivações",
-                       {"morfologia": "morfologia", "radical": "radical"},
-                       exigencia=OPCIONAL,
-                       descricao="separadas por vírgula, `;` ou ` e `; valor fora reprova")
-DERIVACAO_RADICAL = "radical"
-F_REDUCAO = FrasePadrao("procedimento.reducao", F, SF_DECLARACAO, "| FCTn | termo | motivo |",
-                        r"^FCT\d+$", exigencia=OPCIONAL,
-                        descricao="motivo com `radical` afirma alcance pela forma radical "
-                                  "(conferido); com `pendente`, lacuna em aberto")
-MOTIVO_RADICAL = "radical"
-MOTIVO_PENDENTE = "pendente"
-F_STRING_BASE = FrasePadrao(
-    "procedimento.string", F, SF_STRINGS, "### `STRn` — … FCTn … conjunto `#n`, com um bloco ```",
-    r"`(STR\d+[a-z]?)`",
-    descricao="sem FCTn no cabeçalho, ou com número de blocos diferente de um, reprova; "
-              "procedimento de busca sem nenhuma string legível reprova")
-F_CONJUNTO = FrasePadrao("procedimento.conjunto", F, SF_STRINGS, "conjunto `#n`",
-                         r"conjunto\s+`(#\w+)`", exigencia=OPCIONAL)
-SF_EXPRESSOES = Secao("procedimento.expressoes", F, "4. Expressões de busca", 2)
-MF_EXECUCAO = Marcador("procedimento.execucao", F, SF_EXPRESSOES, "- Execução: <forma>",
-                       r"^-\s*Execução:\s*(.*?)\s*$",
-                       descricao="exatamente uma linha; ausente ou repetida reprova")
-D_EXECUCAO = Dominio("procedimento.execucao", F, SF_EXPRESSOES, "Execução",
-                     {"única": "unica", "particionada": "particionada"})
-F_EXPRESSAO_BASE = FrasePadrao(
-    "procedimento.expressao", F, SF_EXPRESSOES, "### EBn …", r"^(EB\d+)", exigencia=OPCIONAL,
-    descricao="as expressões do procedimento de busca têm de ser as do protocolo (conferência)")
-MARCA_FACETAS = "Facetas:"
-MF_FACETAS = Marcador("procedimento.facetas", F, SF_EXPRESSOES, f"**{MARCA_FACETAS}** FCTn AND …",
-                      re.escape(MARCA_FACETAS) + r"\s*\**\s*(.+)", exigencia=OPCIONAL,
-                      descricao="as facetas da expressão têm de ser as da composição "
-                                "(conferência)")
-# Subtítulos de `4. Expressões de busca` que não são expressão (início do título, em
-# minúsculas) e os que têm leitura própria.
-SUBTITULOS_IGNORADOS = ("como executar", "variantes", "como esta base",
-                        "estratégia de proximidade")
-SUBTITULO_PROXIMIDADE = "proximidade"
-SUBTITULO_CURADAS = "curadas"
-SUBTITULO_FORMA_LONGA = "forma longa"
-M_SUBTITULOS = Marcador(
-    "procedimento.subtitulos", F, SF_EXPRESSOES,
-    "### <subtítulo> com: " + ", ".join(SUBTITULOS_IGNORADOS + (
-        SUBTITULO_PROXIMIDADE, SUBTITULO_CURADAS, SUBTITULO_FORMA_LONGA)),
-    r"^###\s+", exigencia=OPCIONAL,
-    descricao="como executar / variantes / como esta base / estratégia de proximidade: "
-              "ignorados; proximidade: "
-              "conjunto das âncoras; curadas: forma curada (`#### grupo` e `| n | "
-              "`consulta` | FCTn |`); forma longa: `**EBn**` com bloco")
-ROTULO_NAO_EXECUTADA = "nao e a forma executada"
-# Estatuto da expressão, lido do texto que segue o subtítulo `### EBn` (normalizado). A
-# ordem importa: a primeira frase encontrada decide.
-ESTATUTOS = (
-    ("sonda", ("sonda de sensibilidade", "controle de sensibilidade")),
-    ("fidelidade", ("teste de fidelidade",)),
-    ("derivada", ("nao se executa", "derivada localmente")),
-    ("executada", ("executada e exportada", "esta que se executa")),
-)
-F_ESTATUTO = FrasePadrao(
-    "procedimento.estatuto", F, SF_EXPRESSOES,
-    "; ".join(f"{e}: " + " / ".join(fr) for e, fr in ESTATUTOS),
-    "|".join(re.escape(fr) for _, frs in ESTATUTOS for fr in frs), exigencia=OPCIONAL,
-    descricao="sem nenhuma, o estatuto é `nao declarado`")
-F_CITACAO = FrasePadrao(
-    "procedimento.citacao_execucao", F, None, "(BDn/<id>)  em toda menção ao registro de execução",
-    r"\((BD\d+)/([^)\s]+)\)", exigencia=OPCIONAL,
-    descricao="menção ao registro sem a citação, ou citação — com ou sem o caminho do "
-              "registro na linha — com BDn de outra base ou com execução inexistente, "
-              "reprova a base (python3 -m rsl dados conferir)")
-
 
 # ============================================================== arquivo de sementes
 # O caminho do arquivo vem do config.toml (`[documentos] sementes`), não da gramática.
@@ -573,6 +461,482 @@ F_DOI = FrasePadrao("doi", A, None, "10.<prefixo>/<sufixo>  (no campo doi, sem `
                     descricao="doi presente fora da forma reprova")
 
 
+# ======================================================== fonte do procedimento de busca
+# O procedimento de busca de cada base (`[documentos] procedimento`) é SAÍDA de
+# `procedimentos gerar` e não tem gramática de leitura. O que se lê e se edita é a fonte da
+# base (`[documentos] procedimento_fonte`): `procedimento.toml`, de esquema fechado, e os
+# fragmentos de prosa de nome fixo. Nenhum valor de base entra aqui: só a forma.
+F = FONTE
+
+
+class TabelaFonte(Elemento):
+    """Tabela de um arquivo TOML de esquema fechado: `[chave]` (única) ou `[[chave]]`
+    (lista de tabelas). `pai` é a tabela que a contém (`[[sondagens.consultas]]`). A raiz
+    do arquivo é a tabela de chave vazia. Campo fora do esquema reprova."""
+
+    tipo = "tabela"
+
+    def __init__(self, nome, documento, chave, multipla=False, exigencia=EXIGIDO,
+                 descricao="", pai=None, minimo=1):
+        self.chave = chave
+        self.multipla = multipla
+        self.pai = pai
+        self.minimo = minimo
+        self.campos = []
+        self.subtabelas = []
+        if pai is not None:
+            pai.subtabelas.append(self)
+        super().__init__(nome, documento, exigencia, descricao)
+
+    @property
+    def local(self):
+        """Nome da tabela dentro da que a contém (`consultas` em `sondagens.consultas`)."""
+        return self.chave.rsplit(".", 1)[-1]
+
+    @property
+    def rotulo(self):
+        if not self.chave:
+            return "raiz do arquivo"
+        return f"tabela [[{self.chave}]]" if self.multipla else f"tabela [{self.chave}]"
+
+    def forma(self):
+        campos = ", ".join(f"{c.chave}{'' if c.exigido else '?'}" for c in self.campos)
+        subs = ", ".join(s.rotulo for s in self.subtabelas)
+        minimo = f"; ao menos {self.minimo} item(ns)" if self.multipla and self.minimo else ""
+        return (f"campos: {campos or '—'}{'; contém ' + subs if subs else ''}{minimo}; "
+                f"`?` = opcional; campo fora do esquema reprova")
+
+
+class CampoFonte(Elemento):
+    """Campo de uma tabela de esquema fechado: tipo, exigência e, quando há, domínio."""
+
+    tipo = "campo"
+    TIPOS = ("texto", "lista de textos", "inteiro", "booleano", "tabela de listas",
+             "inteiro ou texto", "texto ou tabela", "tabela", "lista de tabelas")
+
+    def __init__(self, tabela, chave, tipo_valor, exigencia=EXIGIDO, dominio=None,
+                 descricao=""):
+        assert tipo_valor in self.TIPOS, tipo_valor
+        self.tabela = tabela
+        self.chave = chave
+        self.tipo_valor = tipo_valor
+        self.dominio = tuple(dominio) if dominio else None
+        tabela.campos.append(self)
+        nome = f"{tabela.chave or 'raiz'}.{chave}"
+        super().__init__(nome, tabela.documento, exigencia, descricao)
+
+    @property
+    def rotulo(self):
+        return f"campo '{self.chave}' da {self.tabela.rotulo}"
+
+    def forma(self):
+        dom = f" em {{{', '.join(self.dominio)}}}" if self.dominio else ""
+        return f"{self.chave} = <{self.tipo_valor}>{dom}"
+
+    def aceita(self, valor):
+        """O valor tem o tipo declarado (o domínio se confere à parte)."""
+        def texto(v):
+            return isinstance(v, str)
+
+        def lista(v):
+            return isinstance(v, list) and all(isinstance(x, str) for x in v)
+
+        def inteiro(v):
+            return isinstance(v, int) and not isinstance(v, bool)
+        t = self.tipo_valor
+        if t == "texto":
+            return texto(valor)
+        if t == "lista de textos":
+            return lista(valor)
+        if t == "inteiro":
+            return inteiro(valor)
+        if t == "booleano":
+            return isinstance(valor, bool)
+        if t == "tabela de listas":
+            return isinstance(valor, dict) and all(lista(v) for v in valor.values())
+        if t == "inteiro ou texto":
+            return inteiro(valor) or texto(valor)
+        if t == "texto ou tabela":
+            return texto(valor) or isinstance(valor, dict)
+        if t == "tabela":
+            return isinstance(valor, dict)
+        if t == "lista de tabelas":
+            return isinstance(valor, list) and all(isinstance(x, dict) for x in valor)
+        return False
+
+
+# Marca do que ainda não foi apurado: valor de campo ou linha de fragmento.
+PENDENTE = "PENDENTE"
+
+# Situação de um elemento de sintaxe, de uma regra de montagem e estado de uma leitura de
+# sondagem. A leitura de estado `nao_verificado` é a leitura inconclusiva.
+SITUACOES = ("oficial", "secundaria", "medicao", "nao_verificado", "inexistente")
+SITUACAO_MEDICAO, SITUACAO_NAO_VERIFICADO = "medicao", "nao_verificado"
+SITUACAO_TEXTO = {"oficial": "Verificado em fonte oficial",
+                  "secundaria": "Verificado em fonte secundária",
+                  "medicao": "Verificado por medição",
+                  "nao_verificado": "**Não verificado**",
+                  "inexistente": "**Não existe**"}
+# Categorias mínimas: cada uma tem ao menos um elemento de sintaxe em toda base.
+CATEGORIAS = ("campos", "operadores", "frase", "truncamento", "lematizacao", "proximidade",
+              "agrupamento", "limite_consulta", "limite_retorno", "limite_exportacao",
+              "filtros", "vocabulario_controlado", "idioma_indexacao", "exportacao")
+CATEGORIA_LEMATIZACAO = "lematizacao"
+CATEGORIA_TRUNCAMENTO = "truncamento"
+DESTINOS = ("consulta", "ancora", "interface", "variante", "aproximado", "dispensado",
+            "nao")
+DESTINOS_COM_CLAUSULA = ("consulta", "variante")
+DESTINO_CONSULTA = "consulta"
+DESTINO_TEXTO = {"consulta": "**Sim**", "ancora": "**Sim**, por âncora",
+                 "interface": "**No filtro da interface**", "variante": "Em variante",
+                 "aproximado": "Aproximado", "dispensado": "**Dispensado**",
+                 "nao": "**Não**"}
+PAPEIS_CONSULTA = ("teste", "controle")
+ESTATUTOS = ("executada", "sonda", "fidelidade", "derivada")
+ESTATUTOS_COM_BLOCO = ("executada", "sonda", "fidelidade")
+
+T_RAIZ = TabelaFonte("fonte", F, "", descricao="TOML inválido ou chave fora do esquema "
+                                                "reprova a base")
+C_RESSALVAS = CampoFonte(T_RAIZ, "ressalvas", "lista de textos", OPCIONAL,
+                         descricao="§6, uma ressalva por item")
+
+T_SINTAXE = TabelaFonte("fonte.sintaxe", F, "sintaxe", multipla=True,
+                        descricao="§1, uma linha por elemento; toda categoria mínima tem "
+                                  "ao menos um elemento")
+CampoFonte(T_SINTAXE, "elemento", "texto", descricao="nome repetido reprova")
+D_CATEGORIA = CampoFonte(T_SINTAXE, "categoria", "texto", dominio=CATEGORIAS,
+                         descricao="categoria sem elemento na base reprova")
+CampoFonte(T_SINTAXE, "idioma", "texto", OPCIONAL,
+           descricao="só na categoria `lematizacao`; idioma fora do quadro reprova")
+D_SITUACAO = CampoFonte(T_SINTAXE, "situacao", "texto", dominio=SITUACOES,
+                        descricao="`medicao` exige `citacao`; `nao_verificado` exige "
+                                  "`sondagem` ou `sem_sondagem`")
+CampoFonte(T_SINTAXE, "fonte", "texto", OPCIONAL, descricao="fonte da verificação ou da "
+                                                            "ausência")
+C_CITACAO = CampoFonte(T_SINTAXE, "citacao", "texto", OPCIONAL,
+                       descricao="`BDn/<id>` da própria base; exigida em `medicao`; a "
+                                 "existência do id é conferida por `dados conferir`")
+CampoFonte(T_SINTAXE, "sondagem", "texto", OPCIONAL,
+           descricao="`SDn` existente que lista o elemento")
+CampoFonte(T_SINTAXE, "sem_sondagem", "texto", OPCIONAL,
+           descricao="motivo de não haver sondagem")
+CampoFonte(T_SINTAXE, "nota", "texto", OPCIONAL)
+
+T_CRITERIOS_F = TabelaFonte("fonte.criterios", F, "criterios", multipla=True,
+                            descricao="§2; o conjunto dos IDs tem de ser o do protocolo "
+                                      "(conferência)")
+CampoFonte(T_CRITERIOS_F, "ids", "lista de textos", descricao="CEn")
+CampoFonte(T_CRITERIOS_F, "rotulo", "texto")
+D_DESTINO = CampoFonte(T_CRITERIOS_F, "destino", "texto", dominio=DESTINOS,
+                       descricao="`consulta` e `variante` exigem `clausula`")
+CampoFonte(T_CRITERIOS_F, "como", "texto")
+CampoFonte(T_CRITERIOS_F, "clausula", "texto", OPCIONAL,
+           descricao="sintaxe literal do filtro; a de `consulta` é a única fonte dos "
+                     "filtros dos blocos")
+
+T_COBERTURA = TabelaFonte("fonte.cobertura", F, "cobertura",
+                          descricao="§3, declaração de cobertura")
+CampoFonte(T_COBERTURA, "idiomas", "tabela de listas",
+           descricao="FCTn = [idiomas]; faceta ou idioma desconhecido reprova")
+D_CAMADAS_F = CampoFonte(T_COBERTURA, "camadas", "texto", dominio=("todas", "nucleo"))
+CAMADAS_TODAS, CAMADAS_NUCLEO = D_CAMADAS_F.dominio
+PLURAL_EXPLICITO, PLURAL_LEMATIZACAO = "explícito", "pela lematização"
+D_PLURAL_F = CampoFonte(T_COBERTURA, "plural", "texto ou tabela",
+                        dominio=(PLURAL_EXPLICITO, PLURAL_LEMATIZACAO),
+                        descricao="valor único, ou tabela por idioma cobrindo todos os "
+                                  "idiomas da base; `pela lematização` exige elemento de "
+                                  "`lematizacao` medido, com citação (conferir)")
+TETO_NENHUM = "nenhum"
+D_TETO_F = CampoFonte(T_COBERTURA, "teto", "inteiro ou texto", dominio=(TETO_NENHUM,),
+                      descricao="inteiro positivo de caracteres ou `nenhum`")
+DERIVACAO_MORFOLOGIA, DERIVACAO_RADICAL = "morfologia", "radical"
+D_DERIVACOES_F = CampoFonte(T_COBERTURA, "derivacoes", "lista de textos", OPCIONAL,
+                            dominio=(DERIVACAO_MORFOLOGIA, DERIVACAO_RADICAL))
+
+T_REDUCAO = TabelaFonte("fonte.reducao", F, "reducao", multipla=True, exigencia=OPCIONAL,
+                        minimo=0, descricao="§3, termo vigente fora dos blocos")
+CampoFonte(T_REDUCAO, "faceta", "texto")
+CampoFonte(T_REDUCAO, "termo", "texto")
+CampoFonte(T_REDUCAO, "motivo", "texto",
+           descricao="com `radical`, afirma alcance pela forma radical (conferido); com "
+                     "`pendente`, lacuna em aberto")
+MOTIVO_RADICAL = "radical"
+MOTIVO_PENDENTE = "pendente"
+
+T_COMPOSICAO = TabelaFonte("fonte.composicao", F, "composicao",
+                           descricao="parâmetros de composição dos blocos")
+D_ASPAS = CampoFonte(T_COMPOSICAO, "aspas", "texto", dominio=("todo_termo", "locucao"),
+                     descricao="`locucao`: aspas só no termo com espaço ou hífen")
+ASPAS_TODO_TERMO, ASPAS_LOCUCAO = D_ASPAS.dominio
+D_PROXIMIDADE = CampoFonte(T_COMPOSICAO, "proximidade", "texto ou tabela",
+                           dominio=("nenhum",),
+                           descricao="`nenhum` ou {operador = \"NEAR\", distancia = 5}; "
+                                     "com proximidade, as âncoras ficam no mesmo campo")
+D_DISJUNCAO = CampoFonte(T_COMPOSICAO, "disjuncao", "texto",
+                         dominio=("em_linha", "consultas_separadas"),
+                         descricao="`consultas_separadas`: cada alternativa de um grupo "
+                                   "com OR vira consulta própria")
+DISJUNCAO_EM_LINHA, DISJUNCAO_SEPARADA = D_DISJUNCAO.dominio
+T_COMP_FACETAS = TabelaFonte("fonte.composicao.facetas", F, "composicao.facetas",
+                             multipla=True, pai=T_COMPOSICAO,
+                             descricao="uma por faceta do protocolo")
+CampoFonte(T_COMP_FACETAS, "faceta", "texto")
+CampoFonte(T_COMP_FACETAS, "campo", "texto",
+           descricao="texto literal do campo, como a base o escreve; vazio = sem campo")
+D_FORMA_CAMPO = CampoFonte(T_COMP_FACETAS, "forma", "texto", dominio=("envolve", "prefixa"),
+                           descricao="`envolve`: campo(grupo); `prefixa`: campo em cada termo")
+FORMA_ENVOLVE, FORMA_PREFIXA = D_FORMA_CAMPO.dominio
+CampoFonte(T_COMP_FACETAS, "rotulo", "texto", OPCIONAL,
+           descricao="nome curto da faceta no rótulo das consultas separadas")
+CampoFonte(T_COMP_FACETAS, "cor", "texto", OPCIONAL, descricao="marca da faceta no texto")
+
+T_CONSULTAS_CAMPO = TabelaFonte("fonte.consultas_de_campo", F, "consultas_de_campo",
+                                multipla=True, exigencia=OPCIONAL, minimo=0,
+                                descricao="cada expressão executada vira uma consulta por "
+                                          "entrada, rotulada `<n><letra>`")
+CampoFonte(T_CONSULTAS_CAMPO, "letra", "texto")
+CampoFonte(T_CONSULTAS_CAMPO, "faceta", "texto")
+CampoFonte(T_CONSULTAS_CAMPO, "string", "texto", descricao="STRn ou id de subconjunto")
+CampoFonte(T_CONSULTAS_CAMPO, "campo", "texto")
+CampoFonte(T_CONSULTAS_CAMPO, "rotulo", "texto")
+
+T_SUBCONJUNTOS = TabelaFonte("fonte.subconjuntos", F, "subconjuntos", multipla=True,
+                             exigencia=OPCIONAL, minimo=0,
+                             descricao="termo fora da STR da faceta, e não subsumido por "
+                                       "ela, reprova")
+T_RADICAL = TabelaFonte("fonte.radical", F, "radical", multipla=True, exigencia=OPCIONAL,
+                        minimo=0, descricao="forma radical que substitui a STR da faceta")
+for _t in (T_SUBCONJUNTOS, T_RADICAL):
+    CampoFonte(_t, "id", "texto", descricao="`STRn` ou `STRn<letra>`")
+    CampoFonte(_t, "faceta", "texto")
+    CampoFonte(_t, "campo", "texto")
+    CampoFonte(_t, "termos", "lista de textos")
+    CampoFonte(_t, "rotulo", "texto")
+
+T_EXECUCAO = TabelaFonte("fonte.execucao", F, "execucao", descricao="§4")
+FORMAS_EXECUCAO = ("unica", "particionada", "curada")
+FORMA_EXECUCAO_TEXTO = {"unica": "única", "particionada": "particionada",
+                        "curada": "curada"}
+D_EXECUCAO_F = CampoFonte(T_EXECUCAO, "forma", "texto", dominio=FORMAS_EXECUCAO,
+                          descricao="sem padrão; `unica` com partição necessária reprova")
+T_EXPRESSOES_F = TabelaFonte("fonte.execucao.expressoes", F, "execucao.expressoes",
+                             multipla=True, pai=T_EXECUCAO,
+                             descricao="uma por expressão do protocolo")
+CampoFonte(T_EXPRESSOES_F, "id", "texto", descricao="EBn do protocolo")
+CampoFonte(T_EXPRESSOES_F, "titulo", "texto", descricao="vai a `### EBn (<titulo>)`")
+CampoFonte(T_EXPRESSOES_F, "estatuto", "texto", OPCIONAL, dominio=ESTATUTOS,
+           descricao="só quando difere do papel lido do protocolo")
+
+T_REGRAS = TabelaFonte("fonte.regras_de_montagem", F, "regras_de_montagem", multipla=True,
+                       exigencia=OPCIONAL, minimo=0,
+                       descricao="§4, \"Como esta base exige a montagem\"")
+CampoFonte(T_REGRAS, "texto", "texto")
+CampoFonte(T_REGRAS, "situacao", "texto", dominio=SITUACOES,
+           descricao="as mesmas exigências da situação de [[sintaxe]]")
+CampoFonte(T_REGRAS, "citacao", "texto", OPCIONAL)
+CampoFonte(T_REGRAS, "sondagem", "texto", OPCIONAL)
+CampoFonte(T_REGRAS, "sem_sondagem", "texto", OPCIONAL)
+
+T_CURADAS = TabelaFonte("fonte.curadas", F, "curadas", multipla=True, exigencia=OPCIONAL,
+                        minimo=0, descricao="exigida com `forma = \"curada\"`")
+CampoFonte(T_CURADAS, "grupo", "texto")
+CampoFonte(T_CURADAS, "consulta", "texto")
+CampoFonte(T_CURADAS, "facetas", "lista de textos")
+
+T_SEMENTES_F = TabelaFonte("fonte.sementes", F, "sementes", multipla=True,
+                           exigencia=OPCIONAL, minimo=0,
+                           descricao="observação por semente; semente que não é da base "
+                                     "reprova")
+CampoFonte(T_SEMENTES_F, "id", "texto")
+CampoFonte(T_SEMENTES_F, "observacao", "texto")
+
+T_SONDAGENS = TabelaFonte("fonte.sondagens", F, "sondagens", multipla=True,
+                          exigencia=OPCIONAL, minimo=0,
+                          descricao="roteiro executável; ciclo em `depende_de` reprova")
+I_SD = Identificador("sd", F, None, "SD", descricao="SDn em sequência por base")
+CampoFonte(T_SONDAGENS, "id", "texto", descricao="SDn")
+CampoFonte(T_SONDAGENS, "elementos", "lista de textos",
+           descricao="elementos de [[sintaxe]] ou textos de [[regras_de_montagem]]")
+CampoFonte(T_SONDAGENS, "objetivo", "texto")
+CampoFonte(T_SONDAGENS, "pre_requisitos", "lista de textos")
+CampoFonte(T_SONDAGENS, "passos", "lista de textos")
+CampoFonte(T_SONDAGENS, "observar", "lista de textos")
+CampoFonte(T_SONDAGENS, "evidencia", "lista de textos")
+CampoFonte(T_SONDAGENS, "depende_de", "lista de textos", OPCIONAL)
+T_SOND_CONSULTAS = TabelaFonte("fonte.sondagens.consultas", F, "sondagens.consultas",
+                               multipla=True, pai=T_SONDAGENS,
+                               descricao="ao menos uma por sondagem")
+D_PAPEL_CONSULTA = CampoFonte(T_SOND_CONSULTAS, "papel", "texto", dominio=PAPEIS_CONSULTA)
+CampoFonte(T_SOND_CONSULTAS, "texto", "texto", descricao="consulta literal")
+CampoFonte(T_SOND_CONSULTAS, "onde", "texto", descricao="caixa, campo ou filtro")
+CampoFonte(T_SOND_CONSULTAS, "muda", "texto", OPCIONAL,
+           descricao="o que muda em relação ao controle")
+T_SOND_LEITURAS = TabelaFonte("fonte.sondagens.leituras", F, "sondagens.leituras",
+                              multipla=True, pai=T_SONDAGENS, minimo=2,
+                              descricao="ao menos duas; uma delas, a inconclusiva, com "
+                                        "`estado = \"nao_verificado\"`")
+CampoFonte(T_SOND_LEITURAS, "resultado", "texto", descricao="condição observável")
+CampoFonte(T_SOND_LEITURAS, "conclusao", "texto")
+CampoFonte(T_SOND_LEITURAS, "estado", "texto", dominio=SITUACOES,
+           descricao="a situação que o elemento passa a ter")
+
+# Fragmentos de prosa: nome → (posição no procedimento, admite `####`).
+FRAGMENTOS = {
+    "notas_sintaxe.md": ("§1, depois da tabela", False),
+    "estrategia_de_proximidade.md": ("§4, subseção \"Estratégia de proximidade\"", False),
+    "como_executar.md": ("§4, subseção \"Como executar\" (obrigatório)", False),
+    "variantes.md": ("§4, subseção \"Variantes previstas\"", True),
+    "notas_execucao.md": ("§4, depois das linhas fixas de execução", False),
+    "notas_sementes.md": ("§5, depois do limiar", False),
+}
+FRAGMENTO_OBRIGATORIO = "como_executar.md"
+LINHA_EXECUCAO = "- Execução:"
+FR_FRAGMENTOS = FrasePadrao(
+    "fonte.fragmentos", F, None,
+    "; ".join(f"{n} ({p})" for n, (p, _) in FRAGMENTOS.items()),
+    r"^(#{1,4})\s", exigencia=OPCIONAL,
+    descricao="nome desconhecido, falta de como_executar.md, título de nível 1 a 3, "
+              "`####` fora de variantes.md e a linha `- Execução:` reprovam a base")
+F_CITACAO = FrasePadrao(
+    "fonte.citacao_execucao", F, None,
+    "BDn/<id>  (no texto, `(BDn/<id>)`) em toda menção ao registro de execução",
+    r"\b(BD\d+)/([A-Za-z0-9][\w.-]*)", exigencia=OPCIONAL,
+    descricao="menção ao registro sem a citação, ou citação com BDn de outra base ou com "
+              "id ausente de `execucoes` e de `sondagens`, reprova a base "
+              "(python3 -m rsl dados conferir)")
+
+# Esqueleto e texto fixo do procedimento gerado (saída; não tem leitura).
+ESQUELETO = {
+    "titulo": "# Strings de busca — {nome}",
+    "s1": "## 1. Estado de verificação da sintaxe",
+    "s1_colunas": ("Elemento", "Categoria", "Situação", "Fonte", "Sondagem"),
+    "s1_sondagens": "### Sondagens a executar",
+    "s2": "## 2. Critérios de elegibilidade",
+    "s2_colunas": ("Critério", "ID", "Na consulta?", "Como"),
+    "s3": "## 3. Strings por faceta",
+    "s3_declaracao": "### Declaração de cobertura",
+    "s4": "## 4. Expressões de busca",
+    "s4_montagem": "### Como esta base exige a montagem",
+    "s4_proximidade": "### Estratégia de proximidade",
+    "s4_curadas": "### Forma curada",
+    "s4_como": "### Como executar",
+    "s4_variantes": "### Variantes previstas",
+    "s5": "## 5. Conjunto-semente",
+    "s6": "## 6. Ressalvas",
+    "separador": "---",
+}
+TEXTO_FIXO = {
+    "aviso": "<!-- Gerado por `python3 -m rsl procedimentos gerar {sigla} --gravar` a partir "
+             "de `{fonte}`, do protocolo e do arquivo de sementes. Não editar: a edição à mão "
+             "reprova em `documentos conferir`. -->",
+    "s3_intro": "`STRn` é o identificador do protocolo e `#n` o número da string na "
+                "composição. Mapa das facetas: {mapa}.",
+    "s3_declaracao": "Declarada em `{fonte}`, `[cobertura]`; conferida por `python3 -m rsl "
+                     "documentos conferir`.",
+    "s3_reducao": "**Redução desta base.**",
+    "s1_seguranca": "Uma consulta por vez, sem nova tentativa automática; parar diante de "
+                    "captcha, aviso de atividade atípica ou bloqueio, e registrar.",
+    "fidelidade": "- **Fidelidade:** divergência acima de `divergencia_fidelidade` "
+                  "(`python3 -m rsl configuracao mostrar`) entre {expressoes} executadas e "
+                  "derivadas reprova a derivação.",
+    "sensibilidade": "- **Sensibilidade:** fração elegível de `{sonda} \\ {executada}` abaixo "
+                     "do limite inferior da faixa `sensibilidade` (`python3 -m rsl "
+                     "configuracao mostrar`) mantém {executada}; acima do superior, leva à "
+                     "reconsideração, com emenda.",
+    "retorno_zero": "- **Retorno zero:** {executada} = 0 ou {sonda} = 0 é defeito de "
+                    "execução até prova em contrário; contagem derivada próxima de zero "
+                    "exige execução direta antes do relato.",
+    "s5_intro": "Esperadas nesta base, conforme o protocolo. Estado de conferência no "
+                "arquivo de sementes (`[documentos] sementes`); aferição em "
+                "`data/semente_aderencia.csv`.",
+    "s5_procedimento": "**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem "
+                       "recorte temporal e sem as expressões; semente não indexada sai do "
+                       "denominador e registra-se como cobertura. *Etapa 2:* procurar a "
+                       "semente na exportação de {executada} por DOI e depois por título, "
+                       "sem reexecutar a busca.",
+    "s5_limiar": "**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao "
+                 "mostrar`), sobre a união das bases. A aderência por base indica qual base "
+                 "e qual faceta falharam.",
+}
+EXECUCAO_TEXTO = {"executada": "executar e exportar: é o corpus desta base",
+                  "sonda": "executar uma única vez, na mesma data; não compõe o corpus",
+                  "fidelidade": "executar só para o teste de fidelidade da derivação",
+                  "derivada": "não executar; derivação local"}
+ESTATUTO_FRASE = {"executada": "Executada e exportada nesta base.",
+                  "sonda": "Sonda de sensibilidade — executada uma única vez; não compõe o "
+                           "corpus.",
+                  "fidelidade": "Derivada localmente — executar apenas no teste de "
+                                "fidelidade.",
+                  "derivada": "Derivada localmente — não executar."}
+ESTATUTO_PAPEL = {"executada": "(executada)", "sonda": "(sonda de sensibilidade)"}
+
+# Modelo textual de `procedimentos iniciar`: a biblioteca padrão lê TOML e não o escreve.
+# `{...}` é preenchido com o derivável; o resto vem com a marca PENDENTE.
+MODELO_INICIO = '''# Fonte do procedimento de busca de {nome} ({bd}), criada por
+# `python3 -m rsl procedimentos iniciar {sigla}`. Esquema: `python3 -m rsl documentos gramatica`.
+# Toda marca "{pendente}" é trabalho a fazer: a base fica reprovada até não restar nenhuma.
+
+ressalvas = []
+
+{sintaxe}
+{criterios}
+[cobertura]
+camadas = "todas"
+plural = "explícito"
+teto = "{pendente}"
+derivacoes = ["{pendente}"]
+
+[cobertura.idiomas]
+{idiomas}
+
+[composicao]
+aspas = "{pendente}"
+proximidade = "{pendente}"
+disjuncao = "{pendente}"
+{composicao}
+[execucao]
+forma = "{pendente}"
+{expressoes}
+{sementes}'''
+
+
+# ============================================================ arquivo de exceções de flexão
+X = FLEXOES
+T_RAIZ_FLEXOES = TabelaFonte("flexoes", X, "", exigencia=OPCIONAL,
+                             descricao="arquivo ausente: nenhuma exceção; TOML inválido ou "
+                                       "chave fora do esquema reprova")
+T_EXCECOES = TabelaFonte("flexoes.excecoes", X, "excecoes", multipla=True, minimo=0,
+                         descricao="exceção repetida para o mesmo termo e idioma reprova; "
+                                   "exceção de termo fora de toda STR é relatada")
+CampoFonte(T_EXCECOES, "termo", "texto")
+CampoFonte(T_EXCECOES, "idioma", "texto", descricao="idioma do quadro")
+D_TIPO_EXCECAO = CampoFonte(T_EXCECOES, "tipo", "texto",
+                            dominio=("irregular", "nao_contavel", "vetada"),
+                            descricao="`irregular` e `vetada` exigem `formas`")
+EXC_IRREGULAR, EXC_NAO_CONTAVEL, EXC_VETADA = D_TIPO_EXCECAO.dominio
+CampoFonte(T_EXCECOES, "formas", "lista de textos", OPCIONAL,
+           descricao="irregular: as formas de plural; vetada: a forma que não se usa")
+CampoFonte(T_EXCECOES, "origem", "texto", descricao="fonte ou decisão que sustenta a "
+                                                    "exceção")
+
+
+# ======================================================= resultado de sondagem registrado
+R = SONDAGEM
+T_RES_SONDAGEM = TabelaFonte("registro.sondagens", R, "bases.BDn.sondagens", multipla=True,
+                             minimo=0, descricao="gravado por `sondagens registrar`; id "
+                                                 "repetido na base reprova")
+CampoFonte(T_RES_SONDAGEM, "id", "texto", descricao="`sd<n>-<data>`, com sufixo quando "
+                                                    "se repete")
+CampoFonte(T_RES_SONDAGEM, "sondagem", "texto", descricao="SDn existente na fonte da base")
+CampoFonte(T_RES_SONDAGEM, "data_hora", "texto", descricao="ISO 8601")
+CampoFonte(T_RES_SONDAGEM, "consultas", "lista de tabelas",
+           descricao="lista de {texto, retorno}, na ordem das consultas declaradas")
+CampoFonte(T_RES_SONDAGEM, "leitura", "tabela",
+           descricao="{numero, resultado, estado}: uma das leituras declaradas")
+CampoFonte(T_RES_SONDAGEM, "evidencia", "lista de textos", descricao="caminhos relativos")
+CampoFonte(T_RES_SONDAGEM, "observacao", "texto", OPCIONAL)
+
+
 def exigidos(documento=None):
     return [e for e in ELEMENTOS if e.exigido and (documento is None or
                                                     e.documento == documento)]
@@ -590,6 +954,10 @@ def contrato():
             if e.descricao:
                 linhas.append(f"      reprova: {e.descricao}")
         linhas.append("")
+    linhas.append(f"O {PROCEDIMENTO} de cada base não tem grupo: é saída de `python3 -m rsl "
+                  f"procedimentos gerar`, gerado da fonte, do protocolo e do arquivo de "
+                  f"sementes; edita-se a fonte. Categorias mínimas de [[sintaxe]]: "
+                  f"{', '.join(CATEGORIAS)}.")
     linhas.append("Níveis: exigido — ausente ou fora da forma, PROTOCOLO_ILEGIVEL; opcional — "
                   "ausente, vale o padrão ou a conferência relata; presente e fora da forma, "
                   "PROTOCOLO_ILEGIVEL.")

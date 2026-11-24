@@ -166,12 +166,13 @@
       "responsavel": "pesquisador"
     },
     {
-      "id": "PD26",
+      "id": "PD27",
       "categoria": "sintaxe-base",
-      "descricao": "WoS, Scopus e BRAPCI declaram `plural: explícito` na declaração de cobertura, mas as strings dos procedimentos de busca trazem termos numa só forma de número, fora do alcance de truncamento. A contagem por base é a do relato de `python3 -m rsl documentos conferir`. Pelas skills `expressoes-de-busca` e `procedimento-de-busca-por-base`, `explícito` exige as duas formas de número. Se a base não lematizar, há perda de recall; a lematização de nenhuma das três está medida.",
-      "origem": "python3 -m rsl documentos conferir (relato 'termo(s) numa só forma de número'); data/historico.md, 2026-11-22, change `strings-geradas-do-quadro`; verificação da change em 2026-11-22",
-      "bloqueia": "primeira execução da busca na WoS, na Scopus e na BRAPCI",
-      "acao_sugerida": "aplicar a change `geracao-das-fichas-de-busca` (decisão do pesquisador de 2026-11-23): o plural explícito passa a ser gerado por regra e exceções declaradas, e `plural` passa a valer por idioma. Para o idioma que a base lematiza, medir a lematização numa execução registrada (skill `flexao-por-base`), citá-la na linha 'Lematização' da seção 1 e declarar `pela lematização` para ele. A pendência sai na primeira gravação de `procedimentos gerar`",
+      "base": "BD3 — ERIC",
+      "descricao": "Contradição de verificação na ERIC: a seção 4 do procedimento anterior à migração chamava de \"regras medidas\" as regras de montagem (grupo com OR exige condição externa; grupo não mistura campos; pubyearmin/pubyearmax não convivem com grupo; sem truncamento), e a skill `execucao-da-busca` afirma que a ERIC não trunca (`ontolog*` devolve 0); a seção 1 do mesmo procedimento dava esses elementos como não verificados, e nenhuma sondagem com evidência está no repositório. Transcritos como `nao_verificado`, com sondagem no roteiro, sem resolver a contradição.",
+      "origem": "docs/procedimentos_busca_eric.md antes da migração de 2026-11-23 (seções 1 e 4); .agents/skills/execucao-da-busca/SKILL.md, seção \"Antes da primeira execução numa base\"; change `geracao-das-fichas-de-busca`, tarefa 6.2",
+      "bloqueia": "execução definitiva na ERIC, junto com a PD09",
+      "acao_sugerida": "executar as sondagens SD1 a SD9 do roteiro da ERIC, registrá-las por `sondagens registrar` e corrigir a afirmação da skill `execucao-da-busca` pelo resultado registrado",
       "responsavel": "pesquisador"
     }
   ]

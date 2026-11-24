@@ -60,25 +60,26 @@ exigir, já na 1ª filtragem, pelo menos uma das duas dimensões.
 
 ## Parte 2 — a sintaxe é parâmetro da base
 
-**Medida, não documentada, e declarada no procedimento de busca da base.** Esta skill não traz a sintaxe
-de base alguma. O que difere de uma base para outra é parâmetro: apurado e registrado na
-seção 1 do procedimento de busca (`procedimento-de-busca-por-base`) e, quando governa a composição, declarado na
-declaração de cobertura, onde `documentos conferir` o lê.
+**Medida, não documentada, e declarada na fonte do procedimento da base.** Esta skill não
+traz a sintaxe de base alguma. O que difere de uma base para outra é parâmetro: apurado e
+registrado em `[[sintaxe]]` da fonte (`procedimento-de-busca-por-base`) e, quando governa a
+composição, declarado em `[cobertura]` e `[composicao]`, de onde o gerador compõe os blocos
+e `documentos conferir` os confere.
 
 | Parâmetro | Onde se declara | Como governa a composição |
 | --- | --- | --- |
-| **plural** | declaração de cobertura: `explícito` ou `pela lematização` | `explícito`: a string traz as duas formas de número, ou um truncamento que as alcance. `pela lematização`: só a forma do quadro, e só com a lematização medida e a execução citada na seção 1 |
-| **teto de caracteres** | declaração de cobertura: número inteiro ou `nenhum` | com número, nenhuma consulta executável passa dele, e o que passa se particiona sem retirar termo. `documentos conferir` mede cada bloco e reprova a base. Com `nenhum`, `documentos conferir` relata a maior consulta |
-| **truncamento** | seção 1 | curinga que a base não aceita, ou que devolve zero, não se usa: a forma vai por extenso |
-| **proximidade** | seção 1; a discussão, na subseção "Estratégia de proximidade" do procedimento de busca | operador, distância e grupos de cada lado medidos antes de usar. Vale para todas as expressões ou para nenhuma |
-| **campo** | seção 1 e cabeçalho de cada string | o campo da string é lido do texto; prefixos diferentes na mesma string são "misto" |
-| **filtros** | seção 2 | na consulta ou na interface, conforme a base admite; o ano se confere no retorno |
-| **teto de retorno** | seção 1 | retorno exatamente no teto é corte até prova em contrário: particionar |
+| **plural** | `[cobertura] plural`, valor único ou por idioma: `explícito` ou `pela lematização` | `explícito`: o gerador acrescenta as formas de número por regra e pelas exceções declaradas (`flexao-por-base`). `pela lematização`: só a forma do quadro, e só com a lematização medida e citada naquele idioma |
+| **teto de caracteres** | `[cobertura] teto`: número inteiro ou `nenhum` | com número, o gerador parte a expressão sem retirar termo, e `documentos conferir` reprova a consulta que passe dele. Com `nenhum`, `documentos conferir` relata a maior consulta |
+| **truncamento** | `[[sintaxe]]` | curinga que a base não aceita, ou que devolve zero, não se usa: a forma vai por extenso |
+| **proximidade** | `[composicao] proximidade`; a discussão, em `estrategia_de_proximidade.md` | operador, distância e grupos de cada lado medidos antes de usar. Vale para todas as expressões ou para nenhuma |
+| **campo** | `[[composicao.facetas]]` e `[[consultas_de_campo]]` | declarado por faceta, nunca lido do texto do bloco |
+| **filtros** | `[[criterios]]`, `clausula` | na consulta ou na interface, conforme a base admite; o ano se confere no retorno |
+| **teto de retorno** | `[[sintaxe]]` | retorno exatamente no teto é corte até prova em contrário: particionar |
 
 **O teto não exige medição citada, ao contrário de `pela lematização`.** Um teto baixo
 demais custa partição, não recall. Um teto alto demais aparece como recusa da interface. A
-origem do número fica na linha "Comprimento máximo da consulta" da seção 1, com o seu estado
-de verificação. Regra de bolso é declarada como regra de bolso.
+origem do número fica no elemento de `limite_consulta` da fonte, com o seu estado de
+verificação. Regra de bolso é declarada como regra de bolso.
 
 Três regras que saíram de defeito real:
 
@@ -86,18 +87,21 @@ Três regras que saíram de defeito real:
   registros do ano seguinte sob filtro que se supunha fechado: a cláusula tinha só o
   limite inferior.
 - **Simetria entre expressões.** Operador de proximidade e filtro de tipo de documento
-  aplicados a EB4 e não a EB2 produziram `EB2 > EB4`, que é impossível. Era defeito da
-  procedimento de busca, não do motor.
+  aplicados a EB4 e não a EB2 produziram `EB2 > EB4`, que é impossível. Era defeito do
+  procedimento de busca, não do motor; o gerador hoje compõe todas as expressões com a
+  mesma cláusula.
 - **Partição por teto tem de ser exata**: âncoras idênticas em todas as partes, termos
-  temáticos disjuntos, união igual à expressão original. O comprimento de cada parte
-  `documentos conferir` mede. A exatidão da partição ainda se verifica à mão, parte a parte.
+  temáticos disjuntos, união igual à expressão original. O gerador parte assim e recusa a
+  partição que não preserve a união; `documentos conferir` mede o comprimento de cada parte
+  e confere os termos contra o esperado, recalculado sem o gerador.
 
 ## Depois de compor
 
-Os procedimentos de busca, uma por base, ficam em `docs/` com a expressão executável e o
-estado de verificação da sintaxe. O **registro de execução** fica em
-`data/registro_execucao.json`, uma entrada por base. **Nunca ditar uma expressão
-de memória nem reescrevê-la na conversa** — se o procedimento de busca estiver defasado, corrigi-lo.
+Os procedimentos de busca, um por base, ficam em `docs/` com a expressão executável e o
+estado de verificação da sintaxe; são gerados da fonte de cada base e não se editam. O
+**registro de execução** fica em `data/registro_execucao.json`, uma entrada por base.
+**Nunca ditar uma expressão de memória nem reescrevê-la na conversa** — se o procedimento
+estiver defasado, corrigir a fonte e regenerar.
 
 Alteração de expressão é emenda **de busca**: exige reexecução e novo teste de
 aderência. `execucao-da-busca` para executar, `registrar-decisao` para o histórico

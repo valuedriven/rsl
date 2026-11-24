@@ -29,7 +29,7 @@ ESQUEMA = {
     "dados": ("registro", "validacao", "execucoes", "evidencia"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
                "sensibilidade", "aderencia"),
-    "documentos": ("procedimento", "sementes"),
+    "documentos": ("procedimento", "procedimento_fonte", "flexoes", "sementes"),
     "planilha": ("campos_validacao",),
 }
 # Chaves retiradas: a presença de qualquer uma reprova com mensagem própria, para que não
@@ -53,7 +53,8 @@ RETIRADAS = {
                         "o valor",
 }
 # Marcadores que cada padrão de caminho tem de conter.
-MARCADORES = {"documentos.procedimento": "{sigla}", "saidas.fidelidade": "{expressao}",
+MARCADORES = {"documentos.procedimento": "{sigla}",
+              "documentos.procedimento_fonte": "{sigla}", "saidas.fidelidade": "{expressao}",
               "saidas.sensibilidade": "{base}"}
 
 
@@ -132,10 +133,16 @@ class Configuracao:
         return self.caminho("saidas.pasta") / nome
 
     def ficha(self, sigla):
-        """Caminho do procedimento de busca de uma base, relativo à raiz, pelo padrão
-        `[documentos] procedimento`."""
+        """Caminho do procedimento de busca de uma base (saída de `procedimentos gerar`),
+        relativo à raiz, pelo padrão `[documentos] procedimento`."""
         return self.valor("documentos.procedimento").replace(
             MARCADORES["documentos.procedimento"], sigla)
+
+    def fonte(self, sigla):
+        """Pasta da fonte do procedimento de busca de uma base, relativa à raiz, pelo padrão
+        `[documentos] procedimento_fonte`."""
+        return self.valor("documentos.procedimento_fonte").replace(
+            MARCADORES["documentos.procedimento_fonte"], sigla)
 
     def protocolo(self):
         return RAIZ / self.valor("protocolo")

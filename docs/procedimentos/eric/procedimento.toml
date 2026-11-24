@@ -1,0 +1,892 @@
+# Fonte do procedimento de busca da ERIC (BD3). O procedimento
+# `docs/procedimentos_busca_eric.md` é gerado daqui por
+# `python3 -m rsl procedimentos gerar eric --gravar`. Esquema: `python3 -m rsl documentos gramatica`.
+#
+# Migração de 2026-11-23 (change `geracao-das-fichas-de-busca`): todo elemento e toda regra
+# de montagem dados como medidos entram como `nao_verificado`, com sondagem no roteiro; as
+# sondagens da ERIC serão refeitas pelo pesquisador (decisão de 2026-11-23), e nenhum
+# resultado antigo se reconstrói.
+
+ressalvas = [
+  "Todos os termos são **termos livres**; não apresentar as expressões como compostas de descritores ERIC.",
+  "Alterar as expressões exige repetir as sondagens pertinentes da seção 1.",
+  "No relato, declarar a assimetria de campo em relação à Scopus: aqui a faceta 🟦 vai ao título, e as palavras-chave correspondem ao campo controlado `descriptor`.",
+]
+
+# ------------------------------------------------------------------ §1 sintaxe
+[[sintaxe]]
+elemento = "Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`)"
+categoria = "campos"
+situacao = "oficial"
+fonte = "painel *Advanced Search Tips* de `eric.ed.gov/?advanced`"
+
+[[sintaxe]]
+elemento = "Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+`"
+categoria = "campos"
+situacao = "oficial"
+fonte = "painel *Advanced Search Tips* de `eric.ed.gov/?advanced`"
+nota = "comportamento **não medido**"
+
+[[sintaxe]]
+elemento = "Prefixo de campo restringe de fato"
+categoria = "campos"
+situacao = "nao_verificado"
+sondagem = "SD1"
+
+[[sintaxe]]
+elemento = "Parênteses para agrupamento"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD2"
+
+[[sintaxe]]
+elemento = "Condição externa a um grupo"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD3"
+
+[[sintaxe]]
+elemento = "Campos diferentes num mesmo grupo"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD5"
+
+[[sintaxe]]
+elemento = "`pubyearmin`/`pubyearmax` junto a um grupo"
+categoria = "filtros"
+situacao = "nao_verificado"
+sondagem = "SD6"
+
+[[sintaxe]]
+elemento = "`pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses"
+categoria = "filtros"
+situacao = "nao_verificado"
+sondagem = "SD7"
+
+[[sintaxe]]
+elemento = "Truncamento com `*`"
+categoria = "truncamento"
+situacao = "nao_verificado"
+sondagem = "SD8"
+nota = "a skill `execucao-da-busca` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json`"
+
+[[sintaxe]]
+elemento = "Mínimo de três letras antes do `*`"
+categoria = "truncamento"
+situacao = "nao_verificado"
+sondagem = "SD8"
+nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+
+[[sintaxe]]
+elemento = "Derivação automática de radicais desativada, com casamento exato sem aspas"
+categoria = "lematizacao"
+situacao = "nao_verificado"
+sondagem = "SD10"
+nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+
+[[sintaxe]]
+elemento = "API pública de exportação"
+categoria = "exportacao"
+situacao = "nao_verificado"
+sem_sondagem = "verificação documental, não sondagem: conferir na documentação oficial; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23"
+
+[[sintaxe]]
+elemento = "Lematização"
+categoria = "lematizacao"
+idioma = "en"
+situacao = "nao_verificado"
+sondagem = "SD10"
+
+[[sintaxe]]
+elemento = "Aspas como frase"
+categoria = "frase"
+situacao = "nao_verificado"
+sondagem = "SD9"
+
+[[sintaxe]]
+elemento = "Campo `descriptor`"
+categoria = "vocabulario_controlado"
+situacao = "nao_verificado"
+sondagem = "SD11"
+
+[[sintaxe]]
+elemento = "Comprimento máximo da consulta"
+categoria = "limite_consulta"
+situacao = "nao_verificado"
+sondagem = "SD12"
+nota = "1.400 é regra de bolso, declarada como teto de caracteres na declaração de cobertura até medir"
+
+[[sintaxe]]
+elemento = "Negação com prefixo `-`"
+categoria = "operadores"
+situacao = "oficial"
+fonte = "painel *Advanced Search Tips* de `eric.ed.gov/?advanced`"
+nota = "não medida"
+
+[[sintaxe]]
+elemento = "Hífen como separador de palavras (`ontology-driven`, `e-learning`)"
+categoria = "frase"
+situacao = "nao_verificado"
+sondagem = "SD13"
+
+[[sintaxe]]
+elemento = "Teto de retorno exibido"
+categoria = "limite_retorno"
+situacao = "nao_verificado"
+sondagem = "SD14"
+
+[[sintaxe]]
+elemento = "Teto de exportação por lote"
+categoria = "limite_exportacao"
+situacao = "nao_verificado"
+sondagem = "SD15"
+
+[[sintaxe]]
+elemento = "Controles `Include Synonyms` e `Include Dead terms`"
+categoria = "vocabulario_controlado"
+situacao = "nao_verificado"
+sem_sondagem = "não localizados na interface; nenhuma expressão depende deles"
+
+[[sintaxe]]
+elemento = "Operador de proximidade"
+categoria = "proximidade"
+situacao = "nao_verificado"
+sem_sondagem = "verificação documental antes de sondagem: o painel *Advanced Search Tips* não foi conferido quanto a proximidade; nenhuma expressão depende dele"
+
+[[sintaxe]]
+elemento = "Idioma do título e do resumo indexados"
+categoria = "idioma_indexacao"
+situacao = "nao_verificado"
+sondagem = "SD16"
+
+# ------------------------------------------------------------------ §2 critérios
+[[criterios]]
+ids = ["CE1", "CE2"]
+rotulo = "Intervalo temporal — 2017 até a data de execução"
+destino = "interface"
+como = "filtro de data da página de resultados, 2017 a 2026; registrar o rótulo do filtro e o retorno antes e depois"
+
+[[criterios]]
+ids = ["CE3"]
+rotulo = "Idiomas — português, inglês e espanhol"
+destino = "nao"
+como = "termos só em inglês; campo `language` não usado"
+
+[[criterios]]
+ids = ["CE4", "CE5"]
+rotulo = "Tipo documental e revisão por pares"
+destino = "nao"
+como = "`Peer reviewed only` desmarcada; campo `publicationtype` não usado"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — regra de inclusão"
+destino = "aproximado"
+como = "EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — não pertinência e contra-escopo"
+destino = "nao"
+como = "exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID"
+
+[[criterios]]
+ids = ["CE7", "CE8"]
+rotulo = "Domínio de aplicação educacional"
+destino = "ancora"
+como = "faceta 🟨 (FCT2) como grupo de quatro palavras-raiz, em forma radical"
+
+[[criterios]]
+ids = ["CE9"]
+rotulo = "Outros tipos documentais"
+destino = "nao"
+como = "2ª filtragem"
+
+[[criterios]]
+ids = ["CE10"]
+rotulo = "Fator de impacto — não aplicável"
+destino = "nao"
+como = "não se aplica: critério só documental"
+
+# ------------------------------------------------------------------ §3 cobertura
+[cobertura]
+camadas = "todas"
+plural = "explícito"
+teto = 1400
+derivacoes = ["morfologia", "radical"]
+
+[cobertura.idiomas]
+FCT1 = ["en"]
+FCT2 = ["en"]
+FCT3 = ["en"]
+FCT4 = ["en"]
+
+[[reducao]]
+faceta = "FCT1"
+termo = "educational ontological model"
+motivo = "redução desta base"
+
+[[reducao]]
+faceta = "FCT2"
+termo = "massive open online course"
+motivo = "redução desta base"
+
+[composicao]
+aspas = "locucao"
+proximidade = "nenhum"
+disjuncao = "consultas_separadas"
+
+[[composicao.facetas]]
+faceta = "FCT1"
+campo = "title:"
+forma = "prefixa"
+cor = "🟦"
+
+[[composicao.facetas]]
+faceta = "FCT2"
+campo = "abstract:"
+forma = "prefixa"
+cor = "🟨"
+
+[[composicao.facetas]]
+faceta = "FCT3"
+campo = "abstract:"
+forma = "prefixa"
+cor = "🟥"
+rotulo = "prática"
+
+[[composicao.facetas]]
+faceta = "FCT4"
+campo = "abstract:"
+forma = "prefixa"
+cor = "🟧"
+rotulo = "fator situacional"
+
+[[consultas_de_campo]]
+letra = "a"
+faceta = "FCT1"
+string = "STR1"
+campo = "title:"
+rotulo = "artefato no título"
+
+[[consultas_de_campo]]
+letra = "b"
+faceta = "FCT1"
+string = "STR1b"
+campo = "abstract:"
+rotulo = "termo específico no resumo"
+
+[[subconjuntos]]
+id = "STR1b"
+faceta = "FCT1"
+campo = "abstract:"
+termos = ["controlled vocabulary", "metadata schema", "thesauri", "ontology engineering", "ontology design pattern"]
+rotulo = "Artefatos, subconjunto específico, no resumo"
+
+[[radical]]
+id = "STR2"
+faceta = "FCT2"
+campo = "abstract:"
+termos = ["education", "educational", "learning", "teaching", "learner", "learners"]
+rotulo = "quatro palavras-raiz no resumo"
+
+# ------------------------------------------------------------------ §4 execução
+[execucao]
+forma = "particionada"
+
+[[execucao.expressoes]]
+id = "EB1"
+titulo = "geral — as quatro facetas"
+
+[[execucao.expressoes]]
+id = "EB2"
+titulo = "específica — modelos e ontologias que representam práticas do processo de ensino-aprendizagem"
+
+[[execucao.expressoes]]
+id = "EB3"
+titulo = "específica — artefatos que formalizam os fatores situacionais do domínio educacional"
+
+[[execucao.expressoes]]
+id = "EB4"
+titulo = "de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional"
+
+[[execucao.expressoes]]
+id = "EB5"
+titulo = "sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional"
+
+[[regras_de_montagem]]
+texto = "grupo entre parênteses com `OR` precisa de condição fora dele"
+situacao = "nao_verificado"
+sondagem = "SD3"
+
+[[regras_de_montagem]]
+texto = "a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois"
+situacao = "nao_verificado"
+sondagem = "SD4"
+
+[[regras_de_montagem]]
+texto = "um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero"
+situacao = "nao_verificado"
+sondagem = "SD5"
+
+[[regras_de_montagem]]
+texto = "`pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página"
+situacao = "nao_verificado"
+sondagem = "SD6"
+
+[[regras_de_montagem]]
+texto = "sem truncamento; expressão composta sempre entre aspas"
+situacao = "nao_verificado"
+sondagem = "SD9"
+
+# ------------------------------------------------------------------ §5 sementes
+[[sementes]]
+id = "SE8"
+observacao = "alcance depende do hífen (`ontology-driven`)"
+
+# ------------------------------------------------------------------ roteiro de sondagens
+# Comum a todas: na busca de `eric.ed.gov`, no navegador do pesquisador; uma consulta por
+# vez; sem filtro de data e sem `Peer reviewed only`, salvo quando a sondagem pedir.
+
+[[sondagens]]
+id = "SD1"
+elementos = ["Prefixo de campo restringe de fato"]
+objetivo = "saber se `title:` restringe a busca ao título, em vez de ser ignorado"
+pre_requisitos = ["busca de `eric.ed.gov` aberta no navegador do pesquisador, sem filtro de data e sem `Peer reviewed only`"]
+passos = ["submeter o controle e anotar o retorno exibido", "submeter o teste e anotar o retorno exibido", "abrir três registros do teste e conferir se `ontology` está no título"]
+observar = ["retorno exibido de cada consulta", "presença do termo no título dos registros abertos"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "ontology"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontology"
+onde = "caixa de busca"
+muda = "o prefixo `title:`"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle, e os três registros abertos têm `ontology` no título"
+conclusao = "o prefixo de campo restringe ao título"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, teste = 0, ou registro aberto sem o termo no título"
+conclusao = "não se distingue se o prefixo restringe; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD2"
+elementos = ["Parênteses para agrupamento"]
+objetivo = "saber se um grupo entre parênteses com `OR` é aceito e alarga o retorno"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno"]
+observar = ["retorno exibido", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "title:ontology AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(title:ontology OR title:ontologies) AND abstract:education"
+onde = "caixa de busca"
+muda = "o grupo entre parênteses com `OR`"
+
+[[sondagens.leituras]]
+resultado = "teste ≥ controle > 0"
+conclusao = "os parênteses agrupam"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0 sem mensagem, teste < controle, ou mensagem de erro"
+conclusao = "o agrupamento não se confirma; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD3"
+elementos = ["Condição externa a um grupo", "grupo entre parênteses com `OR` precisa de condição fora dele"]
+objetivo = "saber se um grupo com `OR` sem condição fora dele devolve zero"
+pre_requisitos = ["SD2 registrada com os parênteses verificados"]
+depende_de = ["SD2"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido", "mensagem de erro ou de aviso, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "(title:ontology OR title:ontologies) AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(title:ontology OR title:ontologies)"
+onde = "caixa de busca"
+muda = "sem condição fora do grupo"
+
+[[sondagens.leituras]]
+resultado = "controle > 0 e teste = 0 sem mensagem"
+conclusao = "o grupo com `OR` precisa de condição fora dele"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste > 0, ou mensagem de erro"
+conclusao = "a regra não se confirma; levar ao pesquisador antes de mudar a composição"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD4"
+elementos = ["a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois"]
+objetivo = "saber que formas de condição externa satisfazem o grupo"
+pre_requisitos = ["SD3 registrada com a regra confirmada"]
+depende_de = ["SD3"]
+passos = ["submeter o controle e anotar o retorno", "submeter cada teste, um por vez, e anotar o retorno"]
+observar = ["retorno exibido de cada consulta"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "(title:ontology OR title:ontologies) AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:education AND (title:ontology OR title:ontologies)"
+onde = "caixa de busca"
+muda = "condição de campo antes do grupo"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(title:ontology OR title:ontologies) AND education"
+onde = "caixa de busca"
+muda = "condição de texto livre"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(title:ontology OR title:ontologies) AND (abstract:education OR abstract:learning)"
+onde = "caixa de busca"
+muda = "condição que é outro grupo"
+
+[[sondagens.leituras]]
+resultado = "os três testes > 0, e o primeiro teste = controle"
+conclusao = "a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "algum teste = 0, ou o primeiro teste ≠ controle"
+conclusao = "alguma forma de condição externa não funciona; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD5"
+elementos = ["Campos diferentes num mesmo grupo", "um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero"]
+objetivo = "saber se `title:` e `abstract:` na mesma disjunção devolvem zero"
+pre_requisitos = ["SD3 registrada com a regra confirmada"]
+depende_de = ["SD3"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido", "mensagem de erro ou de aviso, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "(title:ontology OR title:ontologies) AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(title:ontology OR abstract:ontologies) AND abstract:education"
+onde = "caixa de busca"
+muda = "dois campos no mesmo grupo"
+
+[[sondagens.leituras]]
+resultado = "controle > 0 e teste = 0 sem mensagem"
+conclusao = "um grupo não mistura campos"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste > 0, ou mensagem de erro"
+conclusao = "a regra não se confirma; levar ao pesquisador antes de mudar as consultas de campo"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD6"
+elementos = ["`pubyearmin`/`pubyearmax` junto a um grupo", "`pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página"]
+objetivo = "saber se `pubyearmin`/`pubyearmax` ao lado de um grupo devolvem zero"
+pre_requisitos = ["SD3 registrada com a regra confirmada"]
+depende_de = ["SD3"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido", "mensagem de erro ou de aviso, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "(title:ontology OR title:ontologies) AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(title:ontology OR title:ontologies) AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026"
+onde = "caixa de busca"
+muda = "o filtro de ano na consulta"
+
+[[sondagens.leituras]]
+resultado = "controle > 0 e teste = 0 sem mensagem"
+conclusao = "o filtro de ano não convive com grupo; o recorte vem do filtro da página"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "0 < teste ≤ controle, ou mensagem de erro"
+conclusao = "a regra não se confirma; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD7"
+elementos = ["`pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses"]
+objetivo = "saber se o filtro de ano na consulta sem parênteses recorta como o filtro de data da página"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter o controle, aplicar o filtro de data da página de 2017 a 2026 e anotar o retorno e o rótulo exato do filtro", "retirar o filtro da página, submeter o teste e anotar o retorno"]
+observar = ["retorno exibido de cada consulta", "rótulo exato do filtro de data da página"]
+evidencia = ["captura da tela de cada consulta, com a consulta, o filtro e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "title:ontology AND abstract:education"
+onde = "caixa de busca, com o filtro de data da página de 2017 a 2026"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontology AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026"
+onde = "caixa de busca, sem filtro da página"
+muda = "o recorte na consulta em vez do filtro da página"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "o filtro de ano na consulta sem parênteses recorta como o filtro da página"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste ≠ controle, ou teste = 0"
+conclusao = "o filtro de ano na consulta não equivale ao da página; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD8"
+elementos = ["Truncamento com `*`", "Mínimo de três letras antes do `*`"]
+objetivo = "saber se o `*` trunca e com quantas letras antes dele"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter o controle e anotar o retorno", "submeter cada teste, um por vez, e anotar o retorno e a mensagem exibida", "abrir três registros do primeiro teste e conferir a forma do termo no título"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro ou de aviso, se houver", "formas do termo nos títulos dos registros abertos"]
+evidencia = ["captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "title:ontology"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontolog*"
+onde = "caixa de busca"
+muda = "o curinga depois de oito letras"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ont*"
+onde = "caixa de busca"
+muda = "o curinga depois de três letras"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:on*"
+onde = "caixa de busca"
+muda = "o curinga depois de duas letras"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste > controle, com formas como `ontologies` e `ontological` nos registros; segundo teste > 0; terceiro teste = 0 ou mensagem"
+conclusao = "o `*` trunca e exige ao menos três letras antes dele"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste = 0 sem mensagem"
+conclusao = "o `*` não trunca no campo título"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "qualquer outra combinação, ou primeiro teste = controle"
+conclusao = "não se distingue o efeito do `*`; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD9"
+elementos = ["Aspas como frase", "sem truncamento; expressão composta sempre entre aspas"]
+objetivo = "saber se as aspas exigem a sequência exata das palavras"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado", "SD8 registrada, porque a regra de montagem também fala do truncamento"]
+depende_de = ["SD1", "SD8"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno", "abrir três registros do controle que não estejam no teste e conferir se o resumo traz as duas palavras separadas"]
+observar = ["retorno exibido de cada consulta", "posição das palavras nos resumos abertos"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "abstract:knowledge AND abstract:organization"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:\"knowledge organization\""
+onde = "caixa de busca"
+muda = "as palavras entre aspas"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle, e os registros só do controle trazem as palavras separadas"
+conclusao = "as aspas exigem a sequência exata; a expressão composta vai entre aspas"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, ou teste = 0"
+conclusao = "não se distingue o efeito das aspas; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD10"
+elementos = ["Lematização", "Derivação automática de radicais desativada, com casamento exato sem aspas"]
+objetivo = "saber se a ERIC casa a forma singular com a plural, ou uma palavra com as derivadas, sem que a consulta as traga"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno", "abrir três registros do primeiro teste e conferir se o título traz `ontologies` e não `ontology`"]
+observar = ["retorno exibido de cada consulta", "forma do termo nos títulos dos registros abertos"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "title:ontology"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontologies"
+onde = "caixa de busca"
+muda = "o plural no lugar do singular"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontological"
+onde = "caixa de busca"
+muda = "uma forma derivada no lugar do substantivo"
+
+[[sondagens.leituras]]
+resultado = "os três retornos diferem, e os registros do primeiro teste trazem só `ontologies` no título"
+conclusao = "sem lematização e sem derivação automática em inglês: o plural explícito é necessário"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, ou registros do primeiro teste com `ontology` no título sem `ontologies`"
+conclusao = "pode haver lematização; levar ao pesquisador antes de declarar `pela lematização`"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD11"
+elementos = ["Campo `descriptor`"]
+objetivo = "saber se `descriptor:` busca no descritor do tesauro ERIC e se difere de `descriptorx:`"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno", "abrir três registros do primeiro teste e conferir se `Thesauri` está entre os descritores"]
+observar = ["retorno exibido de cada consulta", "descritores dos registros abertos"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "abstract:thesauri"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "descriptor:Thesauri"
+onde = "caixa de busca"
+muda = "o campo `descriptor` no lugar do resumo"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "descriptorx:Thesauri"
+onde = "caixa de busca"
+muda = "o campo de casamento exato"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste > 0 e os registros abertos têm `Thesauri` entre os descritores"
+conclusao = "o campo `descriptor` busca no descritor"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste = 0, ou registros sem o descritor"
+conclusao = "não se confirma o campo `descriptor`; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD12"
+elementos = ["Comprimento máximo da consulta"]
+objetivo = "saber se a consulta mais longa do procedimento é aceita inteira"
+pre_requisitos = ["SD2 registrada com os parênteses verificados", "o procedimento gerado, para copiar as consultas"]
+depende_de = ["SD2"]
+passos = ["copiar do procedimento a consulta mais longa de EB4 e anotar o número de caracteres", "submeter o controle e anotar o retorno e o texto que a caixa de busca mostra depois da submissão", "submeter o teste e anotar o mesmo"]
+observar = ["retorno exibido", "se o texto mostrado depois da submissão é a consulta inteira", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com o fim da consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "(title:ontology OR title:ontologies) AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "a consulta mais longa de EB4 no procedimento gerado"
+onde = "caixa de busca"
+muda = "o comprimento, perto do teto declarado"
+
+[[sondagens.leituras]]
+resultado = "teste > 0 e o texto mostrado é a consulta inteira"
+conclusao = "a base aceita ao menos o comprimento da consulta mais longa; o teto declarado se mantém"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0, texto cortado ou mensagem de erro"
+conclusao = "o comprimento passa do limite da base; levar ao pesquisador para baixar o teto"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD13"
+elementos = ["Hífen como separador de palavras (`ontology-driven`, `e-learning`)"]
+objetivo = "saber se o hífen separa palavras, de modo que `e-learning` case `e learning`"
+pre_requisitos = ["SD9 registrada com as aspas verificadas"]
+depende_de = ["SD9"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno"]
+observar = ["retorno exibido de cada consulta"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "abstract:\"e-learning\""
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:\"e learning\""
+onde = "caixa de busca"
+muda = "espaço no lugar do hífen"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:elearning"
+onde = "caixa de busca"
+muda = "sem hífen nem espaço"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste = controle > 0"
+conclusao = "o hífen separa palavras"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste ≠ controle, ambos > 0"
+conclusao = "o hífen não separa palavras: forma hifenizada e forma separada são buscas distintas"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = 0"
+conclusao = "não se distingue o efeito do hífen; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD14"
+elementos = ["Teto de retorno exibido"]
+objetivo = "saber se a ERIC exibe e deixa percorrer o retorno inteiro de uma busca larga"
+pre_requisitos = ["busca de `eric.ed.gov` aberta no navegador do pesquisador"]
+passos = ["submeter a consulta e anotar o retorno exibido", "ir à última página de resultados pela navegação da interface, sem rastejar, e anotar a posição do último registro acessível"]
+observar = ["retorno exibido", "posição do último registro acessível", "aviso de limite, se houver"]
+evidencia = ["captura da tela do retorno e da última página acessível"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "education"
+onde = "caixa de busca"
+
+[[sondagens.leituras]]
+resultado = "o último registro acessível tem a posição igual ao retorno exibido"
+conclusao = "não há teto de retorno exibido até esse tamanho"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "o último registro acessível tem posição menor que o retorno, ou há aviso de limite"
+conclusao = "há teto de retorno exibido, na posição anotada"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "a navegação não chega à última página"
+conclusao = "não se distingue o teto; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD15"
+elementos = ["Teto de exportação por lote"]
+objetivo = "saber quantos registros a ERIC exporta de uma vez"
+pre_requisitos = ["busca de `eric.ed.gov` aberta no navegador do pesquisador"]
+depende_de = ["SD14"]
+passos = ["submeter a consulta e anotar o retorno", "abrir a opção de exportação e anotar o número máximo de registros que ela oferece ou aceita", "exportar uma vez e contar os registros do arquivo"]
+observar = ["número máximo oferecido pela exportação", "número de registros no arquivo exportado"]
+evidencia = ["captura da tela da opção de exportação", "o arquivo exportado"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontology AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.leituras]]
+resultado = "o arquivo traz todos os registros do retorno"
+conclusao = "não há teto de exportação até esse tamanho"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "o arquivo traz menos registros que o retorno, no número que a exportação anuncia"
+conclusao = "há teto de exportação por lote, no número anotado"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "a exportação falha ou o número do arquivo não corresponde a nenhum dos dois"
+conclusao = "não se distingue o teto; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD16"
+elementos = ["Idioma do título e do resumo indexados"]
+objetivo = "saber se o registro de documento em português ou espanhol traz título e resumo em inglês, buscáveis pelos termos da string"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter a consulta e anotar o retorno", "abrir três registros e anotar o idioma do título e do resumo indexados"]
+observar = ["retorno exibido", "idioma do título e do resumo nos registros abertos"]
+evidencia = ["captura da tela do retorno e de cada registro aberto"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "language:Portuguese AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.leituras]]
+resultado = "os registros abertos têm título e resumo em inglês"
+conclusao = "a ERIC indexa em inglês o documento em outro idioma; os termos só em inglês o alcançam"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "os registros abertos têm título ou resumo só no idioma do documento"
+conclusao = "a ERIC indexa no idioma do documento; levar ao pesquisador (CE3)"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0, ou registros sem resumo"
+conclusao = "não se distingue o idioma de indexação; levar ao pesquisador"
+estado = "nao_verificado"

@@ -1,0 +1,569 @@
+# Fonte do procedimento de busca da Web of Science (BD1). O procedimento
+# `docs/procedimentos_busca_wos.md` é gerado daqui por
+# `python3 -m rsl procedimentos gerar wos --gravar`. Esquema: `python3 -m rsl documentos gramatica`.
+#
+# Migração de 2026-11-23 (change `geracao-das-fichas-de-busca`): transcrição do procedimento
+# anterior; elementos novos das categorias mínimas entram como `nao_verificado`.
+
+ressalvas = [
+  "Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.",
+  "**`LA=`**: executar a sondagem mínima (`TS=ontology AND LA=Portuguese`) antes de usar; se recusada, usar o refinamento por idioma.",
+  "**Texto completo** não é filtro de busca nesta base: o critério opera na 2ª filtragem.",
+  "**Teses e dissertações** não são cobertas pela Core Collection: ficam a cargo da BRAPCI e, se necessário, da BDTD.",
+]
+
+# ------------------------------------------------------------------ §1 sintaxe
+[[sintaxe]]
+elemento = "`TS=` — tópico: título, resumo, palavras-chave de autor e *Keywords Plus*"
+categoria = "campos"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search Field Tags*"
+
+[[sintaxe]]
+elemento = "`TI=`, `AB=`, `AK=`, `SO=`, `KP=`, `WC=`, `SU=`, `DO=`, `ALL=`"
+categoria = "campos"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search Field Tags*"
+
+[[sintaxe]]
+elemento = "`PY=` — ano de publicação; exige combinação com outra *tag*"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search Field Tags*"
+
+[[sintaxe]]
+elemento = "`DT=` — tipo de documento"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search Field Tags*, e FECYT (2024)"
+
+[[sintaxe]]
+elemento = "`LA=` — idioma"
+categoria = "filtros"
+situacao = "secundaria"
+fonte = "FECYT, *De la consulta simple a la compleja en Web of Science* (2024)"
+
+[[sintaxe]]
+elemento = "Truncamento `*`, `?`, `$`; mínimo de 3 caracteres antes do curinga; curinga desativa a lematização"
+categoria = "truncamento"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search examples*"
+
+[[sintaxe]]
+elemento = "Limite de 200 conjuntos de busca por sessão"
+categoria = "limite_consulta"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search examples*"
+
+[[sintaxe]]
+elemento = "Aspas desligam a lematização e o localizador interno de sinônimos"
+categoria = "frase"
+situacao = "nao_verificado"
+sondagem = "SD3"
+nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+
+[[sintaxe]]
+elemento = "Busca em todos os campos (`ALL=`) limitada a 49 operadores booleanos; os demais campos sem limite"
+categoria = "limite_consulta"
+situacao = "nao_verificado"
+sem_sondagem = "nenhuma expressão usa `ALL=`; conferir na documentação oficial (afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23)"
+
+[[sintaxe]]
+elemento = "Intervalos de `PY=` de até 5 anos (recomendação)"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Clarivate, *Advanced Search examples*"
+
+[[sintaxe]]
+elemento = "Filtro de texto completo em sintaxe de consulta"
+categoria = "filtros"
+situacao = "inexistente"
+fonte = "ausência na página de *field tags*"
+
+[[sintaxe]]
+elemento = "Valores exatos admitidos em `DT=` e `LA=`"
+categoria = "filtros"
+situacao = "nao_verificado"
+sondagem = "SD4"
+nota = "conferir na lista da interface"
+
+[[sintaxe]]
+elemento = "`NEAR/x` entre grupos entre parênteses"
+categoria = "proximidade"
+situacao = "nao_verificado"
+sondagem = "SD2"
+
+[[sintaxe]]
+elemento = "Distância padrão de `NEAR` sem número"
+categoria = "proximidade"
+situacao = "nao_verificado"
+sondagem = "SD2"
+
+[[sintaxe]]
+elemento = "Comprimento máximo da consulta"
+categoria = "limite_consulta"
+situacao = "nao_verificado"
+sondagem = "SD5"
+nota = "a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres"
+
+[[sintaxe]]
+elemento = "Tratamento de diacríticos"
+categoria = "idioma_indexacao"
+situacao = "nao_verificado"
+sondagem = "SD6"
+nota = "as strings trazem as duas grafias"
+
+[[sintaxe]]
+elemento = "Teto de retorno exibido"
+categoria = "limite_retorno"
+situacao = "nao_verificado"
+sondagem = "SD7"
+nota = "conferir na interface antes de exportar"
+
+[[sintaxe]]
+elemento = "Teto de exportação por lote"
+categoria = "limite_exportacao"
+situacao = "nao_verificado"
+sondagem = "SD8"
+nota = "conferir na interface antes de exportar"
+
+[[sintaxe]]
+elemento = "Operadores booleanos `AND` e `OR`"
+categoria = "operadores"
+situacao = "nao_verificado"
+sondagem = "SD1"
+
+[[sintaxe]]
+elemento = "Parênteses para agrupamento"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD1"
+
+[[sintaxe]]
+elemento = "Lematização"
+categoria = "lematizacao"
+situacao = "nao_verificado"
+sondagem = "SD3"
+
+[[sintaxe]]
+elemento = "Vocabulário controlado de assunto"
+categoria = "vocabulario_controlado"
+situacao = "nao_verificado"
+sem_sondagem = "verificação documental: a Core Collection não foi conferida quanto a tesauro de assunto; nenhuma expressão depende dele"
+
+[[sintaxe]]
+elemento = "Exportação em RIS com todos os campos"
+categoria = "exportacao"
+situacao = "nao_verificado"
+sondagem = "SD8"
+
+# ------------------------------------------------------------------ §2 critérios
+[[criterios]]
+ids = ["CE1", "CE2"]
+rotulo = "Intervalo temporal — 2017 até a data de execução"
+destino = "consulta"
+como = "`AND PY=(2017-2026)`"
+clausula = "PY=(2017-2026)"
+
+[[criterios]]
+ids = ["CE3"]
+rotulo = "Idiomas — português, inglês e espanhol"
+destino = "variante"
+como = "`AND LA=(English OR Portuguese OR Spanish)`"
+clausula = "LA=(English OR Portuguese OR Spanish)"
+
+[[criterios]]
+ids = ["CE4", "CE5"]
+rotulo = "Tipo documental"
+destino = "consulta"
+como = "`AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")`"
+clausula = "DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — regra de inclusão"
+destino = "aproximado"
+como = "EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — não pertinência e contra-escopo"
+destino = "nao"
+como = "exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID"
+
+[[criterios]]
+ids = ["CE7", "CE8"]
+rotulo = "Domínio de aplicação educacional"
+destino = "ancora"
+como = "faceta 🟨 (FCT2) nas cinco expressões"
+
+[[criterios]]
+ids = ["CE9"]
+rotulo = "Outros tipos documentais"
+destino = "nao"
+como = "2ª filtragem"
+
+[[criterios]]
+ids = ["CE10"]
+rotulo = "Fator de impacto — não aplicável"
+destino = "nao"
+como = "não se aplica: critério só documental"
+
+# ------------------------------------------------------------------ §3 cobertura
+[cobertura]
+camadas = "todas"
+plural = "explícito"
+teto = "nenhum"
+derivacoes = ["morfologia"]
+
+[cobertura.idiomas]
+FCT1 = ["pt", "en", "es"]
+FCT2 = ["pt", "en", "es"]
+FCT3 = ["pt", "en", "es"]
+FCT4 = ["pt", "en", "es"]
+
+[composicao]
+aspas = "todo_termo"
+proximidade = { operador = "NEAR", distancia = 5 }
+disjuncao = "em_linha"
+
+[[composicao.facetas]]
+faceta = "FCT1"
+campo = "TS="
+forma = "envolve"
+cor = "🟦"
+
+[[composicao.facetas]]
+faceta = "FCT2"
+campo = "TS="
+forma = "envolve"
+cor = "🟨"
+
+[[composicao.facetas]]
+faceta = "FCT3"
+campo = "TS="
+forma = "envolve"
+cor = "🟥"
+
+[[composicao.facetas]]
+faceta = "FCT4"
+campo = "TS="
+forma = "envolve"
+cor = "🟧"
+
+# ------------------------------------------------------------------ §4 execução
+[execucao]
+forma = "unica"
+
+[[execucao.expressoes]]
+id = "EB1"
+titulo = "as quatro facetas"
+
+[[execucao.expressoes]]
+id = "EB2"
+titulo = "modelos e ontologias que representam práticas do processo de ensino-aprendizagem"
+
+[[execucao.expressoes]]
+id = "EB3"
+titulo = "artefatos que formalizam os fatores situacionais do domínio educacional"
+
+[[execucao.expressoes]]
+id = "EB4"
+titulo = "de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional"
+
+[[execucao.expressoes]]
+id = "EB5"
+titulo = "sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional"
+
+# ------------------------------------------------------------------ §5 sementes
+[[sementes]]
+id = "SE10"
+observacao = "caso-teste de cobertura de campo; DOI do capítulo"
+
+# ------------------------------------------------------------------ roteiro de sondagens
+# Comum a todas: na Web of Science Core Collection, busca avançada, no navegador do
+# pesquisador, com o acesso institucional dele; uma consulta por vez.
+
+[[sondagens]]
+id = "SD1"
+elementos = ["Operadores booleanos `AND` e `OR`", "Parênteses para agrupamento"]
+objetivo = "saber se `AND`, `OR` e os parênteses dentro de `TS=` se comportam como booleanos"
+pre_requisitos = ["busca avançada da Web of Science Core Collection aberta no navegador do pesquisador, com o acesso institucional dele"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela do histórico de busca, com as consultas e os retornos visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TS=(ontology)"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology AND education)"
+onde = "busca avançada"
+muda = "conjunção com `AND`"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology OR taxonomy)"
+onde = "busca avançada"
+muda = "disjunção com `OR`"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=((ontology OR taxonomy) AND education)"
+onde = "busca avançada"
+muda = "grupo entre parênteses"
+
+[[sondagens.leituras]]
+resultado = "0 < `AND` < controle ≤ `OR`, e 0 < grupo ≤ `OR`"
+conclusao = "os operadores e os parênteses se comportam como booleanos"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "qualquer outra relação, ou mensagem de erro"
+conclusao = "não se confirma o comportamento booleano; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD2"
+elementos = ["`NEAR/x` entre grupos entre parênteses", "Distância padrão de `NEAR` sem número"]
+objetivo = "saber se `NEAR/5` é aceito entre grupos entre parênteses e qual é a distância de `NEAR` sem número"
+pre_requisitos = ["SD1 registrada com operadores e parênteses verificados"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido e a mensagem, se houver"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela do histórico de busca, com as consultas e os retornos visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TS=((ontology OR taxonomy) AND (education OR learning))"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=((ontology OR taxonomy) NEAR/5 (education OR learning))"
+onde = "busca avançada"
+muda = "`NEAR/5` no lugar de `AND`, entre grupos"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology NEAR education)"
+onde = "busca avançada"
+muda = "`NEAR` sem número"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology NEAR/15 education)"
+onde = "busca avançada"
+muda = "`NEAR/15`, para comparar com `NEAR` sem número"
+
+[[sondagens.leituras]]
+resultado = "0 < primeiro teste ≤ controle, sem mensagem; `NEAR` sem número = `NEAR/15`"
+conclusao = "`NEAR/x` funciona entre grupos; a distância padrão é 15"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste recusado ou = 0, ou `NEAR` sem número ≠ `NEAR/15`"
+conclusao = "a proximidade entre grupos ou a distância padrão não se confirma; levar ao pesquisador (variante de partição)"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD3"
+elementos = ["Lematização", "Aspas desligam a lematização e o localizador interno de sinônimos"]
+objetivo = "saber se a base casa singular e plural sem que a consulta os traga, e se as aspas desligam isso"
+pre_requisitos = ["SD1 registrada com operadores e parênteses verificados"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido", "comparar também, com consultas análogas, `ontologia`/`ontologias` e `ontología`/`ontologías`, e anotar os retornos"]
+observar = ["retorno exibido de cada consulta"]
+evidencia = ["captura da tela do histórico de busca, com as consultas e os retornos visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TS=(ontology)"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontologies)"
+onde = "busca avançada"
+muda = "o plural no lugar do singular"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(\"ontology\")"
+onde = "busca avançada"
+muda = "o termo entre aspas"
+
+[[sondagens.leituras]]
+resultado = "controle = plural, e o termo entre aspas < controle"
+conclusao = "a base lematiza em inglês e as aspas desligam a lematização"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle ≠ plural, e o termo entre aspas = controle"
+conclusao = "a base não lematiza em inglês; as aspas não mudam o número"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "qualquer outra relação, ou pt e es diferentes do inglês"
+conclusao = "não se distingue a lematização; levar ao pesquisador antes de declarar `pela lematização`"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD4"
+elementos = ["Valores exatos admitidos em `DT=` e `LA=`"]
+objetivo = "saber se os valores de `DT=` e `LA=` usados no procedimento são aceitos"
+pre_requisitos = ["SD1 registrada com operadores e parênteses verificados"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno e a mensagem, se houver", "conferir cada valor na lista de refinamento da interface"]
+observar = ["retorno exibido de cada consulta", "valores na lista de refinamento de tipo de documento e de idioma"]
+evidencia = ["captura da tela do histórico de busca e das listas de refinamento"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TS=(ontology)"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")"
+onde = "busca avançada"
+muda = "o filtro de tipo de documento"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology) AND LA=Portuguese"
+onde = "busca avançada"
+muda = "a sondagem mínima de idioma"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology) AND LA=(English OR Portuguese OR Spanish)"
+onde = "busca avançada"
+muda = "o filtro de idioma da variante"
+
+[[sondagens.leituras]]
+resultado = "todos os testes aceitos, 0 < teste < controle, e cada valor presente na lista de refinamento"
+conclusao = "os valores de `DT=` e `LA=` são aceitos"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "algum teste recusado, = 0, ou valor ausente da lista"
+conclusao = "algum valor não é aceito; tirá-lo da consulta e levar ao refinamento, com a troca anotada"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD5"
+elementos = ["Comprimento máximo da consulta"]
+objetivo = "saber se a interface aceita inteira a consulta de EB4"
+pre_requisitos = ["SD2 registrada com a proximidade entre grupos verificada", "o procedimento gerado, para copiar a consulta"]
+depende_de = ["SD2"]
+passos = ["copiar o bloco de EB4 do procedimento e anotar o número de caracteres", "submetê-lo e anotar o retorno e a mensagem, se houver"]
+observar = ["retorno exibido", "mensagem de erro ou de recusa, se houver"]
+evidencia = ["captura da tela do histórico de busca, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "o bloco de EB4 no procedimento gerado"
+onde = "busca avançada"
+
+[[sondagens.leituras]]
+resultado = "aceita, com retorno > 0"
+conclusao = "a interface aceita a consulta de EB4 inteira; a execução única se mantém"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "recusa por extensão, ou retorno = 0"
+conclusao = "a consulta passa do limite; levar ao pesquisador (variante de partição e teto)"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD6"
+elementos = ["Tratamento de diacríticos"]
+objetivo = "saber se a base ignora diacríticos"
+pre_requisitos = ["SD3 registrada, porque as aspas entram na consulta"]
+depende_de = ["SD3"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno"]
+observar = ["retorno exibido de cada consulta"]
+evidencia = ["captura da tela do histórico de busca, com as consultas e os retornos visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TS=(\"educação\")"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(\"educacao\")"
+onde = "busca avançada"
+muda = "sem diacrítico"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "a base ignora diacríticos"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste ≠ controle, ambos > 0"
+conclusao = "a base distingue diacríticos; as duas grafias são necessárias"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = 0"
+conclusao = "não se distingue o tratamento; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD7"
+elementos = ["Teto de retorno exibido"]
+objetivo = "saber se a base exibe e deixa percorrer o retorno inteiro de uma busca larga"
+pre_requisitos = ["busca avançada da Web of Science Core Collection aberta no navegador do pesquisador"]
+passos = ["submeter a consulta e anotar o retorno exibido", "ir à última página de resultados pela navegação da interface, sem rastejar, e anotar a posição do último registro acessível"]
+observar = ["retorno exibido", "posição do último registro acessível", "aviso de limite, se houver"]
+evidencia = ["captura da tela do retorno e da última página acessível"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(education)"
+onde = "busca avançada"
+
+[[sondagens.leituras]]
+resultado = "o último registro acessível tem a posição igual ao retorno exibido"
+conclusao = "não há teto de retorno exibido até esse tamanho"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "o último registro acessível tem posição menor que o retorno, ou há aviso de limite"
+conclusao = "há teto de retorno exibido, na posição anotada"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "a navegação não chega à última página"
+conclusao = "não se distingue o teto; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD8"
+elementos = ["Teto de exportação por lote", "Exportação em RIS com todos os campos"]
+objetivo = "saber quantos registros a base exporta de uma vez em RIS com todos os campos"
+pre_requisitos = ["busca avançada da Web of Science Core Collection aberta no navegador do pesquisador"]
+passos = ["submeter a consulta e anotar o retorno", "abrir a exportação em RIS com todos os campos e anotar o número máximo de registros por lote que ela aceita", "exportar um lote e contar os registros do arquivo"]
+observar = ["número máximo por lote oferecido pela exportação", "número de registros no arquivo", "campos presentes no arquivo (resumo, palavras-chave)"]
+evidencia = ["captura da tela da opção de exportação", "o arquivo exportado"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TS=(ontology AND education)"
+onde = "busca avançada"
+
+[[sondagens.leituras]]
+resultado = "o arquivo traz o número de registros pedido, com resumo e palavras-chave, e a exportação anuncia o máximo por lote"
+conclusao = "a exportação em RIS com todos os campos funciona, com o teto por lote anotado"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "a exportação falha, o arquivo vem sem resumo ou o número não corresponde ao pedido"
+conclusao = "não se confirma a exportação; levar ao pesquisador"
+estado = "nao_verificado"

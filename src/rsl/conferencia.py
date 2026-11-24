@@ -1,17 +1,18 @@
-"""Conferência da coerência interna do protocolo e dos procedimentos de busca.
+"""Conferência da coerência interna do protocolo, da fonte de cada procedimento de busca e
+do procedimento gravado.
 
 A conferência verifica a coerência do documento, não valores esperados. Protocolo fora da
 gramática não chega aqui como problema: a leitura levanta ProtocoloInvalido, que sobe até o
-ponto de entrada com o código PROTOCOLO_ILEGIVEL. Procedimento de busca fora da gramática
+ponto de entrada com o código PROTOCOLO_ILEGIVEL. Fonte de procedimento fora da gramática
 reprova só a sua base, como problema de código PROTOCOLO_ILEGIVEL; as demais bases seguem
-conferidas.
+conferidas. O procedimento gravado é saída: confere-se por igualdade com a geração.
 """
 
 from . import gramatica as G
-from .cobertura import (cobertura_base, maior_consulta, numero_unico_na_base,
-                        subsumidos_na_base)
+from .cobertura import listas_a_mao, cobertura_base, maior_consulta, subsumidos_na_base
 from .erros import ProtocoloInvalido
 from .fichas import base_derivada
+from .flexao import le_excecoes, orfas
 from .geracao import problemas_atribuicao, problemas_str
 from .leitura import CAMADAS
 from .markdown import normaliza
@@ -63,16 +64,34 @@ def coerencia_expressoes(d):
     return problemas
 
 
-def problemas_bases(ctx, d):
-    """Problemas de cada base, isolados: procedimento de busca ilegível reprova só a sua base."""
+def problemas_bases(ctx, d, igualdade=True):
+    """Problemas de cada base, isolados: fonte ilegível reprova só a sua base. Com
+    `igualdade`, o procedimento gravado que difere da geração também reprova a base."""
+    from .procedimentos import problemas_igualdade                  # noqa: PLC0415
+    try:
+        excecoes = le_excecoes(ctx)
+    except ProtocoloInvalido as e:
+        return [Problema(str(e), e.codigo)]
     problemas = []
     for b in d["bases"]:
         sigla = b["sigla"]
         try:
             base = base_derivada(ctx, d, sigla)
-            problemas += [Problema(f"{sigla}: {p}") for p in cobertura_base(base, d)]
+            comp = base["comp"]
+            if comp.indecidiveis:
+                problemas.append(Problema(
+                    f"{sigla}: flexão indecidível, sem exceção declarada — " + "; ".join(
+                        f"{e.termo!r} ({e.idioma}): {e.motivo}" for e in comp.indecidiveis)))
+            problemas += [Problema(f"{sigla}: {p}") for p in cobertura_base(base, d, excecoes)]
         except ProtocoloInvalido as e:
             problemas.append(Problema(f"{sigla}: {e}", e.codigo))
+        except Exception as e:                                      # noqa: BLE001
+            from .erros import Reprovado                            # noqa: PLC0415
+            if not isinstance(e, Reprovado):
+                raise
+            problemas.append(Problema(str(e)))
+    if igualdade:
+        problemas += [Problema(f"{s}: {x}") for s, x in problemas_igualdade(ctx, d)]
     return problemas
 
 
@@ -167,16 +186,29 @@ def conferir(ctx):
 
 
 def relatos(ctx, d):
-    """Achados que não reprovam, por base: subsumidos usados na string da base, a maior
-    consulta da base sem teto de caracteres e termos numa só forma de número em procedimento
-    de busca de plural explícito."""
+    """Achados que não reprovam: subsumidos usados nos blocos da base, a maior consulta da
+    base sem teto de caracteres, exceções de flexão órfãs e sondagens sem elemento."""
     saida = []
+    try:
+        excecoes = le_excecoes(ctx)
+    except ProtocoloInvalido:
+        excecoes = {}
+    derivadas = {}
+    for b in d["bases"]:
+        try:
+            derivadas[b["sigla"]] = base_derivada(ctx, d, b["sigla"])
+        except Exception:                                           # noqa: BLE001
+            continue                      # já reprovada em problemas_bases
+    a_mao = {t for base in derivadas.values() for _, _, termos in listas_a_mao(base)
+             for t in termos}
+    for termo, idioma in orfas(excecoes, d, a_mao):
+        saida.append(f"exceção de flexão órfã: {termo!r} ({idioma}) não está em nenhuma STR "
+                     f"nem em subconjunto ou forma curada de base alguma")
     for b in d["bases"]:
         sigla = b["sigla"]
-        try:
-            base = base_derivada(ctx, d, sigla)
-        except ProtocoloInvalido:
-            continue                      # já reprovada em problemas_bases
+        base = derivadas.get(sigla)
+        if base is None:
+            continue
         for fid, sid, termo, por in subsumidos_na_base(base, d):
             saida.append(f"{sigla}: {sid} ({fid}): {termo!r} subsumido por {por!r} da STR")
         maior = maior_consulta(base)
@@ -184,12 +216,11 @@ def relatos(ctx, d):
             n, ident, rotulo = maior
             saida.append(f"{sigla}: teto de caracteres {G.TETO_NENHUM!r}; a maior consulta "
                          f"executável tem {n} caracteres ({ident}, {rotulo[:50]!r})")
-        unicos = {}
-        for fid, termo in numero_unico_na_base(base, d):
-            unicos.setdefault(fid, []).append(termo)
-        for fid, termos in sorted(unicos.items()):
-            saida.append(f"{sigla}: {fid}: {len(termos)} termo(s) numa só forma de número, "
-                         f"com plural explícito: {', '.join(map(repr, termos))}")
+        listados = {e for s in base["fonte"]["sondagens"].values() for e in s["elementos"]}
+        for sd, s in sorted(base["fonte"]["sondagens"].items()):
+            if not s["elementos"]:
+                saida.append(f"{sigla}: sondagem {sd} sem elemento")
+        del listados
     return saida
 
 

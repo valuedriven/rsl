@@ -39,11 +39,18 @@ registros exportados; EB2 e EB3 vão à base apenas no teste de fidelidade da de
 ## Antes da primeira execução numa base
 
 **Sondagem de sintaxe obrigatória.** Nunca supor que a base aceita o que a documentação
-diz. A tabela do que cada base aceita **medido** está no procedimento de busca da própria base, e já
-contradisse a documentação: a ERIC não trunca (`ontolog*` devolve 0) e a BRAPCI tem teto de
-1.000 registros no retorno.
+diz. O que cada base aceita, e com que evidência, está na seção 1 do procedimento de busca
+da própria base; os elementos não verificados têm, ali, o **roteiro de sondagens** — as
+consultas de controle e de teste, o que observar e o que cada resultado significa. Executar
+as sondagens pelo roteiro, na ordem das dependências, antes da primeira execução
+(desenho e leitura: `sondagens-de-sintaxe`). Já se afirmou que a ERIC não trunca
+(`ontolog*` devolve 0) e que a BRAPCI tem teto de 1.000 registros no retorno; nenhuma das
+duas afirmações tem sondagem registrada (PD27, PD09, PD10), e o roteiro as sonda.
 
-Registrar a sondagem com contagem e captura de tela. Sondagem sem evidência não é sondagem.
+Registrar cada sondagem com o comando do projeto (sinopse em `docs/procedimentos.md`), com a
+data e a hora em que foi feita, o retorno de cada consulta, a leitura observada e a
+evidência. Sondagem sem evidência não é sondagem. O registro imprime a mudança a aplicar
+na fonte do procedimento; aplicá-la e regenerar o procedimento.
 
 ## Ao receber as contagens
 

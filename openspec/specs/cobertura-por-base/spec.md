@@ -2,10 +2,12 @@
 
 ## Purpose
 
+
 Conferir a string de busca de cada procedimento de busca contra o vocabulário vigente do protocolo,
 de modo que termo retirado não volte e termo vigente não falte sem redução declarada.
 
 ## Requirements
+
 
 ### Requirement: Vocabulário vigente é a string do protocolo
 O termo vigente de uma faceta SHALL ser o que consta da STR correspondente no protocolo,
@@ -79,17 +81,20 @@ reprove.
 - **WHEN** o autoteste troca um termo do bloco executado de uma base por termo fora das
   facetas declaradas
 - **THEN** a conferência daquela base reprova e as das demais passam
+
 ### Requirement: Forma de execução declarada no procedimento de busca
-Cada procedimento de busca SHALL declarar a sua forma de execução numa linha `- Execução: única` ou
-`- Execução: particionada`. Linha ausente, repetida ou com outro valor MUST reprovar a
-conferência daquela base, nomeando o procedimento de busca; nenhum valor padrão é presumido.
+A fonte do procedimento de cada base SHALL declarar a forma de execução em `[execucao]
+forma`, com o valor `unica`, `particionada` ou `curada`. O campo ausente ou com outro valor
+MUST reprovar a conferência daquela base, nomeando a fonte, e nenhum valor padrão é
+presumido. O procedimento gerado SHALL trazer a linha `- Execução: <forma>` uma única vez.
 
 #### Scenario: Procedimento de busca sem declaração
-- **WHEN** o procedimento de busca da ERIC não tem a linha de execução
-- **THEN** a conferência da ERIC reprova, nomeando o procedimento de busca, e as demais bases não são afetadas
+- **WHEN** `[execucao]` da fonte da ERIC não tem `forma`
+- **THEN** a conferência da ERIC reprova, nomeando a fonte, e as demais bases não são
+  afetadas
 
 #### Scenario: Valor fora do domínio
-- **WHEN** o procedimento de busca declara `- Execução: dividida`
+- **WHEN** a fonte declara `forma = "dividida"`
 - **THEN** a conferência daquela base reprova, nomeando o valor e os admitidos
 
 ### Requirement: Faceta da forma curada identificada pelo código
@@ -153,42 +158,54 @@ base, nomeando expressão e termo.
 - **THEN** o operador não conta como termo estranho
 
 ### Requirement: Verificação por medição remete a execução registrada
-Toda citação do arquivo de registro de execução num procedimento de busca, em tabela ou em prosa, SHALL
-nomear a execução na forma `(BDn/<id>)`, com `BDn` da própria base. A conferência dos
-arquivos alimentados MUST reprovar, só naquela base, quando falta o identificador, quando
-`BDn` é de outra base ou quando `BDn/<id>` não existe no registro, nomeando procedimento de busca, linha e
-referência.
+Toda citação de execução ou de sondagem na fonte do procedimento SHALL ter a forma `BDn/<id>`
+(no texto, `(BDn/<id>)`), com o `BDn` da própria base. Isso vale para os campos `citacao` e
+para o texto dos fragmentos e dos demais campos. Também SHALL estar nessa forma toda menção
+ao arquivo de registro de execução.
+
+A conferência dos arquivos alimentados MUST reprovar, só naquela base, nomeando a fonte, o
+campo ou a linha e a referência, nestes casos:
+- falta o identificador;
+- o `BDn` é de outra base;
+- o `id` não existe em `bases.BDn.execucoes` nem em `bases.BDn.sondagens` do registro.
 
 #### Scenario: Citação sem identificador de execução
-- **WHEN** a seção 1 do procedimento de busca da WoS declara "`NEAR/x` — Verificado por medição —
-  `data/registro_execucao.json` (BD1)"
-- **THEN** `--conferir-dados` reprova a WoS, nomeando a linha e a falta do identificador, e
+- **WHEN** o elemento "`NEAR/x` entre grupos" da WoS tem `situacao = "medicao"` e
+  `citacao = "BD1"`
+- **THEN** `dados conferir` reprova a WoS, nomeando o elemento e a falta do identificador, e
   as demais bases não são afetadas
 
 #### Scenario: Citação em prosa
-- **WHEN** o cabeçalho do procedimento de busca da BRAPCI diz "apurada por medição, com as sondagens em
+- **WHEN** `notas_sintaxe.md` da BRAPCI diz "apurada por medição, com as sondagens em
   `data/registro_execucao.json` (BD4)"
-- **THEN** `--conferir-dados` reprova a BRAPCI pela falta do identificador de execução
+- **THEN** `dados conferir` reprova a BRAPCI pela falta do identificador, e as demais bases
+  não são afetadas
 
 #### Scenario: Base trocada na citação
-- **WHEN** o procedimento de busca da ERIC cita `(BD1/sonda-near)`
-- **THEN** `--conferir-dados` reprova a ERIC, nomeando a citação de outra base
+- **WHEN** um elemento de `[[sintaxe]]` da ERIC tem `citacao = "BD1/sonda-near"`
+- **THEN** `dados conferir` reprova a ERIC, nomeando a citação de outra base
+
+#### Scenario: Citação de sondagem registrada
+- **WHEN** um elemento da WoS cita `BD1/sd1-2026-12-02` e o registro tem esse `id` em
+  `bases.BD1.sondagens`
+- **THEN** essa dimensão não reprova
 
 #### Scenario: Execução citada inexistente
-- **WHEN** a linha cita `(BD2/sonda-w5)` e o registro não tem a execução `sonda-w5` em BD2
-- **THEN** `--conferir-dados` reprova a Scopus, nomeando a referência ausente
+- **WHEN** a fonte da Scopus cita `BD2/sonda-w5` e o registro não tem esse `id` em BD2
+- **THEN** `dados conferir` reprova a Scopus, nomeando a referência ausente
 
 #### Scenario: Registro ausente
-- **WHEN** o procedimento de busca cita uma execução e `data/registro_execucao.json` não existe
-- **THEN** `--conferir-dados` reprova aquela base pela citação sem lastro, além de reportar
-  o arquivo ausente
+- **WHEN** a fonte cita uma execução e `data/registro_execucao.json` não existe
+- **THEN** `dados conferir` reprova aquela base pela citação sem lastro, além de relatar o
+  arquivo ausente
 
 #### Scenario: Elemento não verificado
-- **WHEN** a linha declara **Não verificado** e não cita o registro
+- **WHEN** o elemento tem `situacao = "nao_verificado"` e não cita o registro
 - **THEN** essa dimensão não reprova
 
 #### Scenario: Citação válida
-- **WHEN** a linha cita `(BD1/sonda-near)` e o registro tem essa execução em BD1
+- **WHEN** a fonte da WoS cita `BD1/sonda-near` e o registro tem esse `id` em
+  `bases.BD1.execucoes`
 - **THEN** essa dimensão não reprova
 
 ### Requirement: Autoteste prova a reprovação da verificação sem lastro
@@ -207,27 +224,22 @@ registro de execução, esses casos SHALL constar como não executados, com o mo
   resultado esperado
 
 ### Requirement: Critérios do procedimento de busca conferem com o protocolo
-
-O conjunto de IDs de critério citados na seção 2 de cada procedimento de busca SHALL ser igual ao conjunto
-de IDs da tabela de critérios do protocolo. ID citado que não existe no protocolo, ou
-critério do protocolo ausente do procedimento de busca, MUST reprovar só a conferência daquela base,
-nomeando procedimento de busca e ID.
+O conjunto dos IDs de `[[criterios]]` da fonte de cada base SHALL ser igual ao conjunto de
+IDs da tabela de critérios do protocolo. Um ID que não existe no protocolo, ou um critério
+do protocolo ausente da fonte, MUST reprovar só a conferência daquela base, nomeando a fonte
+e o ID.
 
 #### Scenario: Procedimento de busca cita critério inexistente
-
-- **WHEN** o protocolo é renumerado e o procedimento de busca de uma base ainda cita o ID antigo
-- **THEN** a conferência daquela base reprova, nomeando o procedimento de busca e o ID citado como ausente
-  do protocolo e o ID vigente como ausente do procedimento de busca, e as demais bases corrigidas não
-  reprovam
+- **WHEN** o protocolo é renumerado e a fonte de uma base ainda cita o ID antigo
+- **THEN** a conferência daquela base reprova, nomeando o ID citado como ausente do
+  protocolo e o vigente como ausente da fonte; as demais bases, já corrigidas, não reprovam
 
 #### Scenario: Critério agrupado numa linha
-
-- **WHEN** o procedimento de busca cita `CE1 / CE2` numa mesma linha
+- **WHEN** uma linha de `[[criterios]]` tem `ids = ["CE1", "CE2"]`
 - **THEN** os dois IDs contam como citados
 
 #### Scenario: Procedimentos de busca em dia
-
-- **WHEN** os quatro procedimentos de busca citam exatamente os IDs do protocolo
+- **WHEN** as quatro fontes citam exatamente os IDs do protocolo
 - **THEN** essa dimensão não reprova nenhuma base
 
 ### Requirement: Autoteste prova a reprovação do critério defasado
@@ -241,51 +253,89 @@ base e exigir que só aquela base reprove.
 - **THEN** a conferência da Scopus reprova e as das demais bases não reprovam
 
 ### Requirement: Plural declarado por base
-A declaração de cobertura de cada procedimento de busca SHALL ter a linha `plural`, com o valor `explícito`
-ou `pela lematização`. A linha ausente, ou com outro valor, MUST reprovar com
-PROTOCOLO_ILEGIVEL.
+`[cobertura] plural` da fonte de cada base SHALL ter uma destas formas:
+- um valor único, `explícito` ou `pela lematização`, que vale para todos os idiomas da base;
+- uma tabela por idioma, como `{ en = "pela lematização", pt = "explícito", es = "explícito" }`,
+  cobrindo todos os idiomas que `[cobertura] idiomas` usa.
+
+Os casos abaixo MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a fonte e o campo:
+- o campo ausente;
+- o valor fora do domínio;
+- o idioma sem valor.
 
 #### Scenario: Linha ausente
-- **WHEN** a declaração de cobertura do procedimento de busca da Scopus não tem a linha `plural`
-- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando o procedimento de busca e a linha
+- **WHEN** `[cobertura]` da fonte da Scopus não tem `plural`
+- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando a fonte e o campo
 
 #### Scenario: Valor fora do domínio
-- **WHEN** a linha `plural` do procedimento de busca da WoS diz `omitido`
+- **WHEN** `plural = "omitido"` na fonte da WoS
 - **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, citando os dois valores admitidos
 
+#### Scenario: Valor por idioma
+- **WHEN** a fonte da WoS declara `plural = { en = "pela lematização", pt = "explícito", es = "explícito" }`
+- **THEN** a flexão acrescenta plural só aos termos pt e es, e o en exige a lematização
+  medida para en
+
+#### Scenario: Idioma sem valor
+- **WHEN** a base usa pt, en e es, e `plural` traz só en e pt
+- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando `es`
+
 ### Requirement: Plural pela lematização exige lematização medida
-Procedimento de busca que declara `plural: pela lematização` SHALL ter, na seção 1, a linha "Lematização"
-com o estado verificado por medição e a citação `(BDn/<id>)` de uma execução registrada
-daquela base. A conferência MUST reprovar só aquela base quando a linha falta, quando o
-estado não é verificado ou quando a citação falta.
+Para cada idioma com `pela lematização`, a fonte SHALL ter um elemento de `[[sintaxe]]` de
+`categoria = "lematizacao"` com `situacao = "medicao"` e `citacao` de execução ou sondagem
+registrada daquela base. O elemento com `idioma` vale para esse idioma; o elemento sem
+`idioma` vale para todos. A conferência MUST reprovar só aquela base quando, para o idioma,
+não há elemento medido com citação.
 
 #### Scenario: Lematização não verificada
-- **WHEN** o procedimento de busca da ERIC declara `plural: pela lematização` e a seção 1 diz "Lematização —
-  **Não verificado**"
-- **THEN** `--conferir` reprova a ERIC, nomeando a declaração e a linha sem medição; as
-  demais bases não são afetadas
+- **WHEN** a fonte da ERIC declara `plural = "pela lematização"` e o único elemento de
+  `lematizacao` é `nao_verificado`
+- **THEN** `documentos conferir` reprova a ERIC, nomeando a declaração e o elemento sem
+  medição; as demais bases não são afetadas
 
 #### Scenario: Lematização medida
-- **WHEN** o procedimento de busca declara `plural: pela lematização` e a linha "Lematização" diz
-  verificado por medição com `(BD3/sonda-plural)`
-- **THEN** essa dimensão não reprova em `--conferir`, e a existência de `BD3/sonda-plural`
-  é conferida por `--conferir-dados`, como em "Verificação por medição remete a execução
-  registrada"
+- **WHEN** a fonte declara `plural = "pela lematização"` e o elemento de `lematizacao`, sem
+  `idioma`, é `medicao` com `citacao = "BD3/sonda-plural"`
+- **THEN** essa dimensão não reprova em `documentos conferir`, porque a medição vale para
+  todos os idiomas, e a existência de `BD3/sonda-plural` é conferida por `dados conferir`
+
+#### Scenario: Lematização medida num idioma só
+- **WHEN** a fonte da WoS declara en `pela lematização`, e o elemento de `lematizacao` com
+  `idioma = "en"` é `medicao` com `citacao = "BD1/sd5-2026-12-02"`
+- **THEN** essa dimensão não reprova em `documentos conferir`, e a existência da citação é
+  conferida por `dados conferir`
 
 #### Scenario: Plural explícito
-- **WHEN** o procedimento de busca declara `plural: explícito`
-- **THEN** o estado da linha "Lematização" não reprova
+- **WHEN** a fonte declara `plural = "explícito"`
+- **THEN** a situação dos elementos de `lematizacao` não reprova
 
-### Requirement: Termo só no singular relatado
-Em procedimento de busca com `plural: explícito`, a conferência SHALL relatar, por faceta e sem reprovar, os
-termos da STR presentes na string da base em uma só forma de número e não alcançados por
-truncamento.
+### Requirement: Termo só no singular reprova
+Em idioma com plural explícito, a conferência MUST reprovar, por base, o termo da STR
+presente nos blocos da base numa só forma de número. A reprovação nomeia a faceta, o termo e
+o idioma, e não vale quando:
+- o termo é `nao_contavel` no arquivo de exceções (`flexao-dos-termos`);
+- o termo tem forma `vetada` no arquivo de exceções;
+- um truncamento declarado na fonte alcança o termo.
+
+A regra vale também para a forma curada e para os subconjuntos, que são as partes da fonte
+onde se escrevem termos à mão.
 
 #### Scenario: Plural esquecido
-- **WHEN** o procedimento de busca da Scopus declara `plural: explícito` e traz `"teaching strategy"` sem
-  `"teaching strategies"` nem truncamento que o alcance
-- **THEN** `--conferir` relata `teaching strategy` em FCT3 da Scopus, e o código não muda
-  por esse relato
+- **WHEN** a ERIC declara plural explícito em en, e o subconjunto `STR1b` da fonte traz
+  `metadata schema` sem `metadata schemas` e sem exceção
+- **THEN** `documentos conferir` reprova a ERIC, nomeando `metadata schema`, FCT1 e en; as
+  demais bases passam
+
+#### Scenario: Plural esquecido na forma curada
+- **WHEN** uma consulta de `[[curadas]]` da fonte traz `"teaching strategy"` sem `"teaching
+  strategies"` e sem exceção, e a base declara plural explícito em en
+- **THEN** `documentos conferir` reprova a base, nomeando `teaching strategy`, FCT3 e en;
+  as demais bases passam
+
+#### Scenario: Não contável
+- **WHEN** o bloco traz `"education"` só no singular e o arquivo de exceções declara
+  `education`, en, `nao_contavel`
+- **THEN** essa dimensão não reprova
 
 ### Requirement: Autoteste prova a reprovação do plural sem lastro
 O autoteste SHALL injetar, na cópia do procedimento de busca de uma só base, a declaração `plural: pela
@@ -299,16 +349,16 @@ e SHALL retirar a linha `plural` e exigir PROTOCOLO_ILEGIVEL.
   isso não ocorrer
 
 ### Requirement: Teto de caracteres declarado por base
-A declaração de cobertura de cada procedimento de busca SHALL ter a linha `teto de caracteres`, com um
-número inteiro positivo de caracteres (`1400` ou `1.400`) ou `nenhum`. A linha ausente, ou
-com outro valor, MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando o procedimento de busca e a linha.
+`[cobertura]` da fonte de cada base SHALL ter `teto`, com um número inteiro positivo de
+caracteres ou `"nenhum"`. O campo ausente, ou com outro valor, MUST reprovar com
+PROTOCOLO_ILEGIVEL, nomeando a fonte e o campo.
 
 #### Scenario: Linha ausente
-- **WHEN** a declaração de cobertura do procedimento de busca da WoS não tem a linha `teto de caracteres`
-- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando o procedimento de busca e a linha
+- **WHEN** `[cobertura]` da fonte da WoS não tem `teto`
+- **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando a fonte e o campo
 
 #### Scenario: Valor ilegível
-- **WHEN** a linha `teto de caracteres` do procedimento de busca diz `curto`
+- **WHEN** `teto = "curto"`
 - **THEN** a leitura reprova com PROTOCOLO_ILEGIVEL, nomeando o domínio do teto
 
 ### Requirement: Consulta acima do teto reprova a base
@@ -335,14 +385,13 @@ consulta executável da base.
   muda por esse relato
 
 ### Requirement: Estratégia de proximidade não é forma executável
-A subseção `### Estratégia de proximidade` da seção 4 do procedimento de busca SHALL ser ignorada pela
-leitura: bloco cercado nela não entra no derivado da base, não se executa e não se confere.
-A subseção não é exigida.
+O fragmento `estrategia_de_proximidade.md` da fonte SHALL ser texto de discussão. Bloco
+cercado nele não entra no derivado da base, não se executa e não se confere. O fragmento não
+é exigido. O gerador o escreve na subseção `### Estratégia de proximidade` da seção 4.
 
 #### Scenario: Bloco cercado na estratégia de proximidade
-- **WHEN** o procedimento de busca da WoS ganha uma subseção "Estratégia de proximidade" com um bloco
-  cercado
-- **THEN** o derivado da WoS é igual ao de antes e `documentos conferir` não muda o código
+- **WHEN** a fonte da WoS ganha `estrategia_de_proximidade.md` com um bloco cercado
+- **THEN** o derivado da WoS é igual ao de antes, e o procedimento ganha só a subseção
 
 ### Requirement: Autoteste prova o teto e a estratégia de proximidade
 O autoteste SHALL:
@@ -357,3 +406,24 @@ O autoteste SHALL:
 #### Scenario: Conferência desligada
 - **WHEN** a conferência do comprimento contra o teto é desligada
 - **THEN** o caso do teto abaixo da maior consulta falha
+
+### Requirement: Conferências leem a fonte
+As conferências desta capacidade SHALL ler a estrutura derivada da fonte do procedimento da
+base (`fonte-do-procedimento`), e não o markdown gerado, que se confere só por igualdade
+(`geracao-dos-procedimentos`). O campo e o filtro de cada bloco SHALL vir de `[composicao]`
+e de `[[criterios]]`, e MUST NOT ser reconhecidos pelo texto do bloco.
+
+#### Scenario: Correspondência com a fonte
+- **WHEN** a conferência examina o que antes lia nas seções 1, 2 e 3, nos blocos e na forma
+  curada
+- **THEN** lê, respectivamente, `[[sintaxe]]`, `[[criterios]]`, `[cobertura]` e
+  `[[reducao]]`, os blocos compostos pelo gerador e `[[curadas]]`
+
+#### Scenario: Campo declarado, não inferido
+- **WHEN** a fonte da ERIC declara FCT1 no campo `title`
+- **THEN** a conferência trata FCT1 da ERIC como campo `title`, sem ler o prefixo do bloco
+
+#### Scenario: Invariante protege contra gerador errado
+- **WHEN** o autoteste faz o compositor omitir um termo da STR3 no bloco de EB4 de uma base
+- **THEN** a conferência "Termos do bloco conferem com as facetas declaradas" reprova só
+  aquela base

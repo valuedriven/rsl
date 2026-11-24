@@ -65,12 +65,14 @@ def _parser():
         p.set_defaults(executa=_cmd(modulo, funcao, contexto))
         return p
 
-    grupo("documentos", "protocolo, procedimentos de busca e sementes: conferência e "
-          "gramática")
-    novo("documentos", "conferir", "lê o protocolo e os procedimentos de busca e relata "
-         "problemas de coerência", "conferencia", "cmd_conferir")
+    grupo("documentos", "protocolo, fontes dos procedimentos de busca e sementes: "
+          "conferência e gramática")
+    novo("documentos", "conferir", "lê o protocolo e a fonte de cada procedimento de busca, "
+         "confere o procedimento gravado contra a geração e relata problemas de coerência",
+         "conferencia", "cmd_conferir")
     novo("documentos", "gramatica", "exibe o contrato de forma que o leitor exige do "
-         "protocolo e dos procedimentos de busca", "relatorio", "cmd_gramatica",
+         "protocolo, da fonte dos procedimentos de busca, do arquivo de sementes, do arquivo "
+         "de exceções de flexão e do resultado de sondagem", "relatorio", "cmd_gramatica",
          contexto=False)
 
     grupo("dados", "arquivos alimentados pela execução")
@@ -107,6 +109,46 @@ def _parser():
     p.add_argument("--gravar", action="store_true",
                    help="substitui só as células de string da tabela do protocolo, de "
                         "forma atômica; recusado se o quadro tiver termo em duas facetas")
+
+    grupo("procedimentos", "procedimento de busca de cada base, gerado da fonte da base, "
+          "do protocolo e do arquivo de sementes")
+    p = novo("procedimentos", "gerar", "gera o procedimento de busca da base SIGLA (sem "
+             "sigla, de todas as bases da tabela do protocolo) e exibe a diferença para o "
+             "gravado, por seção, com as formas de número e a sua origem; sem --gravar, nada "
+             "é gravado. O procedimento é saída: edita-se a fonte "
+             "(`[documentos] procedimento_fonte`), nunca o procedimento",
+             "procedimentos", "cmd_gerar")
+    p.add_argument("sigla", metavar="SIGLA", nargs="?", default=None,
+                   help="sigla da base; sem ela, todas as bases")
+    p.add_argument("--gravar", action="store_true",
+                   help="substitui o procedimento inteiro, de forma atômica, depois de reler "
+                        "as fontes; recusado com leitura reprovada, flexão indecidível ou "
+                        "fonte alterada durante a execução")
+    p = novo("procedimentos", "iniciar", "cria a fonte do procedimento de busca de uma base "
+             "já registrada no protocolo, com o derivável preenchido e os campos não "
+             "deriváveis marcados PENDENTE; não sobrescreve fonte existente",
+             "procedimentos", "cmd_iniciar")
+    p.add_argument("sigla", metavar="SIGLA")
+
+    grupo("sondagens", "resultado das sondagens de sintaxe do roteiro de cada base")
+    p = novo("sondagens", "registrar", "grava no registro de execução o resultado da "
+             "sondagem SDn da base SIGLA e exibe a citação e a mudança a aplicar na fonte; "
+             "não altera a fonte", "sondagens", "cmd_registrar")
+    p.add_argument("sigla", metavar="SIGLA")
+    p.add_argument("sondagem", metavar="SDn")
+    p.add_argument("--retorno", action="append", type=int, default=[],
+                   help="retorno exibido, uma vez por consulta declarada, na ordem")
+    p.add_argument("--leitura", type=int, help="número da leitura observada (1, 2, …)")
+    p.add_argument("--data-hora", help="data e hora da sondagem, ISO 8601; obrigatório, sem "
+                                       "padrão: o registro costuma ser posterior à sondagem")
+    p.add_argument("--evidencia", action="append", default=[],
+                   help="arquivo de evidência (um ou mais); obrigatório e existente: sondagem "
+                        "sem evidência não se registra")
+    p.add_argument("--submetido", nargs=2, action="append", default=[],
+                   metavar=("K", "TEXTO"),
+                   help="texto efetivamente submetido na consulta K, quando difere do "
+                        "declarado")
+    p.add_argument("--observacao", default="", help="observação livre")
 
     grupo("catalogo", "catálogo de apoio: skills e comandos por passo do guia de "
           "procedimentos")

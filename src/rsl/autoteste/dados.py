@@ -15,7 +15,7 @@ from .. import gramatica as G
 from ..config import Configuracao, relativo
 from ..dados import (CMD_REGISTRAR, cmd_pendencias, le_json, problemas_citacoes_registro,
                      problemas_registro)
-from ..fichas import ficha
+from .fontes import com_fonte, fonte_de
 
 
 def registro_ausente(ctx, g):
@@ -58,10 +58,12 @@ def casos(ctx, g):
             "registros_lidos": lidos, "status": "valida"})
 
     def so_a_base(alvo, linha):
-        """A citação injetada no procedimento de busca de `alvo` reprova só essa base."""
+        """A citação injetada na fonte de `alvo` (nota do primeiro elemento de sintaxe)
+        reprova só essa base."""
         def caso():
-            texto = ficha(ctx, d, alvo).rstrip("\n") + "\n\n" + linha + "\n"
-            p = problemas_citacoes_registro(ctx.com_fichas({alvo: texto}), d, reg)
+            dado, frag, arqs = fonte_de(ctx, d, alvo)
+            dado["sintaxe"][0]["nota"] = linha
+            p = problemas_citacoes_registro(com_fonte(ctx, alvo, dado, frag, arqs), d, reg)
             return bool(p) and not [x for x in p if not x.startswith(alvo + ":")]
         return caso
 
@@ -101,14 +103,14 @@ def casos(ctx, g):
         (f"citação do registro em prosa sem identificador ({alvo[3]})",
          lambda: so_a_base(alvo[3], f"Comportamento apurado por medição, com as sondagens "
                                     f"em `{caminho_reg}`.")()),
-        # A linha "Lematização" que sustenta `plural: pela lematização` cita só a execução,
-        # sem o caminho do registro: a citação se confere do mesmo modo.
+        # A citação sem o caminho do registro (a nota de lematização que sustenta
+        # `pela lematização`) se confere do mesmo modo.
         (f"citação de execução inexistente na linha Lematização, sem o caminho ({alvo[0]})",
-         lambda: so_a_base(alvo[0], f"| {G.RF_LEMATIZACAO.texto} | Verificado por medição "
-                                    f"({bd_de[alvo[0]]}/{inexistente()}) |")()),
+         lambda: so_a_base(alvo[0], f"Lematização verificada por medição "
+                                    f"({bd_de[alvo[0]]}/{inexistente()})")()),
         (f"citação de outra base na linha Lematização, sem o caminho ({alvo[1]})",
-         lambda: so_a_base(alvo[1], f"| {G.RF_LEMATIZACAO.texto} | Verificado por medição "
-                                    f"({outra_bd(alvo[1])}/de-outra-base) |")()),
+         lambda: so_a_base(alvo[1], f"Lematização verificada por medição "
+                                    f"({outra_bd(alvo[1])}/de-outra-base)")()),
     ]
 
     reg, erro_r = le_json(cfg.caminho("dados.registro"))

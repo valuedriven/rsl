@@ -1,467 +1,266 @@
-"""Autoteste dos procedimentos de busca: a cobertura da base reprova procedimento de busca
-divergente do protocolo, e só na base afetada.
+"""Autoteste da cobertura por base: as conferências leem o derivado da fonte e reprovam o
+defeito só na base afetada.
 
-As bases e os termos de cada caso são escolhidos pela estrutura lida: "a primeira base sem
-derivação radical", "a primeira base que declara a forma radical", "um termo vigente da
-string que nenhum outro cobre", "um termo do quadro que a STR não traz". Caso cuja
-condição o documento corrente não oferece falha como mutação não aplicável.
+Os defeitos entram de dois modos:
+- na cópia em memória da fonte de uma base (`fontes.py`): campo retirado ou fora do domínio,
+  critério renumerado, plural pela lematização sem medição, termo só no singular na forma
+  curada;
+- num compositor errado (`base_derivada(..., composicao=...)`): termo omitido, consulta acima
+  do teto, flexão desligada. É o invariante contra gerador errado: as conferências recalculam
+  o esperado sem o compositor.
+
+A base de cada caso é escolhida pela estrutura da fonte ("a primeira base com teto
+numérico", "a primeira base com proximidade"), e não pelo nome.
 """
 
+import copy
 import re
 
 from .. import gramatica as G
-from ..cobertura import (_mesmo_termo, _par_irregular, _radical_alcanca, _radical_sem_alcance,
-                         _vocabulario, cobertura_base, maior_consulta, subsumidos_na_base)
-from ..geracao import esperada
-from ..erros import ProtocoloInvalido
-from ..fichas import base_derivada, ficha, termos_bloco
-from ..markdown import normaliza, secao
+from ..cobertura import cobertura_base
+from ..erros import ProtocoloInvalido, Reprovado
+from ..fichas import base_derivada
+from ..flexao import Indecidivel, le_excecoes, plural_por_regra
+from ..procedimentos import Composicao, gera_base
 from ..saida import Saida
-from .textos import coluna, edita_celula, linhas_de_tabela_do_trecho, retira_termo_citado
+from .fontes import base_com, com_fonte, fonte_de
 
 R, P, OK = Saida.REPROVADO, Saida.PROTOCOLO_ILEGIVEL, Saida.OK
-INVENTADO = "invented search term"
-RETIRADO = "retired quadro term"
-MOTIVO_RADICAL = f"alcançado pela forma {G.DERIVACAO_RADICAL} declarada"
 
 
-def _insere_antes_do_primeiro(bloco, novo):
-    """`"novo" OR ` antes do primeiro termo entre aspas do bloco."""
-    return re.sub(r'"([^"]+)"', lambda m: f'"{novo}" OR "{m.group(1)}"', bloco, count=1)
+def _problemas(ctx, d, sigla, composicao=None):
+    """(código, mensagens) da conferência de cobertura de uma base."""
+    try:
+        base = base_derivada(ctx, d, sigla, composicao=composicao)
+        p = cobertura_base(base, d, le_excecoes(ctx))
+        if base["comp"].indecidiveis:
+            p.append("flexão indecidível")
+        return (R if p else OK), p
+    except ProtocoloInvalido as e:
+        return P, [str(e)]
+    except Reprovado as e:
+        return R, [str(e)]
+
+
+def _omite(fid, ident):
+    """Compositor que omite, em toda consulta de `ident`, o último termo de `fid`."""
+    class Omite(Composicao):
+        def __init__(self, *a, **k):
+            super().__init__(*a, **k)
+            alvo = self.strings[fid]["termos"][-1]
+            for c in self.expressoes[ident]["consultas"]:
+                if c.get("termos") and alvo in c["termos"].get(fid, []):
+                    c["termos"][fid] = [t for t in c["termos"][fid] if t != alvo]
+            self.omitido = alvo
+    return Omite
+
+
+def _alonga(ident, tamanho):
+    """Compositor que estica a primeira consulta de `ident` além de `tamanho`."""
+    class Alonga(Composicao):
+        def __init__(self, *a, **k):
+            super().__init__(*a, **k)
+            c = self.expressoes[ident]["consultas"][0]
+            c["texto"] = c["texto"] + " " * (tamanho + 1 - len(c["texto"]))
+    return Alonga
+
+
+def _sem_flexao(*a, **k):
+    """Compositor que esquece a flexão (o gerador errado que perde o plural)."""
+    k["flexao"] = False
+    return Composicao(*a, **k)
+
+
+def _termo_regular(d, fid, idioma):
+    """Um termo da STR de `fid` em `idioma` com plural regular decidível."""
+    tabela = next(f for f in d["tabelas"] if f["id"] == fid)
+    for camada in tabela["camadas"][idioma].values():
+        for t in camada:
+            if t in d["strings"][fid]["literais"] and " " in t:
+                try:
+                    plural_por_regra(t, idioma)
+                    return t
+                except Indecidivel:
+                    continue
+    return None
 
 
 def casos(ctx, g):
     d = ctx.protocolo()
     siglas = [b["sigla"] for b in d["bases"]]
-    textos = {s: ficha(ctx, d, s) for s in siglas}
-    lidas = {s: base_derivada(ctx, d, s) for s in siglas}
-
-    def radical(s):
-        return G.DERIVACAO_RADICAL in lidas[s]["declaracao"]["derivacoes"]
-
-    sem_radical = [s for s in siglas if not radical(s)] or siglas
-    com_radical = [s for s in siglas if radical(s)]
-    A = sem_radical[0]
-    D = sem_radical[-1]
-    F = next((s for s in siglas if s not in (A,)), A)
-    RAD = com_radical[0] if com_radical else None
-    E = RAD or A
     executada = d["executada"]
+    correntes = {s: _problemas(ctx, d, s) for s in siglas}
+    reprovadas = [s for s, (c, _) in correntes.items() if c != OK]
+    if reprovadas:
+        g.falha(f"bases correntes já reprovadas: {reprovadas} — "
+                f"{correntes[reprovadas[0]][1][:1]}")
+        return
 
-    def problemas_de(s, texto, dd=None):
-        dd = d if dd is None else dd
-        try:
-            p = cobertura_base(base_derivada(ctx, dd, s, texto), dd)
-            return (R if p else OK), p
-        except ProtocoloInvalido as e:
-            return P, [str(e)]
-
-    def por_base(alvo, texto, dd=None):
-        return {s: problemas_de(s, texto if s == alvo else textos[s], dd) for s in siglas}
-
-    def testa(nome, s, mutante, original, codigo, espera=(), dd=None):
-        if mutante is None or mutante == original:
-            g.falha(f"mutação não aplicada: {nome}")
+    def so_a_base(nome, alvo, mutar, codigo, trechos, composicao=None, frags=None):
+        """Mutação na fonte de `alvo` (ou compositor errado): reprova `alvo` com o código e
+        os trechos esperados, e nenhuma outra base."""
+        if alvo is None:
+            g.falha(f"mutação não aplicada: {nome} (nenhuma base com a condição)")
             return
-        cod, msgs = problemas_de(s, mutante, dd)
-        esperas = (espera,) if isinstance(espera, str) else tuple(espera)
-        faltam = [x for x in esperas if not any(x in m for m in msgs)]
+        dado, frag, arqs = fonte_de(ctx, d, alvo)
+        original = copy.deepcopy(dado)
+        if mutar:
+            mutar(dado)
+            if dado == original and frags is None:
+                g.falha(f"mutação não aplicada: {nome}")
+                return
+        if frags is not None:
+            frag = frags(frag)
+            arqs = ["procedimento.toml"] + sorted(frag)
+        cx = com_fonte(ctx, alvo, dado, frag, arqs)
+        cod, msgs = _problemas(cx, d, alvo, composicao)
+        outras = {s: _problemas(cx, d, s)[0] for s in siglas if s != alvo}
+        trechos = (trechos,) if isinstance(trechos, str) else tuple(trechos)
+        faltam = [x for x in trechos if not any(x in m for m in msgs)]
+        afetadas = [s for s, c in outras.items() if c != OK]
         if cod != codigo:
-            g.falha(f"{nome}: código {cod.name}, esperado {codigo.name} — {msgs[:1]}")
-        elif faltam or not msgs:
-            g.falha(f"{nome}: faltou {faltam or 'reprovação'} — {msgs[:1]}")
+            g.falha(f"{nome} [{alvo}]: código {cod.name}, esperado {codigo.name} — "
+                    f"{msgs[:1]}")
+        elif faltam:
+            g.falha(f"{nome} [{alvo}]: faltou {faltam} — {msgs[:1]}")
+        elif afetadas:
+            g.falha(f"{nome} [{alvo}]: reprovou também {afetadas}")
         else:
-            achado = next((m for m in msgs if any(x in m for x in esperas)), msgs[0])
-            g.ok(f"reprovou ({cod.name}): {nome} [{s}] — {achado[:84]}")
+            achado = next(m for m in msgs if any(x in m for x in trechos))
+            g.ok(f"reprovou só a base ({cod.name}): {nome} [{alvo}] — {achado[:80]}")
 
-    def so_a_base(nome, s, mutante, original, codigo, esperas, dd=None):
-        if mutante is None or mutante == original:
-            g.falha(f"mutação não aplicada: {nome}")
-            return
-        pb = por_base(s, mutante, dd)
-        outras = sorted(x for x, (c, _) in pb.items() if x != s and c != OK)
-        cod, msgs = pb[s]
-        faltam = [x for x in esperas if not any(x in m for m in msgs)]
-        if cod == codigo and not faltam and not outras:
-            g.ok(f"reprovou ({cod.name}): {nome} — só {s}; "
-                 f"{', '.join(x for x in siglas if x != s) or 'nenhuma outra'} passam")
-        else:
-            g.falha(f"{nome}: {s} {cod.name} faltou {faltam}, outras reprovadas {outras}")
+    primeira = siglas[0]
+    ultima = siglas[-1]
 
-    def string_de(s, fid):
-        return next((x for x in lidas[s]["facetas"] if x["faceta"] == fid), None)
+    # Critérios: renumerar o protocolo sem atualizar a fonte.
+    ce = sorted({c["id"] for c in d["criterios"]}, key=lambda x: int(x[2:]))
+    novo = f"{G.I_CE.prefixo}{int(ce[-1][2:]) + 90}"
+    def renumera(x):
+        for c in x["criterios"]:
+            c["ids"] = [novo if i == ce[0] else i for i in c["ids"]]
+    so_a_base("fonte cita critério inexistente e omite o vigente", primeira, renumera, R,
+              (novo, ce[0]))
 
-    def muda_string(s, fid, transforma, texto=None):
-        texto = textos[s] if texto is None else texto
-        st = string_de(s, fid)
-        if st is None:
-            return None
-        novo = transforma(st["texto"])
-        return texto.replace(st["texto"], novo, 1) if novo != st["texto"] else None
+    # Forma de execução: ausente e fora do domínio.
+    so_a_base("forma de execução ausente", ultima,
+              lambda x: x["execucao"].pop("forma"), P, ("`forma`",))
+    so_a_base("forma de execução fora do domínio", ultima,
+              lambda x: x["execucao"].update(forma="dividida"), P, ("dividida",))
 
-    fid = d["facetas"][0]["id"]
-    decl_a = lidas[A]["declaracao"]
-    vigentes, _ = _vocabulario(fid, d, decl_a)
-    st_a = string_de(A, fid)
+    # Teto: ausente e ilegível.
+    so_a_base("teto ausente", primeira, lambda x: x["cobertura"].pop("teto"), P, ("`teto`",))
+    so_a_base("teto ilegível", primeira, lambda x: x["cobertura"].update(teto="curto"), P,
+              ("curto",))
 
-    # (1) termo vigente retirado da string, sem outro que o cubra.
-    alvo = None
-    if st_a:
-        excl = [e["termo"] for e in decl_a["exclusoes"] if e["faceta"] == fid]
-        for termo in st_a["termos"]:
-            outros = [o for o in st_a["termos"] if o != termo]
-            if (any(_mesmo_termo(termo, v) for v in vigentes)
-                    and not any(_mesmo_termo(termo, o) for o in outros)
-                    and not any(_mesmo_termo(termo, e) for e in excl)
-                    and retira_termo_citado(st_a["texto"], termo) != st_a["texto"]):
-                alvo = termo
-                break
-    testa("termo do protocolo retirado da string da base", A,
-          muda_string(A, fid, lambda b: retira_termo_citado(b, alvo)) if alvo else None,
-          textos[A], R, "não consta da redução")
-    testa("termo inventado acrescentado à string da base", A,
-          muda_string(A, fid, lambda b: _insere_antes_do_primeiro(b, INVENTADO)), textos[A],
-          R, "não deriva do protocolo")
-    # Com a STR gerada do quadro, todo termo do quadro fora da STR é subsumido, e o
-    # subsumido é aceito. O termo retirado da STR e mantido no quadro só existe com a STR
-    # defasada: o caso o cria, acrescentando ao quadro de uma cópia um termo que nenhum
-    # termo da STR subsume, sem regerar a STR.
-    def com_termo_no_quadro(f_id):
-        q = L_["quadro"][f_id]
-        k = coluna(t_p, q["cabecalho"], d["idiomas"][0])
-        mut = edita_celula(t_p, q[G.R_RELACIONADOS.interno], k,
-                           lambda c: f"{c}, {RETIRADO}")
-        return ctx.com_texto(mut).protocolo()
-
-    t_p, L_ = ctx.texto, d["locais"]
-    d_q = com_termo_no_quadro(fid)
-    testa("termo só do quadro devolvido à string da base", A,
-          muda_string(A, fid, lambda b: _insere_antes_do_primeiro(b, RETIRADO)),
-          textos[A], R, "não está na string do protocolo", dd=d_q)
-
-    # (2) a mesma família de defeito, em flexão, noutra base: reprova só ela.
-    f_d = next((f["id"] for f in d["facetas"] if string_de(D, f["id"])), None)
-    d_qd = com_termo_no_quadro(f_d) if f_d else None
-    mut_d = (muda_string(D, f_d, lambda b: _insere_antes_do_primeiro(b, RETIRADO + "s"))
-             if f_d else None)
-    testa("termo só do quadro, em flexão, na string da base", D, mut_d, textos[D], R,
-          "não está na string do protocolo", dd=d_qd)
-    so_a_base("defeito só numa base reprova só essa base", D, mut_d, textos[D], R, (),
-              dd=d_qd)
-
-    # (2b) subsumido por termo da STR, na string da base: aceito e relatado, não reprovado.
-    sub_ficha = None
-    for f in d["facetas"]:
-        if not string_de(A, f["id"]):
-            continue
-        tab = next(x for x in d["tabelas"] if x["id"] == f["id"])
-        pares = esperada(tab, d["idiomas"])[1]
-        if pares:
-            sub_ficha = (f["id"], *next(iter(pares.items())))
-            break
-    if sub_ficha is None:
-        g.falha("mutação não aplicável: subsumido aceito na string da base — nenhuma "
-                "faceta do procedimento de busca tem termo subsumido no quadro")
+    # Plural: ausente, fora do domínio, idioma sem valor.
+    so_a_base("plural ausente", primeira, lambda x: x["cobertura"].pop("plural"), P,
+              ("`plural`",))
+    so_a_base("plural fora do domínio", primeira,
+              lambda x: x["cobertura"].update(plural="omitido"), P,
+              (G.PLURAL_EXPLICITO, G.PLURAL_LEMATIZACAO))
+    multi = base_com(ctx, d, lambda x: len({i for v in x["cobertura"]["idiomas"].values()
+                                           for i in v}) > 1)
+    if multi:
+        dado_m, _, _ = fonte_de(ctx, d, multi)
+        idiomas_m = sorted({i for v in dado_m["cobertura"]["idiomas"].values() for i in v})
+        so_a_base("plural por idioma sem um dos idiomas", multi,
+                  lambda x: x["cobertura"].update(
+                      plural={i: G.PLURAL_EXPLICITO for i in idiomas_m[:-1]}), P,
+                  (idiomas_m[-1],))
     else:
-        f_s, termo_s, por_s = sub_ficha
-        # O termo entra na string da faceta e em todo bloco que a repete: só assim a
-        # coerência entre seção 3 e seção 4 não reprova por outro motivo.
-        texto_s = string_de(A, f_s)["texto"]
-        miolo = texto_s[texto_s.index('"'):texto_s.rindex('"') + 1]
-        mut_s = textos[A].replace(miolo, f'"{termo_s}" OR {miolo}')
-        cod_s, msgs_s = problemas_de(A, mut_s)
-        relato = subsumidos_na_base(base_derivada(ctx, d, A, mut_s), d)
-        citado = [m for m in msgs_s if repr(termo_s) in m]
-        if cod_s == OK and any(x[2] == termo_s and x[3] == por_s for x in relato):
-            g.ok(f"aceitou e relatou: subsumido {termo_s!r} (por {por_s!r}) na string de {A}")
-        else:
-            g.falha(f"subsumido {termo_s!r} na string de {A}: código {cod_s.name}, "
-                    f"reprovações {citado[:1]}, relato {relato[:1]}")
+        g.falha("mutação não aplicada: plural por idioma (nenhuma base com mais de um idioma)")
 
-    # Par de plural irregular no relato de número único: o par cala o relato; a regra
-    # afrouxada (qualquer troca de final) calaria os pares negativos.
-    for x, y, esperado in PARES_IRREGULARES:
-        g.testa(f"plural irregular: {x!r} × {y!r} {'é' if esperado else 'não é'} par de "
-                f"número", _par_irregular(x, y) == esperado,
-                f"devolveu {_par_irregular(x, y)}")
+    # Plural pela lematização sem lematização medida; e com ela medida (não reprova).
+    def lematizacao_nao_medida(x):
+        x["cobertura"]["plural"] = G.PLURAL_LEMATIZACAO
+        for s in x["sintaxe"]:
+            if s["categoria"] == G.CATEGORIA_LEMATIZACAO:
+                s.pop("citacao", None)
+                s["situacao"] = G.SITUACAO_NAO_VERIFICADO
+                if not s.get("sondagem"):
+                    s["sem_sondagem"] = "autoteste"
+    so_a_base("plural pela lematização sem lematização medida", primeira,
+              lematizacao_nao_medida, R, (G.PLURAL_LEMATIZACAO,))
+    bd1 = d["bases"][0]["id"]
+    dado, frag, arqs = fonte_de(ctx, d, primeira)
+    dado["cobertura"]["plural"] = G.PLURAL_LEMATIZACAO
+    for s in dado["sintaxe"]:
+        if s["categoria"] == G.CATEGORIA_LEMATIZACAO:
+            s.update(situacao=G.SITUACAO_MEDICAO, citacao=f"{bd1}/autoteste-lematizacao")
+            s.pop("sondagem", None)
+            s.pop("sem_sondagem", None)
+            s.pop("idioma", None)
+    for sd in dado.get("sondagens", []):
+        lem = {s["elemento"] for s in dado["sintaxe"]
+               if s["categoria"] == G.CATEGORIA_LEMATIZACAO}
+        sd["elementos"] = [e for e in sd["elementos"] if e not in lem] or sd["elementos"]
+    cod, msgs = _problemas(com_fonte(ctx, primeira, dado, frag, arqs), d, primeira)
+    g.testa(f"plural pela lematização com lematização medida e citada não reprova "
+            f"essa dimensão [{primeira}]",
+            not any(G.PLURAL_LEMATIZACAO in m for m in msgs), f"{cod.name} {msgs[:1]}")
 
-    # (3) seção de critérios do procedimento de busca: ID inexistente numa base reprova só ela.
-    t_f = textos[F]
-    trecho = secao(t_f, G.SF_CRITERIOS)
-    inicio = t_f.index(trecho)
-    achado = G.I_CE.padrao.search(trecho)
-    mut_f, esperas_f = None, ()
-    if achado:
-        retirado = achado.group(0)
-        novo = f"{G.I_CE.prefixo}{max(int(c['id'][len(G.I_CE.prefixo):]) for c in d['criterios']) + 1}"
-        mut_f = t_f[:inicio + achado.start()] + novo + t_f[inicio + achado.end():]
-        esperas_f = (novo, f"não cita {retirado}")
-    so_a_base("ID de critério inexistente na seção de critérios do procedimento de busca", F,
-              mut_f, t_f, R, esperas_f)
-
-    # (4) facetas da expressão executada e camadas declaradas.
-    t_a = textos[A]
-    mut = None
-    i = t_a.find(f"### {executada}")
-    j = t_a.find(G.MARCA_FACETAS, i) if i >= 0 else -1
-    if j >= 0:
-        fim = t_a.find("\n", j)
-        linha = t_a[j:fim]
-        corte = linha.rfind(" AND ")
-        if corte > 0:
-            mut = t_a[:j] + linha[:corte] + t_a[fim:]
-    testa("expressão com faceta trocada", A, mut, t_a, R, "do protocolo")
-    outro_valor = next(v for v in G.D_CAMADAS.valores if v != decl_a["camadas"])
-    mut = _troca_rotulo(t_a, G.RF_CAMADAS, outro_valor)
-    testa("declaração de cobertura restringindo as camadas", A, mut, t_a, R)
-
-    # (4b) plural declarado: `pela lematização` sem lastro numa só base reprova só ela; a
-    # linha retirada é procedimento de busca ilegível.
-    texto_lem = next(k for k, v in G.D_PLURAL.valores.items() if v == G.PLURAL_LEMATIZACAO)
-    sem_lastro = next((s for s in siglas
-                       if lidas[s]["declaracao"]["plural"] != G.PLURAL_LEMATIZACAO
-                       and not (lidas[s]["lematizacao"][1] and lidas[s]["lematizacao"][2])),
-                      None)
-    if sem_lastro is None:
-        g.falha("mutação não aplicável: plural pela lematização sem lastro — todo procedimento "
-                "de busca já declara a lematização ou a tem medida")
+    # Termo só no singular na forma curada, e o mesmo termo declarado não contável.
+    alvo_c = base_com(ctx, d, lambda x: any("en" in v for v in
+                                            x["cobertura"]["idiomas"].values())
+                      and x["cobertura"]["plural"] == G.PLURAL_EXPLICITO)
+    fid_c = next((f for f in sorted(d["strings"]) if _termo_regular(d, f, "en")), None)
+    if alvo_c and fid_c:
+        termo = _termo_regular(d, fid_c, "en")
+        dado_c, _, _ = fonte_de(ctx, d, alvo_c)
+        if "en" not in dado_c["cobertura"]["idiomas"].get(fid_c, []):
+            alvo_c = None
+    if alvo_c and fid_c:
+        ancoras = list(d["ancoras"])
+        def curada(x):
+            x["execucao"]["forma"] = "curada"
+            x["curadas"] = [{"grupo": "autoteste", "consulta": f'"{termo}"',
+                             "facetas": sorted(set(ancoras + [fid_c]))}]
+        so_a_base("termo só no singular na forma curada", alvo_c, curada, R,
+                  (repr(termo), fid_c, "en"))
+        dado, frag, arqs = fonte_de(ctx, d, alvo_c)
+        curada(dado)
+        exc = (ctx.texto_flexoes.rstrip("\n") + "\n\n[[excecoes]]\n"
+               f'termo = "{termo}"\nidioma = "en"\ntipo = "nao_contavel"\n'
+               'origem = "autoteste"\n')
+        cx = com_fonte(ctx, alvo_c, dado, frag, arqs).com_flexoes(exc)
+        _, msgs = _problemas(cx, d, alvo_c)
+        g.testa(f"termo só no singular declarado não contável não reprova [{alvo_c}]",
+                not any("só no singular" in m and repr(termo) in m for m in msgs),
+                f"{msgs[:1]}")
     else:
-        t_w = textos[sem_lastro]
-        so_a_base("plural pela lematização sem a lematização medida", sem_lastro,
-                  _troca_rotulo(t_w, G.RF_PLURAL, texto_lem), t_w, R,
-                  (f"declara plural {texto_lem!r}", G.RF_LEMATIZACAO.texto))
-    linha_plural = next((linha for _, linha in linhas_de_tabela_do_trecho(t_a, G.SF_DECLARACAO)
-                         if normaliza(linha.strip("| ").split("|")[0])
-                         == normaliza(G.RF_PLURAL.texto)), None)
-    testa("declaração de cobertura sem a linha plural", A,
-          t_a.replace(linha_plural + "\n", "", 1) if linha_plural else None, t_a, P,
-          ("linha de plural", G.RF_PLURAL.rotulo))
+        g.falha("mutação não aplicada: termo só no singular na forma curada")
 
-    # (4c) teto de caracteres declarado: abaixo da maior consulta de uma base, só ela
-    # reprova; igual à maior, passa; a linha retirada é procedimento de busca ilegível.
-    maior = maior_consulta(lidas[A])
-    if maior is None:
-        g.falha(f"mutação não aplicável: teto de caracteres — {A} sem consulta executável")
+    # Invariante contra gerador errado.
+    fid_omite = sorted(d["strings"])[-1]
+    so_a_base(f"compositor omite um termo de {fid_omite} no bloco de {executada}", primeira,
+              None, R, ("não está no bloco",), composicao=_omite(fid_omite, executada))
+    com_teto = base_com(ctx, d, lambda x: isinstance(x["cobertura"]["teto"], int))
+    if com_teto:
+        teto = fonte_de(ctx, d, com_teto)[0]["cobertura"]["teto"]
+        so_a_base("compositor deixa consulta acima do teto", com_teto, None, R,
+                  (f"acima do teto de caracteres declarado ({teto})",),
+                  composicao=_alonga(executada, teto))
     else:
-        n, ident_maior, _ = maior
-        so_a_base("teto de caracteres abaixo da maior consulta", A,
-                  _troca_rotulo(t_a, G.RF_TETO, str(n - 1)), t_a, R,
-                  (f"{n} caracteres, acima do teto de caracteres declarado ({n - 1})",
-                   ident_maior))
-        cod, msgs = problemas_de(A, _troca_rotulo(t_a, G.RF_TETO, f"{n:,}".replace(",", ".")))
-        g.testa(f"teto de caracteres igual à maior consulta, com separador de milhar [{A}]",
-                cod == OK, f"código {cod.name} — {msgs[:1]}")
-    linha_teto = next((linha for _, linha in linhas_de_tabela_do_trecho(t_a, G.SF_DECLARACAO)
-                       if normaliza(linha.strip("| ").split("|")[0])
-                       == normaliza(G.RF_TETO.texto)), None)
-    testa("declaração de cobertura sem a linha de teto de caracteres", A,
-          t_a.replace(linha_teto + "\n", "", 1) if linha_teto else None, t_a, P,
-          ("linha de teto de caracteres", G.RF_TETO.rotulo))
+        g.falha("mutação não aplicada: consulta acima do teto (nenhuma base com teto)")
+    com_explicito = base_com(ctx, d, lambda x: x["cobertura"]["plural"] ==
+                             G.PLURAL_EXPLICITO and not x.get("radical"))
+    so_a_base("compositor esquece a flexão", com_explicito, None, R, ("não está no bloco",),
+              composicao=_sem_flexao)
 
-    # (4d) a subseção de estratégia de proximidade é prosa: bloco cercado nela não muda o
-    # derivado da base nem a conferência.
-    i_exec = t_a.find("\n### Como executar")
-    if i_exec < 0:
-        g.falha(f"mutação não aplicável: estratégia de proximidade — {A} sem 'Como executar'")
+    # Estratégia de proximidade: bloco cercado no fragmento não entra no derivado.
+    prox = base_com(ctx, d, lambda x: isinstance(x["composicao"]["proximidade"], dict))
+    if prox:
+        dado, frag, arqs = fonte_de(ctx, d, prox)
+        antes = base_derivada(ctx, d, prox)
+        frag2 = dict(frag, **{"estrategia_de_proximidade.md":
+                              "Discussão.\n\n```\nTS=(a NEAR/2 b)\n```\n"})
+        cx = com_fonte(ctx, prox, dado, frag2, ["procedimento.toml"] + sorted(frag2))
+        depois = base_derivada(cx, d, prox)
+        _, _, texto = gera_base(cx, d, prox)
+        g.testa(f"bloco cercado na estratégia de proximidade não entra no derivado [{prox}]",
+                antes["expressoes"] == depois["expressoes"]
+                and re.search(r"^### Estratégia de proximidade$", texto, re.M) is not None,
+                "derivado mudou ou subseção ausente")
     else:
-        com_prox = (t_a[:i_exec] + "\n### Estratégia de proximidade\n\nDiscussão da "
-                    "distância entre as âncoras.\n\n```\n\"termo a\" NEAR/3 \"termo b\"\n"
-                    "```\n" + t_a[i_exec:])
-        try:
-            igual, erro = base_derivada(ctx, d, A, com_prox) == lidas[A], ""
-        except ProtocoloInvalido as e:
-            igual, erro = False, f" — {e}"
-        cod = problemas_de(A, com_prox)[0]
-        g.testa(f"estratégia de proximidade com bloco cercado não muda o derivado [{A}]",
-                igual and cod == OK, f"derivado {'igual' if igual else 'DIFERENTE'}, "
-                                     f"código {cod.name}{erro}")
-
-    # (5) forma de execução declarada no procedimento de busca: sem padrão, e o defeito fica
-    # na base.
-    t_e = textos[E]
-    m_exec = G.MF_EXECUCAO.padrao.search(t_e)
-    linha_exec = m_exec.group(0) + "\n" if m_exec else None
-    testa("procedimento de busca sem a linha de execução", E,
-          t_e.replace(linha_exec, "", 1) if linha_exec else None, t_e, P, "falta a linha")
-    testa("procedimento de busca com a linha de execução repetida", E,
-          t_e.replace(linha_exec, linha_exec * 2, 1) if linha_exec else None, t_e, P,
-          "repetida")
-    testa("procedimento de busca com forma de execução fora do domínio", E,
-          t_e.replace(m_exec.group(0), m_exec.group(0).replace(m_exec.group(1), "dividida"),
-                      1) if m_exec else None, t_e, P, "'dividida'")
-    so_a_base("procedimento de busca sem execução reprova só a sua base, nomeando o "
-              "procedimento de busca", E,
-              t_e.replace(linha_exec, "", 1) if linha_exec else None, t_e, P,
-              (lidas[E]["base"]["ficha"],))
-
-    # (6) forma radical, no procedimento de busca que a declara. O controle é o procedimento
-    # de busca corrente com toda linha falsamente declarada como radical reetiquetada como
-    # redução: tem de passar, ou os defeitos injetados sobre ele não provam nada.
-    if RAD is None:
-        for nome in ("controle da forma radical aprovado",
-                     "redução declarada como radical sem termo da string que a alcance",
-                     "termo inventado que partilha uma palavra com o protocolo",
-                     "motivo radical sem derivação radical declarada"):
-            g.falha(f"mutação não aplicável: {nome} — nenhum procedimento de busca declara a "
-                    f"forma radical")
-        controle = None
-    else:
-        controle = textos[RAD]
-        for e, _ in _radical_sem_alcance(lidas[RAD]):
-            controle = re.sub(r"^(\|\s*" + re.escape(e["faceta"]) + r"\s*\|\s*"
-                              + re.escape(e["termo"]) + r"\s*\|)[^\n]*$",
-                              r"\1 redução desta base (controle do autoteste) |",
-                              controle, count=1, flags=re.M)
-        cod, msgs = problemas_de(RAD, controle)
-        g.testa(f"controle da forma radical aprovado [{RAD}]", cod == OK, f"{msgs[:1]}")
-        lida_c = base_derivada(ctx, d, RAD, controle)
-        st_r = next((x for x in lida_c["facetas"] if x["faceta"] == fid), None)
-        sem_alcance = None
-        if st_r:
-            for termo in st_r["termos"]:
-                outros = [o for o in st_r["termos"] if o != termo]
-                if (len(termo.split()) > 1
-                        and not any(_radical_alcanca(termo, o) or _mesmo_termo(termo, o)
-                                    for o in outros)
-                        and retira_termo_citado(st_r["texto"], termo) != st_r["texto"]):
-                    sem_alcance = termo
-                    break
-        mut = None
-        if sem_alcance:
-            mut = controle.replace(st_r["texto"],
-                                   retira_termo_citado(st_r["texto"], sem_alcance), 1)
-            mut = _acrescenta_reducao(mut, fid, sem_alcance, MOTIVO_RADICAL)
-        testa("redução declarada como radical sem termo da string que a alcance", RAD, mut,
-              controle, R, "consta da redução como alcançado")
-        vig_r, _ = _vocabulario(fid, d, lida_c["declaracao"])
-        palavra = normaliza(vig_r[0]).split()[0] if vig_r else "termo"
-        inventado = f"{palavra} zzinventado"
-        mut = (controle.replace(st_r["texto"], _insere_antes_do_primeiro(st_r["texto"],
-                                                                         inventado), 1)
-               if st_r else None)
-        testa("termo inventado que partilha uma palavra com o protocolo", RAD, mut, controle,
-              R, f"{inventado!r} está na string")
-        modos = [m for m in lida_c["declaracao"]["derivacoes"] if m != G.DERIVACAO_RADICAL]
-        mut = _acrescenta_reducao(controle, fid, vig_r[0] if vig_r else palavra,
-                                  MOTIVO_RADICAL)
-        mut = _troca_rotulo(mut, G.RF_DERIVACOES, " e ".join(modos))
-        testa("motivo radical sem derivação radical declarada", RAD, mut, controle, R,
-              "não declara a derivação radical")
-
-    # (7) bloco literal: referência a conjunto e termo defasado da seção 3.
-    expr_a = lidas[A]["expressoes"]
-    por_estatuto = {}
-    for ident, ex in expr_a.items():
-        por_estatuto.setdefault(ex["estatuto"], []).append(ident)
-    termos_str = {normaliza(x) for s in lidas[A]["facetas"] for x in s["termos"]}
-
-    def bloco_unico(ident):
-        """(bloco, termo) com um termo entre aspas que aparece uma só vez nos blocos da
-        expressão e uma só vez na seção de strings."""
-        blocos = [b["texto"] for b in expr_a.get(ident, {}).get("blocos", [])]
-        juntos = "\n".join(blocos)
-        cordas = "\n".join(s["texto"] for s in lidas[A]["facetas"])
-        for b in blocos:
-            for termo in termos_bloco(b):
-                if (normaliza(termo) in termos_str and juntos.count(f'"{termo}"') == 1
-                        and cordas.count(f'"{termo}"') == 1):
-                    return b, termo
-        return None, None
-
-    def no_bloco(ident, transforma, texto=None):
-        texto = t_a if texto is None else texto
-        blocos = expr_a.get(ident, {}).get("blocos", [])
-        if not blocos:
-            return None
-        return texto.replace(blocos[0]["texto"], transforma(blocos[0]["texto"]), 1)
-
-    defasado = ("do bloco não consta das facetas declaradas",
-                "das facetas declaradas não está no bloco")
-
-    def caso_bloco(nome, s, mutante, original, esperas):
-        so_a_base(nome, s, mutante, original, R, esperas)
-
-    caso_bloco("conjunto #n devolvido ao bloco executado", A,
-               no_bloco(executada, lambda b: "#1 AND " + b), t_a, ("referência a conjunto",))
-    bloco, termo = bloco_unico(executada)
-    caso_bloco("termo do bloco executado defasado da seção de strings", A,
-               t_a.replace(bloco, bloco.replace(f'"{termo}"', f'"{termo}zz"', 1), 1)
-               if bloco else None, t_a, defasado)
-    caso_bloco("termo alterado só na seção de strings", A,
-               (lambda st: t_a.replace(st["texto"], st["texto"].replace(
-                   f'"{termo}"', f'"{termo}zz"', 1), 1))(
-                   next(s for s in lidas[A]["facetas"] if f'"{termo}"' in s["texto"]))
-               if termo else None, t_a, defasado)
-    if RAD is not None:
-        exp_r = base_derivada(ctx, d, RAD, controle)["expressoes"].get(executada, {})
-        blocos_r = exp_r.get("blocos", [])
-        mut = (controle.replace(blocos_r[0]["texto"],
-                                blocos_r[0]["texto"] + ' OR "termo-defasado-zz"', 1)
-               if blocos_r else None)
-        so_a_base(f"termo acrescentado ao bloco executado ({lidas[RAD]['execucao']['modo']})",
-                  RAD, mut, controle, R, (defasado[0],))
-    else:
-        g.falha("mutação não aplicável: bloco executado do procedimento de busca com forma radical")
-    fidel = (por_estatuto.get("fidelidade") or [None])[0]
-    caso_bloco("conjunto #n devolvido ao bloco de fidelidade", A,
-               no_bloco(fidel, lambda b: "#1 AND " + b) if fidel else None, t_a,
-               ("referência a conjunto",))
-    sonda = (por_estatuto.get("sonda") or [None])[0]
-    bloco, termo = bloco_unico(sonda) if sonda else (None, None)
-    caso_bloco("termo do bloco de sonda defasado da seção de strings", A,
-               t_a.replace(bloco, bloco.replace(f'"{termo}"', f'"{termo}zz"', 1), 1)
-               if bloco else None, t_a, defasado)
-    derivada = next((k for k in por_estatuto.get("derivada", [])
-                     if not expr_a[k]["blocos"] and not expr_a[k].get("forma_longa")), None)
-    caso_bloco("bloco devolvido à expressão derivada padrão", A,
-               _bloco_novo(t_a, derivada, '"bloco do autoteste"') if derivada else None, t_a,
-               ("expressão derivada não se executa e não leva bloco",))
-
-    # (8) a forma longa é representação não executada: o bloco nela não é recusado pela
-    # regra que fecha a derivada padrão.
-    if derivada:
-        longa = base_derivada(ctx, d, A, t_a)
-        longa["expressoes"][derivada]["blocos"] = [{"rotulo": "", "texto": '"x"'}]
-        longa["expressoes"][derivada]["forma_longa"] = True
-        recusada = [p for p in cobertura_base(longa, d) if "expressão derivada" in p]
-        g.testa("forma longa com bloco não é recusada pela regra da derivada", not recusada,
-                f"{recusada[:1]}")
-    else:
-        g.falha("mutação não aplicável: forma longa — nenhuma expressão derivada sem bloco")
-
-
-def _troca_rotulo(texto, rotulo, valor):
-    """Troca o valor da linha de rótulo `rotulo` na declaração de cobertura."""
-    for _, linha in linhas_de_tabela_do_trecho(texto, G.SF_DECLARACAO):
-        cels = [c.strip() for c in linha.strip().strip("|").split("|")]
-        if len(cels) >= 2 and normaliza(cels[0]).startswith(normaliza(rotulo.texto)):
-            nova = f"| {cels[0]} | {valor} |" + "".join(f" {c} |" for c in cels[2:])
-            return texto.replace(linha, nova, 1)
-    return texto
-
-
-def _acrescenta_reducao(texto, fid, termo, motivo):
-    """Acrescenta `| fid | termo | motivo |` ao fim da tabela da declaração de cobertura."""
-    ultima = linhas_de_tabela_do_trecho(texto, G.SF_DECLARACAO)[-1][1]
-    return texto.replace(ultima, ultima + f"\n| {fid} | {termo} | {motivo} |", 1)
-
-
-def _bloco_novo(texto, ident, bloco):
-    """Acrescenta um bloco cercado à expressão `ident`, logo após a linha de facetas."""
-    i = texto.find(f"### {ident}")
-    j = texto.find(G.MARCA_FACETAS, i) if i >= 0 else -1
-    if j < 0:
-        return None
-    fim = texto.find("\n", j)
-    return texto[:fim + 1] + "\n```\n" + bloco + "\n```\n" + texto[fim + 1:]
-
-
-PARES_IRREGULARES = (
-    ("thesaurus", "thesauri", True),
-    ("analysis", "analyses", True),
-    ("curriculum", "curricula", True),
-    ("thesaurus", "thesaurus", False),
-    ("thesaurus", "taxonomy", False),
-    ("domain thesaurus", "thesauri", False),
-    ("bus", "bi", False),
-)
+        g.falha("mutação não aplicada: estratégia de proximidade (nenhuma base com "
+                "proximidade)")

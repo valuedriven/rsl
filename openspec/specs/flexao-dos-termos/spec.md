@@ -1,4 +1,4 @@
-# Spec Delta
+# flexao-dos-termos Specification
 
 ## Purpose
 
@@ -6,7 +6,7 @@ Dar a cada termo da STR as suas formas de número, por regra regular de pt, en e
 exceção declarada pelo pesquisador, sem adivinhar a flexão que a regra não decide, para que o
 plural explícito de uma base seja completo por construção.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Plural por regra regular
 Para cada termo de um idioma com plural explícito, a flexão SHALL produzir o plural pela
@@ -31,8 +31,8 @@ plural SHALL ter a grafia do idioma, inclusive o acento que a flexão retira ou 
 - **THEN** a flexão produz `situaciones de uso`
 
 ### Requirement: Flexão indecidível reprova
-A palavra cuja terminação a regra não decide sem ambiguidade MUST reprovar a geração da
-ficha que a usa com plural explícito, nomeando o termo, o idioma e a terminação. São
+A palavra cuja terminação a regra não decide sem ambiguidade MUST reprovar a geração do
+procedimento que a usa com plural explícito, nomeando o termo, o idioma e a terminação. São
 exemplos o -ão do português, o -s final sem acento, o -f do inglês, a palavra de classe
 adjetiva e o termo com conjunção. A reprovação vale até haver exceção declarada para o
 termo. A flexão MUST NOT escolher uma das formas possíveis.
@@ -45,6 +45,11 @@ termo. A flexão MUST NOT escolher uma das formas possíveis.
 #### Scenario: Adjetivo isolado
 - **WHEN** a STR2 tem `educational` e não há exceção para o termo
 - **THEN** `procedimentos gerar` reprova, nomeando `educational`, en e a classe adjetiva
+
+#### Scenario: Adjetivo isolado em português
+- **WHEN** a STR2 tem `educacional` em pt e não há exceção para o termo
+- **THEN** `procedimentos gerar` reprova, nomeando `educacional`, pt e a classe adjetiva; o
+  adjetivo que segue o núcleo numa locução (`modelo conceitual`) não é recusado
 
 ### Requirement: Exceções declaradas pelo pesquisador
 O arquivo de exceções, localizado por `[documentos] flexoes` do `config.toml`, SHALL
@@ -65,7 +70,8 @@ prevalece sobre a regra.
 ### Requirement: Exceção inválida reprova
 Exceção sem `origem`, com tipo fora do domínio ou repetida para o mesmo termo e idioma MUST
 reprovar com PROTOCOLO_ILEGIVEL, nomeando o termo e o campo. Exceção de termo que não está
-em nenhuma STR SHALL ser relatada, sem reprovar.
+em nenhuma STR nem em lista escrita à mão na fonte de alguma base (subconjunto ou forma
+curada) SHALL ser relatada, sem reprovar.
 
 #### Scenario: Exceção sem origem
 - **WHEN** uma exceção do arquivo não tem `origem`
@@ -75,10 +81,15 @@ em nenhuma STR SHALL ser relatada, sem reprovar.
 - **WHEN** o arquivo declara exceção para `practice`, que não está em nenhuma STR
 - **THEN** a conferência relata a exceção órfã, e o código não muda por esse relato
 
+#### Scenario: Exceção usada só num subconjunto
+- **WHEN** o arquivo declara exceção para `ontology engineering`, en, que não está em nenhuma
+  STR, e o subconjunto `STR1b` da fonte da ERIC traz o termo
+- **THEN** a conferência não a relata como órfã
+
 ### Requirement: Forma gerada visível antes da gravação
 Toda forma produzida pela regra ou pela exceção SHALL aparecer no ensaio de `procedimentos gerar`,
 por base, faceta e idioma, com a indicação de origem (`regra` ou `exceção`). Assim, o
-pesquisador revisa as formas antes de elas entrarem na ficha.
+pesquisador revisa as formas antes de elas entrarem no procedimento.
 
 #### Scenario: Ensaio lista a origem
 - **WHEN** se executa `procedimentos gerar scopus` com STR1 contendo `thesaurus` e `ontology`

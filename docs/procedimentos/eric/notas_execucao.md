@@ -1,0 +1,1 @@
+Toda expressão é executada como duas consultas de campo único — `STR1` no título e `STR1b` no resumo —, ambas com a faceta 🟨 como grupo externo, unidas por deduplicação. Cada consulta fica dentro do teto de caracteres da declaração de cobertura; acima dele, a expressão se parte mantendo o grupo 🟦 íntegro, sem retirar termo, e as partes se unem por deduplicação.

@@ -1,5 +1,11 @@
-"""Cobertura de cada base: a string do procedimento de busca medida contra a string (STR) do
-protocolo.
+"""Cobertura de cada base: os blocos compostos da fonte do procedimento de busca medidos
+contra a string (STR) do protocolo.
+
+As conferências leem o derivado da base (`fichas.base_derivada`): a fonte e a estrutura dos
+blocos que o compositor monta, com os termos de cada faceta em cada consulta. Nada se
+reconhece pelo texto do bloco. Continuam independentes do código de composição: o que o
+compositor deveria ter posto é recalculado aqui, da STR, da fonte e da flexão, para que um
+compositor errado reprove.
 
 A cobertura é medida contra o vocabulário vigente — os termos da STR do protocolo, nos
 idiomas e camadas que o procedimento de busca declara — e contra a redução própria da base,
@@ -11,8 +17,9 @@ faceta sai como número, porque é ela que mede o preço da forma de cada base.
 import re
 
 from . import gramatica as G
+from .flexao import Indecidivel, formas, formas_de_numero, nao_contavel, vetadas
 from .geracao import subsume
-from .fichas import MODO_CURADA, MODOS_EXECUCAO, consultas_executaveis, termos_bloco
+from .fichas import MODO_CURADA, MODOS_EXECUCAO
 from .leitura import CAMADAS, sem_repeticao
 from .markdown import normaliza
 
@@ -109,8 +116,10 @@ def _vocabulario(fid, d, decl):
     idiomas = decl.get("idiomas", {}).get(fid) or list(d["idiomas"])
     camadas = CAMADAS if decl.get("camadas") == G.CAMADAS_TODAS else (G.R_NUCLEO.interno,)
     na_str = {normaliza(x) for x in d["strings"][fid]["termos"]}
-    tabela = sem_repeticao([x for i in idiomas for c in camadas
-                             for x in f["camadas"][i][c]])
+    # Repetição exata, não normalizada: `ontologia` (pt) e `ontología` (es) são termos
+    # distintos da STR, e a base pode distinguir o acento.
+    tabela = list(dict.fromkeys(x for i in idiomas for c in camadas
+                                for x in f["camadas"][i][c]))
     vigentes = [x for x in tabela if normaliza(x) in na_str]
     quadro = sem_repeticao([x for i in d["idiomas"] for c in CAMADAS
                              for x in f["camadas"][i][c]])
@@ -154,51 +163,69 @@ def _truncamento_alcanca(termo, achados):
     return False
 
 
-# Plural irregular de origem latina ou grega (`thesaurus`/`thesauri`, `analysis`/`analyses`).
-# Só serve ao relato de número único: a derivação conferida em `cobertura_base` continua
-# com a flexão de `_candidatos`, e um par a mais aqui só cala um relato, nunca aprova termo.
-_PLURAIS_IRREGULARES = (("us", "i"), ("um", "a"), ("on", "a"), ("is", "es"),
-                        ("ex", "ices"), ("ix", "ices"))
+def _idiomas_do_termo(d, fid):
+    f = next(x for x in d["tabelas"] if x["id"] == fid)
+    saida = {}
+    for i in d["idiomas"]:
+        for c in CAMADAS:
+            for x in f["camadas"][i][c]:
+                saida.setdefault(x, set()).add(i)
+    return saida
 
 
-def _par_irregular(a, b):
-    """`a` e `b` são o mesmo termo em números diferentes por plural irregular da última
-    palavra, com as demais palavras iguais."""
-    pa, pb = normaliza(a).split(), normaliza(b).split()
-    if len(pa) != len(pb) or not pa or pa[:-1] != pb[:-1]:
-        return False
-    x, y = pa[-1], pb[-1]
-    for sing, plur in _PLURAIS_IRREGULARES:
-        for s, p in ((x, y), (y, x)):
-            if (s.endswith(sing) and p.endswith(plur) and len(s) > len(sing) + 1
-                    and s[:-len(sing)] == p[:-len(plur)]):
-                return True
-    return False
+def listas_a_mao(base):
+    """[(faceta, rótulo, [termos])] das listas de termos que se escrevem à mão na fonte: os
+    blocos de string e de subconjunto e as consultas da forma curada (termos entre aspas)."""
+    saida = [(s["faceta"], s["id"], s["termos"]) for s in base["facetas"]
+             if not s.get("radical")]
+    faceta_de = {}
+    for c in base.get("curadas", []):
+        for fid in c["facetas"]:
+            faceta_de.setdefault(fid, []).append(c)
+    for fid, cs in faceta_de.items():
+        termos = [m for c in cs for m in re.findall(r'"([^"]+)"', c["consulta"])]
+        saida.append((fid, "forma curada", termos))
+    return saida
 
 
-def numero_unico_na_base(base, d):
-    """[(faceta, termo da STR)] presentes na string da base numa só forma de número.
-
-    Só em procedimento de busca com `plural: explícito`, e fora do alcance de truncamento. O
-    termo cujo par de plural irregular também está na string da base não é relatado: as duas
-    formas de número estão lá. É relato, não reprovação: substantivo não contável
-    (`education`, `pedagogia`) não tem plural de uso.
-    """
+def numero_unico_na_base(base, d, excecoes):
+    """[(faceta, termo da STR, idioma, lista)] presentes numa lista da base numa só forma de
+    número, em idioma de plural explícito. Não conta o termo `nao_contavel`, o de forma
+    vetada, o indecidível sem exceção (que já reprova a geração) e o alcançado por
+    truncamento."""
     decl = base.get("declaracao") or {}
-    if decl.get("plural") != G.PLURAL_EXPLICITO:
-        return []
+    plural = decl.get("plural") or {}
     saida = []
     for fid in sorted(d["strings"]):
-        vigentes, _ = _vocabulario(fid, d, decl)
-        achados = [x for s in base["facetas"] if s["faceta"] == fid for x in s["termos"]]
-        for t in vigentes:
-            formas = {normaliza(a) for a in achados if _mesmo_termo(t, a)}
-            if len(formas) != 1 or _truncamento_alcanca(t, achados):
+        idioma_de = _idiomas_do_termo(d, fid)
+        da_faceta = decl.get("idiomas", {}).get(fid, [])
+        for f_, rotulo, termos in listas_a_mao(base):
+            if f_ != fid:
                 continue
-            if any(_par_irregular(t, a) for a in achados):
-                continue
-            saida.append((fid, t))
+            presentes = {normaliza(x) for x in termos}
+            literais = d["strings"][fid]["literais"]
+            ja = formas_de_numero(literais, lambda x: idioma_de.get(x, ()), excecoes)
+            for t in literais:
+                if normaliza(t) not in presentes or _truncamento_alcanca(t, termos) or t in ja:
+                    continue
+                for i in sorted(idioma_de.get(t, ())):
+                    if i not in da_faceta or plural.get(i) != G.PLURAL_EXPLICITO:
+                        continue
+                    if nao_contavel(t, i, excecoes) or vetadas(t, i, excecoes):
+                        continue
+                    try:
+                        fs = [x for x, _ in formas(t, i, excecoes)]
+                    except Indecidivel:
+                        continue
+                    if fs and not any(normaliza(x) in presentes for x in fs):
+                        saida.append((fid, t, i, rotulo))
     return saida
+
+
+def consultas_executaveis(base):
+    """[(expressão, rótulo, texto)] de cada consulta que vai à base."""
+    return [(ident, c["rotulo"] or c["id"], c["texto"])
+            for ident, e in sorted(base["expressoes"].items()) for c in e["consultas"]]
 
 
 def maior_consulta(base):
@@ -208,6 +235,47 @@ def maior_consulta(base):
         return None
     ident, rotulo, texto = max(consultas, key=lambda c: len(c[2]))
     return len(texto), ident, rotulo
+
+
+def esperado_por_faceta(base, d, excecoes):
+    """{faceta: termos} que os blocos da base têm de trazer, recalculado sem o compositor:
+    os vigentes da STR com as formas de número, ou a forma radical declarada, mais os
+    subconjuntos declarados."""
+    fonte = base["fonte"]
+    dado = fonte["dado"]
+    decl = base["declaracao"]
+    radical = {r["faceta"]: r["termos"] for r in dado.get("radical", [])}
+    saida = {}
+    for fid in d["strings"]:
+        if fid in radical:
+            saida[fid] = set(radical[fid])
+            continue
+        vigentes_, _ = _vocabulario(fid, d, decl)
+        reduzidos = {normaliza(e["termo"]) for e in decl.get("exclusoes", [])
+                     if e["faceta"] == fid}
+        termos = [x for x in vigentes_ if normaliza(x) not in reduzidos]
+        saida[fid] = set(_com_plurais(termos, fid, d, decl, excecoes))
+    for s in dado.get("subconjuntos", []):
+        saida[s["faceta"]] |= set(_com_plurais(s["termos"], s["faceta"], d, decl, excecoes))
+    return saida
+
+
+def _com_plurais(termos, fid, d, decl, excecoes):
+    idioma_de = _idiomas_do_termo(d, fid)
+    ja = formas_de_numero(list(d["strings"][fid]["literais"]) + list(termos),
+                          lambda x: idioma_de.get(x, ()), excecoes)
+    saida = list(termos)
+    for t in termos:
+        if t in ja:
+            continue
+        for i in idioma_de.get(t, ()):
+            if i in decl["idiomas"].get(fid, []) and \
+                    decl["plural"].get(i) == G.PLURAL_EXPLICITO:
+                try:
+                    saida += [x for x, _ in formas(t, i, excecoes)]
+                except Indecidivel:
+                    pass
+    return saida
 
 
 def _facetas_da_composicao(d, ident):
@@ -220,146 +288,122 @@ def _ordem_criterio(cid):
     return int(cid[2:])
 
 
-def cobertura_base(base, d):
-    """Problemas de forma da base: critérios, vocabulário, âncoras, composição, execução."""
+def cobertura_base(base, d, excecoes=None):
+    """Problemas da base: critérios, vocabulário, plural, teto, expressões e execução."""
+    excecoes = excecoes or {}
     problemas = []
     decl = base.get("declaracao") or {}
     modos = set(decl.get("derivacoes") or [])
+    fonte = f"fonte {base['base']['fonte']}"
 
-    # A seção 2 cita os critérios que a base aplica. Renumerar o protocolo sem atualizar a
-    # procedimento de busca deixaria a triagem aplicando um critério que o documento já não nomeia.
-    caminho = base["base"]["ficha"]
+    # Os IDs de [[criterios]] são os do protocolo: renumerar o protocolo sem atualizar a
+    # fonte deixaria a triagem aplicando um critério que o documento já não nomeia.
     protocolo = {c["id"] for c in d["criterios"]}
     citados = set(base.get("criterios") or [])
     for cid in sorted(citados - protocolo, key=_ordem_criterio):
-        problemas.append(f"procedimento de busca {caminho}: cita {cid}, que não existe na "
-                         f"tabela de critérios do protocolo")
+        problemas.append(f"{fonte}: cita {cid}, que não existe na tabela de critérios do "
+                         f"protocolo")
     for cid in sorted(protocolo - citados, key=_ordem_criterio):
-        problemas.append(f"procedimento de busca {caminho}: não cita {cid}, que o protocolo "
-                         f"declara")
+        problemas.append(f"{fonte}: não cita {cid}, que o protocolo declara")
 
+    esperado_flexionado = esperado_por_faceta(base, d, excecoes or {})
     for fid in sorted(d["strings"]):
         if not decl.get("idiomas", {}).get(fid):
             problemas.append(f"{fid}: a declaração de cobertura não declara idiomas")
         esperados, fora = _vocabulario(fid, d, decl)
-        unidade = [s for s in base["facetas"] if s["faceta"] == fid]
-        achados = [x for s in unidade for x in s["termos"]]
+        achados = [x for s in base["facetas"] if s["faceta"] == fid for x in s["termos"]]
         excluidos = [e["termo"] for e in decl.get("exclusoes", []) if e["faceta"] == fid]
         for termo in esperados:
             if any(_mesmo_termo(termo, a) for a in achados):
                 continue
-            # A forma radical declara que uma palavra-raiz presente alcança a expressão
-            # inteira. É declaração do procedimento de busca, não omissão silenciosa: a
-            # cobertura literal continua sendo reportada, e o que a regra não alcança tem de
-            # estar na tabela.
             if G.DERIVACAO_RADICAL in modos and any(_radical_alcanca(termo, a) for a in achados):
                 continue
             if any(_mesmo_termo(termo, e) for e in excluidos):
                 continue
-            problemas.append(f"{fid}: {termo!r} está no protocolo, não está na string desta "
+            problemas.append(f"{fid}: {termo!r} está no protocolo, não está nos blocos desta "
                              f"base e não consta da redução declarada")
         for termo in achados:
+            # A forma de número por regra ou por exceção vem do recálculo independente do
+            # compositor (`esperado_por_faceta`); a heurística de `_mesmo_termo` não conhece
+            # todas as terminações (-m/-ns, -ão/-ões, -il/-is, -z/-ces).
+            if termo in esperado_flexionado.get(fid, ()):
+                continue
             if any(_mesmo_termo(termo, p) for p in esperados):
                 continue
-            # Termo do quadro que a STR não traz não é vigente: a base não pode executá-lo,
-            # nem em flexão.
             so_quadro = next((p for p in fora if _mesmo_termo(termo, p)), None)
-            # O subsumido por termo vigente deriva da STR: o procedimento de busca pode
-            # usá-lo em campo próprio, como a `STR1b` da ERIC no resumo. É relatado, não
-            # reprovado.
             if so_quadro and _subsumido_por(so_quadro, fid, d):
                 continue
             if so_quadro:
-                problemas.append(f"{fid}: {termo!r} está na string desta base e não está na "
+                problemas.append(f"{fid}: {termo!r} está nos blocos desta base e não está na "
                                  f"string do protocolo (consta só do quadro: {so_quadro!r})")
                 continue
-            # Derivar por radical é ser raiz de um termo vigente: estar contido nele.
             if G.DERIVACAO_RADICAL in modos and any(_radical_alcanca(p, termo) for p in esperados):
                 continue
-            problemas.append(f"{fid}: {termo!r} está na string desta base e não deriva do "
+            problemas.append(f"{fid}: {termo!r} está nos blocos desta base e não deriva do "
                              f"protocolo")
     for e, porque in _radical_sem_alcance(base):
         problemas.append(f"{e['faceta']}: {e['termo']!r} consta da redução como alcançado "
                          f"pela forma radical, e {porque}")
 
-    # Plural pela lematização é afirmação sobre a base, e afirmação se confere: só com a
-    # lematização medida e a execução que a mediu citada.
-    if decl.get("plural") == G.PLURAL_LEMATIZACAO:
-        linha, medida, citacao = base.get("lematizacao") or (None, False, None)
-        texto = next(k for k, v in G.D_PLURAL.valores.items() if v == G.PLURAL_LEMATIZACAO)
-        rotulo = f"declara plural {texto!r}"
-        if linha is None:
-            problemas.append(f"procedimento de busca {caminho}: {rotulo}, e a seção "
-                             f"'{G.SF_SINTAXE.titulo}' não tem a linha "
-                             f"'{G.RF_LEMATIZACAO.texto}'")
-        elif not medida:
-            problemas.append(f"procedimento de busca {caminho}: {rotulo}, e a linha "
-                             f"'{G.RF_LEMATIZACAO.texto}' não está verificada por medição: "
-                             f"{linha[:90]!r}")
-        elif not citacao:
-            problemas.append(f"procedimento de busca {caminho}: {rotulo}, e a linha "
-                             f"'{G.RF_LEMATIZACAO.texto}' não cita a execução que a mediu "
-                             f"(BDn/<id>)")
+    # Termo só no singular, em idioma de plural explícito, reprova (as listas escritas à
+    # mão na fonte: subconjuntos e forma curada; nos blocos gerados, a flexão o impede).
+    for fid, termo, idioma, rotulo in numero_unico_na_base(base, d, excecoes):
+        problemas.append(f"{fid}: {termo!r} ({idioma}) só no singular em {rotulo}, com "
+                         f"plural explícito; acrescentar o plural ou declarar exceção")
 
-    # O teto de caracteres é parâmetro da base: a consulta mais longa que ele seria recusada
-    # pela interface ou, pior, truncada em silêncio.
+    # Plural pela lematização é afirmação sobre a base: só com a lematização daquele idioma
+    # medida e a medição citada.
+    sintaxe = base.get("sintaxe") or []
+    for idioma, valor in sorted((decl.get("plural") or {}).items()):
+        if valor != G.PLURAL_LEMATIZACAO:
+            continue
+        lemas = [s for s in sintaxe if s["categoria"] == G.CATEGORIA_LEMATIZACAO
+                 and s.get("idioma") in (None, idioma)]
+        medidos = [s for s in lemas if s["situacao"] == G.SITUACAO_MEDICAO and s.get("citacao")]
+        if not medidos:
+            nomes = ", ".join(repr(s["elemento"]) for s in lemas) or "nenhum elemento"
+            problemas.append(f"{fonte}: declara plural {G.PLURAL_LEMATIZACAO!r} em {idioma}, "
+                             f"e a lematização não está medida com citação ({nomes} na "
+                             f"categoria {G.CATEGORIA_LEMATIZACAO!r})")
+
+    # Teto de caracteres: invariante da partição.
     teto = decl.get("teto")
     if teto is not None:
         for ident, rotulo, texto in consultas_executaveis(base):
             if len(texto) > teto:
                 problemas.append(f"{ident}: consulta {rotulo[:60]!r} tem {len(texto)} "
-                                 f"caracteres, acima do teto de caracteres declarado "
-                                 f"({teto}); particionar sem retirar termo")
+                                 f"caracteres, acima do teto de caracteres declarado ({teto})")
 
     previstas = sorted(d["expressoes"])
     if sorted(base["expressoes"]) != previstas:
         problemas.append(f"expressões {sorted(base['expressoes'])} não são as do protocolo "
                          f"{previstas}")
     ancoras_ = set(d["ancoras"])
+    esperado = esperado_por_faceta(base, d, excecoes)
     for ident, expr in sorted(base["expressoes"].items()):
         if ident not in d["expressoes"]:
             continue
-        esperado = _facetas_da_composicao(d, ident)
-        if expr["facetas"] != esperado:
-            problemas.append(f"{ident}: facetas {expr['facetas']} não são "
-                             f"{esperado} do protocolo")
+        compostas = _facetas_da_composicao(d, ident)
+        if expr["facetas"] != compostas:
+            problemas.append(f"{ident}: facetas {expr['facetas']} não são {compostas} do "
+                             f"protocolo")
         if not ancoras_ <= set(expr["facetas"]):
             problemas.append(f"{ident}: falta âncora obrigatória ({sorted(ancoras_)})")
-        # Expressão derivada e não materializada nesta base — a sonda da ERIC — não
-        # precisa de forma: o que se executa ou se confere tem de ter.
-        precisa_forma = expr["estatuto"] in ("executada", "fidelidade", "sonda")
-        if precisa_forma and not expr["blocos"]:
-            problemas.append(f"{ident}: expressão sem forma legível nesta base")
-        # Bloco só onde há execução: a derivada padrão não é forma que se submete. A
-        # forma longa é representação não executada e fica fora desta regra.
-        if expr["estatuto"] == "derivada" and not expr.get("forma_longa"):
-            if expr["blocos"]:
-                problemas.append(f"{ident}: expressão derivada não se executa e não leva bloco")
+        com_bloco = expr["estatuto"] in G.ESTATUTOS_COM_BLOCO
+        if com_bloco and not expr["consultas"]:
+            problemas.append(f"{ident}: expressão que se executa sem consulta nesta base")
+        if not com_bloco and expr["consultas"]:
+            problemas.append(f"{ident}: expressão derivada não se executa e não leva bloco")
+        consultas = [c for c in expr["consultas"] if c.get("termos") is not None]
+        if not consultas:
             continue
-        if not precisa_forma or not expr["blocos"]:
-            continue
-        # Bloco que se submete é literal: referência a conjunto depende da numeração da
-        # sessão e não se reproduz a partir do procedimento de busca.
-        referencias = sorted({r for b in expr["blocos"]
-                              for r in re.findall(r"#\d+", b["texto"])})
-        if referencias:
-            problemas.append(f"{ident}: referência a conjunto {', '.join(referencias)} no "
-                             f"bloco — a expressão que se executa é bloco literal")
-            continue
-        # O conjunto de termos do bloco tem de ser o das strings que a expressão declara:
-        # é o que impede a segunda cópia de defasar da seção 3.
-        esperados = sem_repeticao([t for s in base["facetas"]
-                                    if s["faceta"] in expr["facetas"] for t in s["termos"]])
-        achados = sem_repeticao([t for b in expr["blocos"]
-                                  for t in termos_bloco(b["texto"])])
-        por_norm = {normaliza(t): t for t in esperados}
-        no_bloco = {normaliza(t): t for t in achados}
-        for k, termo in por_norm.items():
-            if k not in no_bloco:
-                problemas.append(f"{ident}: termo {termo!r} das facetas declaradas não está "
-                                 f"no bloco")
-        for k, termo in no_bloco.items():
-            if k not in por_norm:
+        # Os termos dos blocos são os das strings que a expressão declara: a união, por
+        # faceta, sobre as consultas da expressão, recalculada sem o compositor.
+        for fid in expr["facetas"]:
+            uniao = {x for c in consultas for x in c["termos"].get(fid, [])}
+            for termo in sorted(esperado.get(fid, set()) - uniao):
+                problemas.append(f"{ident}: termo {termo!r} de {fid} não está no bloco")
+            for termo in sorted(uniao - esperado.get(fid, set())):
                 problemas.append(f"{ident}: termo {termo!r} do bloco não consta das facetas "
                                  f"declaradas ({', '.join(expr['facetas'])})")
 
@@ -367,7 +411,7 @@ def cobertura_base(base, d):
     if execucao["expressao"] != d["executada"]:
         problemas.append(f"a base executa {execucao['expressao']}, e o protocolo declara "
                          f"executada {d['executada']}")
-    if execucao["modo"] not in (MODO_CURADA,) + MODOS_EXECUCAO:
+    if execucao["modo"] not in MODOS_EXECUCAO:
         problemas.append(f"modo de execução desconhecido: {execucao['modo']!r}")
     if not execucao["itens"]:
         problemas.append("execução sem consulta legível")

@@ -1,31 +1,715 @@
 # Strings de busca — ERIC
 
+<!-- Gerado por `python3 -m rsl procedimentos gerar eric --gravar` a partir de `docs/procedimentos/eric`, do protocolo e do arquivo de sementes. Não editar: a edição à mão reprova em `documentos conferir`. -->
+
 ## 1. Estado de verificação da sintaxe
 
-Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?advanced`; comportamento **não verificado** — medir na primeira execução e registrar a execução.
+| Elemento | Categoria | Situação | Fonte | Sondagem |
+| :--- | :--- | :--- | :--- | :--- |
+| Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`) | campos | Verificado em fonte oficial | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
+| Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` | campos | Verificado em fonte oficial; comportamento **não medido** | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
+| Prefixo de campo restringe de fato | campos | **Não verificado** | — | SD1 |
+| Parênteses para agrupamento | agrupamento | **Não verificado** | — | SD2 |
+| Condição externa a um grupo | agrupamento | **Não verificado** | — | SD3 |
+| Campos diferentes num mesmo grupo | agrupamento | **Não verificado** | — | SD5 |
+| `pubyearmin`/`pubyearmax` junto a um grupo | filtros | **Não verificado** | — | SD6 |
+| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | filtros | **Não verificado** | — | SD7 |
+| Truncamento com `*` | truncamento | **Não verificado**; a skill `execucao-da-busca` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json` | — | SD8 |
+| Mínimo de três letras antes do `*` | truncamento | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD8 |
+| Derivação automática de radicais desativada, com casamento exato sem aspas | lematizacao | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD10 |
+| API pública de exportação | exportacao | **Não verificado** | — | sem sondagem: verificação documental, não sondagem: conferir na documentação oficial; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23 |
+| Lematização | lematizacao | **Não verificado** | — | SD10 |
+| Aspas como frase | frase | **Não verificado** | — | SD9 |
+| Campo `descriptor` | vocabulario_controlado | **Não verificado** | — | SD11 |
+| Comprimento máximo da consulta | limite_consulta | **Não verificado**; 1.400 é regra de bolso, declarada como teto de caracteres na declaração de cobertura até medir | — | SD12 |
+| Negação com prefixo `-` | operadores | Verificado em fonte oficial; não medida | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
+| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | **Não verificado** | — | SD13 |
+| Teto de retorno exibido | limite_retorno | **Não verificado** | — | SD14 |
+| Teto de exportação por lote | limite_exportacao | **Não verificado** | — | SD15 |
+| Controles `Include Synonyms` e `Include Dead terms` | vocabulario_controlado | **Não verificado** | — | sem sondagem: não localizados na interface; nenhuma expressão depende deles |
+| Operador de proximidade | proximidade | **Não verificado** | — | sem sondagem: verificação documental antes de sondagem: o painel *Advanced Search Tips* não foi conferido quanto a proximidade; nenhuma expressão depende dele |
+| Idioma do título e do resumo indexados | idioma_indexacao | **Não verificado** | — | SD16 |
 
-| Elemento | Situação |
-| :--- | :--- |
-| Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`) | **Verificados em fonte oficial** |
-| Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` | **Verificados em fonte oficial**, comportamento **não medido** |
-| Prefixo de campo restringe de fato | **Não verificado**; medir na primeira execução |
-| Parênteses para agrupamento | **Não verificado**; medir na primeira execução |
-| Condição externa a um grupo | **Não verificado**; medir na primeira execução |
-| Campos diferentes num mesmo grupo | **Não verificado**; medir na primeira execução |
-| `pubyearmin`/`pubyearmax` junto a um grupo | **Não verificado**; medir na primeira execução |
-| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | **Não verificado**; medir na primeira execução |
-| Truncamento com `*` | **Não verificado**; medir na primeira execução |
-| Mínimo de três letras antes do `*` | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
-| Derivação automática de radicais desativada, com casamento exato sem aspas | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
-| API pública de exportação | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir na documentação oficial |
-| Lematização | **Não verificado**; medir na primeira execução |
-| Aspas como frase | **Não verificado**; medir na primeira execução |
-| Campo `descriptor` | **Não verificado**; medir na primeira execução |
-| Comprimento máximo da consulta | **Não verificado**; 1.400 é regra de bolso, declarada como teto de caracteres na declaração de cobertura até medir na primeira execução |
-| Negação com prefixo `-` | **Verificada em fonte oficial**, não medida |
-| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | **Não medido** |
-| Teto de retorno exibido e de exportação por lote | **Não verificados** |
-| Controles `Include Synonyms` e `Include Dead terms` | **Não localizados** na interface; nenhuma expressão depende deles |
+Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?advanced`; comportamento **não verificado** — medir pelas sondagens abaixo e registrar cada uma.
+
+### Sondagens a executar
+
+Uma consulta por vez, sem nova tentativa automática; parar diante de captcha, aviso de atividade atípica ou bloqueio, e registrar.
+
+#### SD1 — saber se `title:` restringe a busca ao título, em vez de ser ignorado
+
+**Elementos verificados:** Prefixo de campo restringe de fato (Não verificado).
+
+**Pré-requisitos.**
+
+- busca de `eric.ed.gov` aberta no navegador do pesquisador, sem filtro de data e sem `Peer reviewed only`
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+ontology
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o prefixo `title:`.
+
+```
+title:ontology
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno exibido
+2. submeter o teste e anotar o retorno exibido
+3. abrir três registros do teste e conferir se `ontology` está no título
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- presença do termo no título dos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle, e os três registros abertos têm `ontology` no título | o prefixo de campo restringe ao título | Verificado por medição |
+| 2 | teste = controle, teste = 0, ou registro aberto sem o termo no título | não se distingue se o prefixo restringe; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD2 — saber se um grupo entre parênteses com `OR` é aceito e alarga o retorno
+
+**Elementos verificados:** Parênteses para agrupamento (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+title:ontology AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o grupo entre parênteses com `OR`.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno
+
+**Observar.**
+
+- retorno exibido
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste ≥ controle > 0 | os parênteses agrupam | Verificado por medição |
+| 2 | teste = 0 sem mensagem, teste < controle, ou mensagem de erro | o agrupamento não se confirma; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD3 — saber se um grupo com `OR` sem condição fora dele devolve zero
+
+**Elementos verificados:** Condição externa a um grupo (Não verificado); grupo entre parênteses com `OR` precisa de condição fora dele (Não verificado).
+**Depende de:** SD2.
+
+**Pré-requisitos.**
+
+- SD2 registrada com os parênteses verificados
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: sem condição fora do grupo.
+
+```
+(title:ontology OR title:ontologies)
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido
+- mensagem de erro ou de aviso, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | controle > 0 e teste = 0 sem mensagem | o grupo com `OR` precisa de condição fora dele | Verificado por medição |
+| 2 | teste > 0, ou mensagem de erro | a regra não se confirma; levar ao pesquisador antes de mudar a composição | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
+
+#### SD4 — saber que formas de condição externa satisfazem o grupo
+
+**Elementos verificados:** a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois (Não verificado).
+**Depende de:** SD3.
+
+**Pré-requisitos.**
+
+- SD3 registrada com a regra confirmada
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: condição de campo antes do grupo.
+
+```
+abstract:education AND (title:ontology OR title:ontologies)
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: condição de texto livre.
+
+```
+(title:ontology OR title:ontologies) AND education
+```
+
+**Consulta 4 — teste**, em caixa de busca. Muda em relação ao controle: condição que é outro grupo.
+
+```
+(title:ontology OR title:ontologies) AND (abstract:education OR abstract:learning)
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter cada teste, um por vez, e anotar o retorno
+
+**Observar.**
+
+- retorno exibido de cada consulta
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | os três testes > 0, e o primeiro teste = controle | a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois | Verificado por medição |
+| 2 | algum teste = 0, ou o primeiro teste ≠ controle | alguma forma de condição externa não funciona; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD5 — saber se `title:` e `abstract:` na mesma disjunção devolvem zero
+
+**Elementos verificados:** Campos diferentes num mesmo grupo (Não verificado); um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero (Não verificado).
+**Depende de:** SD3.
+
+**Pré-requisitos.**
+
+- SD3 registrada com a regra confirmada
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: dois campos no mesmo grupo.
+
+```
+(title:ontology OR abstract:ontologies) AND abstract:education
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido
+- mensagem de erro ou de aviso, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | controle > 0 e teste = 0 sem mensagem | um grupo não mistura campos | Verificado por medição |
+| 2 | teste > 0, ou mensagem de erro | a regra não se confirma; levar ao pesquisador antes de mudar as consultas de campo | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
+
+#### SD6 — saber se `pubyearmin`/`pubyearmax` ao lado de um grupo devolvem zero
+
+**Elementos verificados:** `pubyearmin`/`pubyearmax` junto a um grupo (Não verificado); `pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página (Não verificado).
+**Depende de:** SD3.
+
+**Pré-requisitos.**
+
+- SD3 registrada com a regra confirmada
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o filtro de ano na consulta.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido
+- mensagem de erro ou de aviso, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | controle > 0 e teste = 0 sem mensagem | o filtro de ano não convive com grupo; o recorte vem do filtro da página | Verificado por medição |
+| 2 | 0 < teste ≤ controle, ou mensagem de erro | a regra não se confirma; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
+
+#### SD7 — saber se o filtro de ano na consulta sem parênteses recorta como o filtro de data da página
+
+**Elementos verificados:** `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca, com o filtro de data da página de 2017 a 2026.
+
+```
+title:ontology AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca, sem filtro da página. Muda em relação ao controle: o recorte na consulta em vez do filtro da página.
+
+```
+title:ontology AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026
+```
+
+**Passos.**
+
+1. submeter o controle, aplicar o filtro de data da página de 2017 a 2026 e anotar o retorno e o rótulo exato do filtro
+2. retirar o filtro da página, submeter o teste e anotar o retorno
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- rótulo exato do filtro de data da página
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste = controle > 0 | o filtro de ano na consulta sem parênteses recorta como o filtro da página | Verificado por medição |
+| 2 | teste ≠ controle, ou teste = 0 | o filtro de ano na consulta não equivale ao da página; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta, o filtro e o retorno visíveis
+
+#### SD8 — saber se o `*` trunca e com quantas letras antes dele
+
+**Elementos verificados:** Truncamento com `*` (Não verificado); Mínimo de três letras antes do `*` (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+title:ontology
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o curinga depois de oito letras.
+
+```
+title:ontolog*
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: o curinga depois de três letras.
+
+```
+title:ont*
+```
+
+**Consulta 4 — teste**, em caixa de busca. Muda em relação ao controle: o curinga depois de duas letras.
+
+```
+title:on*
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter cada teste, um por vez, e anotar o retorno e a mensagem exibida
+3. abrir três registros do primeiro teste e conferir a forma do termo no título
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro ou de aviso, se houver
+- formas do termo nos títulos dos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | primeiro teste > controle, com formas como `ontologies` e `ontological` nos registros; segundo teste > 0; terceiro teste = 0 ou mensagem | o `*` trunca e exige ao menos três letras antes dele | Verificado por medição |
+| 2 | primeiro teste = 0 sem mensagem | o `*` não trunca no campo título | Verificado por medição |
+| 3 | qualquer outra combinação, ou primeiro teste = controle | não se distingue o efeito do `*`; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
+
+#### SD9 — saber se as aspas exigem a sequência exata das palavras
+
+**Elementos verificados:** Aspas como frase (Não verificado); sem truncamento; expressão composta sempre entre aspas (Não verificado).
+**Depende de:** SD1, SD8.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+- SD8 registrada, porque a regra de montagem também fala do truncamento
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+abstract:knowledge AND abstract:organization
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: as palavras entre aspas.
+
+```
+abstract:"knowledge organization"
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno
+3. abrir três registros do controle que não estejam no teste e conferir se o resumo traz as duas palavras separadas
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- posição das palavras nos resumos abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle, e os registros só do controle trazem as palavras separadas | as aspas exigem a sequência exata; a expressão composta vai entre aspas | Verificado por medição |
+| 2 | teste = controle, ou teste = 0 | não se distingue o efeito das aspas; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD10 — saber se a ERIC casa a forma singular com a plural, ou uma palavra com as derivadas, sem que a consulta as traga
+
+**Elementos verificados:** Lematização (Não verificado); Derivação automática de radicais desativada, com casamento exato sem aspas (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+title:ontology
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o plural no lugar do singular.
+
+```
+title:ontologies
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: uma forma derivada no lugar do substantivo.
+
+```
+title:ontological
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, e anotar o retorno
+2. abrir três registros do primeiro teste e conferir se o título traz `ontologies` e não `ontology`
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- forma do termo nos títulos dos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | os três retornos diferem, e os registros do primeiro teste trazem só `ontologies` no título | sem lematização e sem derivação automática em inglês: o plural explícito é necessário | Verificado por medição |
+| 2 | teste = controle, ou registros do primeiro teste com `ontology` no título sem `ontologies` | pode haver lematização; levar ao pesquisador antes de declarar `pela lematização` | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD11 — saber se `descriptor:` busca no descritor do tesauro ERIC e se difere de `descriptorx:`
+
+**Elementos verificados:** Campo `descriptor` (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+abstract:thesauri
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o campo `descriptor` no lugar do resumo.
+
+```
+descriptor:Thesauri
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: o campo de casamento exato.
+
+```
+descriptorx:Thesauri
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, e anotar o retorno
+2. abrir três registros do primeiro teste e conferir se `Thesauri` está entre os descritores
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- descritores dos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | primeiro teste > 0 e os registros abertos têm `Thesauri` entre os descritores | o campo `descriptor` busca no descritor | Verificado por medição |
+| 2 | primeiro teste = 0, ou registros sem o descritor | não se confirma o campo `descriptor`; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD12 — saber se a consulta mais longa do procedimento é aceita inteira
+
+**Elementos verificados:** Comprimento máximo da consulta (Não verificado).
+**Depende de:** SD2.
+
+**Pré-requisitos.**
+
+- SD2 registrada com os parênteses verificados
+- o procedimento gerado, para copiar as consultas
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+(title:ontology OR title:ontologies) AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o comprimento, perto do teto declarado.
+
+```
+a consulta mais longa de EB4 no procedimento gerado
+```
+
+**Passos.**
+
+1. copiar do procedimento a consulta mais longa de EB4 e anotar o número de caracteres
+2. submeter o controle e anotar o retorno e o texto que a caixa de busca mostra depois da submissão
+3. submeter o teste e anotar o mesmo
+
+**Observar.**
+
+- retorno exibido
+- se o texto mostrado depois da submissão é a consulta inteira
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste > 0 e o texto mostrado é a consulta inteira | a base aceita ao menos o comprimento da consulta mais longa; o teto declarado se mantém | Verificado por medição |
+| 2 | teste = 0, texto cortado ou mensagem de erro | o comprimento passa do limite da base; levar ao pesquisador para baixar o teto | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com o fim da consulta e o retorno visíveis
+
+#### SD13 — saber se o hífen separa palavras, de modo que `e-learning` case `e learning`
+
+**Elementos verificados:** Hífen como separador de palavras (`ontology-driven`, `e-learning`) (Não verificado).
+**Depende de:** SD9.
+
+**Pré-requisitos.**
+
+- SD9 registrada com as aspas verificadas
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+abstract:"e-learning"
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: espaço no lugar do hífen.
+
+```
+abstract:"e learning"
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: sem hífen nem espaço.
+
+```
+abstract:elearning
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, e anotar o retorno
+
+**Observar.**
+
+- retorno exibido de cada consulta
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | primeiro teste = controle > 0 | o hífen separa palavras | Verificado por medição |
+| 2 | primeiro teste ≠ controle, ambos > 0 | o hífen não separa palavras: forma hifenizada e forma separada são buscas distintas | Verificado por medição |
+| 3 | controle = 0 | não se distingue o efeito do hífen; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+#### SD14 — saber se a ERIC exibe e deixa percorrer o retorno inteiro de uma busca larga
+
+**Elementos verificados:** Teto de retorno exibido (Não verificado).
+
+**Pré-requisitos.**
+
+- busca de `eric.ed.gov` aberta no navegador do pesquisador
+
+**Consulta 1 — teste**, em caixa de busca.
+
+```
+education
+```
+
+**Passos.**
+
+1. submeter a consulta e anotar o retorno exibido
+2. ir à última página de resultados pela navegação da interface, sem rastejar, e anotar a posição do último registro acessível
+
+**Observar.**
+
+- retorno exibido
+- posição do último registro acessível
+- aviso de limite, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | o último registro acessível tem a posição igual ao retorno exibido | não há teto de retorno exibido até esse tamanho | Verificado por medição |
+| 2 | o último registro acessível tem posição menor que o retorno, ou há aviso de limite | há teto de retorno exibido, na posição anotada | Verificado por medição |
+| 3 | a navegação não chega à última página | não se distingue o teto; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela do retorno e da última página acessível
+
+#### SD15 — saber quantos registros a ERIC exporta de uma vez
+
+**Elementos verificados:** Teto de exportação por lote (Não verificado).
+**Depende de:** SD14.
+
+**Pré-requisitos.**
+
+- busca de `eric.ed.gov` aberta no navegador do pesquisador
+
+**Consulta 1 — teste**, em caixa de busca.
+
+```
+title:ontology AND abstract:education
+```
+
+**Passos.**
+
+1. submeter a consulta e anotar o retorno
+2. abrir a opção de exportação e anotar o número máximo de registros que ela oferece ou aceita
+3. exportar uma vez e contar os registros do arquivo
+
+**Observar.**
+
+- número máximo oferecido pela exportação
+- número de registros no arquivo exportado
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | o arquivo traz todos os registros do retorno | não há teto de exportação até esse tamanho | Verificado por medição |
+| 2 | o arquivo traz menos registros que o retorno, no número que a exportação anuncia | há teto de exportação por lote, no número anotado | Verificado por medição |
+| 3 | a exportação falha ou o número do arquivo não corresponde a nenhum dos dois | não se distingue o teto; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela da opção de exportação
+- o arquivo exportado
+
+#### SD16 — saber se o registro de documento em português ou espanhol traz título e resumo em inglês, buscáveis pelos termos da string
+
+**Elementos verificados:** Idioma do título e do resumo indexados (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — teste**, em caixa de busca.
+
+```
+language:Portuguese AND abstract:education
+```
+
+**Passos.**
+
+1. submeter a consulta e anotar o retorno
+2. abrir três registros e anotar o idioma do título e do resumo indexados
+
+**Observar.**
+
+- retorno exibido
+- idioma do título e do resumo nos registros abertos
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | os registros abertos têm título e resumo em inglês | a ERIC indexa em inglês o documento em outro idioma; os termos só em inglês o alcançam | Verificado por medição |
+| 2 | os registros abertos têm título ou resumo só no idioma do documento | a ERIC indexa no idioma do documento; levar ao pesquisador (CE3) | Verificado por medição |
+| 3 | teste = 0, ou registros sem resumo | não se distingue o idioma de indexação; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela do retorno e de cada registro aberto
 
 ---
 
@@ -33,12 +717,12 @@ Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?adv
 
 | Critério | ID | Na consulta? | Como |
 | :--- | :---: | :--- | :--- |
-| Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Não** | filtro de data da página de resultados, 2017 a 2026; registrar o rótulo do filtro e o retorno antes e depois |
+| Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **No filtro da interface** | filtro de data da página de resultados, 2017 a 2026; registrar o rótulo do filtro e o retorno antes e depois |
 | Idiomas — português, inglês e espanhol | CE3 | **Não** | termos só em inglês; campo `language` não usado |
 | Tipo documental e revisão por pares | CE4 / CE5 | **Não** | `Peer reviewed only` desmarcada; campo `publicationtype` não usado |
 | Adequação temática — regra de inclusão | CE6 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
 | Adequação temática — não pertinência e contra-escopo | CE6 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
-| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, em forma radical | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz |
+| Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz, em forma radical |
 | Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
 | Fator de impacto — não aplicável | CE10 | **Não** | não se aplica: critério só documental |
 
@@ -46,13 +730,11 @@ Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?adv
 
 ## 3. Strings por faceta
 
-`STRn` é o identificador do protocolo e `#n` a consulta correspondente. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
-
-Forma desta base: `STR1` no título; `STR1b`, subconjunto específico de `STR1`, no resumo; `STR2` em quatro palavras-raiz no resumo; `STR3` e `STR4` no resumo. Plural regular explícito: a lematização da base não está medida.
+`STRn` é o identificador do protocolo e `#n` o número da string na composição. Mapa das facetas: **FCT1** 🟦 · **FCT2** 🟨 · **FCT3** 🟥 · **FCT4** 🟧.
 
 ### Declaração de cobertura
 
-Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca em `src/rsl/fichas.py`).
+Declarada em `docs/procedimentos/eric/procedimento.toml`, `[cobertura]`; conferida por `python3 -m rsl documentos conferir`.
 
 | Parâmetro | Valor |
 | :--- | :--- |
@@ -71,23 +753,17 @@ Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca
 
 ### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
-*No título.*
-
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering")
 ```
 
 ### `STR1b` — string `#1b` — 🟦 FCT1 — Artefatos, subconjunto específico, no resumo
-
-*No resumo.*
 
 ```
 (abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns")
 ```
 
-### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
-
-*Forma radical, no resumo.*
+### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — forma radical: quatro palavras-raiz no resumo — **âncora obrigatória**
 
 ```
 (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners)
@@ -95,86 +771,94 @@ Lida por `python3 -m rsl documentos conferir` (leitor dos procedimentos de busca
 
 ### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
-*No resumo.*
-
 ```
-(abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies" OR abstract:"instructional strategy" OR abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention" OR abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences" OR abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
+(abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies" OR abstract:"instructional strategy" OR abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention" OR abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences" OR abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:pedagogies OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"instructional designs" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
 ```
 
 ### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
 
-*No resumo.*
-
 ```
-(abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor" OR abstract:"context factors" OR abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context" OR abstract:"institutional contexts" OR abstract:"sociocultural context" OR abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor" OR abstract:"context factors" OR abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context" OR abstract:"institutional contexts" OR abstract:"sociocultural context" OR abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualizations OR abstract:contextualisation OR abstract:contextualisations)
 ```
 
 ---
 
 ## 4. Expressões de busca
 
-### Como esta base exige que a expressão seja montada
-
-Regras medidas; violá-las devolve **zero sem mensagem de erro**:
-
-- grupo entre parênteses com `OR` precisa de condição fora dele;
-- a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois;
-- um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero;
-- `pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página;
-- sem truncamento; expressão composta sempre entre aspas;
-- cada consulta dentro do teto de caracteres da declaração de cobertura, que `documentos conferir` confere contra o comprimento de cada bloco; acima dele, partir a expressão mantendo o grupo 🟦 íntegro e unir por deduplicação. As consultas de EB2, EB3 e EB4 são partidas no grupo 🟥 ou 🟧, sem retirar termo;
-
-Toda expressão é executada como duas consultas de campo único — `STR1` no título e `STR1b` no resumo —, ambas com a faceta 🟨 como grupo externo, unidas por deduplicação.
-
-**Composição.** `EB1 = #1 AND #2 AND #3 AND #4`; `EB2 = #1 AND #2 AND #3`; `EB3 = #1 AND #2 AND #4`; `EB4 = #1 AND #2 AND (#3 OR #4)`; `EB5 = #1 AND #2`.
+```
+EB1 = #1 AND #2 AND #3 AND #4
+EB2 = #1 AND #2 AND #3
+EB3 = #1 AND #2 AND #4
+EB4 = #1 AND #2 AND (#3 OR #4)     (executada)
+EB5 = #1 AND #2                    (sonda de sensibilidade)
+```
 
 | Expressão | Execução |
 | :--- | :--- |
-| **EB4** | executar e exportar, em 13 consultas: é o corpus desta base |
+| **EB4** | executar e exportar: é o corpus desta base |
 | **EB5** | executar uma única vez, na mesma data; não compõe o corpus |
 | **EB2**, **EB3** | executar só para o teste de fidelidade da derivação |
 | **EB1** | não executar; derivação local |
 
 - Execução: particionada
 - **Fidelidade:** divergência acima de `divergencia_fidelidade` (`python3 -m rsl configuracao mostrar`) entre EB2/EB3 executadas e derivadas reprova a derivação.
+- **Sensibilidade:** fração elegível de `EB5 \ EB4` abaixo do limite inferior da faixa `sensibilidade` (`python3 -m rsl configuracao mostrar`) mantém EB4; acima do superior, leva à reconsideração, com emenda.
 - **Retorno zero:** EB4 = 0 ou EB5 = 0 é defeito de execução até prova em contrário; contagem derivada próxima de zero exige execução direta antes do relato.
 
-### EB1 (geral) — as quatro facetas
+Toda expressão é executada como duas consultas de campo único — `STR1` no título e `STR1b` no resumo —, ambas com a faceta 🟨 como grupo externo, unidas por deduplicação. Cada consulta fica dentro do teto de caracteres da declaração de cobertura; acima dele, a expressão se parte mantendo o grupo 🟦 íntegro, sem retirar termo, e as partes se unem por deduplicação.
 
-**Não se executa; derivação local.** **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)
+### Como esta base exige a montagem
 
-### EB2 (específica) — modelos e ontologias que representam práticas do processo de ensino-aprendizagem
+| Regra | Situação | Sondagem |
+| :--- | :--- | :--- |
+| grupo entre parênteses com `OR` precisa de condição fora dele | **Não verificado** | SD3 |
+| a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois | **Não verificado** | SD4 |
+| um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero | **Não verificado** | SD5 |
+| `pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página | **Não verificado** | SD6 |
+| sem truncamento; expressão composta sempre entre aspas | **Não verificado** | SD9 |
 
-**Conferência do teste de fidelidade.** **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)
+### EB1 (geral — as quatro facetas)
 
-**Consulta 2a1 — artefato no título, parte 1 de 5**
+*Derivada localmente — não executar.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥) AND FCT4 (🟧)
 
-```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies" OR abstract:"instructional strategy")
-```
+### EB2 (específica — modelos e ontologias que representam práticas do processo de ensino-aprendizagem)
 
-**Consulta 2a2 — artefato no título, parte 2 de 5**
+*Derivada localmente — executar apenas no teste de fidelidade.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)
 
-```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention")
-```
-
-**Consulta 2a3 — artefato no título, parte 3 de 5**
-
-```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences" OR abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice")
-```
-
-**Consulta 2a4 — artefato no título, parte 4 de 5**
+**Consulta 2a1 — artefato no título, parte 1 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies")
 ```
 
-**Consulta 2a5 — artefato no título, parte 5 de 5**
+**Consulta 2a2 — artefato no título, parte 2 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional strategy" OR abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities")
+```
+
+**Consulta 2a3 — artefato no título, parte 3 de 6**
+
+```
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention" OR abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences" OR abstract:"instructional sequence" OR abstract:"instructional sequences")
+```
+
+**Consulta 2a4 — artefato no título, parte 4 de 6**
+
+```
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:pedagogy OR abstract:pedagogies OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design")
+```
+
+**Consulta 2a5 — artefato no título, parte 5 de 6**
+
+```
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional designs" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology")
+```
+
+**Consulta 2a6 — artefato no título, parte 6 de 6**
+
+```
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching methodologies")
 ```
 
 **Consulta 2b1 — termo específico no resumo, parte 1 de 2**
@@ -186,35 +870,35 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 2b2 — termo específico no resumo, parte 2 de 2**
 
 ```
-(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
+(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:pedagogies OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"instructional designs" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
 ```
 
-### EB3 (específica) — artefatos que formalizam os fatores situacionais do domínio educacional
+### EB3 (específica — artefatos que formalizam os fatores situacionais do domínio educacional)
 
-**Conferência do teste de fidelidade.** **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧)
+*Derivada localmente — executar apenas no teste de fidelidade.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧)
 
 **Consulta 3a1 — artefato no título, parte 1 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor" OR abstract:"context factors")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor")
 ```
 
 **Consulta 3a2 — artefato no título, parte 2 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context" OR abstract:"institutional contexts" OR abstract:"sociocultural context")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"context factors" OR abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context")
 ```
 
 **Consulta 3a3 — artefato no título, parte 3 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"institutional contexts" OR abstract:"sociocultural context" OR abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint" OR abstract:"contextual constraints" OR abstract:"context modeling")
 ```
 
 **Consulta 3a4 — artefato no título, parte 4 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualizations OR abstract:contextualisation OR abstract:contextualisations)
 ```
 
 **Consulta 3b1 — termo específico no resumo, parte 1 de 2**
@@ -226,101 +910,105 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 3b2 — termo específico no resumo, parte 2 de 2**
 
 ```
-(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualizations OR abstract:contextualisation OR abstract:contextualisations)
 ```
 
-### EB4 (de cobertura restrita) — artefatos de representação no domínio educacional que mencionam prática ou fator situacional
+### EB4 (de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional)
 
-**É esta que se executa e se exporta.** **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
+*Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
-Executar as 13 consultas abaixo e unir por deduplicação.
-
-**Consulta 4a1 — título × prática, parte 1 de 5**
+**Consulta 4a1 — artefato no título × prática, parte 1 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies" OR abstract:"instructional strategy")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies")
 ```
 
-**Consulta 4a2 — título × prática, parte 2 de 5**
+**Consulta 4a2 — artefato no título × prática, parte 2 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional strategy" OR abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities")
 ```
 
-**Consulta 4a3 — título × prática, parte 3 de 5**
+**Consulta 4a3 — artefato no título × prática, parte 3 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences" OR abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention" OR abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences" OR abstract:"instructional sequence" OR abstract:"instructional sequences")
 ```
 
-**Consulta 4a4 — título × prática, parte 4 de 5**
+**Consulta 4a4 — artefato no título × prática, parte 4 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:pedagogy OR abstract:pedagogies OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design")
 ```
 
-**Consulta 4a5 — título × prática, parte 5 de 5**
+**Consulta 4a5 — artefato no título × prática, parte 5 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional designs" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology")
 ```
 
-**Consulta 4b1 — título × fator situacional, parte 1 de 4**
+**Consulta 4a6 — artefato no título × prática, parte 6 de 6**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor" OR abstract:"context factors")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching methodologies")
 ```
 
-**Consulta 4b2 — título × fator situacional, parte 2 de 4**
+**Consulta 4b1 — artefato no título × fator situacional, parte 1 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context" OR abstract:"institutional contexts" OR abstract:"sociocultural context")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor")
 ```
 
-**Consulta 4b3 — título × fator situacional, parte 3 de 4**
+**Consulta 4b2 — artefato no título × fator situacional, parte 2 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint" OR abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"context factors" OR abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context")
 ```
 
-**Consulta 4b4 — título × fator situacional, parte 4 de 4**
+**Consulta 4b3 — artefato no título × fator situacional, parte 3 de 4**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"institutional contexts" OR abstract:"sociocultural context" OR abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint" OR abstract:"contextual constraints" OR abstract:"context modeling")
 ```
 
-**Consulta 4c1 — termo específico × prática, parte 1 de 2**
+**Consulta 4b4 — artefato no título × fator situacional, parte 4 de 4**
+
+```
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualizations OR abstract:contextualisation OR abstract:contextualisations)
+```
+
+**Consulta 4c1 — termo específico no resumo × prática, parte 1 de 2**
 
 ```
 (abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"pedagogical practice" OR abstract:"pedagogical practices" OR abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teaching strategy" OR abstract:"teaching strategies" OR abstract:"instructional strategy" OR abstract:"instructional strategies" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"instructional method" OR abstract:"instructional methods" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"learning task" OR abstract:"learning tasks" OR abstract:"educational intervention" OR abstract:"educational interventions" OR abstract:"instructional intervention" OR abstract:"instructional interventions" OR abstract:"teaching sequence" OR abstract:"teaching sequences")
 ```
 
-**Consulta 4c2 — termo específico × prática, parte 2 de 2**
+**Consulta 4c2 — termo específico no resumo × prática, parte 2 de 2**
 
 ```
-(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
+(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"instructional sequence" OR abstract:"instructional sequences" OR abstract:pedagogy OR abstract:pedagogies OR abstract:"best practice" OR abstract:"best practices" OR abstract:"recommended practice" OR abstract:"recommended practices" OR abstract:"pedagogical approach" OR abstract:"pedagogical approaches" OR abstract:"instructional approach" OR abstract:"instructional approaches" OR abstract:"instructional design" OR abstract:"instructional designs" OR abstract:"learning design" OR abstract:"learning designs" OR abstract:"pedagogical pattern" OR abstract:"pedagogical patterns" OR abstract:"pedagogical design pattern" OR abstract:"pedagogical design patterns" OR abstract:"active learning method" OR abstract:"active learning methods" OR abstract:"teaching methodology" OR abstract:"teaching methodologies")
 ```
 
-**Consulta 4d1 — termo específico × fator situacional, parte 1 de 2**
+**Consulta 4d1 — termo específico no resumo × fator situacional, parte 1 de 2**
 
 ```
 (abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"situational factor" OR abstract:"situational factors" OR abstract:"situation of use" OR abstract:"situations of use" OR abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"context factor" OR abstract:"context factors" OR abstract:"application condition" OR abstract:"application conditions" OR abstract:"implementation condition" OR abstract:"implementation conditions" OR abstract:"learning situation" OR abstract:"learning situations" OR abstract:"educational setting" OR abstract:"educational settings" OR abstract:"institutional context" OR abstract:"institutional contexts" OR abstract:"sociocultural context" OR abstract:"sociocultural contexts" OR abstract:"class profile" OR abstract:"class profiles" OR abstract:"learner characteristic" OR abstract:"learner characteristics" OR abstract:"contextual constraint")
 ```
 
-**Consulta 4d2 — termo específico × fator situacional, parte 2 de 2**
+**Consulta 4d2 — termo específico no resumo × fator situacional, parte 2 de 2**
 
 ```
-(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualisation)
+(abstract:"controlled vocabulary" OR abstract:"controlled vocabularies" OR abstract:"metadata schema" OR abstract:"metadata schemas" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern" OR abstract:"ontology design patterns") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"contextual constraints" OR abstract:"context modeling" OR abstract:"context modelling" OR abstract:"context representation" OR abstract:"context representations" OR abstract:"context-aware" OR abstract:contextualization OR abstract:contextualizations OR abstract:contextualisation OR abstract:contextualisations)
 ```
 
-### EB5 (sonda de sensibilidade) — as duas âncoras, sem exigir prática nem fator situacional
+### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
 
-**Sonda de sensibilidade — executada uma única vez; não compõe o corpus.** **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
+*Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
 
 **Consulta 5a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners)
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"controlled vocabulary" OR title:"controlled vocabularies" OR title:thesaurus OR title:thesauri OR title:taxonomy OR title:taxonomies OR title:"classification scheme" OR title:"classification schemes" OR title:"metadata schema" OR title:"metadata schemas" OR title:"faceted classification" OR title:"faceted classifications" OR title:"conceptual model" OR title:"conceptual models" OR title:"conceptual modeling" OR title:"conceptual modelling" OR title:"conceptual schema" OR title:"conceptual schemas" OR title:"domain model" OR title:"domain models" OR title:"semantic model" OR title:"semantic models" OR title:"ontology-based modeling" OR title:"ontology-based modelling" OR title:"ontological engineering") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners)
 ```
 
 **Consulta 5b — termo específico no resumo**
@@ -331,9 +1019,9 @@ Executar as 13 consultas abaixo e unir por deduplicação.
 
 ### Como executar
 
-1. Executar as 13 consultas de EB4 (4a1, 4a2, 4a3, 4a4, 4a5, 4b1, 4b2, 4b3, 4b4, 4c1, 4c2, 4d1, 4d2) e exportar cada uma em arquivo próprio, `eric_<consulta>.ris` (`eric_4a1.ris`, …), em `data/execucoes/eric/`.
+1. Executar as consultas de EB4, na ordem em que aparecem acima, e exportar cada uma em arquivo próprio, `eric_<consulta>.ris` (`eric_4a1.ris`, …), em `data/execucoes/eric/`.
 2. Aplicar o filtro de data da página e anotar o retorno antes e depois, com o rótulo exato do filtro.
-3. Registrar as 13 execuções, uma por arquivo: `python3 -m rsl busca registrar eric EB4 <arquivo> --retorno <n>`; rodar `busca derivar`. O retorno da base é a união deduplicada, nunca a soma: o número que vai às contagens da busca é o dos únicos, com o bruto ao lado.
+3. Registrar as execuções, uma por arquivo: `python3 -m rsl busca registrar eric EB4 <arquivo> --retorno <n>`; rodar `busca derivar`. O retorno da base é a união deduplicada, nunca a soma: o número que vai às contagens da busca é o dos únicos, com o bruto ao lado.
 4. Executar EB5 (5a e 5b) uma única vez e registrar com `EB5`.
 5. Medir a aderência (seção 5). Abaixo do limiar de aderência (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), passar à contingência das variantes.
 
@@ -393,7 +1081,7 @@ Disparo: necessidade de levar ao resumo termos de `STR1` hoje restritos ao títu
 
 ## 5. Conjunto-semente
 
-Esperadas nesta base, conforme o protocolo. Estado de conferência em `data/sementes.json`; aferição em `data/semente_aderencia.csv`.
+Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de sementes (`[documentos] sementes`); aferição em `data/semente_aderencia.csv`.
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |

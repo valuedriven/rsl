@@ -64,13 +64,15 @@ chave, não pelo caminho.
 | `docs/02_protocolo_informacoes_gerais.md` | protocolo, informações gerais: tópicos preliminares, delimitação do assunto e objeto | pesquisador |
 | `docs/03_protocolo_estrategia_pesquisa.md` (`protocolo`) | protocolo, estratégias de pesquisa: questão, facetas, controle terminológico, strings, expressões, critérios, fontes, conjunto-semente, procedimentos, instrumentos e ferramentas; fonte única dos parâmetros que declara | pesquisador; a tabela "Strings de busca por faceta", `strings gerar --gravar`, a partir do quadro terminológico |
 | `docs/conjunto_semente.toml` (`[documentos] sementes`) | conjunto-semente, uma tabela `[[sementes]]` por estudo; único lugar de dado de semente | pesquisador; nenhum subcomando grava |
-| `docs/procedimentos_busca_<sigla>.md` (`[documentos] procedimento`) | procedimento de busca de cada base: sintaxe, critérios, strings com a declaração de cobertura (inclusive os parâmetros `plural` e `teto de caracteres`), expressões, estratégia de proximidade, execução, conjunto-semente e ressalvas | pesquisador e agente, a pedido |
+| `docs/procedimentos/<sigla>/` (`[documentos] procedimento_fonte`) | fonte do procedimento de busca de cada base: `procedimento.toml` (sintaxe e roteiro de sondagens, critérios, declaração de cobertura com `plural` e `teto`, composição, execução, regras de montagem, sementes, ressalvas) e fragmentos de prosa de nome fixo; esquema em `documentos gramatica` | pesquisador e agente, a pedido; base nova começa por `procedimentos iniciar` |
+| `docs/procedimentos_busca_<sigla>.md` (`[documentos] procedimento`) | procedimento de busca de cada base, inteiro: sintaxe e roteiro de sondagens, critérios, strings, expressões, execução, conjunto-semente e ressalvas; saída de geração, não se edita à mão | `procedimentos gerar --gravar`, a partir da fonte, do protocolo, do arquivo de sementes e do de exceções |
+| `docs/flexoes.toml` (`[documentos] flexoes`) | exceções de flexão de número dos termos das STR, por idioma (irregular, não contável, vetada), cada uma com a origem | pesquisador; agente, a pedido, com revisão antes de gravar |
 | `docs/parametros_complementares.md` | instrumento de extração e síntese: grupos de extração, cobertura conceitual, granularidade e grau de formalização | pesquisador |
 | `docs/procedimentos.md` | guia de procedimentos: módulos, etapas e passos, com fonte, script, skill e apoio; fonte do catálogo de apoio | pesquisador e agente, a pedido |
 | `docs/catalogo_de_apoio.md` | catálogo de apoio: skills e comandos por passo, por skill e por comando, e cobertura por etapa; saída de geração, não se edita à mão | `catalogo gerar --gravar`, a partir do guia de procedimentos |
 | `data/historico.md` | decisões, inclusive emendas | pesquisador; agente, a pedido |
 | `data/pendencias.json` | ações ainda a executar, `PDnn` | pesquisador; agente, a pedido |
-| `data/registro_execucao.json` (`[dados] registro`) — *sob demanda* | resultados das consultas nas bases, por base e por execução | pesquisador e `busca registrar` |
+| `data/registro_execucao.json` (`[dados] registro`) — *sob demanda* | resultados das consultas nas bases, por base: execuções (`execucoes`) e sondagens de sintaxe (`sondagens`) | pesquisador, `busca registrar` e `sondagens registrar` |
 | `data/execucoes/<base>/` (`[dados] execucoes`) — *sob demanda* | exportações intactas das bases | pesquisador |
 | `data/validacao_terminologica.csv` (`[dados] validacao`) — *sob demanda* | estatuto de cada termo; preserva as decisões e as linhas fora do protocolo | `termos exportar`, `termos validar`, `termos importar`; decisões pelo pesquisador |
 | `data/evidencia/<instrumento>/` (`[dados] evidencia`) — *sob demanda* | resposta bruta de cada consulta terminológica | `termos validar` |
@@ -88,7 +90,7 @@ chave, não pelo caminho.
 
 O que é **derivado do documento não vira arquivo**: questão, facetas, instrumentos,
 strings, expressões, critérios e fontes são lidos do protocolo a cada execução, e a forma de
-cada base, do procedimento de busca. Em `data/` fica o que alguém alimenta e o que os subcomandos gravam.
+cada base, da fonte do procedimento de busca. Em `data/` fica o que alguém alimenta e o que os subcomandos gravam.
 Os demais instrumentos do RS Banyan e o portfólio não integram este repositório.
 
 ### Três registros, três finalidades
@@ -97,13 +99,13 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 | --- | --- | --- |
 | `data/historico.md` | **decisões** relevantes sobre a revisão — emendas, escolhas de método, de escopo e de instrumento —, com data, alcance e fundamento | ação por fazer; resultado de consulta; contagem — de termos, de sementes, de caracteres, de casos — e resultado de conferência ou de autoteste |
 | `data/pendencias.json` | **ações ainda a executar**, e só elas, com `id`, `origem`, o que bloqueia, ação sugerida e responsável | ação concluída ou descartada; decisão; resultado de consulta |
-| `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens, retornos, exportações e conferências | decisão; ação por fazer |
+| `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens de sintaxe (`bases.BDn.sondagens`, por `sondagens registrar`), retornos, exportações e conferências | decisão; ação por fazer |
 
 - Pendência resolvida ou descartada **sai** de `data/pendencias.json`; não se arquiva. O que
   a encerrou vai ao seu registro antes da exclusão: a decisão, inclusive a de descartar, ao
   histórico, que cita o `id`; o resultado de consulta, ao registro de execução. O `id` de
   pendência excluída não se reutiliza.
-- A pendência remete à sua `origem` (procedimento de busca, protocolo, plano, comando) em vez de copiar o
+- A pendência remete à sua `origem` (fonte do procedimento de busca, protocolo, plano, comando) em vez de copiar o
   conteúdo dela.
 - O histórico **não transcreve contagem**. Número se calcula do artefato quando se precisa
   dele (`configuracao mostrar`, `documentos conferir`, `projeto autoteste`), e o transcrito diverge na alteração seguinte. A
@@ -114,8 +116,9 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 ## Precedência
 
 - **Uma fonte por dado.** Vocabulário, expressões, critérios e os parâmetros que declara vêm
-  do protocolo; a forma da busca, do procedimento de busca da base; o conjunto-semente, do arquivo de
-  sementes; o resto, do `config.toml`. Não há cópia intermediária nem valor de parâmetro no
+  do protocolo; a forma da busca, da fonte do procedimento de busca da base; as exceções de
+  flexão, do arquivo de exceções; o conjunto-semente, do arquivo de sementes; o resto, do
+  `config.toml`. Não há cópia intermediária nem valor de parâmetro no
   código.
 - O **protocolo** — `docs/02_protocolo_informacoes_gerais.md` e
   `docs/03_protocolo_estrategia_pesquisa.md` — prevalece sobre qualquer formulação feita em
@@ -133,8 +136,14 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 - A tabela **"Strings de busca por faceta"** do protocolo é saída de geração: cada STR é a
   união dos termos do quadro terminológico da faceta, menos os subsumidos. Altera-se o
   quadro, e a ordem é quadro → `strings gerar` (ensaio) → `strings gerar --gravar` →
-  procedimentos de busca → `documentos conferir`. STR editada à mão, ou defasada do quadro,
-  reprova em `documentos conferir`.
+  fonte do procedimento → `procedimentos gerar` (ensaio, revisado) → `procedimentos gerar
+  --gravar` → `documentos conferir`. STR editada à mão, ou defasada do quadro, reprova em
+  `documentos conferir`.
+- O **procedimento de busca** de cada base é saída de geração: altera-se a fonte da base
+  (`docs/procedimentos/<sigla>/`), o arquivo de exceções ou o de sementes, e regenera-se.
+  Procedimento editado à mão, ou defasado da fonte, reprova em `documentos conferir`. O
+  resultado de uma sondagem se registra por `sondagens registrar`, que não altera a fonte: a
+  mudança que ele imprime aplica-se na fonte, e regenera-se.
 - O **catálogo de apoio** é saída de geração do guia de procedimentos. Altera-se o guia —
   ou cria-se, renomeia-se ou retira-se uma skill ou um comando —, e a ordem é guia →
   `catalogo gerar` (ensaio e conferência) → `catalogo gerar --gravar`. Catálogo editado à

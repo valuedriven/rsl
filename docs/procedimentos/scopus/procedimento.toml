@@ -1,0 +1,501 @@
+# Fonte do procedimento de busca da Scopus (BD2). O procedimento
+# `docs/procedimentos_busca_scopus.md` é gerado daqui por
+# `python3 -m rsl procedimentos gerar scopus --gravar`. Esquema: `python3 -m rsl documentos gramatica`.
+#
+# Migração de 2026-11-23 (change `geracao-das-fichas-de-busca`): transcrição do procedimento
+# anterior; elementos novos das categorias mínimas entram como `nao_verificado`.
+
+ressalvas = [
+  "Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.",
+]
+
+# ------------------------------------------------------------------ §1 sintaxe
+[[sintaxe]]
+elemento = "`TITLE-ABS-KEY()`"
+categoria = "campos"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`PUBYEAR >`, `<`, `=`"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`LANGUAGE()`"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`DOCTYPE()` com os códigos `ar`, `re`, `cp`, `ch`, `bk`, `ed`, `le`, `no`, `sh`"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`SRCTYPE()` com `j`, `b`, `k`, `p`, `r`, `d`"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`OPENACCESS(0` ou `1)`"
+categoria = "filtros"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`AND`, `OR`, `AND NOT`; precedência `OR` → `AND` → `AND NOT`"
+categoria = "operadores"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+nota = "a precedência muda em 2026"
+
+[[sintaxe]]
+elemento = "Truncamento `*` e `?`, mínimo de 3 caracteres antes do curinga"
+categoria = "truncamento"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "Proximidade `W/n` e `PRE/n`"
+categoria = "proximidade"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+nota = "`W/5` **não medido**"
+
+[[sintaxe]]
+elemento = "`W/5` entre os grupos inteiros das duas âncoras"
+categoria = "proximidade"
+situacao = "nao_verificado"
+sondagem = "SD2"
+nota = "recusa leva à variante \"Redução por recusa da interface\""
+
+[[sintaxe]]
+elemento = "`{}` frase exata *versus* `\"\"` frase aproximada"
+categoria = "frase"
+situacao = "oficial"
+fonte = "Elsevier, *Scopus Search API — search tips*"
+
+[[sintaxe]]
+elemento = "`\"\"` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento"
+categoria = "frase"
+situacao = "nao_verificado"
+sondagem = "SD3"
+nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+
+[[sintaxe]]
+elemento = "Limite de operadores por consulta"
+categoria = "limite_consulta"
+situacao = "nao_verificado"
+sondagem = "SD4"
+nota = "não documentado"
+
+[[sintaxe]]
+elemento = "Comprimento máximo da consulta"
+categoria = "limite_consulta"
+situacao = "nao_verificado"
+sondagem = "SD4"
+nota = "a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres"
+
+[[sintaxe]]
+elemento = "Lematização do plural"
+categoria = "lematizacao"
+situacao = "nao_verificado"
+sondagem = "SD3"
+
+[[sintaxe]]
+elemento = "Tratamento de diacríticos"
+categoria = "idioma_indexacao"
+situacao = "nao_verificado"
+sondagem = "SD5"
+nota = "as strings trazem as duas grafias"
+
+[[sintaxe]]
+elemento = "Teto de retorno exibido"
+categoria = "limite_retorno"
+situacao = "nao_verificado"
+sondagem = "SD6"
+nota = "conferir na interface antes de exportar"
+
+[[sintaxe]]
+elemento = "Teto de exportação por lote"
+categoria = "limite_exportacao"
+situacao = "nao_verificado"
+sondagem = "SD7"
+nota = "conferir na interface antes de exportar"
+
+[[sintaxe]]
+elemento = "Parênteses para agrupamento"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD1"
+
+[[sintaxe]]
+elemento = "Vocabulário controlado de assunto"
+categoria = "vocabulario_controlado"
+situacao = "nao_verificado"
+sem_sondagem = "verificação documental: os termos de indexação da Scopus não foram conferidos; nenhuma expressão depende deles"
+
+[[sintaxe]]
+elemento = "Exportação em RIS com todos os campos"
+categoria = "exportacao"
+situacao = "nao_verificado"
+sondagem = "SD7"
+
+# ------------------------------------------------------------------ §2 critérios
+[[criterios]]
+ids = ["CE1", "CE2"]
+rotulo = "Intervalo temporal — 2017 até a data de execução"
+destino = "consulta"
+como = "`AND PUBYEAR > 2016 AND PUBYEAR < 2027`"
+clausula = "PUBYEAR > 2016 AND PUBYEAR < 2027"
+
+[[criterios]]
+ids = ["CE3"]
+rotulo = "Idiomas — português, inglês e espanhol"
+destino = "consulta"
+como = "`AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish))`"
+clausula = "(LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish))"
+
+[[criterios]]
+ids = ["CE4", "CE5"]
+rotulo = "Tipo documental"
+destino = "consulta"
+como = "`AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))`"
+clausula = "(DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — regra de inclusão"
+destino = "aproximado"
+como = "EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — não pertinência e contra-escopo"
+destino = "nao"
+como = "exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID"
+
+[[criterios]]
+ids = ["CE7", "CE8"]
+rotulo = "Domínio de aplicação educacional"
+destino = "ancora"
+como = "faceta 🟨 (FCT2) nas cinco expressões"
+
+[[criterios]]
+ids = ["CE9"]
+rotulo = "Outros tipos documentais"
+destino = "nao"
+como = "2ª filtragem"
+
+[[criterios]]
+ids = ["CE10"]
+rotulo = "Fator de impacto — não aplicável"
+destino = "nao"
+como = "não se aplica: critério só documental"
+
+# ------------------------------------------------------------------ §3 cobertura
+[cobertura]
+camadas = "todas"
+plural = "explícito"
+teto = "nenhum"
+derivacoes = ["morfologia"]
+
+[cobertura.idiomas]
+FCT1 = ["pt", "en", "es"]
+FCT2 = ["pt", "en", "es"]
+FCT3 = ["pt", "en", "es"]
+FCT4 = ["pt", "en", "es"]
+
+[composicao]
+aspas = "todo_termo"
+proximidade = { operador = "W", distancia = 5 }
+disjuncao = "em_linha"
+
+[[composicao.facetas]]
+faceta = "FCT1"
+campo = "TITLE-ABS-KEY"
+forma = "envolve"
+cor = "🟦"
+
+[[composicao.facetas]]
+faceta = "FCT2"
+campo = "TITLE-ABS-KEY"
+forma = "envolve"
+cor = "🟨"
+
+[[composicao.facetas]]
+faceta = "FCT3"
+campo = "TITLE-ABS-KEY"
+forma = "envolve"
+cor = "🟥"
+
+[[composicao.facetas]]
+faceta = "FCT4"
+campo = "TITLE-ABS-KEY"
+forma = "envolve"
+cor = "🟧"
+
+# ------------------------------------------------------------------ §4 execução
+[execucao]
+forma = "unica"
+
+[[execucao.expressoes]]
+id = "EB1"
+titulo = "as quatro facetas"
+
+[[execucao.expressoes]]
+id = "EB2"
+titulo = "modelos e ontologias que representam práticas do processo de ensino-aprendizagem"
+
+[[execucao.expressoes]]
+id = "EB3"
+titulo = "artefatos que formalizam os fatores situacionais do domínio educacional"
+
+[[execucao.expressoes]]
+id = "EB4"
+titulo = "de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional"
+
+[[execucao.expressoes]]
+id = "EB5"
+titulo = "sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional"
+
+# ------------------------------------------------------------------ §5 sementes
+[[sementes]]
+id = "SE4"
+observacao = "comunicação em anais"
+
+# ------------------------------------------------------------------ roteiro de sondagens
+# Comum a todas: na busca avançada da Scopus, no navegador do pesquisador, com o acesso
+# institucional dele; uma consulta por vez.
+
+[[sondagens]]
+id = "SD1"
+elementos = ["Parênteses para agrupamento"]
+objetivo = "saber se os parênteses agrupam dentro de `TITLE-ABS-KEY()` como booleanos"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador, com o acesso institucional dele"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY(ontology OR taxonomy)"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY((ontology OR taxonomy) AND education)"
+onde = "busca avançada"
+muda = "grupo entre parênteses com condição"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(ontology OR taxonomy AND education)"
+onde = "busca avançada"
+muda = "sem parênteses, pela precedência"
+
+[[sondagens.leituras]]
+resultado = "0 < primeiro teste ≤ controle, e o segundo teste = primeiro teste (precedência `OR` antes de `AND`)"
+conclusao = "os parênteses agrupam; a precedência documentada se confirma"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "primeiro teste = 0, primeiro teste > controle, ou mensagem de erro"
+conclusao = "o agrupamento não se confirma; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD2"
+elementos = ["`W/5` entre os grupos inteiros das duas âncoras"]
+objetivo = "saber se a interface aceita `W/5` entre os grupos inteiros das duas âncoras"
+pre_requisitos = ["SD1 registrada com os parênteses verificados", "o procedimento gerado, para copiar as âncoras"]
+depende_de = ["SD1"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem, se houver"]
+observar = ["retorno exibido", "mensagem de erro ou de recusa, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "o bloco de EB5 no procedimento gerado, com `AND` no lugar de `W/5`"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "o bloco de EB5 no procedimento gerado"
+onde = "busca avançada"
+muda = "`W/5` entre os grupos inteiros"
+
+[[sondagens.leituras]]
+resultado = "teste aceito, com 0 < teste ≤ controle"
+conclusao = "`W/5` entre os grupos inteiros funciona"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste recusado, = 0, ou > controle"
+conclusao = "`W/5` entre grupos não se confirma; levar ao pesquisador (variante \"Forma ampla, sem proximidade\")"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD3"
+elementos = ["Lematização do plural", "`\"\"` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento"]
+objetivo = "saber se a base casa singular e plural sem que a consulta os traga, entre aspas e entre chaves"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno e a mensagem, se houver", "comparar também, com consultas análogas entre aspas, `ontologia`/`ontologias` e `ontología`/`ontologías`, e anotar os retornos"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY(\"conceptual model\")"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(\"conceptual models\")"
+onde = "busca avançada"
+muda = "o plural entre aspas"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY({conceptual model})"
+onde = "busca avançada"
+muda = "frase exata entre chaves"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(\"conceptual model*\")"
+onde = "busca avançada"
+muda = "truncamento dentro das aspas"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY({conceptual model*})"
+onde = "busca avançada"
+muda = "truncamento dentro das chaves"
+
+[[sondagens.leituras]]
+resultado = "controle = plural entre aspas; chaves < controle; truncamento entre aspas ≥ controle; truncamento entre chaves recusado ou sem efeito"
+conclusao = "as aspas incluem plurais e admitem truncamento; as chaves são exatas e não o admitem"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle ≠ plural entre aspas, ou qualquer outra relação, ou pt e es diferentes do inglês"
+conclusao = "não se confirma o comportamento afirmado; levar ao pesquisador antes de declarar `pela lematização`"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD4"
+elementos = ["Comprimento máximo da consulta", "Limite de operadores por consulta"]
+objetivo = "saber se a interface aceita inteira a consulta de EB4"
+pre_requisitos = ["SD2 registrada com `W/5` entre grupos verificado", "o procedimento gerado, para copiar a consulta"]
+depende_de = ["SD2"]
+passos = ["copiar o bloco de EB4 do procedimento e anotar o número de caracteres e de operadores", "submetê-lo e anotar o retorno e a mensagem, se houver"]
+observar = ["retorno exibido", "mensagem de erro ou de recusa, se houver"]
+evidencia = ["captura da tela, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "o bloco de EB4 no procedimento gerado"
+onde = "busca avançada"
+
+[[sondagens.leituras]]
+resultado = "aceita, com retorno > 0"
+conclusao = "a interface aceita o comprimento e o número de operadores da consulta de EB4"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "recusa por extensão ou por operadores, ou retorno = 0"
+conclusao = "a consulta passa do limite; levar ao pesquisador (variante \"Redução por recusa da interface\")"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD5"
+elementos = ["Tratamento de diacríticos"]
+objetivo = "saber se a base ignora diacríticos"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno"]
+observar = ["retorno exibido de cada consulta"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY(\"educação\")"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(\"educacao\")"
+onde = "busca avançada"
+muda = "sem diacrítico"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "a base ignora diacríticos"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste ≠ controle, ambos > 0"
+conclusao = "a base distingue diacríticos; as duas grafias são necessárias"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = 0"
+conclusao = "não se distingue o tratamento; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD6"
+elementos = ["Teto de retorno exibido"]
+objetivo = "saber se a base exibe e deixa percorrer o retorno inteiro de uma busca larga"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
+passos = ["submeter a consulta e anotar o retorno exibido", "ir à última página de resultados pela navegação da interface, sem rastejar, e anotar a posição do último registro acessível"]
+observar = ["retorno exibido", "posição do último registro acessível", "aviso de limite, se houver"]
+evidencia = ["captura da tela do retorno e da última página acessível"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(education)"
+onde = "busca avançada"
+
+[[sondagens.leituras]]
+resultado = "o último registro acessível tem a posição igual ao retorno exibido"
+conclusao = "não há teto de retorno exibido até esse tamanho"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "o último registro acessível tem posição menor que o retorno, ou há aviso de limite"
+conclusao = "há teto de retorno exibido, na posição anotada"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "a navegação não chega à última página"
+conclusao = "não se distingue o teto; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD7"
+elementos = ["Teto de exportação por lote", "Exportação em RIS com todos os campos"]
+objetivo = "saber quantos registros a base exporta de uma vez em RIS com todos os campos"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
+passos = ["submeter a consulta e anotar o retorno", "abrir a exportação em RIS com todos os campos e anotar o número máximo de registros que ela aceita", "exportar uma vez e contar os registros do arquivo"]
+observar = ["número máximo oferecido pela exportação", "número de registros no arquivo", "campos presentes no arquivo (resumo, palavras-chave)"]
+evidencia = ["captura da tela da opção de exportação", "o arquivo exportado"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(ontology AND education)"
+onde = "busca avançada"
+
+[[sondagens.leituras]]
+resultado = "o arquivo traz o número de registros pedido, com resumo e palavras-chave, e a exportação anuncia o máximo"
+conclusao = "a exportação em RIS com todos os campos funciona, com o teto anotado"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "a exportação falha, o arquivo vem sem resumo ou o número não corresponde ao pedido"
+conclusao = "não se confirma a exportação; levar ao pesquisador"
+estado = "nao_verificado"

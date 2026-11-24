@@ -1,0 +1,523 @@
+# Fonte do procedimento de busca da BRAPCI (BD4). O procedimento
+# `docs/procedimentos_busca_brapci.md` é gerado daqui por
+# `python3 -m rsl procedimentos gerar brapci --gravar`. Esquema: `python3 -m rsl documentos gramatica`.
+#
+# Migração de 2026-11-23 (change `geracao-das-fichas-de-busca`): transcrição do procedimento
+# anterior; elementos novos das categorias mínimas entram como `nao_verificado`.
+
+ressalvas = [
+  "Alterar as consultas exige repetir as sondagens pertinentes da seção 1.",
+  "Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.",
+  "No relato, declarar que o corpus desta base é a EB4, com o custo da âncora 🟨 medido pela sonda EB5 e pela varredura da faceta 🟦 isolada.",
+]
+
+# ------------------------------------------------------------------ §1 sintaxe
+[[sintaxe]]
+elemento = "Aspas como frase"
+categoria = "frase"
+situacao = "nao_verificado"
+sondagem = "SD2"
+
+[[sintaxe]]
+elemento = "`AND`, `OR` e parênteses"
+categoria = "operadores"
+situacao = "nao_verificado"
+sondagem = "SD1"
+
+[[sintaxe]]
+elemento = "Truncamento `*`"
+categoria = "truncamento"
+situacao = "nao_verificado"
+sem_sondagem = "não se usa"
+
+[[sintaxe]]
+elemento = "Lematização"
+categoria = "lematizacao"
+situacao = "nao_verificado"
+sondagem = "SD3"
+nota = "flexões explícitas nas strings"
+
+[[sintaxe]]
+elemento = "Comprimento máximo da consulta"
+categoria = "limite_consulta"
+situacao = "nao_verificado"
+sondagem = "SD4"
+nota = "a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres"
+
+[[sintaxe]]
+elemento = "Proximidade"
+categoria = "proximidade"
+situacao = "nao_verificado"
+sem_sondagem = "nenhuma consulta usa proximidade"
+
+[[sintaxe]]
+elemento = "Exportação — formatos e lote"
+categoria = "exportacao"
+situacao = "nao_verificado"
+sondagem = "SD8"
+
+[[sintaxe]]
+elemento = "Local de pesquisa"
+categoria = "campos"
+situacao = "nao_verificado"
+sondagem = "SD5"
+
+[[sintaxe]]
+elemento = "Campos diferentes na mesma consulta"
+categoria = "campos"
+situacao = "nao_verificado"
+sondagem = "SD5"
+
+[[sintaxe]]
+elemento = "Filtros"
+categoria = "filtros"
+situacao = "nao_verificado"
+sondagem = "SD6"
+
+[[sintaxe]]
+elemento = "Teto de exibição"
+categoria = "limite_retorno"
+situacao = "nao_verificado"
+sondagem = "SD7"
+nota = "retorno de exatamente 1.000 será tratado como **corte** até medir"
+
+[[sintaxe]]
+elemento = "Parênteses para agrupamento"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD1"
+
+[[sintaxe]]
+elemento = "Teto de exportação por lote"
+categoria = "limite_exportacao"
+situacao = "nao_verificado"
+sondagem = "SD8"
+
+[[sintaxe]]
+elemento = "Vocabulário controlado de assunto"
+categoria = "vocabulario_controlado"
+situacao = "nao_verificado"
+sem_sondagem = "verificação documental: a BRAPCI não foi conferida quanto a vocabulário de assunto; nenhuma consulta depende dele"
+
+[[sintaxe]]
+elemento = "Idioma do título, do resumo e das palavras-chave indexados"
+categoria = "idioma_indexacao"
+situacao = "nao_verificado"
+sondagem = "SD9"
+
+# ------------------------------------------------------------------ §2 critérios
+[[criterios]]
+ids = ["CE1", "CE2"]
+rotulo = "Intervalo temporal — 2017 até a data de execução"
+destino = "interface"
+como = "ano inicial 2017 e final 2026, antes de executar; conferir o ano no retorno"
+
+[[criterios]]
+ids = ["CE3"]
+rotulo = "Idiomas — português, inglês e espanhol"
+destino = "dispensado"
+como = "strings em português, e em inglês na faceta 🟦; sem filtro de idioma"
+
+[[criterios]]
+ids = ["CE4", "CE5"]
+rotulo = "Tipo documental"
+destino = "nao"
+como = "filtro de tipo não usado"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — regra de inclusão"
+destino = "aproximado"
+como = "EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem"
+
+[[criterios]]
+ids = ["CE6"]
+rotulo = "Adequação temática — não pertinência e contra-escopo"
+destino = "nao"
+como = "exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID"
+
+[[criterios]]
+ids = ["CE7", "CE8"]
+rotulo = "Domínio de aplicação educacional"
+destino = "ancora"
+como = "faceta 🟨 (FCT2) nas cinco expressões"
+
+[[criterios]]
+ids = ["CE9"]
+rotulo = "Outros tipos documentais"
+destino = "nao"
+como = "2ª filtragem"
+
+[[criterios]]
+ids = ["CE10"]
+rotulo = "Fator de impacto — não aplicável"
+destino = "nao"
+como = "não se aplica: critério só documental"
+
+# ------------------------------------------------------------------ §3 cobertura
+[cobertura]
+camadas = "todas"
+plural = "explícito"
+teto = "nenhum"
+derivacoes = ["morfologia"]
+
+[cobertura.idiomas]
+FCT1 = ["pt", "en"]
+FCT2 = ["pt"]
+FCT3 = ["pt"]
+FCT4 = ["pt"]
+
+[composicao]
+aspas = "todo_termo"
+proximidade = "nenhum"
+disjuncao = "em_linha"
+
+[[composicao.facetas]]
+faceta = "FCT1"
+campo = ""
+forma = "envolve"
+cor = "🟦"
+
+[[composicao.facetas]]
+faceta = "FCT2"
+campo = ""
+forma = "envolve"
+cor = "🟨"
+
+[[composicao.facetas]]
+faceta = "FCT3"
+campo = ""
+forma = "envolve"
+cor = "🟥"
+
+[[composicao.facetas]]
+faceta = "FCT4"
+campo = ""
+forma = "envolve"
+cor = "🟧"
+
+# ------------------------------------------------------------------ §4 execução
+[execucao]
+forma = "unica"
+
+[[execucao.expressoes]]
+id = "EB1"
+titulo = "as quatro facetas"
+
+[[execucao.expressoes]]
+id = "EB2"
+titulo = "modelos e ontologias que representam práticas do processo de ensino-aprendizagem"
+estatuto = "derivada"
+
+[[execucao.expressoes]]
+id = "EB3"
+titulo = "artefatos que formalizam os fatores situacionais do domínio educacional"
+estatuto = "derivada"
+
+[[execucao.expressoes]]
+id = "EB4"
+titulo = "de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional"
+
+[[execucao.expressoes]]
+id = "EB5"
+titulo = "sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional"
+
+# ------------------------------------------------------------------ §5 sementes
+[[sementes]]
+id = "SE5"
+observacao = "**caso-teste de cobertura de campo**: o artefato está fora do título"
+
+# ------------------------------------------------------------------ roteiro de sondagens
+# Comum a todas: na busca da BRAPCI, no navegador do pesquisador, com Local de pesquisa =
+# Todos os campos e método ponderado, salvo quando a sondagem pedir; uma consulta por vez.
+
+[[sondagens]]
+id = "SD1"
+elementos = ["`AND`, `OR` e parênteses", "Parênteses para agrupamento"]
+objetivo = "saber se `AND`, `OR` e os parênteses se comportam como booleanos"
+pre_requisitos = ["busca da BRAPCI aberta no navegador do pesquisador, com Local de pesquisa = Todos os campos e método ponderado"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido", "abrir três registros do primeiro teste e conferir se trazem as duas palavras"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "ontologia"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "ontologia AND educação"
+onde = "caixa de busca"
+muda = "conjunção com `AND`"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "ontologia OR taxonomia"
+onde = "caixa de busca"
+muda = "disjunção com `OR`"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "(ontologia OR taxonomia) AND educação"
+onde = "caixa de busca"
+muda = "grupo entre parênteses"
+
+[[sondagens.leituras]]
+resultado = "0 < `AND` < controle ≤ `OR`, 0 < grupo ≤ `OR`, e os registros abertos trazem as duas palavras"
+conclusao = "os operadores e os parênteses se comportam como booleanos"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "qualquer outra relação, ou mensagem de erro"
+conclusao = "não se confirma o comportamento booleano; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD2"
+elementos = ["Aspas como frase"]
+objetivo = "saber se as aspas exigem a sequência exata das palavras"
+pre_requisitos = ["SD1 registrada com os operadores verificados"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno", "abrir três registros do controle que não estejam no teste e conferir se trazem as palavras separadas"]
+observar = ["retorno exibido de cada consulta"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "organização AND conhecimento"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "\"organização do conhecimento\""
+onde = "caixa de busca"
+muda = "a locução entre aspas"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle, e os registros só do controle trazem as palavras separadas"
+conclusao = "as aspas exigem a sequência exata"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, ou teste = 0"
+conclusao = "não se distingue o efeito das aspas; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD3"
+elementos = ["Lematização"]
+objetivo = "saber se a base casa singular e plural sem que a consulta os traga"
+pre_requisitos = ["SD2 registrada com as aspas verificadas"]
+depende_de = ["SD2"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno", "abrir três registros do teste e conferir se trazem só o plural"]
+observar = ["retorno exibido de cada consulta", "forma do termo nos registros abertos"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "\"ontologia\""
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "\"ontologias\""
+onde = "caixa de busca"
+muda = "o plural no lugar do singular"
+
+[[sondagens.leituras]]
+resultado = "teste ≠ controle, e os registros abertos trazem só o plural"
+conclusao = "a base não lematiza em português: as flexões explícitas são necessárias"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, ou registros com só o singular"
+conclusao = "pode haver lematização; levar ao pesquisador antes de declarar `pela lematização`"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD4"
+elementos = ["Comprimento máximo da consulta"]
+objetivo = "saber se a base aceita inteira a consulta longa"
+pre_requisitos = ["SD1 registrada com os operadores verificados", "o procedimento gerado, para copiar as consultas"]
+depende_de = ["SD1"]
+passos = ["submeter o bloco de EB5 da seção 4 e anotar o retorno", "partir a faceta 🟦 em duas metades, cada metade com a faceta 🟨, submeter as duas e anotar os retornos", "comparar o retorno de EB5 com a união das metades"]
+observar = ["retorno exibido de cada consulta", "se o texto mostrado depois da submissão é a consulta inteira"]
+evidencia = ["captura da tela de cada consulta, com o fim da consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "o bloco de EB5 no procedimento gerado"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "a primeira metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "a segunda metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado"
+onde = "caixa de busca"
+
+[[sondagens.leituras]]
+resultado = "EB5 ≥ cada metade, e o texto mostrado é a consulta inteira"
+conclusao = "a base aceita a consulta longa inteira"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "EB5 < alguma metade, texto cortado, ou mensagem de erro"
+conclusao = "a consulta longa não é aceita inteira; levar ao pesquisador (variante \"Partição\")"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD5"
+elementos = ["Local de pesquisa", "Campos diferentes na mesma consulta"]
+objetivo = "saber o que o seletor Local de pesquisa restringe e se uma consulta combina campos diferentes"
+pre_requisitos = ["SD1 registrada com os operadores verificados"]
+depende_de = ["SD1"]
+passos = ["submeter a mesma consulta com Local de pesquisa = Todos os campos e depois = Título, e anotar os retornos", "abrir três registros da busca em Título e conferir o termo no título", "conferir se a interface oferece mais de um campo na mesma consulta e anotar como"]
+observar = ["retorno exibido de cada consulta", "presença do termo no título", "opções do seletor"]
+evidencia = ["captura da tela de cada consulta e do seletor"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "\"ontologia\""
+onde = "caixa de busca, Local de pesquisa = Todos os campos"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "\"ontologia\""
+onde = "caixa de busca, Local de pesquisa = Título"
+muda = "o Local de pesquisa"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle, os registros abertos têm o termo no título, e a combinação de campos está anotada"
+conclusao = "o Local de pesquisa restringe; a combinação de campos fica descrita"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, teste = 0, ou registro sem o termo no título"
+conclusao = "não se distingue o efeito do seletor; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD6"
+elementos = ["Filtros"]
+objetivo = "saber se o filtro de ano recorta o retorno"
+pre_requisitos = ["SD1 registrada com os operadores verificados"]
+depende_de = ["SD1"]
+passos = ["submeter a consulta sem filtro e anotar o retorno", "aplicar o filtro de ano 2017 a 2026 antes de executar, submeter de novo e anotar o retorno", "conferir o ano de dez registros do teste"]
+observar = ["retorno exibido de cada consulta", "ano dos registros conferidos", "rótulo do filtro"]
+evidencia = ["captura da tela de cada consulta, com o filtro e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "\"ontologia\""
+onde = "caixa de busca, sem filtro de ano"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "\"ontologia\""
+onde = "caixa de busca, filtro de ano 2017 a 2026"
+muda = "o filtro de ano"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle, e os registros conferidos estão entre 2017 e 2026"
+conclusao = "o filtro de ano recorta o retorno"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle, ou registro conferido fora do intervalo"
+conclusao = "o filtro de ano não se confirma; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD7"
+elementos = ["Teto de exibição"]
+objetivo = "saber se a base corta o retorno em 1.000 ou no limite de resultados escolhido"
+pre_requisitos = ["busca da BRAPCI aberta no navegador do pesquisador"]
+passos = ["submeter a consulta com o limite de resultados em 1.000 e anotar o retorno", "repetir com o limite em 5.000 e anotar o retorno"]
+observar = ["retorno exibido de cada consulta", "aviso de limite, se houver"]
+evidencia = ["captura da tela de cada consulta, com o limite e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "educação"
+onde = "caixa de busca, limite de resultados 1.000"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "educação"
+onde = "caixa de busca, limite de resultados 5.000"
+muda = "o limite de resultados"
+
+[[sondagens.leituras]]
+resultado = "controle = 1.000 e teste > 1.000"
+conclusao = "o retorno é cortado no limite de resultados escolhido"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = teste < 1.000"
+conclusao = "a consulta não alcança o teto; repetir com consulta mais larga"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD8"
+elementos = ["Exportação — formatos e lote", "Teto de exportação por lote"]
+objetivo = "saber em que formatos e com quantos registros por vez a base exporta"
+pre_requisitos = ["busca da BRAPCI aberta no navegador do pesquisador"]
+passos = ["submeter a consulta e anotar o retorno", "abrir a exportação e anotar os formatos e o número máximo de registros", "exportar uma vez em RIS ou BibTeX e contar os registros do arquivo"]
+observar = ["formatos oferecidos", "número máximo de registros", "número de registros no arquivo"]
+evidencia = ["captura da tela da opção de exportação", "o arquivo exportado"]
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "\"ontologia\" AND \"educação\""
+onde = "caixa de busca"
+
+[[sondagens.leituras]]
+resultado = "o arquivo traz todos os registros do retorno, no formato escolhido"
+conclusao = "a exportação funciona no formato anotado, sem teto até esse tamanho"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "o arquivo traz menos registros que o retorno, no número que a exportação anuncia"
+conclusao = "há teto de exportação por lote, no número anotado"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "não há exportação, ou ela falha"
+conclusao = "sem exportação utilizável; registrar no Zotero e levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD9"
+elementos = ["Idioma do título, do resumo e das palavras-chave indexados"]
+objetivo = "saber se os registros trazem título, resumo e palavras-chave também em inglês, buscáveis pela faceta 🟦 em inglês"
+pre_requisitos = ["SD1 registrada com os operadores verificados"]
+depende_de = ["SD1"]
+passos = ["submeter cada consulta e anotar o retorno", "abrir três registros do teste e anotar em que idioma estão título, resumo e palavras-chave"]
+observar = ["retorno exibido de cada consulta", "idiomas dos campos nos registros abertos"]
+evidencia = ["captura da tela de cada consulta e de cada registro aberto"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "\"ontologia\""
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "\"ontology\""
+onde = "caixa de busca"
+muda = "o termo em inglês"
+
+[[sondagens.leituras]]
+resultado = "teste > 0, e os registros abertos trazem o resumo ou as palavras-chave em inglês"
+conclusao = "a base indexa campos em inglês; a faceta 🟦 em inglês alcança registros"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0, ou registros só em português"
+conclusao = "não se confirma a indexação em inglês; levar ao pesquisador"
+estado = "nao_verificado"

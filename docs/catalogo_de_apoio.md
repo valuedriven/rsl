@@ -2,7 +2,7 @@
 
 Gerado de `docs/procedimentos.md` por `python3 -m rsl catalogo gerar --gravar`. **Não editar à mão**: altera-se o guia e regenera-se. A conferência `python3 -m rsl catalogo gerar` reprova este arquivo quando ele está defasado.
 
-Passos: 63 do modelo + 1 de adaptação do projeto = 64.
+Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 
 ## Por passo
 
@@ -76,6 +76,7 @@ Passos: 63 do modelo + 1 de adaptação do projeto = 64.
 | Destacar as palavras significativas da questão de revisão | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Facetas da questão de revisão | `facetacao-e-termos-livres` | — | — |
 | Estabelecer o controle terminológico | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico e §Instrumentos para controle terminológico | `validacao-vocabulario-controlado`; `auditoria-das-strings` | `termos sondar`; `termos exportar`; `termos validar`; `termos importar` | — |
 | Gerar as strings de busca por faceta a partir do quadro terminológico | adaptação | `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico; a tabela §Strings de busca por faceta é saída de geração e não se edita à mão | `facetacao-e-termos-livres`; `auditoria-das-strings` | `strings gerar`; `strings gerar` | — |
+| Gerar o procedimento de busca de cada base a partir da fonte | adaptação | fonte do procedimento de cada base (`[documentos] procedimento_fonte`: o `procedimento.toml` e os fragmentos de prosa); arquivo de exceções de flexão (`[documentos] flexoes`); o procedimento de busca é saída de geração e não se edita à mão | `procedimento-de-busca-por-base`; `flexao-por-base`; `sondagens-de-sintaxe` | `procedimentos iniciar`; `procedimentos gerar`; `procedimentos gerar` | — |
 | Elaborar as expressões de busca | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Strings de busca por faceta, §Expressões de busca e §Notas explicativas; procedimento de busca de cada base §3 e §4 | `expressoes-de-busca`; `procedimento-de-busca-por-base` | — | — |
 | Definir os critérios de elegibilidade | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade; procedimento de busca de cada base §2 | `criterios-de-elegibilidade` | — | — |
 | Avaliar e definir as fontes de pesquisa | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Fontes de informação (§Bases de dados, §Acervos especiais, §Acervos pessoais); procedimento de busca de cada base §1 | `procedimento-de-busca-por-base` | — | — |
@@ -89,6 +90,7 @@ Passos: 63 do modelo + 1 de adaptação do projeto = 64.
 | --- | --- | --- | --- | --- | --- |
 | Realizar teste de aderência das expressões de busca | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais; arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2 | `conjunto-semente`; `teste-de-aderencia` | `aderencia planilhar`; `aderencia medir` | — |
 | Acessar as fontes de pesquisa na ordem predefinida | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados (ordem e via de acesso); procedimento de busca de cada base §1 (estado de verificação da sintaxe); plano §7 | `execucao-da-busca` | — | — |
+| Executar as sondagens de sintaxe pelo roteiro de cada base | adaptação | procedimento de busca de cada base §1, "Sondagens a executar", na ordem das dependências | `sondagens-de-sintaxe`; `execucao-da-busca` | `sondagens registrar` | — |
 | Executar expressões de busca | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas explicativas; procedimento de busca de cada base §4 (Como executar, Variantes previstas) e §6 | `execucao-da-busca` | `busca registrar` | — |
 | Avaliar a pertinência e a relevância dos resultados | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Notas explicativas; plano §6.2 | `conferencias-da-busca` | `busca derivar`; `conferencia fidelidade`; `conferencia sensibilidade` | — |
 | Exportar metadados dos resultados | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; exportações intactas no caminho `[dados] execucoes` (mapa no `README.md`) | `execucao-da-busca` | — | — |
@@ -150,19 +152,21 @@ Passos: 63 do modelo + 1 de adaptação do projeto = 64.
 | `conjunto-semente` | artefato | M3/E2 › Realizar teste de aderência das expressões de busca | `aderencia medir`; `aderencia planilhar` | citada |
 | `controle-de-duplicatas` | procedimento | M3/E3 › Controlar duplicatas e registrar no IO 2 | — | citada |
 | `criterios-de-elegibilidade` | procedimento | M3/E1 › Definir os critérios de elegibilidade; M3/E3 › Aplicar os critérios de elegibilidade e registrar no IO 2 | — | citada |
-| `execucao-da-busca` | procedimento | M3/E2 › Acessar as fontes de pesquisa na ordem predefinida; M3/E2 › Executar expressões de busca; M3/E2 › Exportar metadados dos resultados; M3/E2 › Criar alertas de busca nas bases | `busca registrar` | citada |
+| `execucao-da-busca` | procedimento | M3/E2 › Acessar as fontes de pesquisa na ordem predefinida; M3/E2 › Executar as sondagens de sintaxe pelo roteiro de cada base; M3/E2 › Executar expressões de busca; M3/E2 › Exportar metadados dos resultados; M3/E2 › Criar alertas de busca nas bases | `busca registrar`; `sondagens registrar` | citada |
 | `expressoes-de-busca` | procedimento | M3/E1 › Elaborar as expressões de busca | — | citada |
 | `facetacao-e-termos-livres` | procedimento | M3/E1 › Destacar as palavras significativas da questão de revisão; M3/E1 › Gerar as strings de busca por faceta a partir do quadro terminológico | `strings gerar` | citada |
 | `fichamento` | instrumento | M1/E3 › Preparar o formulário de fichamento (IO 4); M1/E3 › Preparar o glossário (IO 5); M3/E4 › Coletar dados com o formulário de fichamento (IO 4) | — | citada |
 | `filtragem-dos-estudos` | procedimento | M3/E3 › Analisar os títulos dos registros (1ª filtragem) e registrar no IO 2; M3/E3 › Analisar os resumos (2ª filtragem) e registrar no IO 2; M3/E3 › Analisar os textos completos (3ª filtragem) e registrar no IO 2; M3/E3 › Aplicar os critérios de elegibilidade e registrar no IO 2; M3/E3 › Confirmar a seleção por avaliação dupla independente e registrar no IO 2 | — | citada |
+| `flexao-por-base` | procedimento | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte | `procedimentos gerar`; `procedimentos iniciar` | citada |
 | `parecer-sobre-protocolo` | procedimento | M3/E1 › Validar o protocolo com pesquisador expert | — | citada |
-| `procedimento-de-busca-por-base` | artefato | M3/E1 › Elaborar as expressões de busca; M3/E1 › Avaliar e definir as fontes de pesquisa | — | citada |
+| `procedimento-de-busca-por-base` | artefato | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte; M3/E1 › Elaborar as expressões de busca; M3/E1 › Avaliar e definir as fontes de pesquisa | `procedimentos gerar`; `procedimentos iniciar` | citada |
 | `questao-e-objetivos` | procedimento | M1/E1 › Elaborar os objetivos da revisão; M2/E2 › Especificar a temática da revisão; M2/E2 › Delimitar a abordagem sobre a temática; M2/E2 › Identificar o objeto de estudo da revisão; M2/E2 › Especificar o objeto de estudo da revisão; M2/E2 › Redigir as questões de revisão e registrá-las no protocolo (IO 1) | — | citada |
 | `rastreabilidade` | transversal | M3/E1 › Montar o protocolo de revisão (IO 1) | `dados conferir`; `documentos conferir`; `projeto autoteste` | citada |
 | `registrar-decisao` | transversal | M1/E2 › Decidir sobre a execução da revisão; M3/E1 › Validar o protocolo com pesquisador expert | — | citada |
 | `relato-prisma` | transversal | M1/E3 › Preparar a tabela de composição do portfólio (IO 2); M1/E3 › Preparar o fluxograma da revisão (IO 3); M3/E2 › Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2); M4/E2 › Redigir o texto final; M4/E2 › Formatar as seções do relatório; M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | — | citada |
 | `revisao-geral-do-projeto` | transversal | M3/E1 › Montar o protocolo de revisão (IO 1) | `dados conferir`; `documentos conferir`; `projeto autoteste` | citada |
 | `sintese-e-lacunas` | procedimento | M4/E1 › Realizar a análise bibliométrica dos estudos; M4/E1 › Realizar a análise de conteúdo dos estudos; M4/E2 › Redigir o texto final | — | citada |
+| `sondagens-de-sintaxe` | procedimento | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte; M3/E2 › Executar as sondagens de sintaxe pelo roteiro de cada base | `procedimentos gerar`; `procedimentos iniciar`; `sondagens registrar` | citada |
 | `teste-de-aderencia` | procedimento | M3/E2 › Realizar teste de aderência das expressões de busca | `aderencia medir`; `aderencia planilhar` | citada |
 | `validacao-vocabulario-controlado` | procedimento | M3/E1 › Estabelecer o controle terminológico | `termos exportar`; `termos importar`; `termos sondar`; `termos validar` | citada |
 
@@ -181,10 +185,13 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 | `conferencia sensibilidade` | mede a perda da sonda para a executada e grava a amostra a classificar | M3/E2 › Avaliar a pertinência e a relevância dos resultados | `conferencias-da-busca` | passo |
 | `configuracao mostrar` | resume o que foi lido e os parâmetros em uso, com a origem | — | — | transversal |
 | `dados conferir` | confere os arquivos alimentados contra o protocolo | M3/E1 › Montar o protocolo de revisão (IO 1) | `rastreabilidade`; `revisao-geral-do-projeto` | passo |
-| `documentos conferir` | lê o protocolo e os procedimentos de busca e relata problemas de coerência | M3/E1 › Montar o protocolo de revisão (IO 1) | `rastreabilidade`; `revisao-geral-do-projeto` | passo |
-| `documentos gramatica` | exibe o contrato de forma que o leitor exige do protocolo e dos procedimentos de busca | M1/E3 › Preparar o protocolo de revisão (IO 1) | — | passo |
+| `documentos conferir` | lê o protocolo e a fonte de cada procedimento de busca, confere o procedimento gravado contra a geração e relata problemas de coerência | M3/E1 › Montar o protocolo de revisão (IO 1) | `rastreabilidade`; `revisao-geral-do-projeto` | passo |
+| `documentos gramatica` | exibe o contrato de forma que o leitor exige do protocolo, da fonte dos procedimentos de busca, do arquivo de sementes, do arquivo de exceções de flexão e do resultado de sondagem | M1/E3 › Preparar o protocolo de revisão (IO 1) | — | passo |
+| `procedimentos gerar` | gera o procedimento de busca da base SIGLA (sem sigla, de todas as bases da tabela do protocolo) e exibe a diferença para o gravado, por seção, com as formas de número e a sua origem; sem --gravar, nada é gravado. O procedimento é saída: edita-se a fonte (`[documentos] procedimento_fonte`), nunca o procedimento | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte | `flexao-por-base`; `procedimento-de-busca-por-base`; `sondagens-de-sintaxe` | passo |
+| `procedimentos iniciar` | cria a fonte do procedimento de busca de uma base já registrada no protocolo, com o derivável preenchido e os campos não deriváveis marcados PENDENTE; não sobrescreve fonte existente | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte | `flexao-por-base`; `procedimento-de-busca-por-base`; `sondagens-de-sintaxe` | passo |
 | `projeto autoteste` | injeta defeitos em cópias e exige que cada conferência os reprove com o código esperado | M3/E1 › Montar o protocolo de revisão (IO 1) | `rastreabilidade`; `revisao-geral-do-projeto` | passo |
 | `projeto pendencias` | relata as pendências dos artefatos, sem escrever | — | — | transversal |
+| `sondagens registrar` | grava no registro de execução o resultado da sondagem SDn da base SIGLA e exibe a citação e a mudança a aplicar na fonte; não altera a fonte | M3/E2 › Executar as sondagens de sintaxe pelo roteiro de cada base | `execucao-da-busca`; `sondagens-de-sintaxe` | passo |
 | `strings gerar` | calcula cada STR a partir do quadro terminológico e exibe a diferença para a tabela do protocolo; sem --gravar, nada é gravado | M3/E1 › Gerar as strings de busca por faceta a partir do quadro terminológico | `auditoria-das-strings`; `facetacao-e-termos-livres` | passo |
 | `termos exportar` | reconstrói a planilha de validação a partir do protocolo, sem rede | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
 | `termos importar` | reconcilia a planilha com o protocolo, preservando as decisões | M3/E1 › Estabelecer o controle terminológico | `auditoria-das-strings`; `validacao-vocabulario-controlado` | passo |
@@ -202,8 +209,8 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 | M1 — Planejamento (exequibilidade da revisão) | E5 — Elaboração do cronograma | 3 | 0 | 0 | 3 | 0 |
 | M2 — Questão de revisão (direcionamento) | E1 — Identificação de tópicos preliminares | 3 | 1 | 0 | 0 | 2 |
 | M2 — Questão de revisão (direcionamento) | E2 — Delimitação do assunto | 5 | 5 | 0 | 0 | 0 |
-| M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E1 — Elaboração das estratégias de pesquisa | 9 | 8 | 3 | 1 | 0 |
-| M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E2 — Localização dos estudos | 7 | 7 | 3 | 0 | 0 |
+| M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E1 — Elaboração das estratégias de pesquisa | 10 | 9 | 4 | 1 | 0 |
+| M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E2 — Localização dos estudos | 8 | 8 | 4 | 0 | 0 |
 | M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E3 — Seleção dos estudos | 8 | 7 | 0 | 0 | 1 |
 | M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E4 — Extração de dados | 3 | 1 | 0 | 2 | 0 |
 | M4 — Discussão e redação | E1 — Interpretação do conhecimento | 2 | 2 | 0 | 0 | 0 |

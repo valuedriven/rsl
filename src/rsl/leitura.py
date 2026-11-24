@@ -579,7 +579,6 @@ def ancoras(pal, params):
 # ------------------------------------------------------------------------- fontes
 def bases_de_dados(ctx, t, locais):
     """Bases da tabela de bases: identificador, sigla, nome e procedimento de busca."""
-    from .config import RAIZ                                        # noqa: PLC0415
     T = G.T_BASES
     c_id, c_sigla, c_nome = T.colunas
     bloco, tabela = tabela_da_secao(t, T)
@@ -602,13 +601,12 @@ def bases_de_dados(ctx, t, locais):
                                        f"chave (letras, dígitos, `_` ou `-`)")
         if any(b["sigla"] == sigla for b in bases):
             raise ProtocoloInvalido(T, f"sigla repetida {sigla!r}")
+        # O procedimento gravado é saída e a fonte se lê por base (`fonte.py`): a falta de
+        # uma ou de outra reprova só aquela base, não a leitura do protocolo.
         ficha_ = ctx.config.ficha(sigla)
-        if not (RAIZ / ficha_).exists():
-            raise ProtocoloInvalido(T, f"linha {ident}: procedimento de busca da sigla {sigla!r} "
-                                       f"não existe — procurado em {ficha_} "
-                                       f"(`documentos.procedimento` do {ctx.config.nome})")
         ident = f"{G.I_BD.prefixo}{int(m.group(1))}"
-        bases.append({"id": ident, "sigla": sigla, "nome": valores[c_nome], "ficha": ficha_})
+        bases.append({"id": ident, "sigla": sigla, "nome": valores[c_nome], "ficha": ficha_,
+                      "fonte": ctx.config.fonte(sigla)})
         locais["base"][ident] = linha["_linha"]
     numeracao([b["id"] for b in bases], G.I_BD, "bases")
     return bases

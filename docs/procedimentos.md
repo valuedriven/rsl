@@ -1,9 +1,10 @@
 # Guia de procedimentos — módulos, etapas e passos
 
 O que se faz, em que ordem e com que apoio. A revisão segue o **RS Banyan** (plano,
-`docs/01_plano.md` §1.4): quatro módulos, catorze etapas e 63 passos do modelo, mais um
-passo de adaptação do projeto — a geração das STRs —, totalizando 64. O passo de adaptação
-leva a marca `(adaptação do projeto)`. Os títulos de módulo e de etapa são os do plano §1.4;
+`docs/01_plano.md` §1.4): quatro módulos, catorze etapas e 63 passos do modelo, mais três
+passos de adaptação do projeto — a geração das STRs, a geração dos procedimentos de busca e
+as sondagens de sintaxe —, totalizando 66. Os passos de adaptação levam a marca `(adaptação
+do projeto)`. Os títulos de módulo e de etapa são os do plano §1.4;
 os passos do modelo seguem a ordem da estrutura
 fornecida pelo pesquisador, atribuída a Borges (2020). **Essa estrutura de passos não foi
 conferida na tese.**
@@ -165,8 +166,22 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
     acrescentar e a retirar e os subsumidos; não grava
   - Script: `python3 -m rsl strings gerar --gravar` — regrava só as células de string;
     recusado se o quadro tiver termo em mais de uma faceta
-  - Ordem: quadro → `strings gerar` → `strings gerar --gravar` → procedimentos de busca → `documentos conferir`
+  - Ordem: quadro → `strings gerar` → `strings gerar --gravar` → fonte do procedimento de
+    cada base → `procedimentos gerar` → `procedimentos gerar --gravar` → `documentos conferir`
   - Skill: `facetacao-e-termos-livres`; `auditoria-das-strings`
+- Gerar o procedimento de busca de cada base a partir da fonte (adaptação do projeto)
+  - Fonte: fonte do procedimento de cada base (`[documentos] procedimento_fonte`: o
+    `procedimento.toml` e os fragmentos de prosa); arquivo de exceções de flexão
+    (`[documentos] flexoes`); o procedimento de busca é saída de geração e não se edita à mão
+  - Script: `python3 -m rsl procedimentos iniciar SIGLA` — base nova: cria a fonte da base
+    já registrada no protocolo, com o derivável preenchido e o resto marcado `PENDENTE`;
+    não sobrescreve fonte existente
+  - Script: `python3 -m rsl procedimentos gerar [SIGLA]` — ensaio: exibe, por seção, a
+    diferença para o gravado e as formas de número acrescentadas, com a origem; não grava
+  - Script: `python3 -m rsl procedimentos gerar [SIGLA] --gravar` — substitui o
+    procedimento inteiro, de forma atômica; recusado com leitura reprovada ou flexão
+    indecidível
+  - Skill: `procedimento-de-busca-por-base`; `flexao-por-base`; `sondagens-de-sintaxe`
 - Elaborar as expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Strings de busca por faceta,
     §Expressões de busca e §Notas explicativas; procedimento de busca de cada base §3 e §4
@@ -206,6 +221,17 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados (ordem e via de
     acesso); procedimento de busca de cada base §1 (estado de verificação da sintaxe); plano §7
   - Skill: `execucao-da-busca`
+- Executar as sondagens de sintaxe pelo roteiro de cada base (adaptação do projeto)
+  - Fonte: procedimento de busca de cada base §1, "Sondagens a executar", na ordem das
+    dependências
+  - Script: `python3 -m rsl sondagens registrar SIGLA SDn --retorno RETORNO … --leitura
+    LEITURA --data-hora DATA_HORA --evidencia EVIDENCIA [--submetido K TEXTO] [--observacao
+    OBSERVACAO]` — `SDn`: sondagem do roteiro da base; `--retorno`: uma vez
+    por consulta declarada, na ordem; `--leitura`: número da leitura observada;
+    `--data-hora`: ISO 8601, obrigatória, sem padrão; `--evidencia`: arquivo existente,
+    obrigatório. Grava em `[dados] registro` e exibe a citação e a mudança a aplicar na
+    fonte, que não altera; aplicá-la na fonte e regenerar o procedimento
+  - Skill: `sondagens-de-sintaxe`; `execucao-da-busca`
 - Executar expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas
     explicativas; procedimento de busca de cada base §4 (Como executar, Variantes previstas) e §6
@@ -393,7 +419,7 @@ de naturezas diferentes. O papel é declarado aqui, não inferido do nome.
 
 | Papel | Skills |
 | --- | --- |
-| procedimento | `questao-e-objetivos`; `facetacao-e-termos-livres`; `validacao-vocabulario-controlado`; `auditoria-das-strings`; `expressoes-de-busca`; `criterios-de-elegibilidade`; `parecer-sobre-protocolo`; `teste-de-aderencia`; `execucao-da-busca`; `conferencias-da-busca`; `filtragem-dos-estudos`; `controle-de-duplicatas`; `sintese-e-lacunas` |
+| procedimento | `questao-e-objetivos`; `facetacao-e-termos-livres`; `validacao-vocabulario-controlado`; `auditoria-das-strings`; `expressoes-de-busca`; `criterios-de-elegibilidade`; `parecer-sobre-protocolo`; `teste-de-aderencia`; `execucao-da-busca`; `sondagens-de-sintaxe`; `flexao-por-base`; `conferencias-da-busca`; `filtragem-dos-estudos`; `controle-de-duplicatas`; `sintese-e-lacunas` |
 | instrumento | `fichamento` |
 | artefato | `conjunto-semente`; `procedimento-de-busca-por-base` |
 | transversal | `registrar-decisao`; `rastreabilidade`; `revisao-geral-do-projeto`; `conferir-referencia`; `relato-prisma` |

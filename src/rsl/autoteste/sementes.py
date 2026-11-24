@@ -23,6 +23,7 @@ from .. import gramatica as G
 from ..config import Configuracao
 from ..conferencia import conferir
 from ..contexto import Contexto
+from ..procedimentos import gera_base
 from ..dados import SUBPASTA_REFERENCIAS, pendencias_sementes, problemas_evidencia
 from ..saida import Saida
 from ..sementes import cmd_planilha, manuais
@@ -142,8 +143,17 @@ def _aprovam_com_pendencia(ctx, g, itens, com, d):
     nao_ancoras = [f["id"] for f in d["facetas"] if f["id"] not in ancoras]
     k_val = next((k for k, x in enumerate(itens) if x[c_papel] == G.PAPEL_VALIDACAO), None)
 
+    def regenerado(mutante):
+        """Contexto com a cópia do arquivo de sementes e os procedimentos regenerados em
+        memória: a seção 5 é gerada do arquivo de sementes, e a cópia só se aprova depois
+        de `procedimentos gerar`."""
+        cx = ctx.com_sementes(mutante)
+        dx = cx.protocolo()
+        return cx.com_fichas({b["sigla"]: gera_base(cx, dx, b["sigla"])[2]
+                              for b in dx["bases"]})
+
     def aprova_e_relata(nome, mutante, ident, trecho, relata=True):
-        cod, msgs = resultado(lambda: conferir(ctx.com_sementes(mutante)))
+        cod, msgs = resultado(lambda: conferir(regenerado(mutante)))
         if cod != Saida.OK:
             g.falha(f"{nome}: a cópia devia ser aprovada — {cod.name} {msgs[:1]}")
             return
