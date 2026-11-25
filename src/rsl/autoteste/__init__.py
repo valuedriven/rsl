@@ -17,7 +17,7 @@ Sem os arquivos alimentados, os casos que dependem deles não rodam: o resultado
 nunca OK.
 """
 
-from ..conferencia import conferir
+from ..coerencia import conferir
 from ..erros import ErroRSL
 from ..saida import Saida
 
@@ -92,7 +92,7 @@ def conferir_texto(ctx):
 
 
 def grupos():
-    from . import (busca, catalogo, configuracao, dados, fichas, geracao, gramatica,
+    from . import (busca, catalogo, configuracao, dados, derivado, geracao, gramatica,
                    nomes_antigos, procedimentos, protocolo, sementes, validacao)
     return [
         ("defeitos injetados no protocolo", protocolo.mutacoes),
@@ -105,7 +105,7 @@ def grupos():
         ("classificação do controle terminológico", validacao.classificacao),
         ("conferências dos arquivos alimentados", dados.casos),
         ("geração das strings", geracao.casos),
-        ("cobertura por base, sobre a fonte", fichas.casos),
+        ("cobertura por base, sobre a fonte", derivado.casos),
         ("fonte do procedimento de busca", procedimentos.fonte),
         ("geração dos procedimentos", procedimentos.geracao),
         ("sondagens por base", procedimentos.sondagens),

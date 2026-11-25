@@ -418,7 +418,7 @@ def classificacao(ctx, g):
     """Domínio de `decisao_ReT`, regra da linha esperada e conferência cruzada CT × planilha,
     sobre planilhas em memória e cópias do protocolo. Tudo gerado da estrutura lida: o
     primeiro termo livre da primeira faceta, os instrumentos planejados para ele."""
-    from ..conferencia import conferir                              # noqa: PLC0415
+    from ..coerencia import conferir                              # noqa: PLC0415
     from ..saida import Saida                                       # noqa: PLC0415
     from ..termos.decisao import (esperada, fora_do_dominio, le_planilha,  # noqa: PLC0415
                                   linhas_esperadas)
@@ -478,17 +478,30 @@ def classificacao(ctx, g):
     g.testa("planilha sem as colunas exigidas é ilegível (DADOS)", cod == Saida.DADOS,
             f"{cod.name} {msgs[:1]}")
 
-    # Conferência cruzada: cópias do protocolo e planilhas em memória.
+    # Conferência cruzada: cópias do protocolo e planilhas em memória. O termo movido junta-se
+    # aos descritores que a célula já tiver: substituí-los apagaria do quadro um termo que a
+    # STR ainda traz, e a reprovação deixaria de ser só a da ordem.
     q = L["quadro"][fid]
     k = coluna(t, q["cabecalho"], idioma)
     movido = edita_celula(edita_celula(t, q[livre], k,
                                        lambda c: ", ".join(x.strip() for x in c.split(",")
                                                            if x.strip() != termo)),
-                          q[desc], k, lambda c: termo)
+                          q[desc], k,
+                          lambda c: ", ".join([x for x in (c.strip(), termo) if x]))
+
+    # A planilha de prova parte da classificação corrente do protocolo: sem isso, todo termo
+    # já classificado fora de "Termo livre" reprovaria em qualquer caso com planilha, e o
+    # caso dependeria de o quadro corrente não ter descritores.
+    valor_de = {v: k for k, v in G.DECISAO_RET.items()}
+    atual = [{"faceta": ff["id"], "idioma": i, "termo": x,
+              "instrumento": instrumentos_do_termo(d, ff["id"], i)[0]["sigla"],
+              "decisao_ReT": valor_de[c]}
+             for ff in d["tabelas"] for i in d["idiomas"] for c in (desc, rel)
+             for x in ff["linhas"][i][c] if instrumentos_do_termo(d, ff["id"], i)]
 
     def com(texto, plan):
-        return lambda m: conferir(ctx.com_texto(m).com_validacao(texto if plan is None
-                                                                   else _planilha(plan)))
+        return lambda m: conferir(ctx.com_texto(m).com_validacao(
+            texto if plan is None else _planilha(atual + plan)))
     decide = [{"faceta": fid, "idioma": idioma, "termo": termo, "instrumento": a,
                "decisao_ReT": "descritor"}]
     R = Saida.REPROVADO

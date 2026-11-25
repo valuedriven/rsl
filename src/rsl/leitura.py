@@ -688,10 +688,10 @@ def bases_de_dados(ctx, t, locais):
             raise ProtocoloInvalido(T, f"sigla repetida {sigla!r}")
         # O procedimento gravado é saída e a fonte se lê por base (`fonte.py`): a falta de
         # uma ou de outra reprova só aquela base, não a leitura do protocolo.
-        ficha_ = ctx.config.ficha(sigla)
+        procedimento = ctx.config.procedimento(sigla)
         ident = f"{G.I_BD.prefixo}{int(m.group(1))}"
-        bases.append({"id": ident, "sigla": sigla, "nome": valores[c_nome], "ficha": ficha_,
-                      "fonte": ctx.config.fonte(sigla)})
+        bases.append({"id": ident, "sigla": sigla, "nome": valores[c_nome],
+                      "procedimento": procedimento, "fonte": ctx.config.fonte(sigla)})
         locais["base"][ident] = linha["_linha"]
     numeracao([b["id"] for b in bases], G.I_BD, "bases")
     return bases
@@ -940,7 +940,7 @@ def analisa(ctx):
     crit = criterios(t, locais)
     fts = fontes(ctx, t, locais)
     siglas = [b["sigla"] for b in fts["bases"]]
-    _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['ficha']}"
+    _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['procedimento']}"
                                   for b in fts["bases"]])
     est = sementes(ctx.texto_sementes, siglas, ids_facetas, locais)
     params["sementes"] = {"valor": [f"{e['id']} ({e['papel']}): {', '.join(e['bases'])}"

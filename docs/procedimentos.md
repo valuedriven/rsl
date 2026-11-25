@@ -1,9 +1,9 @@
 # Guia de procedimentos — módulos, etapas e passos
 
 O que se faz, em que ordem e com que apoio. A revisão segue o **RS Banyan** (plano,
-`docs/01_plano.md` §1.4): quatro módulos, catorze etapas e 63 passos do modelo, mais três
-passos de adaptação do projeto — a geração das STRs, a geração dos procedimentos de busca e
-as sondagens de sintaxe —, totalizando 66. Os passos de adaptação levam a marca `(adaptação
+`docs/01_plano.md` §1.4): quatro módulos, catorze etapas e 63 passos do modelo, mais quatro
+passos de adaptação do projeto — a geração das STRs, a definição do conjunto-semente, a
+geração dos procedimentos de busca e as sondagens de sintaxe —, totalizando 67. Os passos de adaptação levam a marca `(adaptação
 do projeto)`. Os títulos de módulo e de etapa são os do plano §1.4;
 os passos do modelo seguem a ordem da estrutura
 fornecida pelo pesquisador, atribuída a Borges (2020). **Essa estrutura de passos não foi
@@ -14,9 +14,13 @@ projeto. O que é específico do projeto não está aqui: está na fonte indicad
 Sob cada passo, quando houver:
 
 - **Fonte** — documento e seção onde a decisão está; prevalece sobre este guia.
-- **Script** — sinopse do comando, transcrita de `python3 -m rsl <subcomando> -h`, que é a
-  fonte dos parâmetros. Como executar, o mapa dos caminhos e os códigos de saída: `README.md`.
-- **Skill** — competência em `.agents/skills/` que orienta a execução.
+- **Script principal** e **Script** — sinopse do comando, transcrita de
+  `python3 -m rsl <subcomando> -h`, que é a fonte dos parâmetros. Como executar, o mapa dos
+  caminhos e os códigos de saída: `README.md`. O comando marcado principal é o que executa a
+  atividade do passo; sem a marca, apoia um passo cuja atividade é de outro.
+- **Skill principal** e **Skill** — competência em `.agents/skills/` que orienta a execução. A
+  skill principal é a que conduz a atividade do passo, no máximo uma por passo; as demais
+  são de apoio. O papel de cada skill está em [Papel das skills](#papel-das-skills).
 - **Apoio** — só no passo sem skill nem script: `manual — <razão>` quando a atividade é do
   pesquisador, de gestão ou está fora do repositório; `lacuna — <razão>` quando falta uma
   skill ou um script e a decisão está pendente.
@@ -42,7 +46,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Apoio: manual — decisão do pesquisador com a orientação
 - Elaborar os objetivos da revisão
   - Fonte: plano §1.2 e §1.3;
-  - Skill: `questao-e-objetivos`
+  - Skill: `redigir-questoes-de-revisao`
 
 ### E2 — Avaliação da necessidade
 
@@ -61,20 +65,22 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 
 - Preparar o protocolo de revisão (IO 1)
   - Fonte: `docs/02_protocolo_informacoes_gerais.md`; `docs/03_protocolo_estrategia_pesquisa.md`
-  - Script: `python3 -m rsl documentos gramatica` (forma que o leitor exige); conferências na seção
+  - Script principal: `python3 -m rsl documentos gramatica` — o contrato de forma que o leitor
+    exige; consultar ao redigir ou reestruturar o protocolo, um procedimento de busca ou o
+    arquivo de sementes. Conferências na seção
     [Conferências transversais](#conferências-transversais)
 - Preparar a tabela de composição do portfólio (IO 2)
   - Fonte: plano §2.3
-  - Skill: `relato-prisma`
+  - Skill: `redigir-relatorio`
 - Preparar o fluxograma da revisão (IO 3)
   - Fonte: plano §1.4 (método de apresentação) e §6.3
-  - Skill: `relato-prisma`
+  - Skill: `redigir-relatorio`
 - Preparar o formulário de fichamento (IO 4)
   - Fonte: protocolo §Instrumentos; `docs/parametros_complementares.md`
-  - Skill: `fichamento`
+  - Skill: `coletar-dados-dos-estudos`
 - Preparar o glossário (IO 5)
   - Fonte: plano §2.3
-  - Skill: `fichamento`
+  - Skill: `coletar-dados-dos-estudos`
 - Definir a ferramenta de gestão de dados bibliográficos
   - Fonte: protocolo §Ferramentas; plano §4.1
   - Apoio: manual — decisão de gestão do pesquisador
@@ -126,19 +132,19 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 
 - Especificar a temática da revisão
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Especificação da temática da revisão
-  - Skill: `questao-e-objetivos`
+  - Skill: `redigir-questoes-de-revisao`
 - Delimitar a abordagem sobre a temática
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Delimitação da abordagem sobre a temática
-  - Skill: `questao-e-objetivos`
+  - Skill: `redigir-questoes-de-revisao`
 - Identificar o objeto de estudo da revisão
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Objeto de estudo da revisão
-  - Skill: `questao-e-objetivos`
+  - Skill: `redigir-questoes-de-revisao`
 - Especificar o objeto de estudo da revisão
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Objeto da revisão
-  - Skill: `questao-e-objetivos`
+  - Skill: `redigir-questoes-de-revisao`
 - Redigir as questões de revisão e registrá-las no protocolo (IO 1)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Questão de revisão
-  - Skill: `questao-e-objetivos`
+  - Skill principal: `redigir-questoes-de-revisao`
 
 ---
 
@@ -148,54 +154,47 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 
 - Destacar as palavras significativas da questão de revisão
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Facetas da questão de revisão
-  - Skill: `facetacao-e-termos-livres`
+  - Skill principal: `destacar-termos-da-questao`
 - Estabelecer o controle terminológico
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico e
     §Instrumentos para controle terminológico
-  - Script: `python3 -m rsl termos sondar` — consulta de prova em cada endereço resolvido dos
-    instrumentos `Automático`, um por idioma; não grava. Executar antes de validar.
-  - Script: `python3 -m rsl termos exportar` — reconstrói a planilha de validação a partir
-    do protocolo, sem rede, reabrindo as linhas que deixaram de valer
-  - Script: `python3 -m rsl termos validar [--faceta FACETA] SIGLA` — `SIGLA`: instrumento
-    `Automático` da tabela de instrumentos, ou `todos`; `--faceta`: número n de `FCTn`
-  - Script: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
+  - Script principal: `python3 -m rsl termos sondar` — consulta de prova em cada endereço
+    resolvido dos instrumentos `Automático`, um por idioma; não grava. Executar antes de
+    validar.
+  - Script principal: `python3 -m rsl termos exportar` — reconstrói a planilha de validação a
+    partir do protocolo, sem rede, reabrindo as linhas que deixaram de valer
+  - Script principal: `python3 -m rsl termos validar [--faceta FACETA] SIGLA` — `SIGLA`:
+    instrumento `Automático` da tabela de instrumentos, ou `todos`; `--faceta`: número n de
+    `FCTn`
+  - Script principal: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
     preservando as decisões
-  - Skill: `validacao-vocabulario-controlado`; `auditoria-das-strings`
+  - Skill principal: `estabelecer-controle-terminologico`
+  - Skill: `gerar-strings-de-busca`
 - Gerar as strings de busca por faceta a partir do quadro terminológico (adaptação do projeto)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico; a tabela
     §Strings de busca por faceta é saída de geração e não se edita à mão
-  - Script: `python3 -m rsl strings gerar` — ensaio: exibe, por faceta, os termos a
+  - Script principal: `python3 -m rsl strings gerar` — ensaio: exibe, por faceta, os termos a
     acrescentar e a retirar e os subsumidos; não grava
-  - Script: `python3 -m rsl strings gerar --gravar` — regrava só as células de string;
+  - Script principal: `python3 -m rsl strings gerar --gravar` — regrava só as células de string;
     recusado se o quadro tiver termo em mais de uma faceta
-  - Ordem: quadro → `strings gerar` → `strings gerar --gravar` → fonte do procedimento de
-    cada base → `procedimentos gerar` → `procedimentos gerar --gravar` → `documentos conferir`
-  - Skill: `facetacao-e-termos-livres`; `auditoria-das-strings`
-- Gerar o procedimento de busca de cada base a partir da fonte (adaptação do projeto)
-  - Fonte: fonte do procedimento de cada base (`[documentos] procedimento_fonte`: o
-    `procedimento.toml` e os fragmentos de prosa); arquivo de exceções de flexão
-    (`[documentos] flexoes`); o procedimento de busca é saída de geração e não se edita à mão
-  - Script: `python3 -m rsl procedimentos iniciar SIGLA` — base nova: cria a fonte da base
-    já registrada no protocolo, com o derivável preenchido e o resto marcado `PENDENTE`;
-    não sobrescreve fonte existente
-  - Script: `python3 -m rsl procedimentos gerar [SIGLA]` — ensaio: exibe, por seção, a
-    diferença para o gravado e as formas de número acrescentadas, com a origem; não grava
-  - Script: `python3 -m rsl procedimentos gerar [SIGLA] --gravar` — substitui o
-    procedimento inteiro, de forma atômica; recusado com leitura reprovada ou flexão
-    indecidível
-  - Skill: `procedimento-de-busca-por-base`; `flexao-por-base`; `sondagens-de-sintaxe`
+  - Ordem: quadro → `strings gerar` → `strings gerar --gravar`
+  - Skill principal: `gerar-strings-de-busca`
+  - Skill: `destacar-termos-da-questao`
 - Elaborar as expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Strings de busca por faceta,
-    §Expressões de busca e §Notas explicativas; procedimento de busca de cada base §3 e §4
-  - Skill: `expressoes-de-busca`; `procedimento-de-busca-por-base`
+    §Expressões de busca e §Notas explicativas
+  - Skill principal: `elaborar-expressoes-de-busca`
 - Definir os critérios de elegibilidade
-  - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade;
-    procedimento de busca de cada base §2
-  - Skill: `criterios-de-elegibilidade`
+  - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade
+  - Skill principal: `definir-criterios-de-elegibilidade`
 - Avaliar e definir as fontes de pesquisa
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Fontes de informação (§Bases de
-    dados, §Acervos especiais, §Acervos pessoais); procedimento de busca de cada base §1
-  - Skill: `procedimento-de-busca-por-base`
+    dados, §Acervos especiais, §Acervos pessoais)
+  - Apoio: manual — escolha das fontes pelo pesquisador, registrada no protocolo
+- Definir conjunto semente (adaptação do projeto)
+  - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais;
+    arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2
+  - Skill principal: `definir-conjunto-semente`
 - Definir a ferramenta de gestão bibliográfica
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Ferramentas e §Procedimentos
   - Apoio: manual — decisão de gestão do pesquisador
@@ -204,65 +203,86 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
     LOG_IA como apêndice, plano §8.3
   - Script: `python3 -m rsl documentos conferir`; `python3 -m rsl dados conferir`;
     `python3 -m rsl projeto autoteste` (ver [Conferências transversais](#conferências-transversais))
-  - Skill: `rastreabilidade`; `revisao-geral-do-projeto`
+  - Skill: `revisar-projeto`
+- Gerar o procedimento de busca de cada base a partir da fonte (adaptação do projeto)
+  - Fonte: fonte do procedimento de cada base (`[documentos] procedimento_fonte`: o
+    `procedimento.toml` e os fragmentos de prosa); arquivo de exceções de flexão
+    (`[documentos] flexoes`); o procedimento de busca é saída de geração e não se edita à mão
+  - Script principal: `python3 -m rsl procedimentos iniciar SIGLA` — base nova: cria a fonte
+    da base já registrada no protocolo, com o derivável preenchido e o resto marcado
+    `PENDENTE`; não sobrescreve fonte existente
+  - Script principal: `python3 -m rsl procedimentos gerar [SIGLA]` — ensaio: exibe, por seção, a
+    diferença para o gravado e as formas de número acrescentadas, com a origem; não grava
+  - Script principal: `python3 -m rsl procedimentos gerar [SIGLA] --gravar` — substitui o
+    procedimento inteiro, de forma atômica; recusado com leitura reprovada ou flexão
+    indecidível
+  - Ordem: fonte do procedimento de cada base → `procedimentos gerar` →
+    `procedimentos gerar --gravar` → `documentos conferir`
+  - Skill principal: `gerar-procedimento-de-busca`
+  - Skill: `declarar-flexao-por-base`; `executar-sondagens-de-sintaxe`
 - Validar o protocolo com pesquisador expert
   - Fonte: plano §6.1 (validação do protocolo por revisor expert)
-  - Skill: `parecer-sobre-protocolo`; `registrar-decisao`
+  - Skill principal: `validar-protocolo`
+  - Skill: `registrar-decisao`
 
 ### E2 — Localização dos estudos
 
 - Realizar teste de aderência das expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais;
     arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2
-  - Script: `python3 -m rsl aderencia planilhar` — grava a planilha do teste de aderência e
-    imprime o ensaio seco
-  - Script: `python3 -m rsl aderencia medir` — teste de aderência ao conjunto-semente, por
-    papel; lê as execuções registradas
-  - Skill: `conjunto-semente`; `teste-de-aderencia`
+  - Script principal: `python3 -m rsl aderencia planilhar` — grava a planilha do teste de
+    aderência e imprime o ensaio seco
+  - Script principal: `python3 -m rsl aderencia medir` — teste de aderência ao
+    conjunto-semente, por papel; lê as execuções registradas
+  - Skill principal: `testar-aderencia-das-expressoes`
+  - Skill: `definir-conjunto-semente`
 - Acessar as fontes de pesquisa na ordem predefinida
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados (ordem e via de
     acesso); procedimento de busca de cada base §1 (estado de verificação da sintaxe); plano §7
-  - Skill: `execucao-da-busca`
+  - Skill: `executar-expressoes-de-busca`
 - Executar as sondagens de sintaxe pelo roteiro de cada base (adaptação do projeto)
   - Fonte: procedimento de busca de cada base §1, "Sondagens a executar", na ordem das
     dependências
-  - Script: `python3 -m rsl sondagens registrar SIGLA SDn --retorno RETORNO … --leitura
-    LEITURA --data-hora DATA_HORA --evidencia EVIDENCIA [--submetido K TEXTO] [--observacao
-    OBSERVACAO]` — `SDn`: sondagem do roteiro da base; `--retorno`: uma vez
-    por consulta declarada, na ordem; `--leitura`: número da leitura observada;
-    `--data-hora`: ISO 8601, obrigatória, sem padrão; `--evidencia`: arquivo existente,
-    obrigatório. Grava em `[dados] registro` e exibe a citação e a mudança a aplicar na
-    fonte, que não altera; aplicá-la na fonte e regenerar o procedimento
-  - Skill: `sondagens-de-sintaxe`; `execucao-da-busca`
+  - Script principal: `python3 -m rsl sondagens registrar SIGLA SDn --retorno RETORNO
+    … --leitura LEITURA --data-hora DATA_HORA --evidencia EVIDENCIA [--submetido K TEXTO]
+    [--observacao OBSERVACAO]` — `SDn`: sondagem do roteiro da base; `--retorno`: uma vez por
+    consulta declarada, na ordem; `--leitura`: número da leitura observada; `--data-hora`: ISO
+    8601, obrigatória, sem padrão; `--evidencia`: arquivo existente, obrigatório. Grava em
+    `[dados] registro` e exibe a citação e a mudança a aplicar na fonte, que não altera;
+    aplicá-la na fonte e regenerar o procedimento
+  - Skill principal: `executar-sondagens-de-sintaxe`
+  - Skill: `executar-expressoes-de-busca`
 - Executar expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas
     explicativas; procedimento de busca de cada base §4 (Como executar, Variantes previstas) e §6
-  - Script: `python3 -m rsl busca registrar --retorno RETORNO [--data-hora DATA_HORA]
+  - Script principal: `python3 -m rsl busca registrar --retorno RETORNO [--data-hora DATA_HORA]
     [--justificar JUSTIFICAR] BASE EXPRESSAO ARQUIVO` — `BASE`: sigla da tabela de bases;
     `EXPRESSAO`: identificador da expressão no protocolo; `ARQUIVO`: exportação intacta;
     `--retorno`: retorno que a base exibiu;
     `--data-hora`: ISO 8601, padrão agora; `--justificar`: motivo aceito para retorno
     divergente do arquivo
-  - Skill: `execucao-da-busca`
+  - Skill principal: `executar-expressoes-de-busca`
 - Avaliar a pertinência e a relevância dos resultados
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Notas explicativas; plano §6.2
-  - Script: `python3 -m rsl busca derivar` — deriva as expressões não executadas, as
+  - Script principal: `python3 -m rsl busca derivar` — deriva as expressões não executadas, as
     contagens e a ordem de triagem
-  - Script: `python3 -m rsl conferencia fidelidade EXPRESSAO ARQUIVO` — compara o conjunto
-    derivado com a execução direta; `ARQUIVO`: exportação da execução direta da expressão
-  - Script: `python3 -m rsl conferencia sensibilidade [BASE]` — mede a perda da sonda para a
-    executada e grava a amostra a classificar; sem `BASE`, todas as bases
-  - Skill: `conferencias-da-busca`; índices na tabela abaixo
+  - Script principal: `python3 -m rsl conferencia fidelidade EXPRESSAO ARQUIVO` — compara o
+    conjunto derivado com a execução direta; `ARQUIVO`: exportação da execução direta da
+    expressão
+  - Script principal: `python3 -m rsl conferencia sensibilidade [BASE]` — mede a perda da
+    sonda para a executada e grava a amostra a classificar; sem `BASE`, todas as bases
+  - Skill principal: `avaliar-resultados-da-busca`; índices na tabela abaixo
 - Exportar metadados dos resultados
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; exportações intactas
     no caminho `[dados] execucoes` (mapa no `README.md`)
-  - Skill: `execucao-da-busca`
+  - Skill: `executar-expressoes-de-busca`
 - Criar alertas de busca nas bases
   - Fonte: plano §3.1
-  - Skill: `execucao-da-busca`
+  - Skill: `executar-expressoes-de-busca`
 - Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2)
   - Fonte: plano §6.2; contagens em `[saidas] contagens`, gravadas por `busca derivar`
-  - Skill: `relato-prisma`
+  - Script: `python3 -m rsl busca derivar` — grava as contagens em `[saidas] contagens`
+  - Skill: `redigir-relatorio`
 
 #### Índices da localização dos estudos
 
@@ -294,20 +314,24 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 - Analisar os títulos dos registros (1ª filtragem) e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; ordem de leitura em
     `[saidas] ordem_triagem`
-  - Skill: `filtragem-dos-estudos`
+  - Skill principal: `filtrar-estudos`
+  - Script: `python3 -m rsl busca derivar` — grava a ordem de leitura em `[saidas]
+    ordem_triagem`
 - Analisar os resumos (2ª filtragem) e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos
-  - Skill: `filtragem-dos-estudos`
+  - Skill: `filtrar-estudos`
 - Analisar os textos completos (3ª filtragem) e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; plano §6.3
-  - Skill: `filtragem-dos-estudos`
+  - Skill: `filtrar-estudos`
 - Aplicar os critérios de elegibilidade e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade
-  - Skill: `criterios-de-elegibilidade`; `filtragem-dos-estudos`
+  - Skill: `definir-criterios-de-elegibilidade`; `filtrar-estudos`
 - Controlar duplicatas e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; plano §6.2 (dupla
     passagem de deduplicação); marca `duplicata_de` em `[saidas] registros`
-  - Skill: `controle-de-duplicatas`
+  - Skill principal: `controlar-duplicatas`
+  - Script: `python3 -m rsl busca derivar` — grava os registros com a marca `duplicata_de` da
+    primeira passagem, por identificador
 - Analisar as listas de referências dos estudos selecionados e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos e §Acervos especiais;
     plano §3.3 e §7
@@ -316,11 +340,11 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Acervos especiais e §Acervos pessoais
     (nenhum dos dois é fonte autônoma de inclusão: o acervo pessoal compõe o conjunto-semente;
     a ausência de busca nos acervos especiais é limitação declarada no relato)
-  - Skill: `conjunto-semente`; `relato-prisma`
+  - Skill: `definir-conjunto-semente`; `redigir-relatorio`
 - Confirmar a seleção por avaliação dupla independente e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos (concordância e
     terceiro revisor); plano §6.1 e §6.2 (kappa)
-  - Skill: `filtragem-dos-estudos`
+  - Skill: `filtrar-estudos`
 
 ### E4 — Extração de dados
 
@@ -333,7 +357,8 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 - Coletar dados com o formulário de fichamento (IO 4)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos e §Instrumentos;
     `docs/parametros_complementares.md`; uso de IA no plano §8
-  - Skill: `fichamento`; `conferir-referencia`
+  - Skill principal: `coletar-dados-dos-estudos`
+  - Skill: `conferir-referencia`
 
 ---
 
@@ -343,22 +368,23 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
 
 - Realizar a análise bibliométrica dos estudos
   - Fonte: plano §3.1; `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados
-  - Skill: `sintese-e-lacunas`
+  - Skill: `analisar-conteudo-dos-estudos`
 - Realizar a análise de conteúdo dos estudos
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos;
     `docs/parametros_complementares.md`
-  - Skill: `sintese-e-lacunas`
+  - Skill principal: `analisar-conteudo-dos-estudos`
 
 ### E2 — Registro e validação do conteúdo
 
 - Redigir o texto final
-  - Skill: `sintese-e-lacunas`; `relato-prisma`
+  - Skill principal: `redigir-relatorio`
+  - Skill: `analisar-conteudo-dos-estudos`
 - Formatar as seções do relatório
   - Fonte: plano §1.4 (método de apresentação) e §6.3; declaração de uso de IA a partir do
     LOG_IA, plano §8.3
-  - Skill: `relato-prisma`
+  - Skill: `redigir-relatorio`
 - Revisar o conteúdo do texto final
-  - Skill: `relato-prisma`; `conferir-referencia`
+  - Skill: `redigir-relatorio`; `conferir-referencia`
 
 ### E3 — Preparação textual e divulgação
 
@@ -368,7 +394,7 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
   - Apoio: manual — tradução pelo pesquisador
 - Normalizar e formatar o relatório
   - Fonte: `README.md` §Convenções
-  - Skill: `conferir-referencia`; `relato-prisma`
+  - Skill: `conferir-referencia`; `redigir-relatorio`
 - Registrar e publicar o relatório
   - Fonte: plano §2.3
   - Apoio: manual — submissão e registro fora do repositório
@@ -386,7 +412,6 @@ quando executar e o que relatam.
 | `python3 -m rsl dados conferir` | após alimentar `data/` ou registrar uma execução | arquivos alimentados confrontados com o protocolo |
 | `python3 -m rsl projeto autoteste` | após alterar o código, a configuração ou a gramática | se cada conferência reprova os defeitos injetados com o código esperado |
 | `python3 -m rsl configuracao mostrar` | antes de citar um parâmetro ou limiar | o que foi lido e os parâmetros em uso, com a origem |
-| `python3 -m rsl documentos gramatica` | ao redigir ou reestruturar o protocolo, um procedimento de busca ou o arquivo de sementes | o contrato de forma que o leitor exige |
 | `python3 -m rsl projeto pendencias` | ao revisar o estado do projeto | pendências encontradas nos artefatos, sem escrever |
 | `python3 -m rsl catalogo gerar` | após alterar este guia, uma skill ou um comando; `--gravar` regrava o catálogo | citações de skill e de comando, cobertura de apoio, contagem de passos e catálogo defasado |
 
@@ -402,8 +427,9 @@ catálogo é saída de geração (`python3 -m rsl catalogo gerar --gravar`) e n�
 mão: altera-se este guia e regenera-se.
 
 A forma deste guia é o contrato que o catálogo lê: módulo em `## M<n> — `, etapa em
-`### E<n> — `, passo em `- ` na coluna 0 e os subitens `Fonte`, `Script`, `Skill`, `Apoio`
-e `Ordem` indentados sob o passo. A conferência do catálogo exige:
+`### E<n> — `, passo em `- ` na coluna 0 e os subitens `Fonte`, `Script principal`, `Script`,
+`Skill principal`, `Skill`, `Apoio` e `Ordem` indentados sob o passo. A conferência do
+catálogo exige:
 
 - **contagem** — os passos sem marca são do modelo e têm de ser 63, o número do RS Banyan;
   os marcados `(adaptação do projeto)` são do projeto; o total declarado no topo é a soma;
@@ -412,18 +438,33 @@ e `Ordem` indentados sob o passo. A conferência do catálogo exige:
 - **citações** — toda skill citada existe e tem o `name` igual à pasta; toda skill existente
   é citada num passo ou declarada transversal em [Papel das skills](#papel-das-skills); todo
   comando e opção citados existem no parser; todo comando do parser é citado num passo ou
-  na tabela de conferências transversais.
+  na tabela de conferências transversais;
+- **papel e âncora das skills** — toda skill tem um papel; a principal é principal em
+  exatamente um passo; o passo tem no máximo uma skill principal; a subordinada declara a
+  principal que complementa e é citada no passo dela; subordinada e transversal nunca são
+  principais;
+- **âncora dos comandos** — todo comando citado é principal em exatamente um passo ou está na
+  tabela de conferências transversais, e não as duas coisas; um passo pode ter mais de um
+  comando principal.
 
 ## Papel das skills
 
-Cada skill tem um papel. Skill de **procedimento** nomeia a atividade de um ou mais passos;
-skill de **instrumento** orienta um instrumento operacional do modelo; skill de **artefato**
-nomeia o artefato que mantém; skill **transversal** incide em mais de um módulo ou em passos
-de naturezas diferentes. O papel é declarado aqui, não inferido do nome.
+Cada skill tem um papel, declarado aqui e não inferido do nome. Skill **principal** conduz a
+atividade de um passo: é `Skill principal` em exatamente um passo e pode ser citada como apoio
+em outros. Skill **subordinada** complementa a principal de um passo: é citada nesse passo e
+nunca é principal. Skill **transversal** não tem passo próprio: nunca é principal e pode ser
+citada como apoio em qualquer passo.
 
 | Papel | Skills |
 | --- | --- |
-| procedimento | `questao-e-objetivos`; `facetacao-e-termos-livres`; `validacao-vocabulario-controlado`; `auditoria-das-strings`; `expressoes-de-busca`; `criterios-de-elegibilidade`; `parecer-sobre-protocolo`; `teste-de-aderencia`; `execucao-da-busca`; `sondagens-de-sintaxe`; `flexao-por-base`; `conferencias-da-busca`; `filtragem-dos-estudos`; `controle-de-duplicatas`; `sintese-e-lacunas` |
-| instrumento | `fichamento` |
-| artefato | `conjunto-semente`; `procedimento-de-busca-por-base` |
-| transversal | `registrar-decisao`; `rastreabilidade`; `revisao-geral-do-projeto`; `conferir-referencia`; `relato-prisma` |
+| principal | `redigir-questoes-de-revisao`; `destacar-termos-da-questao`; `estabelecer-controle-terminologico`; `gerar-strings-de-busca`; `elaborar-expressoes-de-busca`; `definir-criterios-de-elegibilidade`; `gerar-procedimento-de-busca`; `validar-protocolo`; `executar-expressoes-de-busca`; `executar-sondagens-de-sintaxe`; `testar-aderencia-das-expressoes`; `definir-conjunto-semente`; `avaliar-resultados-da-busca`; `controlar-duplicatas`; `filtrar-estudos`; `coletar-dados-dos-estudos`; `analisar-conteudo-dos-estudos`; `redigir-relatorio` |
+| subordinada | `declarar-flexao-por-base` |
+| transversal | `registrar-decisao`; `revisar-projeto`; `conferir-referencia` |
+
+### Skills subordinadas
+
+O passo da subordinada é o passo em que a sua principal é principal.
+
+| Subordinada | Principal que complementa |
+| --- | --- |
+| `declarar-flexao-por-base` | `gerar-procedimento-de-busca` |

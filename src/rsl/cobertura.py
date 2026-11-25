@@ -1,7 +1,7 @@
 """Cobertura de cada base: os blocos compostos da fonte do procedimento de busca medidos
 contra a string (STR) do protocolo.
 
-As conferências leem o derivado da base (`fichas.base_derivada`): a fonte e a estrutura dos
+As conferências leem o derivado da base (`derivado.base_derivada`): a fonte e a estrutura dos
 blocos que o compositor monta, com os termos de cada faceta em cada consulta. Nada se
 reconhece pelo texto do bloco. Continuam independentes do código de composição: o que o
 compositor deveria ter posto é recalculado aqui, da STR, da fonte e da flexão, para que um
@@ -19,7 +19,7 @@ import re
 from . import gramatica as G
 from .flexao import Indecidivel, formas, formas_de_numero, nao_contavel, vetadas
 from .geracao import subsume
-from .fichas import MODO_CURADA, MODOS_EXECUCAO
+from .derivado import MODO_CURADA, MODOS_EXECUCAO
 from .leitura import LINHAS, sem_repeticao
 from .markdown import normaliza
 

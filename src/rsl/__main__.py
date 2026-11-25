@@ -69,7 +69,7 @@ def _parser():
           "conferência e gramática")
     novo("documentos", "conferir", "lê o protocolo e a fonte de cada procedimento de busca, "
          "confere o procedimento gravado contra a geração e relata problemas de coerência",
-         "conferencia", "cmd_conferir")
+         "coerencia", "cmd_conferir")
     novo("documentos", "gramatica", "exibe o contrato de forma que o leitor exige do "
          "protocolo, da fonte dos procedimentos de busca, do arquivo de sementes, do arquivo "
          "de exceções de flexão e do resultado de sondagem", "relatorio", "cmd_gramatica",

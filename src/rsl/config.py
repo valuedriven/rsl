@@ -135,7 +135,7 @@ class Configuracao:
             **{k: str(v).lower() for k, v in marcas.items()})
         return self.caminho("saidas.pasta") / nome
 
-    def ficha(self, sigla):
+    def procedimento(self, sigla):
         """Caminho do procedimento de busca de uma base (saída de `procedimentos gerar`),
         relativo à raiz, pelo padrão `[documentos] procedimento`."""
         return self.valor("documentos.procedimento").replace(

@@ -68,7 +68,7 @@ elemento = "Truncamento com `*`"
 categoria = "truncamento"
 situacao = "nao_verificado"
 sondagem = "SD8"
-nota = "a skill `execucao-da-busca` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json`"
+nota = "a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json`"
 
 [[sintaxe]]
 elemento = "Mínimo de três letras antes do `*`"

@@ -3,7 +3,7 @@
 
 from . import gramatica as G
 from .erros import ProtocoloInvalido
-from .fichas import forma_execucao
+from .derivado import forma_execucao
 from .leitura import endereco, referencia
 from .saida import Saida
 
@@ -30,7 +30,7 @@ def _legivel(valor):
     return str(valor)
 
 
-def execucao_das_fichas(ctx, d):
+def execucao_dos_procedimentos(ctx, d):
     """Forma de execução de cada base, com origem na fonte: (nome, valor, origem).
 
     Fonte ilegível nesse ponto aparece como tal, sem derrubar a exibição das demais.
@@ -93,7 +93,7 @@ def relatorio(ctx, d):
     L.append("  parâmetros em uso:")
     for nome, p in d["parametros"].items():
         L.append(f"    {nome:<24} {_legivel(p['valor'])[:70]:<72} [{p['origem']}]")
-    for nome, valor, origem in execucao_das_fichas(ctx, d):
+    for nome, valor, origem in execucao_dos_procedimentos(ctx, d):
         L.append(f"    {nome:<24} {valor[:70]:<72} [{origem}]")
     return "\n".join(L)
 

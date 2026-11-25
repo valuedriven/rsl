@@ -12,18 +12,22 @@ Gramática de leitura do guia (a forma do guia é contrato):
   sem passos, até o próximo `###` ou `##`;
 - `- <passo>` na coluna 0 é um passo; a marca `(adaptação do projeto)` no fim declara o
   passo de adaptação; sem ela, o passo é do modelo;
-- `  - <Rótulo>: <valor>` é um subitem do passo; os rótulos são `Fonte`, `Script`, `Skill`,
-  `Apoio` e `Ordem`; rótulo fora dessa lista é forma ilegível (DADOS);
+- `  - <Rótulo>: <valor>` é um subitem do passo; os rótulos são `Fonte`, `Script principal`,
+  `Script`, `Skill principal`, `Skill`, `Apoio` e `Ordem`; rótulo fora dessa lista é forma
+  ilegível (DADOS);
 - linha indentada que não começa por `-` continua o subitem anterior;
-- em `Script:`, cada trecho em crase que começa por `python3 -m rsl` é uma citação de
+- em `Script:` e `Script principal:`, cada trecho em crase que começa por `python3 -m rsl` é uma citação de
   comando; o caminho são as palavras minúsculas que o parser reconhece, as opções são os
   `--longos`; posicionais e placeholders (`SIGLA`, `BASE`…) não são caminho nem opção;
-- em `Skill:`, cada trecho em crase é uma skill;
+- em `Skill:` e `Skill principal:`, cada trecho em crase é uma skill;
+- a citação sob `Skill principal:` ou `Script principal:` é principal no passo; sob `Skill:` ou
+  `Script:`, é de apoio;
 - `Apoio: manual — <razão>` ou `Apoio: lacuna — <razão>`, só no passo sem skill nem script.
 
 Fora dos módulos, o guia declara a contagem (`<n> passos do modelo … totalizando <t>`), a
-tabela da seção "Conferências transversais" (comandos transversais) e a tabela da seção
-"Papel das skills" (papel de cada skill).
+tabela da seção "Conferências transversais" (comandos transversais) e, na seção "Papel das
+skills", a tabela de papéis (`principal`, `subordinada` ou `transversal`) e, sob o título
+`### Skills subordinadas`, a tabela `subordinada | principal que complementa`.
 
 As conferências são funções puras sobre `Entradas`; o autoteste as executa sobre cópias em
 memória e com uma regra desligada por vez.
@@ -45,16 +49,18 @@ COMANDO = "python3 -m rsl catalogo gerar --gravar"
 # O RS Banyan tem 63 passos (plano §1.4). É o modelo, não parâmetro do projeto.
 MODELO = 63
 MARCA_ADAPTACAO = "(adaptação do projeto)"
-ROTULOS = ("Fonte", "Script", "Skill", "Apoio", "Ordem")
+ROTULOS = ("Fonte", "Script principal", "Script", "Skill principal", "Skill", "Apoio", "Ordem")
 TIPOS_APOIO = ("manual", "lacuna")
-PAPEIS = ("procedimento", "instrumento", "artefato", "transversal")
+PAPEIS = ("principal", "subordinada", "transversal")
 SECAO_TRANSVERSAIS = "Conferências transversais"
 SECAO_PAPEIS = "Papel das skills"
+SUBSECAO_SUBORDINADAS = "Skills subordinadas"
 
 # Regras, na ordem do relato. Cada problema leva a regra que o produziu; o autoteste
 # desliga uma por vez.
 REGRAS = ("contagem", "cobertura", "skill_existe", "skill_nome", "skill_orfa", "skill_papel",
-          "comando_existe", "comando_opcao", "comando_orfao", "defasado")
+          "skill_ancora", "passo_principal", "skill_subordinada", "comando_existe",
+          "comando_opcao", "comando_orfao", "comando_ancora", "defasado")
 
 
 # ------------------------------------------------------------------------ entradas
@@ -124,6 +130,7 @@ class Citacao:
     caminho: tuple        # palavras de caminho reconhecidas (ou a tentativa)
     opcoes: tuple
     erro: str = ""        # caminho inexistente ou incompleto
+    principal: bool = False
 
 
 @dataclasses.dataclass
@@ -134,7 +141,8 @@ class Passo:
     origem: str
     linha: int
     fonte: list = dataclasses.field(default_factory=list)
-    skills: list = dataclasses.field(default_factory=list)
+    skills: list = dataclasses.field(default_factory=list)    # todas as citadas, na ordem
+    principais: list = dataclasses.field(default_factory=list)  # as de `Skill principal:`
     scripts: list = dataclasses.field(default_factory=list)   # Citacao
     apoio: list = dataclasses.field(default_factory=list)     # textos de Apoio:
 
@@ -148,7 +156,8 @@ class Guia:
     passos: list
     declarada: tuple | None      # (modelo, total) declarados no topo
     transversais: list           # Citacao, da tabela de conferências transversais
-    papeis: dict                 # skill → [papéis declarados]
+    papeis: dict                 # skill → [papéis declarados, reconhecidos ou não]
+    subordinadas: dict           # subordinada → [principais que declara complementar]
     modulos: list                # títulos, na ordem
     etapas: list                 # (módulo, etapa), na ordem
 
@@ -272,12 +281,16 @@ def le_guia(texto, grupos, comandos):
     for passo, (rotulo, valor), _n in pendentes:
         if rotulo == "Fonte":
             passo.fonte.append(valor.strip())
-        elif rotulo == "Skill":
-            passo.skills.extend(_CRASE.findall(valor))
-        elif rotulo == "Script":
+        elif rotulo in ("Skill", "Skill principal"):
+            nomes = _CRASE.findall(valor)
+            passo.skills.extend(nomes)
+            if rotulo == "Skill principal":
+                passo.principais.extend(nomes)
+        elif rotulo in ("Script", "Script principal"):
             for trecho in _CRASE.findall(valor):
                 c = citacao(trecho, grupos, comandos)
                 if c:
+                    c.principal = rotulo == "Script principal"
                     passo.scripts.append(c)
         elif rotulo == "Apoio":
             passo.apoio.append(valor.strip())
@@ -294,14 +307,25 @@ def le_guia(texto, grupos, comandos):
                 c = citacao(trecho, grupos, comandos)
                 if c:
                     transversais.append(c)
-    papeis = {}
+    # Linha de tabela sem skill em crase é cabeçalho ou separador. O papel se guarda como
+    # escrito: papel fora de PAPEIS reprova na conferência, nomeando a skill.
+    papeis, subordinadas, em_sub = {}, {}, False
     for linha in secoes.get(SECAO_PAPEIS, []):
-        if linha.startswith("|"):
-            cel = _celulas(linha)
-            if len(cel) >= 2 and cel[0] in PAPEIS:
-                for s in _CRASE.findall(cel[1]):
-                    papeis.setdefault(s, []).append(cel[0])
-    return Guia(passos, declarada, transversais, papeis, modulos, etapas)
+        if linha.startswith("### "):
+            em_sub = linha[4:].strip() == SUBSECAO_SUBORDINADAS
+            continue
+        if not linha.startswith("|"):
+            continue
+        cel = _celulas(linha)
+        if len(cel) < 2:
+            continue
+        if em_sub:
+            for s in _CRASE.findall(cel[0]):
+                subordinadas.setdefault(s, []).extend(_CRASE.findall(cel[1]))
+        else:
+            for s in _CRASE.findall(cel[1]):
+                papeis.setdefault(s, []).append(cel[0])
+    return Guia(passos, declarada, transversais, papeis, subordinadas, modulos, etapas)
 
 
 def _frontmatter_nome(texto):
@@ -315,6 +339,25 @@ def _frontmatter_nome(texto):
 
 
 # ------------------------------------------------------------------------ conferência
+def _principal_em(g):
+    """{skill: [passos em que é principal]}, cada passo uma vez."""
+    em = {}
+    for p in g.passos:
+        for s in dict.fromkeys(p.principais):
+            em.setdefault(s, []).append(p)
+    return em
+
+
+def _comando_principal_em(g):
+    """{caminho: [passos em que é principal]}, cada passo uma vez."""
+    em = {}
+    for p in g.passos:
+        for caminho in dict.fromkeys(c.caminho for c in p.scripts
+                                     if c.principal and not c.erro):
+            em.setdefault(caminho, []).append(p)
+    return em
+
+
 def _apoio(valor):
     """(tipo, razão) de um `Apoio:`; razão vazia se faltar o travessão ou o texto."""
     m = re.match(r"(\w+)\s*(?:—\s*(.*))?$", valor)
@@ -375,9 +418,10 @@ def confere(e, g=None, desligadas=frozenset()):
             if s not in e.skills:
                 acusa("skill_existe", f"skill citada inexistente `{s}` em .agents/skills/: "
                                       f"{p.onde}")
-    for s in g.papeis:
+    for s in sorted(set(g.papeis) | set(g.subordinadas)
+                    | {x for v in g.subordinadas.values() for x in v}):
         if s not in e.skills:
-            acusa("skill_existe", f"skill citada inexistente `{s}` na tabela "
+            acusa("skill_existe", f"skill citada inexistente `{s}` na seção "
                                   f"\"{SECAO_PAPEIS}\"")
     for pasta, texto in sorted(e.skills.items()):
         nome = _frontmatter_nome(texto)
@@ -391,6 +435,55 @@ def confere(e, g=None, desligadas=frozenset()):
         if len(papel) != 1:
             acusa("skill_papel", f"skill `{pasta}` com {len(papel)} papel(éis) na tabela "
                                  f"\"{SECAO_PAPEIS}\"; exige-se um")
+        for x in papel:
+            if x not in PAPEIS:
+                acusa("skill_papel", f"skill `{pasta}` com papel não reconhecido `{x}`; "
+                                     f"papéis: {', '.join(PAPEIS)}")
+
+    # âncora das skills
+    papel_de = {s: v[0] for s, v in g.papeis.items() if len(v) == 1 and v[0] in PAPEIS}
+    principal_em = _principal_em(g)
+    for p in g.passos:
+        unicas = list(dict.fromkeys(p.principais))
+        if len(unicas) > 1:
+            acusa("passo_principal", f"passo com {len(unicas)} skills principais "
+                                     f"({_lista(unicas)}); admite-se uma: {p.onde}")
+    for s in sorted(e.skills):
+        ps = principal_em.get(s, [])
+        papel = papel_de.get(s)
+        if papel == "principal" and not ps:
+            acusa("skill_ancora", f"skill principal `{s}` não é principal em nenhum passo")
+        elif papel == "principal" and len(ps) > 1:
+            acusa("skill_ancora", f"skill principal `{s}` é principal em {len(ps)} passos: "
+                                  f"{'; '.join(p.onde for p in ps)}")
+        elif papel in ("subordinada", "transversal"):
+            for p in ps:
+                acusa("skill_ancora", f"skill `{s}`, de papel {papel}, marcada como "
+                                      f"principal: {p.onde}")
+
+    # subordinadas
+    for s in sorted(e.skills):
+        if papel_de.get(s) != "subordinada":
+            continue
+        declaradas = list(dict.fromkeys(g.subordinadas.get(s, [])))
+        if len(declaradas) != 1:
+            acusa("skill_subordinada", f"skill subordinada `{s}` declara {len(declaradas)} "
+                                       f"principal(is) em \"{SUBSECAO_SUBORDINADAS}\"; "
+                                       f"exige-se uma")
+            continue
+        pr = declaradas[0]
+        if papel_de.get(pr) != "principal":
+            acusa("skill_subordinada", f"skill subordinada `{s}` complementa `{pr}`, que não "
+                                       f"tem papel principal")
+            continue
+        for p in principal_em.get(pr, []):
+            if s not in p.skills:
+                acusa("skill_subordinada", f"skill subordinada `{s}` não citada no passo em "
+                                           f"que `{pr}` é principal: {p.onde}")
+    for s in sorted(g.subordinadas):
+        if s in e.skills and papel_de.get(s) != "subordinada":
+            acusa("skill_subordinada", f"skill `{s}` em \"{SUBSECAO_SUBORDINADAS}\" sem "
+                                       f"papel subordinada")
 
     # comandos
     citados = set()
@@ -411,6 +504,22 @@ def confere(e, g=None, desligadas=frozenset()):
             acusa("comando_orfao", f"comando não citado em passo nem declarado transversal: "
                                    f"`{' '.join(caminho)}`")
 
+    # âncora dos comandos (o não citado é da regra de órfão)
+    transversais = {c.caminho for c in g.transversais if not c.erro}
+    cmd_principal = _comando_principal_em(g)
+    for caminho in sorted(citados):
+        nome, ps = " ".join(caminho), cmd_principal.get(caminho, [])
+        if caminho in transversais:
+            for p in ps:
+                acusa("comando_ancora", f"comando `{nome}`, declarado transversal, marcado "
+                                        f"como principal: {p.onde}")
+        elif not ps:
+            acusa("comando_ancora", f"comando sem passo principal nem declaração "
+                                    f"transversal: `{nome}`")
+        elif len(ps) > 1:
+            acusa("comando_ancora", f"comando `{nome}` é principal em {len(ps)} passos: "
+                                    f"{'; '.join(p.onde for p in ps)}")
+
     # catálogo gravado
     if "defasado" not in desligadas:
         esperado = renderiza(e, g)
@@ -430,13 +539,27 @@ def _lista(itens):
     return "; ".join(f"`{i}`" for i in itens) if itens else "—"
 
 
+def _marcadas(citacoes, chave):
+    """Citações de um passo, com a principal marcada."""
+    return "; ".join(f"`{c[chave]}`" + (" (principal)" if c["citacao"] == "principal" else "")
+                     for c in citacoes) or "—"
+
+
+def _citacao(principal):
+    return "principal" if principal else "apoio"
+
+
 def visoes(e, g):
-    """Estrutura do catálogo, usada pelo markdown e pelo JSON."""
+    """Estrutura do catálogo, usada pelo markdown e pelo JSON. Cada citação de skill e de
+    comando num passo leva o seu papel: `principal` ou `apoio`."""
     transversais = {c.caminho for c in g.transversais if not c.erro}
     passos = [{
         "modulo": p.modulo, "etapa": p.etapa, "passo": p.nome, "origem": p.origem,
-        "fonte": p.fonte, "skills": p.skills,
-        "comandos": [" ".join(c.caminho) for c in p.scripts],
+        "fonte": p.fonte,
+        "skills": [{"skill": s, "citacao": _citacao(s in p.principais)}
+                   for s in dict.fromkeys(p.skills)],
+        "comandos": [{"comando": " ".join(c.caminho), "citacao": _citacao(c.principal)}
+                     for c in p.scripts],
         "apoio": [dict(zip(("tipo", "razao"), _apoio(a))) for a in p.apoio],
     } for p in g.passos]
     skills = []
@@ -447,15 +570,23 @@ def visoes(e, g):
                   "citada" if ps else "transversal" if "transversal" in papel else "órfã")
         cmds = sorted({" ".join(c.caminho) for p in ps for c in p.scripts if not c.erro})
         skills.append({"skill": s, "papel": "; ".join(papel) or "—",
+                       "complementa": "; ".join(g.subordinadas.get(s, [])) or None,
+                       "principal_em": [p.onde for p in ps if s in p.principais],
+                       "apoio_em": [p.onde for p in ps if s not in p.principais],
                        "passos": [p.onde for p in ps], "comandos": cmds, "estado": estado})
     comandos = []
     for caminho in sorted(e.comandos):
         ps = [p for p in g.passos if any(c.caminho == caminho for c in p.scripts)]
-        estado = ("passo" if ps else "transversal" if caminho in transversais
-                  else "não citado")
+        princ = [p for p in ps if any(c.caminho == caminho and c.principal
+                                      for c in p.scripts)]
+        estado = ("transversal" if caminho in transversais else "principal" if princ
+                  else "só apoio" if ps else "não citado")
         comandos.append({
             "comando": " ".join(caminho), "opcoes": sorted(e.comandos[caminho].opcoes),
-            "ajuda": e.comandos[caminho].ajuda, "passos": [p.onde for p in ps],
+            "ajuda": e.comandos[caminho].ajuda,
+            "principal_em": [p.onde for p in princ],
+            "apoio_em": [p.onde for p in ps if p not in princ],
+            "passos": [p.onde for p in ps],
             "skills": sorted({s for p in ps for s in p.skills}), "estado": estado})
     cobertura = []
     for mod, et in g.etapas:
@@ -499,21 +630,26 @@ def renderiza(e, g):
                     "| --- | --- | --- | --- | --- | --- |"]
         apoio = "; ".join(f"{a['tipo']} — {a['razao']}" for a in p["apoio"]) or "—"
         out.append(f"| {_cel(p['passo'])} | {p['origem']} | "
-                   f"{_cel('; '.join(p['fonte'])) or '—'} | {_lista(p['skills'])} | "
-                   f"{_lista(p['comandos'])} | {_cel(apoio)} |")
+                   f"{_cel('; '.join(p['fonte'])) or '—'} | "
+                   f"{_marcadas(p['skills'], 'skill')} | "
+                   f"{_marcadas(p['comandos'], 'comando')} | {_cel(apoio)} |")
     out += ["", "## Por skill", "",
-            "| Skill | Papel | Passos | Comandos dos mesmos passos | Estado |",
-            "| --- | --- | --- | --- | --- |"]
+            "| Skill | Papel | Principal em | Apoio em | Comandos dos mesmos passos | Estado |",
+            "| --- | --- | --- | --- | --- | --- |"]
     for s in v["skills"]:
-        out.append(f"| `{s['skill']}` | {s['papel']} | {_cel('; '.join(s['passos'])) or '—'} "
+        papel = s["papel"] + (f" de `{s['complementa']}`" if s["complementa"] else "")
+        out.append(f"| `{s['skill']}` | {papel} | "
+                   f"{_cel('; '.join(s['principal_em'])) or '—'} | "
+                   f"{_cel('; '.join(s['apoio_em'])) or '—'} "
                    f"| {_lista(s['comandos'])} | {s['estado']} |")
     out += ["", "## Por comando", "",
             "Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).", "",
-            "| Comando | Ajuda | Passos | Skills dos mesmos passos | Estado |",
-            "| --- | --- | --- | --- | --- |"]
+            "| Comando | Ajuda | Principal em | Apoio em | Skills dos mesmos passos | Estado |",
+            "| --- | --- | --- | --- | --- | --- |"]
     for k in v["comandos"]:
         out.append(f"| `{k['comando']}` | {_cel(k['ajuda'])} | "
-                   f"{_cel('; '.join(k['passos'])) or '—'} | {_lista(k['skills'])} | "
+                   f"{_cel('; '.join(k['principal_em'])) or '—'} | "
+                   f"{_cel('; '.join(k['apoio_em'])) or '—'} | {_lista(k['skills'])} | "
                    f"{k['estado']} |")
     out += ["", "## Cobertura por etapa", "",
             "| Módulo | Etapa | Passos | Com skill | Com comando | Manual | Lacuna |",

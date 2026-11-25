@@ -16,9 +16,9 @@ import re
 
 from . import gramatica as G
 from .config import RAIZ, relativo
-from .conferencia import Problema, Resultado, imprime_problemas, problemas_bases
+from .coerencia import Problema, Resultado, imprime_problemas, problemas_bases
 from .erros import DadosInvalidos, ProtocoloInvalido
-from .fichas import base_derivada
+from .derivado import base_derivada
 from .fonte import le_fonte
 from .markdown import normaliza
 from .saida import Saida

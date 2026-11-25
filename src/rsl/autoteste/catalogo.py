@@ -46,6 +46,18 @@ def _troca_linha(texto, n, nova):
     return "\n".join(linhas)
 
 
+def _troca_subitem(texto, n, nova):
+    """`texto` com o subitem da linha `n` (1-based) trocado por `nova` (ou retirado, com None),
+    junto com as suas linhas de continuação: trocar só a primeira deixaria a continuação
+    devolver ao subitem o que a injeção retirou."""
+    linhas = texto.split("\n")
+    fim = n
+    while fim < len(linhas) and linhas[fim].startswith("    "):
+        fim += 1
+    linhas[n - 1:fim] = [] if nova is None else [nova]
+    return "\n".join(linhas)
+
+
 def _primeira(texto, prefixo):
     """Número (1-based) da primeira linha que começa por `prefixo`, ou None."""
     for n, linha in enumerate(texto.split("\n"), 1):
@@ -67,6 +79,110 @@ def _grava_em(e, caminho, interrompe=False):
         return None, x
     finally:
         geracao.os.replace = original
+
+
+def _linha_de(texto, prefixo):
+    """(n, linha) da primeira linha que começa por `prefixo`; falha se não houver."""
+    n = _primeira(texto, prefixo)
+    if n is None:
+        raise AssertionError(f"o guia corrente não tem linha começando por {prefixo!r}")
+    return n, texto.split("\n")[n - 1]
+
+
+def _casos_ancora(g, e, g0, t):
+    """Papel e âncora de skill e de comando. O alvo de cada injeção sai da estrutura lida:
+    "a primeira skill principal", "o primeiro passo sem skill principal", "a primeira
+    subordinada", "o primeiro comando transversal"."""
+    papel_de = {s: v[0] for s, v in g0.papeis.items() if len(v) == 1}
+    em = C._principal_em(g0)
+    p0 = next(p for p in g0.passos if p.principais)
+    principal = p0.principais[0]
+    outra = next(s for s in sorted(em) if s != principal)
+    livre = next(p for p in g0.passos if not p.principais and p is not p0)
+    transversal = sorted(s for s, x in papel_de.items() if x == "transversal")[0]
+
+    # rótulo fora da forma
+    m = dataclasses.replace(e, guia=_apos_linha(t, p0.linha, f"  - Skill (principal): "
+                                                          f"`{principal}`"))
+    g.espera("rótulo `Skill (principal):` fora da forma", m, e,
+             lambda x: C.le_guia(x.guia, x.grupos, x.comandos), D,
+             f"passo '{p0.nome}': subitem 'Skill (principal)'")
+
+    # papel
+    n_papel = next(n for n, linha in enumerate(t.split("\n"), 1)
+                   if linha.startswith("|") and f"`{principal}`" in linha
+                   and C._celulas(linha)[0] in C.PAPEIS)
+    m = dataclasses.replace(e, guia=_apos_linha(t, n_papel, f"| artefato | `{principal}` |"))
+    _caso(g, "papel antigo (`artefato`)", m, e, "skill_papel",
+          f"skill `{principal}` com papel não reconhecido `artefato`")
+
+    # âncora das skills
+    n, linha = _linha_de(t, f"  - Skill principal: `{principal}`")
+    m = dataclasses.replace(e, guia=_troca_linha(
+        t, n, linha.replace("  - Skill principal:", "  - Skill:", 1)))
+    _caso(g, "skill principal sem passo", m, e, "skill_ancora",
+          f"skill principal `{principal}` não é principal em nenhum passo")
+
+    m = dataclasses.replace(e, guia=_apos_linha(t, livre.linha,
+                                                f"  - Skill principal: `{principal}`"))
+    _caso(g, "skill principal em dois passos", m, e, "skill_ancora",
+          f"skill principal `{principal}` é principal em 2 passos")
+
+    m = dataclasses.replace(e, guia=_apos_linha(t, livre.linha,
+                                                f"  - Skill principal: `{transversal}`"))
+    _caso(g, "skill transversal marcada como principal", m, e, "skill_ancora",
+          f"skill `{transversal}`, de papel transversal, marcada como principal")
+
+    m = dataclasses.replace(e, guia=_apos_linha(t, p0.linha, f"  - Skill principal: `{outra}`"))
+    _caso(g, "passo com duas skills principais", m, e, "passo_principal",
+          f"passo com 2 skills principais (`{outra}`; `{principal}`); admite-se uma: "
+          f"{p0.onde}")
+
+    # subordinadas
+    sub = sorted(g0.subordinadas)[0]
+    dona = g0.subordinadas[sub][0]
+    passo_dona = em[dona][0]
+    linhas = t.split("\n")
+    n_cita = next(n for n in range(passo_dona.linha + 1, len(linhas) + 1)
+                  if linhas[n - 1].startswith("  - Skill:") and f"`{sub}`" in linhas[n - 1])
+    sem = re.sub(rf"`{re.escape(sub)}`(;\s*)?|;\s*`{re.escape(sub)}`", "",
+                 linhas[n_cita - 1], count=1)
+    m = dataclasses.replace(e, guia=_troca_linha(
+        t, n_cita, None if sem.strip() == "- Skill:" else sem))
+    _caso(g, "subordinada fora do passo da sua principal", m, e, "skill_subordinada",
+          f"skill subordinada `{sub}` não citada no passo em que `{dona}` é principal")
+
+    n_decl = next(n for n, linha in enumerate(linhas, 1)
+                  if linha.startswith(f"| `{sub}` |"))
+    m = dataclasses.replace(e, guia=_troca_linha(t, n_decl, None))
+    _caso(g, "subordinada sem principal declarada", m, e, "skill_subordinada",
+          f"skill subordinada `{sub}` declara 0 principal(is)")
+
+    # âncora dos comandos
+    n, linha = _linha_de(t, "  - Script principal:")
+    cmd = " ".join(next(c for c in (C.citacao(x, e.grupos, e.comandos)
+                                    for x in C._CRASE.findall(linha)) if c).caminho)
+    unico = [p.onde for p in g0.passos
+             if any(" ".join(c.caminho) == cmd and c.principal for c in p.scripts)]
+    m = dataclasses.replace(e, guia=_troca_linha(
+        t, n, linha.replace("  - Script principal:", "  - Script:", 1)))
+    if len(unico) != 1 or any(" ".join(c.caminho) == cmd and c.principal
+                              for p in g0.passos for c in p.scripts
+                              if p.onde not in unico):
+        g.testa("o primeiro `Script principal:` é o único do seu comando", False, cmd)
+    _caso(g, "comando só de apoio (único `Script principal:` trocado por `Script:`)", m, e,
+          "comando_ancora", f"comando sem passo principal nem declaração transversal: `{cmd}`")
+
+    m = dataclasses.replace(e, guia=_apos_linha(
+        t, livre.linha, f"  - Script principal: `python3 -m rsl {cmd}`"))
+    _caso(g, "comando principal em dois passos", m, e, "comando_ancora",
+          f"comando `{cmd}` é principal em 2 passos")
+
+    tcmd = " ".join(sorted(c.caminho for c in g0.transversais if not c.erro)[0])
+    m = dataclasses.replace(e, guia=_apos_linha(
+        t, livre.linha, f"  - Script principal: `python3 -m rsl {tcmd}`"))
+    _caso(g, "comando transversal marcado como principal", m, e, "comando_ancora",
+          f"comando `{tcmd}`, declarado transversal, marcado como principal")
 
 
 def casos(_ctx, g):
@@ -108,6 +224,8 @@ def casos(_ctx, g):
     m = dataclasses.replace(e, guia=_troca_linha(t, n_papel, sem_papel))
     _caso(g, "skill sem papel declarado", m, e, "skill_papel",
           f"skill `{s_papel}` com 0 papel(éis)")
+
+    _casos_ancora(g, e, g0, t)
 
     # comandos
     n_script = _primeira(t, "  - Script:")
@@ -153,15 +271,15 @@ def casos(_ctx, g):
     sem = next(p for p in g0.passos if p.apoio and not (p.skills or p.scripts))
     n_apoio = next(n for n in range(sem.linha + 1, len(t.split("\n")) + 1)
                    if t.split("\n")[n - 1].startswith("  - Apoio:"))
-    m = dataclasses.replace(e, guia=_troca_linha(t, n_apoio, None))
+    m = dataclasses.replace(e, guia=_troca_subitem(t, n_apoio, None))
     _caso(g, "passo sem skill, script ou marcador", m, e, "cobertura",
           f"passo sem skill, script ou marcador `Apoio:`: {sem.onde}")
 
-    m = dataclasses.replace(e, guia=_troca_linha(t, n_apoio, "  - Apoio: manual —"))
+    m = dataclasses.replace(e, guia=_troca_subitem(t, n_apoio, "  - Apoio: manual —"))
     _caso(g, "marcador de apoio sem razão", m, e, "cobertura",
           f"`Apoio: manual` sem razão: {sem.onde}")
 
-    m = dataclasses.replace(e, guia=_troca_linha(
+    m = dataclasses.replace(e, guia=_troca_subitem(
         t, n_apoio, "  - Apoio: tipo-autoteste — razão do autoteste"))
     _caso(g, "marcador de apoio com tipo fora de manual/lacuna", m, e, "cobertura",
           f"com tipo fora de {C.TIPOS_APOIO}: {sem.onde}")
@@ -189,7 +307,7 @@ def casos(_ctx, g):
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as fh:
             fh.write("anterior\n")
-        ruim = dataclasses.replace(e, guia=_troca_linha(t, n_apoio, None))
+        ruim = dataclasses.replace(e, guia=_troca_subitem(t, n_apoio, None))
         cod, _x = _grava_em(ruim, caminho)
         with open(caminho, encoding="utf-8") as fh:
             g.testa("conferência reprovada durante --gravar deixa o arquivo anterior intacto",
@@ -227,8 +345,9 @@ def casos(_ctx, g):
         v = C.visoes(e, g0)
         skill = ambos.skills[0]
         cmd = next(" ".join(c.caminho) for c in ambos.scripts if not c.erro)
-        por_passo = any(x["passo"] == ambos.nome and skill in x["skills"]
-                        and cmd in x["comandos"] for x in v["passos"])
+        por_passo = any(x["passo"] == ambos.nome
+                        and skill in [c["skill"] for c in x["skills"]]
+                        and cmd in [c["comando"] for c in x["comandos"]] for x in v["passos"])
         por_skill = any(x["skill"] == skill and ambos.onde in x["passos"]
                         and cmd in x["comandos"] for x in v["skills"])
         por_cmd = any(x["comando"] == cmd and ambos.onde in x["passos"]

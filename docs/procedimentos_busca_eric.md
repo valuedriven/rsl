@@ -14,7 +14,7 @@
 | Campos diferentes num mesmo grupo | agrupamento | **Não verificado** | — | SD5 |
 | `pubyearmin`/`pubyearmax` junto a um grupo | filtros | **Não verificado** | — | SD6 |
 | `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | filtros | **Não verificado** | — | SD7 |
-| Truncamento com `*` | truncamento | **Não verificado**; a skill `execucao-da-busca` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json` | — | SD8 |
+| Truncamento com `*` | truncamento | **Não verificado**; a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json` | — | SD8 |
 | Mínimo de três letras antes do `*` | truncamento | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD8 |
 | Derivação automática de radicais desativada, com casamento exato sem aspas | lematizacao | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD10 |
 | API pública de exportação | exportacao | **Não verificado** | — | sem sondagem: verificação documental, não sondagem: conferir na documentação oficial; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23 |

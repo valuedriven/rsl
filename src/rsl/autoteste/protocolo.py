@@ -10,7 +10,7 @@ import re
 from .. import gramatica as G
 from ..markdown import celulas, desescapa, linha_do_cabecalho, lista
 from ..saida import Saida
-from ..conferencia import conferir
+from ..coerencia import conferir
 from . import conferir_texto, resultado
 from .textos import (cabecalho, celula, coluna, edita_celula, linhas, monta_linha,
                      insere_depois, remove_coluna, remove_linhas, remove_tabela, sub_na_linha,

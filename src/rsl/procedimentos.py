@@ -590,16 +590,16 @@ def problemas_igualdade(ctx, d):
             _, _, novo = gera_base(ctx, d, sigla, registro=_registro(ctx))
         except (ProtocoloInvalido, Reprovado):
             continue
-        atual = ctx.ficha(sigla, b["ficha"])
+        atual = ctx.procedimento(sigla, b["procedimento"])
         correcao = f"`python3 -m rsl procedimentos gerar {sigla} --gravar`"
         if atual is None:
-            saida.append((sigla, f"procedimento de busca {b['ficha']} não existe; gerar com "
+            saida.append((sigla, f"procedimento de busca {b['procedimento']} não existe; gerar com "
                                  f"{correcao}"))
             continue
         div = primeira_divergente(atual, novo)
         if div:
             k, x, _ = div
-            saida.append((sigla, f"procedimento de busca {b['ficha']} difere da geração a "
+            saida.append((sigla, f"procedimento de busca {b['procedimento']} difere da geração a "
                                  f"partir da linha {k} ({(x or '')[:70]!r}); o procedimento "
                                  f"é saída — corrigir na fonte e gerar com {correcao}"))
     return saida
@@ -618,7 +618,7 @@ def _ensaio_flexoes(comp):
 def releitura(ctx):
     """Contexto que relê do disco o que não é cópia em memória (o autoteste injeta a
     mudança da fonte entre a leitura e a gravação por aqui)."""
-    return ctx.com_fichas({})
+    return ctx.com_procedimentos({})
 
 
 def gera(ctx, siglas=None, gravar=False, saida=print):
@@ -630,7 +630,7 @@ def gera(ctx, siglas=None, gravar=False, saida=print):
     registro = _registro(ctx)
     for sigla in siglas:
         b = next(x for x in d["bases"] if x["sigla"] == sigla)
-        saida(f"== {sigla} ({b['ficha']})")
+        saida(f"== {sigla} ({b['procedimento']})")
         try:
             fonte, comp, novo = gera_base(ctx, d, sigla, registro=registro)
         except (ProtocoloInvalido, Reprovado) as e:
@@ -640,8 +640,8 @@ def gera(ctx, siglas=None, gravar=False, saida=print):
             continue
         for linha in _ensaio_flexoes(comp):
             saida(linha)
-        caminho = RAIZ / b["ficha"]
-        atual = ctx.ficha(sigla, b["ficha"])
+        caminho = RAIZ / b["procedimento"]
+        atual = ctx.procedimento(sigla, b["procedimento"])
         if atual == novo:
             saida("  Sem diferença: o procedimento gravado é o gerado.")
             continue
@@ -662,7 +662,7 @@ def gera(ctx, siglas=None, gravar=False, saida=print):
         relido = caminho.read_text(encoding="utf-8")
         if relido != novo:
             raise Reprovado(f"{sigla}: o arquivo relido difere do gerado")
-        saida(f"  Gravado: {b['ficha']}.")
+        saida(f"  Gravado: {b['procedimento']}.")
     return codigo
 
 

@@ -97,7 +97,7 @@
       "id": "PD16",
       "categoria": "conferencias-da-busca",
       "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
-      "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/conferencias-da-busca/SKILL.md §2",
+      "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/avaliar-resultados-da-busca/SKILL.md §2",
       "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
       "acao_sugerida": "PYTHONPATH=src python3 -m rsl conferencia fidelidade, depois de registrada a execução de cobertura",
       "responsavel": "pesquisador"
@@ -108,7 +108,7 @@
       "descricao": "Conjunto de validação com 9 sementes (SE1, SE2, SE3, SE5, SE6, SE7, SE8, SE9 e SE10); SE4 é de desenvolvimento por registro. A ampliação do conjunto de validação está pendente, com tamanho-alvo a fixar pelo pesquisador. Até a ampliação, o intervalo de Wilson a 95% fica largo: 8/9 resulta em 88,9% (56,5%–98,0%), recalculado em 2026-11-22.",
       "origem": "data/historico.md, 2026-11-19; openspec/changes/archive/2026-11-19-conjunto-semente-independente",
       "bloqueia": "precisão da estimativa de aderência; não bloqueia a execução do teste",
-      "acao_sugerida": "buscar sementes novas por procedimento independente da string (skill conjunto-semente), conferir cada referência e acrescentá-las ao arquivo de sementes (`[documentos] sementes`) com `papel = \"validação\"`",
+      "acao_sugerida": "buscar sementes novas por procedimento independente da string (skill definir-conjunto-semente), conferir cada referência e acrescentá-las ao arquivo de sementes (`[documentos] sementes`) com `papel = \"validação\"`",
       "responsavel": "pesquisador"
     },
     {
@@ -117,7 +117,7 @@
       "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio nas 10 sementes do arquivo de sementes (`[documentos] sementes`). É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
       "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl projeto pendencias",
       "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda; não bloqueia a execução do teste de aderência",
-      "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill conjunto-semente, §4)",
+      "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill definir-conjunto-semente, §4)",
       "responsavel": "pesquisador"
     },
     {
@@ -151,10 +151,10 @@
       "id": "PD27",
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
-      "descricao": "Contradição de verificação na ERIC: a seção 4 do procedimento anterior à migração chamava de \"regras medidas\" as regras de montagem (grupo com OR exige condição externa; grupo não mistura campos; pubyearmin/pubyearmax não convivem com grupo; sem truncamento), e a skill `execucao-da-busca` afirma que a ERIC não trunca (`ontolog*` devolve 0); a seção 1 do mesmo procedimento dava esses elementos como não verificados, e nenhuma sondagem com evidência está no repositório. Transcritos como `nao_verificado`, com sondagem no roteiro, sem resolver a contradição.",
-      "origem": "docs/procedimentos_busca_eric.md antes da migração de 2026-11-23 (seções 1 e 4); .agents/skills/execucao-da-busca/SKILL.md, seção \"Antes da primeira execução numa base\"; change `geracao-das-fichas-de-busca`, tarefa 6.2",
+      "descricao": "Contradição de verificação na ERIC: a seção 4 do procedimento anterior à migração chamava de \"regras medidas\" as regras de montagem (grupo com OR exige condição externa; grupo não mistura campos; pubyearmin/pubyearmax não convivem com grupo; sem truncamento), e a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca (`ontolog*` devolve 0); a seção 1 do mesmo procedimento dava esses elementos como não verificados, e nenhuma sondagem com evidência está no repositório. Transcritos como `nao_verificado`, com sondagem no roteiro, sem resolver a contradição.",
+      "origem": "docs/procedimentos_busca_eric.md antes da migração de 2026-11-23 (seções 1 e 4); .agents/skills/executar-sondagens-de-sintaxe/SKILL.md, seção \"4. O roteiro\"; change `geracao-das-fichas-de-busca`, tarefa 6.2",
       "bloqueia": "execução definitiva na ERIC, junto com a PD09",
-      "acao_sugerida": "executar as sondagens SD1 a SD9 do roteiro da ERIC, registrá-las por `sondagens registrar` e corrigir a afirmação da skill `execucao-da-busca` pelo resultado registrado",
+      "acao_sugerida": "executar as sondagens SD1 a SD9 do roteiro da ERIC, registrá-las por `sondagens registrar` e corrigir a afirmação da skill `executar-sondagens-de-sintaxe` pelo resultado registrado",
       "responsavel": "pesquisador"
     },
     {
@@ -163,7 +163,16 @@
       "descricao": "Teste de aderência a refazer: as STRs mudaram de conteúdo em 2026-11-24 (termos retirados e acrescentados ao controle terminológico; en/es da linha \"Termo livre\" reduzidos aos equivalentes dos termos pt; \"Termos sinônimos ou relacionados\" fora da STR), e o pesquisador decidiu refazer o teste.",
       "origem": "data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
       "bloqueia": "passagem da busca (M3/E2) com as STRs vigentes",
-      "acao_sugerida": "executar a busca de cada base com os procedimentos regenerados e refazer o teste de aderência (skill teste-de-aderencia; aderencia planilhar)",
+      "acao_sugerida": "executar a busca de cada base com os procedimentos regenerados e refazer o teste de aderência (skill testar-aderencia-das-expressoes; aderencia planilhar)",
+      "responsavel": "pesquisador"
+    },
+    {
+      "id": "PD32",
+      "categoria": "protocolo",
+      "descricao": "A skill gerar-strings-de-busca prescreve ampliar o conjunto-semente por backward e forward search de uma geração, para aferição independente da construção; o protocolo prevê só backward citation searching de uma geração, sobre os estudos incluídos, como busca complementar.",
+      "origem": "docs/03_protocolo_estrategia_pesquisa.md §Procedimentos (P11); skill gerar-strings-de-busca, Regras duras",
+      "bloqueia": "nada na execução corrente; a coerência entre a skill e o protocolo",
+      "acao_sugerida": "decidir se o forward search entra no protocolo (emenda, skill registrar-decisao) ou sai da skill",
       "responsavel": "pesquisador"
     }
   ]

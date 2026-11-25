@@ -21,7 +21,7 @@ import tempfile
 
 from .. import gramatica as G
 from ..config import Configuracao
-from ..conferencia import conferir
+from ..coerencia import conferir
 from ..contexto import Contexto
 from ..procedimentos import gera_base
 from ..dados import SUBPASTA_REFERENCIAS, pendencias_sementes, problemas_evidencia
@@ -149,7 +149,7 @@ def _aprovam_com_pendencia(ctx, g, itens, com, d):
         de `procedimentos gerar`."""
         cx = ctx.com_sementes(mutante)
         dx = cx.protocolo()
-        return cx.com_fichas({b["sigla"]: gera_base(cx, dx, b["sigla"])[2]
+        return cx.com_procedimentos({b["sigla"]: gera_base(cx, dx, b["sigla"])[2]
                               for b in dx["bases"]})
 
     def aprova_e_relata(nome, mutante, ident, trecho, relata=True):

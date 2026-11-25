@@ -14,11 +14,11 @@ _NAO_LIDA = object()
 
 
 class Contexto:
-    def __init__(self, cfg, texto=None, fichas=None, sementes=None, fontes=None,
+    def __init__(self, cfg, texto=None, procedimentos=None, sementes=None, fontes=None,
                  flexoes=None, validacao=_NAO_LIDA):
         self.config = cfg
         self._texto = texto
-        self._fichas = dict(fichas or {})
+        self._procedimentos = dict(procedimentos or {})
         self._sementes = sementes
         self._fontes = dict(fontes or {})
         self._flexoes = flexoes
@@ -54,11 +54,11 @@ class Contexto:
     def caminho_sementes(self):
         return self.config.valor("documentos.sementes")
 
-    def ficha(self, sigla, caminho):
+    def procedimento(self, sigla, caminho):
         """Texto do procedimento de busca gravado de uma base (saída de geração): o da cópia
         em memória, ou o do arquivo; None se não existe."""
-        if sigla in self._fichas:
-            return self._fichas[sigla]
+        if sigla in self._procedimentos:
+            return self._procedimentos[sigla]
         arquivo = _config.RAIZ / caminho
         return arquivo.read_text(encoding="utf-8") if arquivo.exists() else None
 
@@ -110,7 +110,7 @@ class Contexto:
 
     # ---------------------------------------------------------------------- cópias
     def _copia(self, **mudou):
-        atual = {"cfg": self.config, "texto": self._texto, "fichas": self._fichas,
+        atual = {"cfg": self.config, "texto": self._texto, "procedimentos": self._procedimentos,
                  "sementes": self._sementes, "fontes": self._fontes,
                  "flexoes": self._flexoes, "validacao": self._validacao}
         atual.update(mudou)
@@ -119,8 +119,8 @@ class Contexto:
     def com_texto(self, texto):
         return self._copia(texto=texto)
 
-    def com_fichas(self, fichas):
-        return self._copia(fichas={**self._fichas, **fichas})
+    def com_procedimentos(self, procedimentos):
+        return self._copia(procedimentos={**self._procedimentos, **procedimentos})
 
     def com_fontes(self, fontes):
         """Cópia com a fonte de algumas bases em memória: {sigla: {"toml", "fragmentos",

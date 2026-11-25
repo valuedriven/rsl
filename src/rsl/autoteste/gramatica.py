@@ -10,7 +10,7 @@ exigência que o autoteste não prove.
 import copy
 
 from .. import gramatica as G
-from ..conferencia import conferir
+from ..coerencia import conferir
 from ..dados import problemas_sondagens_registradas
 from ..markdown import blocos_de_tabela, celulas, linha_do_cabecalho, normaliza, secao
 from ..saida import Saida
