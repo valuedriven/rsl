@@ -177,30 +177,29 @@ organização AND conhecimento
 **Pré-requisitos.**
 
 - SD1 registrada com os operadores verificados
-- o procedimento gerado, para copiar as consultas
 
-**Consulta 1 — teste**, em caixa de busca.
-
-```
-o bloco de EB5 no procedimento gerado
-```
-
-**Consulta 2 — controle**, em caixa de busca.
+**Consulta 1 — teste**, em caixa de busca. Texto de EB5, 468 caracteres.
 
 ```
-a primeira metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
 ```
 
-**Consulta 3 — controle**, em caixa de busca.
+**Consulta 2 — controle**, em caixa de busca. Texto de EB5, metade 1 de 2 da faceta FCT1 🟦, 305 caracteres.
 
 ```
-a segunda metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
+```
+
+**Consulta 3 — controle**, em caixa de busca. Texto de EB5, metade 2 de 2 da faceta FCT1 🟦, 291 caracteres.
+
+```
+("knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
 ```
 
 **Passos.**
 
-1. submeter o bloco de EB5 da seção 4 e anotar o retorno
-2. partir a faceta 🟦 em duas metades, cada metade com a faceta 🟨, submeter as duas e anotar os retornos
+1. submeter o teste, EB5 inteira, e anotar o retorno
+2. submeter os dois controles, cada metade da faceta 🟦 com a faceta 🟨, e anotar os retornos
 3. comparar o retorno de EB5 com a união das metades
 
 **Observar.**

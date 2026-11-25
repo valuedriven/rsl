@@ -86,18 +86,17 @@ TITLE-ABS-KEY(ontology OR taxonomy AND education)
 **Pré-requisitos.**
 
 - SD1 registrada com os parênteses verificados
-- o procedimento gerado, para copiar as âncoras
 
-**Consulta 1 — controle**, em busca avançada.
-
-```
-o bloco de EB5 no procedimento gerado, com `AND` no lugar de `W/5`
-```
-
-**Consulta 2 — teste**, em busca avançada. Muda em relação ao controle: `W/5` entre os grupos inteiros.
+**Consulta 1 — controle**, em busca avançada. Texto de EB5, sem proximidade, 993 caracteres.
 
 ```
-o bloco de EB5 no procedimento gerado
+TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") AND ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) PUBYEAR > 2016 AND PUBYEAR < 2027 (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
+```
+
+**Consulta 2 — teste**, em busca avançada. Texto de EB5, 993 caracteres. Muda em relação ao controle: `W/5` entre os grupos inteiros.
+
+```
+TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") W/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) PUBYEAR > 2016 AND PUBYEAR < 2027 (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
 ```
 
 **Passos.**
@@ -184,18 +183,17 @@ TITLE-ABS-KEY({conceptual model*})
 **Pré-requisitos.**
 
 - SD2 registrada com `W/5` entre grupos verificado
-- o procedimento gerado, para copiar a consulta
 
-**Consulta 1 — teste**, em busca avançada.
+**Consulta 1 — teste**, em busca avançada. Texto de EB4, 2.643 caracteres.
 
 ```
-o bloco de EB4 no procedimento gerado
+TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") W/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND (TITLE-ABS-KEY("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") OR TITLE-ABS-KEY("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos")) PUBYEAR > 2016 AND PUBYEAR < 2027 (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))
 ```
 
 **Passos.**
 
-1. copiar o bloco de EB4 do procedimento e anotar o número de caracteres e de operadores
-2. submetê-lo e anotar o retorno e a mensagem, se houver
+1. anotar o número de caracteres, que está na linha que precede a consulta, e o de operadores
+2. submeter a consulta e anotar o retorno e a mensagem, se houver
 
 **Observar.**
 

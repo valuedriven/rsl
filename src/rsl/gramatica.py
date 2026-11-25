@@ -813,10 +813,48 @@ T_SOND_CONSULTAS = TabelaFonte("fonte.sondagens.consultas", F, "sondagens.consul
                                multipla=True, pai=T_SONDAGENS,
                                descricao="ao menos uma por sondagem")
 D_PAPEL_CONSULTA = CampoFonte(T_SOND_CONSULTAS, "papel", "texto", dominio=PAPEIS_CONSULTA)
-CampoFonte(T_SOND_CONSULTAS, "texto", "texto", descricao="consulta literal")
+C_SOND_TEXTO = CampoFonte(
+    T_SOND_CONSULTAS, "texto", "texto", OPCIONAL,
+    descricao="consulta literal, exclusiva com `expressao` (as duas, ou nenhuma, reprova); "
+              "marca de referência no texto reprova (frase-padrão de marca de referência)")
+C_SOND_EXPRESSAO = CampoFonte(
+    T_SOND_CONSULTAS, "expressao", "texto", OPCIONAL,
+    descricao="EBn do protocolo, com bloco nesta base: o texto é o da consulta na composição "
+              "corrente, o mesmo da §4; exclusiva com `texto`")
+CONSULTA_MAIS_LONGA = "mais_longa"
+C_SOND_CONSULTA = CampoFonte(
+    T_SOND_CONSULTAS, "consulta", "texto", OPCIONAL,
+    descricao=f"com `expressao`: o id de uma consulta da expressão ou `{CONSULTA_MAIS_LONGA}` "
+              f"(empate: a primeira na ordem da §4); exigida quando a expressão tem várias "
+              f"consultas; id inexistente reprova")
+C_SOND_SEM_PROXIMIDADE = CampoFonte(
+    T_SOND_CONSULTAS, "sem_proximidade", "booleano", OPCIONAL,
+    descricao="com `expressao` de consulta única: as âncoras unidas por AND no lugar do "
+              "operador de proximidade; reprova na base sem `[composicao] proximidade` e na "
+              "expressão que não usa proximidade")
+METADE_PARTES = (1, 2)
+C_SOND_METADE = CampoFonte(
+    T_SOND_CONSULTAS, "metade", "tabela", OPCIONAL,
+    descricao="com `expressao` de consulta única: {faceta = \"FCTn\", parte = 1 | 2}; só a "
+              "metade indicada dos termos da faceta, em ordem, entra (a parte 1 fica com o "
+              "termo excedente); faceta fora da composição ou da expressão, e parte fora de "
+              "{1, 2}, reprovam")
 CampoFonte(T_SOND_CONSULTAS, "onde", "texto", descricao="caixa, campo ou filtro")
 CampoFonte(T_SOND_CONSULTAS, "muda", "texto", OPCIONAL,
            descricao="o que muda em relação ao controle")
+# Transformações da referência: conjunto fechado, aplicadas na composição.
+TRANSFORMACOES = (C_SOND_SEM_PROXIMIDADE.chave, C_SOND_METADE.chave)
+# Marcas de referência a outro trecho do procedimento: lista fechada. Em `texto`, reprovam
+# (a consulta seria prosa, não literal); a garantia é `expressao`, e a detecção impede que o
+# defeito conhecido volte. A cor de cada faceta vem de `[composicao.facetas] cor` da fonte.
+LOCUCAO_REFERENCIA = "procedimento gerado"
+FR_MARCA_REFERENCIA = FrasePadrao(
+    "fonte.marca_referencia", F, None,
+    f"EBn, STRn, FCTn, a cor de uma faceta ou \"{LOCUCAO_REFERENCIA}\"  (em `texto` de "
+    f"[[sondagens.consultas]])",
+    rf"\b(?:{I_EB.prefixo}|{I_STR.prefixo}|{I_FCT.prefixo})\d+\b", exigencia=OPCIONAL,
+    descricao="marca em `texto` reprova a base, nomeando a sondagem, a consulta e a marca; "
+              "a consulta por referência se declara com `expressao`")
 T_SOND_LEITURAS = TabelaFonte("fonte.sondagens.leituras", F, "sondagens.leituras",
                               multipla=True, pai=T_SONDAGENS, minimo=2,
                               descricao="ao menos duas; uma delas, a inconclusiva, com "

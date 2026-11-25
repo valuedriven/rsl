@@ -223,6 +223,70 @@ def _valida_sondagens(lista, nomes, doc):
     return sondagens
 
 
+def marcas_de_referencia(texto, cores):
+    """Marcas de referência a outro trecho do procedimento em `texto`, na ordem: EBn, STRn,
+    FCTn, a locução da gramática e as cores de faceta declaradas na fonte."""
+    achadas = [m.group(0) for m in G.FR_MARCA_REFERENCIA.padrao.finditer(texto)]
+    if G.LOCUCAO_REFERENCIA in texto.lower():
+        achadas.append(G.LOCUCAO_REFERENCIA)
+    achadas += [c for c in cores if c in texto]
+    return achadas
+
+
+def _valida_consultas_de_sondagem(sondagens, d, por_faceta, prox, doc):
+    """A camada da consulta de sondagem que depende só da fonte e do protocolo: `texto` ou
+    `expressao`, exclusivos; transformações só com `expressao` e na forma declarada; marca
+    de referência em `texto`. A camada que depende da composição fica em
+    `Composicao.resolve`."""
+    cores = [f["cor"] for f in por_faceta.values() if f.get("cor")]
+    for sd, s in sondagens.items():
+        for k, c in enumerate(s["consultas"], 1):
+            onde = f"{sd}, consulta {k}"
+            tem_texto, tem_expr = "texto" in c, "expressao" in c
+            if tem_texto == tem_expr:
+                quais = "`texto` e `expressao` juntos" if tem_texto else \
+                    "nem `texto` nem `expressao`"
+                raise ProtocoloInvalido(G.C_SOND_TEXTO, f"{onde}: declara {quais}; a consulta "
+                                                        f"é um dos dois", doc)
+            if tem_texto:
+                marcas = marcas_de_referencia(c["texto"], cores)
+                if marcas:
+                    raise ProtocoloInvalido(G.FR_MARCA_REFERENCIA, f"{onde}: `texto` com a "
+                                            f"marca de referência {marcas[0]!r}; `texto` é a "
+                                            f"consulta literal — para usar a consulta de uma "
+                                            f"expressão, declarar `expressao = \"EBn\"`", doc)
+                fora = [x for x in ("consulta",) + G.TRANSFORMACOES if x in c]
+                if fora:
+                    raise ProtocoloInvalido(G.T_SOND_CONSULTAS, f"{onde}: {fora} só se "
+                                            f"declaram com `expressao`", doc)
+                continue
+            ident = c["expressao"]
+            if not G.I_EB.casa(ident) or ident not in d["expressoes"]:
+                raise ProtocoloInvalido(G.C_SOND_EXPRESSAO, f"{onde}: `expressao` {ident!r} não "
+                                        f"é expressão do protocolo "
+                                        f"({sorted(d['expressoes'])})", doc)
+            if "consulta" in c and not c["consulta"].strip():
+                raise ProtocoloInvalido(G.C_SOND_CONSULTA, f"{onde}: `consulta` vazia", doc)
+            if c.get("sem_proximidade") and prox is None:
+                raise ProtocoloInvalido(G.C_SOND_SEM_PROXIMIDADE, f"{onde}: `sem_proximidade` "
+                                        f"numa base sem proximidade (`[composicao] "
+                                        f"proximidade = \"nenhum\"`)", doc)
+            if "metade" in c:
+                m = c["metade"]
+                if set(m) != {"faceta", "parte"} or not isinstance(m["faceta"], str) \
+                        or isinstance(m["parte"], bool) or not isinstance(m["parte"], int):
+                    raise ProtocoloInvalido(G.C_SOND_METADE, f"{onde}: `metade` {m!r}: exige "
+                                            f"`faceta` (texto) e `parte` (inteiro)", doc)
+                if m["parte"] not in G.METADE_PARTES:
+                    raise ProtocoloInvalido(G.C_SOND_METADE, f"{onde}: `metade` com parte "
+                                            f"{m['parte']}; admitidas: "
+                                            f"{list(G.METADE_PARTES)}", doc)
+                if m["faceta"] not in por_faceta:
+                    raise ProtocoloInvalido(G.C_SOND_METADE, f"{onde}: `metade` da faceta "
+                                            f"{m['faceta']!r}, que não está na composição "
+                                            f"({sorted(por_faceta)})", doc)
+
+
 def _valida_fragmentos(fonte_bruta, doc):
     admitidos = sorted(G.FRAGMENTOS)
     fragmentos = fonte_bruta.get("fragmentos", {})
@@ -398,6 +462,7 @@ def le_fonte(ctx, d, sigla, sem_pendente=True):
             or not isinstance(prox["distancia"], int):
         raise ProtocoloInvalido(G.D_PROXIMIDADE, f"proximidade {prox!r}: exige `operador` "
                                                  f"(texto) e `distancia` (inteiro)", doc)
+    _valida_consultas_de_sondagem(sondagens, d, por_faceta, prox, doc)
     extras = {}
     for tab, decl in (("subconjuntos", G.T_SUBCONJUNTOS), ("radical", G.T_RADICAL)):
         for s in dado.get(tab, []):

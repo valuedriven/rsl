@@ -311,7 +311,7 @@ estado = "nao_verificado"
 id = "SD2"
 elementos = ["`W/5` entre os grupos inteiros das duas âncoras"]
 objetivo = "saber se a interface aceita `W/5` entre os grupos inteiros das duas âncoras"
-pre_requisitos = ["SD1 registrada com os parênteses verificados", "o procedimento gerado, para copiar as âncoras"]
+pre_requisitos = ["SD1 registrada com os parênteses verificados"]
 depende_de = ["SD1"]
 passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem, se houver"]
 observar = ["retorno exibido", "mensagem de erro ou de recusa, se houver"]
@@ -319,12 +319,13 @@ evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visí
 
 [[sondagens.consultas]]
 papel = "controle"
-texto = "o bloco de EB5 no procedimento gerado, com `AND` no lugar de `W/5`"
+expressao = "EB5"
+sem_proximidade = true
 onde = "busca avançada"
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "o bloco de EB5 no procedimento gerado"
+expressao = "EB5"
 onde = "busca avançada"
 muda = "`W/5` entre os grupos inteiros"
 
@@ -390,15 +391,15 @@ estado = "nao_verificado"
 id = "SD4"
 elementos = ["Comprimento máximo da consulta", "Limite de operadores por consulta"]
 objetivo = "saber se a interface aceita inteira a consulta de EB4"
-pre_requisitos = ["SD2 registrada com `W/5` entre grupos verificado", "o procedimento gerado, para copiar a consulta"]
+pre_requisitos = ["SD2 registrada com `W/5` entre grupos verificado"]
 depende_de = ["SD2"]
-passos = ["copiar o bloco de EB4 do procedimento e anotar o número de caracteres e de operadores", "submetê-lo e anotar o retorno e a mensagem, se houver"]
+passos = ["anotar o número de caracteres, que está na linha que precede a consulta, e o de operadores", "submeter a consulta e anotar o retorno e a mensagem, se houver"]
 observar = ["retorno exibido", "mensagem de erro ou de recusa, se houver"]
 evidencia = ["captura da tela, com a consulta e o retorno visíveis"]
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "o bloco de EB4 no procedimento gerado"
+expressao = "EB4"
 onde = "busca avançada"
 
 [[sondagens.leituras]]

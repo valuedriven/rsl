@@ -87,6 +87,16 @@ leituras (uma delas inconclusiva) e evidência, desenhados como nas seções 5 e
 montagem que a composição pressupõe vai a `[[regras_de_montagem]]`, com a mesma exigência de
 situação.
 
+Cada consulta do roteiro sai pronta para colar. É literal (`texto`) ou referência a uma
+expressão (`expressao = "EBn"`), quando a sondagem mede a própria consulta da busca, como o
+comprimento máximo. Na referência, `consulta` escolhe uma das consultas da expressão (o id
+ou `mais_longa`), e as transformações fechadas montam o controle na composição:
+`sem_proximidade` troca o operador de proximidade por AND, e `metade` mantém metade dos
+termos de uma faceta. O gerador escreve o texto e o número de caracteres, sempre iguais aos
+da seção 4. `texto` que aponte outro trecho do procedimento ("o bloco de EB4", a cor de uma
+faceta) reprova a base: a consulta seria prosa, e quem a executa teria de montá-la à mão.
+Esquema em `python3 -m rsl documentos gramatica`.
+
 O roteiro se executa antes da primeira execução numa base, na ordem das dependências. Já se
 afirmou que a ERIC não trunca (`ontolog*` devolve 0) e que a BRAPCI tem teto de 1.000
 registros no retorno; nenhuma das duas afirmações tem sondagem registrada (PD27, PD09, PD10),
@@ -151,7 +161,9 @@ captura dos registros abertos; quando a sondagem é de exportação, o arquivo e
 
 Registram-se também a data e a hora em que a sondagem foi feita, não as do registro, e o
 texto efetivamente submetido, quando difere do roteiro (a interface que reescreve a
-consulta, um termo trocado por necessidade). O retorno se anota como veio, sem
+consulta, um termo trocado por necessidade). O texto do roteiro já é o registrado por
+padrão: na consulta por referência, o literal resolvido no momento do registro, nunca a
+referência, porque a expressão pode mudar depois. O retorno se anota como veio, sem
 arredondar.
 
 A sondagem se registra pelo comando do projeto (sinopse em `docs/procedimentos.md`), com a

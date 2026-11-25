@@ -23,7 +23,7 @@ from .. import gramatica as G
 from ..config import Configuracao
 from ..coerencia import conferir
 from ..contexto import Contexto
-from ..procedimentos import gera_base
+from ..procedimentos import gera_base, registro_de_execucao
 from ..dados import SUBPASTA_REFERENCIAS, pendencias_sementes, problemas_evidencia
 from ..saida import Saida
 from ..sementes import cmd_planilha, manuais
@@ -149,7 +149,10 @@ def _aprovam_com_pendencia(ctx, g, itens, com, d):
         de `procedimentos gerar`."""
         cx = ctx.com_sementes(mutante)
         dx = cx.protocolo()
-        return cx.com_procedimentos({b["sigla"]: gera_base(cx, dx, b["sigla"])[2]
+        # Com o registro de execução, como `procedimentos gerar`: o roteiro traz os
+        # resultados de sondagem registrados.
+        reg = registro_de_execucao(cx)
+        return cx.com_procedimentos({b["sigla"]: gera_base(cx, dx, b["sigla"], registro=reg)[2]
                               for b in dx["bases"]})
 
     def aprova_e_relata(nome, mutante, ident, trecho, relata=True):

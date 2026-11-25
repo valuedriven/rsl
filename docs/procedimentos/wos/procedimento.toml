@@ -58,7 +58,8 @@ fonte = "Clarivate, *Advanced Search examples*"
 [[sintaxe]]
 elemento = "Aspas desligam a lematização e o localizador interno de sinônimos"
 categoria = "frase"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd3-2026-11-25"
 sondagem = "SD3"
 nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
 
@@ -90,13 +91,15 @@ nota = "conferir na lista da interface"
 [[sintaxe]]
 elemento = "`NEAR/x` entre grupos entre parênteses"
 categoria = "proximidade"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd2-2026-11-25"
 sondagem = "SD2"
 
 [[sintaxe]]
 elemento = "Distância padrão de `NEAR` sem número"
 categoria = "proximidade"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd2-2026-11-25"
 sondagem = "SD2"
 
 [[sintaxe]]
@@ -130,19 +133,23 @@ nota = "conferir na interface antes de exportar"
 [[sintaxe]]
 elemento = "Operadores booleanos `AND` e `OR`"
 categoria = "operadores"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd1-2026-11-25"
 sondagem = "SD1"
 
 [[sintaxe]]
 elemento = "Parênteses para agrupamento"
 categoria = "agrupamento"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd1-2026-11-25"
 sondagem = "SD1"
 
 [[sintaxe]]
 elemento = "Lematização"
 categoria = "lematizacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd3-2026-11-25"
+nota = "medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem"
 sondagem = "SD3"
 
 [[sintaxe]]
@@ -374,7 +381,7 @@ elementos = ["Lematização", "Aspas desligam a lematização e o localizador in
 objetivo = "saber se a base casa singular e plural sem que a consulta os traga, e se as aspas desligam isso"
 pre_requisitos = ["SD1 registrada com operadores e parênteses verificados"]
 depende_de = ["SD1"]
-passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido", "comparar também, com consultas análogas, `ontologia`/`ontologias` e `ontología`/`ontologías`, e anotar os retornos"]
+passos = ["submeter cada consulta, uma por vez, e anotar o retorno exibido"]
 observar = ["retorno exibido de cada consulta"]
 evidencia = ["captura da tela do histórico de busca, com as consultas e os retornos visíveis"]
 
@@ -406,7 +413,7 @@ conclusao = "a base não lematiza em inglês; as aspas não mudam o número"
 estado = "medicao"
 
 [[sondagens.leituras]]
-resultado = "qualquer outra relação, ou pt e es diferentes do inglês"
+resultado = "qualquer outra relação"
 conclusao = "não se distingue a lematização; levar ao pesquisador antes de declarar `pela lematização`"
 estado = "nao_verificado"
 
@@ -457,15 +464,15 @@ estado = "nao_verificado"
 id = "SD5"
 elementos = ["Comprimento máximo da consulta"]
 objetivo = "saber se a interface aceita inteira a consulta de EB4"
-pre_requisitos = ["SD2 registrada com a proximidade entre grupos verificada", "o procedimento gerado, para copiar a consulta"]
+pre_requisitos = ["SD2 registrada com a proximidade entre grupos verificada"]
 depende_de = ["SD2"]
-passos = ["copiar o bloco de EB4 do procedimento e anotar o número de caracteres", "submetê-lo e anotar o retorno e a mensagem, se houver"]
+passos = ["anotar o número de caracteres, que está na linha que precede a consulta", "submeter a consulta e anotar o retorno e a mensagem, se houver"]
 observar = ["retorno exibido", "mensagem de erro ou de recusa, se houver"]
 evidencia = ["captura da tela do histórico de busca, com a consulta e o retorno visíveis"]
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "o bloco de EB4 no procedimento gerado"
+expressao = "EB4"
 onde = "busca avançada"
 
 [[sondagens.leituras]]

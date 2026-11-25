@@ -338,25 +338,27 @@ estado = "nao_verificado"
 id = "SD4"
 elementos = ["Comprimento máximo da consulta"]
 objetivo = "saber se a base aceita inteira a consulta longa"
-pre_requisitos = ["SD1 registrada com os operadores verificados", "o procedimento gerado, para copiar as consultas"]
+pre_requisitos = ["SD1 registrada com os operadores verificados"]
 depende_de = ["SD1"]
-passos = ["submeter o bloco de EB5 da seção 4 e anotar o retorno", "partir a faceta 🟦 em duas metades, cada metade com a faceta 🟨, submeter as duas e anotar os retornos", "comparar o retorno de EB5 com a união das metades"]
+passos = ["submeter o teste, EB5 inteira, e anotar o retorno", "submeter os dois controles, cada metade da faceta 🟦 com a faceta 🟨, e anotar os retornos", "comparar o retorno de EB5 com a união das metades"]
 observar = ["retorno exibido de cada consulta", "se o texto mostrado depois da submissão é a consulta inteira"]
 evidencia = ["captura da tela de cada consulta, com o fim da consulta e o retorno visíveis"]
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "o bloco de EB5 no procedimento gerado"
+expressao = "EB5"
 onde = "caixa de busca"
 
 [[sondagens.consultas]]
 papel = "controle"
-texto = "a primeira metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado"
+expressao = "EB5"
+metade = { faceta = "FCT1", parte = 1 }
 onde = "caixa de busca"
 
 [[sondagens.consultas]]
 papel = "controle"
-texto = "a segunda metade da faceta 🟦 AND a faceta 🟨, copiadas do procedimento gerado"
+expressao = "EB5"
+metade = { faceta = "FCT1", parte = 2 }
 onde = "caixa de busca"
 
 [[sondagens.leituras]]

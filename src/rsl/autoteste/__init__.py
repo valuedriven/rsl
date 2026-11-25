@@ -9,7 +9,8 @@ motivo ou com outro código faz o autoteste falhar; mutação que não se aplica
 Grupos executados numa só chamada, cada um com a sua contagem: defeitos injetados no
 protocolo, precedência, configuração, arquivo de sementes, leitura estrutural que aprova,
 planejamento da validação, cliente TemaTres e reabertura, arquivos alimentados, cobertura por base, fonte do
-procedimento, geração dos procedimentos, sondagens, flexão dos termos,
+procedimento, geração dos procedimentos, sondagens, consulta de sondagem por
+referência, flexão dos termos,
 composição da derivação, aderência por papel, geração das strings, gramática do protocolo,
 catálogo de apoio e nomes antigos recusados.
 
@@ -109,6 +110,7 @@ def grupos():
         ("fonte do procedimento de busca", procedimentos.fonte),
         ("geração dos procedimentos", procedimentos.geracao),
         ("sondagens por base", procedimentos.sondagens),
+        ("consulta de sondagem por referência", procedimentos.referencias),
         ("flexão dos termos", procedimentos.flexao),
         ("prova da composição da derivação", busca.composicao),
         ("aderência por papel", busca.aderencia),

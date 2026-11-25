@@ -227,6 +227,20 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 
 ### E2 — Localização dos estudos
 
+- Executar as sondagens de sintaxe pelo roteiro de cada base (adaptação do projeto)
+  - Fonte: procedimento de busca de cada base §1, "Sondagens a executar", na ordem das
+    dependências
+  - Script principal: `python3 -m rsl sondagens registrar SIGLA SDn --retorno RETORNO
+    … --leitura LEITURA --data-hora DATA_HORA --evidencia EVIDENCIA [--submetido K TEXTO]
+    [--observacao OBSERVACAO]` — `SDn`: sondagem do roteiro da base; `--retorno`: uma vez por
+    consulta declarada, na ordem; `--leitura`: número da leitura observada; `--data-hora`: ISO
+    8601, obrigatória, sem padrão; `--evidencia`: arquivo existente, obrigatório;
+    `--submetido`: o texto da consulta K, quando o submetido difere do roteiro. Grava em
+    `[dados] registro` o texto de cada consulta como está no roteiro (a consulta por
+    referência a uma expressão, já resolvida) e exibe a citação e a mudança a aplicar na
+    fonte, que não altera; aplicá-la na fonte e regenerar o procedimento
+  - Skill principal: `executar-sondagens-de-sintaxe`
+  - Skill: `executar-expressoes-de-busca`
 - Realizar teste de aderência das expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais;
     arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2
@@ -240,18 +254,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados (ordem e via de
     acesso); procedimento de busca de cada base §1 (estado de verificação da sintaxe); plano §7
   - Skill: `executar-expressoes-de-busca`
-- Executar as sondagens de sintaxe pelo roteiro de cada base (adaptação do projeto)
-  - Fonte: procedimento de busca de cada base §1, "Sondagens a executar", na ordem das
-    dependências
-  - Script principal: `python3 -m rsl sondagens registrar SIGLA SDn --retorno RETORNO
-    … --leitura LEITURA --data-hora DATA_HORA --evidencia EVIDENCIA [--submetido K TEXTO]
-    [--observacao OBSERVACAO]` — `SDn`: sondagem do roteiro da base; `--retorno`: uma vez por
-    consulta declarada, na ordem; `--leitura`: número da leitura observada; `--data-hora`: ISO
-    8601, obrigatória, sem padrão; `--evidencia`: arquivo existente, obrigatório. Grava em
-    `[dados] registro` e exibe a citação e a mudança a aplicar na fonte, que não altera;
-    aplicá-la na fonte e regenerar o procedimento
-  - Skill principal: `executar-sondagens-de-sintaxe`
-  - Skill: `executar-expressoes-de-busca`
+
 - Executar expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas
     explicativas; procedimento de busca de cada base §4 (Como executar, Variantes previstas) e §6

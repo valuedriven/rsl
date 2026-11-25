@@ -40,21 +40,35 @@ def base_com(ctx, d, condicao):
     return None
 
 
+def _inconclusiva(dado):
+    """A primeira sondagem cujos elementos a fonte ainda dá como não verificados: o
+    resultado de leitura inconclusiva dela não tem nada a levar à fonte. Sondagem já medida
+    não serve: o resultado inconclusivo contradiria a fonte e seria relatado."""
+    situacao = {s["elemento"]: s["situacao"] for s in dado["sintaxe"]}
+    situacao.update({r["texto"]: r["situacao"] for r in dado.get("regras_de_montagem", [])})
+    return next((s for s in dado.get("sondagens", [])
+                 if all(situacao.get(e) == G.SITUACAO_NAO_VERIFICADO for e in s["elementos"])),
+                None)
+
+
 def registro_com_sondagem(ctx, d):
-    """(sigla, registro) com um resultado válido da primeira sondagem da primeira base que
-    declara sondagem: leitura inconclusiva, sem elemento a levar à fonte."""
-    sigla = base_com(ctx, d, lambda x: bool(x.get("sondagens")))
+    """(sigla, registro) com um resultado válido da primeira sondagem ainda não verificada
+    da primeira base que a tenha: leitura inconclusiva, sem elemento a levar à fonte."""
+    sigla = base_com(ctx, d, lambda x: _inconclusiva(x) is not None)
     if sigla is None:
         return None, None
     dado, _, _ = fonte_de(ctx, d, sigla)
-    s = dado["sondagens"][0]
+    s = _inconclusiva(dado)
     k = next(i for i, x in enumerate(s["leituras"], 1)
              if x["estado"] == G.SITUACAO_NAO_VERIFICADO)
     bd = next(b for b in d["bases"] if b["sigla"] == sigla)
     resultado = {
         "id": f"{s['id'].lower()}-2026-01-01", "sondagem": s["id"],
         "data_hora": "2026-01-01T10:00",
-        "consultas": [{"texto": c["texto"], "retorno": 1} for c in s["consultas"]],
+        # `dados conferir` não compara o texto registrado com a fonte: o da consulta por
+        # referência (sem `texto`) basta como marcador.
+        "consultas": [{"texto": c.get("texto") or c["expressao"], "retorno": 1}
+                      for c in s["consultas"]],
         "leitura": {"numero": k, "resultado": s["leituras"][k - 1]["resultado"],
                     "estado": s["leituras"][k - 1]["estado"]},
         "evidencia": ["autoteste.png"], "observacao": "",

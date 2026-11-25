@@ -21,7 +21,7 @@
 | Lematização | lematizacao | **Não verificado** | — | SD10 |
 | Aspas como frase | frase | **Não verificado** | — | SD9 |
 | Campo `descriptor` | vocabulario_controlado | **Não verificado** | — | SD11 |
-| Comprimento máximo da consulta | limite_consulta | **Não verificado**; 1.400 é regra de bolso, declarada como teto de caracteres na declaração de cobertura até medir | — | SD12 |
+| Comprimento máximo da consulta | limite_consulta | **Não verificado**; 1.400 é regra de bolso, mantida como teto sem verificação; a SD12 mede só o comprimento da consulta mais longa do procedimento, e consulta acima do comprimento registrado vai à base sem verificação até a SD12 ser refeita | — | SD12 |
 | Negação com prefixo `-` | operadores | Verificado em fonte oficial; não medida | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
 | Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | **Não verificado** | — | SD13 |
 | Teto de retorno exibido | limite_retorno | **Não verificado** | — | SD14 |
@@ -524,7 +524,6 @@ descriptorx:Thesauri
 **Pré-requisitos.**
 
 - SD2 registrada com os parênteses verificados
-- o procedimento gerado, para copiar as consultas
 
 **Consulta 1 — controle**, em caixa de busca.
 
@@ -532,15 +531,15 @@ descriptorx:Thesauri
 (title:ontology OR title:ontologies) AND abstract:education
 ```
 
-**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o comprimento, perto do teto declarado.
+**Consulta 2 — teste**, em caixa de busca. Texto de EB4, consulta 4a (a mais longa), 719 caracteres. Muda em relação ao controle: o comprimento: a consulta mais longa do procedimento.
 
 ```
-a consulta mais longa de EB4 no procedimento gerado
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
 ```
 
 **Passos.**
 
-1. copiar do procedimento a consulta mais longa de EB4 e anotar o número de caracteres
+1. anotar o número de caracteres do teste, que está na linha que o precede
 2. submeter o controle e anotar o retorno e o texto que a caixa de busca mostra depois da submissão
 3. submeter o teste e anotar o mesmo
 
@@ -552,7 +551,7 @@ a consulta mais longa de EB4 no procedimento gerado
 
 | # | Resultado | Conclusão | Estado |
 | :---: | :--- | :--- | :--- |
-| 1 | teste > 0 e o texto mostrado é a consulta inteira | a base aceita ao menos o comprimento da consulta mais longa; o teto declarado se mantém | Verificado por medição |
+| 1 | teste > 0 e o texto mostrado é a consulta inteira | a base aceita ao menos o comprimento da consulta mais longa, que fica no resultado registrado; acima dele, o comprimento segue sem verificação | Verificado por medição |
 | 2 | teste = 0, texto cortado ou mensagem de erro | o comprimento passa do limite da base; levar ao pesquisador para baixar o teto | Não verificado |
 
 **Evidência a registrar.**

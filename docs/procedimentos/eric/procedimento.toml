@@ -114,7 +114,7 @@ elemento = "Comprimento máximo da consulta"
 categoria = "limite_consulta"
 situacao = "nao_verificado"
 sondagem = "SD12"
-nota = "1.400 é regra de bolso, declarada como teto de caracteres na declaração de cobertura até medir"
+nota = "1.400 é regra de bolso, mantida como teto sem verificação; a SD12 mede só o comprimento da consulta mais longa do procedimento, e consulta acima do comprimento registrado vai à base sem verificação até a SD12 ser refeita"
 
 [[sintaxe]]
 elemento = "Negação com prefixo `-`"
@@ -732,9 +732,9 @@ estado = "nao_verificado"
 id = "SD12"
 elementos = ["Comprimento máximo da consulta"]
 objetivo = "saber se a consulta mais longa do procedimento é aceita inteira"
-pre_requisitos = ["SD2 registrada com os parênteses verificados", "o procedimento gerado, para copiar as consultas"]
+pre_requisitos = ["SD2 registrada com os parênteses verificados"]
 depende_de = ["SD2"]
-passos = ["copiar do procedimento a consulta mais longa de EB4 e anotar o número de caracteres", "submeter o controle e anotar o retorno e o texto que a caixa de busca mostra depois da submissão", "submeter o teste e anotar o mesmo"]
+passos = ["anotar o número de caracteres do teste, que está na linha que o precede", "submeter o controle e anotar o retorno e o texto que a caixa de busca mostra depois da submissão", "submeter o teste e anotar o mesmo"]
 observar = ["retorno exibido", "se o texto mostrado depois da submissão é a consulta inteira", "mensagem de erro, se houver"]
 evidencia = ["captura da tela de cada consulta, com o fim da consulta e o retorno visíveis"]
 
@@ -745,13 +745,14 @@ onde = "caixa de busca"
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "a consulta mais longa de EB4 no procedimento gerado"
+expressao = "EB4"
+consulta = "mais_longa"
 onde = "caixa de busca"
-muda = "o comprimento, perto do teto declarado"
+muda = "o comprimento: a consulta mais longa do procedimento"
 
 [[sondagens.leituras]]
 resultado = "teste > 0 e o texto mostrado é a consulta inteira"
-conclusao = "a base aceita ao menos o comprimento da consulta mais longa; o teto declarado se mantém"
+conclusao = "a base aceita ao menos o comprimento da consulta mais longa, que fica no resultado registrado; acima dele, o comprimento segue sem verificação"
 estado = "medicao"
 
 [[sondagens.leituras]]

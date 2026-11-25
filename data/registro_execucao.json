@@ -1,0 +1,114 @@
+{
+  "bases": {
+    "BD1": {
+      "base": "Web of Science (Core Collection)",
+      "execucoes": [],
+      "sondagens": [
+        {
+          "id": "sd1-2026-11-25",
+          "sondagem": "SD1",
+          "data_hora": "2026-11-25T16:50",
+          "consultas": [
+            {
+              "texto": "TS=(ontology)",
+              "retorno": 149994
+            },
+            {
+              "texto": "TS=(ontology AND education)",
+              "retorno": 3430
+            },
+            {
+              "texto": "TS=(ontology OR taxonomy)",
+              "retorno": 347398
+            },
+            {
+              "texto": "TS=((ontology OR taxonomy) AND education)",
+              "retorno": 9167
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < `AND` < controle ≤ `OR`, e 0 < grupo ≤ `OR`",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD1-SD3_2026-11-25T1650.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela"
+        },
+        {
+          "id": "sd2-2026-11-25",
+          "sondagem": "SD2",
+          "data_hora": "2026-11-25T16:50",
+          "consultas": [
+            {
+              "texto": "TS=((ontology OR taxonomy) AND (education OR learning))",
+              "retorno": 32349
+            },
+            {
+              "texto": "TS=((ontology OR taxonomy) NEAR/5 (education OR learning))",
+              "retorno": 5900
+            },
+            {
+              "texto": "TS=(ontology NEAR education)",
+              "retorno": 794
+            },
+            {
+              "texto": "TS=(ontology NEAR/15 education)",
+              "retorno": 794
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < primeiro teste ≤ controle, sem mensagem; `NEAR` sem número = `NEAR/15`",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD1-SD3_2026-11-25T1650.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela"
+        },
+        {
+          "id": "sd3-2026-11-25",
+          "sondagem": "SD3",
+          "data_hora": "2026-11-25T16:50",
+          "consultas": [
+            {
+              "texto": "TS=(ontology)",
+              "retorno": 149994
+            },
+            {
+              "texto": "TS=(ontologies)",
+              "retorno": 149994
+            },
+            {
+              "texto": "TS=(\"ontology\")",
+              "retorno": 137354
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "controle = plural, e o termo entre aspas < controle",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD1-SD3_2026-11-25T1650.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela"
+        }
+      ]
+    },
+    "BD2": {
+      "base": "Scopus",
+      "execucoes": []
+    },
+    "BD3": {
+      "base": "ERIC",
+      "execucoes": []
+    },
+    "BD4": {
+      "base": "BRAPCI",
+      "execucoes": []
+    }
+  }
+}

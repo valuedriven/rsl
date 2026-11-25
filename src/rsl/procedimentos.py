@@ -139,6 +139,10 @@ class Composicao:
                           if c["destino"] == G.DESTINO_CONSULTA]
         self.expressoes = {e["id"]: self._expressao(e["id"])
                            for e in fonte["dado"]["execucao"]["expressoes"]}
+        # Consultas de sondagem resolvidas: toda geração e todo registro passam por aqui, e
+        # a referência inválida reprova antes de chegar ao roteiro.
+        self.sondagens = {sd: [self.resolve(sd, k, c) for k, c in enumerate(s["consultas"], 1)]
+                          for sd, s in fonte["sondagens"].items()}
 
     # ---- estatuto e rótulos
     def estatuto(self, ident):
@@ -159,8 +163,9 @@ class Composicao:
         return self.fonte["composicao"][fid].get("rotulo") or fid
 
     # ---- consultas
-    def _ancoras(self, partes):
-        """Texto das âncoras: com proximidade, no mesmo campo, entre parênteses."""
+    def _ancoras(self, partes, sem_proximidade=False):
+        """Texto das âncoras: com proximidade, no mesmo campo, entre parênteses. Com
+        `sem_proximidade`, a mesma forma com AND no lugar do operador de proximidade."""
         prox = self.fonte["proximidade"]
         if prox is None or len(partes) != 2:
             return [grupo(p["termos"], p["campo"], p["forma"], self.aspas) for p in partes]
@@ -169,14 +174,14 @@ class Composicao:
             raise ProtocoloInvalido(G.D_PROXIMIDADE, "proximidade entre âncoras exige as duas "
                                                      "no mesmo campo, na forma `envolve`",
                                     self.fonte["doc"])
-        op = f"{prox['operador']}/{prox['distancia']}"
+        op = "AND" if sem_proximidade else f"{prox['operador']}/{prox['distancia']}"
         ia = interior(a["termos"], "", G.FORMA_ENVOLVE, self.aspas)
         ib = interior(b["termos"], "", G.FORMA_ENVOLVE, self.aspas)
         return [f"{a['campo']}(({ia}) {op} ({ib}))"]
 
-    def _texto(self, ancoras, outros):
-        """(texto, [(índice do grupo em `outros`, alternativa)]) de uma consulta."""
-        partes = list(self._ancoras(ancoras))
+    def _texto(self, ancoras, outros, sem_proximidade=False):
+        """Texto de uma consulta: âncoras, demais grupos e cláusulas de filtro."""
+        partes = list(self._ancoras(ancoras, sem_proximidade))
         for g in outros:
             if len(g) == 1:
                 partes.append(grupo(g[0]["termos"], g[0]["campo"], g[0]["forma"], self.aspas))
@@ -195,17 +200,28 @@ class Composicao:
         s = self.strings[fid]
         return {"fid": fid, "termos": s["termos"], "campo": s["campo"], "forma": s["forma"]}
 
+    def _curada(self, ident):
+        return self.fonte["dado"]["execucao"]["forma"] == "curada" and \
+            ident == self.d["executada"]
+
     def _expressao(self, ident):
         estatuto = self.estatuto(ident)
         if estatuto not in G.ESTATUTOS_COM_BLOCO:
             return {"id": ident, "estatuto": estatuto, "consultas": []}
-        if self.fonte["dado"]["execucao"]["forma"] == "curada" and \
-                ident == self.d["executada"]:
+        if self._curada(ident):
             consultas = [{"id": f"{n}", "rotulo": f"{c['grupo']} — consulta {n}",
                           "texto": c["consulta"], "termos": None, "facetas": c["facetas"]}
                          for n, c in enumerate(self.fonte["dado"]["curadas"], 1)]
             return {"id": ident, "estatuto": estatuto, "consultas": consultas}
         n = ident[len(G.I_EB.prefixo):]
+        consultas = []
+        for letra, rotulo, ancoras, outros in self._combinacoes(ident):
+            consultas += self._particiona(ident, n, letra, rotulo, ancoras, outros)
+        return {"id": ident, "estatuto": estatuto, "consultas": consultas}
+
+    def _combinacoes(self, ident):
+        """[(letra, rótulo, âncoras, outros)] de uma expressão não curada: uma por consulta
+        de campo e alternativa separada, antes da partição pelo teto."""
         ancoras_ids = [g[0] for g in self.d["papeis"]["ancoras"]]
         grupos = self.d["expressoes"][ident]
         campos = self.fonte["dado"].get("consultas_de_campo") or [None]
@@ -220,7 +236,7 @@ class Composicao:
                 alternativas.append([(g, False)])
         combinacoes = list(itertools.product(campos, *alternativas))
         multiplas = len(combinacoes) > 1 or campos != [None]
-        consultas = []
+        saida = []
         for k, (campo_q, *escolhas) in enumerate(combinacoes):
             letra = string.ascii_lowercase[k] if multiplas else ""
             rotulos = [campo_q["rotulo"]] if campo_q else []
@@ -229,8 +245,8 @@ class Composicao:
             escolha = [g for g, _ in escolhas]
             ancoras = [self._parte(self.faceta_de[a], campo_q) for a in ancoras_ids]
             outros = [[self._parte(self.faceta_de[x], campo_q) for x in g] for g in escolha]
-            consultas += self._particiona(ident, n, letra, rotulo, ancoras, outros)
-        return {"id": ident, "estatuto": estatuto, "consultas": consultas}
+            saida.append((letra, rotulo, ancoras, outros))
+        return saida
 
     def _particiona(self, ident, n, letra, rotulo, ancoras, outros):
         """Uma consulta, ou as partes contíguas do maior grupo não âncora até caber no teto."""
@@ -285,10 +301,112 @@ class Composicao:
             saida.append(consulta(f"{n}{letra}{k}", rot, mud))
         return saida
 
+    # ---- consulta de sondagem por referência
+    def resolve(self, sd, k, c):
+        """{texto, origem} da consulta `k` da sondagem `sd`: o literal de `texto`, ou a
+        consulta da expressão referida na composição corrente, com a transformação
+        declarada. A forma da referência já foi conferida na leitura da fonte; aqui se
+        confere o que depende da composição. ProtocoloInvalido nomeia sondagem e consulta."""
+        if "expressao" not in c:
+            return {"texto": c["texto"], "origem": None}
+        doc, onde, ident = self.fonte["doc"], f"{sd}, consulta {k}", c["expressao"]
+        e = self.expressoes[ident]
+        if not e["consultas"]:
+            raise ProtocoloInvalido(G.C_SOND_EXPRESSAO, f"{onde}: {ident} não tem bloco nesta "
+                                                        f"base (estatuto {e['estatuto']!r})",
+                                    doc)
+        consultas = e["consultas"]
+        ids = [x["id"] for x in consultas]
+        sem_prox, metade = bool(c.get("sem_proximidade")), c.get("metade")
+        sel = c.get("consulta")
+        if len(consultas) > 1:
+            if sem_prox or metade:
+                raise ProtocoloInvalido(G.T_SOND_CONSULTAS, f"{onde}: transformação só em "
+                                                            f"expressão de consulta única; "
+                                                            f"{ident} tem {len(consultas)} "
+                                                            f"consultas {ids}", doc)
+            if sel is None:
+                raise ProtocoloInvalido(G.C_SOND_CONSULTA, f"{onde}: {ident} tem "
+                                                           f"{len(consultas)} consultas {ids}; "
+                                                           f"declarar `consulta` com o id ou "
+                                                           f"`{G.CONSULTA_MAIS_LONGA}`", doc)
+        if sel == G.CONSULTA_MAIS_LONGA:
+            # max devolve a primeira entre as de mesmo comprimento: a ordem da §4.
+            escolhida = max(consultas, key=lambda x: len(x["texto"]))
+        elif sel is None:
+            escolhida = consultas[0]
+        else:
+            escolhida = next((x for x in consultas if x["id"] == sel), None)
+            if escolhida is None:
+                raise ProtocoloInvalido(G.C_SOND_CONSULTA, f"{onde}: consulta {sel!r} não "
+                                                           f"existe em {ident} {ids}", doc)
+        texto = escolhida["texto"]
+        if sem_prox or metade:
+            texto = self._transformada(ident, onde, sem_prox, metade)
+        origem = [ident]
+        if len(consultas) > 1:
+            origem.append(f"consulta {escolhida['id']}"
+                          + (" (a mais longa)" if sel == G.CONSULTA_MAIS_LONGA else ""))
+        if sem_prox:
+            origem.append("sem proximidade")
+        if metade:
+            origem.append(f"metade {metade['parte']} de {len(G.METADE_PARTES)} da faceta "
+                          f"{metade['faceta']}{_cor(self.fonte, metade['faceta'])}")
+        origem.append(f"{_milhar(len(texto))} caracteres")
+        teto = self.fonte["teto"]
+        if teto is not None and len(texto) > teto:
+            raise ProtocoloInvalido(G.T_SOND_CONSULTAS, f"{onde}: a consulta resolvida "
+                                                        f"({', '.join(origem)}) passa do teto "
+                                                        f"({teto}); a base a recusaria", doc)
+        return {"texto": texto, "origem": ", ".join(origem)}
+
+    def _transformada(self, ident, onde, sem_prox, metade):
+        """Texto da consulta única de `ident` composto com a transformação: as âncoras por
+        AND no lugar da proximidade e/ou só uma metade dos termos de uma faceta. Composição,
+        não substituição no texto final: o operador ou um termo podem aparecer em mais de um
+        lugar. Não particiona: o teto se confere no texto resolvido."""
+        doc = self.fonte["doc"]
+        combinacoes = [] if self._curada(ident) else self._combinacoes(ident)
+        if len(combinacoes) != 1:
+            raise ProtocoloInvalido(G.T_SOND_CONSULTAS, f"{onde}: transformação só em "
+                                                        f"expressão composta de consulta "
+                                                        f"única; {ident} não é", doc)
+        _, _, ancoras, outros = combinacoes[0]
+        # A transformação que não muda a consulta faria do controle uma cópia do teste.
+        if sem_prox and self._texto(ancoras, outros, True) == self._texto(ancoras, outros):
+            raise ProtocoloInvalido(G.C_SOND_SEM_PROXIMIDADE, f"{onde}: `sem_proximidade` "
+                                                              f"não muda a consulta: {ident} "
+                                                              f"não usa proximidade", doc)
+        if metade:
+            fid, parte = metade["faceta"], metade["parte"]
+            todas = ancoras + [x for g in outros for x in g]
+            if not any(p["fid"] == fid for p in todas):
+                raise ProtocoloInvalido(G.C_SOND_METADE, f"{onde}: `metade` da faceta {fid}, "
+                                                         f"que não está em {ident}", doc)
+
+            def corta(p):
+                if p["fid"] != fid:
+                    return p
+                termos = p["termos"]
+                if len(termos) < len(G.METADE_PARTES):
+                    raise ProtocoloInvalido(G.C_SOND_METADE, f"{onde}: a faceta {fid} tem "
+                                                             f"{len(termos)} termo(s) em "
+                                                             f"{ident}; não se parte", doc)
+                meio = -(-len(termos) // 2)            # a parte 1 leva o termo excedente
+                return dict(p, termos=termos[:meio] if parte == 1 else termos[meio:])
+            ancoras = [corta(p) for p in ancoras]
+            outros = [[corta(x) for x in g] for g in outros]
+        return self._texto(ancoras, outros, sem_prox)
+
     def consultas_executaveis(self):
         """[(expressão, id da consulta, rótulo, texto)] do que vai à base."""
         return [(e["id"], c["id"], c["rotulo"], c["texto"])
                 for e in self.expressoes.values() for c in e["consultas"]]
+
+
+def _milhar(n):
+    """Inteiro com ponto de milhar: 1.870."""
+    return f"{n:,}".replace(",", ".")
 
 
 # ------------------------------------------------------------------ texto gerado
@@ -356,8 +474,10 @@ def _resultados(registro, bd, sd):
             and r.get("sondagem") == sd]
 
 
-def roteiro(fonte, registro=None):
-    """Linhas da subseção de sondagens, na ordem de `depende_de` e do id."""
+def roteiro(fonte, comp, registro=None):
+    """Linhas da subseção de sondagens, na ordem de `depende_de` e do id. O texto de cada
+    consulta vem da composição: o literal, ou a consulta da expressão referida, com a origem
+    e o número de caracteres na linha que precede o bloco."""
     sondagens = fonte["sondagens"]
     if not sondagens:
         return []
@@ -373,10 +493,11 @@ def roteiro(fonte, registro=None):
         if s.get("depende_de"):
             L.append(f"**Depende de:** {', '.join(s['depende_de'])}.")
         L += ["", "**Pré-requisitos.**", ""] + [f"- {x}" for x in s["pre_requisitos"]] + [""]
-        for k, c in enumerate(s["consultas"], 1):
+        for k, (c, r) in enumerate(zip(s["consultas"], comp.sondagens[sd]), 1):
+            origem = f" Texto de {r['origem']}." if r["origem"] else ""
             muda = f" Muda em relação ao controle: {c['muda']}." if c.get("muda") else ""
-            L += [f"**Consulta {k} — {c['papel']}**, em {c['onde']}.{muda}", "", "```",
-                  c["texto"], "```", ""]
+            L += [f"**Consulta {k} — {c['papel']}**, em {c['onde']}.{origem}{muda}", "",
+                  "```", r["texto"], "```", ""]
         L += ["**Passos.**", ""] + [f"{k}. {x}" for k, x in enumerate(s["passos"], 1)] + [""]
         L += ["**Observar.**", ""] + [f"- {x}" for x in s["observar"]] + [""]
         L += _tabela(("#", "Resultado", "Conclusão", "Estado"),
@@ -405,7 +526,7 @@ def texto_procedimento(ctx, d, fonte, comp, registro=None):
                                     s.get("fonte") or "—", _sondagem_celula(s))
                                    for s in dado["sintaxe"]]) + [""]
     L += _fragmento(fonte, "notas_sintaxe.md")
-    L += roteiro(fonte, registro)
+    L += roteiro(fonte, comp, registro)
     L += [E["separador"], ""]
 
     # §2
@@ -527,7 +648,9 @@ def gera_base(ctx, d, sigla, flexao=True, registro=None):
     return fonte, comp, texto_procedimento(ctx, d, fonte, comp, registro)
 
 
-def _registro(ctx):
+def registro_de_execucao(ctx):
+    """O registro de execução (`[dados] registro`) lido, ou None se ausente ou ilegível: os
+    resultados de sondagem que o roteiro traz."""
     import json                                                     # noqa: PLC0415
     caminho = ctx.config.caminho("dados.registro")
     try:
@@ -587,7 +710,7 @@ def problemas_igualdade(ctx, d):
     for b in d["bases"]:
         sigla = b["sigla"]
         try:
-            _, _, novo = gera_base(ctx, d, sigla, registro=_registro(ctx))
+            _, _, novo = gera_base(ctx, d, sigla, registro=registro_de_execucao(ctx))
         except (ProtocoloInvalido, Reprovado):
             continue
         atual = ctx.procedimento(sigla, b["procedimento"])
@@ -627,7 +750,7 @@ def gera(ctx, siglas=None, gravar=False, saida=print):
     todas = [b["sigla"] for b in d["bases"]]
     siglas = siglas or todas
     codigo = Saida.OK
-    registro = _registro(ctx)
+    registro = registro_de_execucao(ctx)
     for sigla in siglas:
         b = next(x for x in d["bases"] if x["sigla"] == sigla)
         saida(f"== {sigla} ({b['procedimento']})")

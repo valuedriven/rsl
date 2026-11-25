@@ -9,6 +9,12 @@ comentários).
 A data e a hora são obrigatórias, sem padrão "agora": a sondagem costuma ser registrada
 depois de feita, e a data presumida seria falsa. A evidência é obrigatória e tem de existir:
 sondagem sem evidência não é sondagem.
+
+O texto submetido de cada consulta é o literal resolvido pela composição corrente da base
+(`Composicao.sondagens`): o `texto` declarado, ou, na consulta por referência (`expressao`),
+o texto da expressão com a transformação declarada, nunca a referência. Assim o registro
+guarda o que foi à base naquela data, ainda que as strings mudem depois. `--submetido K
+TEXTO` substitui o texto da consulta K, depois da resolução.
 """
 
 import datetime
@@ -17,9 +23,10 @@ import pathlib
 
 from . import gramatica as G
 from .config import RAIZ, relativo
-from .erros import DadosInvalidos, ProtocoloInvalido, Uso
+from .erros import DadosInvalidos, ProtocoloInvalido, Reprovado, Uso
 from .fonte import le_fonte
 from .geracao import grava_atomico
+from .procedimentos import Composicao
 from .saida import Saida
 
 
@@ -61,7 +68,12 @@ def registra(ctx, sigla, sd, retornos, leitura, data_hora, evidencias, submetido
         if not arq.is_file():
             raise DadosInvalidos(f"evidência {ev!r} não existe")
         caminhos.append(relativo(arq))
-    textos = [c["texto"] for c in s["consultas"]]
+    comp = Composicao(ctx, d, fonte)
+    if comp.indecidiveis and any("expressao" in c for c in s["consultas"]):
+        raise Reprovado(f"{sigla}: flexão indecidível — o texto de {sd} por referência não "
+                        f"se resolve; declarar a exceção em "
+                        f"`{ctx.config.valor('documentos.flexoes')}`")
+    textos = [r["texto"] for r in comp.sondagens[sd]]
     for k, texto in submetidos:
         try:
             idx = int(k)

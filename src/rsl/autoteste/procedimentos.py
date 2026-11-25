@@ -19,7 +19,7 @@ from ..dados import problemas_registro, problemas_sondagens_registradas
 from ..erros import ErroRSL
 from ..flexao import Indecidivel, le_excecoes, orfas, plural_por_regra
 from ..fonte import le_fonte
-from ..procedimentos import gera, gera_base, inicia, problemas_igualdade
+from ..procedimentos import gera, gera_base, inicia, problemas_igualdade, registro_de_execucao
 from ..saida import Saida
 from ..sondagens import registra
 from .fontes import base_com, com_fonte, fonte_de, registro_com_sondagem
@@ -232,7 +232,7 @@ def geracao(ctx, g):
         g.testa(f"ensaio não grava [{alvo}]", not arq.exists() and "Ensaio" in texto,
                 texto[-120:])
         _codigo(lambda: gera(cx, [alvo], gravar=True))
-        _, _, esperado = gera_base(cx, dx, alvo)
+        _, _, esperado = gera_base(cx, dx, alvo, registro=registro_de_execucao(cx))
         g.testa(f"gravado é o gerado [{alvo}]",
                 arq.is_file() and arq.read_text(encoding="utf-8") == esperado)
         g.testa(f"procedimento em dia não reprova na igualdade [{alvo}]",
@@ -418,3 +418,313 @@ def flexao(ctx, g):
     g.testa("exceção órfã é relatada", orfas(e, d) == [("termo-orfao-autoteste", "en")])
     g.testa("exceção de termo escrito à mão na fonte (subconjunto, curada) não é órfã",
             orfas(e, d, {"termo-orfao-autoteste"}) == [])
+
+
+# ------------------------------------------------------- consulta de sondagem por referência
+def _consultas(dado):
+    """[(índice da sondagem, índice da consulta, consulta)] de todas as sondagens."""
+    return [(i, k, c) for i, s in enumerate(dado.get("sondagens", []))
+            for k, c in enumerate(s["consultas"])]
+
+
+def _onde(dado, i, k):
+    return (dado["sondagens"][i]["id"], f"consulta {k + 1}")
+
+
+def _tokens(texto):
+    return re.findall(r'"[^"]+"|[^\s()]+', texto)
+
+
+def referencias(ctx, g):
+    """Consulta por referência (`expressao`): a recusa na leitura da fonte, a resolução na
+    composição e o texto resolvido no registro. As bases vêm da estrutura das fontes."""
+    from .. import fonte as FO
+    from .. import procedimentos as PR
+    from .. import sondagens as SO
+    d = ctx.protocolo()
+
+    def acha(cond):
+        """(sigla, dado, frag, arqs, i, k) da primeira consulta que satisfaz `cond`."""
+        for b in d["bases"]:
+            dado, frag, arqs = fonte_de(ctx, d, b["sigla"])
+            for i, k, c in _consultas(dado):
+                if cond(dado, c):
+                    return b["sigla"], dado, frag, arqs, i, k
+        return None
+
+    def simples(dado, c):
+        return "expressao" in c and not any(x in c for x in ("consulta",) + G.TRANSFORMACOES)
+
+    def le(sigla, dado, frag, arqs):
+        cx = com_fonte(ctx, sigla, dado, frag, arqs)
+        return lambda: le_fonte(cx, d, sigla)
+
+    def compoe(sigla, dado, frag, arqs, classe=None):
+        cx = com_fonte(ctx, sigla, dado, frag, arqs)
+        return lambda: (classe or PR.Composicao)(cx, d, le_fonte(cx, d, sigla))
+
+    def reprova(nome, funcao, trechos, sigla):
+        cod, texto = _codigo(funcao)
+        faltam = [x for x in trechos if x not in texto]
+        g.testa(f"reprovou (PROTOCOLO_ILEGIVEL): {nome} [{sigla}]", cod == P and not faltam,
+                f"{cod.name}, faltou {faltam} — {texto[-160:]}")
+
+    ref = acha(simples)
+    if ref is None:
+        g.falha("mutação não aplicada: nenhuma consulta por referência sem transformação")
+        return
+    sigla, dado0, frag, arqs, i, k = ref
+    sd, cons = _onde(dado0, i, k)
+    lit = acha(lambda x, c: "texto" in c)
+
+    def muda(base, mutar):
+        sig, dado, fr, ar = base
+        x = copy.deepcopy(dado)
+        mutar(x)
+        if x == dado:
+            g.falha("mutação não aplicada")
+        return sig, x, fr, ar
+
+    base_ref = (sigla, dado0, frag, arqs)
+
+    # -- camada da fonte (leitura)
+    def na_ref(**mud):
+        def mutar(x):
+            c = x["sondagens"][i]["consultas"][k]
+            for chave, valor in mud.items():
+                if valor is None:
+                    c.pop(chave, None)
+                else:
+                    c[chave] = valor
+        return muda(base_ref, mutar)
+    reprova("`texto` e `expressao` juntos", le(*na_ref(texto="TS=(x)")),
+            (sd, cons, "juntos"), sigla)
+    reprova("nem `texto` nem `expressao`", le(*na_ref(expressao=None)),
+            (sd, cons, "nem `texto` nem `expressao`"), sigla)
+    fora = f"{G.I_EB.prefixo}{len(d['expressoes']) + 1}"
+    reprova("expressão inexistente", le(*na_ref(expressao=fora)), (sd, cons, fora), sigla)
+    reprova("`metade` com parte fora de {1, 2}",
+            le(*na_ref(metade={"faceta": d["facetas"][0]["id"], "parte": 3})),
+            (sd, cons, "parte 3"), sigla)
+    reprova("`metade` de faceta inexistente",
+            le(*na_ref(metade={"faceta": "FCT99", "parte": 1})), (sd, cons, "FCT99"), sigla)
+    reprova("`metade` fora da forma", le(*na_ref(metade={"faceta": d["facetas"][0]["id"]})),
+            (sd, cons, "exige `faceta`"), sigla)
+    sem = acha(lambda x, c: isinstance(x["composicao"]["proximidade"], str))
+    if sem is None:
+        g.falha("mutação não aplicada: nenhuma base sem proximidade com sondagem")
+    else:
+        s2, dado2, fr2, ar2, i2, k2 = sem
+
+        def sem_prox(x):
+            c = x["sondagens"][i2]["consultas"][k2]
+            c.pop("texto", None)
+            c.update(expressao=d["executada"], sem_proximidade=True)
+        reprova("`sem_proximidade` na base sem proximidade",
+                le(*muda((s2, dado2, fr2, ar2), sem_prox)),
+                (_onde(dado2, i2, k2)[0], "sem_proximidade"), s2)
+    if lit is None:
+        g.falha("mutação não aplicada: nenhuma consulta literal")
+    else:
+        s3, dado3, fr3, ar3, i3, k3 = lit
+        b3 = (s3, dado3, fr3, ar3)
+        sd3, cons3 = _onde(dado3, i3, k3)
+        cor = next((f["cor"] for f in dado3["composicao"]["facetas"] if f.get("cor")), None)
+
+        def prosa(texto):
+            return muda(b3, lambda x: x["sondagens"][i3]["consultas"][k3].update(texto=texto))
+        reprova("consulta em prosa com identificador de expressão",
+                le(*prosa(f"o bloco de {d['executada']} no {G.LOCUCAO_REFERENCIA}")),
+                (sd3, cons3, repr(d["executada"]), "expressao"), s3)
+        reprova("consulta em prosa com a locução", le(*prosa(f"copiar do "
+                                                             f"{G.LOCUCAO_REFERENCIA}")),
+                (sd3, cons3, G.LOCUCAO_REFERENCIA), s3)
+        if cor:
+            reprova("consulta em prosa com a cor de uma faceta",
+                    le(*prosa(f"a faceta {cor} inteira")), (sd3, cons3, cor), s3)
+        reprova("`consulta` declarada com `texto`",
+                le(*muda(b3, lambda x: x["sondagens"][i3]["consultas"][k3].update(
+                    consulta=G.CONSULTA_MAIS_LONGA))), (sd3, cons3, "só se declaram"), s3)
+        cod, texto = _codigo(le(*b3))
+        g.testa(f"consulta literal comum não reprova [{s3}]", cod == Saida.OK, texto[-120:])
+        # Conferência de marcas desligada: a consulta em prosa passaria (o caso falharia).
+        original = FO.marcas_de_referencia
+        FO.marcas_de_referencia = lambda *a: []
+        try:
+            cod, _ = _codigo(le(*prosa(f"o bloco de {d['executada']} no "
+                                       f"{G.LOCUCAO_REFERENCIA}")))
+        finally:
+            FO.marcas_de_referencia = original
+        g.testa(f"com a conferência de marcas desligada, a consulta em prosa passa (o caso "
+                f"falharia) [{s3}]", cod == Saida.OK, cod.name)
+
+    # -- camada da composição (resolução)
+    _, comp0, texto0 = gera_base(com_fonte(ctx, *base_ref), d, sigla)
+    alvo = dado0["sondagens"][i]["consultas"][k]["expressao"]
+    bloco = comp0.expressoes[alvo]["consultas"][0]["texto"]
+    resolvido = comp0.sondagens[sd][k]["texto"]
+    g.testa(f"consulta por referência igual ao bloco de {alvo} na §4 [{sigla}]",
+            resolvido == bloco and f"```\n{bloco}\n```" in texto0.split(
+                G.ESQUELETO["s4"])[1] and f"```\n{resolvido}\n```" in texto0.split(
+                G.ESQUELETO["s2"])[0], f"{len(resolvido)} × {len(bloco)}")
+
+    # Strings alteradas: o bloco da sondagem acompanha a composição, sem edição da fonte.
+    marca = "zzstringalterada"
+
+    class Alterada(PR.Composicao):
+        def _parte(self, fid, campo_q):
+            p = super()._parte(fid, campo_q)
+            return dict(p, termos=list(p["termos"]) + [marca])
+
+    def acompanha(classe):
+        comp = compoe(*base_ref, classe=classe)()
+        novo = comp.expressoes[alvo]["consultas"][0]["texto"]
+        r = comp.sondagens[sd][k]["texto"]
+        return marca in novo and novo != bloco and r == novo
+    g.testa(f"com as strings alteradas, a consulta por referência acompanha {alvo} [{sigla}]",
+            acompanha(Alterada))
+
+    class Congelada(Alterada):
+        def resolve(self, sd_, k_, c):
+            r = super().resolve(sd_, k_, c)
+            return dict(r, texto=resolvido) if sd_ == sd and k_ == k + 1 else r
+    g.testa(f"com a consulta congelada no texto anterior, o caso falharia [{sigla}]",
+            not acompanha(Congelada))
+    sem_bloco =next((e for e, x in comp0.expressoes.items() if not x["consultas"]), None)
+
+    def derivada(x):
+        x["sondagens"][i]["consultas"][k]["expressao"] = alvo
+        next(e for e in x["execucao"]["expressoes"] if e["id"] == alvo)["estatuto"] = "derivada"
+    if sem_bloco is None:
+        reprova("expressão sem bloco na base", compoe(*muda(base_ref, derivada)),
+                (sd, cons, "não tem bloco"), sigla)
+    else:
+        reprova("expressão sem bloco na base", compoe(*na_ref(expressao=sem_bloco)),
+                (sd, cons, "não tem bloco"), sigla)
+
+    longa = acha(lambda x, c: c.get("consulta") == G.CONSULTA_MAIS_LONGA)
+    if longa is None:
+        g.falha("mutação não aplicada: nenhuma consulta `mais_longa`")
+    else:
+        s4, dado4, fr4, ar4, i4, k4 = longa
+        b4 = (s4, dado4, fr4, ar4)
+        sd4, cons4 = _onde(dado4, i4, k4)
+        comp4 = compoe(*b4)()
+        e4 = dado4["sondagens"][i4]["consultas"][k4]["expressao"]
+        cs = comp4.expressoes[e4]["consultas"]
+        maior = max(len(c["texto"]) for c in cs)
+        primeira = next(c for c in cs if len(c["texto"]) == maior)
+        r4 = comp4.sondagens[sd4][k4]
+        g.testa(f"`mais_longa` é a primeira consulta de maior comprimento de {e4} [{s4}]",
+                len(cs) > 1 and r4["texto"] == primeira["texto"]
+                and f"consulta {primeira['id']}" in r4["origem"], r4["origem"])
+
+        def na4(**mud):
+            return muda(b4, lambda x: x["sondagens"][i4]["consultas"][k4].update(mud))
+        reprova("expressão de várias consultas sem `consulta`",
+                compoe(*muda(b4, lambda x: x["sondagens"][i4]["consultas"][k4].pop(
+                    "consulta"))), (sd4, cons4, "declarar `consulta`"), s4)
+        reprova("consulta inexistente na expressão", compoe(*na4(consulta="999z")),
+                (sd4, cons4, "'999z' não existe"), s4)
+        reprova("transformação em expressão de várias consultas",
+                compoe(*na4(metade={"faceta": d["facetas"][0]["id"], "parte": 1})),
+                (sd4, cons4, "consulta única"), s4)
+
+    prox = acha(lambda x, c: c.get("sem_proximidade"))
+    if prox is None:
+        g.falha("mutação não aplicada: nenhuma consulta com `sem_proximidade`")
+    else:
+        s5, dado5, fr5, ar5, i5, k5 = prox
+        b5 = (s5, dado5, fr5, ar5)
+        sd5, cons5 = _onde(dado5, i5, k5)
+        comp5 = compoe(*b5)()
+        c5 = dado5["sondagens"][i5]["consultas"][k5]
+        teste = comp5.expressoes[c5["expressao"]]["consultas"][0]["texto"]
+        controle = comp5.sondagens[sd5][k5]["texto"]
+        p = comp5.fonte["proximidade"]
+        op = f" {p['operador']}/{p['distancia']} "
+        g.testa(f"`sem_proximidade` difere do teste só no operador [{s5}]",
+                controle != teste and teste.count(op) == 1
+                and teste.replace(op, " AND ") == controle, f"{controle[:80]}")
+
+        class SemEfeito(PR.Composicao):
+            def _ancoras(self, partes, sem_proximidade=False):
+                return super()._ancoras(partes, False)
+        reprova("com a composição que ignora `sem_proximidade`, a transformação sem efeito",
+                compoe(*b5, classe=SemEfeito), (sd5, cons5, "não muda a consulta"), s5)
+
+        # Teto: a resolução reprova o texto acima do teto (composição que o alonga).
+        def teto_justo(x):
+            x["cobertura"]["teto"] = max(len(c["texto"]) for e in comp5.expressoes.values()
+                                         for c in e["consultas"])
+
+        class Alonga(PR.Composicao):
+            def _transformada(self, *a):
+                return super()._transformada(*a) + " " * (self.fonte["teto"] or 0)
+        reprova("consulta resolvida acima do teto",
+                compoe(*muda(b5, teto_justo), classe=Alonga), (sd5, cons5, "passa do teto"),
+                s5)
+
+    met = acha(lambda x, c: c.get("metade"))
+    if met is None:
+        g.falha("mutação não aplicada: nenhuma consulta com `metade`")
+    else:
+        s6, dado6, fr6, ar6, i6, _ = met
+        b6 = (s6, dado6, fr6, ar6)
+        sd6 = dado6["sondagens"][i6]["id"]
+        cs6 = dado6["sondagens"][i6]["consultas"]
+        partes = {c["metade"]["parte"]: k for k, c in enumerate(cs6) if c.get("metade")}
+        fid = next(c["metade"]["faceta"] for c in cs6 if c.get("metade"))
+        e6 = next(c["expressao"] for c in cs6 if c.get("metade"))
+
+        def confere_metades(classe=None):
+            comp6 = compoe(*b6, classe=classe)()
+            termos = [PR.literal(t, comp6.aspas) for t in comp6.strings[fid]["termos"]]
+            inteira = comp6.expressoes[e6]["consultas"][0]["texto"]
+            da = [[t for t in _tokens(comp6.sondagens[sd6][partes[n]]["texto"]) if t in termos]
+                  for n in sorted(partes)]
+            return (sorted(partes) == list(G.METADE_PARTES) and all(da)
+                    and da[0] + da[1] == termos
+                    and [t for t in _tokens(inteira) if t in termos] == termos)
+        g.testa(f"`metade`: a união das partes é a string da faceta {fid}, em ordem [{s6}]",
+                confere_metades())
+
+        class SemMetade(PR.Composicao):
+            def _transformada(self, ident, onde, sem_prox, metade):
+                return super()._transformada(ident, onde, sem_prox, None)
+        g.testa(f"com a `metade` desligada, a conferência das partes falha [{s6}]",
+                not confere_metades(SemMetade))
+
+    # -- registro: o texto resolvido, não a referência
+    with tempfile.TemporaryDirectory() as tmp:
+        reg = pathlib.Path(tmp) / "registro.json"
+        ev = pathlib.Path(tmp) / "evidencia.png"
+        ev.write_bytes(b"autoteste")
+        n = len(dado0["sondagens"][i]["consultas"])
+        cx = com_fonte(ctx, *base_ref)
+
+        def gravado():
+            reg.unlink(missing_ok=True)
+            _codigo(lambda: registra(cx, sigla, sd, [1] * n, 1, "2026-01-01T10:00",
+                                     [str(ev)], caminho=reg))
+            if not reg.exists():
+                return None
+            r = json.loads(reg.read_text(encoding="utf-8"))
+            bd = next(b["id"] for b in d["bases"] if b["sigla"] == sigla)
+            return r["bases"][bd]["sondagens"][0]["consultas"][k]["texto"]
+        texto_reg = gravado()
+        g.testa(f"registro grava o texto resolvido de {alvo}, não a referência [{sigla}]",
+                texto_reg == bloco, f"{(texto_reg or '')[:80]!r}")
+
+        class Referencia(PR.Composicao):
+            def resolve(self, sd_, k_, c):
+                r = super().resolve(sd_, k_, c)
+                return dict(r, texto=c.get("expressao") or r["texto"])
+        original = SO.Composicao
+        SO.Composicao = Referencia
+        try:
+            texto_ref = gravado()
+        finally:
+            SO.Composicao = original
+        g.testa(f"com o registro gravando a referência, o caso falharia [{sigla}]",
+                texto_ref is not None and texto_ref != bloco, f"{texto_ref!r}")

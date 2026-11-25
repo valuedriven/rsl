@@ -13,20 +13,20 @@
 | `LA=` — idioma | filtros | Verificado em fonte secundária | FECYT, *De la consulta simple a la compleja en Web of Science* (2024) | — |
 | Truncamento `*`, `?`, `$`; mínimo de 3 caracteres antes do curinga; curinga desativa a lematização | truncamento | Verificado em fonte oficial | Clarivate, *Advanced Search examples* | — |
 | Limite de 200 conjuntos de busca por sessão | limite_consulta | Verificado em fonte oficial | Clarivate, *Advanced Search examples* | — |
-| Aspas desligam a lematização e o localizador interno de sinônimos | frase | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD3 |
+| Aspas desligam a lematização e o localizador interno de sinônimos | frase | Verificado por medição (BD1/sd3-2026-11-25); afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD3 |
 | Busca em todos os campos (`ALL=`) limitada a 49 operadores booleanos; os demais campos sem limite | limite_consulta | **Não verificado** | — | sem sondagem: nenhuma expressão usa `ALL=`; conferir na documentação oficial (afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23) |
 | Intervalos de `PY=` de até 5 anos (recomendação) | filtros | Verificado em fonte oficial | Clarivate, *Advanced Search examples* | — |
 | Filtro de texto completo em sintaxe de consulta | filtros | **Não existe** | ausência na página de *field tags* | — |
 | Valores exatos admitidos em `DT=` e `LA=` | filtros | **Não verificado**; conferir na lista da interface | — | SD4 |
-| `NEAR/x` entre grupos entre parênteses | proximidade | **Não verificado** | — | SD2 |
-| Distância padrão de `NEAR` sem número | proximidade | **Não verificado** | — | SD2 |
+| `NEAR/x` entre grupos entre parênteses | proximidade | Verificado por medição (BD1/sd2-2026-11-25) | — | SD2 |
+| Distância padrão de `NEAR` sem número | proximidade | Verificado por medição (BD1/sd2-2026-11-25) | — | SD2 |
 | Comprimento máximo da consulta | limite_consulta | **Não verificado**; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres | — | SD5 |
 | Tratamento de diacríticos | idioma_indexacao | **Não verificado**; as strings trazem as duas grafias | — | SD6 |
 | Teto de retorno exibido | limite_retorno | **Não verificado**; conferir na interface antes de exportar | — | SD7 |
 | Teto de exportação por lote | limite_exportacao | **Não verificado**; conferir na interface antes de exportar | — | SD8 |
-| Operadores booleanos `AND` e `OR` | operadores | **Não verificado** | — | SD1 |
-| Parênteses para agrupamento | agrupamento | **Não verificado** | — | SD1 |
-| Lematização | lematizacao | **Não verificado** | — | SD3 |
+| Operadores booleanos `AND` e `OR` | operadores | Verificado por medição (BD1/sd1-2026-11-25) | — | SD1 |
+| Parênteses para agrupamento | agrupamento | Verificado por medição (BD1/sd1-2026-11-25) | — | SD1 |
+| Lematização | lematizacao | Verificado por medição (BD1/sd3-2026-11-25); medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem | — | SD3 |
 | Vocabulário controlado de assunto | vocabulario_controlado | **Não verificado** | — | sem sondagem: verificação documental: a Core Collection não foi conferida quanto a tesauro de assunto; nenhuma expressão depende dele |
 | Exportação em RIS com todos os campos | exportacao | **Não verificado** | — | SD8 |
 
@@ -38,7 +38,7 @@ Uma consulta por vez, sem nova tentativa automática; parar diante de captcha, a
 
 #### SD1 — saber se `AND`, `OR` e os parênteses dentro de `TS=` se comportam como booleanos
 
-**Elementos verificados:** Operadores booleanos `AND` e `OR` (Não verificado); Parênteses para agrupamento (Não verificado).
+**Elementos verificados:** Operadores booleanos `AND` e `OR` (Verificado por medição); Parênteses para agrupamento (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -86,9 +86,13 @@ TS=((ontology OR taxonomy) AND education)
 
 - captura da tela do histórico de busca, com as consultas e os retornos visíveis
 
+**Resultados registrados.**
+
+- (BD1/sd1-2026-11-25) 2026-11-25T16:50: leitura 1
+
 #### SD2 — saber se `NEAR/5` é aceito entre grupos entre parênteses e qual é a distância de `NEAR` sem número
 
-**Elementos verificados:** `NEAR/x` entre grupos entre parênteses (Não verificado); Distância padrão de `NEAR` sem número (Não verificado).
+**Elementos verificados:** `NEAR/x` entre grupos entre parênteses (Verificado por medição); Distância padrão de `NEAR` sem número (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -137,9 +141,13 @@ TS=(ontology NEAR/15 education)
 
 - captura da tela do histórico de busca, com as consultas e os retornos visíveis
 
+**Resultados registrados.**
+
+- (BD1/sd2-2026-11-25) 2026-11-25T16:50: leitura 1
+
 #### SD3 — saber se a base casa singular e plural sem que a consulta os traga, e se as aspas desligam isso
 
-**Elementos verificados:** Lematização (Não verificado); Aspas desligam a lematização e o localizador interno de sinônimos (Não verificado).
+**Elementos verificados:** Lematização (Verificado por medição); Aspas desligam a lematização e o localizador interno de sinônimos (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -167,7 +175,6 @@ TS=("ontology")
 **Passos.**
 
 1. submeter cada consulta, uma por vez, e anotar o retorno exibido
-2. comparar também, com consultas análogas, `ontologia`/`ontologias` e `ontología`/`ontologías`, e anotar os retornos
 
 **Observar.**
 
@@ -177,11 +184,15 @@ TS=("ontology")
 | :---: | :--- | :--- | :--- |
 | 1 | controle = plural, e o termo entre aspas < controle | a base lematiza em inglês e as aspas desligam a lematização | Verificado por medição |
 | 2 | controle ≠ plural, e o termo entre aspas = controle | a base não lematiza em inglês; as aspas não mudam o número | Verificado por medição |
-| 3 | qualquer outra relação, ou pt e es diferentes do inglês | não se distingue a lematização; levar ao pesquisador antes de declarar `pela lematização` | Não verificado |
+| 3 | qualquer outra relação | não se distingue a lematização; levar ao pesquisador antes de declarar `pela lematização` | Não verificado |
 
 **Evidência a registrar.**
 
 - captura da tela do histórico de busca, com as consultas e os retornos visíveis
+
+**Resultados registrados.**
+
+- (BD1/sd3-2026-11-25) 2026-11-25T16:50: leitura 1
 
 #### SD4 — saber se os valores de `DT=` e `LA=` usados no procedimento são aceitos
 
@@ -243,18 +254,17 @@ TS=(ontology) AND LA=(English OR Portuguese OR Spanish)
 **Pré-requisitos.**
 
 - SD2 registrada com a proximidade entre grupos verificada
-- o procedimento gerado, para copiar a consulta
 
-**Consulta 1 — teste**, em busca avançada.
+**Consulta 1 — teste**, em busca avançada. Texto de EB4, 2.537 caracteres.
 
 ```
-o bloco de EB4 no procedimento gerado
+TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND (TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") OR TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos")) PY=(2017-2026) DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
 ```
 
 **Passos.**
 
-1. copiar o bloco de EB4 do procedimento e anotar o número de caracteres
-2. submetê-lo e anotar o retorno e a mensagem, se houver
+1. anotar o número de caracteres, que está na linha que precede a consulta
+2. submeter a consulta e anotar o retorno e a mensagem, se houver
 
 **Observar.**
 
