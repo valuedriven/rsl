@@ -11,13 +11,9 @@ AND PY=(2017-2021)
 AND PY=(2022-2026)
 ```
 
-#### Idioma
+#### Idioma recusado
 
-Disparo: sondagem de `LA=` aceita (`TS=ontology AND LA=Portuguese`) e valores conferidos na lista da interface. Forma: anexar ao final da expressão. Valor recusado: aplicar o limite por refinamento e anotar no registro.
-
-```
-AND LA=(English OR Portuguese OR Spanish)
-```
+Disparo: a interface recusa algum valor de `LA=` da consulta, ou o valor some da lista de refinamento. Forma: tirar o valor da cláusula, aplicar o limite por refinamento de idioma, anotar a troca no registro e repetir a SD4.
 
 #### Truncamento
 

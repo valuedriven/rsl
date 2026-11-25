@@ -103,10 +103,10 @@ O bloco de cada expressão que se executa SHALL ser a composição do protocolo,
 Expressão derivada que não se executa MUST NOT ter bloco.
 
 #### Scenario: Filtros da seção 2
-- **WHEN** a fonte da WoS declara CE1 com `destino = "consulta"` e `clausula = "AND
-  PY=(2017-2026)"`, e CE3 com `destino = "variante"`
-- **THEN** os blocos de EB2 a EB5 terminam com `AND PY=(2017-2026)`, e a cláusula de CE3
-  não entra em bloco nenhum
+- **WHEN** a fonte da WoS declara CE1 com `destino = "consulta"` e `clausula =
+  "PY=(2017-2026)"`, e um critério com `destino = "variante"`
+- **THEN** os blocos de EB2 a EB5 trazem `AND PY=(2017-2026)`, com o `AND` posto pela
+  composição, e a cláusula da variante não entra em bloco nenhum
 
 #### Scenario: Derivada sem bloco
 - **WHEN** EB1 é derivada localmente

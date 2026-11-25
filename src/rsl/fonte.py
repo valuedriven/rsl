@@ -437,6 +437,11 @@ def le_fonte(ctx, d, sigla, sem_pendente=True):
             raise ProtocoloInvalido(G.T_CRITERIOS_F, f"criterios {'/'.join(c['ids'])}: "
                                                      f"destino {c['destino']!r} sem "
                                                      f"`clausula`", doc)
+        if c.get("clausula") and G.CONECTOR_NA_BORDA.search(c["clausula"]):
+            raise ProtocoloInvalido(G.T_CRITERIOS_F, f"criterios {'/'.join(c['ids'])}: "
+                                                     f"`clausula` com conector na borda "
+                                                     f"({c['clausula']!r}); o conector sai "
+                                                     f"da composição", doc)
 
     # Redução, composição, consultas de campo, subconjuntos e forma radical.
     for r in dado.get("reducao", []):

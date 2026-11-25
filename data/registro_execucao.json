@@ -95,6 +95,123 @@
             "data/evidencia/sondagens/wos/SD1-SD3_2026-11-25T1650.md"
           ],
           "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela"
+        },
+        {
+          "id": "sd4-2026-11-25",
+          "sondagem": "SD4",
+          "data_hora": "2026-11-25T18:03",
+          "consultas": [
+            {
+              "texto": "TS=(ontology)",
+              "retorno": 149994
+            },
+            {
+              "texto": "TS=(ontology) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")",
+              "retorno": 145845
+            },
+            {
+              "texto": "TS=(ontology) AND LA=Portuguese",
+              "retorno": 752
+            },
+            {
+              "texto": "TS=(ontology) AND LA=(English OR Portuguese OR Spanish)",
+              "retorno": 145606
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "todos os testes aceitos, 0 < teste < controle, e cada valor presente na lista de refinamento",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD4_2026-11-25T1803.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; presença dos valores nas listas de refinamento informada pelo pesquisador"
+        },
+        {
+          "id": "sd5-2026-11-25",
+          "sondagem": "SD5",
+          "data_hora": "2026-11-25T18:58",
+          "consultas": [
+            {
+              "texto": "TS=((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") NEAR/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND (TS=(\"prática educacional\" OR \"práticas educacionais\" OR \"método de ensino\" OR \"métodos de ensino\" OR \"estratégia educacional\" OR \"estratégias educacionais\" OR \"atividade de aprendizagem\" OR \"atividades de aprendizagem\" OR \"intervenção educacional\" OR \"intervenções educacionais\" OR \"educational practice\" OR \"educational practices\" OR \"teaching method\" OR \"teaching methods\" OR \"educational strategy\" OR \"educational strategies\" OR \"learning activity\" OR \"learning activities\" OR \"educational intervention\" OR \"educational interventions\" OR \"práctica educativa\" OR \"prácticas educativas\" OR \"estrategia educativa\" OR \"estrategias educativas\" OR \"actividad de aprendizaje\" OR \"actividades de aprendizaje\" OR \"intervención educativa\" OR \"intervenciones educativas\" OR \"método de enseñanza\" OR \"métodos de enseñanza\") OR TS=(\"contexto educacional\" OR \"contextos educacionais\" OR \"contexto de aprendizagem\" OR \"contextos de aprendizagem\" OR \"fator contextual\" OR \"fatores contextuais\" OR \"fator situacional\" OR \"fatores situacionais\" OR \"ambiente educacional\" OR \"ambientes educacionais\" OR \"ambientes educacionales\" OR \"educational context\" OR \"educational contexts\" OR \"learning context\" OR \"learning contexts\" OR \"contextual factor\" OR \"contextual factors\" OR \"situational factor\" OR \"situational factors\" OR \"educational environment\" OR \"educational environments\" OR \"contexto educativo\" OR \"contextos educativos\" OR \"contexto de aprendizaje\" OR \"contextos de aprendizaje\" OR \"factor contextual\" OR \"factores contextuales\" OR \"factor situacional\" OR \"factores situacionales\" OR \"entorno educativo\" OR \"entornos educativos\")) AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")",
+              "retorno": 98
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "aceita, com retorno > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD5-SD7_2026-11-25T1858.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; aceita sem mensagem"
+        },
+        {
+          "id": "sd6-2026-11-25",
+          "sondagem": "SD6",
+          "data_hora": "2026-11-25T18:58",
+          "consultas": [
+            {
+              "texto": "TS=(\"educação\")",
+              "retorno": 770
+            },
+            {
+              "texto": "TS=(\"educacao\")",
+              "retorno": 770
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste = controle > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD5-SD7_2026-11-25T1858.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela"
+        },
+        {
+          "id": "sd7-2026-11-25",
+          "sondagem": "SD7",
+          "data_hora": "2026-11-25T18:58",
+          "consultas": [
+            {
+              "texto": "TS=(education)",
+              "retorno": 1986021
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "o último registro acessível tem posição menor que o retorno, ou há aviso de limite",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD5-SD7_2026-11-25T1858.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; último registro acessível na posição 100000, informada pelo pesquisador; retificado em 2026-11-25T19:13: a leitura 1, registrada antes, tomou a última página oferecida pela interface como a posição do retorno"
+        },
+        {
+          "id": "sd8-2026-11-25",
+          "sondagem": "SD8",
+          "data_hora": "2026-11-25T19:12",
+          "consultas": [
+            {
+              "texto": "TS=(ontology AND education)",
+              "retorno": 3430
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "o arquivo traz o número de registros pedido, com resumo e palavras-chave, e a exportação anuncia o máximo por lote",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/wos/SD8_2026-11-25T1912.md",
+            "data/evidencia/sondagens/wos/SD8_2026-11-25T1912.ris"
+          ],
+          "observacao": "máximo por lote em RIS: 1000; arquivo com 1000 registros, 968 com resumo e 919 com palavras-chave; sem captura de tela da opção de exportação"
         }
       ]
     },

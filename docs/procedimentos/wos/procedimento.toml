@@ -7,7 +7,7 @@
 
 ressalvas = [
   "Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.",
-  "**`LA=`**: executar a sondagem mínima (`TS=ontology AND LA=Portuguese`) antes de usar; se recusada, usar o refinamento por idioma.",
+  "**`LA=`** vai na consulta, porque os valores English, Portuguese e Spanish foram aceitos (BD1/sd4-2026-11-25); valor recusado leva à variante \"Idioma recusado\".",
   "**Texto completo** não é filtro de busca nesta base: o critério opera na 2ª filtragem.",
   "**Teses e dissertações** não são cobertas pela Core Collection: ficam a cargo da BRAPCI e, se necessário, da BDTD.",
 ]
@@ -84,9 +84,9 @@ fonte = "ausência na página de *field tags*"
 [[sintaxe]]
 elemento = "Valores exatos admitidos em `DT=` e `LA=`"
 categoria = "filtros"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd4-2026-11-25"
 sondagem = "SD4"
-nota = "conferir na lista da interface"
 
 [[sintaxe]]
 elemento = "`NEAR/x` entre grupos entre parênteses"
@@ -105,30 +105,34 @@ sondagem = "SD2"
 [[sintaxe]]
 elemento = "Comprimento máximo da consulta"
 categoria = "limite_consulta"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd5-2026-11-25"
 sondagem = "SD5"
 nota = "a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres"
 
 [[sintaxe]]
 elemento = "Tratamento de diacríticos"
 categoria = "idioma_indexacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd6-2026-11-25"
 sondagem = "SD6"
-nota = "as strings trazem as duas grafias"
+nota = "medido só com `educação` (til e cedilha); acento agudo e `ñ` sem sondagem"
 
 [[sintaxe]]
 elemento = "Teto de retorno exibido"
 categoria = "limite_retorno"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd7-2026-11-25"
 sondagem = "SD7"
-nota = "conferir na interface antes de exportar"
+nota = "a navegação só chega ao registro 100000"
 
 [[sintaxe]]
 elemento = "Teto de exportação por lote"
 categoria = "limite_exportacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd8-2026-11-25"
 sondagem = "SD8"
-nota = "conferir na interface antes de exportar"
+nota = "1000 registros por lote"
 
 [[sintaxe]]
 elemento = "Operadores booleanos `AND` e `OR`"
@@ -161,7 +165,8 @@ sem_sondagem = "verificação documental: a Core Collection não foi conferida q
 [[sintaxe]]
 elemento = "Exportação em RIS com todos os campos"
 categoria = "exportacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD1/sd8-2026-11-25"
 sondagem = "SD8"
 
 # ------------------------------------------------------------------ §2 critérios
@@ -175,7 +180,7 @@ clausula = "PY=(2017-2026)"
 [[criterios]]
 ids = ["CE3"]
 rotulo = "Idiomas — português, inglês e espanhol"
-destino = "variante"
+destino = "consulta"
 como = "`AND LA=(English OR Portuguese OR Spanish)`"
 clausula = "LA=(English OR Portuguese OR Spanish)"
 
@@ -448,7 +453,7 @@ muda = "a sondagem mínima de idioma"
 papel = "teste"
 texto = "TS=(ontology) AND LA=(English OR Portuguese OR Spanish)"
 onde = "busca avançada"
-muda = "o filtro de idioma da variante"
+muda = "o filtro de idioma da consulta"
 
 [[sondagens.leituras]]
 resultado = "todos os testes aceitos, 0 < teste < controle, e cada valor presente na lista de refinamento"
@@ -458,6 +463,11 @@ estado = "medicao"
 [[sondagens.leituras]]
 resultado = "algum teste recusado, = 0, ou valor ausente da lista"
 conclusao = "algum valor não é aceito; tirá-lo da consulta e levar ao refinamento, com a troca anotada"
+estado = "nao_verificado"
+
+[[sondagens.leituras]]
+resultado = "controle = 0, teste ≥ controle sem mensagem, ou listas de refinamento não conferidas"
+conclusao = "não se distingue se os valores são aceitos; levar ao pesquisador"
 estado = "nao_verificado"
 
 [[sondagens]]

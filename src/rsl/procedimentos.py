@@ -188,7 +188,9 @@ class Composicao:
             else:
                 partes.append("(" + " OR ".join(grupo(x["termos"], x["campo"], x["forma"],
                                                       self.aspas) for x in g) + ")")
-        return " AND ".join(partes) + "".join(" " + c for c in self.clausulas)
+        # O conector dos filtros sai daqui, não da `clausula`: a fonte recusa cláusula com
+        # conector na borda, e o filtro nunca fica justaposto ao bloco.
+        return " AND ".join(partes + self.clausulas)
 
     def _parte(self, fid, campo_q):
         """A string de uma faceta numa consulta: a da consulta de campo, se há."""

@@ -107,6 +107,15 @@ def fonte(ctx, g):
          lambda x: (x["criterios"][criterio_sem].update(destino="consulta"),
                     x["criterios"][criterio_sem].pop("clausula", None)),
          trechos="`clausula`")
+    criterio_com = next((k for k, c in enumerate(dado0["criterios"])
+                         if c["destino"] in G.DESTINOS_COM_CLAUSULA), None)
+    if criterio_com is None:
+        g.falha(f"mutação não aplicada: cláusula com conector [{alvo}] sem critério com cláusula")
+    else:
+        caso("cláusula com conector na borda",
+             lambda x: x["criterios"][criterio_com].update(
+                 clausula="AND " + x["criterios"][criterio_com]["clausula"]),
+             trechos="conector na borda")
     caso("fragmento de nome errado", frags=lambda f: dict(f, **{"variante.md": "x\n"}),
          trechos="variante.md")
     caso("falta como_executar.md",

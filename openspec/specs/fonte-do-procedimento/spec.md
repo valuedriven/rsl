@@ -93,12 +93,16 @@ Cada linha de `[[criterios]]` SHALL ter:
 - `como`.
 
 O destino `consulta` e o destino `variante` SHALL ter `clausula`, que é a sintaxe literal do
-filtro. A `clausula` de destino `consulta` é a única fonte dos filtros dos blocos de
-expressão.
+filtro, sem conector na borda: o `AND` que a liga ao bloco é posto pela composição. A
+`clausula` de destino `consulta` é a única fonte dos filtros dos blocos de expressão.
 
 #### Scenario: Filtro sem cláusula
 - **WHEN** o critério CE1 da WoS tem `destino = "consulta"` sem `clausula`
 - **THEN** a leitura da WoS reprova, nomeando CE1 e `clausula`
+
+#### Scenario: Cláusula com conector na borda
+- **WHEN** a `clausula` de um critério começa ou termina com `AND`, `OR` ou `NOT`
+- **THEN** a leitura da base reprova, nomeando o critério e `clausula`
 
 ### Requirement: Fragmentos de prosa com nome fixo
 A pasta da fonte SHALL admitir só os fragmentos que a gramática declara:

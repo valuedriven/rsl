@@ -634,6 +634,8 @@ CATEGORIA_TRUNCAMENTO = "truncamento"
 DESTINOS = ("consulta", "ancora", "interface", "variante", "aproximado", "dispensado",
             "nao")
 DESTINOS_COM_CLAUSULA = ("consulta", "variante")
+# Operador booleano no início ou no fim de uma `clausula`: a composição põe o conector.
+CONECTOR_NA_BORDA = re.compile(r"^\s*(AND|OR|NOT)\b|\b(AND|OR|NOT)\s*$", re.IGNORECASE)
 DESTINO_CONSULTA = "consulta"
 DESTINO_TEXTO = {"consulta": "**Sim**", "ancora": "**Sim**, por âncora",
                  "interface": "**No filtro da interface**", "variante": "Em variante",
@@ -679,8 +681,8 @@ D_DESTINO = CampoFonte(T_CRITERIOS_F, "destino", "texto", dominio=DESTINOS,
                        descricao="`consulta` e `variante` exigem `clausula`")
 CampoFonte(T_CRITERIOS_F, "como", "texto")
 CampoFonte(T_CRITERIOS_F, "clausula", "texto", OPCIONAL,
-           descricao="sintaxe literal do filtro; a de `consulta` é a única fonte dos "
-                     "filtros dos blocos")
+           descricao="sintaxe literal do filtro, sem conector na borda (a composição "
+                     "põe o AND); a de `consulta` é a única fonte dos filtros dos blocos")
 
 T_COBERTURA = TabelaFonte("fonte.cobertura", F, "cobertura",
                           descricao="§3, declaração de cobertura")

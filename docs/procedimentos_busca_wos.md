@@ -17,18 +17,18 @@
 | Busca em todos os campos (`ALL=`) limitada a 49 operadores booleanos; os demais campos sem limite | limite_consulta | **Não verificado** | — | sem sondagem: nenhuma expressão usa `ALL=`; conferir na documentação oficial (afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23) |
 | Intervalos de `PY=` de até 5 anos (recomendação) | filtros | Verificado em fonte oficial | Clarivate, *Advanced Search examples* | — |
 | Filtro de texto completo em sintaxe de consulta | filtros | **Não existe** | ausência na página de *field tags* | — |
-| Valores exatos admitidos em `DT=` e `LA=` | filtros | **Não verificado**; conferir na lista da interface | — | SD4 |
+| Valores exatos admitidos em `DT=` e `LA=` | filtros | Verificado por medição (BD1/sd4-2026-11-25) | — | SD4 |
 | `NEAR/x` entre grupos entre parênteses | proximidade | Verificado por medição (BD1/sd2-2026-11-25) | — | SD2 |
 | Distância padrão de `NEAR` sem número | proximidade | Verificado por medição (BD1/sd2-2026-11-25) | — | SD2 |
-| Comprimento máximo da consulta | limite_consulta | **Não verificado**; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres | — | SD5 |
-| Tratamento de diacríticos | idioma_indexacao | **Não verificado**; as strings trazem as duas grafias | — | SD6 |
-| Teto de retorno exibido | limite_retorno | **Não verificado**; conferir na interface antes de exportar | — | SD7 |
-| Teto de exportação por lote | limite_exportacao | **Não verificado**; conferir na interface antes de exportar | — | SD8 |
+| Comprimento máximo da consulta | limite_consulta | Verificado por medição (BD1/sd5-2026-11-25); a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres | — | SD5 |
+| Tratamento de diacríticos | idioma_indexacao | Verificado por medição (BD1/sd6-2026-11-25); medido só com `educação` (til e cedilha); acento agudo e `ñ` sem sondagem | — | SD6 |
+| Teto de retorno exibido | limite_retorno | Verificado por medição (BD1/sd7-2026-11-25); a navegação só chega ao registro 100000 | — | SD7 |
+| Teto de exportação por lote | limite_exportacao | Verificado por medição (BD1/sd8-2026-11-25); 1000 registros por lote | — | SD8 |
 | Operadores booleanos `AND` e `OR` | operadores | Verificado por medição (BD1/sd1-2026-11-25) | — | SD1 |
 | Parênteses para agrupamento | agrupamento | Verificado por medição (BD1/sd1-2026-11-25) | — | SD1 |
 | Lematização | lematizacao | Verificado por medição (BD1/sd3-2026-11-25); medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem | — | SD3 |
 | Vocabulário controlado de assunto | vocabulario_controlado | **Não verificado** | — | sem sondagem: verificação documental: a Core Collection não foi conferida quanto a tesauro de assunto; nenhuma expressão depende dele |
-| Exportação em RIS com todos os campos | exportacao | **Não verificado** | — | SD8 |
+| Exportação em RIS com todos os campos | exportacao | Verificado por medição (BD1/sd8-2026-11-25) | — | SD8 |
 
 As expressões usam `TS=`, `PY=`, `DT=` e `NEAR/5`. Valor de `DT=` recusado pela interface sai da consulta e vai ao refinamento, com a troca anotada no registro.
 
@@ -196,7 +196,7 @@ TS=("ontology")
 
 #### SD4 — saber se os valores de `DT=` e `LA=` usados no procedimento são aceitos
 
-**Elementos verificados:** Valores exatos admitidos em `DT=` e `LA=` (Não verificado).
+**Elementos verificados:** Valores exatos admitidos em `DT=` e `LA=` (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -221,7 +221,7 @@ TS=(ontology) AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter"
 TS=(ontology) AND LA=Portuguese
 ```
 
-**Consulta 4 — teste**, em busca avançada. Muda em relação ao controle: o filtro de idioma da variante.
+**Consulta 4 — teste**, em busca avançada. Muda em relação ao controle: o filtro de idioma da consulta.
 
 ```
 TS=(ontology) AND LA=(English OR Portuguese OR Spanish)
@@ -241,24 +241,29 @@ TS=(ontology) AND LA=(English OR Portuguese OR Spanish)
 | :---: | :--- | :--- | :--- |
 | 1 | todos os testes aceitos, 0 < teste < controle, e cada valor presente na lista de refinamento | os valores de `DT=` e `LA=` são aceitos | Verificado por medição |
 | 2 | algum teste recusado, = 0, ou valor ausente da lista | algum valor não é aceito; tirá-lo da consulta e levar ao refinamento, com a troca anotada | Não verificado |
+| 3 | controle = 0, teste ≥ controle sem mensagem, ou listas de refinamento não conferidas | não se distingue se os valores são aceitos; levar ao pesquisador | Não verificado |
 
 **Evidência a registrar.**
 
 - captura da tela do histórico de busca e das listas de refinamento
 
+**Resultados registrados.**
+
+- (BD1/sd4-2026-11-25) 2026-11-25T18:03: leitura 1
+
 #### SD5 — saber se a interface aceita inteira a consulta de EB4
 
-**Elementos verificados:** Comprimento máximo da consulta (Não verificado).
+**Elementos verificados:** Comprimento máximo da consulta (Verificado por medição).
 **Depende de:** SD2.
 
 **Pré-requisitos.**
 
 - SD2 registrada com a proximidade entre grupos verificada
 
-**Consulta 1 — teste**, em busca avançada. Texto de EB4, 2.537 caracteres.
+**Consulta 1 — teste**, em busca avançada. Texto de EB4, 2.587 caracteres.
 
 ```
-TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND (TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") OR TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos")) PY=(2017-2026) DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
+TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND (TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") OR TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos")) AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
 ```
 
 **Passos.**
@@ -280,9 +285,13 @@ TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais"
 
 - captura da tela do histórico de busca, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD1/sd5-2026-11-25) 2026-11-25T18:58: leitura 1
+
 #### SD6 — saber se a base ignora diacríticos
 
-**Elementos verificados:** Tratamento de diacríticos (Não verificado).
+**Elementos verificados:** Tratamento de diacríticos (Verificado por medição).
 **Depende de:** SD3.
 
 **Pré-requisitos.**
@@ -319,9 +328,13 @@ TS=("educacao")
 
 - captura da tela do histórico de busca, com as consultas e os retornos visíveis
 
+**Resultados registrados.**
+
+- (BD1/sd6-2026-11-25) 2026-11-25T18:58: leitura 1
+
 #### SD7 — saber se a base exibe e deixa percorrer o retorno inteiro de uma busca larga
 
-**Elementos verificados:** Teto de retorno exibido (Não verificado).
+**Elementos verificados:** Teto de retorno exibido (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -354,9 +367,13 @@ TS=(education)
 
 - captura da tela do retorno e da última página acessível
 
+**Resultados registrados.**
+
+- (BD1/sd7-2026-11-25) 2026-11-25T18:58: leitura 2
+
 #### SD8 — saber quantos registros a base exporta de uma vez em RIS com todos os campos
 
-**Elementos verificados:** Teto de exportação por lote (Não verificado); Exportação em RIS com todos os campos (Não verificado).
+**Elementos verificados:** Teto de exportação por lote (Verificado por medição); Exportação em RIS com todos os campos (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -390,6 +407,10 @@ TS=(ontology AND education)
 - captura da tela da opção de exportação
 - o arquivo exportado
 
+**Resultados registrados.**
+
+- (BD1/sd8-2026-11-25) 2026-11-25T19:12: leitura 1
+
 ---
 
 ## 2. Critérios de elegibilidade
@@ -397,7 +418,7 @@ TS=(ontology AND education)
 | Critério | ID | Na consulta? | Como |
 | :--- | :---: | :--- | :--- |
 | Intervalo temporal — 2017 até a data de execução | CE1 / CE2 | **Sim** | `AND PY=(2017-2026)` |
-| Idiomas — português, inglês e espanhol | CE3 | Em variante | `AND LA=(English OR Portuguese OR Spanish)` |
+| Idiomas — português, inglês e espanhol | CE3 | **Sim** | `AND LA=(English OR Portuguese OR Spanish)` |
 | Tipo documental | CE4 / CE5 | **Sim** | `AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")` |
 | Adequação temática — regra de inclusão | CE6 | Aproximado | EB4 exige termo de prática (STR3) ou de fator situacional (STR4); a formalização se decide na triagem |
 | Adequação temática — não pertinência e contra-escopo | CE6 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
@@ -479,7 +500,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Derivada localmente — executar apenas no teste de fidelidade.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT3 (🟥)
 
 ```
-TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") PY=(2017-2026) DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
+TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
 ```
 
 ### EB3 (artefatos que formalizam os fatores situacionais do domínio educacional)
@@ -487,7 +508,7 @@ TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais"
 *Derivada localmente — executar apenas no teste de fidelidade.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND FCT4 (🟧)
 
 ```
-TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos") PY=(2017-2026) DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
+TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos") AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
 ```
 
 ### EB4 (de cobertura restrita — artefatos de representação no domínio educacional que mencionam prática ou fator situacional)
@@ -495,7 +516,7 @@ TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais"
 *Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
 ```
-TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND (TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") OR TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos")) PY=(2017-2026) DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
+TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND (TS=("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais" OR "educational practice" OR "educational practices" OR "teaching method" OR "teaching methods" OR "educational strategy" OR "educational strategies" OR "learning activity" OR "learning activities" OR "educational intervention" OR "educational interventions" OR "práctica educativa" OR "prácticas educativas" OR "estrategia educativa" OR "estrategias educativas" OR "actividad de aprendizaje" OR "actividades de aprendizaje" OR "intervención educativa" OR "intervenciones educativas" OR "método de enseñanza" OR "métodos de enseñanza") OR TS=("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "ambientes educacionales" OR "educational context" OR "educational contexts" OR "learning context" OR "learning contexts" OR "contextual factor" OR "contextual factors" OR "situational factor" OR "situational factors" OR "educational environment" OR "educational environments" OR "contexto educativo" OR "contextos educativos" OR "contexto de aprendizaje" OR "contextos de aprendizaje" OR "factor contextual" OR "factores contextuales" OR "factor situacional" OR "factores situacionales" OR "entorno educativo" OR "entornos educativos")) AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
 ```
 
 ### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
@@ -503,7 +524,7 @@ TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais"
 *Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
 
 ```
-TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) PY=(2017-2026) DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
+TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "modelos conceptuales" OR "ontología" OR "ontologías") NEAR/5 ("educacional" OR "educacionais" OR "educacionales" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza-aprendizajes" OR "enseñanza y aprendizaje" OR "educación")) AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR "Proceedings Paper" OR "Book Chapter")
 ```
 
 ### Como executar
@@ -530,13 +551,9 @@ AND PY=(2017-2021)
 AND PY=(2022-2026)
 ```
 
-#### Idioma
+#### Idioma recusado
 
-Disparo: sondagem de `LA=` aceita (`TS=ontology AND LA=Portuguese`) e valores conferidos na lista da interface. Forma: anexar ao final da expressão. Valor recusado: aplicar o limite por refinamento e anotar no registro.
-
-```
-AND LA=(English OR Portuguese OR Spanish)
-```
+Disparo: a interface recusa algum valor de `LA=` da consulta, ou o valor some da lista de refinamento. Forma: tirar o valor da cláusula, aplicar o limite por refinamento de idioma, anotar a troca no registro e repetir a SD4.
 
 #### Truncamento
 
@@ -585,6 +602,6 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de
 ## 6. Ressalvas
 
 1. Todos os termos são **termos livres**; não apresentá-los como descritores autorizados.
-2. **`LA=`**: executar a sondagem mínima (`TS=ontology AND LA=Portuguese`) antes de usar; se recusada, usar o refinamento por idioma.
+2. **`LA=`** vai na consulta, porque os valores English, Portuguese e Spanish foram aceitos (BD1/sd4-2026-11-25); valor recusado leva à variante "Idioma recusado".
 3. **Texto completo** não é filtro de busca nesta base: o critério opera na 2ª filtragem.
 4. **Teses e dissertações** não são cobertas pela Core Collection: ficam a cargo da BRAPCI e, se necessário, da BDTD.
