@@ -1,6 +1,6 @@
 {
   "chave": "brased|pt|ensino-aprendizagem",
-  "recuperado_em": "2026-11-24T18:31:52-03:00",
+  "recuperado_em": "2026-11-25T09:59:17-03:00",
   "payload": {
     "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=ensino-aprendizagem&output=json",
     "status_http": 200,

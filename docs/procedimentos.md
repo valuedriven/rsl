@@ -33,7 +33,8 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 
 - Realizar pesquisas preliminares sobre o tema
   - Fonte: plano §1.1
-  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
+  - Apoio: manual — pesquisa exploratória do pesquisador, anterior às expressões de busca e sem
+    procedimento sistemático
 - Consultar pesquisadores da área sobre as intenções iniciais
   - Apoio: manual — contato do pesquisador com especialistas, fora do repositório
 - Elaborar o escopo da revisão e discuti-lo com a orientação
@@ -46,11 +47,12 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 ### E2 — Avaliação da necessidade
 
 - Pesquisar revisões sistemáticas anteriores
-  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
+  - Apoio: manual — busca exploratória do pesquisador, anterior às expressões de busca e sem
+    procedimento sistemático
 - Consultar biblioteca especializada no tema
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas; papel VT
     no plano §4.2
-  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
+  - Apoio: manual — consulta do pesquisador às bibliotecas, fora do repositório
 - Decidir sobre a execução da revisão
   - Fonte: plano §1.1 e §2.2
   - Skill: `registrar-decisao`
@@ -111,10 +113,10 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 
 - Consultar obras de referência da área
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Obras de referência a consultar
-  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
+  - Skill: `conferir-referencia`
 - Consultar biblioteca especializada no tema
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas
-  - Apoio: lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado
+  - Apoio: manual — consulta do pesquisador às bibliotecas, fora do repositório
 - Verificar estudos iniciais sobre o tema
   - Fonte: `docs/02_protocolo_informacoes_gerais.md` §Estudos inicialmente consultados acerca
     do tema da revisão
@@ -150,10 +152,10 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 - Estabelecer o controle terminológico
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Controle terminológico e
     §Instrumentos para controle terminológico
-  - Script: `python3 -m rsl termos sondar` — consulta de prova em cada cliente automatizado;
-    não grava. Executar antes de validar.
+  - Script: `python3 -m rsl termos sondar` — consulta de prova em cada endereço resolvido dos
+    instrumentos `Automático`, um por idioma; não grava. Executar antes de validar.
   - Script: `python3 -m rsl termos exportar` — reconstrói a planilha de validação a partir
-    do protocolo, sem rede
+    do protocolo, sem rede, reabrindo as linhas que deixaram de valer
   - Script: `python3 -m rsl termos validar [--faceta FACETA] SIGLA` — `SIGLA`: instrumento
     `Automático` da tabela de instrumentos, ou `todos`; `--faceta`: número n de `FCTn`
   - Script: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
@@ -312,7 +314,9 @@ Concordância entre revisores e contagens do fluxo PRISMA são da seleção (M3/
   - Skill: `conferir-referencia`
 - Incluir estudos de acervos especiais e pessoais e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Acervos especiais e §Acervos pessoais
-  - Apoio: lacuna — skill a decidir (busca-complementar): inclusão de acervos especiais e pessoais sem procedimento declarado
+    (nenhum dos dois é fonte autônoma de inclusão: o acervo pessoal compõe o conjunto-semente;
+    a ausência de busca nos acervos especiais é limitação declarada no relato)
+  - Skill: `conjunto-semente`; `relato-prisma`
 - Confirmar a seleção por avaliação dupla independente e registrar no IO 2
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos (concordância e
     terceiro revisor); plano §6.1 e §6.2 (kappa)

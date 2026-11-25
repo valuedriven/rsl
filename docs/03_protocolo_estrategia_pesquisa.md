@@ -30,30 +30,30 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 ### CT1 (FCT1) 
 | Termo    | pt | en | es |
 | ----- | ----- | ----- | ----- |
-| *Termo livre* | representação do conhecimento, organização do conhecimento, ontologia, modelo conceitual, sistema de organização do conhecimento | knowledge representation, knowledge organization, ontology, conceptual model, knowledge organization system | representación del conocimiento, organización del conocimiento, ontología, modelo conceptual, sistema de organización del conocimiento |
-| *Descritores correspondentes* |  |  |  |
+| *Termo livre* | ontologia, modelo conceitual, sistema de organização do conhecimento | knowledge representation, knowledge organization, conceptual model, knowledge organization system | representación del conocimiento, organización del conocimiento, modelo conceptual, sistema de organización del conocimiento |
+| *Descritores correspondentes* | representação do conhecimento, organização do conhecimento, ontologias | ontology | ontología |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
 ### CT2 (FCT2)
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
-| *Termo livre* | educação, educacional, ensino-aprendizagem, ensino e aprendizagem | education, educational, teaching-learning, teaching and learning | educación, educacional, enseñanza-aprendizaje, enseñanza y aprendizaje |
-| *Descritores correspondentes* |  |  |  |
+| *Termo livre* | educacional, ensino-aprendizagem, ensino e aprendizagem | educational, teaching-learning, teaching and learning | educacional, enseñanza-aprendizaje, enseñanza y aprendizaje |
+| *Descritores correspondentes* |educação | education  | educación |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
 ### CT3 (FCT3)
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
-| *Termo livre* | prática educacional, método de ensino, estratégia educacional, atividade de aprendizagem, intervenção educacional | educational practice, teaching method, educational strategy, learning activity, educational intervention | práctica educativa, método de enseñanza, estrategia educativa, actividad de aprendizaje, intervención educativa |
-| *Descritores correspondentes* |  |  |  |
+| *Termo livre* | prática educacional, método de ensino, estratégia educacional, atividade de aprendizagem, intervenção educacional | educational practice, teaching method, educational strategy, learning activity, educational intervention | práctica educativa, estrategia educativa, actividad de aprendizaje, intervención educativa |
+| *Descritores correspondentes* | métodos de ensino | educational practices, teaching methods | método de enseñanza |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
 
 ### CT4 (FCT4)
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
-| *Termo livre* | contexto educacional, contexto de aprendizagem, fator contextual, fator situacional, ambiente educacional | educational context, learning context, contextual factor, situational factor, educational environment | contexto educativo, contexto de aprendizaje, factor contextual, factor situacional, entorno educativo |
-| *Descritores correspondentes* |  |  |  |
+| *Termo livre* | contexto educacional, contexto de aprendizagem, fator contextual, fator situacional, ambiente educacional | educational context, learning context, contextual factor, situational factor | contexto educativo, contexto de aprendizaje, factor contextual, factor situacional, entorno educativo |
+| *Descritores correspondentes* |  | educational environment | ambiente educacional  |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
 ## Instrumentos para controle terminológico
@@ -69,9 +69,9 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 
 | ID String | Faceta | String | 
 | :---: | :---- | :---- |
-| STR1 | FCT1  | ("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "modelo conceitual" OR "knowledge representation" OR "knowledge organization" OR "ontology" OR "conceptual model" OR "representación del conocimiento" OR "organización del conocimiento" OR "ontología" OR "modelo conceptual") |
-| STR2 | FCT2 | ("educação" OR "educacional" OR "ensino-aprendizagem" OR "ensino e aprendizagem" OR "education" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "educación" OR "enseñanza-aprendizaje" OR "enseñanza y aprendizaje") |
-| STR3 | FCT3 | ("prática educacional" OR "método de ensino" OR "estratégia educacional" OR "atividade de aprendizagem" OR "intervenção educacional" OR "educational practice" OR "teaching method" OR "educational strategy" OR "learning activity" OR "educational intervention" OR "práctica educativa" OR "método de enseñanza" OR "estrategia educativa" OR "actividad de aprendizaje" OR "intervención educativa") |
+| STR1 | FCT1  | ("ontologia" OR "modelo conceitual" OR "representação do conhecimento" OR "organização do conhecimento" OR "ontologias" OR "knowledge representation" OR "knowledge organization" OR "conceptual model" OR "ontology" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "ontología") |
+| STR2 | FCT2 | ("educacional" OR "ensino-aprendizagem" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza y aprendizaje" OR "educación") |
+| STR3 | FCT3 | ("prática educacional" OR "método de ensino" OR "estratégia educacional" OR "atividade de aprendizagem" OR "intervenção educacional" OR "métodos de ensino" OR "educational practice" OR "teaching method" OR "educational strategy" OR "learning activity" OR "educational intervention" OR "educational practices" OR "teaching methods" OR "práctica educativa" OR "estrategia educativa" OR "actividad de aprendizaje" OR "intervención educativa" OR "método de enseñanza") |
 | STR4 | FCT4 | ("contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fator situacional" OR "ambiente educacional" OR "educational context" OR "learning context" OR "contextual factor" OR "situational factor" OR "educational environment" OR "contexto educativo" OR "contexto de aprendizaje" OR "factor contextual" OR "factor situacional" OR "entorno educativo") |
 
 ## Expressões de busca

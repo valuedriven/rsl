@@ -1,6 +1,6 @@
 {
   "chave": "tbci|pt|modelo conceitual",
-  "recuperado_em": "2026-11-24T18:30:52-03:00",
+  "recuperado_em": "2026-11-25T09:58:02-03:00",
   "payload": {
     "url_consultada": "https://www.vocabularyserver.com/tbci/br/services.php?task=search&arg=modelo+conceitual&output=json",
     "status_http": 200,

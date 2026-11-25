@@ -1,6 +1,6 @@
 {
   "chave": "unesco|es|método de enseñanza",
-  "recuperado_em": "2026-11-24T17:05:17-03:00",
+  "recuperado_em": "2026-11-25T10:06:37-03:00",
   "payload": {
     "url_consultada": "https://www.vocabularyserver.com/unesco/es/services.php?task=search&arg=m%C3%A9todo+de+ense%C3%B1anza&output=json",
     "status_http": 200,

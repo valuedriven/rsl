@@ -1,6 +1,6 @@
 {
   "chave": "brased|pt|educação",
-  "recuperado_em": "2026-11-24T17:03:51-03:00",
+  "recuperado_em": "2026-11-25T09:59:10-03:00",
   "payload": {
     "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=educa%C3%A7%C3%A3o&output=json",
     "status_http": 200,

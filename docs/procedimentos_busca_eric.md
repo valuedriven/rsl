@@ -753,7 +753,7 @@ Declarada em `docs/procedimentos/eric/procedimento.toml`, `[cobertura]`; conferi
 ### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"conceptual model" OR title:"conceptual models")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies)
 ```
 
 ### `STR1b` — string `#1b` — 🟦 FCT1 — Artefatos, subconjunto específico, no resumo
@@ -827,7 +827,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 2a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"conceptual model" OR title:"conceptual models") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
 ```
 
 **Consulta 2b — termo específico no resumo**
@@ -843,7 +843,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 3a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"conceptual model" OR title:"conceptual models") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"situational factor" OR abstract:"situational factors" OR abstract:"educational environment" OR abstract:"educational environments")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"situational factor" OR abstract:"situational factors" OR abstract:"educational environment" OR abstract:"educational environments")
 ```
 
 **Consulta 3b — termo específico no resumo**
@@ -859,13 +859,13 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 4a — artefato no título × prática**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"conceptual model" OR title:"conceptual models") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
 ```
 
 **Consulta 4b — artefato no título × fator situacional**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"conceptual model" OR title:"conceptual models") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"situational factor" OR abstract:"situational factors" OR abstract:"educational environment" OR abstract:"educational environments")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational context" OR abstract:"educational contexts" OR abstract:"learning context" OR abstract:"learning contexts" OR abstract:"contextual factor" OR abstract:"contextual factors" OR abstract:"situational factor" OR abstract:"situational factors" OR abstract:"educational environment" OR abstract:"educational environments")
 ```
 
 **Consulta 4c — termo específico no resumo × prática**
@@ -887,7 +887,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 5a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:ontology OR title:ontologies OR title:"conceptual model" OR title:"conceptual models") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners)
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners)
 ```
 
 **Consulta 5b — termo específico no resumo**

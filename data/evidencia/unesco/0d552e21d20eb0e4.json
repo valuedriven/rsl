@@ -1,0 +1,517 @@
+{
+  "chave": "unesco|en|teaching methods",
+  "recuperado_em": "2026-11-25T10:06:04-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/unesco/en/services.php?task=search&arg=teaching+methods&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "6917": {
+          "term_id": 6917,
+          "string": "Teaching methods",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|5|6872|6917",
+          "order": 1
+        },
+        "6885": {
+          "term_id": 6885,
+          "string": "Self instruction",
+          "isMetaTerm": 0,
+          "no_term_string": "Self teaching methods",
+          "index": null,
+          "order": 2
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "teaching methods"
+        },
+        "web_service_version": "2.1",
+        "version": "TemaTres 3.6.1",
+        "cant_result": 2
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchAlt&arg=6917&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6922": {
+            "term_id": "6922",
+            "code": null,
+            "lang": "en",
+            "string": "Didactics",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6918": {
+            "term_id": "6918",
+            "code": null,
+            "lang": "en",
+            "string": "Educational methods",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6919": {
+            "term_id": "6919",
+            "code": null,
+            "lang": "en",
+            "string": "Instructional methods",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6920": {
+            "term_id": "6920",
+            "code": null,
+            "lang": "en",
+            "string": "Teaching strategies",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6921": {
+            "term_id": "6921",
+            "code": null,
+            "lang": "en",
+            "string": "Teaching techniques",
+            "relation_type_id": "4",
+            "relation_type": "UF",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 6917
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchUp&arg=6917&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "5": {
+            "term_id": "5",
+            "string": "Education",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "6872": {
+            "term_id": "6872",
+            "string": "Teaching and training",
+            "isMetaTerm": "1",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "6917": {
+            "term_id": "6917",
+            "string": "Teaching methods",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 6917
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchDown&arg=6917&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6923": {
+            "term_id": "6923",
+            "string": "Classroom techniques",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6926": {
+            "term_id": "6926",
+            "string": "Competency based teaching",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6943": {
+            "term_id": "6943",
+            "string": "Demonstrations (educational)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6945": {
+            "term_id": "6945",
+            "string": "Discussions (teaching method)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6944": {
+            "term_id": "6944",
+            "string": "Experiments (lessons)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6947": {
+            "term_id": "6947",
+            "string": "Group instruction",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6959": {
+            "term_id": "6959",
+            "string": "Heuristic method (teaching)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6939": {
+            "term_id": "6939",
+            "string": "Individualized instruction",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6936": {
+            "term_id": "6936",
+            "string": "Lectures (teaching method)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6929": {
+            "term_id": "6929",
+            "string": "Literacy methods",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6933": {
+            "term_id": "6933",
+            "string": "Multimedia instruction",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "6963": {
+            "term_id": "6963",
+            "string": "Peer teaching",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6957": {
+            "term_id": "6957",
+            "string": "Questioning (teaching method)",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6937": {
+            "term_id": "6937",
+            "string": "Remedial instruction",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6930": {
+            "term_id": "6930",
+            "string": "School visits",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6960": {
+            "term_id": "6960",
+            "string": "Suggestopaedia",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          },
+          "6962": {
+            "term_id": "6962",
+            "string": "Team teaching",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 0
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 6917
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 17
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchRelated&arg=6917&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6584": {
+            "term_id": "6584",
+            "code": "concept14097",
+            "lang": "en",
+            "string": "Microteaching",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6881": {
+            "term_id": "6881",
+            "code": "concept17113",
+            "lang": "en",
+            "string": "Blended learning",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "4471": {
+            "term_id": "4471",
+            "code": "concept7268",
+            "lang": "en",
+            "string": "Modular instruction",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6866": {
+            "term_id": "6866",
+            "code": "concept81",
+            "lang": "en",
+            "string": "Learning methods",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6914": {
+            "term_id": "6914",
+            "code": "concept82",
+            "lang": "en",
+            "string": "Teaching",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6976": {
+            "term_id": "6976",
+            "code": "concept85",
+            "lang": "en",
+            "string": "Training methods",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "6859": {
+            "term_id": "6859",
+            "code": "concept9267",
+            "lang": "en",
+            "string": "Teaching method innovations",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          },
+          "7097": {
+            "term_id": "7097",
+            "code": "concept9345",
+            "lang": "en",
+            "string": "Study abroad",
+            "isMetaTerm": "0",
+            "relation_type_id": "2",
+            "relation_type": "RT",
+            "relation_code": null,
+            "relation_label": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 6917
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 8
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchNotes&arg=6917&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "2911": {
+            "term_id": "6917",
+            "string": "Teaching methods",
+            "note_id": "2911",
+            "note_type": "NA",
+            "note_lang": "en",
+            "note_text": "Patterns of teacher behaviour that are recurrent, applicable to various subject matters, characteristic of more than one teacher and relevant to learning.",
+            "note_src": null
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 6917
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 1
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/unesco/en/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "UNESCO Thesaurus",
+          "author": "UNESCO",
+          "lang": "en",
+          "scope": null,
+          "keywords": null,
+          "uri": "https://vocabularyserver.com//unesco/en/",
+          "createDate": "2025-07-08",
+          "lastMod": "2025-07-09 14:32:56",
+          "status": "published - stable",
+          "status_date": "2025-07-08",
+          "contributor": "",
+          "adminEmail": null,
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "7186"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.1",
+          "version": "TemaTres 3.6.1",
+          "cant_result": 16
+        }
+      }
+    }
+  }
+}

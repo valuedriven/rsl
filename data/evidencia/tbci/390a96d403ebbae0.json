@@ -1,6 +1,6 @@
 {
   "chave": "tbci|pt|ontologia",
-  "recuperado_em": "2026-11-24T18:30:48-03:00",
+  "recuperado_em": "2026-11-25T09:58:00-03:00",
   "payload": {
     "url_consultada": "https://www.vocabularyserver.com/tbci/br/services.php?task=search&arg=ontologia&output=json",
     "status_http": 200,

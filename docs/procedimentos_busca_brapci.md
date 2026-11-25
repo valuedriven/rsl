@@ -452,13 +452,13 @@ Declarada em `docs/procedimentos/brapci/procedimento.toml`, `[cobertura]`; confe
 ### `STR1` — string `#1` — 🟦 FCT1 — Artefatos de representação e organização do conhecimento — **âncora obrigatória**
 
 ```
-("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "ontology" OR "ontologies" OR "conceptual model" OR "conceptual models")
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies")
 ```
 
 ### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
 
 ```
-("educação" OR "educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem")
+("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
 ```
 
 ### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
@@ -516,7 +516,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
 ```
-("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "ontology" OR "ontologies" OR "conceptual model" OR "conceptual models") AND ("educação" OR "educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem") AND (("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais") OR ("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais"))
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação") AND (("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais") OR ("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais"))
 ```
 
 ### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
@@ -524,7 +524,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
 
 ```
-("representação do conhecimento" OR "organização do conhecimento" OR "ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "ontology" OR "ontologies" OR "conceptual model" OR "conceptual models") AND ("educação" OR "educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem")
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
 ```
 
 ### Como executar

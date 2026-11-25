@@ -1,0 +1,230 @@
+{
+  "chave": "brased|pt|métodos de ensino",
+  "recuperado_em": "2026-11-25T10:00:59-03:00",
+  "payload": {
+    "url_consultada": "https://www.vocabularyserver.com/brased/services.php?task=search&arg=m%C3%A9todos+de+ensino&output=json",
+    "status_http": 200,
+    "busca": {
+      "result": {
+        "7988": {
+          "term_id": 7988,
+          "string": "Métodos de Ensino",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7988",
+          "order": 1
+        },
+        "7979": {
+          "term_id": 7979,
+          "string": "Métodos de Ensino a Distância",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7947|7979",
+          "order": 2
+        },
+        "7960": {
+          "term_id": 7960,
+          "string": "Métodos de Ensino de Línguas",
+          "isMetaTerm": 0,
+          "no_term_string": false,
+          "index": "|6413|7718|7908|7946|7947|7960",
+          "order": 3
+        }
+      },
+      "resume": {
+        "status": "available",
+        "param": {
+          "task": "search",
+          "arg": "métodos de ensino"
+        },
+        "web_service_version": "2.0",
+        "version": "TemaTres 3.5.2",
+        "cant_result": 3
+      }
+    },
+    "fetchAlt": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchAlt&arg=7988&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchAlt",
+            "arg": 7988
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchUp": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchUp&arg=7988&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "6413": {
+            "term_id": "6413",
+            "string": "Educação",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 1
+          },
+          "7718": {
+            "term_id": "7718",
+            "string": "Processo de Ensino-Aprendizagem",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 2
+          },
+          "7908": {
+            "term_id": "7908",
+            "string": "Ensino",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 3
+          },
+          "7946": {
+            "term_id": "7946",
+            "string": "Métodos Didático-Pedagógicos",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 4
+          },
+          "7988": {
+            "term_id": "7988",
+            "string": "Métodos de Ensino",
+            "isMetaTerm": "0",
+            "relation_type_id": null,
+            "order": 5
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchUp",
+            "arg": 7988
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 5
+        }
+      }
+    },
+    "fetchDown": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchDown&arg=7988&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "7989": {
+            "term_id": "7989",
+            "string": "Métodos Ativos",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8016": {
+            "term_id": "8016",
+            "string": "Métodos Diretos",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          },
+          "8034": {
+            "term_id": "8034",
+            "string": "Métodos Indiretos",
+            "isMetaTerm": "0",
+            "lang": null,
+            "relation_type_id": "3",
+            "relation_type": "NT",
+            "relation_code": null,
+            "relation_label": null,
+            "hasMoreDown": 1
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchDown",
+            "arg": 7988
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 3
+        }
+      }
+    },
+    "fetchRelated": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchRelated&arg=7988&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchRelated",
+            "arg": 7988
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchNotes": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchNotes&arg=7988&output=json",
+      "status_http": 200,
+      "payload": {
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchNotes",
+            "arg": 7988
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 0
+        }
+      }
+    },
+    "fetchVocabularyData": {
+      "url": "https://www.vocabularyserver.com/brased/services.php?task=fetchVocabularyData&arg=&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Thesaurus Brasileiro da Educação",
+          "author": "INEP.  Centro de Informação e Biblioteca em Educação",
+          "lang": "pt-BR",
+          "scope": "O Thesaurus Brased insere a educação dentro do contexto global, sem o qual não é possível compreendê-la. Na definição de seu âmbito temático foram levadas em consideração áreas que estão relacionadas com a educação. Incluye solo relaciones jerárquicas. Fonte: http://inep.gov.br/thesaurus-brasileiro-da-educacao",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/brased/",
+          "createDate": "2020-02-16",
+          "lastMod": "2020-02-16 16:12:48",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "8327"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    }
+  }
+}

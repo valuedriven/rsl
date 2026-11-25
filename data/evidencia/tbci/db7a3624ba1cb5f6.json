@@ -1,6 +1,6 @@
 {
   "chave": "tbci|pt|representação do conhecimento",
-  "recuperado_em": "2026-11-24T17:02:52-03:00",
+  "recuperado_em": "2026-11-25T09:57:40-03:00",
   "payload": {
     "url_consultada": "https://www.vocabularyserver.com/tbci/br/services.php?task=search&arg=representa%C3%A7%C3%A3o+do+conhecimento&output=json",
     "status_http": 200,

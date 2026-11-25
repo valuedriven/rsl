@@ -82,3 +82,13 @@ Com plural explícito, a forma de número se gera por regra de pt, en e es, com 
 - **O teste de aderência será refeito**, porque as STRs mudaram de conteúdo.
 
 Alcance: **método** e **busca**.
+
+## 2026-11-25 — Descritores aceitos pelo ReT
+
+- **Descritores correspondentes**, por correspondência exata nos instrumentos do protocolo: `representação do conhecimento`, `organização do conhecimento` e `ontologias` (TBCI); `ontology` e `ontología` (UNESCO); `educação` (Brased), `education` (UNESCO e ERIC) e `educación` (UNESCO); `métodos de ensino` (Brased), `educational practices` (ERIC), `teaching methods` (UNESCO e ERIC) e `método de enseñanza` (UNESCO); `educational environment` (UNESCO e ERIC) e `ambiente educacional`, em es (UNESCO).
+- **A forma livre no singular permanece** ao lado do descritor no plural (`ontologia`, `método de ensino`, `educational practice`, `teaching method`).
+- **`ambiente educacional` (pt) fica termo livre:** o Brased não tem o termo, e o candidato que sugere é outro conceito.
+- **`contexto de aprendizaje` (es) fica termo livre:** na UNESCO é entrada não preferida de `Ambiente educacional`, e o descritor adotado é a forma preferida. O termo continua na STR4.
+- **O teste de aderência será refeito.** Pela flexão, a única forma nova nas expressões é `ambientes educacionales`, na WoS e na Scopus. Na ERIC e na BRAPCI, só a ordem dos termos mudou.
+
+Alcance: **busca**.

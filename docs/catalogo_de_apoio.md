@@ -10,7 +10,7 @@ Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 
 | Passo | Origem | Fonte | Skills | Comandos | Apoio |
 | --- | --- | --- | --- | --- | --- |
-| Realizar pesquisas preliminares sobre o tema | modelo | plano §1.1 | — | — | lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
+| Realizar pesquisas preliminares sobre o tema | modelo | plano §1.1 | — | — | manual — pesquisa exploratória do pesquisador, anterior às expressões de busca e sem procedimento sistemático |
 | Consultar pesquisadores da área sobre as intenções iniciais | modelo | — | — | — | manual — contato do pesquisador com especialistas, fora do repositório |
 | Elaborar o escopo da revisão e discuti-lo com a orientação | modelo | plano §2.1 a §2.4 | — | — | manual — decisão do pesquisador com a orientação |
 | Elaborar os objetivos da revisão | modelo | plano §1.2 e §1.3; | `questao-e-objetivos` | — | — |
@@ -19,8 +19,8 @@ Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 
 | Passo | Origem | Fonte | Skills | Comandos | Apoio |
 | --- | --- | --- | --- | --- | --- |
-| Pesquisar revisões sistemáticas anteriores | modelo | — | — | — | lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
-| Consultar biblioteca especializada no tema | modelo | `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas; papel VT no plano §4.2 | — | — | lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
+| Pesquisar revisões sistemáticas anteriores | modelo | — | — | — | manual — busca exploratória do pesquisador, anterior às expressões de busca e sem procedimento sistemático |
+| Consultar biblioteca especializada no tema | modelo | `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas; papel VT no plano §4.2 | — | — | manual — consulta do pesquisador às bibliotecas, fora do repositório |
 | Decidir sobre a execução da revisão | modelo | plano §1.1 e §2.2 | `registrar-decisao` | — | — |
 
 ### M1 — Planejamento (exequibilidade da revisão) › E3 — Viabilização dos instrumentos operacionais
@@ -55,8 +55,8 @@ Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 
 | Passo | Origem | Fonte | Skills | Comandos | Apoio |
 | --- | --- | --- | --- | --- | --- |
-| Consultar obras de referência da área | modelo | `docs/02_protocolo_informacoes_gerais.md` §Obras de referência a consultar | — | — | lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
-| Consultar biblioteca especializada no tema | modelo | `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas | — | — | lacuna — skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
+| Consultar obras de referência da área | modelo | `docs/02_protocolo_informacoes_gerais.md` §Obras de referência a consultar | `conferir-referencia` | — | — |
+| Consultar biblioteca especializada no tema | modelo | `docs/02_protocolo_informacoes_gerais.md` §Bibliotecas especializadas | — | — | manual — consulta do pesquisador às bibliotecas, fora do repositório |
 | Verificar estudos iniciais sobre o tema | modelo | `docs/02_protocolo_informacoes_gerais.md` §Estudos inicialmente consultados acerca do tema da revisão | `conferir-referencia` | — | — |
 
 ### M2 — Questão de revisão (direcionamento) › E2 — Delimitação do assunto
@@ -107,7 +107,7 @@ Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 | Aplicar os critérios de elegibilidade e registrar no IO 2 | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Critérios de elegibilidade | `criterios-de-elegibilidade`; `filtragem-dos-estudos` | — | — |
 | Controlar duplicatas e registrar no IO 2 | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; plano §6.2 (dupla passagem de deduplicação); marca `duplicata_de` em `[saidas] registros` | `controle-de-duplicatas` | — | — |
 | Analisar as listas de referências dos estudos selecionados e registrar no IO 2 | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos e §Acervos especiais; plano §3.3 e §7 | `conferir-referencia` | — | — |
-| Incluir estudos de acervos especiais e pessoais e registrar no IO 2 | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Acervos especiais e §Acervos pessoais | — | — | lacuna — skill a decidir (busca-complementar): inclusão de acervos especiais e pessoais sem procedimento declarado |
+| Incluir estudos de acervos especiais e pessoais e registrar no IO 2 | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Acervos especiais e §Acervos pessoais (nenhum dos dois é fonte autônoma de inclusão: o acervo pessoal compõe o conjunto-semente; a ausência de busca nos acervos especiais é limitação declarada no relato) | `conjunto-semente`; `relato-prisma` | — | — |
 | Confirmar a seleção por avaliação dupla independente e registrar no IO 2 | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos (concordância e terceiro revisor); plano §6.1 e §6.2 (kappa) | `filtragem-dos-estudos` | — | — |
 
 ### M3 — Pesquisa bibliográfica (busca e avaliação da evidência) › E4 — Extração de dados
@@ -148,8 +148,8 @@ Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 | --- | --- | --- | --- | --- |
 | `auditoria-das-strings` | procedimento | M3/E1 › Estabelecer o controle terminológico; M3/E1 › Gerar as strings de busca por faceta a partir do quadro terminológico | `strings gerar`; `termos exportar`; `termos importar`; `termos sondar`; `termos validar` | citada |
 | `conferencias-da-busca` | procedimento | M3/E2 › Avaliar a pertinência e a relevância dos resultados | `busca derivar`; `conferencia fidelidade`; `conferencia sensibilidade` | citada |
-| `conferir-referencia` | transversal | M2/E1 › Verificar estudos iniciais sobre o tema; M3/E3 › Analisar as listas de referências dos estudos selecionados e registrar no IO 2; M3/E4 › Coletar dados com o formulário de fichamento (IO 4); M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | — | citada |
-| `conjunto-semente` | artefato | M3/E2 › Realizar teste de aderência das expressões de busca | `aderencia medir`; `aderencia planilhar` | citada |
+| `conferir-referencia` | transversal | M2/E1 › Consultar obras de referência da área; M2/E1 › Verificar estudos iniciais sobre o tema; M3/E3 › Analisar as listas de referências dos estudos selecionados e registrar no IO 2; M3/E4 › Coletar dados com o formulário de fichamento (IO 4); M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | — | citada |
+| `conjunto-semente` | artefato | M3/E2 › Realizar teste de aderência das expressões de busca; M3/E3 › Incluir estudos de acervos especiais e pessoais e registrar no IO 2 | `aderencia medir`; `aderencia planilhar` | citada |
 | `controle-de-duplicatas` | procedimento | M3/E3 › Controlar duplicatas e registrar no IO 2 | — | citada |
 | `criterios-de-elegibilidade` | procedimento | M3/E1 › Definir os critérios de elegibilidade; M3/E3 › Aplicar os critérios de elegibilidade e registrar no IO 2 | — | citada |
 | `execucao-da-busca` | procedimento | M3/E2 › Acessar as fontes de pesquisa na ordem predefinida; M3/E2 › Executar as sondagens de sintaxe pelo roteiro de cada base; M3/E2 › Executar expressões de busca; M3/E2 › Exportar metadados dos resultados; M3/E2 › Criar alertas de busca nas bases | `busca registrar`; `sondagens registrar` | citada |
@@ -163,7 +163,7 @@ Passos: 63 do modelo + 3 de adaptação do projeto = 66.
 | `questao-e-objetivos` | procedimento | M1/E1 › Elaborar os objetivos da revisão; M2/E2 › Especificar a temática da revisão; M2/E2 › Delimitar a abordagem sobre a temática; M2/E2 › Identificar o objeto de estudo da revisão; M2/E2 › Especificar o objeto de estudo da revisão; M2/E2 › Redigir as questões de revisão e registrá-las no protocolo (IO 1) | — | citada |
 | `rastreabilidade` | transversal | M3/E1 › Montar o protocolo de revisão (IO 1) | `dados conferir`; `documentos conferir`; `projeto autoteste` | citada |
 | `registrar-decisao` | transversal | M1/E2 › Decidir sobre a execução da revisão; M3/E1 › Validar o protocolo com pesquisador expert | — | citada |
-| `relato-prisma` | transversal | M1/E3 › Preparar a tabela de composição do portfólio (IO 2); M1/E3 › Preparar o fluxograma da revisão (IO 3); M3/E2 › Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2); M4/E2 › Redigir o texto final; M4/E2 › Formatar as seções do relatório; M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | — | citada |
+| `relato-prisma` | transversal | M1/E3 › Preparar a tabela de composição do portfólio (IO 2); M1/E3 › Preparar o fluxograma da revisão (IO 3); M3/E2 › Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2); M3/E3 › Incluir estudos de acervos especiais e pessoais e registrar no IO 2; M4/E2 › Redigir o texto final; M4/E2 › Formatar as seções do relatório; M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | — | citada |
 | `revisao-geral-do-projeto` | transversal | M3/E1 › Montar o protocolo de revisão (IO 1) | `dados conferir`; `documentos conferir`; `projeto autoteste` | citada |
 | `sintese-e-lacunas` | procedimento | M4/E1 › Realizar a análise bibliométrica dos estudos; M4/E1 › Realizar a análise de conteúdo dos estudos; M4/E2 › Redigir o texto final | — | citada |
 | `sondagens-de-sintaxe` | procedimento | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte; M3/E2 › Executar as sondagens de sintaxe pelo roteiro de cada base | `procedimentos gerar`; `procedimentos iniciar`; `sondagens registrar` | citada |
@@ -202,16 +202,16 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 
 | Módulo | Etapa | Passos | Com skill | Com comando | Manual | Lacuna |
 | --- | --- | --- | --- | --- | --- | --- |
-| M1 — Planejamento (exequibilidade da revisão) | E1 — Definição dos objetivos | 4 | 1 | 0 | 2 | 1 |
-| M1 — Planejamento (exequibilidade da revisão) | E2 — Avaliação da necessidade | 3 | 1 | 0 | 0 | 2 |
+| M1 — Planejamento (exequibilidade da revisão) | E1 — Definição dos objetivos | 4 | 1 | 0 | 3 | 0 |
+| M1 — Planejamento (exequibilidade da revisão) | E2 — Avaliação da necessidade | 3 | 1 | 0 | 2 | 0 |
 | M1 — Planejamento (exequibilidade da revisão) | E3 — Viabilização dos instrumentos operacionais | 7 | 4 | 1 | 2 | 0 |
 | M1 — Planejamento (exequibilidade da revisão) | E4 — Definição da equipe | 3 | 0 | 0 | 3 | 0 |
 | M1 — Planejamento (exequibilidade da revisão) | E5 — Elaboração do cronograma | 3 | 0 | 0 | 3 | 0 |
-| M2 — Questão de revisão (direcionamento) | E1 — Identificação de tópicos preliminares | 3 | 1 | 0 | 0 | 2 |
+| M2 — Questão de revisão (direcionamento) | E1 — Identificação de tópicos preliminares | 3 | 2 | 0 | 1 | 0 |
 | M2 — Questão de revisão (direcionamento) | E2 — Delimitação do assunto | 5 | 5 | 0 | 0 | 0 |
 | M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E1 — Elaboração das estratégias de pesquisa | 10 | 9 | 4 | 1 | 0 |
 | M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E2 — Localização dos estudos | 8 | 8 | 4 | 0 | 0 |
-| M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E3 — Seleção dos estudos | 8 | 7 | 0 | 0 | 1 |
+| M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E3 — Seleção dos estudos | 8 | 8 | 0 | 0 | 0 |
 | M3 — Pesquisa bibliográfica (busca e avaliação da evidência) | E4 — Extração de dados | 3 | 1 | 0 | 2 | 0 |
 | M4 — Discussão e redação | E1 — Interpretação do conhecimento | 2 | 2 | 0 | 0 | 0 |
 | M4 — Discussão e redação | E2 — Registro e validação do conteúdo | 3 | 3 | 0 | 0 | 0 |
@@ -221,11 +221,11 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 
 | Passo | Apoio | Razão |
 | --- | --- | --- |
-| M1/E1 › Realizar pesquisas preliminares sobre o tema | lacuna | skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
+| M1/E1 › Realizar pesquisas preliminares sobre o tema | manual | pesquisa exploratória do pesquisador, anterior às expressões de busca e sem procedimento sistemático |
 | M1/E1 › Consultar pesquisadores da área sobre as intenções iniciais | manual | contato do pesquisador com especialistas, fora do repositório |
 | M1/E1 › Elaborar o escopo da revisão e discuti-lo com a orientação | manual | decisão do pesquisador com a orientação |
-| M1/E2 › Pesquisar revisões sistemáticas anteriores | lacuna | skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
-| M1/E2 › Consultar biblioteca especializada no tema | lacuna | skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
+| M1/E2 › Pesquisar revisões sistemáticas anteriores | manual | busca exploratória do pesquisador, anterior às expressões de busca e sem procedimento sistemático |
+| M1/E2 › Consultar biblioteca especializada no tema | manual | consulta do pesquisador às bibliotecas, fora do repositório |
 | M1/E3 › Definir a ferramenta de gestão de dados bibliográficos | manual | decisão de gestão do pesquisador |
 | M1/E3 › Definir as ferramentas de visualização da informação | manual | decisão de gestão do pesquisador |
 | M1/E4 › Relacionar os agentes aptos a auxiliar na revisão | manual | gestão da equipe, decisão do pesquisador |
@@ -234,10 +234,8 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 | M1/E5 › Relacionar as tarefas de cada etapa | manual | planejamento do pesquisador |
 | M1/E5 › Validar a estimativa de prazos com a orientação | manual | decisão do pesquisador com a orientação |
 | M1/E5 › Preparar o cronograma (IO 7) | manual | instrumento mantido fora do repositório |
-| M2/E1 › Consultar obras de referência da área | lacuna | skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
-| M2/E1 › Consultar biblioteca especializada no tema | lacuna | skill a decidir (avaliacao-da-necessidade): busca exploratória e de revisões anteriores sem procedimento declarado |
+| M2/E1 › Consultar biblioteca especializada no tema | manual | consulta do pesquisador às bibliotecas, fora do repositório |
 | M3/E1 › Definir a ferramenta de gestão bibliográfica | manual | decisão de gestão do pesquisador |
-| M3/E3 › Incluir estudos de acervos especiais e pessoais e registrar no IO 2 | lacuna | skill a decidir (busca-complementar): inclusão de acervos especiais e pessoais sem procedimento declarado |
 | M3/E4 › Organizar os arquivos do portfólio definitivo | manual | gestão de arquivos pela convenção do README |
 | M3/E4 › Padronizar os arquivos de fichamento | manual | gestão de arquivos pela convenção do README |
 | M4/E3 › Revisar a língua e o estilo do texto final | manual | revisão textual do pesquisador |
