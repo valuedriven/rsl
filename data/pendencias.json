@@ -8,51 +8,22 @@
   },
   "pendencias": [
     {
-      "id": "PD01",
-      "categoria": "dados",
-      "descricao": "Os campos `tipo` e `alinhamento` estão vazios nas 10 sementes do arquivo de sementes (`[documentos] sementes` do config.toml). São juízos autorais, não dados bibliográficos. O campo `eric` também está vazio.",
-      "origem": "arquivo de sementes (`[documentos] sementes`); python3 -m rsl projeto pendencias",
-      "bloqueia": "teste de aderência (M3/E2): a planilha sai com `tipo` em branco",
-      "acao_sugerida": "preencher `tipo` e `alinhamento` de cada semente no arquivo de sementes (`[documentos] sementes`); são juízos autorais, não dados bibliográficos",
-      "responsavel": "pesquisador",
-      "atualizacao": "2026-11-19: verificação bibliográfica das 10 sementes declarada pelo pesquisador; DOI do capítulo da SE10 conferido no Crossref; restam escopo, tipo e alinhamento. 2026-11-20: os dados de conferência passaram de data/sementes.json, removido, ao arquivo de sementes, com o mesmo conteúdo; o campo escopo foi retirado por decisão do pesquisador; restam tipo e alinhamento. 2026-11-22: descrição reduzida ao que falta; a verificação bibliográfica, o veículo e o DOI do capítulo da SE10 constam do arquivo de sementes."
-    },
-    {
       "id": "PD03",
       "categoria": "validacao-terminologica",
       "descricao": "Validação terminológica sem decisão: TBCI, UNESCO Thesaurus, ERIC Thesaurus e Brased/INEP consultados pelo cliente TemaTres nos endereços do protocolo, com as propostas da máquina e a forma do termo no instrumento na planilha; nenhuma `decisao_ReT` preenchida. Até a decisão, todo termo fica em \"Termo livre\". A validação decide a linha de cada termo pela `decisao_ReT` (descritor em algum instrumento → \"Descritores correspondentes\"; senão sinônimo ou relacionado → \"Termos sinônimos ou relacionados\"; senão \"Termo livre\"), e `documentos conferir` reprova o termo fora da linha que a decisão determina.",
       "origem": "python3 -m rsl projeto pendencias; data/validacao_terminologica.csv; data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
       "bloqueia": "validação terminológica (M3/E1, passo 2)",
       "acao_sugerida": "preencher `decisao_ReT` em data/validacao_terminologica.csv a partir das propostas e da evidência; mover cada termo para a linha que a decisão determina; strings gerar --gravar e procedimentos gerar <sigla> --gravar",
-      "responsavel": "pesquisador"
+      "responsavel": "pesquisador",
+      "atualizacao": "2026-11-26: fazer por faceta; toda mudança de linha altera a STR e é emenda de busca, com reexecução."
     },
     {
       "id": "PD04",
       "categoria": "validacao-terminologica",
-      "descricao": "TBCI: falta verificar se o servidor TemaTres consultado traz os equivalentes em inglês e espanhol. Até lá, o TBCI vale só para o português.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha tbci. Evidência da edição de 2014: descrição do IBICT reproduzida em edisciplinas.usp.br (id=1597195), edição de 2014 (Pinheiro & Ferrez), cerca de 1.800 termos, a maioria com versão em inglês e espanhol",
-      "bloqueia": "uso do TBCI em en/es",
-      "acao_sugerida": "consultar o servidor TemaTres e, se ele expuser os equivalentes, atualizar a coluna Idiomas da linha tbci na tabela de instrumentos do protocolo",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD07",
-      "categoria": "sintaxe-base",
-      "base": "BD1 — Web of Science",
-      "descricao": "Itens de sintaxe e de exportação da Web of Science marcados como não verificados na seção 1 do procedimento de busca.",
-      "origem": "docs/procedimentos_busca_wos.md, seção 1",
-      "bloqueia": "execução definitiva na WoS (M3/E2)",
-      "acao_sugerida": "conferir na interface e medir na primeira execução, conforme o procedimento de busca",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD08",
-      "categoria": "sintaxe-base",
-      "base": "BD2 — Scopus",
-      "descricao": "Itens de sintaxe e de exportação da Scopus marcados como não verificados, não medidos ou não documentados na seção 1 do procedimento de busca.",
-      "origem": "docs/procedimentos_busca_scopus.md, seção 1",
-      "bloqueia": "execução definitiva na Scopus (M3/E2)",
-      "acao_sugerida": "conferir na interface antes de exportar, conforme o procedimento de busca",
+      "descricao": "TBCI em en/es: o servidor TemaTres pt (`/tbci/br/services.php`) liga o termo ao vocabulário em espanhol (`/tbci/es/`, serviço próprio, 1.098 termos) por `fetchTargetTerms` — `ontologias` → `ontologías`, marca `eq`. O endereço `/tbci/en/` respondeu 404; isso não prova que não haja inglês, só que não está nesse endereço. Até a decisão, o TBCI vale só para o português.",
+      "origem": "docs/03_protocolo_estrategia_pesquisa.md, tabela 'Instrumentos para controle terminológico', linha tbci; evidência em data/evidencia/instrumentos/tbci_idiomas_2026-11-26.json",
+      "bloqueia": "uso do TBCI em es",
+      "acao_sugerida": "decidir se o TBCI passa a valer em es; se sim, emenda da tabela de instrumentos (Idiomas e endereço do serviço es) e change no cliente TemaTres para consultar o vocabulário es ou seguir `fetchTargetTerms`; en: conferir com o IBICT se há versão em inglês publicada",
       "responsavel": "pesquisador"
     },
     {
@@ -76,39 +47,12 @@
       "responsavel": "pesquisador"
     },
     {
-      "id": "PD11",
-      "categoria": "equipe",
-      "descricao": "Revisores 1 e 2 a definir. O plano trata isso como dependência crítica: os nomes precisam ser confirmados até a data-limite do cronograma, antes das buscas definitivas. Sem eles, as três filtragens ficam travadas.",
-      "origem": "docs/01_plano.md, §4.2 (linhas Rev 1 e Rev 2) e §7 (indisponibilidade dos dois revisores independentes)",
-      "bloqueia": "M3/E3 — as três filtragens (kappa)",
-      "acao_sugerida": "confirmar os nomes até a 1ª quinzena de dezembro; se não houver confirmação, decidir no marco, como o plano prevê",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD12",
-      "categoria": "equipe",
-      "descricao": "RTG (mentoria), VT (bibliotecário(a) de referência, atendimento a agendar na 1ª semana) e APB a definir.",
-      "origem": "docs/01_plano.md, §4.2 (linhas RTG, VT e APB)",
-      "bloqueia": "VT: arbitragem das divergências da 3ª filtragem (M3/E3)",
-      "acao_sugerida": "definir os nomes e agendar o atendimento do VT",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD16",
-      "categoria": "conferencias-da-busca",
-      "descricao": "Teste de fidelidade da derivação local: executar as duas específicas diretamente na WoS e na Scopus e comparar com a derivação.",
-      "origem": "docs/procedimentos.md, M3/E2 (Avaliar a pertinência e a relevância dos resultados; índice Divergência da fidelidade); .agents/skills/avaliar-resultados-da-busca/SKILL.md §2",
-      "bloqueia": "condição de passagem de M3/E2 (fidelidade dentro do limiar)",
-      "acao_sugerida": "PYTHONPATH=src python3 -m rsl conferencia fidelidade, depois de registrada a execução de cobertura",
-      "responsavel": "pesquisador"
-    },
-    {
       "id": "PD18",
       "categoria": "aderencia",
-      "descricao": "Conjunto de validação com 9 sementes (SE1, SE2, SE3, SE5, SE6, SE7, SE8, SE9 e SE10); SE4 é de desenvolvimento por registro. A ampliação do conjunto de validação está pendente, com tamanho-alvo a fixar pelo pesquisador. Até a ampliação, o intervalo de Wilson a 95% fica largo: 8/9 resulta em 88,9% (56,5%–98,0%), recalculado em 2026-11-22.",
-      "origem": "data/historico.md, 2026-11-19; openspec/changes/archive/2026-11-19-conjunto-semente-independente",
+      "descricao": "Conjunto-semente pequeno: todo o conjunto é de validação, e com o tamanho atual o intervalo de Wilson a 95% fica largo, qualquer que seja a aderência; o tamanho e a aderência vigentes se calculam com `configuracao mostrar` e `aderencia medir`. Tamanho-alvo recomendado e acatado: 15 a 20 sementes.",
+      "origem": "data/historico.md, 2026-11-19 e 2026-11-26 (conjunto-semente único); openspec/changes/archive/2026-11-19-conjunto-semente-independente",
       "bloqueia": "precisão da estimativa de aderência; não bloqueia a execução do teste",
-      "acao_sugerida": "buscar sementes novas por procedimento independente da string (skill definir-conjunto-semente), conferir cada referência e acrescentá-las ao arquivo de sementes (`[documentos] sementes`) com `papel = \"validação\"`",
+      "acao_sugerida": "buscar sementes novas por procedimento independente da string — indicação de especialista e referências das revisões existentes (skill definir-conjunto-semente) —, conferir cada referência e acrescentá-las ao arquivo de sementes",
       "responsavel": "pesquisador"
     },
     {
@@ -116,14 +60,15 @@
       "categoria": "aderencia",
       "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio nas 10 sementes do arquivo de sementes (`[documentos] sementes`). É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
       "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl projeto pendencias",
-      "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda; não bloqueia a execução do teste de aderência",
+      "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda (`aderencia diagnosticar`); não bloqueia a execução do teste de aderência",
       "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill definir-conjunto-semente, §4)",
-      "responsavel": "pesquisador"
+      "responsavel": "pesquisador",
+      "atualizacao": "2026-11-26: o preenchimento fica para depois da refatoração do conjunto-semente (data/historico.md, 2026-11-26 — Conjunto-semente único)."
     },
     {
       "id": "PD21",
       "categoria": "aderencia",
-      "descricao": "Regra para semente de validação sem faceta âncora: não há regra para a semente de validação cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl projeto pendencias` só relata o caso, sem reprovar.",
+      "descricao": "Regra para semente sem faceta âncora: não há regra para a semente cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl projeto pendencias` só relata o caso, sem reprovar.",
       "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
       "bloqueia": "nada por ora; o caso só aparece quando as facetas das sementes forem informadas (PD20)",
       "acao_sugerida": "decidir a regra e registrá-la (skill registrar-decisao); até lá, o caso é relatado",
@@ -145,7 +90,8 @@
       "origem": "docs/procedimentos.md M3/E3; plano §6.3; protocolo §Procedimentos; data/historico.md, 2026-11-22; openspec/changes/archive/2026-11-22-guia-de-procedimentos (tarefa 4.1)",
       "bloqueia": "a 3ª filtragem (M3/E3) e o relato PRISMA",
       "acao_sugerida": "definir procedimento e instrumento; depois, incluí-los no protocolo como emenda e retirar do plano a formulação de não aplicabilidade (skill registrar-decisao)",
-      "responsavel": "pesquisador"
+      "responsavel": "pesquisador",
+      "atualizacao": "2026-11-26: candidatos, a escolher pelo pesquisador — MMAT 2018 (Hong et al., Education for Information 34(4), 285–291, doi:10.3233/EFI-180221), critérios de qualidade de Dybå e Dingsøyr (Information and Software Technology 50(9-10), 833–859, 2008) e checklist de Kitchenham e Charters (EBSE-2007-01, v2.3); dados bibliográficos conferidos em busca na web em 2026-11-26, conteúdo dos critérios dos dois últimos não lido."
     },
     {
       "id": "PD27",
@@ -167,21 +113,42 @@
       "responsavel": "pesquisador"
     },
     {
-      "id": "PD32",
-      "categoria": "protocolo",
-      "descricao": "A skill gerar-strings-de-busca prescreve ampliar o conjunto-semente por backward e forward search de uma geração, para aferição independente da construção; o protocolo prevê só backward citation searching de uma geração, sobre os estudos incluídos, como busca complementar.",
-      "origem": "docs/03_protocolo_estrategia_pesquisa.md §Procedimentos (P11); skill gerar-strings-de-busca, Regras duras",
-      "bloqueia": "nada na execução corrente; a coerência entre a skill e o protocolo",
-      "acao_sugerida": "decidir se o forward search entra no protocolo (emenda, skill registrar-decisao) ou sai da skill",
+      "id": "PD34",
+      "categoria": "dados",
+      "descricao": "As execuções EX1 a EX4 da WoS (BD1) não registram quais índices da Core Collection (SCI-EXPANDED, SSCI, A&HCI, ESCI, CPCI etc.) estavam ativos sob o vínculo CAFe; o pesquisador não localizou a informação na interface.",
+      "origem": "data/registro_execucao.json, bases.BD1.execucoes, campo edicao",
+      "bloqueia": "reprodutibilidade das contagens da WoS e explicação de divergência em reexecução",
+      "acao_sugerida": "na busca avançada, abrir o seletor de coleção/edições (\"Editions\") ou a página de detalhes de assinatura da Core Collection e anotar os índices e os anos cobertos; sem acesso à informação, consultar a biblioteca ou o Portal de Periódicos CAPES sobre a assinatura",
       "responsavel": "pesquisador"
     },
     {
-      "id": "PD33",
-      "categoria": "procedimento",
-      "descricao": "A lematização da WoS em português e espanhol não tem sondagem: SD3 mede só o inglês, e o resultado não se estende a outro idioma.",
-      "origem": "docs/procedimentos/wos/procedimento.toml, [[sondagens]] SD3",
-      "bloqueia": "declarar a flexão pela lematização para os termos em português e espanhol na WoS; até lá, plural explícito",
-      "acao_sugerida": "desenhar sondagem própria (controle e teste por idioma, com leituras) no roteiro da WoS, ou registrar sem_sondagem com o motivo",
+      "id": "PD38",
+      "categoria": "conferencias-da-busca",
+      "descricao": "Amostra da sonda de sensibilidade da WoS a classificar: data/sensibilidade_wos.csv, gravada por `conferencia sensibilidade wos`, sem nenhum registro classificado.",
+      "origem": "python3 -m rsl conferencia sensibilidade wos",
+      "bloqueia": "decisão da sensibilidade da WoS (manter EB4 ou reconsiderar, com emenda)",
+      "acao_sugerida": "classificar cada registro da amostra quanto à elegibilidade e rodar de novo `conferencia sensibilidade wos`",
+      "responsavel": "pesquisador",
+      "atualizacao": "2026-11-26: lista de leitura com título e resumo dos 52 registros em data/leitura_sensibilidade_wos.md; a classificação vai à coluna `elegivel` do CSV, com `;` como separador."
+    },
+    {
+      "id": "PD40",
+      "categoria": "conferencias-da-busca",
+      "base": "BD2 — Scopus",
+      "descricao": "O agrupamento de vários `DOI()` por `OR` na busca avançada da Scopus não está medido (`docs/procedimentos/scopus/procedimento.toml`, [[sintaxe]] \"Restrição por DOI\"). Se ele falhar em parte, o nível 1 do diagnóstico devolve menos DOIs, e a causa `não indexada` sai errada.",
+      "origem": "verificação da change diagnostico-das-perdas-da-busca (2026-11-26); docs/procedimentos/scopus/procedimento.toml",
+      "bloqueia": "atribuição da causa `não indexada` no diagnóstico da Scopus (nível 1)",
+      "acao_sugerida": "ao submeter o nível 1 de `aderencia diagnosticar scopus`: se o retorno for menor que o número de DOIs, submeter cada DOI ausente sozinho antes de registrar; DOI que volta sozinho e não no grupo indica falha do agrupamento — parar e não registrar.",
+      "responsavel": "pesquisador"
+    },
+    {
+      "id": "PD41",
+      "categoria": "sintaxe-base",
+      "base": "BD3 — ERIC",
+      "descricao": "A SD2 (controle 101, teste 101) e a SD3 (teste 344) não distinguem parênteses honrados de avaliação da esquerda para a direita: nos dois desenhos o retorno é o mesmo. A conclusão registrada em `[sintaxe]` \"Parênteses para agrupamento\" diz que os parênteses agrupam, mas o resultado não estabelece que a condição externa se aplica ao grupo inteiro. A questão importa para a EB4, cuja forma `1 AND 2 AND (3 OR 4)` sem agrupamento efetivo equivaleria a `(1 AND 2 AND 3) OR 4`.",
+      "origem": "data/registro_execucao.json, bases.BD3.sondagens (BD3/sd2-2026-11-26 e BD3/sd3-2026-11-26); docs/procedimentos/eric/procedimento.toml, [[sondagens]] SD17",
+      "bloqueia": "execução definitiva na ERIC (M3/E2), junto com a PD09; a composição da EB4 pressupõe agrupamento",
+      "acao_sugerida": "executar a SD17 do roteiro da ERIC (controle `abstract:ontology AND abstract:education OR abstract:learning` contra o teste agrupado) e registrar por `sondagens registrar`; se o teste for igual ao controle, levar ao pesquisador antes de executar a busca",
       "responsavel": "pesquisador"
     }
   ]

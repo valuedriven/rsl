@@ -9,14 +9,9 @@ numero = "1"
 doi = "10.26512/rici.v16.n1.2023.47618"
 bases = ["brapci"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = ""
 
 [[sementes]]
 id = "SE2"
@@ -30,14 +25,9 @@ paginas = "6-21"
 doi = "10.5771/0943-7444-2022-1-6"
 bases = ["wos", "scopus"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = ""
 
 [[sementes]]
 id = "SE3"
@@ -45,35 +35,30 @@ autores = ["Chi, Y.-L.", "Chen, T.-Y.", "Hung, C."]
 ano = 2018
 titulo = "Learning adaptivity in support of flipped learning: An ontological problem-solving approach"
 veiculo = "Expert Systems"
+volume = "35"
+numero = "3"
 doi = "10.1111/exsy.12246"
 bases = ["scopus"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; volume e número conferidos no Crossref em 2026-11-26; conteúdo não consultado. Conferência declarada pelo pesquisador; volume e número conferidos no Crossref em 2026-11-26; resposta bruta em data/evidencia/referencias/SE3_crossref.json."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = ""
 
 [[sementes]]
 id = "SE4"
-autores = ["Shvets, O.", "Murtazin, K.", "Meeter, M.", "Piho, G."]
-ano = 2024
-titulo = "Towards a Domain Model for Learning and Teaching"
-veiculo = "MODELSWARD 2024"
-doi = "10.5220/0012471400003645"
+autores = ["Palomino, P. T.", "Toda, A. M.", "Rodrigues, L.", "Oliveira, W.", "Nacke, L.", "Isotani, S."]
+ano = 2023
+titulo = "An ontology for modelling user’ profiles and activities in gamified education"
+veiculo = "Research and Practice in Technology Enhanced Learning"
+volume = "18"
+numero = ""
+paginas = "018"
+doi = "10.58459/rptel.2023.18018"
 bases = ["scopus"]
-facetas = []
-papel = "desenvolvimento"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+facetas = ["FCT1", "FCT2", "FCT3", "FCT4"]
+verificacao = true
+nota = "Página oficial do periódico e registro de pesquisa consultados em 2026-11-26; identificador Scopus AN=85152788106 localizado em registro institucional; conteúdo do resumo consultado; indexação deve ser reconfirmada diretamente na Scopus antes do teste de aderência. A publicação apresenta uma ontologia que relaciona arquétipos/perfis de usuários, elementos de jogos e tipos de atividades de aprendizagem classificados pela taxonomia revisada de Bloom. Registro Scopus AN=85152788106 identificado no portal institucional; confirmar diretamente na base. DOI, autoria, periódico, volume e artigo 018 conferidos na página oficial do periódico."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = "SciTePress"
 
 [[sementes]]
 id = "SE5"
@@ -87,14 +72,9 @@ paginas = "271-289"
 doi = "10.5433/1981-8920.2018v23n1p271"
 bases = ["brapci"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo. Referência: (UEL)."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = "(UEL)"
 
 [[sementes]]
 id = "SE6"
@@ -102,17 +82,15 @@ autores = ["Iatrellis, O.", "Kameas, A.", "Fitsilis, P."]
 ano = 2019
 titulo = "EDUC8 ontology: semantic modeling of multi-facet learning pathways"
 veiculo = "Education and Information Technologies"
-doi = "10.1007/s10639-019-09872-9"
+volume = "24"
+numero = "4"
+paginas = "2371-2390"
+doi = "10.1007/s10639-019-09877-4"
 bases = ["eric"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos no Crossref em 2026-11-26; conteúdo não consultado. Conferência dos dados bibliográficos no Crossref em 2026-11-26; resposta bruta em data/evidencia/referencias/SE6_crossref.json. Referência: (Springer)."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = "(Springer)"
 
 [[sementes]]
 id = "SE7"
@@ -124,14 +102,9 @@ volume = "7"
 doi = "10.1186/s40561-020-00135-6"
 bases = ["eric", "wos", "scopus"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = ""
 
 [[sementes]]
 id = "SE8"
@@ -145,14 +118,9 @@ paginas = "6445-6461"
 doi = "10.1080/10494820.2022.2039947"
 bases = ["eric", "scopus"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = ""
 
 [[sementes]]
 id = "SE9"
@@ -166,14 +134,9 @@ paginas = "1-19"
 doi = "10.1186/s40561-024-00307-8"
 bases = ["wos", "scopus"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo."
+verificacao = true
+nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = ""
 
 [[sementes]]
 id = "SE10"
@@ -185,11 +148,38 @@ paginas = "484-488"
 doi = "10.5771/9783956507762-484"
 bases = ["wos"]
 facetas = []
-papel = "validação"
-verificacao = "CONFIRMADA — dados bibliográficos do volume e do capítulo conferidos no Crossref em 2026-11-19 (DOI do capítulo: 10.5771/9783956507762-484); conteúdo não consultado."
-tipo = ""
-alinhamento = ""
-nota = "Conferência declarada pelo pesquisador; dados do protocolo. O DOI do capítulo foi conferido no Crossref em 2026-11-19; resposta bruta em data/evidencia/referencias/SE10_crossref.json."
+verificacao = true
+nota = "Dados bibliográficos do volume e do capítulo conferidos no Crossref em 2026-11-26 (DOI do capítulo: 10.5771/9783956507762-484); conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo. O DOI do capítulo foi conferido no Crossref em 2026-11-26; resposta bruta em data/evidencia/referencias/SE10_crossref.json. Referência: Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.); Aalborg, Dinamarca; Ergon Verlag."
 veiculo_conferido = "sim"
-eric = ""
-observacoes = "Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.); Aalborg, Dinamarca; Ergon Verlag"
+
+[[sementes]]
+id = "SE11"
+autores = ["Quigley, C. F.", "Herro, D.", "Jamil, F. M."]
+ano = 2017
+titulo = "Developing a Conceptual Model of STEAM Teaching Practices"
+veiculo = "School Science and Mathematics"
+volume = "117"
+numero = "1-2"
+paginas = "1-12"
+doi = "10.1111/ssm.12201"
+bases = ["eric"]
+facetas = ["FCT1", "FCT2", "FCT3"]
+verificacao = true
+nota = "Registro oficial ERIC EJ1129872 e página oficial do periódico consultados em 2026-11-26; título, autoria, ano, volume, número, páginas e DOI conferidos; indexação individual na ERIC confirmada; conteúdo avaliado com base no resumo, sem leitura integral."
+
+
+[[sementes]]
+id = "SE12"
+autores = ["Ferreira, M.", "Martinsone, B.", "Talić, S."]
+ano = 2020
+titulo = "Promoting Sustainable Social Emotional Learning at School through Relationship-Centered Learning Environment, Teaching Methods and Formative Assessment"
+veiculo = "Journal of Teacher Education for Sustainability"
+volume = "22"
+numero = "1"
+paginas = "21-36"
+doi = "10.2478/jtes-2020-0003"
+bases = ["eric"]
+facetas = ["FCT1", "FCT2", "FCT3", "FCT4"]
+verificacao = true
+nota = "Registro oficial ERIC EJ1261559 e página da publicação consultados em 2026-11-26; título, autoria, ano, volume, número, páginas e DOI conferidos; indexação individual na ERIC confirmada; conteúdo avaliado com base no resumo, sem leitura integral."
+veiculo_conferido = "sim"

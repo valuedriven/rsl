@@ -210,12 +210,6 @@ def conferir(ctx):
         if not e["titulo"] or len(e["titulo"]) < 12:
             problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
 
-    # Sem semente de validação a aderência decisória não tem denominador: o defeito é
-    # impedido na leitura, não descoberto em M3/E2.
-    if d["distribuicao"]["validacao_vazia"]:
-        problemas.append("conjunto-semente sem semente de validação: a aderência que decide "
-                         "a passagem não teria denominador")
-
     resultado = Resultado(Problema(p) for p in problemas)
     resultado += problemas_classificacao(ctx, d)
     # A forma de cada base é parte da coerência do documento: procedimento de busca ilegível

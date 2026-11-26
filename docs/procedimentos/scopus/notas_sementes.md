@@ -1,8 +1,8 @@
-**Anatomia da perda.** Executar em ordem, com o DOI da semente; a primeira que devolver zero é a causa.
-
-| # | Consulta | Se devolver zero |
-| :---: | :--- | :--- |
-| 1 | `DOI(<DOI>)` | a base não indexa o estudo: sai do denominador |
-| 2 | `DOI(<DOI>) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` | um filtro a exclui: identificar qual critério |
-| 3 | `DOI(<DOI>) AND TITLE-ABS-KEY(🟦) AND TITLE-ABS-KEY(🟨)` | o vocabulário não a alcança: emenda de termo |
-| 4 | `DOI(<DOI>) AND TITLE-ABS-KEY((🟦) W/5 (🟨))` | a proximidade a exclui: variante "Forma ampla" |
+**Anatomia da perda.** A causa da perda não se atribui a olho:
+`python3 -m rsl aderencia diagnosticar <sigla>` monta, da composição desta base, as
+consultas por nível com os DOIs das sementes não recuperadas, lê da execução registrada os
+níveis que já a têm e atribui a causa pelo primeiro nível em que o DOI desaparece — não
+indexada, filtro, âncoras, proximidade ou faceta não âncora. O comando exige que a fonte
+declare `[composicao] doi`; sem a declaração, recusa e nomeia o campo. O roteiro é submetido
+no navegador do pesquisador, uma consulta por vez, e o resultado se registra com `--retorno`,
+`--exportacao` e `--data-hora`.

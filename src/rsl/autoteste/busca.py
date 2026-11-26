@@ -1,5 +1,5 @@
 """Autoteste da busca: a prova da composição reprova cada relação quebrada, a aderência é
-relatada por papel, com o intervalo de Wilson, o casamento local usa os termos da base e o
+relatada sobre o conjunto, com o intervalo de Wilson, o casamento local usa os termos da base e o
 corpus da derivação é só a executada."""
 
 import contextlib
@@ -15,14 +15,21 @@ from .. import gramatica as G
 from ..busca import Busca
 from ..busca.aderencia import (avalia_aderencia, casa_sementes, casa_titulo, chave_titulo,
                                registros_unicos, wilson)
-from ..busca.composicao import grupos_em_facetas, prova_da_composicao
-from ..busca.derivacao import carrega_facetas, derivar, facetas_atingidas, texto_do
+from ..busca.anatomia import diagnosticar, monta_niveis, selecao
+from ..busca.composicao import grupos_em_facetas, prova_da_composicao, satisfaz_em
+from ..busca.derivacao import (carrega_facetas, derivar, facetas_atingidas, texto_do,
+                               vocabulario_da_base)
 from ..busca.fidelidade import fidelidade
+from ..busca.leitores import SEPARADOR_VALORES
+from ..busca.registro import chave_dedup
+from ..busca.simulacao import analisa, valida_termos
+from ..busca.simulacao import candidatos as candidatos_da_amostra
 from ..config import Configuracao
 from ..erros import ErroRSL
 from ..flexao import formas_de_numero
 from ..leitura import papeis
 from ..markdown import normaliza
+from ..saida import Saida
 from ..procedimentos import composicao_da_base, idiomas_do_termo
 from .fontes import com_fonte, fonte_de
 
@@ -79,7 +86,7 @@ def composicao(ctx, g):
 
 
 def aderencia(ctx, g):
-    """Relato por papel e intervalo de Wilson, com dados sintéticos."""
+    """Relato único sobre o conjunto e intervalo de Wilson, com dados sintéticos."""
     lo, hi = wilson(8, 10)
     g.testa("Wilson 8/10 = 80% com intervalo 49,0%–94,3%",
             abs(lo - 0.490) < 0.001 and abs(hi - 0.943) < 0.001, f"{lo:.3%}–{hi:.3%}")
@@ -91,27 +98,20 @@ def aderencia(ctx, g):
     exatas, prefixo = casa_titulo(idx, chave_titulo("Um título completo"))
     g.testa("prefixo é indício, não recuperação", not exatas and bool(prefixo))
 
-    val, dev = G.PAPEL_VALIDACAO, G.PAPEL_DESENVOLVIMENTO
-    sementes = ([{"id": f"V{k}", "papel": val} for k in range(1, 7)]
-                + [{"id": f"D{k}", "papel": dev} for k in range(1, 5)])
-    recuperadas = {f"V{k}" for k in range(1, 6)} | {f"D{k}" for k in range(1, 5)}
-    av = avalia_aderencia(sementes, recuperadas, limiar=0.8)
-    v, dv = av["decide"], av["por_papel"][dev]
-    g.testa("5/6 de validação e 4/4 de desenvolvimento são relatados separados",
-            v["recuperadas"] == 5 and v["total"] == 6
-            and dv["recuperadas"] == 4 and dv["total"] == 4,
-            f"validação {v['recuperadas']}/{v['total']}, "
-            f"desenvolvimento {dv['recuperadas']}/{dv['total']}")
-    g.testa("total recuperado independe do papel",
-            sum(x["recuperadas"] for x in av["por_papel"].values()) == len(recuperadas))
-    # 4/6 de validação = 66,7%; 4/4 de desenvolvimento leva o total a 80%, mas o
-    # desenvolvimento não compensa: a validação continua abaixo do limiar.
-    recuperadas = {f"V{k}" for k in range(1, 5)} | {f"D{k}" for k in range(1, 5)}
-    av = avalia_aderencia(sementes, recuperadas, limiar=0.8)
-    g.testa("desenvolvimento não compensa validação",
-            av["decide"]["recuperadas"] == 4 and av["decide"]["total"] == 6
-            and not av["decide"]["aprovada"] and av["por_papel"][dev]["proporcao"] == 1.0,
-            f"validação {av['decide']['proporcao']:.1%}")
+    sementes = [{"id": f"SE{k}"} for k in range(1, 11)]
+    av = avalia_aderencia(sementes, {f"SE{k}" for k in range(1, 9)}, limiar=0.8)
+    lo, hi = av["intervalo"]
+    g.testa("relato único: 8/10 = 80%, com Wilson 49,0%–94,3% sobre o mesmo denominador, "
+            "no limiar",
+            av["recuperadas"] == 8 and av["total"] == 10 and av["proporcao"] == 0.8
+            and abs(lo - 0.490) < 0.001 and abs(hi - 0.943) < 0.001 and av["aprovada"]
+            and "por_papel" not in av,
+            f"{av['recuperadas']}/{av['total']} {lo:.3%}–{hi:.3%} aprovada={av['aprovada']}")
+    av = avalia_aderencia(sementes, {f"SE{k}" for k in range(1, 8)}, limiar=0.8)
+    g.testa("7/10 fica abaixo do limiar de 80% e é declarada abaixo",
+            av["recuperadas"] == 7 and not av["aprovada"], f"{av['proporcao']:.1%}")
+    g.testa("ids recuperados na ordem das sementes",
+            av["ids"] == [f"SE{k}" for k in range(1, 8)], f"{av['ids']}")
 
 
 # ------------------------------------------------------------- casamento e corpus
@@ -152,7 +152,7 @@ def casamento(ctx, g):
     que a string dela não traz; e cada registro se casa com os termos da sua base."""
     b, sigla, comp = _base_que_compoe(ctx)
     if sigla is None:
-        g.nao_executa(4, "nenhuma base com composição legível — " + "; ".join(comp))
+        g.nao_executa("nenhuma base com composição legível — " + "; ".join(comp))
         return
     vocab = carrega_facetas(b, [sigla])
     antigos = {fid: [_padrao_com_sufixo(t) for t in v["termos"]]
@@ -170,7 +170,8 @@ def casamento(ctx, g):
         if achado:
             break
     if achado is None:
-        g.nao_executa(1, f"{sigla}: nenhuma forma de número fora do alcance do sufixo s/es")
+        g.nao_executa(f"{sigla}: nenhuma forma de número fora do alcance do sufixo s/es",
+                      quantos=1)
     else:
         fid, forma, reg = achado
         antigo = {n for n, ps in antigos.items() if any(p.search(texto_do(reg)) for p in ps)}
@@ -184,15 +185,52 @@ def casamento(ctx, g):
     alvo = next(((fid, t) for fid, f in vocab[sigla].items() for t in f["termos"]
                  if "*" not in t and (t + "es").lower() not in todos), None)
     if alvo is None:
-        g.nao_executa(1, f"{sigla}: nenhum termo sem '*' para testar o sufixo")
+        g.nao_executa(f"{sigla}: nenhum termo sem '*' para testar o sufixo", quantos=1)
     else:
         fid, t = alvo
         reg = {"titulo": t + "es", "resumo": "", "palavras_chave": "", "base": sigla}
         g.testa(f"sem sufixo aproximado: {t + 'es'!r} não é reconhecido em {fid} ({sigla})",
                 fid not in facetas_atingidas(reg, vocab))
 
+    _fronteira(g, sigla, vocab)
     _lematizacao(ctx, g, b, sigla)
     _outra_base(ctx, g, b)
+
+
+def _fronteira(g, sigla, vocab):
+    """Um termo de várias palavras, partido em dois pedaços que sozinhos não casam a
+    faceta, não é reconhecido quando os pedaços estão em palavras-chave distintas nem
+    quando um está no título e o outro no resumo; inteiro numa palavra-chave, é. O termo e
+    o corte vêm do vocabulário da base, e a escolha usa os padrões, não a função sob teste."""
+    achado = None
+    for fid, f in vocab[sigla].items():
+        for t in f["termos"]:
+            palavras = t.split()
+            if "*" in t or len(palavras) < 2:
+                continue
+            for k in range(1, len(palavras)):
+                a, c = " ".join(palavras[:k]), " ".join(palavras[k:])
+                if not any(p.search(normaliza(x)) for p in f["padroes"] for x in (a, c)):
+                    achado = (fid, t, a, c)
+                    break
+            if achado:
+                break
+        if achado:
+            break
+    if achado is None:
+        g.nao_executa(f"fronteira ({sigla}): nenhum termo de várias palavras partível")
+        return
+    fid, t, a, c = achado
+    sep = SEPARADOR_VALORES
+    inteiro = {"titulo": "", "resumo": "", "palavras_chave": f"outra{sep}{t}", "base": sigla}
+    entre_chaves = dict(inteiro, palavras_chave=f"{a}{sep}{c}")
+    entre_campos = dict(inteiro, titulo=a, resumo=c, palavras_chave="")
+    g.testa(f"fronteira ({sigla}, {fid}): {t!r} inteiro numa palavra-chave é reconhecido",
+            fid in facetas_atingidas(inteiro, vocab))
+    g.testa(f"fronteira ({sigla}, {fid}): {a!r}{sep}{c!r} em palavras-chave distintas não "
+            f"forma {t!r}", fid not in facetas_atingidas(entre_chaves, vocab))
+    g.testa(f"fronteira ({sigla}, {fid}): {a!r} no título e {c!r} no resumo não formam "
+            f"{t!r}", fid not in facetas_atingidas(entre_campos, vocab))
 
 
 def _lematizacao(ctx, g, b, sigla):
@@ -201,7 +239,7 @@ def _lematizacao(ctx, g, b, sigla):
     try:
         dado, frag, arqs = fonte_de(ctx, b.d, sigla)
     except LookupError as e:
-        g.nao_executa(1, f"base que lematiza: {e}")
+        g.nao_executa(f"base que lematiza: {e}")
         return
     dado.setdefault("cobertura", {})["plural"] = G.PLURAL_LEMATIZACAO
     cx = com_fonte(ctx, sigla, dado, frag, arqs)
@@ -209,7 +247,7 @@ def _lematizacao(ctx, g, b, sigla):
     try:
         comp = composicao_da_base(cx, bx.d, sigla)[1]
     except ErroRSL as e:
-        g.nao_executa(1, f"base que lematiza ({sigla}): {str(e)[:80]}")
+        g.nao_executa(f"base que lematiza ({sigla}): {str(e)[:80]}")
         return
     vocab = carrega_facetas(bx, [sigla])
     achado = None
@@ -221,7 +259,7 @@ def _lematizacao(ctx, g, b, sigla):
             achado = (fid, forma)
             break
     if achado is None:
-        g.nao_executa(1, f"base que lematiza ({sigla}): nenhuma forma de número fora da string")
+        g.nao_executa(f"base que lematiza ({sigla}): nenhuma forma de número fora da string")
         return
     fid, forma = achado
     reg = {"titulo": forma, "resumo": "", "palavras_chave": "", "base": sigla}
@@ -256,7 +294,7 @@ def _outra_base(ctx, g, b):
                             fid in facetas_atingidas(em_a, vocab)
                             and fid not in facetas_atingidas(em_c, vocab))
                     return
-    g.nao_executa(1, "termos de outra base: nenhum par de bases com strings diferentes")
+    g.nao_executa("termos de outra base: nenhum par de bases com strings diferentes", quantos=1)
 
 
 def _ris(registros):
@@ -269,6 +307,34 @@ def _linhas_csv(caminho):
         return list(csv.DictReader(fh, delimiter=";"))
 
 
+def _registro_de_outra_base(b, sigla, conf):
+    """(sigla, (título, ano, doi)) de uma base diferente de `sigla`, cujo título reúne um
+    termo de cada grupo de `conf` pelo vocabulário dela e é reconhecido como pertencente a
+    `conf`; (None, None) se nenhuma base compõe."""
+    for base in b.d["bases"]:
+        outra = base["sigla"]
+        if outra == sigla:
+            continue
+        try:
+            vocab = carrega_facetas(b, [outra])
+        except ErroRSL:
+            continue
+        termos = []
+        for grupo in b.grupos[conf]:
+            fid = next((f for f in grupo if f in vocab[outra]), None)
+            termo = fid and next((t for t in vocab[outra][fid]["termos"] if "*" not in t),
+                                 None)
+            if not termo:
+                break
+            termos.append(termo)
+        else:
+            titulo = " ".join(termos)
+            reg = {"titulo": titulo, "resumo": "", "palavras_chave": "", "base": outra}
+            if satisfaz_em(b.grupos, conf, facetas_atingidas(reg, vocab)):
+                return outra, (titulo, b.ano_min, "10.0000/autoteste.outra.1")
+    return None, None
+
+
 def corpus(ctx, g):
     """Executada com N registros e sonda com N + 1, num registro de execução e numa pasta de
     saídas temporários, mais a execução direta de uma expressão de conferência: o excedente
@@ -277,7 +343,7 @@ def corpus(ctx, g):
     arquivo; e `derivar` e `fidelidade` relatam as lidas e as deixadas de fora, com o motivo."""
     b, sigla, motivos = _base_que_compoe(ctx)
     if sigla is None:
-        g.nao_executa(8, "nenhuma base com composição legível — " + "; ".join(motivos))
+        g.nao_executa("nenhuma base com composição legível — " + "; ".join(motivos))
         return
     bd = b.bd_de[sigla]
     executados = [(f"Registro sintetico {k} da executada no autoteste", b.ano_min,
@@ -301,6 +367,14 @@ def corpus(ctx, g):
              "registros_lidos": n + 1, "status": "valida"},
             {"id": "EX3", "expressao": conf, "arquivo": str(pasta / "conferencia.ris"),
              "registros_lidos": 2, "status": "valida"}]}}}
+        # Outra base, com a executada trazendo um registro que satisfaz a expressão de
+        # conferência pelos termos DELA: a fidelidade da primeira base não pode contá-lo.
+        outra, de_outra = _registro_de_outra_base(b, sigla, conf)
+        if outra is not None:
+            (pasta / "outra.ris").write_text(_ris([de_outra]), encoding="utf-8")
+            registro["bases"][b.bd_de[outra]] = {"base": outra, "execucoes": [
+                {"id": "EX1", "expressao": b.executada, "arquivo": str(pasta / "outra.ris"),
+                 "registros_lidos": 1, "status": "valida"}]}
         (pasta / "registro.json").write_text(json.dumps(registro), encoding="utf-8")
         cfg = ctx.config
         cfg = Configuracao(cfg.com("dados.registro", str(pasta / "registro.json")), cfg.arquivo)
@@ -310,10 +384,15 @@ def corpus(ctx, g):
         with contextlib.redirect_stdout(relato):
             derivar(bx)
             unicos = registros_unicos(bx)
+        relato_reg = io.StringIO()
         with contextlib.redirect_stdout(relato_fid):
-            fidelidade(bx, conf, str(pasta / "conferencia.ris"))
-        registros = _linhas_csv(cfg.saida("registros"))
-        ordem = _linhas_csv(cfg.saida("ordem_triagem"))
+            fidelidade(bx, sigla, conf, str(pasta / "conferencia.ris"))
+        with contextlib.redirect_stdout(relato_reg):
+            fidelidade(bx, sigla, conf)
+        # Só os da base sob teste: a segunda base, quando há, entra nas saídas pela sua
+        # própria executada.
+        registros = [x for x in _linhas_csv(cfg.saida("registros")) if x["base"] == sigla]
+        ordem = [x for x in _linhas_csv(cfg.saida("ordem_triagem")) if x["base"] == sigla]
         contagem = next((x for x in _linhas_csv(cfg.saida("contagens"))
                          if x["base"] == sigla and x["expressao"] == b.executada), {})
     chave = normaliza(excedente[0])
@@ -332,6 +411,18 @@ def corpus(ctx, g):
     g.testa(f"`conferencia fidelidade {conf}` lê o arquivo como execução direta (2 registros)",
             re.search(r"execução direta na base\s*:\s*2\b", relato_fid.getvalue()) is not None,
             relato_fid.getvalue()[-300:])
+    g.testa(f"`conferencia fidelidade {sigla} {conf}` sem arquivo lê a execução registrada "
+            f"(2 registros)", re.search(r"execução direta na base\s*:\s*2\b",
+                                        relato_reg.getvalue()) is not None,
+            relato_reg.getvalue()[-300:])
+    if outra is None:
+        g.nao_executa("fidelidade por base: nenhuma segunda base com registro que "
+                      f"satisfaça {conf}", quantos=1)
+    else:
+        g.testa(f"fidelidade de {sigla} não conta o registro da executada de {outra} que "
+                f"satisfaz {conf} (conjunto derivado 0)",
+                re.search(r"conjunto derivado\s*:\s*0\b", relato_fid.getvalue()) is not None,
+                relato_fid.getvalue()[-300:])
     g.testa(f"registro só da sonda fora de `ordem_triagem.csv` ({len(ordem)} de {n})",
             len(ordem) == n and all(normaliza(x["titulo"]) != chave for x in ordem))
     g.testa(f"contagem de {b.executada} igual aos registros da executada ({n})",
@@ -341,3 +432,427 @@ def corpus(ctx, g):
     casados = {e["id"]: bool(exatas) for e, exatas, _ in casa_sementes(sementes, unicos)}
     g.testa("semente só na sonda não conta na aderência; a da executada conta",
             casados == {"SX1": False, "SX2": True}, str(casados))
+
+
+# ------------------------------------------------------------- anatomia da perda
+def _ris_anat(linhas):
+    """RIS de ensaio com idioma e tipo, que a causa `filtro` relata."""
+    return "".join(
+        f"TY  - {tipo}\nTI  - {titulo}\nPY  - {ano}\nLA  - {idioma}\nDO  - {doi}\nER  - \n\n"
+        for titulo, ano, doi, idioma, tipo in linhas)
+
+
+def _roda_anatomia(funcao):
+    """(código, saída, mensagem) de uma chamada do diagnóstico, com a saída recolhida."""
+    out = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(out):
+            r = funcao()
+        return Saida(r), out.getvalue(), ""
+    except ErroRSL as e:
+        return Saida(e.codigo), out.getvalue(), str(e)
+
+
+def _base_com_proximidade(ctx, b):
+    """(sigla, fonte, fragmentos, arquivos) da primeira base com proximidade e sonda e
+    executada de consulta única, legível."""
+    for base in b.d["bases"]:
+        sigla = base["sigla"]
+        try:
+            dado, frag, arqs = fonte_de(ctx, b.d, sigla)
+            if not isinstance(dado.get("composicao", {}).get("proximidade"), dict):
+                continue
+            _, comp = composicao_da_base(ctx, b.d, sigla)
+        except ErroRSL:
+            continue
+        if len(comp.expressoes[b.sonda]["consultas"]) == 1 and \
+                len(comp.expressoes[b.executada]["consultas"]) == 1:
+            return sigla, dado, frag, arqs
+    return None
+
+
+def anatomia(ctx, g):
+    """Anatomia da perda com fonte de ensaio e exportações sintéticas: uma semente por
+    causa, a recusa por exportação que não confere, nível faltando, incoerência entre
+    níveis, DOI estranho e base sem `[composicao] doi`.
+
+    A causa de cada semente é o PRIMEIRO nível em que o DOI some; usar o último faria as
+    sementes ausentes desde o nível 1 saírem como `faceta não âncora`, e os casos de causa
+    abaixo reprovariam. A conferência de subconjunto é provada pelo caso do DOI que
+    reaparece: desligada, ele deixaria de reprovar.
+    """
+    b = Busca(ctx)
+    achado = _base_com_proximidade(ctx, b)
+    if achado is None:
+        g.nao_executa("nenhuma base com proximidade e sonda/executada de consulta única")
+        return
+    sigla, dado0, frag0, arqs0 = achado
+    dado = copy.deepcopy(dado0)
+    dado.setdefault("composicao", {})[G.C_DOI_MODELO.chave] = f"DOI({G.MARCADOR_DOI})"
+
+    # Dois títulos próprios: o da semente F difere do registro da executada, para que a
+    # aderência não a conte como recuperada e o nível 5 revele a divergência de casamento.
+    titulo_exec = "Registro sintetico da executada no autoteste da anatomia"
+    definicao = {
+        "SX1": ("10.0000/at.a", 2019, "eng", "JOUR"),   # não indexada
+        "SX2": ("10.0000/at.b", 2020, "eng", "JOUR"),   # filtro
+        "SX3": ("10.0000/at.c", 2021, "eng", "JOUR"),   # âncoras
+        "SX4": ("10.0000/at.d", 2022, "eng", "JOUR"),   # proximidade
+        "SX5": ("10.0000/at.e", 2023, "eng", "JOUR"),   # faceta não âncora
+        "SX6": ("10.0000/at.f", 2024, "eng", "JOUR"),   # presente na executada
+    }
+    sementes = [{"id": k, "titulo": f"Semente sintetica {k} do autoteste da anatomia",
+                 "doi": v[0], "bases": [sigla], "ano": v[1]} for k, v in definicao.items()]
+    esperado = {"SX1": "não indexada", "SX2": "filtro", "SX3": "âncoras",
+                "SX4": "proximidade", "SX5": "faceta não âncora",
+                "SX6": "presente na executada"}
+
+    def registros(ids, titulo_de=None):
+        titulo_de = titulo_de or {}
+        return _ris_anat([(titulo_de.get(k, f"Semente sintetica {k} do autoteste da anatomia"),
+                           definicao[k][1], definicao[k][0], definicao[k][2],
+                           definicao[k][3]) for k in ids])
+
+    with tempfile.TemporaryDirectory() as tmp:
+        pasta = pathlib.Path(tmp)
+        l1, l2, l3 = pasta / "n1.ris", pasta / "n2.ris", pasta / "n3.ris"
+        l1.write_text(registros(["SX2", "SX3", "SX4", "SX5", "SX6"]), encoding="utf-8")
+        l2.write_text(registros(["SX3", "SX4", "SX5", "SX6"]), encoding="utf-8")
+        l3.write_text(registros(["SX4", "SX5", "SX6"]), encoding="utf-8")
+        (pasta / "sonda.ris").write_text(registros(["SX5", "SX6"]), encoding="utf-8")
+        (pasta / "executada.ris").write_text(
+            _ris_anat([(titulo_exec, 2024, "10.0000/at.f", "eng", "JOUR")]), encoding="utf-8")
+        registro = {"bases": {b.bd_de[sigla]: {"base": sigla, "execucoes": [
+            {"id": "EX1", "expressao": b.sonda, "arquivo": str(pasta / "sonda.ris"),
+             "registros_lidos": 2, "status": "valida", "data_hora": "2026-11-25T10:00"},
+            {"id": "EX2", "expressao": b.executada, "arquivo": str(pasta / "executada.ris"),
+             "registros_lidos": 1, "status": "valida", "data_hora": "2026-11-25T10:00"}]}}}
+        # Outra base recupera SX7, esperada também nesta: a seleção é da executada desta
+        # base, e SX7 tem de ser diagnosticada aqui mesmo recuperada lá.
+        titulo_sx7 = "Semente sintetica SX7 recuperada so na outra base"
+        outra = next((x["sigla"] for x in b.d["bases"] if x["sigla"] != sigla), None)
+        if outra is not None:
+            (pasta / "outra.ris").write_text(
+                _ris_anat([(titulo_sx7, 2021, "10.0000/at.g", "eng", "JOUR")]),
+                encoding="utf-8")
+            registro["bases"][b.bd_de[outra]] = {"base": outra, "execucoes": [
+                {"id": "EX1", "expressao": b.executada, "arquivo": str(pasta / "outra.ris"),
+                 "registros_lidos": 1, "status": "valida",
+                 "data_hora": "2026-11-25T10:00"}]}
+        (pasta / "registro.json").write_text(json.dumps(registro), encoding="utf-8")
+        cfg = ctx.config
+        cfg = Configuracao(cfg.com("dados.registro", str(pasta / "registro.json")),
+                           cfg.arquivo)
+        cfg = Configuracao(cfg.com("saidas.pasta", str(pasta / "saidas")), cfg.arquivo)
+        cx = com_fonte(ctx, sigla, dado, frag0, arqs0).com_config(cfg)
+        bx = Busca(cx)
+
+        fonte, comp, niveis = monta_niveis(bx, sigla, sementes)
+        g.testa(f"níveis da base com proximidade: 1, 2, 3, 4, 5 [{sigla}]",
+                [n["nivel"] for n in niveis] == [1, 2, 3, 4, 5]
+                and niveis[3]["expressao"] == b.sonda
+                and niveis[4]["expressao"] == b.executada,
+                [(n["nivel"], n["expressao"]) for n in niveis])
+
+        sem_prox = copy.deepcopy(dado)
+        sem_prox["composicao"]["proximidade"] = "nenhum"
+        cx_np = com_fonte(ctx, sigla, sem_prox, frag0, arqs0).com_config(cfg)
+        _, _, niveis_np = monta_niveis(Busca(cx_np), sigla, sementes)
+        g.testa("base sem proximidade funde os níveis 3 e 4 e mantém o 5",
+                [n["nivel"] for n in niveis_np] == [1, 2, 3, 5]
+                and niveis_np[2]["expressao"] == b.sonda,
+                [(n["nivel"], n["expressao"]) for n in niveis_np])
+
+        particionada = None
+        for base in b.d["bases"]:
+            try:
+                dado_p, frag_p, arqs_p = fonte_de(ctx, b.d, base["sigla"])
+            except LookupError:
+                continue
+            if dado_p["execucao"]["forma"] == "particionada":
+                particionada = (base["sigla"], dado_p, frag_p, arqs_p)
+                break
+        if particionada is None:
+            g.nao_executa("nenhuma base particionada para a recusa", quantos=1)
+        else:
+            sigla_p, dado_p, frag_p, arqs_p = particionada
+            dado_p = copy.deepcopy(dado_p)
+            dado_p.setdefault("composicao", {})[G.C_DOI_MODELO.chave] = f"DOI({G.MARCADOR_DOI})"
+            cx_p = com_fonte(ctx, sigla_p, dado_p, frag_p, arqs_p).com_config(cfg)
+            cod, _, erro = _roda_anatomia(
+                lambda: (monta_niveis(Busca(cx_p), sigla_p, sementes), Saida.OK)[1])
+            g.testa(f"base particionada reprova com REPROVADO [{sigla_p}]",
+                    cod == Saida.REPROVADO and "consulta" in erro, f"{cod.name} {erro[:100]}")
+
+        def resultado(retornos=None, exportacoes=None, data_hora="2026-11-25T10:00"):
+            return _roda_anatomia(lambda: diagnosticar(
+                bx, sigla, retornos or [], exportacoes or [], data_hora, sementes=sementes))
+
+        cod, texto, erro = resultado(
+            retornos=[(1, 5), (2, 4), (3, 3)],
+            exportacoes=[(1, l1), (2, l2), (3, l3)])
+        g.testa(f"diagnóstico aceito com os três níveis submetidos e os dois lidos [{sigla}]",
+                cod == Saida.OK and not erro, f"{cod.name} {erro[:120]}")
+        g.testa("o resumo por causa conta também a semente presente na executada",
+                "presente na executada: 1" in texto, texto[-200:])
+        g.testa("submissão no dia das execuções lidas não avisa de datas diferentes",
+                "AVISO: execuções lidas" not in texto
+                and "a conferir" not in texto, texto[-200:])
+        rel = cfg.saida("anatomia", base=sigla)
+        cons = cfg.saida("anatomia_consultas", base=sigla)
+        linhas = {x["semente"]: x for x in _linhas_csv(rel)} if rel.exists() else {}
+        causas = {k: x["causa"] for k, x in linhas.items()}
+        g.testa("uma causa por semente, pelo primeiro nível vazio",
+                causas == esperado, str(causas))
+        g.testa("o filtro relata ano, idioma e tipo documental lidos do nível 1",
+                "ano: 2020" in linhas.get("SX2", {}).get("observacao", "")
+                and "idioma: eng" in linhas["SX2"]["observacao"]
+                and "tipo: JOUR" in linhas["SX2"]["observacao"],
+                linhas.get("SX2", {}).get("observacao", ""))
+        g.testa("a semente presente na executada aponta a divergência do casamento por título",
+                "casamento por título" in linhas.get("SX6", {}).get("observacao", ""),
+                linhas.get("SX6", {}).get("observacao", ""))
+        consultas = _linhas_csv(cons) if cons.exists() else []
+        g.testa("anatomia_consultas: uma linha por nível, com a origem submetida ou lida",
+                [x["nivel"] for x in consultas] == ["1", "2", "3", "4", "5"]
+                and consultas[3]["origem"].startswith("execução")
+                and consultas[4]["origem"].startswith("execução")
+                and consultas[0]["origem"] == "submetido", str(consultas[-1:]))
+
+        cod, texto_d, erro = resultado(retornos=[(1, 5), (2, 4), (3, 3)],
+                                       exportacoes=[(1, l1), (2, l2), (3, l3)],
+                                       data_hora="2026-11-27T10:00")
+        obs_sx4 = {x["semente"]: x for x in _linhas_csv(rel)}.get("SX4", {}).get(
+            "observacao", "") if rel.exists() else ""
+        g.testa("submissão em outro dia avisa, e a causa proximidade sai a conferir",
+                cod == Saida.OK and "AVISO: execuções lidas de 2026-11-25" in texto_d
+                and "a conferir" in obs_sx4, f"{cod.name} {obs_sx4[:120]} {erro[:80]}")
+
+        cod, _, erro = resultado(retornos=[(1, 6), (2, 4), (3, 3)],
+                                 exportacoes=[(1, l1), (2, l2), (3, l3)])
+        g.testa("exportação que não confere reprova com DADOS", cod == Saida.DADOS
+                and "nível 1" in erro and "retorno 6" in erro, f"{cod.name} {erro[:100]}")
+        cod, _, erro = resultado(retornos=[(1, 5), (3, 3)],
+                                 exportacoes=[(1, l1), (3, l3)])
+        g.testa("nível submetido sem resultado reprova com DADOS", cod == Saida.DADOS
+                and "nível 2" in erro, f"{cod.name} {erro[:100]}")
+        cod, _, erro = resultado(retornos=[(1, 5), (2, 4), (3, 0)],
+                                 exportacoes=[(1, l1), (2, l2), (3, l3)])
+        g.testa("exportação sobrando em nível de retorno 0 reprova com DADOS",
+                cod == Saida.DADOS and "nível 3" in erro and "retorno 0" in erro,
+                f"{cod.name} {erro[:100]}")
+        cod, _, erro = resultado(retornos=[(1, 5), (2, 4), (3, 3), (4, 2)],
+                                 exportacoes=[(1, l1), (2, l2), (3, l3)])
+        g.testa("retorno sobrando em nível lido de execução reprova com DADOS",
+                cod == Saida.DADOS and "nível 4" in erro, f"{cod.name} {erro[:100]}")
+        cod, _, erro = resultado(retornos=[(1, 5), (2, 4), (3, 3)],
+                                 exportacoes=[(1, l1), (2, l2), (3, l3)], data_hora="")
+        g.testa("resultado sem --data-hora reprova com DADOS",
+                cod == Saida.DADOS and "--data-hora" in erro, f"{cod.name} {erro[:100]}")
+
+        sem_c = pasta / "sem_c.ris"
+        sem_c.write_text(registros(["SX4", "SX5", "SX6"]), encoding="utf-8")
+        com_c = pasta / "com_c.ris"
+        com_c.write_text(registros(["SX3", "SX4", "SX5", "SX6"]), encoding="utf-8")
+        cod, _, erro = resultado(retornos=[(1, 5), (2, 3), (3, 4)],
+                                 exportacoes=[(1, l1), (2, sem_c), (3, com_c)])
+        g.testa("DOI que reaparece num nível posterior reprova com REPROVADO",
+                cod == Saida.REPROVADO and "nível 3" in erro and "10.0000/at.c" in erro,
+                f"{cod.name} {erro[:100]}")
+
+        estranho = pasta / "estranho.ris"
+        estranho.write_text(_ris_anat([("Estranho", 2020, "10.9999/at.x", "eng", "JOUR")])
+                            + registros(["SX2", "SX3", "SX4", "SX5"]), encoding="utf-8")
+        cod, _, erro = resultado(retornos=[(1, 5), (2, 4), (3, 3)],
+                                 exportacoes=[(1, estranho), (2, l2), (3, l3)])
+        g.testa("DOI fora das sementes reprova com REPROVADO",
+                cod == Saida.REPROVADO and "nível 1" in erro and "10.9999/at.x" in erro,
+                f"{cod.name} {erro[:100]}")
+
+        sem_doi = copy.deepcopy(dado0)
+        sem_doi.get("composicao", {}).pop("doi", None)
+        cx2 = com_fonte(ctx, sigla, sem_doi, frag0, arqs0).com_config(cfg)
+        cod, _, erro = _roda_anatomia(lambda: diagnosticar(
+            Busca(cx2), sigla, sementes=sementes))
+        g.testa("base sem [composicao] doi reprova com REPROVADO, nomeando base e campo",
+                cod == Saida.REPROVADO and sigla in erro and "doi" in erro
+                and "composicao" in erro, f"{cod.name} {erro[:120]}")
+
+        sem = copy.deepcopy(sementes)
+        sem[0].pop("doi")
+        with contextlib.redirect_stdout(io.StringIO()):
+            sel = selecao(bx, sigla, sem)
+        g.testa("semente sem DOI listada à parte e fora das consultas",
+                [x["id"] for x in sel["sem_doi"]] == ["SX1"]
+                and all(x["id"] != "SX1" for x in sel["diagnosticaveis"]),
+                f"{[x['id'] for x in sel['sem_doi']]}")
+
+        if outra is None:
+            g.nao_executa("uma base só: sem outra base para a seleção por base", quantos=1)
+        else:
+            sx7 = {"id": "SX7", "titulo": titulo_sx7, "doi": "10.0000/at.g",
+                   "bases": [sigla, outra], "ano": 2021}
+            with contextlib.redirect_stdout(io.StringIO()):
+                sel = selecao(bx, sigla, sementes + [sx7])
+            g.testa(f"semente recuperada só em outra base ({outra}) é diagnosticada nesta",
+                    any(x["id"] == "SX7" for x in sel["diagnosticaveis"]),
+                    f"recuperadas: {sel['recuperadas']}")
+
+        recuperada = {"id": "SX9", "titulo": titulo_exec, "doi": "10.0000/at.f",
+                      "bases": [sigla], "ano": 2024}
+        if rel.exists():
+            rel.unlink()
+        cod, texto, erro = _roda_anatomia(lambda: diagnosticar(
+            bx, sigla, sementes=[recuperada]))
+        g.testa("nada a diagnosticar informa e sai OK, sem gravar",
+                cod == Saida.OK and "Nenhuma perda" in texto and not rel.exists(),
+                f"{cod.name} {erro[:100]}")
+
+
+
+# ------------------------------------------------------- análise da sensibilidade
+def _ris_sim(linhas):
+    """(título, ano, doi, palavras-chave, resumo) em RIS de ensaio."""
+    return "".join(
+        f"TY  - JOUR\nTI  - {titulo}\nAB  - {resumo}\nKW  - {kw}\nPY  - {ano}\n"
+        f"DO  - {doi}\nER  - \n\n"
+        for titulo, ano, doi, kw, resumo in linhas)
+
+
+def _roda_analise(funcao):
+    out = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(out):
+            r = funcao()
+        return Saida(r), out.getvalue(), ""
+    except ErroRSL as e:
+        return Saida(e.codigo), out.getvalue(), str(e)
+
+
+def sensibilidade_analise(ctx, g):
+    """Análise da sensibilidade com executada e sonda sintéticas e amostra classificada: o
+    casamento da amostra, a exclusão do candidato já no vocabulário, a contagem da simulação
+    só sobre a perda e a recusa por amostra incompleta e por faceta âncora.
+
+    O termo de ensaio aparece também num registro DA EXECUTADA: contar a executada na
+    simulação somaria um registro a mais, e o caso da contagem reprovaria. O plural do termo
+    é palavra-chave de um elegível e o único termo de um registro perdido fora da amostra:
+    sem as formas de número, o plural seria candidato à parte e o acréscimo perderia um.
+    """
+    b, sigla, motivos = _base_que_compoe(ctx)
+    if sigla is None:
+        g.nao_executa("nenhuma base com composição legível — " + "; ".join(motivos))
+        return
+    _, comp = composicao_da_base(ctx, b.d, sigla)
+    fct = next(f["id"] for f in b.d["facetas"] if f["id"] not in b.ancoras)
+    termo = "special topic term"
+    plural = "special topic terms"  # plural regular em inglês; pt e es não decidem
+    # Três palavras-chave de prova, escolhidas pelos padrões da base:
+    # - igual a termo de âncora: excluída;
+    # - termo de âncora seguido de palavra sem sentido: só CONTÉM o termo, é candidata;
+    # - termo de faceta não âncora: excluída, e num elegível é divergência do casamento.
+    vocab = vocabulario_da_base(b, sigla)
+    nao_ancora = [p for fid, f in vocab.items() if fid not in b.ancoras for p in f["padroes"]]
+    simples = [(fid, t) for fid in comp.strings
+               for t in comp.strings[fid]["termos"] if "*" not in t]
+    termo_vocab = next(t for fid, t in simples if fid in b.ancoras
+                       and not any(p.search(normaliza(f"{t} zzqx")) for p in nao_ancora))
+    composto = normaliza(f"{termo_vocab} zzqx")
+    termo_nao_ancora = next(t for fid, t in simples if fid == fct)
+    executados = [("Registro da executada E1 do autoteste", 2020, "10.0000/sim.e1", "", ""),
+                  ("Registro da executada E2 do autoteste", 2021, "10.0000/sim.e2", "", ""),
+                  ("Registro da executada E3 do autoteste", 2022, "10.0000/sim.e3", "", ""),
+                  (f"{termo} no registro da executada", 2023, "10.0000/sim.e4", "", "")]
+    perdidos = [(f"Registro perdido L1 com {termo}", 2020, "10.0000/sim.l1",
+                 f"{termo}; {termo_vocab}; {composto}; {termo_nao_ancora}", ""),
+                (f"Registro perdido L2 com {termo}", 2021, "10.0000/sim.l2",
+                 f"{termo}; {plural}", ""),
+                (f"Registro perdido L3 com {termo}", 2022, "10.0000/sim.l3", termo, ""),
+                (f"Registro perdido L4 com {plural}", 2023, "10.0000/sim.l4", "", "")]
+    amostra = [("sim", "sim"), ("sim", "sim"), ("sim", "não")]
+    with tempfile.TemporaryDirectory() as tmp:
+        pasta = pathlib.Path(tmp)
+        (pasta / "executada.ris").write_text(_ris_sim(executados), encoding="utf-8")
+        (pasta / "sonda.ris").write_text(_ris_sim(executados + perdidos), encoding="utf-8")
+        registro = {"bases": {b.bd_de[sigla]: {"base": sigla, "execucoes": [
+            {"id": "EX1", "expressao": b.executada, "arquivo": str(pasta / "executada.ris"),
+             "registros_lidos": len(executados), "status": "valida"},
+            {"id": "EX2", "expressao": b.sonda, "arquivo": str(pasta / "sonda.ris"),
+             "registros_lidos": len(executados) + len(perdidos), "status": "valida"}]}}}
+        (pasta / "registro.json").write_text(json.dumps(registro), encoding="utf-8")
+        cfg = ctx.config
+        cfg = Configuracao(cfg.com("dados.registro", str(pasta / "registro.json")),
+                           cfg.arquivo)
+        cfg = Configuracao(cfg.com("saidas.pasta", str(pasta / "saidas")), cfg.arquivo)
+
+        def escreve_amostra(classificacoes):
+            rel = cfg.saida("sensibilidade", base=sigla)
+            rel.parent.mkdir(parents=True, exist_ok=True)
+            with rel.open("w", encoding="utf-8-sig", newline="") as fh:
+                w = csv.writer(fh, delimiter=";")
+                w.writerow(["chave", "ano", "titulo", "doi", "amostra", "elegivel"])
+                for (titulo, ano, doi, _, _), (_, eleg) in zip(perdidos, classificacoes):
+                    w.writerow([chave_dedup({"doi": doi, "titulo": titulo}), ano, titulo,
+                                doi, "sim", eleg])
+            return rel
+
+        rel = escreve_amostra(amostra)
+        bx = Busca(ctx.com_config(cfg))
+        cod, texto, erro = _roda_analise(lambda: analisa(bx, sigla))
+        g.testa("amostra inteira casada com a perda e analisada",
+                cod == Saida.OK and "CASAMENTO LOCAL NA AMOSTRA — 3 registros" in texto,
+                f"{cod.name} {erro[:100]}")
+        candidatos = {x["termo"]: x for x in _linhas_csv(cfg.saida("candidatos", base=sigla))}
+        g.testa("candidato já no vocabulário da base é excluído; o termo novo entra",
+                normaliza(termo_vocab) not in candidatos
+                and normaliza(termo_nao_ancora) not in candidatos and termo in candidatos,
+                str(sorted(candidatos)[:5]))
+        g.testa("o plural de outra candidata entra no grupo dela, e não é candidato à parte",
+                plural not in candidatos
+                and plural in candidatos.get(termo, {}).get("formas", "").split("; "),
+                str({k: v.get("formas") for k, v in candidatos.items()}))
+        g.testa(f"palavra-chave que só contém termo de âncora é candidata ({composto!r})",
+                composto in candidatos, str(sorted(candidatos)[:5]))
+        excl = texto.split("PALAVRAS-CHAVE EXCLUÍDAS", 1)[-1].split("LIMITES", 1)[0]
+        g.testa("as excluídas saem listadas à parte, com o motivo",
+                f"{normaliza(termo_vocab)} " in excl and "(âncora)" in excl
+                and f"{normaliza(termo_nao_ancora)} " in excl and "(não âncora)" in excl,
+                excl[:200])
+        g.testa(f"elegível com termo de {fct} sai como divergência do casamento local",
+                "DIVERGÊNCIA DO CASAMENTO LOCAL — 1 elegível" in texto
+                and fct in texto.split("DIVERGÊNCIA DO CASAMENTO LOCAL", 1)[-1][:300],
+                texto[:300])
+        with contextlib.redirect_stdout(io.StringIO()):
+            _, sem_kw, *_ = candidatos_da_amostra(bx, sigla, [
+                ({"chave": "k1", "elegivel": "sim"},
+                 {"titulo": "t1", "resumo": "", "palavras_chave": ""}),
+                ({"chave": "k2", "elegivel": "sim"},
+                 {"titulo": "t2", "resumo": "", "palavras_chave": "zzqx"}),
+                ({"chave": "k3", "elegivel": "não"},
+                 {"titulo": "t3", "resumo": "", "palavras_chave": ""})], {})
+        g.testa("elegível sem palavras-chave é contado à parte (1 de 2 elegíveis)",
+                sem_kw == 1, str(sem_kw))
+        linha = candidatos.get(termo, {})
+        g.testa("candidato: 2 elegíveis, 1 não elegível e acréscimo de 4 na perda, com o "
+                "registro que só traz o plural",
+                (linha.get("elegiveis"), linha.get("nao_elegiveis"),
+                 linha.get("acrescimo")) == ("2", "1", "4"), str(linha))
+
+        cod, texto, erro = _roda_analise(lambda: analisa(bx, sigla, [(fct, termo)]))
+        g.testa("simulação conta só a perda, com as formas de número do termo: 2/2 "
+                "elegíveis, 1/1 não elegível, +4, total 8",
+                cod == Saida.OK and "CONJUNTO: 2/2 elegíveis" in texto
+                and f"(com {plural!r})" in texto
+                and "1/1 não elegíveis, +4 registros (total 8)" in texto,
+                f"{cod.name} {texto[-300:]}")
+
+        escreve_amostra([("sim", "sim"), ("sim", ""), ("sim", "não")])
+        cod, _, erro = _roda_analise(lambda: analisa(bx, sigla))
+        g.testa("amostra incompleta reprova com DADOS, informando 2 de 3",
+                cod == Saida.DADOS and "2 de 3" in erro, f"{cod.name} {erro[:120]}")
+
+        escreve_amostra(amostra)
+        cod, _, erro = _roda_analise(lambda: analisa(
+            bx, sigla, [(sorted(b.ancoras)[0], termo)]))
+        g.testa("faceta âncora recusada com USO", cod == Saida.USO and "âncora" in erro,
+                f"{cod.name} {erro[:120]}")

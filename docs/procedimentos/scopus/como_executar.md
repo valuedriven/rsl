@@ -4,5 +4,5 @@
 4. Exportar em RIS, com todos os campos.
 5. Conferir o retorno da exportação contra o da tela e o recorte temporal dentro do arquivo.
 6. Registrar EB4 e EB5: `python3 -m rsl busca registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `conferencia sensibilidade`.
-7. Medir a aderência (seção 5). Semente esperada não recuperada: aplicar a anatomia da perda.
+7. Medir a aderência (seção 5). Semente esperada não recuperada: diagnosticar a causa com `python3 -m rsl aderencia diagnosticar scopus`.
 8. Na primeira execução, conferir se o retorno de EB4 tem a mesma ordem de grandeza do da Web of Science; discrepância indica problema de agrupamento.

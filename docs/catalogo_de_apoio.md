@@ -90,10 +90,10 @@ Passos: 63 do modelo + 4 de adaptação do projeto = 67.
 | Passo | Origem | Fonte | Skills | Comandos | Apoio |
 | --- | --- | --- | --- | --- | --- |
 | Executar as sondagens de sintaxe pelo roteiro de cada base | adaptação | procedimento de busca de cada base §1, "Sondagens a executar", na ordem das dependências | `executar-sondagens-de-sintaxe` (principal); `executar-expressoes-de-busca` | `sondagens registrar` (principal) | — |
-| Realizar teste de aderência das expressões de busca | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais; arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2 | `testar-aderencia-das-expressoes` (principal); `definir-conjunto-semente` | `aderencia planilhar` (principal); `aderencia medir` (principal) | — |
+| Realizar teste de aderência das expressões de busca | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais; arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2 | `testar-aderencia-das-expressoes` (principal); `definir-conjunto-semente` | `aderencia planilhar` (principal); `aderencia medir` (principal); `aderencia diagnosticar` (principal) | — |
 | Acessar as fontes de pesquisa na ordem predefinida | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Bases de dados (ordem e via de acesso); procedimento de busca de cada base §1 (estado de verificação da sintaxe); plano §7 | `executar-expressoes-de-busca` | — | — |
 | Executar expressões de busca | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Expressões de busca e §Notas explicativas; procedimento de busca de cada base §4 (Como executar, Variantes previstas) e §6 | `executar-expressoes-de-busca` (principal) | `busca registrar` (principal) | — |
-| Avaliar a pertinência e a relevância dos resultados | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Notas explicativas; plano §6.2 | `avaliar-resultados-da-busca` (principal) | `busca derivar` (principal); `conferencia fidelidade` (principal); `conferencia sensibilidade` (principal) | — |
+| Avaliar a pertinência e a relevância dos resultados | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Notas explicativas; plano §6.2 | `avaliar-resultados-da-busca` (principal) | `busca derivar` (principal); `conferencia fidelidade` (principal); `conferencia sensibilidade` (principal); `conferencia simular` (principal) | — |
 | Exportar metadados dos resultados | modelo | `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; exportações intactas no caminho `[dados] execucoes` (mapa no `README.md`) | `executar-expressoes-de-busca` | — | — |
 | Criar alertas de busca nas bases | modelo | plano §3.1 | `executar-expressoes-de-busca` | — | — |
 | Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2) | modelo | plano §6.2; contagens em `[saidas] contagens`, gravadas por `busca derivar` | `redigir-relatorio` | `busca derivar` | — |
@@ -148,12 +148,12 @@ Passos: 63 do modelo + 4 de adaptação do projeto = 67.
 | Skill | Papel | Principal em | Apoio em | Comandos dos mesmos passos | Estado |
 | --- | --- | --- | --- | --- | --- |
 | `analisar-conteudo-dos-estudos` | principal | M4/E1 › Realizar a análise de conteúdo dos estudos | M4/E1 › Realizar a análise bibliométrica dos estudos; M4/E2 › Redigir o texto final | — | citada |
-| `avaliar-resultados-da-busca` | principal | M3/E2 › Avaliar a pertinência e a relevância dos resultados | — | `busca derivar`; `conferencia fidelidade`; `conferencia sensibilidade` | citada |
+| `avaliar-resultados-da-busca` | principal | M3/E2 › Avaliar a pertinência e a relevância dos resultados | — | `busca derivar`; `conferencia fidelidade`; `conferencia sensibilidade`; `conferencia simular` | citada |
 | `coletar-dados-dos-estudos` | principal | M3/E4 › Coletar dados com o formulário de fichamento (IO 4) | M1/E3 › Preparar o formulário de fichamento (IO 4); M1/E3 › Preparar o glossário (IO 5) | — | citada |
 | `conferir-referencia` | transversal | — | M2/E1 › Consultar obras de referência da área; M2/E1 › Verificar estudos iniciais sobre o tema; M3/E3 › Analisar as listas de referências dos estudos selecionados e registrar no IO 2; M3/E4 › Coletar dados com o formulário de fichamento (IO 4); M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | — | citada |
 | `controlar-duplicatas` | principal | M3/E3 › Controlar duplicatas e registrar no IO 2 | — | `busca derivar` | citada |
 | `declarar-flexao-por-base` | subordinada de `gerar-procedimento-de-busca` | — | M3/E1 › Gerar o procedimento de busca de cada base a partir da fonte | `procedimentos gerar`; `procedimentos iniciar` | citada |
-| `definir-conjunto-semente` | principal | M3/E1 › Definir conjunto semente | M3/E2 › Realizar teste de aderência das expressões de busca; M3/E3 › Incluir estudos de acervos especiais e pessoais e registrar no IO 2 | `aderencia medir`; `aderencia planilhar` | citada |
+| `definir-conjunto-semente` | principal | M3/E1 › Definir conjunto semente | M3/E2 › Realizar teste de aderência das expressões de busca; M3/E3 › Incluir estudos de acervos especiais e pessoais e registrar no IO 2 | `aderencia diagnosticar`; `aderencia medir`; `aderencia planilhar` | citada |
 | `definir-criterios-de-elegibilidade` | principal | M3/E1 › Definir os critérios de elegibilidade | M3/E3 › Aplicar os critérios de elegibilidade e registrar no IO 2 | — | citada |
 | `destacar-termos-da-questao` | principal | M3/E1 › Destacar as palavras significativas da questão de revisão | M3/E1 › Gerar as strings de busca por faceta a partir do quadro terminológico | `strings gerar` | citada |
 | `elaborar-expressoes-de-busca` | principal | M3/E1 › Elaborar as expressões de busca | — | — | citada |
@@ -167,7 +167,7 @@ Passos: 63 do modelo + 4 de adaptação do projeto = 67.
 | `redigir-relatorio` | principal | M4/E2 › Redigir o texto final | M1/E3 › Preparar a tabela de composição do portfólio (IO 2); M1/E3 › Preparar o fluxograma da revisão (IO 3); M3/E2 › Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2); M3/E3 › Incluir estudos de acervos especiais e pessoais e registrar no IO 2; M4/E2 › Formatar as seções do relatório; M4/E2 › Revisar o conteúdo do texto final; M4/E3 › Normalizar e formatar o relatório | `busca derivar` | citada |
 | `registrar-decisao` | transversal | — | M1/E2 › Decidir sobre a execução da revisão; M3/E1 › Validar o protocolo com pesquisador expert | — | citada |
 | `revisar-projeto` | transversal | — | M3/E1 › Montar o protocolo de revisão (IO 1) | `dados conferir`; `documentos conferir`; `projeto autoteste` | citada |
-| `testar-aderencia-das-expressoes` | principal | M3/E2 › Realizar teste de aderência das expressões de busca | — | `aderencia medir`; `aderencia planilhar` | citada |
+| `testar-aderencia-das-expressoes` | principal | M3/E2 › Realizar teste de aderência das expressões de busca | — | `aderencia diagnosticar`; `aderencia medir`; `aderencia planilhar` | citada |
 | `validar-protocolo` | principal | M3/E1 › Validar o protocolo com pesquisador expert | — | — | citada |
 
 ## Por comando
@@ -176,13 +176,15 @@ Caminhos lidos do parser; a ajuda é a do próprio comando (`-h`).
 
 | Comando | Ajuda | Principal em | Apoio em | Skills dos mesmos passos | Estado |
 | --- | --- | --- | --- | --- | --- |
-| `aderencia medir` | teste de aderência ao conjunto-semente, por papel | M3/E2 › Realizar teste de aderência das expressões de busca | — | `definir-conjunto-semente`; `testar-aderencia-das-expressoes` | principal |
+| `aderencia diagnosticar` | anatomia da perda: monta as consultas por nível com o DOI das sementes não recuperadas; sem --retorno, imprime o roteiro e não grava | M3/E2 › Realizar teste de aderência das expressões de busca | — | `definir-conjunto-semente`; `testar-aderencia-das-expressoes` | principal |
+| `aderencia medir` | teste de aderência ao conjunto-semente | M3/E2 › Realizar teste de aderência das expressões de busca | — | `definir-conjunto-semente`; `testar-aderencia-das-expressoes` | principal |
 | `aderencia planilhar` | grava a planilha do teste de aderência e imprime o ensaio seco | M3/E2 › Realizar teste de aderência das expressões de busca | — | `definir-conjunto-semente`; `testar-aderencia-das-expressoes` | principal |
 | `busca derivar` | deriva as expressões não executadas, as contagens e a ordem de triagem | M3/E2 › Avaliar a pertinência e a relevância dos resultados | M3/E2 › Registrar os resultados quantitativos na tabela de composição do portfólio (IO 2); M3/E3 › Analisar os títulos dos registros (1ª filtragem) e registrar no IO 2; M3/E3 › Controlar duplicatas e registrar no IO 2 | `avaliar-resultados-da-busca`; `controlar-duplicatas`; `filtrar-estudos`; `redigir-relatorio` | principal |
 | `busca registrar` | registra uma execução e confere o retorno declarado contra o arquivo | M3/E2 › Executar expressões de busca | — | `executar-expressoes-de-busca` | principal |
 | `catalogo gerar` | deriva do guia de procedimentos o catálogo de skills e comandos por passo, imprime-o e confere as citações, a cobertura, a contagem de passos e o catálogo gravado; sem --gravar, nada é gravado | — | — | — | transversal |
 | `conferencia fidelidade` | compara o conjunto derivado com a execução direta | M3/E2 › Avaliar a pertinência e a relevância dos resultados | — | `avaliar-resultados-da-busca` | principal |
 | `conferencia sensibilidade` | mede a perda da sonda para a executada e grava a amostra a classificar | M3/E2 › Avaliar a pertinência e a relevância dos resultados | — | `avaliar-resultados-da-busca` | principal |
+| `conferencia simular` | analisa a perda da sensibilidade: facetas reconhecidas na amostra, termos candidatos e, com --termo, a executada ampliada | M3/E2 › Avaliar a pertinência e a relevância dos resultados | — | `avaliar-resultados-da-busca` | principal |
 | `configuracao mostrar` | resume o que foi lido e os parâmetros em uso, com a origem | — | — | — | transversal |
 | `dados conferir` | confere os arquivos alimentados contra o protocolo | — | M3/E1 › Montar o protocolo de revisão (IO 1) | `revisar-projeto` | transversal |
 | `documentos conferir` | lê o protocolo e a fonte de cada procedimento de busca, confere o procedimento gravado contra a geração e relata problemas de coerência | — | M3/E1 › Montar o protocolo de revisão (IO 1) | `revisar-projeto` | transversal |

@@ -11,9 +11,9 @@ protocolo, precedência, configuração, arquivo de sementes, leitura estrutural
 planejamento da validação, cliente TemaTres e reabertura, arquivos alimentados, cobertura por base, fonte do
 procedimento, geração dos procedimentos, sondagens, consulta de sondagem por
 referência, flexão dos termos,
-composição da derivação, aderência por papel, casamento local pelos termos da base,
-corpus da derivação, geração das strings, gramática do protocolo,
-catálogo de apoio e nomes antigos recusados.
+composição da derivação, aderência sobre o conjunto, casamento local pelos termos da base,
+corpus da derivação, anatomia da perda, análise da sensibilidade, geração das strings, gramática do protocolo,
+catálogo de apoio, nomes antigos recusados e contagem dos casos não executados.
 
 Sem os arquivos alimentados, os casos que dependem deles não rodam: o resultado é PARCIAL,
 nunca OK.
@@ -32,7 +32,8 @@ class Grupo:
         self.falhas = 0
         self.n = 0
         self.nao_executados = 0
-        self.motivo = ""
+        self.blocos_pulados = 0
+        self.motivos = []
 
     def ok(self, texto):
         self.n += 1
@@ -49,10 +50,27 @@ class Grupo:
         else:
             self.falha(f"{nome}{' — ' + detalhe if detalhe else ''}")
 
-    def nao_executa(self, quantos, motivo):
-        self.nao_executados += quantos
-        self.motivo = motivo
-        print(f"  [--] {quantos} caso(s) NÃO executado(s): {motivo}")
+    def nao_executa(self, motivo, *, quantos=None):
+        """Casos que não rodam, com o motivo.
+
+        Com `quantos`, os casos são contados: um caso trocado pelo aviso (1), ou um número
+        calculado dos dados. Sem `quantos`, o restante do bloco não roda e não se conta: um
+        número escrito à mão ao lado de um retorno antecipado desatualiza a cada caso novo
+        do bloco, e o relato diria menos do que deixou de provar."""
+        if not isinstance(motivo, str):
+            raise TypeError(f"nao_executa: o motivo é texto, não {motivo!r}; o número de "
+                            f"casos, quando se conta, vai em `quantos=`")
+        self.motivos.append(motivo)
+        if quantos is None:
+            self.blocos_pulados += 1
+            print(f"  [--] restante do bloco NÃO executado: {motivo}")
+        else:
+            self.nao_executados += quantos
+            print(f"  [--] {quantos} caso(s) NÃO executado(s): {motivo}")
+
+    @property
+    def pulou(self):
+        return bool(self.nao_executados or self.blocos_pulados)
 
     def espera(self, nome, mutante, original, executa, codigo, trecho=None):
         """Executa `executa(mutante)` e exige o `codigo` com uma mensagem que contenha
@@ -114,12 +132,15 @@ def grupos():
         ("consulta de sondagem por referência", procedimentos.referencias),
         ("flexão dos termos", procedimentos.flexao),
         ("prova da composição da derivação", busca.composicao),
-        ("aderência por papel", busca.aderencia),
+        ("aderência sobre o conjunto", busca.aderencia),
         ("casamento local pelos termos da base", busca.casamento),
         ("corpus da derivação é a executada", busca.corpus),
+        ("anatomia da perda", busca.anatomia),
+        ("análise da sensibilidade", busca.sensibilidade_analise),
         ("gramática do protocolo", gramatica.casos),
         ("catálogo de apoio", catalogo.casos),
         ("nomes antigos recusados", nomes_antigos.casos),
+        ("contagem dos casos não executados", contagem),
     ]
 
 
@@ -136,26 +157,89 @@ def cmd_autoteste(ctx, a=None):
         g = Grupo(nome)
         funcao(ctx, g)
         feitos.append(g)
-    falhas = sum(g.falhas for g in feitos)
-    executados = sum(g.n for g in feitos)
-    nao_exec = sum(g.nao_executados for g in feitos)
     print("\nResumo por grupo:")
     for g in feitos:
         extra = f", {g.nao_executados} NÃO executado(s)" if g.nao_executados else ""
+        extra += (f", {g.blocos_pulados} bloco(s) NÃO executado(s)" if g.blocos_pulados
+                  else "")
         falhou = f", {g.falhas} FALHA(S)" if g.falhas else ""
         print(f"  {g.nome:<42} {g.n:>3} executado(s){falhou}{extra}")
+    codigo, texto = conclusao(feitos)
+    print(f"\n{texto}")
+    return codigo
+
+
+def conclusao(feitos):
+    """(código, última mensagem) do autoteste a partir dos grupos executados. O número de
+    casos não executados é só o contado (`quantos=`); o bloco pulado se relata como bloco,
+    sem número."""
+    falhas = sum(g.falhas for g in feitos)
+    executados = sum(g.n for g in feitos)
+    nao_exec = sum(g.nao_executados for g in feitos)
+    blocos = sum(g.blocos_pulados for g in feitos)
     parcial = ""
-    if nao_exec:
-        motivos = "; ".join(f"{g.nome}: {g.motivo}" for g in feitos if g.nao_executados)
-        parcial = (f"\nAUTOTESTE PARCIAL: {nao_exec} de {executados + nao_exec} casos NÃO foram "
-                   f"executados ({motivos}). Esses casos não foram aprovados nem reprovados: "
+    if nao_exec or blocos:
+        motivos = "; ".join(f"{g.nome}: {' / '.join(g.motivos)}" for g in feitos if g.pulou)
+        partes = []
+        if nao_exec:
+            partes.append(f"{nao_exec} caso(s) contado(s)")
+        if blocos:
+            partes.append(f"{blocos} bloco(s) inteiro(s), de tamanho não contado")
+        parcial = (f"\nAUTOTESTE PARCIAL: NÃO foram executados {' e '.join(partes)} "
+                   f"({motivos}). Esses casos não foram aprovados nem reprovados: "
                    f"não se sabe se as conferências correspondentes reprovam os defeitos que "
                    f"deveriam.")
     if falhas:
-        print(f"\n{falhas} de {executados} caso(s) executado(s) falharam.{parcial}")
-        return Saida.REPROVADO
-    if nao_exec:
-        print(f"\nOs {executados} casos executados tiveram o resultado esperado.{parcial}")
-        return Saida.PARCIAL
-    print(f"\nTodos os {executados} casos tiveram o resultado esperado.")
-    return Saida.OK
+        return Saida.REPROVADO, f"{falhas} de {executados} caso(s) executado(s) falharam.{parcial}"
+    if nao_exec or blocos:
+        return (Saida.PARCIAL,
+                f"Os {executados} casos executados tiveram o resultado esperado.{parcial}")
+    return Saida.OK, f"Todos os {executados} casos tiveram o resultado esperado."
+
+
+def contagem(ctx, g):
+    """Contrato dos casos não executados, com grupos fictícios em memória: o bloco pulado
+    dá PARCIAL sem número, o número só vem de `quantos=`, a falha prevalece e a forma
+    antiga, com o número escrito à mão como primeiro argumento, é recusada."""
+    import contextlib
+    import io
+
+    def fictício(*chamadas, falha=False):
+        f = Grupo("fictício")
+        with contextlib.redirect_stdout(io.StringIO()):
+            f.ok("caso que passa")
+            if falha:
+                f.falha("caso que falha")
+            for motivo, quantos in chamadas:
+                f.nao_executa(motivo, quantos=quantos)
+        return conclusao([f])
+
+    cod, texto = fictício(("sem dado de ensaio", None))
+    g.testa("bloco pulado: PARCIAL, relatado como bloco, sem número de casos",
+            cod == Saida.PARCIAL and "1 bloco(s) inteiro(s), de tamanho não contado" in texto
+            and "caso(s) contado(s)" not in texto, f"{cod.name} {texto[:160]}")
+    cod, texto = fictício(("dois casos trocados", 2))
+    g.testa("casos contados: PARCIAL com o número de `quantos=`",
+            cod == Saida.PARCIAL and "2 caso(s) contado(s)" in texto
+            and "bloco(s)" not in texto, f"{cod.name} {texto[:160]}")
+    cod, texto = fictício(("bloco", None), ("um caso", 1))
+    g.testa("bloco e contagem juntos: PARCIAL com os dois",
+            cod == Saida.PARCIAL and "1 caso(s) contado(s) e 1 bloco(s)" in texto,
+            f"{cod.name} {texto[:160]}")
+    cod, texto = fictício(("um caso", 1), falha=True)
+    g.testa("falha com casos não executados: REPROVADO, informando os não executados",
+            cod == Saida.REPROVADO and "1 caso(s) contado(s)" in texto,
+            f"{cod.name} {texto[:160]}")
+    cod, texto = fictício()
+    g.testa("contraprova: sem caso pulado nem falha, OK", cod == Saida.OK, cod.name)
+    for nome, chamada in (("nao_executa(3, \"…\")", lambda f: f.nao_executa(3, "…")),
+                          ("nao_executa(3)", lambda f: f.nao_executa(3))):
+        f = Grupo("fictício")
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                chamada(f)
+            recusada = False
+        except TypeError:
+            recusada = True
+        g.testa(f"forma antiga recusada: {nome}", recusada and not f.pulou,
+                f"aceita: {f.nao_executados} contado(s), {f.blocos_pulados} bloco(s)")

@@ -11,7 +11,7 @@ from ..procedimentos import composicao_da_base, idiomas_do_termo
 from ..saida import Saida
 from . import Busca
 from .composicao import satisfaz_em
-from .leitores import CAMPOS
+from .leitores import CAMPOS, SEPARADOR_VALORES
 from .registro import (aplica_recorte, coleta, consultas_do_corpus, exige_registros,
                        identifica)
 
@@ -69,11 +69,23 @@ def texto_do(reg):
     return normaliza(" ".join((reg["titulo"], reg["resumo"], reg["palavras_chave"])))
 
 
+def segmentos_do(reg):
+    """Os trechos em que um termo pode casar: o título, o resumo e cada palavra-chave, à
+    parte. Unidos num texto só, a normalização apagaria a fronteira entre eles, e um termo
+    de várias palavras casaria juntando o fim de um com o começo do outro — `learning;
+    context awareness` daria `learning context` —, o que a base não faz entre valores
+    distintos do campo."""
+    trechos = [reg["titulo"], reg["resumo"]]
+    trechos += (reg["palavras_chave"] or "").split(SEPARADOR_VALORES.strip())
+    return [t for t in (normaliza(x) for x in trechos) if t]
+
+
 def facetas_atingidas(reg, vocabulario):
-    """Facetas reconhecidas no registro pelos termos da base dele."""
-    alvo = texto_do(reg)
+    """Facetas reconhecidas no registro pelos termos da base dele, trecho a trecho."""
+    trechos = segmentos_do(reg)
     facetas = vocabulario[reg["base"]]
-    return {n for n, f in facetas.items() if any(p.search(alvo) for p in f["padroes"])}
+    return {n for n, f in facetas.items()
+            if any(p.search(t) for p in f["padroes"] for t in trechos)}
 
 
 def expressoes_de(b, fac):

@@ -534,7 +534,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 4. Executar EB5 uma única vez, na mesma data.
 5. Exportar em RIS ou BibTeX; sem exportação, registrar os metadados no Zotero e anotar a entrada manual como risco de transcrição.
 6. Registrar: `python3 -m rsl busca registrar brapci EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`, com a justificativa do teto de 1.000 quando for o caso; rodar `busca derivar` e `conferencia sensibilidade`.
-7. Medir a aderência (seção 5).
+7. Medir a aderência (seção 5). Semente não recuperada: `python3 -m rsl aderencia diagnosticar brapci`, que exige `[composicao] doi` na fonte.
 
 ### Variantes previstas
 
@@ -572,6 +572,13 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de
 | o resumo ou as palavras-chave trazem `ontologia` | falha de campo, não de vocabulário |
 | nem o resumo nem as palavras-chave trazem o termo | falha de vocabulário da faceta 🟦 |
 | a consulta por `Duque` devolve zero | opção *Autor* inoperante ou registro não indexado: registrar antes de usar o campo no *backward search* |
+
+**Anatomia da perda.** A causa da perda não se atribui a olho:
+`python3 -m rsl aderencia diagnosticar <sigla>` monta, da composição desta base, as
+consultas por nível com os DOIs das sementes não recuperadas, lê da execução registrada os
+níveis que já a têm e atribui a causa pelo primeiro nível em que o DOI desaparece — não
+indexada, filtro, âncoras, proximidade ou faceta não âncora. O comando exige que a fonte
+declare `[composicao] doi`; sem a declaração, recusa e nomeia o campo.
 
 ---
 

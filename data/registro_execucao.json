@@ -2,7 +2,84 @@
   "bases": {
     "BD1": {
       "base": "Web of Science (Core Collection)",
-      "execucoes": [],
+      "execucoes": [
+        {
+          "id": "EX1",
+          "expressao": "EB2",
+          "forma": "registrada por busca registrar",
+          "retorno": 49,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:53:15-03:00",
+          "mede": "EB2, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/wos/wos-eb2.ris",
+          "registros_lidos": 49,
+          "status": "valida",
+          "justificativa_divergencia": "",
+          "texto": "TS=((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") NEAR/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND TS=(\"prática educacional\" OR \"práticas educacionais\" OR \"método de ensino\" OR \"métodos de ensino\" OR \"estratégia educacional\" OR \"estratégias educacionais\" OR \"atividade de aprendizagem\" OR \"atividades de aprendizagem\" OR \"intervenção educacional\" OR \"intervenções educacionais\" OR \"educational practice\" OR \"educational practices\" OR \"teaching method\" OR \"teaching methods\" OR \"educational strategy\" OR \"educational strategies\" OR \"learning activity\" OR \"learning activities\" OR \"educational intervention\" OR \"educational interventions\" OR \"práctica educativa\" OR \"prácticas educativas\" OR \"estrategia educativa\" OR \"estrategias educativas\" OR \"actividad de aprendizaje\" OR \"actividades de aprendizaje\" OR \"intervención educativa\" OR \"intervenciones educativas\" OR \"método de enseñanza\" OR \"métodos de enseñanza\") AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")",
+          "vinculo": "CAFe",
+          "edicao": "não verificada: o pesquisador não localizou na interface os índices da Core Collection ativos",
+          "observacao": "texto: o da seção 4 de docs/procedimentos_busca_wos.md, gravada em 2026-11-25T19:13, antes da exportação, submetido sem mudanças, segundo o pesquisador"
+        },
+        {
+          "id": "EX2",
+          "expressao": "EB3",
+          "forma": "registrada por busca registrar",
+          "retorno": 53,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:53:56-03:00",
+          "mede": "EB3, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/wos/wos-eb3.ris",
+          "registros_lidos": 53,
+          "status": "valida",
+          "justificativa_divergencia": "",
+          "texto": "TS=((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") NEAR/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND TS=(\"contexto educacional\" OR \"contextos educacionais\" OR \"contexto de aprendizagem\" OR \"contextos de aprendizagem\" OR \"fator contextual\" OR \"fatores contextuais\" OR \"fator situacional\" OR \"fatores situacionais\" OR \"ambiente educacional\" OR \"ambientes educacionais\" OR \"ambientes educacionales\" OR \"educational context\" OR \"educational contexts\" OR \"learning context\" OR \"learning contexts\" OR \"contextual factor\" OR \"contextual factors\" OR \"situational factor\" OR \"situational factors\" OR \"educational environment\" OR \"educational environments\" OR \"contexto educativo\" OR \"contextos educativos\" OR \"contexto de aprendizaje\" OR \"contextos de aprendizaje\" OR \"factor contextual\" OR \"factores contextuales\" OR \"factor situacional\" OR \"factores situacionales\" OR \"entorno educativo\" OR \"entornos educativos\") AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")",
+          "vinculo": "CAFe",
+          "edicao": "não verificada: o pesquisador não localizou na interface os índices da Core Collection ativos",
+          "observacao": "texto: o da seção 4 de docs/procedimentos_busca_wos.md, gravada em 2026-11-25T19:13, antes da exportação, submetido sem mudanças, segundo o pesquisador"
+        },
+        {
+          "id": "EX3",
+          "expressao": "EB4",
+          "forma": "registrada por busca registrar",
+          "retorno": 98,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:54:46-03:00",
+          "mede": "EB4, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/wos/wos-eb4.ris",
+          "registros_lidos": 98,
+          "status": "valida",
+          "justificativa_divergencia": "",
+          "texto": "TS=((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") NEAR/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND (TS=(\"prática educacional\" OR \"práticas educacionais\" OR \"método de ensino\" OR \"métodos de ensino\" OR \"estratégia educacional\" OR \"estratégias educacionais\" OR \"atividade de aprendizagem\" OR \"atividades de aprendizagem\" OR \"intervenção educacional\" OR \"intervenções educacionais\" OR \"educational practice\" OR \"educational practices\" OR \"teaching method\" OR \"teaching methods\" OR \"educational strategy\" OR \"educational strategies\" OR \"learning activity\" OR \"learning activities\" OR \"educational intervention\" OR \"educational interventions\" OR \"práctica educativa\" OR \"prácticas educativas\" OR \"estrategia educativa\" OR \"estrategias educativas\" OR \"actividad de aprendizaje\" OR \"actividades de aprendizaje\" OR \"intervención educativa\" OR \"intervenciones educativas\" OR \"método de enseñanza\" OR \"métodos de enseñanza\") OR TS=(\"contexto educacional\" OR \"contextos educacionais\" OR \"contexto de aprendizagem\" OR \"contextos de aprendizagem\" OR \"fator contextual\" OR \"fatores contextuais\" OR \"fator situacional\" OR \"fatores situacionais\" OR \"ambiente educacional\" OR \"ambientes educacionais\" OR \"ambientes educacionales\" OR \"educational context\" OR \"educational contexts\" OR \"learning context\" OR \"learning contexts\" OR \"contextual factor\" OR \"contextual factors\" OR \"situational factor\" OR \"situational factors\" OR \"educational environment\" OR \"educational environments\" OR \"contexto educativo\" OR \"contextos educativos\" OR \"contexto de aprendizaje\" OR \"contextos de aprendizaje\" OR \"factor contextual\" OR \"factores contextuales\" OR \"factor situacional\" OR \"factores situacionales\" OR \"entorno educativo\" OR \"entornos educativos\")) AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")",
+          "vinculo": "CAFe",
+          "edicao": "não verificada: o pesquisador não localizou na interface os índices da Core Collection ativos",
+          "observacao": "texto: o da seção 4 de docs/procedimentos_busca_wos.md, gravada em 2026-11-25T19:13, antes da exportação, submetido sem mudanças, segundo o pesquisador"
+        },
+        {
+          "id": "EX4",
+          "expressao": "EB5",
+          "forma": "registrada por busca registrar",
+          "retorno": 716,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:55:28-03:00",
+          "mede": "EB5, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/wos/wos-eb5.ris",
+          "registros_lidos": 716,
+          "status": "valida",
+          "justificativa_divergencia": "",
+          "texto": "TS=((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") NEAR/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND PY=(2017-2026) AND LA=(English OR Portuguese OR Spanish) AND DT=(Article OR Review OR \"Proceedings Paper\" OR \"Book Chapter\")",
+          "vinculo": "CAFe",
+          "edicao": "não verificada: o pesquisador não localizou na interface os índices da Core Collection ativos",
+          "observacao": "texto: o da seção 4 de docs/procedimentos_busca_wos.md, gravada em 2026-11-25T19:13, antes da exportação, submetido sem mudanças, segundo o pesquisador"
+        }
+      ],
       "sondagens": [
         {
           "id": "sd1-2026-11-25",
@@ -577,7 +654,321 @@
     },
     "BD3": {
       "base": "ERIC",
-      "execucoes": []
+      "execucoes": [],
+      "sondagens": [
+        {
+          "id": "sd1-2026-11-26",
+          "sondagem": "SD1",
+          "data_hora": "2026-11-26T12:01",
+          "consultas": [
+            {
+              "texto": "ontology",
+              "retorno": 1507
+            },
+            {
+              "texto": "title:ontology",
+              "retorno": 344
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < teste < controle, e os três registros abertos têm `ontology` no título",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD1_2026-11-26T1201.md"
+          ],
+          "observacao": ""
+        },
+        {
+          "id": "sd2-2026-11-26",
+          "sondagem": "SD2",
+          "data_hora": "2026-11-26T12:27",
+          "consultas": [
+            {
+              "texto": "title:ontology AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education",
+              "retorno": 101
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste ≥ controle > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD2_2026-11-26T1227.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada; teste = controle = 101, o acréscimo de title:ontologies ao grupo não alterou o retorno"
+        },
+        {
+          "id": "sd3-2026-11-26",
+          "sondagem": "SD3",
+          "data_hora": "2026-11-26T12:35",
+          "consultas": [
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "(title:ontology OR title:ontologies)",
+              "retorno": 344
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "teste > 0, ou mensagem de erro",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD3_2026-11-26T1235.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada; teste > 0, a regra não se confirma; teste = 344, igual ao title:ontology sozinho da SD1"
+        },
+        {
+          "id": "sd4-2026-11-26",
+          "sondagem": "SD4",
+          "data_hora": "2026-11-26T13:22",
+          "consultas": [
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "abstract:education AND (title:ontology OR title:ontologies)",
+              "retorno": 101
+            },
+            {
+              "texto": "(title:ontology OR title:ontologies) AND education",
+              "retorno": 225
+            },
+            {
+              "texto": "(title:ontology OR title:ontologies) AND (abstract:education OR abstract:learning)",
+              "retorno": 205
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "os três testes > 0, e o primeiro teste = controle",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD4-SD8_2026-11-26T1322.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada"
+        },
+        {
+          "id": "sd5-2026-11-26",
+          "sondagem": "SD5",
+          "data_hora": "2026-11-26T13:22",
+          "consultas": [
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "(title:ontology OR abstract:ontologies) AND abstract:education",
+              "retorno": 644
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "teste > 0, ou mensagem de erro",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD4-SD8_2026-11-26T1322.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; teste > 0, a regra de que o grupo não mistura campos não se confirma"
+        },
+        {
+          "id": "sd6-2026-11-26",
+          "sondagem": "SD6",
+          "data_hora": "2026-11-26T13:22",
+          "consultas": [
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026",
+              "retorno": 142
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "0 < teste ≤ controle, ou mensagem de erro",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD4-SD8_2026-11-26T1322.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; teste 142 > controle 101, fora da faixa declarada na leitura 2 (0 < teste <= controle); registrada a leitura 2 por ser a inconclusiva, e o aumento não é explicado pelo desenho"
+        },
+        {
+          "id": "sd7-2026-11-26",
+          "sondagem": "SD7",
+          "data_hora": "2026-11-26T13:22",
+          "consultas": [
+            {
+              "texto": "title:ontology AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "title:ontology AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026",
+              "retorno": 142
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "teste ≠ controle, ou teste = 0",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD4-SD8_2026-11-26T1322.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; controle com o filtro de data da página de 2017 a 2026; teste 142 != controle 101, sem filtro da página"
+        },
+        {
+          "id": "sd8-2026-11-26",
+          "sondagem": "SD8",
+          "data_hora": "2026-11-26T13:22",
+          "consultas": [
+            {
+              "texto": "title:ontology",
+              "retorno": 344
+            },
+            {
+              "texto": "title:ontolog*",
+              "retorno": 0
+            },
+            {
+              "texto": "title:ont*",
+              "retorno": 8
+            },
+            {
+              "texto": "title:on*",
+              "retorno": 224913
+            }
+          ],
+          "leitura": {
+            "numero": 3,
+            "resultado": "qualquer outra combinação, ou primeiro teste = controle",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD4-SD8_2026-11-26T1322.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; o primeiro teste devolveu zero com a mensagem 'No results matched your query.', não o zero silencioso da leitura 2; segundo teste 8 e terceiro 224.913; nenhuma leitura do roteiro cobre o conjunto"
+        },
+        {
+          "id": "sd9-2026-11-26",
+          "sondagem": "SD9",
+          "data_hora": "2026-11-26T14:33",
+          "consultas": [
+            {
+              "texto": "abstract:knowledge AND abstract:organization",
+              "retorno": 10008
+            },
+            {
+              "texto": "abstract:\"knowledge organization\"",
+              "retorno": 465
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < teste < controle, e os registros só do controle trazem as palavras separadas",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD9-SD12_2026-11-26T1433.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; três registros só do controle conferidos, com as duas palavras separadas"
+        },
+        {
+          "id": "sd10-2026-11-26",
+          "sondagem": "SD10",
+          "data_hora": "2026-11-26T14:33",
+          "consultas": [
+            {
+              "texto": "title:ontology",
+              "retorno": 344
+            },
+            {
+              "texto": "title:ontologies",
+              "retorno": 344
+            },
+            {
+              "texto": "title:ontological",
+              "retorno": 243
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "teste = controle, ou registros do primeiro teste com `ontology` no título sem `ontologies`",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD9-SD12_2026-11-26T1433.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; plural com o mesmo retorno do singular e forma derivada com 243; a conferência dos títulos não foi relatada"
+        },
+        {
+          "id": "sd11-2026-11-26",
+          "sondagem": "SD11",
+          "data_hora": "2026-11-26T14:33",
+          "consultas": [
+            {
+              "texto": "abstract:thesauri",
+              "retorno": 182
+            },
+            {
+              "texto": "descriptor:Thesauri",
+              "retorno": 568
+            },
+            {
+              "texto": "descriptorx:Thesauri",
+              "retorno": 568
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "primeiro teste = 0, ou registros sem o descritor",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD9-SD12_2026-11-26T1433.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; nenhum dos três registros abertos de descriptor:Thesauri trazia Thesauri entre os descritores"
+        },
+        {
+          "id": "sd12-2026-11-26",
+          "sondagem": "SD12",
+          "data_hora": "2026-11-26T14:33",
+          "consultas": [
+            {
+              "texto": "(title:ontology OR title:ontologies) AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "(title:\"knowledge representation\" OR title:\"knowledge representations\" OR title:\"knowledge organization\" OR title:\"knowledge organizations\" OR title:\"conceptual model\" OR title:\"conceptual models\" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:\"educational practice\" OR abstract:\"educational practices\" OR abstract:\"teaching method\" OR abstract:\"teaching methods\" OR abstract:\"educational strategy\" OR abstract:\"educational strategies\" OR abstract:\"learning activity\" OR abstract:\"learning activities\" OR abstract:\"educational intervention\" OR abstract:\"educational interventions\")",
+              "retorno": 28
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste > 0 e o texto mostrado é a consulta inteira",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD9-SD12_2026-11-26T1433.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; a caixa mostrou a consulta inteira, com os 719 caracteres"
+        }
+      ]
     },
     "BD4": {
       "base": "BRAPCI",

@@ -53,7 +53,9 @@ fica ao lado dele e muda à medida que a consulta ocorra.
 2. Não tendo, consultar a fonte. Havendo busca na web disponível, usá-la e **resolver até o
    registro do item**; não havendo, dizer que não se pode conferir aqui e deixar o item como
    designado — **não preencher**.
-3. Registrar na fonte única: os dados conferidos, o estado e onde se conferiu.
+3. Registrar na fonte única: os dados conferidos, o estado e onde se conferiu. No arquivo
+   de sementes, o estado é `verificacao = true` (conferida) ou `false` (pendente), e onde e
+   como se conferiu vai em `nota`.
 4. Atualizar o instrumento correspondente e conferir o texto final nele.
 5. Havendo divergência com o que estava escrito, **retificar explicitamente** no relato ao
    pesquisador. Não corrigir em silêncio.

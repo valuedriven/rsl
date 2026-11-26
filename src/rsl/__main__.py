@@ -168,8 +168,20 @@ def _parser():
     grupo("aderencia", "teste de aderência ao conjunto-semente")
     novo("aderencia", "planilhar", "grava a planilha do teste de aderência e imprime o "
          "ensaio seco", "sementes", "cmd_planilha")
-    novo("aderencia", "medir", "teste de aderência ao conjunto-semente, por papel",
+    novo("aderencia", "medir", "teste de aderência ao conjunto-semente",
          "busca.aderencia", "cmd_aderencia")
+    p = novo("aderencia", "diagnosticar", "anatomia da perda: monta as consultas por nível "
+             "com o DOI das sementes não recuperadas; sem --retorno, imprime o roteiro e não "
+             "grava", "busca.anatomia", "cmd_diagnosticar")
+    p.add_argument("base", metavar="BASE")
+    p.add_argument("--retorno", nargs=2, action="append", default=[],
+                   metavar=("N", "K"), type=int,
+                   help="retorno K exibido pelo nível N submetido; um por nível")
+    p.add_argument("--exportacao", nargs=2, action="append", default=[],
+                   metavar=("N", "ARQUIVO"),
+                   help="exportação do nível N, quando K > 0")
+    p.add_argument("--data-hora", help="data e hora da submissão, ISO 8601; obrigatória com "
+                                       "resultado, sem padrão")
 
     grupo("busca", "registro das execuções e derivação das expressões")
     p = novo("busca", "registrar", "registra uma execução e confere o retorno declarado "
@@ -187,11 +199,21 @@ def _parser():
     grupo("conferencia", "conferências pós-execução da busca")
     p = novo("conferencia", "fidelidade", "compara o conjunto derivado com a execução "
              "direta", "busca.fidelidade", "cmd_fidelidade")
+    p.add_argument("base", metavar="BASE")
     p.add_argument("expressao", metavar="EXPRESSAO")
-    p.add_argument("arquivo", metavar="ARQUIVO")
+    p.add_argument("arquivo", metavar="ARQUIVO", nargs="?", default=None,
+                   help="exportação da execução direta (padrão: a registrada da expressão "
+                        "na base)")
     p = novo("conferencia", "sensibilidade", "mede a perda da sonda para a executada e "
              "grava a amostra a classificar", "busca.sensibilidade", "cmd_sensibilidade")
     p.add_argument("base", metavar="BASE", nargs="?", default=None)
+    p = novo("conferencia", "simular", "analisa a perda da sensibilidade: facetas "
+             "reconhecidas na amostra, termos candidatos e, com --termo, a executada "
+             "ampliada", "busca.simulacao", "cmd_simular")
+    p.add_argument("base", metavar="BASE")
+    p.add_argument("--termo", nargs=2, action="append", default=[],
+                   metavar=("FCTn", "TERMO"),
+                   help="termo a acrescentar à faceta não âncora FCTn na simulação; repetível")
 
     return ap, grupos
 

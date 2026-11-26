@@ -246,7 +246,7 @@ class CampoToml(Elemento):
     """Campo de um item de uma tabela TOML: nome, tipo e exigência."""
 
     tipo = "campo"
-    TIPOS = {"texto": str, "lista de textos": list, "inteiro": int}
+    TIPOS = {"texto": str, "lista de textos": list, "inteiro": int, "booleano": bool}
 
     def __init__(self, nome, documento, tabela, chave, tipo_valor, exigencia=EXIGIDO,
                  descricao=""):
@@ -265,6 +265,8 @@ class CampoToml(Elemento):
 
     def aceita(self, valor):
         tipo = self.TIPOS[self.tipo_valor]
+        if tipo is bool:
+            return isinstance(valor, bool)
         # bool é subclasse de int no Python; no TOML, `true` não é número.
         if not isinstance(valor, tipo) or isinstance(valor, bool):
             return False
@@ -312,6 +314,9 @@ T_INSTRUMENTOS = Tabela(
               "faceta inexistente e faceta sem instrumento reprovam")
 # Marcador do Caminho trocado pelo código do idioma do termo: o endereço resolvido.
 MARCADOR_IDIOMA = "{idioma}"
+# Marcador do modelo de restrição a um DOI, trocado pelo DOI da semente em `aderencia
+# diagnosticar`. A forma da restrição difere entre as bases: nenhuma entra no código.
+MARCADOR_DOI = "{doi}"
 D_MODO = Dominio("modo", P, S_INSTRUMENTOS, "Modo",
                  {"Manual": "Manual", "Automático": "Automático"},
                  descricao="Automático: consultado pelo cliente TemaTres no endereço "
@@ -485,24 +490,18 @@ C_BASES = _campo("bases", "lista de textos",
 C_FACETAS = _campo("facetas", "lista de textos",
                    "FCTn informadas pelo pesquisador (não do ensaio seco); faceta fora da "
                    "tabela de facetas ou repetida reprova; vazia vira pendência", OPCIONAL)
-C_PAPEL = _campo("papel", "texto", "ausente ou de outro tipo reprova")
 # Conferência: estado da referência e juízos do pesquisador.
-C_VERIFICACAO = _campo("verificacao", "texto", _OPC, OPCIONAL)
-C_TIPO = _campo("tipo", "texto", _OPC + "; vazio vira pendência", OPCIONAL)
-C_ALINHAMENTO = _campo("alinhamento", "texto", _OPC + "; vazio vira pendência", OPCIONAL)
+C_VERIFICACAO = _campo("verificacao", "booleano",
+                       "true: dados bibliográficos conferidos; false ou ausente: conferência "
+                       "pendente (`projeto pendencias`); texto ou outro tipo reprova. Onde e "
+                       "como se conferiu vai em `nota`", OPCIONAL)
+# `nota` reúne o registro de conferência (onde e como se conferiu) e o que a referência
+# traz e não cabe em outro campo (editores, evento, local, editora), transcrito como está.
 C_NOTA = _campo("nota", "texto", _OPC, OPCIONAL)
 C_VEICULO_CONFERIDO = _campo("veiculo_conferido", "texto", _OPC, OPCIONAL)
-C_ERIC = _campo("eric", "texto", _OPC, OPCIONAL)
-# Sobra: o que a referência traz e não cabe em outro campo, transcrito como está.
-C_OBSERVACOES = _campo("observacoes", "texto", _OPC, OPCIONAL)
-CONFERENCIA = (C_VERIFICACAO, C_TIPO, C_ALINHAMENTO, C_NOTA, C_VEICULO_CONFERIDO, C_ERIC)
+CONFERENCIA = (C_VERIFICACAO, C_NOTA, C_VEICULO_CONFERIDO)
 
 I_SE = Identificador("se", A, None, "SE", descricao="id fora da sequência reprova")
-D_PAPEL = Dominio("papel", A, None, "papel",
-                  {"desenvolvimento": "desenvolvimento", "validação": "validação"},
-                  descricao="só a validação decide a passagem; vazio ou fora do domínio "
-                            "reprova")
-PAPEL_DESENVOLVIMENTO, PAPEL_VALIDACAO = D_PAPEL.valores
 F_DOI = FrasePadrao("doi", A, None, "10.<prefixo>/<sufixo>  (no campo doi, sem `DOI:` nem "
                                     "URL)",
                     r"^10\.\d{4,9}/\S+$", exigencia=OPCIONAL,
@@ -725,6 +724,11 @@ D_DISJUNCAO = CampoFonte(T_COMPOSICAO, "disjuncao", "texto",
                          descricao="`consultas_separadas`: cada alternativa de um grupo "
                                    "com OR vira consulta própria")
 DISJUNCAO_EM_LINHA, DISJUNCAO_SEPARADA = D_DISJUNCAO.dominio
+# Modelo da restrição a um DOI (ex.: `DOI({doi})`), usado só pelo diagnóstico da perda.
+C_DOI_MODELO = CampoFonte(
+    T_COMPOSICAO, "doi", "texto", OPCIONAL,
+    descricao=f"modelo da restrição a um DOI, com o marcador {MARCADOR_DOI}; sem o "
+              f"marcador, reprova")
 T_COMP_FACETAS = TabelaFonte("fonte.composicao.facetas", F, "composicao.facetas",
                              multipla=True, pai=T_COMPOSICAO,
                              descricao="uma por faceta do protocolo")

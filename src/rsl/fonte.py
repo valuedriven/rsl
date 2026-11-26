@@ -448,6 +448,12 @@ def le_fonte(ctx, d, sigla, sem_pendente=True):
         if r["faceta"] not in facetas:
             raise ProtocoloInvalido(G.T_REDUCAO, f"faceta {r['faceta']!r} não existe", doc)
     comp = dado["composicao"]
+    modelo_doi = comp.get("doi")
+    if modelo_doi is not None and G.MARCADOR_DOI not in modelo_doi:
+        raise ProtocoloInvalido(G.C_DOI_MODELO, f"[composicao] doi = {modelo_doi!r} sem o "
+                                                f"marcador {G.MARCADOR_DOI}: o modelo da "
+                                                f"restrição a um DOI tem de conter o "
+                                                f"marcador", doc)
     por_faceta = {}
     for f in comp["facetas"]:
         if f["faceta"] not in facetas or f["faceta"] in por_faceta:
@@ -524,4 +530,4 @@ def le_fonte(ctx, d, sigla, sem_pendente=True):
             "dado": dado, "fragmentos": fragmentos, "sondagens": sondagens,
             "plural": plural, "teto": teto, "idiomas_base": idiomas_base,
             "proximidade": prox, "composicao": por_faceta, "extras": extras,
-            "pendentes": marcas}
+            "doi": modelo_doi, "pendentes": marcas}

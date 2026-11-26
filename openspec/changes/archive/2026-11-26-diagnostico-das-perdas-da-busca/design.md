@@ -110,9 +110,35 @@ incoerência reprova, em vez de produzir uma causa errada.
 ### 5. Candidatos pelas palavras-chave dos elegíveis
 
 Os candidatos são as palavras-chave (campo de palavras-chave da exportação, separadas por
-`;`) dos elegíveis da amostra, normalizadas, menos as que algum padrão do vocabulário da
-base reconhece. O alcance de cada candidato se mede com `padrao(candidato)` sobre `texto_do`,
-como `TITLE-ABS-KEY`.
+`;`) dos elegíveis da amostra, normalizadas, menos:
+
+- as que algum padrão de faceta **não âncora** da base reconhece (`search`);
+- as que um padrão de faceta **âncora** casa inteiras (`fullmatch`), com as formas de número
+  que o vocabulário da base já traz: `ontologies` é igual a `ontology`.
+
+A palavra-chave que só *contém* termo de âncora continua candidata. Todo registro da perda
+já passa pelas âncoras, e `distance education` conter `education` (FCT2) não diz que FCT3 ou
+FCT4 cobrem o conceito. Medido na Scopus em 2026-11-26, a regra anterior (qualquer faceta,
+por `search`) excluía 59 das 302 palavras-chave distintas dos elegíveis, todas só pelas
+âncoras. O relato lista as excluídas à parte, com o motivo.
+
+As palavras-chave candidatas que são forma de número uma da outra formam um candidato só:
+`students` entra no grupo de `student`, que o representa por não ser forma de outra. As
+formas vêm da mesma flexão que dá as formas do vocabulário da base (regra regular e exceções
+declaradas), aplicada em cada idioma do protocolo, porque o idioma da palavra-chave não se
+conhece. O alcance do candidato se mede com `padrao` de cada forma do grupo sobre
+`texto_do`, como `TITLE-ABS-KEY`: a string emendada traria as formas, e medir só a grafia da
+palavra-chave subestimaria o acréscimo. O relato e o arquivo mostram as formas que casaram em
+algum registro. A regra aplicada fora do idioma da palavra dá forma inexistente
+(`curriculuns`), que não casa e não se mostra. O que a regra não decide (`curriculum` /
+`curricula`, terminação -s) fica separado até haver exceção declarada. A escolha do
+agrupamento foi do pesquisador, em 2026-11-26.
+
+*Alternativas à exclusão:* (a) qualquer faceta, por `search`: esconde os compostos com termo
+de âncora, que são candidatos plausíveis a FCT3 e FCT4. (b) só as facetas não âncora: traz
+`education` e `ontology` sozinhas, com acréscimo perto da perda inteira e no topo da lista.
+Descartadas; a escolha (exclusão por faceta não âncora e por igualdade a termo de âncora,
+com as excluídas listadas) foi do pesquisador.
 
 *Alternativa:* n-gramas de título e resumo. Exigiria lista de palavras vazias por idioma e
 geraria ruído. Palavra-chave já é termo atribuído. Descartada; qualquer termo fora da lista
@@ -124,7 +150,8 @@ A perda P é a sonda menos a executada. Acrescentar termos a uma faceta não ân
 a executada os registros de P em que algum termo novo casa. Os registros da executada já
 estão nela e não contam. A sonda e a executada têm as mesmas âncoras e a mesma proximidade
 (conferido na Scopus), então P é exatamente o universo do acréscimo. Âncora não se simula
-(USO): ampliá-la sai do universo da sonda.
+(USO): ampliá-la sai do universo da sonda. O termo simulado casa com as suas formas de
+número, como o candidato (decisão 5): `learning system` alcança também `learning systems`.
 
 ### 7. Lugar dos comandos
 

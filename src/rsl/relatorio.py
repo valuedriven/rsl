@@ -68,16 +68,9 @@ def relatorio(ctx, d):
     L.append(f"  sementes: {len(d['sementes'])}  "
              f"incidências: {dist['incidencias']}  "
              f"por base: " + ", ".join(f"{b} {v}" for b, v in dist["por_base"].items()))
-    papeis = "  ".join(
-        f"{p}: {dist['por_papel'][p]} estudo(s), "
-        f"{sum(dist['por_base_papel'][b][p] for b in dist['por_base'])} incidência(s) "
-        f"(" + ", ".join(f"{b} {dist['por_base_papel'][b][p]}"
-                         for b in dist["por_base"]) + ")"
-        for p in G.D_PAPEL.valores.values())
-    L.append(f"  sementes por papel: {papeis}")
     L.append("  sementes (referência montada dos campos do arquivo de sementes; só exibição):")
     for e in d["sementes"]:
-        L.append(f"    {e['id']:>4} [{e['papel']}] {referencia(e)}")
+        L.append(f"    {e['id']:>4} {referencia(e)}")
     L.append("  instrumentos (endereço resolvido por idioma):")
     for s, i in d["instrumentos"].items():
         for x in i["idiomas"]:

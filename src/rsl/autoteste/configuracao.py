@@ -41,9 +41,10 @@ def casos(ctx, g):
     # A correção indicada é renomear, não retirar: retirada, a chave canônica faltaria.
     testa("chave antiga `[documentos] ficha` indica renomear, não retirar", valida(antiga),
           "renomeá-la")
-    testa("saída de fidelidade sem o marcador da expressão",
-          valida(cfg.com("saidas.fidelidade", "fidelidade.csv")),
-          C.MARCADORES["saidas.fidelidade"])
+    for marca in C.MARCADORES["saidas.fidelidade"]:
+        sem_marca = cfg.valor("saidas.fidelidade").replace(marca, "")
+        testa(f"saída de fidelidade sem o marcador {marca}",
+              valida(cfg.com("saidas.fidelidade", sem_marca)), marca)
     testa(f"[fichas.{sigla}] na configuração",
           valida(cfg.com("fichas", {sigla: {"execucao": "unica"}})), "`fichas`")
     # Toda chave retirada, de volta à configuração, é segunda fonte: reprova.

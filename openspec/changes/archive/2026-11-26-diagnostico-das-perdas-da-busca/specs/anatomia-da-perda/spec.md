@@ -114,6 +114,10 @@ sem gravar.
 - **WHEN** falta `--retorno` de um nível submetido
 - **THEN** o comando sai com DADOS, nomeando o nível
 
+#### Scenario: Data e hora faltando
+- **WHEN** se passam os retornos e as exportações sem `--data-hora`
+- **THEN** o comando sai com DADOS, nomeando `--data-hora`, sem gravar
+
 ### Requirement: Coerência entre os níveis
 Cada nível SHALL ser subconjunto do anterior, nos DOIs das sementes diagnosticadas, e nenhum
 nível pode trazer DOI fora delas. A violação sai com REPROVADO, nomeando o nível e os DOIs,

@@ -297,21 +297,19 @@ def cmd_conferir_dados(ctx, a=None):
 
 
 # ---------------------------------------------------------------------- pendências
-# Campos de conferência cujo valor vazio é juízo ou conferência ainda não feitos.
-CAMPOS_PENDENTES = ((G.C_VERIFICACAO.chave, "verificação"), (G.C_TIPO.chave, "tipo"),
-                    (G.C_ALINHAMENTO.chave, "alinhamento"))
+# Campos de conferência cujo valor diferente de `true` é conferência ainda não feita.
+CAMPOS_PENDENTES = ((G.C_VERIFICACAO.chave, "verificação"),)
 
 
 def campo_pendente(valor):
-    v = str(valor or "")
-    return not v or v.startswith(("A CONFERIR", "a conferir")) or "PENDÊNCIA" in v
+    """Conferência pendente: o campo é booleano, e só `true` a encerra."""
+    return valor is not True
 
 
 def pendencias_sementes(d):
     """Dado ainda não obtido e juízo ainda não feito, por semente, sem reprovar (D4).
 
-    DOI ausente; facetas a informar; semente de validação cujas facetas não incluem
-    nenhuma âncora (a regra está em aberto: só se relata); campo de conferência vazio.
+    DOI ausente; facetas a informar; semente cujas facetas não incluem nenhuma âncora (a regra está em aberto: só se relata); campo de conferência vazio.
     Com `facetas` vazia, relata-se só "facetas a informar": a falta de âncora é
     consequência dela, não segundo juízo pendente.
     """
@@ -323,8 +321,8 @@ def pendencias_sementes(d):
             abertos.append("DOI ausente")
         if not e[G.C_FACETAS.chave]:
             abertos.append("facetas a informar")
-        elif e["papel"] == G.PAPEL_VALIDACAO and not ancoras_ & set(e[G.C_FACETAS.chave]):
-            abertos.append(f"validação sem faceta âncora ({', '.join(d['ancoras'])}) — "
+        elif not ancoras_ & set(e[G.C_FACETAS.chave]):
+            abertos.append(f"sem faceta âncora ({', '.join(d['ancoras'])}) — "
                            f"regra a decidir")
         abertos += [rotulo for campo, rotulo in CAMPOS_PENDENTES
                     if campo_pendente(e.get(campo))]

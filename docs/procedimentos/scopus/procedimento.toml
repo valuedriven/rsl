@@ -17,6 +17,13 @@ situacao = "oficial"
 fonte = "Elsevier, *Scopus Search API — search tips*"
 
 [[sintaxe]]
+elemento = "Restrição por DOI: `DOI(<DOI>)`"
+categoria = "campos"
+situacao = "oficial"
+fonte = "Elsevier, *How can I best use the Advanced search?* (Scopus Support Center)"
+nota = "código `DOI` na tabela de códigos de campo da busca avançada: `DOI(10.1007/s00202-004-0261-3)` devolve o documento com esse DOI (https://www.elsevier.support/scopus/answer/how-can-i-best-use-the-advanced-search, atualizada em 2026-08-24, consultada em 2026-11-26); é a forma da restrição por DOI do diagnóstico da perda. O agrupamento de vários `DOI()` por `OR` não está medido"
+
+[[sintaxe]]
 elemento = "`PUBYEAR >`, `<`, `=`"
 categoria = "filtros"
 situacao = "oficial"
@@ -248,6 +255,7 @@ FCT4 = ["pt", "en", "es"]
 aspas = "todo_termo"
 proximidade = { operador = "W", distancia = 5 }
 disjuncao = "em_linha"
+doi = "DOI({doi})"
 
 [[composicao.facetas]]
 faceta = "FCT1"
@@ -298,9 +306,6 @@ id = "EB5"
 titulo = "sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional"
 
 # ------------------------------------------------------------------ §5 sementes
-[[sementes]]
-id = "SE4"
-observacao = "comunicação em anais"
 
 # ------------------------------------------------------------------ roteiro de sondagens
 # Comum a todas: na busca avançada da Scopus, no navegador do pesquisador, com o acesso

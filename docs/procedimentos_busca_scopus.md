@@ -7,6 +7,7 @@
 | Elemento | Categoria | Situação | Fonte | Sondagem |
 | :--- | :--- | :--- | :--- | :--- |
 | `TITLE-ABS-KEY()` | campos | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
+| Restrição por DOI: `DOI(<DOI>)` | campos | Verificado em fonte oficial; código `DOI` na tabela de códigos de campo da busca avançada: `DOI(10.1007/s00202-004-0261-3)` devolve o documento com esse DOI (https://www.elsevier.support/scopus/answer/how-can-i-best-use-the-advanced-search, atualizada em 2026-08-24, consultada em 2026-11-26); é a forma da restrição por DOI do diagnóstico da perda. O agrupamento de vários `DOI()` por `OR` não está medido | Elsevier, *How can I best use the Advanced search?* (Scopus Support Center) | — |
 | `PUBYEAR >`, `<`, `=` | filtros | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
 | `LANGUAGE()` | filtros | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
 | `DOCTYPE()` com os códigos `ar`, `re`, `cp`, `ch`, `bk`, `ed`, `le`, `no`, `sh` | filtros | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
@@ -575,7 +576,7 @@ TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos co
 4. Exportar em RIS, com todos os campos.
 5. Conferir o retorno da exportação contra o da tela e o recorte temporal dentro do arquivo.
 6. Registrar EB4 e EB5: `python3 -m rsl busca registrar scopus EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `conferencia sensibilidade`.
-7. Medir a aderência (seção 5). Semente esperada não recuperada: aplicar a anatomia da perda.
+7. Medir a aderência (seção 5). Semente esperada não recuperada: diagnosticar a causa com `python3 -m rsl aderencia diagnosticar scopus`.
 8. Na primeira execução, conferir se o retorno de EB4 tem a mesma ordem de grandeza do da Web of Science; discrepância indica problema de agrupamento.
 
 ### Variantes previstas
@@ -614,7 +615,7 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de
 | :---: | :--- | :--- | :--- |
 | SE2 | Das et al. (2022) | `10.5771/0943-7444-2022-1-6` | — |
 | SE3 | Chi et al. (2018) | `10.1111/exsy.12246` | — |
-| SE4 | Shvets et al. (2024) | `10.5220/0012471400003645` | comunicação em anais |
+| SE4 | Palomino et al. (2023) | `10.58459/rptel.2023.18018` | — |
 | SE7 | Chimalakonda & Nori (2020) | `10.1186/s40561-020-00135-6` | — |
 | SE8 | Cenka et al. (2023) | `10.1080/10494820.2022.2039947` | — |
 | SE9 | Piriyapongpipat et al. (2024) | `10.1186/s40561-024-00307-8` | — |
@@ -623,14 +624,14 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de
 
 **Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
-**Anatomia da perda.** Executar em ordem, com o DOI da semente; a primeira que devolver zero é a causa.
-
-| # | Consulta | Se devolver zero |
-| :---: | :--- | :--- |
-| 1 | `DOI(<DOI>)` | a base não indexa o estudo: sai do denominador |
-| 2 | `DOI(<DOI>) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))` | um filtro a exclui: identificar qual critério |
-| 3 | `DOI(<DOI>) AND TITLE-ABS-KEY(🟦) AND TITLE-ABS-KEY(🟨)` | o vocabulário não a alcança: emenda de termo |
-| 4 | `DOI(<DOI>) AND TITLE-ABS-KEY((🟦) W/5 (🟨))` | a proximidade a exclui: variante "Forma ampla" |
+**Anatomia da perda.** A causa da perda não se atribui a olho:
+`python3 -m rsl aderencia diagnosticar <sigla>` monta, da composição desta base, as
+consultas por nível com os DOIs das sementes não recuperadas, lê da execução registrada os
+níveis que já a têm e atribui a causa pelo primeiro nível em que o DOI desaparece — não
+indexada, filtro, âncoras, proximidade ou faceta não âncora. O comando exige que a fonte
+declare `[composicao] doi`; sem a declaração, recusa e nomeia o campo. O roteiro é submetido
+no navegador do pesquisador, uma consulta por vez, e o resultado se registra com `--retorno`,
+`--exportacao` e `--data-hora`.
 
 ---
 

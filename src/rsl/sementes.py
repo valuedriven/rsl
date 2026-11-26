@@ -1,7 +1,7 @@
 """Instrumento do teste de aderência: a planilha a preencher e o ensaio seco.
 
-Tudo o que a planilha traz de cada semente — referência, bases, papel e os dados de
-conferência (verificação, tipo, alinhamento…) — vem do arquivo de sementes
+Tudo o que a planilha traz de cada semente — referência, bases e o estado de conferência
+(verificação) — vem do arquivo de sementes
 (`[documentos] sementes`), lido por `ctx.protocolo()`. Não há outro arquivo de semente. A
 planilha é gravada em `[saidas] aderencia`.
 
@@ -48,11 +48,8 @@ def colunas(d):
         ("id", "identificador da semente (SEn), conforme o conjunto-semente"),
         ("autores_ano", "autoria abreviada e ano"),
         ("titulo", "título, como consta na referência do conjunto-semente"),
-        ("tipo", "primário ou secundário — preencher no arquivo de sementes"),
-        ("verificacao", "estado de conferência da referência — preencher no arquivo de "
-                        "sementes"),
-        ("papel", "papel da semente no conjunto: desenvolvimento ou validação — do "
-                  "conjunto-semente"),
+        ("verificacao", "sim se os dados bibliográficos foram conferidos, não se a "
+                        "conferência está pendente — preencher no arquivo de sementes"),
         ("base", " ou ".join(filter(None, [", ".join(bases[:-1]), bases[-1]]))),
         ("esperada_na_base", "sim se o conjunto-semente cita esta base para a semente"),
     ]
@@ -117,7 +114,7 @@ def relata_ensaio(d, estudos, facetas):
 
 def _pendentes(estudos):
     """Sementes com campo de metadado ainda não conferido, e quais campos são."""
-    rotulo = {"verificacao": "verificação", "tipo": "tipo", "alinhamento": "alinhamento"}
+    rotulo = {"verificacao": "verificação"}
     saida = []
     for e in estudos:
         campos = [rotulo[c] for c in rotulo if campo_pendente(e.get(c, ""))]
@@ -134,9 +131,7 @@ def linhas_planilha(d, estudos):
                 "id": e["id"],
                 "autores_ano": f"{e['autores'][0].split(',')[0].strip()} et al. {e['ano']}",
                 "titulo": e["titulo"],
-                "tipo": e.get("tipo", ""),
-                "verificacao": e.get("verificacao", ""),
-                "papel": e["papel"],
+                "verificacao": "sim" if e.get("verificacao") is True else "não",
                 "base": b,
                 "esperada_na_base": "sim" if b in e["bases"] else "nao",
                 **{c: "" for c in manuais(d)},
@@ -252,13 +247,9 @@ def cmd_planilha(ctx, a=None):
 
     print(f"{destino.name}   {len(linhas)} linhas, {len(cols)} colunas")
     com_entrada = sum(1 for e in estudos if e["_meta"])
-    confirmadas = sum(1 for e in estudos
-                      if str(e.get("verificacao", "")).startswith("CONFIRMADA"))
-    alinhadas = sum(1 for e in estudos
-                    if e.get("alinhamento")
-                    and not str(e["alinhamento"]).startswith(("A CONFERIR", "a conferir")))
+    confirmadas = sum(1 for e in estudos if e.get("verificacao") is True)
     print(f"conferência: {com_entrada}/{len(estudos)} com campo de conferência preenchido; "
-          f"{confirmadas} com verificação confirmada; {alinhadas} com alinhamento conferido")
+          f"{confirmadas} com verificação confirmada")
     pendentes = _pendentes(estudos)
     if pendentes:
         print("pendências de conferência:")

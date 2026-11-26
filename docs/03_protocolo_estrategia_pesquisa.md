@@ -129,8 +129,8 @@ Não se aplica como fonte autônoma de inclusão. Os itens de acervo pessoal —
 
 #### Conjunto-semente
 
-- Regra de ajuste: recuperação inferior a 80% das sementes de validação obriga a revisar o controle terminológico antes de prosseguir, com emenda registrada. O limiar é decisão deste projeto, não norma da literatura, e consta como tal no relato. Decide a fração das sementes de validação, sobre a união das bases: semente que a base não indexa sai do denominador daquela base e registra-se como cobertura, não como falha da busca; as sementes de desenvolvimento são relatadas à parte e não compensam a validação.
-- Fórmula de recuperação: `R = sementes de validação recuperadas / sementes de validação elegíveis e indexadas na fonte × 100`. A elegibilidade e a indexação de cada semente deverão ser confirmadas e documentadas. A recuperação será avaliada tanto por identificador bibliográfico quanto por correspondência de referência, considerando variações de metadados.
+- Regra de ajuste: recuperação inferior a 80% das sementes obriga a revisar o controle terminológico antes de prosseguir, com emenda registrada. O limiar é decisão deste projeto, não norma da literatura, e consta como tal no relato. Todo o conjunto-semente é de validação, e decide a fração das sementes recuperadas, sobre a união das bases, relatada com o intervalo de Wilson a 95%: semente que a base não indexa sai do denominador daquela base e registra-se como cobertura, não como falha da busca.
+- Fórmula de recuperação: `R = sementes recuperadas / sementes elegíveis e indexadas na fonte × 100`. A elegibilidade e a indexação de cada semente deverão ser confirmadas e documentadas. A recuperação será avaliada tanto por identificador bibliográfico quanto por correspondência de referência, considerando variações de metadados.
 
 ## Procedimentos
 

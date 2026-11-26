@@ -47,15 +47,20 @@ se executam apenas no teste de fidelidade, e EB5 é a sonda de sensibilidade.
 O teste afere se o cálculo reproduz a base.
 
 Procedimento: executar EB2 e EB3 **directamente** na base (estado 2 de execução, o
-experimental), e comparar com a contagem derivada localmente dos mesmos registros. A
-sonda de EB5 se mede à parte, por `conferencia sensibilidade`, e não se confunde com fidelidade.
+experimental), e comparar, **base a base**, com o conjunto derivado localmente das
+exportações da executada da mesma base. A comparação é de conjuntos (registros), não só
+de contagens. A sonda de EB5 se mede à parte, por `conferencia sensibilidade`, e não se
+confunde com fidelidade.
 
-**Limiar: coincidência exacta das contagens.** Não aproximada — a derivação é
-determinística e qualquer diferença denuncia divergência entre o que a base entende e
-o que o derivador aplica.
+**Limiar: a divergência simétrica máxima `divergencia_fidelidade`** — o valor que o
+protocolo declara, ou, na falta dele, o padrão do `config.toml`; o valor em uso e a sua
+origem se leem em `configuracao mostrar`, e nunca se fixam aqui. A derivação é
+determinística: toda divergência, mesmo abaixo do limiar, denuncia diferença entre o que
+a base entende e o que o derivador aplica, e se examina registro a registro na saída
+`[saidas] fidelidade` antes de aceitar as contagens derivadas.
 
-**Consequência:** a derivação local é abandonada e as expressões passam a ser
-executadas uma a uma, com o custo de execução que isso traz.
+**Consequência:** acima do limiar, a derivação local é abandonada e as expressões passam
+a ser executadas uma a uma, com o custo de execução que isso traz.
 
 O retorno da execução experimental **não compõe o corpus** e descarta-se após a
 comparação.

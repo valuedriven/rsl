@@ -26,7 +26,7 @@
 | Teto de exportação por lote | limite_exportacao | Verificado por medição (BD1/sd8-2026-11-25); 1000 registros por lote | — | SD8 |
 | Operadores booleanos `AND` e `OR` | operadores | Verificado por medição (BD1/sd1-2026-11-25) | — | SD1 |
 | Parênteses para agrupamento | agrupamento | Verificado por medição (BD1/sd1-2026-11-25) | — | SD1 |
-| Lematização | lematizacao | Verificado por medição (BD1/sd3-2026-11-25); medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem | — | SD3 |
+| Lematização | lematizacao | Verificado por medição (BD1/sd3-2026-11-25); medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem, sem efeito na busca: todo termo vai entre aspas, que desligam a lematização (SD3), e o plural é explícito | — | SD3 |
 | Vocabulário controlado de assunto | vocabulario_controlado | **Não verificado** | — | sem sondagem: verificação documental: a Core Collection não foi conferida quanto a tesauro de assunto; nenhuma expressão depende dele |
 | Exportação em RIS com todos os campos | exportacao | Verificado por medição (BD1/sd8-2026-11-25) | — | SD8 |
 
@@ -534,7 +534,7 @@ TS=(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais"
 3. Exportar em RIS, com todos os campos, em lotes dentro do limite da base.
 4. Conferir o retorno da exportação contra o da tela.
 5. Registrar EB4 e EB5: `python3 -m rsl busca registrar wos EB4 <arquivo> --retorno <n>` e o mesmo com `EB5`; rodar `busca derivar` e `conferencia sensibilidade`.
-6. Medir a aderência ao conjunto-semente (seção 5).
+6. Medir a aderência ao conjunto-semente (seção 5). Semente não recuperada: `python3 -m rsl aderencia diagnosticar wos`, que exige `[composicao] doi` na fonte.
 
 ### Variantes previstas
 
@@ -596,6 +596,13 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de
 **Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 
 **SE10.** O domínio está fora do título; anotar no registro se EB4 a recupera.
+
+**Anatomia da perda.** A causa da perda não se atribui a olho:
+`python3 -m rsl aderencia diagnosticar <sigla>` monta, da composição desta base, as
+consultas por nível com os DOIs das sementes não recuperadas, lê da execução registrada os
+níveis que já a têm e atribui a causa pelo primeiro nível em que o DOI desaparece — não
+indexada, filtro, âncoras, proximidade ou faceta não âncora. O comando exige que a fonte
+declare `[composicao] doi`; sem a declaração, recusa e nomeia o campo.
 
 ---
 

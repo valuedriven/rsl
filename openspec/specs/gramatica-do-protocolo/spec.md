@@ -60,7 +60,7 @@ ao subcomando.
 #### Scenario: Arquivo de sementes no contrato
 - **WHEN** se executa `rsl documentos gramatica`
 - **THEN** a saída traz o grupo do arquivo de sementes, com a tabela `[[sementes]]` e os
-  campos `id`, `bases` e `papel`, cada um com tipo e exigência
+  campos `id` e `bases`, cada um com tipo e exigência
 
 #### Scenario: Fonte do procedimento no contrato
 - **WHEN** se executa `rsl documentos gramatica`
@@ -108,8 +108,7 @@ campo, o nome, o tipo e a exigência. O leitor MUST usar essa declaração para 
 reprovar o arquivo, e o autoteste MUST gerar a partir dela os casos de campo ausente e de
 campo desconhecido. Os campos declarados SHALL ser os do esquema estruturado: `id`,
 `autores`, `ano`, `titulo`, `veiculo`, `volume`, `numero`, `paginas`, `doi`, `bases`,
-`facetas`, `papel`, `verificacao`, `tipo`, `alinhamento`, `nota`, `veiculo_conferido`,
-`eric` e `observacoes`.
+`facetas`, `verificacao`, `nota` e `veiculo_conferido`.
 
 #### Scenario: Campo novo no esquema
 - **WHEN** uma change acrescenta um campo obrigatório ao esquema
@@ -122,7 +121,7 @@ campo desconhecido. Os campos declarados SHALL ser os do esquema estruturado: `i
 
 #### Scenario: Esquema estruturado exibido
 - **WHEN** se executa `rsl documentos gramatica`
-- **THEN** o grupo do arquivo de sementes traz os 19 campos do esquema estruturado, cada
+- **THEN** o grupo do arquivo de sementes traz os 14 campos do esquema estruturado, cada
   um com tipo e exigência, o `id` com a exigência de sequência a partir de SE1, e não
   traz `semente`
 

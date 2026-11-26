@@ -153,7 +153,7 @@ elemento = "Lematização"
 categoria = "lematizacao"
 situacao = "medicao"
 citacao = "BD1/sd3-2026-11-25"
-nota = "medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem"
+nota = "medida só em inglês, com `ontology`/`ontologies`; português e espanhol sem sondagem, sem efeito na busca: todo termo vai entre aspas, que desligam a lematização (SD3), e o plural é explícito"
 sondagem = "SD3"
 
 [[sintaxe]]

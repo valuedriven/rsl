@@ -426,10 +426,11 @@ def estrutural(ctx, g):
     g.testa("bases lidas pelo nome da coluna, com as colunas em outra ordem",
             mut != t and igual, f"{msg}")
     dist = d["distribuicao"]
-    g.testa("distribuição por papel soma estudos e incidências e tem validação",
-            sum(dist["por_papel"].values()) == len(d["sementes"])
-            and sum(sum(v.values()) for v in dist["por_base_papel"].values())
-            == dist["incidencias"] and not dist["validacao_vazia"], repr(dist))
+    g.testa("distribuição por base soma as incidências das sementes, sem papel",
+            sum(dist["por_base"].values()) == dist["incidencias"]
+            == sum(len(e["bases"]) for e in d["sementes"])
+            and not any(k.startswith(("por_papel", "por_base_papel", "validacao_vazia"))
+                        for k in dist), repr(dist))
 
     # Colunas do quadro em outra ordem: cada idioma continua lido pelo nome.
     fid = d["facetas"][min(1, len(d["facetas"]) - 1)]["id"]

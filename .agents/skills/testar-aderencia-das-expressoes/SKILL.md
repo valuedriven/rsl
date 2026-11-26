@@ -16,10 +16,10 @@ python3 -m rsl aderencia medir
 
 Lê o conjunto-semente e, de `data/registro_execucao.json`, só as execuções da expressão
 executada (a sonda e as execuções diretas de conferência ficam de fora), casa por título
-normalizado e, na falta dele, por prefixo, e imprime o relato **separado por papel**:
-recuperação das sementes de **validação** e das de **desenvolvimento**. Só a validação é
-comparada ao limiar; ela traz a proporção e o intervalo de Wilson a 95%. O desenvolvimento é
-não decisório e não compensa a validação. **Prefixo é indício, nunca acerto**: o candidato por
+normalizado e, na falta dele, por prefixo, e imprime um **relato único** sobre o
+conjunto-semente, todo de validação: a proporção recuperada, o intervalo de Wilson a 95%
+sobre o mesmo numerador e denominador, e a comparação com o limiar, que decide a passagem.
+**Prefixo é indício, nunca acerto**: o candidato por
 prefixo é impresso como `[? ]` e **não entra no numerador** — exige conferência humana e
 registro na coluna `recuperada`. A razão impressa é sobre as sementes informadas; o denominador
 definitivo são as sementes que cada base indexa.
@@ -45,15 +45,13 @@ substitui esse registro: ela mede, o instrumento documenta.
 
 | | |
 | --- | --- |
-| **Limiar** | 80% sobre a UNIÃO das bases, aplicado **só às sementes de validação** |
-| **Decide** | a aderência de validação; a de desenvolvimento é não decisória e não compensa a validação |
-| **Incerteza** | a validação é relatada com o intervalo de Wilson a 95%, junto da proporção |
+| **Limiar** | 80% sobre a UNIÃO das bases, aplicado ao conjunto-semente inteiro |
+| **Decide** | a aderência do conjunto: um numerador, um denominador |
+| **Incerteza** | o intervalo de Wilson a 95%, junto da proporção |
 | **Abaixo** | revisão obrigatória do controlo terminológico antes de prosseguir, com emenda ao protocolo |
 
 Sobre a **união**, não por base: nenhuma base isolada tem obrigação de trazer tudo, e
-exigir 80% de cada uma reprovaria buscas corretas. Sobre a **validação**, não sobre o total:
-semente que orientou o vocabulário é recuperada por construção e não pode servir de prova
-do desenho da busca.
+exigir 80% de cada uma reprovaria buscas corretas.
 
 Limiar sem consequência é ornamento. A consequência está declarada e cumpre-se.
 

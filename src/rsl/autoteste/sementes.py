@@ -8,7 +8,7 @@ manuais, omite a linha vazia de semente ou de base que deixou de existir e recus
 arquivo intacto, a que perderia preenchimento (semente renumerada, linha sem par, coluna
 fora do esquema).
 
-Dado não obtido ou juízo não feito (DOI ausente, facetas vazias, validação sem âncora) não
+Dado não obtido ou juízo não feito (DOI ausente, facetas vazias, semente sem âncora) não
 reprova: a cópia tem de ser aprovada e `projeto pendencias` tem de relatá-la. A evidência
 bruta de semente inexistente reprova `dados conferir`."""
 
@@ -37,7 +37,7 @@ CHAVE = G.TT_SEMENTES.chave
 def casos(ctx, g):
     texto, d = ctx.texto_sementes, ctx.protocolo()
     itens = itens_toml(texto, CHAVE)
-    c_id, c_bases, c_papel = G.C_ID.chave, G.C_BASES.chave, G.C_PAPEL.chave
+    c_id, c_bases = G.C_ID.chave, G.C_BASES.chave
     c_ano, c_autores, c_doi = G.C_ANO.chave, G.C_AUTORES.chave, G.C_DOI.chave
     c_facetas = G.C_FACETAS.chave
     primeiro, ultimo = itens[0][c_id], itens[-1][c_id]
@@ -88,8 +88,6 @@ def casos(ctx, g):
          (f"semente {ultimo}", "semente sem base")),
         ("base repetida", com(-1, **{c_bases: itens[-1][c_bases][:1] * 2}), P,
          (f"semente {ultimo}", f"{c_bases} com repetição")),
-        ("papel fora do domínio", com(-1, **{c_papel: "teste"}), P,
-         (f"semente {ultimo}", "'teste' fora dos admitidos")),
         # Esquema estruturado: cada defeito, gerado das sementes lidas.
         ("ano como texto", com(-1, **{c_ano: str(itens[-1][c_ano])}), P,
          (f"semente {ultimo}", f"'{c_ano}' não é")),
@@ -108,10 +106,16 @@ def casos(ctx, g):
          (f"semente {ultimo}", "campo desconhecido", "semente")),
         ("campo retirado `escopo`", com(-1, escopo=""), P,
          (f"semente {ultimo}", "campo desconhecido", "escopo")),
-        ("conjunto-semente sem validação",
-         toml_de([{**x, c_papel: G.PAPEL_DESENVOLVIMENTO} for x in itens], CHAVE), R,
-         "sem semente de validação"),
+        # Verificação binária: o texto livre antigo reprova, em vez de valer como estado.
+        ("verificação como texto", com(-1, **{G.C_VERIFICACAO.chave: "CONFIRMADA"}), P,
+         (f"semente {ultimo}", f"'{G.C_VERIFICACAO.chave}' não é booleano")),
     ]
+    # Campos retirados do esquema (conjunto único de validação; conferência sem dado):
+    # um arquivo antigo reprova alto, em vez de perder o campo em silêncio.
+    for retirado, valor in (("papel", "validação"), ("tipo", ""), ("alinhamento", ""),
+                            ("eric", ""), ("observacoes", "")):
+        casos_.append((f"campo retirado `{retirado}`", com(-1, **{retirado: valor}), P,
+                       (f"semente {ultimo}", "campo desconhecido", retirado)))
     for nome, mutante, codigo, trecho in casos_:
         g.espera(nome, mutante, texto, executa, codigo, trecho)
 
@@ -138,10 +142,10 @@ def casos(ctx, g):
 def _aprovam_com_pendencia(ctx, g, itens, com, d):
     """Dado ou juízo pendente: a cópia é aprovada e `projeto pendencias` a relata, nomeando a
     semente. Cópia reprovada, ou pendência não relatada, faz o autoteste falhar."""
-    c_id, c_papel, c_facetas = G.C_ID.chave, G.C_PAPEL.chave, G.C_FACETAS.chave
+    c_id, c_facetas = G.C_ID.chave, G.C_FACETAS.chave
     ancoras = d["ancoras"]
     nao_ancoras = [f["id"] for f in d["facetas"] if f["id"] not in ancoras]
-    k_val = next((k for k, x in enumerate(itens) if x[c_papel] == G.PAPEL_VALIDACAO), None)
+    k_val = len(itens) // 2
 
     def regenerado(mutante):
         """Contexto com a cópia do arquivo de sementes e os procedimentos regenerados em
@@ -168,20 +172,25 @@ def _aprovam_com_pendencia(ctx, g, itens, com, d):
                 f"{trecho!r}")
 
     ident = itens[0][c_id]
+    c_verif = G.C_VERIFICACAO.chave
+    aprova_e_relata("verificação false", com(0, **{c_verif: False}), ident, "verificação")
+    aprova_e_relata("verificação ausente", com(0, **{c_verif: None}), ident, "verificação")
+    aprova_e_relata("verificação true", com(0, **{c_verif: True}), ident, "verificação",
+                    relata=False)
     aprova_e_relata("doi ausente", com(0, doi=None), ident, "DOI ausente")
     aprova_e_relata("facetas vazias", com(0, **{c_facetas: []}), ident, "facetas a informar")
-    if k_val is None or not nao_ancoras:
-        g.nao_executa(3, "sem semente de validação ou sem faceta que não seja âncora")
+    if not nao_ancoras:
+        g.nao_executa("sem faceta que não seja âncora")
         return
     ident = itens[k_val][c_id]
-    aprova_e_relata("semente de validação sem faceta âncora",
+    aprova_e_relata("semente sem faceta âncora",
                     com(k_val, **{c_facetas: nao_ancoras[:1]}), ident, "sem faceta âncora")
     # Prova de que a pendência discrimina: com uma âncora, não se relata.
-    aprova_e_relata("semente de validação com faceta âncora",
+    aprova_e_relata("semente com faceta âncora",
                     com(k_val, **{c_facetas: ancoras[:1]}), ident, "sem faceta âncora",
                     relata=False)
     # Com facetas vazias, só "facetas a informar": a falta de âncora não se relata à parte.
-    aprova_e_relata("semente de validação sem facetas",
+    aprova_e_relata("semente sem facetas",
                     com(k_val, **{c_facetas: []}), ident, "sem faceta âncora",
                     relata=False)
 
@@ -215,7 +224,7 @@ def _planilha(ctx, g, itens, d):
     manual é conservado; a regravação que o perderia é recusada com o arquivo intacto.
     `id`, bases e títulos vêm das sementes lidas."""
     if len(itens) < 3:
-        g.nao_executa(10,"menos de três sementes: sem semente do meio a retirar")
+        g.nao_executa("menos de três sementes: sem semente do meio a retirar")
         return
     c_id = G.C_ID.chave
     bases = [b["sigla"] for b in d["bases"]]
@@ -274,6 +283,11 @@ def _planilha(ctx, g, itens, d):
         if not arq.exists():
             return
 
+        # Colunas de campos retirados do arquivo de sementes não voltam à planilha.
+        retiradas = [c for c in ("escopo", "papel", "tipo") if c in le()[0]]
+        g.testa("planilha de aderência sem as colunas retiradas `escopo`, `papel` e `tipo`",
+                not retiradas, f"presentes: {retiradas}")
+
         # Preservação: todas as colunas manuais de primeiro × primeira base.
         valores = {c: f"{c} {primeiro} autoteste" for c in cols_m}
         preenche(primeiro, bases[0], valores)
@@ -283,14 +297,15 @@ def _planilha(ctx, g, itens, d):
                 cod == Saida.OK and conservado == valores, f"{cod.name} {conservado}")
 
         # Coluna derivada atualizada, manuais conservadas.
-        c_tipo = G.C_TIPO.chave
-        novo_tipo = f"{itens[0].get(c_tipo) or ''} autoteste".strip()
+        c_verif = G.C_VERIFICACAO.chave
+        nova_verif = itens[0].get(c_verif) is not True
         mudado = [dict(x) for x in itens]
-        mudado[0][c_tipo] = novo_tipo
+        mudado[0][c_verif] = nova_verif
         cod, msgs = roda(cx.com_sementes(toml_de(mudado, CHAVE)))
         x = linha(primeiro, bases[0])
-        g.testa(f"regravação traz o tipo novo de {primeiro} e conserva as manuais",
-                cod == Saida.OK and x.get("tipo") == novo_tipo
+        g.testa(f"regravação traz a verificação nova de {primeiro} "
+                f"({'sim' if nova_verif else 'não'}) e conserva as manuais",
+                cod == Saida.OK and x.get(c_verif) == ("sim" if nova_verif else "não")
                 and {c: x.get(c) for c in cols_m} == valores, f"{cod.name} {msgs[:1]}")
         roda()
 

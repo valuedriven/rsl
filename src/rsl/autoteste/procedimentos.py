@@ -93,6 +93,9 @@ def fonte(ctx, g):
          lambda x: x["sintaxe"][0].update(situacao="medido"), trechos="fora do domínio")
     caso("campo desconhecido", lambda x: x["cobertura"].update(plurais="explícito"),
          trechos="campo desconhecido")
+    caso("modelo de DOI sem o marcador {doi}",
+         lambda x: x["composicao"].update(doi="DO="),
+         trechos=("composicao", "doi", G.MARCADOR_DOI))
     caso("categoria esquecida",
          lambda x: x.update(sintaxe=[s for s in x["sintaxe"] if s["categoria"] != categoria]),
          trechos=categoria)
@@ -114,8 +117,8 @@ def fonte(ctx, g):
 
     com_clausula = alvo if tem_clausula(dado0) else base_com(ctx, d, tem_clausula)
     if com_clausula is None:
-        g.nao_executa(1, "cláusula com conector na borda: nenhuma base com critério de "
-                         "destino " + " ou ".join(G.DESTINOS_COM_CLAUSULA))
+        g.nao_executa("cláusula com conector na borda: nenhuma base com critério de "
+                      "destino " + " ou ".join(G.DESTINOS_COM_CLAUSULA), quantos=1)
     else:
         dado_c, frag_c, arqs_c = fonte_de(ctx, d, com_clausula)
         k = next(i for i, c in enumerate(dado_c["criterios"])

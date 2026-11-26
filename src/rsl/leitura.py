@@ -754,8 +754,7 @@ def sementes(texto, siglas, facetas_, locais):
     O esquema é o da gramática (`TT_SEMENTES` e os seus campos): campo exigido ausente,
     campo de outro tipo ou campo desconhecido reprova, nomeando a semente e o campo. Cada
     base citada tem de ser sigla da tabela de bases, e cada faceta, `FCTn` da tabela de
-    facetas, na grafia exata e sem repetição; o papel tem de estar no domínio; o `id`, em
-    sequência a partir de SE1. Autoria, ano, título e DOI são os campos: nada se extrai
+    facetas, na grafia exata e sem repetição; o `id`, em sequência a partir de SE1. Autoria, ano, título e DOI são os campos: nada se extrai
     por padrão de texto. Campo opcional ausente vale vazio.
     """
     T = G.TT_SEMENTES
@@ -799,7 +798,8 @@ def sementes(texto, siglas, facetas_, locais):
         for c in T.campos:
             if c is G.C_ID:
                 continue
-            valor = item.get(c.chave, [] if c.tipo_valor == "lista de textos" else "")
+            vazio = {"lista de textos": [], "booleano": False}.get(c.tipo_valor, "")
+            valor = item.get(c.chave, vazio)
             e[c.chave] = valor.strip() if isinstance(valor, str) else valor
         for c in (G.C_TITULO, G.C_VEICULO):
             if not e[c.chave]:
@@ -812,12 +812,6 @@ def sementes(texto, siglas, facetas_, locais):
             raise _semente_invalida(G.F_DOI, ident, f"campo '{G.C_DOI.chave}' "
                                                     f"{e[G.C_DOI.chave]!r} fora da forma "
                                                     f"{G.F_DOI.texto.split()[0]}")
-        papel = e[G.C_PAPEL.chave]
-        if papel not in G.D_PAPEL.valores:
-            raise _semente_invalida(G.D_PAPEL, ident, f"campo '{G.C_PAPEL.chave}' {papel!r} "
-                                                      f"fora dos admitidos "
-                                                      f"{list(G.D_PAPEL.valores)}")
-        e[G.C_PAPEL.chave] = G.D_PAPEL.valores[papel]
         e[G.C_BASES.chave] = _lista_de_siglas(item, G.C_BASES, ident, siglas,
                                               G.T_BASES.rotulo, vazia_reprova=True)
         e[G.C_FACETAS.chave] = _lista_de_siglas(item, G.C_FACETAS, ident, facetas_,
@@ -845,27 +839,20 @@ def referencia(e):
 
 
 def distribuicao(estudos, siglas):
-    """Distribuição das sementes pelas bases e por papel, calculada do arquivo de sementes.
+    """Distribuição das sementes pelas bases, calculada do arquivo de sementes.
 
-    Não confere prosa. `por_base` e `por_base_papel` contam incidências: a semente
-    indexada em duas bases conta nas duas, como manda a leitura do conjunto-semente.
-    `por_papel` conta estudos distintos.
+    Não confere prosa. `por_base` conta incidências: a semente indexada em duas bases conta
+    nas duas, como manda a leitura do conjunto-semente.
     """
-    papeis_ = tuple(G.D_PAPEL.valores.values())
     por_base = {b: 0 for b in siglas}
-    por_base_papel = {b: {p: 0 for p in papeis_} for b in siglas}
     for e in estudos:
         for b in e["bases"]:
             por_base[b] += 1
-            por_base_papel[b][e["papel"]] += 1
     multi = sum(1 for e in estudos if len(e["bases"]) > 1)
     return {
         "por_base": por_base, "incidencias": sum(por_base.values()),
         "registros": len(estudos), "em_mais_de_uma_base": multi,
         "em_uma_so": len(estudos) - multi,
-        "por_papel": {p: sum(1 for e in estudos if e["papel"] == p) for p in papeis_},
-        "por_base_papel": por_base_papel,
-        "validacao_vazia": not any(e["papel"] == G.PAPEL_VALIDACAO for e in estudos),
     }
 
 
@@ -943,7 +930,7 @@ def analisa(ctx):
     _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['procedimento']}"
                                   for b in fts["bases"]])
     est = sementes(ctx.texto_sementes, siglas, ids_facetas, locais)
-    params["sementes"] = {"valor": [f"{e['id']} ({e['papel']}): {', '.join(e['bases'])}"
+    params["sementes"] = {"valor": [f"{e['id']}: {', '.join(e['bases'])}"
                                     for e in est],
                           "origem": f"arquivo de sementes ({ctx.caminho_sementes})"}
     d = {

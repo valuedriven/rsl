@@ -225,7 +225,11 @@ só extrai dela as referências `(Nn)` às notas explicativas.
 ### Requirement: Resultado parcial do autoteste declarado
 Quando houver caso não executado, o autoteste SHALL declarar que o resultado é parcial e
 terminar com o código PARCIAL, desde que nenhum caso executado tenha falhado. Havendo
-falha, o código é REPROVADO, e a mensagem informa também os casos não executados.
+falha, o código é REPROVADO, e a mensagem informa também os casos não executados. O número
+de casos não executados SHALL vir de contagem feita pelo próprio autoteste (um caso trocado
+pelo aviso, ou número calculado dos dados); o bloco que deixa de rodar por retorno
+antecipado SHALL ser relatado como bloco inteiro, de tamanho não contado, e MUST NOT levar
+número escrito à mão.
 
 #### Scenario: Arquivos alimentados ausentes
 - **WHEN** `projeto autoteste` termina sem falha e com casos não executados
@@ -235,6 +239,17 @@ falha, o código é REPROVADO, e a mensagem informa também os casos não execut
 #### Scenario: Falha com casos não executados
 - **WHEN** um caso executado falha e há casos não executados
 - **THEN** o código de saída é REPROVADO, e a mensagem informa os casos não executados
+
+#### Scenario: Bloco não executado
+- **WHEN** um grupo encerra antes dos seus casos por falta de dado de ensaio
+- **THEN** o relato diz que o restante do bloco não foi executado e por quê, sem número de
+  casos, e o código de saída é PARCIAL
+
+#### Scenario: Contagem à mão recusada
+- **WHEN** um grupo chama o aviso de casos não executados no formato antigo, com o número
+  como primeiro argumento
+- **THEN** a chamada é recusada no próprio autoteste, em vez de relatar um número que não
+  foi contado
 
 ### Requirement: Parâmetros estruturais só do protocolo
 Composição das expressões, facetas e âncoras, instrumentos, bases e idiomas do quadro SHALL
@@ -304,21 +319,6 @@ como correção, e MUST NOT impedir a leitura da fonte.
 #### Scenario: Sigla repetida
 - **WHEN** duas linhas da tabela têm a sigla `eric`
 - **THEN** a leitura reprova, nomeando a sigla
-
-### Requirement: Conjunto de validação não vazio
-
-O conjunto-semente SHALL ter ao menos uma semente de validação. Conjunto sem semente de
-validação MUST reprovar `--conferir`, porque a aderência que decide a passagem não teria
-denominador.
-
-#### Scenario: Só sementes de desenvolvimento
-- **WHEN** todas as sementes declaram `desenvolvimento`
-- **THEN** `--conferir` reprova, nomeando a falta de semente de validação
-
-#### Scenario: Autoteste do conjunto de validação vazio
-- **WHEN** o autoteste troca, numa cópia, o papel de todas as sementes de validação para
-  `desenvolvimento`
-- **THEN** a conferência reprova pelo motivo esperado
 
 ### Requirement: Critério de elegibilidade tem justificativa
 
@@ -440,11 +440,11 @@ gramática:
 
 - bibliográficos: `id` (`SEn`, único e em sequência a partir de SE1), `autores` (lista não vazia), `ano` (inteiro),
   `titulo`, `veiculo`, e os opcionais `volume`, `numero`, `paginas` e `doi`;
-- aferição: `bases` (siglas que indexam a semente), `facetas` (opcional, `FCTn` informadas
-  pelo pesquisador) e `papel`;
-- conferência, opcionais: `verificacao`, `tipo`, `alinhamento`, `nota`,
-  `veiculo_conferido` e `eric`;
-- `observacoes`, opcional: o que a referência traz e não cabe em outro campo.
+- aferição: `bases` (siglas que indexam a semente) e `facetas` (opcional, `FCTn` informadas
+  pelo pesquisador);
+- conferência, opcionais: `verificacao`, `nota` e `veiculo_conferido`. O campo `nota`
+  reúne o registro de conferência e o que a referência traz e não cabe em outro campo
+  (editores, evento, local, editora).
 
 Autoria, ano, título e DOI MUST ser lidos dos campos, sem extração por padrão de texto, e
 nenhum outro arquivo SHALL guardar dado de semente.
@@ -452,7 +452,7 @@ nenhum outro arquivo SHALL guardar dado de semente.
 #### Scenario: Arquivo atual
 - **WHEN** o arquivo de sementes tem as 10 sementes de SE1 a SE10, com os campos do
   esquema estruturado
-- **THEN** a leitura aprova, e a distribuição por base e por papel exibida por `configuracao mostrar` é
+- **THEN** a leitura aprova, e a distribuição por base exibida por `configuracao mostrar` é
   a mesma exibida antes da troca do esquema intermediário pelo estruturado
 
 #### Scenario: Título com ponto
@@ -466,14 +466,14 @@ nenhum outro arquivo SHALL guardar dado de semente.
 #### Scenario: Distribuição calculada
 - **WHEN** o arquivo é lido
 - **THEN** a contagem por base, as incidências e as sementes em mais de uma base são
-  calculadas do campo `bases`, e a distribuição por papel, do campo `papel`
+  calculadas do campo `bases`
 
 ### Requirement: Arquivo de sementes fora do esquema reprova
 Arquivo de sementes ausente MUST terminar com CONFIGURACAO, nomeando a chave e o caminho.
 MUST reprovar com PROTOCOLO_ILEGIVEL, nomeando a semente e o campo: TOML inválido; campo
 obrigatório ausente ou de tipo errado; campo desconhecido; `id` fora da forma `SEn`,
 repetido ou fora da sequência a partir de SE1; `doi` fora da forma `10.x/…`; base fora da tabela de bases, com outra grafia ou
-repetida; faceta fora da tabela de facetas ou repetida; `papel` fora do domínio.
+repetida; faceta fora da tabela de facetas ou repetida.
 
 #### Scenario: Lacuna na numeração
 - **WHEN** o arquivo tem SE1, SE2 e SE4, sem SE3
@@ -481,7 +481,8 @@ repetida; faceta fora da tabela de facetas ou repetida; `papel` fora do domínio
 
 #### Scenario: Papel fora do domínio
 - **WHEN** uma semente traz `papel = "teste"`
-- **THEN** a leitura reprova, nomeando a semente e os valores admitidos
+- **THEN** a leitura reprova, nomeando a semente e o campo `papel` como desconhecido,
+  porque o campo foi retirado do esquema
 
 #### Scenario: Sigla com outra grafia
 - **WHEN** a semente SE2 cita a base `WoS` e a tabela de bases declara `wos`
@@ -492,8 +493,9 @@ repetida; faceta fora da tabela de facetas ou repetida; `papel` fora do domínio
 - **THEN** a leitura reprova, nomeando SE7 e a faceta
 
 #### Scenario: Campo desconhecido
-- **WHEN** uma semente traz o campo `titlo`, o campo retirado `escopo` ou o campo
-  `semente` do esquema intermediário
+- **WHEN** uma semente traz o campo `titlo`, o campo retirado `escopo`, os campos retirados
+  `papel`, `tipo`, `alinhamento`, `eric` e `observacoes`, ou o campo `semente` do esquema
+  intermediário
 - **THEN** a leitura reprova, nomeando a semente e o campo
 
 #### Scenario: Arquivo ausente
@@ -522,11 +524,10 @@ escapado ou não, pertence ao termo.
 
 - `doi` ausente;
 - `facetas` vazia ou ausente;
-- semente de validação com `facetas` preenchida que não inclui nenhuma faceta marcada
-  `Sim` na coluna "Âncora obrigatória" da tabela de facetas. O caso fica como pendência
-  até o pesquisador decidir a regra. Com `facetas` vazia ou ausente, só se relata
-  "facetas a informar": a falta de âncora decorre dela e não é relatada à parte;
-- `tipo` ou `alinhamento` vazios.
+- semente com `facetas` preenchida que não inclui nenhuma faceta marcada `Sim` na coluna
+  "Âncora obrigatória" da tabela de facetas. O caso fica como pendência até o pesquisador
+  decidir a regra. Com `facetas` vazia ou ausente, só se relata "facetas a informar": a
+  falta de âncora decorre dela e não é relatada à parte.
 
 #### Scenario: DOI a obter
 - **WHEN** a semente SE6 não traz `doi`
@@ -537,14 +538,13 @@ escapado ou não, pertence ao termo.
 - **THEN** a leitura aprova, e `projeto pendencias` relata SE3 com facetas a informar
 
 #### Scenario: Validação sem âncora
-- **WHEN** a semente de validação SE5 traz `facetas = ["FCT3"]`, e FCT1 e FCT2 são as
-  âncoras
+- **WHEN** a semente SE5 traz `facetas = ["FCT3"]`, e FCT1 e FCT2 são as âncoras
 - **THEN** a leitura aprova, e `projeto pendencias` relata SE5 sem faceta âncora
 
 #### Scenario: Validação sem facetas
-- **WHEN** a semente de validação SE3 não traz `facetas`
-- **THEN** `projeto pendencias` relata SE3 com facetas a informar, e não relata SE3 sem faceta
-  âncora
+- **WHEN** a semente SE3 não traz `facetas`
+- **THEN** `projeto pendencias` relata SE3 com facetas a informar, e não relata SE3 sem
+  faceta âncora
 
 ### Requirement: Semente retirada não deixa resto
 Semente retirada SHALL sair do arquivo, das saídas regeneradas e da evidência bruta.

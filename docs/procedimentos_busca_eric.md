@@ -8,20 +8,21 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`) | campos | Verificado em fonte oficial | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
 | Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` | campos | Verificado em fonte oficial; comportamento **não medido** | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
-| Prefixo de campo restringe de fato | campos | **Não verificado** | — | SD1 |
-| Parênteses para agrupamento | agrupamento | **Não verificado** | — | SD2 |
-| Condição externa a um grupo | agrupamento | **Não verificado** | — | SD3 |
-| Campos diferentes num mesmo grupo | agrupamento | **Não verificado** | — | SD5 |
-| `pubyearmin`/`pubyearmax` junto a um grupo | filtros | **Não verificado** | — | SD6 |
-| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | filtros | **Não verificado** | — | SD7 |
+| Prefixo de campo restringe de fato | campos | Verificado por medição (BD3/sd1-2026-11-26) | — | SD1 |
+| Parênteses para agrupamento | agrupamento | Verificado por medição (BD3/sd2-2026-11-26) | — | SD2 |
+| Parênteses aplicam a condição externa ao grupo inteiro | agrupamento | **Não verificado** | — | SD17 |
+| Exigência de condição externa ao grupo | agrupamento | **Não verificado**; o grupo com `OR` sozinho devolveu registros sem condição fora dele (BD3/sd3-2026-11-26); a exigência não se sustenta, e a composição não depende dela | — | SD3 |
+| Campos diferentes num mesmo grupo | agrupamento | **Não verificado**; a ERIC aceita campos diferentes na mesma disjunção: o teste devolveu registros (BD3/sd5-2026-11-26), e a regra de que devolveria zero não se sustenta | — | SD5 |
+| `pubyearmin`/`pubyearmax` junto a um grupo | filtros | **Não verificado**; os campos de ano na consulta não recortam como o filtro da página (BD3/sd6-2026-11-26); o recorte de ano é feito no filtro da página | — | SD6 |
+| `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | filtros | **Não verificado**; no teste, o retorno sem o filtro da página foi maior que o do controle com o filtro (BD3/sd7-2026-11-26); o recorte de ano é feito no filtro da página | — | SD7 |
 | Truncamento com `*` | truncamento | **Não verificado**; a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json` | — | SD8 |
 | Mínimo de três letras antes do `*` | truncamento | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD8 |
-| Derivação automática de radicais desativada, com casamento exato sem aspas | lematizacao | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD10 |
+| Derivação automática de radicais desativada, com casamento exato sem aspas | lematizacao | **Não verificado**; a forma derivada devolveu retorno menor que o do singular (BD3/sd10-2026-11-26), o que não confirma a derivação automática; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23 | — | SD10 |
 | API pública de exportação | exportacao | **Não verificado** | — | sem sondagem: verificação documental, não sondagem: conferir na documentação oficial; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23 |
-| Lematização | lematizacao | **Não verificado** | — | SD10 |
-| Aspas como frase | frase | **Não verificado** | — | SD9 |
-| Campo `descriptor` | vocabulario_controlado | **Não verificado** | — | SD11 |
-| Comprimento máximo da consulta | limite_consulta | **Não verificado**; 1.400 é regra de bolso, mantida como teto sem verificação; a SD12 mede só o comprimento da consulta mais longa do procedimento, e consulta acima do comprimento registrado vai à base sem verificação até a SD12 ser refeita | — | SD12 |
+| Lematização | lematizacao | **Não verificado**; o plural devolveu o mesmo retorno do singular (BD3/sd10-2026-11-26); não se declara `pela lematização` sem decisão | — | SD10 |
+| Aspas como frase | frase | Verificado por medição (BD3/sd9-2026-11-26) | — | SD9 |
+| Campo `descriptor` | vocabulario_controlado | **Não verificado**; os três registros abertos de `descriptor:Thesauri` não traziam `Thesauri` entre os descritores (BD3/sd11-2026-11-26); o campo não se confirma | — | SD11 |
+| Comprimento máximo da consulta | limite_consulta | Verificado por medição (BD3/sd12-2026-11-26); a consulta mais longa do procedimento foi aceita inteira (BD3/sd12-2026-11-26); 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação | — | SD12 |
 | Negação com prefixo `-` | operadores | Verificado em fonte oficial; não medida | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
 | Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | **Não verificado** | — | SD13 |
 | Teto de retorno exibido | limite_retorno | **Não verificado** | — | SD14 |
@@ -38,7 +39,7 @@ Uma consulta por vez, sem nova tentativa automática; parar diante de captcha, a
 
 #### SD1 — saber se `title:` restringe a busca ao título, em vez de ser ignorado
 
-**Elementos verificados:** Prefixo de campo restringe de fato (Não verificado).
+**Elementos verificados:** Prefixo de campo restringe de fato (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -76,9 +77,13 @@ title:ontology
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd1-2026-11-26) 2026-11-26T12:01: leitura 1
+
 #### SD2 — saber se um grupo entre parênteses com `OR` é aceito e alarga o retorno
 
-**Elementos verificados:** Parênteses para agrupamento (Não verificado).
+**Elementos verificados:** Parênteses para agrupamento (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -116,9 +121,13 @@ title:ontology AND abstract:education
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd2-2026-11-26) 2026-11-26T12:27: leitura 1
+
 #### SD3 — saber se um grupo com `OR` sem condição fora dele devolve zero
 
-**Elementos verificados:** Condição externa a um grupo (Não verificado); grupo entre parênteses com `OR` precisa de condição fora dele (Não verificado).
+**Elementos verificados:** Exigência de condição externa ao grupo (Não verificado).
 **Depende de:** SD2.
 
 **Pré-requisitos.**
@@ -156,14 +165,18 @@ title:ontology AND abstract:education
 
 - captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd3-2026-11-26) 2026-11-26T12:35: leitura 2
+
 #### SD4 — saber que formas de condição externa satisfazem o grupo
 
-**Elementos verificados:** a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois (Não verificado).
+**Elementos verificados:** a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois (Verificado por medição).
 **Depende de:** SD3.
 
 **Pré-requisitos.**
 
-- SD3 registrada com a regra confirmada
+- SD3 registrada
 
 **Consulta 1 — controle**, em caixa de busca.
 
@@ -207,14 +220,18 @@ abstract:education AND (title:ontology OR title:ontologies)
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd4-2026-11-26) 2026-11-26T13:22: leitura 1
+
 #### SD5 — saber se `title:` e `abstract:` na mesma disjunção devolvem zero
 
-**Elementos verificados:** Campos diferentes num mesmo grupo (Não verificado); um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero (Não verificado).
+**Elementos verificados:** Campos diferentes num mesmo grupo (Não verificado).
 **Depende de:** SD3.
 
 **Pré-requisitos.**
 
-- SD3 registrada com a regra confirmada
+- SD3 registrada
 
 **Consulta 1 — controle**, em caixa de busca.
 
@@ -247,14 +264,18 @@ abstract:education AND (title:ontology OR title:ontologies)
 
 - captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd5-2026-11-26) 2026-11-26T13:22: leitura 2
+
 #### SD6 — saber se `pubyearmin`/`pubyearmax` ao lado de um grupo devolvem zero
 
-**Elementos verificados:** `pubyearmin`/`pubyearmax` junto a um grupo (Não verificado); `pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página (Não verificado).
+**Elementos verificados:** `pubyearmin`/`pubyearmax` junto a um grupo (Não verificado).
 **Depende de:** SD3.
 
 **Pré-requisitos.**
 
-- SD3 registrada com a regra confirmada
+- SD3 registrada
 
 **Consulta 1 — controle**, em caixa de busca.
 
@@ -286,6 +307,10 @@ abstract:education AND (title:ontology OR title:ontologies)
 **Evidência a registrar.**
 
 - captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd6-2026-11-26) 2026-11-26T13:22: leitura 2
 
 #### SD7 — saber se o filtro de ano na consulta sem parênteses recorta como o filtro de data da página
 
@@ -327,9 +352,13 @@ title:ontology AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026
 
 - captura da tela de cada consulta, com a consulta, o filtro e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd7-2026-11-26) 2026-11-26T13:22: leitura 2
+
 #### SD8 — saber se o `*` trunca e com quantas letras antes dele
 
-**Elementos verificados:** Truncamento com `*` (Não verificado); Mínimo de três letras antes do `*` (Não verificado).
+**Elementos verificados:** Truncamento com `*` (Não verificado); Mínimo de três letras antes do `*` (Não verificado); sem truncamento nas expressões (Não verificado).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -382,9 +411,13 @@ title:on*
 
 - captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd8-2026-11-26) 2026-11-26T13:22: leitura 3
+
 #### SD9 — saber se as aspas exigem a sequência exata das palavras
 
-**Elementos verificados:** Aspas como frase (Não verificado); sem truncamento; expressão composta sempre entre aspas (Não verificado).
+**Elementos verificados:** Aspas como frase (Verificado por medição); expressão composta sempre entre aspas (Verificado por medição).
 **Depende de:** SD1, SD8.
 
 **Pré-requisitos.**
@@ -423,6 +456,10 @@ abstract:"knowledge organization"
 **Evidência a registrar.**
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd9-2026-11-26) 2026-11-26T14:33: leitura 1
 
 #### SD10 — saber se a ERIC casa a forma singular com a plural, ou uma palavra com as derivadas, sem que a consulta as traga
 
@@ -470,6 +507,10 @@ title:ontological
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd10-2026-11-26) 2026-11-26T14:33: leitura 2
+
 #### SD11 — saber se `descriptor:` busca no descritor do tesauro ERIC e se difere de `descriptorx:`
 
 **Elementos verificados:** Campo `descriptor` (Não verificado).
@@ -516,9 +557,13 @@ descriptorx:Thesauri
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd11-2026-11-26) 2026-11-26T14:33: leitura 2
+
 #### SD12 — saber se a consulta mais longa do procedimento é aceita inteira
 
-**Elementos verificados:** Comprimento máximo da consulta (Não verificado).
+**Elementos verificados:** Comprimento máximo da consulta (Verificado por medição).
 **Depende de:** SD2.
 
 **Pré-requisitos.**
@@ -557,6 +602,10 @@ descriptorx:Thesauri
 **Evidência a registrar.**
 
 - captura da tela de cada consulta, com o fim da consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd12-2026-11-26) 2026-11-26T14:33: leitura 1
 
 #### SD13 — saber se o hífen separa palavras, de modo que `e-learning` case `e learning`
 
@@ -710,6 +759,48 @@ language:Portuguese AND abstract:education
 
 - captura da tela do retorno e de cada registro aberto
 
+#### SD17 — distinguir se os parênteses são honrados — com a condição externa aplicada ao grupo inteiro — ou se a base avalia a expressão da esquerda para a direita, ignorando-os
+
+**Elementos verificados:** Parênteses aplicam a condição externa ao grupo inteiro (Não verificado).
+**Depende de:** SD1, SD2.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+- SD2 registrada com os parênteses aceitos
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+abstract:ontology AND abstract:education OR abstract:learning
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: os parênteses em torno da disjunção.
+
+```
+abstract:ontology AND (abstract:education OR abstract:learning)
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle | os parênteses são honrados: a condição externa se aplica ao grupo inteiro | Verificado por medição |
+| 2 | teste = controle > 0 | os parênteses não são honrados: a forma agrupada se comporta como a plana, por avaliação da esquerda para a direita ou por precedência do `OR` | Verificado por medição |
+| 3 | controle = 0, teste > controle, ou mensagem de erro | não se distingue o efeito dos parênteses; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
 ---
 
 ## 2. Critérios de elegibilidade
@@ -809,11 +900,9 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 
 | Regra | Situação | Sondagem |
 | :--- | :--- | :--- |
-| grupo entre parênteses com `OR` precisa de condição fora dele | **Não verificado** | SD3 |
-| a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois | **Não verificado** | SD4 |
-| um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero | **Não verificado** | SD5 |
-| `pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página | **Não verificado** | SD6 |
-| sem truncamento; expressão composta sempre entre aspas | **Não verificado** | SD9 |
+| a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois | Verificado por medição (BD3/sd4-2026-11-26) | SD4 |
+| sem truncamento nas expressões | **Não verificado** | SD8 |
+| expressão composta sempre entre aspas | Verificado por medição (BD3/sd9-2026-11-26) | SD9 |
 
 ### EB1 (geral — as quatro facetas)
 
@@ -907,19 +996,19 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 
 #### Refinamento por cruzamento título × resumo
 
-Disparo: retorno da 4a acima do limite de triagem fixado pelo ReT e registrado nas contagens da busca. Forma: substituir a 4a pelas consultas abaixo, com o sufixo de ano; registrar o retorno antes e depois.
+Disparo: retorno da 4a acima do limite de triagem fixado pelo ReT e registrado nas contagens da busca. Forma: substituir a 4a pelas consultas abaixo, aplicando o filtro de data da página de 2017 a 2026 em cada uma; registrar o retorno antes e depois. O recorte de ano não vai na consulta: os campos `pubyearmin`/`pubyearmax` não recortam como o filtro da página.
 
 | # | Consulta |
 | :---: | :--- |
-| X2 | `title:ontology AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X3 | `title:ontology AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X4 | `title:ontology AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X6 | `title:ontologies AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X7 | `title:ontologies AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X8 | `title:ontologies AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X14 | `title:"domain model" AND abstract:"learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X15 | `title:"domain model" AND abstract:"instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| X16 | `title:"domain model" AND abstract:"learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
+| X2 | `title:ontology AND abstract:"learning object"` |
+| X3 | `title:ontology AND abstract:"instructional design"` |
+| X4 | `title:ontology AND abstract:"learning design"` |
+| X6 | `title:ontologies AND abstract:"learning object"` |
+| X7 | `title:ontologies AND abstract:"instructional design"` |
+| X8 | `title:ontologies AND abstract:"learning design"` |
+| X14 | `title:"domain model" AND abstract:"learning object"` |
+| X15 | `title:"domain model" AND abstract:"instructional design"` |
+| X16 | `title:"domain model" AND abstract:"learning design"` |
 
 #### Camada 3 — descritores de artefato
 
@@ -931,25 +1020,25 @@ Disparo: estudo que trata do artefato sem o nomear no título nem no resumo. For
 
 #### Contingência — consultas curtas, sem agrupamento
 
-Disparo: aderência reprovada na busca por campo. Forma: executar todas as consultas abaixo, exportar e deduplicar em conjunto. Não reproduzem EB4; a adoção exige emenda e a recomposição de FCT1 AND FCT2 AND (FCT3 OR FCT4) com `AND` entre um termo de cada faceta.
+Disparo: aderência reprovada na busca por campo. Forma: executar todas as consultas abaixo, aplicar o filtro de data da página de 2017 a 2026 em cada uma, exportar e deduplicar em conjunto. O recorte de ano não vai na consulta: os campos `pubyearmin`/`pubyearmax` não recortam como o filtro da página. Não reproduzem EB4; a adoção exige emenda e a recomposição de FCT1 AND FCT2 AND (FCT3 OR FCT4) com `AND` entre um termo de cada faceta.
 
 | # | Consulta | # | Consulta |
 | :---: | :--- | :---: | :--- |
-| 1 | `"knowledge representation" AND pubyearmin:2017 AND pubyearmax:2026` | 2 | `"knowledge organization" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 3 | `"knowledge organization system" AND pubyearmin:2017 AND pubyearmax:2026` | 4 | `"knowledge organization systems" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 5 | `"controlled vocabulary" AND pubyearmin:2017 AND pubyearmax:2026` | 6 | `"controlled vocabularies" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 7 | `thesaurus AND pubyearmin:2017 AND pubyearmax:2026` | 8 | `thesauri AND pubyearmin:2017 AND pubyearmax:2026` |
-| 9 | `"classification scheme" AND pubyearmin:2017 AND pubyearmax:2026` | 10 | `"classification schemes" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 11 | `"metadata schema" AND pubyearmin:2017 AND pubyearmax:2026` | 12 | `"metadata schemas" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 13 | `"ontology engineering" AND pubyearmin:2017 AND pubyearmax:2026` | 14 | `"ontology development" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 15 | `"ontology design pattern" AND pubyearmin:2017 AND pubyearmax:2026` | 16 | `"ontology-based knowledge representation" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 18 | `ontology AND "learning object" AND pubyearmin:2017 AND pubyearmax:2026` | 20 | `ontology AND "learning analytics" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 21 | `ontology AND "learning design" AND pubyearmin:2017 AND pubyearmax:2026` | 22 | `ontology AND "instructional design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 23 | `ontology AND "teaching methods" AND pubyearmin:2017 AND pubyearmax:2026` | 24 | `ontology AND "situational factors" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 25 | `ontology AND "educational context" AND pubyearmin:2017 AND pubyearmax:2026` | 26 | `ontologies AND "learning object" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 28 | `ontologies AND "learning analytics" AND pubyearmin:2017 AND pubyearmax:2026` | 29 | `ontologies AND "learning design" AND pubyearmin:2017 AND pubyearmax:2026` |
-| 30 | `ontologies AND "instructional design" AND pubyearmin:2017 AND pubyearmax:2026` | 35 | `"domain model" AND education AND pubyearmin:2017 AND pubyearmax:2026` |
-| 39 | `"ontological engineering" AND pubyearmin:2017 AND pubyearmax:2026` | | |
+| 1 | `"knowledge representation"` | 2 | `"knowledge organization"` |
+| 3 | `"knowledge organization system"` | 4 | `"knowledge organization systems"` |
+| 5 | `"controlled vocabulary"` | 6 | `"controlled vocabularies"` |
+| 7 | `thesaurus` | 8 | `thesauri` |
+| 9 | `"classification scheme"` | 10 | `"classification schemes"` |
+| 11 | `"metadata schema"` | 12 | `"metadata schemas"` |
+| 13 | `"ontology engineering"` | 14 | `"ontology development"` |
+| 15 | `"ontology design pattern"` | 16 | `"ontology-based knowledge representation"` |
+| 18 | `ontology AND "learning object"` | 20 | `ontology AND "learning analytics"` |
+| 21 | `ontology AND "learning design"` | 22 | `ontology AND "instructional design"` |
+| 23 | `ontology AND "teaching methods"` | 24 | `ontology AND "situational factors"` |
+| 25 | `ontology AND "educational context"` | 26 | `ontologies AND "learning object"` |
+| 28 | `ontologies AND "learning analytics"` | 29 | `ontologies AND "learning design"` |
+| 30 | `ontologies AND "instructional design"` | 35 | `"domain model" AND education` |
+| 39 | `"ontological engineering"` | | |
 
 #### Negação do ruído por descritor
 
@@ -963,9 +1052,11 @@ Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |
-| SE6 | Iatrellis et al. (2019) | `10.1007/s10639-019-09872-9` | — |
+| SE6 | Iatrellis et al. (2019) | `10.1007/s10639-019-09877-4` | — |
 | SE7 | Chimalakonda & Nori (2020) | `10.1186/s40561-020-00135-6` | — |
 | SE8 | Cenka et al. (2023) | `10.1080/10494820.2022.2039947` | alcance depende do hífen (`ontology-driven`) |
+| SE11 | Quigley et al. (2017) | `10.1111/ssm.12201` | — |
+| SE12 | Ferreira et al. (2020) | `10.2478/jtes-2020-0003` | — |
 
 **Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
 

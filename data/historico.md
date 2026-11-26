@@ -92,3 +92,26 @@ Alcance: **método** e **busca**.
 - **O teste de aderência será refeito.** Pela flexão, a única forma nova nas expressões é `ambientes educacionales`, na WoS e na Scopus. Na ERIC e na BRAPCI, só a ordem dos termos mudou.
 
 Alcance: **busca**.
+
+## 2026-11-26 — Limiar da fidelidade da derivação
+
+O teste de fidelidade aceitava só a coincidência exata, pela skill de avaliação dos resultados, enquanto o comando aplicava a divergência simétrica máxima configurada. Passa a valer o limiar `divergencia_fidelidade`: o valor que o protocolo declarar, ou, na falta dele, o padrão do `config.toml`, comparado base a base. Toda divergência, mesmo abaixo do limiar, se examina registro a registro antes de aceitar as contagens derivadas. Encerra a PD37. Alcance: **método**.
+
+## 2026-11-26 — Sem forward search
+
+A busca por citação fica no que o protocolo já prevê: backward de uma geração, só sobre os estudos incluídos (P11). O forward search não entra no protocolo nem na ampliação do conjunto-semente, que segue procedimento independente da string. A ausência do forward search se declara como limitação no relato. Encerra a PD32. Alcance: **método**.
+
+## 2026-11-26 — Conjunto-semente único
+
+- **Todo o conjunto-semente é de validação.** Cai a divisão entre sementes de validação e de desenvolvimento, decidida em 2026-11-19: só a SE4 fora classificada por evidência registrada, e a divisão não garantia a independência do conjunto em relação à busca. A aderência que decide a passagem é a do conjunto, sobre a união das bases, comparada ao limiar de **80%** e relatada com o intervalo de Wilson a 95%.
+- **Campos retirados do arquivo de sementes:** `papel`, `tipo`, `alinhamento`, `eric` e `observacoes`. O texto de `observacoes` passa ao campo `nota`. Encerra a PD01.
+
+Alcance: **método**.
+
+## 2026-11-26 — EB4 mantida, sem emenda
+
+- **A EB4 fica como está.** A reconsideração foi aberta porque, na Scopus, a fração elegível da amostra da sonda ficou acima do limite superior da faixa `sensibilidade`, e a aderência ficou abaixo de `limiar_aderencia`. Nenhum termo entra no vocabulário: os candidatos da análise da sensibilidade (`conferencia simular`) foram examinados e recusados, entre eles os que contêm termo de âncora, que esvaziariam a exigência de FCT3 e FCT4.
+- **Não se alteraram** a faixa `sensibilidade`, o `limiar_aderencia`, as facetas, as strings nem as expressões. Não há reexecução por esta decisão.
+- **A regra de ajuste continua valendo:** se a aderência com o denominador definitivo ficar abaixo de `limiar_aderencia`, a revisão do controle terminológico volta a ser obrigatória.
+
+Encerra a PD39. Alcance: **busca**.

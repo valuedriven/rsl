@@ -30,38 +30,50 @@ nota = "comportamento **não medido**"
 [[sintaxe]]
 elemento = "Prefixo de campo restringe de fato"
 categoria = "campos"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD1"
+citacao = "BD3/sd1-2026-11-26"
 
 [[sintaxe]]
 elemento = "Parênteses para agrupamento"
 categoria = "agrupamento"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD2"
+citacao = "BD3/sd2-2026-11-26"
 
 [[sintaxe]]
-elemento = "Condição externa a um grupo"
+elemento = "Parênteses aplicam a condição externa ao grupo inteiro"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD17"
+
+[[sintaxe]]
+elemento = "Exigência de condição externa ao grupo"
 categoria = "agrupamento"
 situacao = "nao_verificado"
 sondagem = "SD3"
+nota = "o grupo com `OR` sozinho devolveu registros sem condição fora dele (BD3/sd3-2026-11-26); a exigência não se sustenta, e a composição não depende dela"
 
 [[sintaxe]]
 elemento = "Campos diferentes num mesmo grupo"
 categoria = "agrupamento"
 situacao = "nao_verificado"
 sondagem = "SD5"
+nota = "a ERIC aceita campos diferentes na mesma disjunção: o teste devolveu registros (BD3/sd5-2026-11-26), e a regra de que devolveria zero não se sustenta"
 
 [[sintaxe]]
 elemento = "`pubyearmin`/`pubyearmax` junto a um grupo"
 categoria = "filtros"
 situacao = "nao_verificado"
 sondagem = "SD6"
+nota = "os campos de ano na consulta não recortam como o filtro da página (BD3/sd6-2026-11-26); o recorte de ano é feito no filtro da página"
 
 [[sintaxe]]
 elemento = "`pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses"
 categoria = "filtros"
 situacao = "nao_verificado"
 sondagem = "SD7"
+nota = "no teste, o retorno sem o filtro da página foi maior que o do controle com o filtro (BD3/sd7-2026-11-26); o recorte de ano é feito no filtro da página"
 
 [[sintaxe]]
 elemento = "Truncamento com `*`"
@@ -82,7 +94,7 @@ elemento = "Derivação automática de radicais desativada, com casamento exato 
 categoria = "lematizacao"
 situacao = "nao_verificado"
 sondagem = "SD10"
-nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+nota = "a forma derivada devolveu retorno menor que o do singular (BD3/sd10-2026-11-26), o que não confirma a derivação automática; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23"
 
 [[sintaxe]]
 elemento = "API pública de exportação"
@@ -96,25 +108,29 @@ categoria = "lematizacao"
 idioma = "en"
 situacao = "nao_verificado"
 sondagem = "SD10"
+nota = "o plural devolveu o mesmo retorno do singular (BD3/sd10-2026-11-26); não se declara `pela lematização` sem decisão"
 
 [[sintaxe]]
 elemento = "Aspas como frase"
 categoria = "frase"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD9"
+citacao = "BD3/sd9-2026-11-26"
 
 [[sintaxe]]
 elemento = "Campo `descriptor`"
 categoria = "vocabulario_controlado"
 situacao = "nao_verificado"
 sondagem = "SD11"
+nota = "os três registros abertos de `descriptor:Thesauri` não traziam `Thesauri` entre os descritores (BD3/sd11-2026-11-26); o campo não se confirma"
 
 [[sintaxe]]
 elemento = "Comprimento máximo da consulta"
 categoria = "limite_consulta"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD12"
-nota = "1.400 é regra de bolso, mantida como teto sem verificação; a SD12 mede só o comprimento da consulta mais longa do procedimento, e consulta acima do comprimento registrado vai à base sem verificação até a SD12 ser refeita"
+citacao = "BD3/sd12-2026-11-26"
+nota = "a consulta mais longa do procedimento foi aceita inteira (BD3/sd12-2026-11-26); 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação"
 
 [[sintaxe]]
 elemento = "Negação com prefixo `-`"
@@ -314,29 +330,21 @@ id = "EB5"
 titulo = "sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional"
 
 [[regras_de_montagem]]
-texto = "grupo entre parênteses com `OR` precisa de condição fora dele"
-situacao = "nao_verificado"
-sondagem = "SD3"
-
-[[regras_de_montagem]]
 texto = "a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD4"
+citacao = "BD3/sd4-2026-11-26"
 
 [[regras_de_montagem]]
-texto = "um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero"
+texto = "sem truncamento nas expressões"
 situacao = "nao_verificado"
-sondagem = "SD5"
+sondagem = "SD8"
 
 [[regras_de_montagem]]
-texto = "`pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página"
-situacao = "nao_verificado"
-sondagem = "SD6"
-
-[[regras_de_montagem]]
-texto = "sem truncamento; expressão composta sempre entre aspas"
-situacao = "nao_verificado"
+texto = "expressão composta sempre entre aspas"
+situacao = "medicao"
 sondagem = "SD9"
+citacao = "BD3/sd9-2026-11-26"
 
 # ------------------------------------------------------------------ §5 sementes
 [[sementes]]
@@ -410,7 +418,7 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD3"
-elementos = ["Condição externa a um grupo", "grupo entre parênteses com `OR` precisa de condição fora dele"]
+elementos = ["Exigência de condição externa ao grupo"]
 objetivo = "saber se um grupo com `OR` sem condição fora dele devolve zero"
 pre_requisitos = ["SD2 registrada com os parênteses verificados"]
 depende_de = ["SD2"]
@@ -443,7 +451,7 @@ estado = "nao_verificado"
 id = "SD4"
 elementos = ["a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois"]
 objetivo = "saber que formas de condição externa satisfazem o grupo"
-pre_requisitos = ["SD3 registrada com a regra confirmada"]
+pre_requisitos = ["SD3 registrada"]
 depende_de = ["SD3"]
 passos = ["submeter o controle e anotar o retorno", "submeter cada teste, um por vez, e anotar o retorno"]
 observar = ["retorno exibido de cada consulta"]
@@ -484,9 +492,9 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD5"
-elementos = ["Campos diferentes num mesmo grupo", "um grupo não mistura campos: `title:` e `abstract:` na mesma disjunção devolvem zero"]
+elementos = ["Campos diferentes num mesmo grupo"]
 objetivo = "saber se `title:` e `abstract:` na mesma disjunção devolvem zero"
-pre_requisitos = ["SD3 registrada com a regra confirmada"]
+pre_requisitos = ["SD3 registrada"]
 depende_de = ["SD3"]
 passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
 observar = ["retorno exibido", "mensagem de erro ou de aviso, se houver"]
@@ -515,9 +523,9 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD6"
-elementos = ["`pubyearmin`/`pubyearmax` junto a um grupo", "`pubyearmin`/`pubyearmax` não convivem com grupo: o recorte vem do filtro da página"]
+elementos = ["`pubyearmin`/`pubyearmax` junto a um grupo"]
 objetivo = "saber se `pubyearmin`/`pubyearmax` ao lado de um grupo devolvem zero"
-pre_requisitos = ["SD3 registrada com a regra confirmada"]
+pre_requisitos = ["SD3 registrada"]
 depende_de = ["SD3"]
 passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
 observar = ["retorno exibido", "mensagem de erro ou de aviso, se houver"]
@@ -577,7 +585,7 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD8"
-elementos = ["Truncamento com `*`", "Mínimo de três letras antes do `*`"]
+elementos = ["Truncamento com `*`", "Mínimo de três letras antes do `*`", "sem truncamento nas expressões"]
 objetivo = "saber se o `*` trunca e com quantas letras antes dele"
 pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
 depende_de = ["SD1"]
@@ -625,7 +633,7 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD9"
-elementos = ["Aspas como frase", "sem truncamento; expressão composta sempre entre aspas"]
+elementos = ["Aspas como frase", "expressão composta sempre entre aspas"]
 objetivo = "saber se as aspas exigem a sequência exata das palavras"
 pre_requisitos = ["SD1 registrada com o prefixo de campo verificado", "SD8 registrada, porque a regra de montagem também fala do truncamento"]
 depende_de = ["SD1", "SD8"]
@@ -889,4 +897,40 @@ estado = "medicao"
 [[sondagens.leituras]]
 resultado = "teste = 0, ou registros sem resumo"
 conclusao = "não se distingue o idioma de indexação; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD17"
+elementos = ["Parênteses aplicam a condição externa ao grupo inteiro"]
+objetivo = "distinguir se os parênteses são honrados — com a condição externa aplicada ao grupo inteiro — ou se a base avalia a expressão da esquerda para a direita, ignorando-os"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado", "SD2 registrada com os parênteses aceitos"]
+depende_de = ["SD1", "SD2"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "abstract:ontology AND abstract:education OR abstract:learning"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:ontology AND (abstract:education OR abstract:learning)"
+onde = "caixa de busca"
+muda = "os parênteses em torno da disjunção"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle"
+conclusao = "os parênteses são honrados: a condição externa se aplica ao grupo inteiro"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "os parênteses não são honrados: a forma agrupada se comporta como a plana, por avaliação da esquerda para a direita ou por precedência do `OR`"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = 0, teste > controle, ou mensagem de erro"
+conclusao = "não se distingue o efeito dos parênteses; levar ao pesquisador"
 estado = "nao_verificado"

@@ -115,7 +115,7 @@ def casos(ctx, g):
 
     reg, erro_r = le_json(cfg.caminho("dados.registro"))
     if erro_r:
-        g.nao_executa(len(lista), erro_r)
+        g.nao_executa(erro_r, quantos=len(lista))
         return
     base_pr = problemas_registro(ctx, reg, bds)
     if base_pr:

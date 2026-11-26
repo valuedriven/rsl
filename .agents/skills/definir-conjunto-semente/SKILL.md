@@ -57,8 +57,6 @@ reprova, para que erro de digitação não passe como campo ignorado.
   `10.x/…`, sem `DOI:` nem URL). Transcrever da fonte conferida, **nunca de memória** —
   ver `conferir-referencia`. O que a fonte não traz fica vazio. DOI ausente não reprova:
   `python3 -m rsl projeto pendencias` o relata, porque o DOI é a chave de conferência.
-- **`observacoes`**: o que a referência traz e não cabe em outro campo (editores, evento,
-  local, editora), transcrito como está. Nada da referência se perde.
 - **`bases` é indexação, não recuperação**: as siglas das bases que indexam a semente, da
   tabela de bases do protocolo. Semente que a base não indexa sai do denominador daquela
   base. O que a busca recuperou é resultado e fica na planilha (§7).
@@ -66,11 +64,13 @@ reprova, para que erro de digitação não passe como campo ignorado.
   **resumo ou do texto completo**, **nunca do ensaio seco** (§6). O valor do campo está em
   contrastar as duas coisas — semente declarada em FCT2 sem termo de FCT2 no título indica
   lacuna de vocabulário —, e copiar o ensaio tornaria o contraste circular. Vazia, vira
-  pendência; semente de validação sem nenhuma faceta âncora também é relatada, enquanto o
+  pendência; semente sem nenhuma faceta âncora também é relatada, enquanto o
   pesquisador não decide a regra.
-- **`papel`**: `desenvolvimento` ou `validação` (§7).
-- **Conferência**: `verificacao`, `tipo`, `alinhamento`, `nota`, `veiculo_conferido`,
-  `eric`. `tipo` e `alinhamento` vazios são relatados como pendência.
+- **Conferência**: `verificacao`, `nota` e `veiculo_conferido`. `verificacao` é booleano:
+  `true` quando os dados bibliográficos foram conferidos na fonte; `false` ou ausente é
+  conferência pendente, e texto reprova a leitura. A `nota` reúne o registro de conferência
+  — onde e como se conferiu — e o que a referência traz e não cabe em outro campo
+  (editores, evento, local, editora), transcrito como está. Nada da referência se perde.
 
 O `id` é `SEn`, em **sequência a partir de SE1, sem lacuna**: lacuna ou `id` fora de
 sequência reprova a leitura.
@@ -127,7 +127,7 @@ python3 -m rsl aderencia planilhar
 ```
 
 O comando lê as sementes do arquivo de sementes (`[documentos] sementes`) — dados
-bibliográficos, bases, papel e conferência —, gera a planilha
+bibliográficos, bases e conferência —, gera a planilha
 `data/semente_aderencia.csv` e **imprime no terminal** a composição, o estado de
 conferência e o ensaio seco — quantas sementes o título entrega às facetas e quantas
 satisfazem as duas âncoras e uma faceta temática. Não grava guia em arquivo: o
@@ -144,9 +144,7 @@ são a evidência do teste.
 | `id` | identificador da semente (SEn), conforme o arquivo de sementes |
 | `autores_ano` | autoria abreviada e ano |
 | `titulo` | título, como consta na referência do arquivo de sementes |
-| `tipo` | primário ou secundário — preencher no arquivo de sementes |
-| `verificacao` | estado de conferência da referência — preencher no arquivo de sementes |
-| `papel` | `desenvolvimento` ou `validação` — do arquivo de sementes |
+| `verificacao` | `sim` se os dados bibliográficos foram conferidos, `não` se a conferência está pendente — preencher no arquivo de sementes |
 | `base` | WoS, Scopus, ERIC ou BRAPCI |
 | `esperada_na_base` | sim se o campo `bases` da semente indica esta base |
 | `indexada` | etapa 1: sim ou não, por busca de título. **obrigatório** |
@@ -167,19 +165,17 @@ O preenchimento segue duas etapas, e a ordem importa:
 > `indexada` em branco impede o cálculo: sem ela não há denominador. `recuperada` só se
 > preenche onde `indexada` = sim.
 
-Semente com conferência pendente — `verificacao`, `tipo` ou `alinhamento` em branco, marcado `A CONFERIR` ou `PENDÊNCIA` — sai com a coluna em branco. O instrumento
+Semente com conferência pendente — `verificacao = false` ou ausente — sai com `não` na coluna e aparece em `projeto pendencias`. O instrumento
 pode ser executado; o que falta é registro, não dado de busca, e a pendência se reporta
 em vez de se esconder.
 
-**Papel.** Só as sementes de **validação** decidem a passagem. As de **desenvolvimento**
-orientaram a inclusão, a manutenção ou a retirada de um termo e são relatadas à parte; elas
-não compensam a validação. A distinção vive no campo `papel` do arquivo de sementes e é
-exigida na leitura: papel ausente, fora do domínio ou conjunto de validação vazio reprova.
+**Conjunto único.** Todo o conjunto-semente é de validação: não há sementes de
+desenvolvimento relatadas à parte, e a aderência que decide a passagem é a do conjunto.
 
 ## 8. Limiar e consequência
 
-O teste de aderência exige **80%** sobre a união das bases, contando **só as sementes de
-validação**. Abaixo disso, revisão obrigatória do controlo terminológico antes de
+O teste de aderência exige **80%** sobre a união das bases, contando **todas as sementes**
+do conjunto. Abaixo disso, revisão obrigatória do controlo terminológico antes de
 prosseguir, com emenda ao protocolo. O relato traz o intervalo de Wilson a 95%: com
 conjunto pequeno, o intervalo mostra a imprecisão em vez de deixar ler 80% como estimativa.
 Ver `testar-aderencia-das-expressoes`, que é onde a medição acontece.

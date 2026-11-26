@@ -4,18 +4,26 @@ import csv
 import pathlib
 import re
 
+# Separador entre valores de um mesmo campo (várias palavras-chave, várias colunas de
+# palavras-chave): o casamento local o usa para não casar termo através de dois valores.
+SEPARADOR_VALORES = "; "
+
 CAMPOS = ("titulo", "resumo", "palavras_chave", "ano", "doi", "id_base", "autores", "fonte")
+# Campos lidos para a anatomia da perda (ano, idioma e tipo documental da semente
+# filtrada). Não entram nas saídas da derivação, que usam `CAMPOS`.
+EXTRAS = ("idioma", "tipo")
 
 
 def vazio():
-    return {k: "" for k in CAMPOS}
+    return {k: "" for k in CAMPOS + EXTRAS}
 
 
 def le_ris(texto):
     regs, atual = [], vazio()
     mapa = {"TI": "titulo", "T1": "titulo", "AB": "resumo", "N2": "resumo",
             "KW": "palavras_chave", "PY": "ano", "Y1": "ano", "DO": "doi",
-            "AU": "autores", "JO": "fonte", "T2": "fonte", "ID": "id_base"}
+            "AU": "autores", "JO": "fonte", "T2": "fonte", "ID": "id_base",
+            "LA": "idioma", "TY": "tipo"}
     for linha in texto.splitlines():
         m = re.match(r"^([A-Z][A-Z0-9])\s+-\s?(.*)$", linha)
         if not m:
@@ -27,7 +35,8 @@ def le_ris(texto):
             atual = vazio()
         elif tag in mapa:
             campo = mapa[tag]
-            atual[campo] = (atual[campo] + "; " + val).strip("; ") if atual[campo] else val
+            atual[campo] = (atual[campo] + SEPARADOR_VALORES + val).strip(SEPARADOR_VALORES) \
+                if atual[campo] else val
     if atual["titulo"]:
         regs.append(atual)
     return regs
@@ -38,7 +47,7 @@ def le_wos_txt(texto):
     regs, atual, tag = [], vazio(), None
     mapa = {"TI": "titulo", "AB": "resumo", "DE": "palavras_chave", "ID": "palavras_chave",
             "PY": "ano", "DI": "doi", "AF": "autores", "AU": "autores", "SO": "fonte",
-            "UT": "id_base"}
+            "UT": "id_base", "LA": "idioma", "DT": "tipo"}
     for linha in texto.splitlines():
         if linha.startswith("ER"):
             if atual["titulo"]:
@@ -70,6 +79,8 @@ ALIAS = {
     "id_base": ("ut (unique wos id)", "ut", "eid", "accession number", "id"),
     "autores": ("authors", "author full names", "autores", "af", "au"),
     "fonte": ("source title", "journal", "fonte", "so"),
+    "idioma": ("language", "idioma", "la"),
+    "tipo": ("document type", "tipo documental", "tipo", "dt"),
 }
 
 
@@ -86,7 +97,7 @@ def le_tabela(caminho, delim):
         for linha in leitor:
             r = vazio()
             for campo, origens in casa.items():
-                r[campo] = "; ".join(str(linha.get(o) or "").strip()
+                r[campo] = SEPARADOR_VALORES.join(str(linha.get(o) or "").strip()
                                      for o in origens if linha.get(o))
             if r["titulo"]:
                 regs.append(r)

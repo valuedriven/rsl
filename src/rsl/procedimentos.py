@@ -405,6 +405,18 @@ class Composicao:
         return [(e["id"], c["id"], c["rotulo"], c["texto"])
                 for e in self.expressoes.values() for c in e["consultas"]]
 
+    def texto_da_expressao(self, ident, sem_proximidade=False):
+        """Texto da consulta única de `ident`; com `sem_proximidade`, as âncoras unidas por
+        AND no lugar do operador. Expressão sem consulta única reprova: o diagnóstico da
+        perda e a sonda de sensibilidade leem uma consulta por nível."""
+        e = self.expressoes[ident]
+        if len(e["consultas"]) != 1:
+            raise Reprovado(f"{self.fonte['sigla']}: {ident} tem {len(e['consultas'])} "
+                            f"consultas; o diagnóstico da perda exige consulta única")
+        if not sem_proximidade:
+            return e["consultas"][0]["texto"]
+        return self._transformada(ident, ident, True, None)
+
 
 def _milhar(n):
     """Inteiro com ponto de milhar: 1.870."""

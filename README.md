@@ -79,7 +79,7 @@ chave, não pelo caminho.
 | `data/evidencia/referencias/` | resposta bruta da conferência de referências, `SEn_…` pelo `id` da semente | agente, a pedido |
 | `data/semente_aderencia.csv` (`[saidas] aderencia`) | planilha do teste de aderência, uma linha por semente e por base; regravada a cada execução, com as colunas manuais preservadas | `aderencia planilhar` |
 | `data/registros.csv`, `data/contagens_busca.csv`, `data/ordem_triagem.csv` (`[saidas]`) — *sob demanda* | registros com pertinência e marcas, contagens por base e expressão, ordem da 1ª filtragem | `busca derivar` |
-| `data/fidelidade_<expressao>.csv` (`[saidas] fidelidade`) — *sob demanda* | divergências entre derivação e execução direta | `conferencia fidelidade` |
+| `data/fidelidade_<base>_<expressao>.csv` (`[saidas] fidelidade`) — *sob demanda* | divergências entre derivação e execução direta | `conferencia fidelidade` |
 | `data/sensibilidade_<base>.csv` (`[saidas] sensibilidade`) — *sob demanda* | perda da sonda e amostra a classificar; preserva a coluna `elegivel` | `conferencia sensibilidade`; classificação pelo pesquisador |
 | `data/arquivo/` — *sob demanda* | cópias anteriores, com `SHA256` | migrações |
 | `config.toml` | configuração dos scripts | pesquisador; nenhum subcomando grava |
@@ -165,7 +165,7 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
   com sufixo `_FICHA` para fichamentos.
 - Arquivos gravados pelos subcomandos: `snake_case`, em português e sem acento, com o
   substantivo do conteúdo e, quando há um por chave, a chave em minúsculas
-  (`fidelidade_eb2.csv`, `sensibilidade_wos.csv`).
+  (`fidelidade_wos_eb2.csv`, `sensibilidade_wos.csv`).
 
 ## Uso de IA
 

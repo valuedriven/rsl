@@ -75,9 +75,12 @@ pasta = "data"
 registros = "registros.csv"
 contagens = "contagens_busca.csv"
 ordem_triagem = "ordem_triagem.csv"
-fidelidade = "fidelidade_{expressao}.csv"
+fidelidade = "fidelidade_{base}_{expressao}.csv"
 sensibilidade = "sensibilidade_{base}.csv"
 aderencia = "semente_aderencia.csv"
+anatomia = "anatomia_{base}.csv"
+anatomia_consultas = "anatomia_consultas_{base}.csv"
+candidatos = "candidatos_{base}.csv"
 
 [documentos]
 # Procedimento de busca de cada base, localizado pela sigla da tabela "Bases de dados" do

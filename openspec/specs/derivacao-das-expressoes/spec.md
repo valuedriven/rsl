@@ -63,9 +63,8 @@ Ficam fora dessa exigência só estas exceções:
   estrita (`FCT1 AND FCT2 AND (FCT3 OR FCT4)`) por decisão do pesquisador;
 - a grafia das siglas das bases, que passa a ser a do protocolo (`wos`, `scopus`, `eric`,
   `brapci`);
-- na aderência, o relato separado por papel da semente, com o intervalo de confiança, a
-  coluna `papel` da planilha de aderência e o casamento por prefixo, que deixa de entrar no
-  numerador e passa a ser relatado como indício;
+- na aderência, o relato único com o intervalo de confiança e o casamento por prefixo, que
+  deixa de entrar no numerador e passa a ser relatado como indício;
 - o **nome** dos arquivos de saída, que segue a convenção de nomes da interface de comando
   e vem do `config.toml` (`fidelidade_EB<n>.csv` passa a `fidelidade_eb<n>.csv`);
 - as facetas reconhecidas pelo casamento local, que passam a vir dos termos da base, e o
@@ -80,11 +79,9 @@ Ficam fora dessa exigência só estas exceções:
 - **THEN** os valores coincidem, comparadas as siglas sem distinção de caixa
 
 #### Scenario: Aderência preservada nos casamentos exatos
-- **WHEN** a aderência é calculada antes e depois da separação por papel, com os mesmos
-  registros
-- **THEN** o total de sementes recuperadas por casamento exato coincide, e só a decomposição
-  por papel, o intervalo e a coluna `papel` são novos; o casamento por prefixo deixa de ser
-  contado e passa a indício
+- **WHEN** a aderência é calculada antes e depois da mudança, com os mesmos registros
+- **THEN** o total de sementes recuperadas por casamento exato coincide, e o relato único, o
+  intervalo e o indício por prefixo são a forma atual
 
 #### Scenario: Mesmo conteúdo com outro nome
 - **WHEN** a derivação, a fidelidade e a sensibilidade rodam antes e depois da mudança sobre
@@ -96,24 +93,6 @@ Ficam fora dessa exigência só estas exceções:
 - **WHEN** a sensibilidade roda antes e depois do casamento pelos termos da base e da
   restrição do corpus, sobre as mesmas exportações
 - **THEN** `sensibilidade_<base>.csv` tem conteúdo idêntico byte a byte
-
-### Requirement: Aderência relatada por papel da semente
-
-`--aderencia` SHALL relatar separadamente a recuperação das sementes de validação e a das
-de desenvolvimento, com numerador e denominador de cada uma. Só a das sementes de validação
-SHALL ser comparada ao limiar de aderência, e o relato MUST identificar qual das duas é a
-que decide a passagem.
-
-#### Scenario: Relato separado
-- **WHEN** há 6 sementes de validação, das quais 5 recuperadas, e 4 de desenvolvimento,
-  todas recuperadas
-- **THEN** o relato mostra 5/6 para validação, comparado ao limiar, e 4/4 para
-  desenvolvimento, marcado como não decisório
-
-#### Scenario: Desenvolvimento não compensa validação
-- **WHEN** a recuperação de validação fica abaixo do limiar e a total, somando
-  desenvolvimento, fica acima
-- **THEN** o relato declara a aderência abaixo do limiar
 
 ### Requirement: Casamento por prefixo é indício
 
@@ -127,27 +106,26 @@ humano na coluna `recuperada`.
 
 ### Requirement: Intervalo de confiança da aderência
 
-O relato da aderência de validação SHALL trazer, junto com a proporção, o intervalo de
-Wilson a 95%, calculado sobre o mesmo numerador e o mesmo denominador.
+O relato da aderência SHALL trazer, junto com a proporção, o intervalo de Wilson a 95%,
+calculado sobre o mesmo numerador e o mesmo denominador.
 
 #### Scenario: Intervalo para 8 de 10
-- **WHEN** 8 de 10 sementes de validação são recuperadas
+- **WHEN** 8 de 10 sementes são recuperadas
 - **THEN** o relato mostra 80% com intervalo de aproximadamente 49% a 94%
 
-### Requirement: Planilha de aderência traz o papel
+### Requirement: Aderência relatada sobre o conjunto
+A aderência SHALL relatar a recuperação do conjunto-semente com um único numerador e
+denominador e SHALL compará-la ao limiar de aderência, identificando-a como a que decide a
+passagem.
 
-A planilha gerada pelo instrumento de aderência SHALL ter, em cada linha, o papel da
-semente lido do arquivo de sementes. Os dados de conferência SHALL vir do mesmo arquivo,
-e a planilha MUST NOT trazer a coluna `escopo`.
+#### Scenario: Relato único
+- **WHEN** há 10 sementes, das quais 8 recuperadas
+- **THEN** o relato mostra 8/10, comparado ao limiar, como a aderência que decide a
+  passagem
 
-#### Scenario: Coluna de papel
-- **WHEN** `aderencia planilhar` gera a planilha
-- **THEN** cada linha traz a coluna `papel` com `desenvolvimento` ou `validação`, igual ao
-  campo `papel` da semente no arquivo de sementes
-
-#### Scenario: Sem coluna de escopo
-- **WHEN** `aderencia planilhar` gera a planilha
-- **THEN** o cabeçalho não traz `escopo`
+#### Scenario: Abaixo do limiar
+- **WHEN** a recuperação do conjunto fica abaixo do limiar
+- **THEN** o relato declara a aderência abaixo do limiar
 
 ### Requirement: Arquivos de entrada e de saída lidos da configuração
 A derivação, a aderência, a fidelidade, a sensibilidade e o instrumento de aderência
@@ -173,7 +151,8 @@ SHALL obter do `config.toml` o caminho de cada arquivo que leem ou gravam. Isso 
 colunas preenchidas à mão (`indexada`, `data_etapa1`, `recuperada`, `como_localizada`,
 `data_etapa2` e `observacao`). A linha anterior casa com a nova por `id` e `base`, e só
 casa se o título for o mesmo, sem distinguir acento nem caixa. As demais colunas MUST vir
-sempre do arquivo de sementes e da tabela de bases.
+sempre do arquivo de sementes e da tabela de bases, e a planilha MUST NOT trazer a coluna
+`escopo`.
 
 #### Scenario: Preenchimento conservado
 - **WHEN** a planilha traz `indexada = sim` e `observacao` preenchida na linha SE2 × wos,
@@ -181,9 +160,13 @@ sempre do arquivo de sementes e da tabela de bases.
 - **THEN** a linha SE2 × wos sai com o mesmo `indexada` e a mesma `observacao`
 
 #### Scenario: Coluna derivada atualizada
-- **WHEN** o `tipo` de SE2 é preenchido no arquivo de sementes e a planilha já traz
+- **WHEN** a `verificacao` de SE2 é alterada no arquivo de sementes e a planilha já traz
   colunas manuais de SE2
-- **THEN** a regravação traz o `tipo` novo e conserva as colunas manuais de SE2
+- **THEN** a regravação traz a `verificacao` nova e conserva as colunas manuais de SE2
+
+#### Scenario: Sem coluna de escopo
+- **WHEN** `aderencia planilhar` gera a planilha
+- **THEN** o cabeçalho não traz `escopo`
 
 #### Scenario: Primeira geração
 - **WHEN** `semente_aderencia.csv` não existe

@@ -1,8 +1,7 @@
-"""Teste de aderência ao conjunto-semente, por papel, sobre as consultas registradas."""
+"""Teste de aderência ao conjunto-semente, sobre as consultas registradas."""
 
 import math
 
-from .. import gramatica as G
 from ..markdown import normaliza
 from ..saida import Saida
 from ..sementes import COL_INDEXADA, COL_RECUPERADA
@@ -43,26 +42,17 @@ def wilson(k, n, z=1.96):
 
 
 def avalia_aderencia(sementes, recuperadas, limiar):
-    """Contagem e decisão por papel. `recuperadas` é o conjunto de IDs recuperados.
+    """Contagem e decisão sobre o conjunto. `recuperadas` é o conjunto de IDs recuperados.
 
-    Só a validação é comparada ao limiar; o desenvolvimento é relatado como não
-    decisório e não compensa a validação.
+    Um numerador e um denominador: a proporção, o intervalo de Wilson a 95% sobre eles e a
+    comparação com o limiar, que é a que decide a passagem.
     """
-    por_papel = {p: {"total": 0, "recuperadas": 0, "ids": []}
-                 for p in G.D_PAPEL.valores.values()}
-    for e in sementes:
-        p = e["papel"]
-        por_papel[p]["total"] += 1
-        if e["id"] in recuperadas:
-            por_papel[p]["recuperadas"] += 1
-            por_papel[p]["ids"].append(e["id"])
-    for p in por_papel:
-        total = por_papel[p]["total"]
-        por_papel[p]["proporcao"] = por_papel[p]["recuperadas"] / total if total else 0.0
-    val = por_papel[G.PAPEL_VALIDACAO]
-    val["intervalo"] = wilson(val["recuperadas"], val["total"])
-    val["aprovada"] = val["total"] > 0 and val["proporcao"] >= limiar
-    return {"por_papel": por_papel, "decide": val, "limiar": limiar}
+    ids = [e["id"] for e in sementes if e["id"] in recuperadas]
+    total = len(sementes)
+    proporcao = len(ids) / total if total else 0.0
+    return {"total": total, "recuperadas": len(ids), "ids": ids, "proporcao": proporcao,
+            "intervalo": wilson(len(ids), total),
+            "aprovada": total > 0 and proporcao >= limiar, "limiar": limiar}
 
 
 def registros_unicos(b):
@@ -84,15 +74,14 @@ def aderencia(b):
     recorte temporal — o conjunto-semente valida o desenho da busca, não os critérios de
     elegibilidade.
 
-    Relata validação e desenvolvimento separadamente. Só a validação é comparada ao
-    limiar e traz o intervalo de Wilson a 95%; o desenvolvimento é não decisório e não
-    compensa a validação. A coluna de indexação da planilha de aderência
-    (`sementes.COL_INDEXADA`) é o denominador definitivo e precisa ser preenchida à mão,
-    base por base, buscando cada semente pelo título: ausência por falta de indexação não é
-    falha da string.
+    Relata uma única aderência, sobre o conjunto, com o intervalo de Wilson a 95%, e a
+    compara ao limiar: é a que decide a passagem. A coluna de indexação da planilha de
+    aderência (`sementes.COL_INDEXADA`) é o denominador definitivo e precisa ser preenchida
+    à mão, base por base, buscando cada semente pelo título: ausência por falta de
+    indexação não é falha da string.
 
-    Sai com REPROVADO só quando não há semente de validação (sem denominador); a aderência
-    abaixo do limiar é relatada, porque o denominador definitivo é o da planilha.
+    A aderência abaixo do limiar é relatada, sem reprovar, porque o denominador definitivo
+    é o da planilha; o conjunto vazio já reprova na leitura do arquivo de sementes.
     """
     sementes = b.d["sementes"]
     regs = registros_unicos(b)
@@ -104,34 +93,25 @@ def aderencia(b):
         if exatas:
             recuperadas.add(e["id"])
             bases = ", ".join(sorted({r.get("base", "?") for r in exatas}))
-            print(f"  [OK ] {e['id']:>4}. {e['ano']} [{e['papel']}] "
+            print(f"  [OK ] {e['id']:>4}. {e['ano']} "
                   f"{e['titulo'][:48]:<50} {bases}")
         elif prefixo:
             indicios.add(e["id"])
             bases = ", ".join(sorted({r.get("base", "?") for r in prefixo}))
-            print(f"  [? ] {e['id']:>4}. {e['ano']} [{e['papel']}] "
+            print(f"  [? ] {e['id']:>4}. {e['ano']} "
                   f"{e['titulo'][:48]:<50} {bases} — prefixo; conferir à mão")
         else:
-            print(f"  [   ] {e['id']:>4}. {e['ano']} [{e['papel']}] "
+            print(f"  [   ] {e['id']:>4}. {e['ano']} "
                   f"{e['titulo'][:48]:<50} esperado em: {', '.join(e['bases'])}")
 
     av = avalia_aderencia(sementes, recuperadas, b.d["limiar"])
-    val, dev = av["decide"], av["por_papel"][G.PAPEL_DESENVOLVIMENTO]
-    print(f"\n  TOTAL — {len(recuperadas)}/{len(sementes)} sementes recuperadas "
-          f"({len(recuperadas) / len(sementes):.0%}); informativo, não decide")
-    print(f"\n  ADERÊNCIA DE VALIDAÇÃO — {val['recuperadas']}/{val['total']} = "
-          f"{val['proporcao']:.1%}")
-    if val["intervalo"]:
-        lo, hi = val["intervalo"]
-        print(f"    intervalo de Wilson a 95%: {lo:.1%}–{hi:.1%}")
-    else:
-        print("    sem sementes de validação: a aderência não tem denominador")
+    print(f"\n  ADERÊNCIA — {av['recuperadas']}/{av['total']} sementes recuperadas = "
+          f"{av['proporcao']:.1%}")
+    lo, hi = av["intervalo"]
+    print(f"    intervalo de Wilson a 95%: {lo:.1%}–{hi:.1%}")
     print(f"    limiar do protocolo: {av['limiar']:.0%} — "
-          f"{'APROVADA' if val['aprovada'] else 'REPROVADA'}; esta é a aderência que "
+          f"{'APROVADA' if av['aprovada'] else 'REPROVADA'}; esta é a aderência que "
           f"decide a passagem")
-    print(f"\n  ADERÊNCIA DE DESENVOLVIMENTO — {dev['recuperadas']}/{dev['total']} = "
-          f"{dev['proporcao']:.1%}")
-    print("    não decisória: não compensa a validação nem altera a passagem")
     if indicios:
         print(f"\n  INDÍCIO POR PREFIXO — {len(indicios)} semente(s) NÃO contabilizada(s): "
               f"{', '.join(sorted(indicios))}")
@@ -141,7 +121,7 @@ def aderencia(b):
     print(f"  são as sementes que cada base INDEXA, apurado à mão na coluna `{COL_INDEXADA}`")
     print("  da planilha. Semente ausente por não ser indexada não conta contra a string.")
     print("  Cada ausência acima exige diagnóstico: qual termo a teria alcançado?")
-    return Saida.OK if val["total"] else Saida.REPROVADO
+    return Saida.OK
 
 
 def cmd_aderencia(ctx, a=None):

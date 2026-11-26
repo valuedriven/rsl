@@ -1,0 +1,102 @@
+{
+  "consulta": "idiomas expostos pelo TBCI (PD04)",
+  "recuperado_em": "2026-11-26",
+  "respostas": [
+    {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchVocabularyData&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro brasileiro de ciência da informação",
+          "author": "IBICT",
+          "lang": "pt-BR",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/tbci/br/",
+          "createDate": "2024-10-14",
+          "lastMod": "2024-11-07 12:30:17",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "1863"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    },
+    {
+      "url": "https://www.vocabularyserver.com/tbci/br/services.php?task=fetchTargetTerms&arg=155&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "752": {
+            "string": "ontologías",
+            "url": "https://vocabularyserver.com/tbci/es/?tema=155",
+            "uri": "https://vocabularyserver.com/tbci/es/services.php?task=fetchTerm&arg=155",
+            "term_id": "155",
+            "target_vocabulary_label": "Español",
+            "target_vocabulary_tag": "eq",
+            "target_vocabulary_title": "Tesauro brasilero de ciencias de la información"
+          }
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchTargetTerms",
+            "arg": 155
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 1
+        }
+      }
+    },
+    {
+      "url": "https://www.vocabularyserver.com/tbci/es/services.php?task=fetchVocabularyData&output=json",
+      "status_http": 200,
+      "payload": {
+        "result": {
+          "vocabulary_id": "1",
+          "title": "Tesauro de ciencias de la información",
+          "author": "IBICT-INIBI",
+          "lang": "es",
+          "scope": "",
+          "keywords": "",
+          "uri": "https://vocabularyserver.com/tbci/es/",
+          "createDate": "2024-11-06",
+          "lastMod": "2024-11-07 12:31:40",
+          "contributor": "",
+          "adminEmail": "",
+          "publisher": "",
+          "rights": "",
+          "cant_terms": "1098"
+        },
+        "resume": {
+          "status": "available",
+          "param": {
+            "task": "fetchVocabularyData",
+            "arg": ""
+          },
+          "web_service_version": "2.0",
+          "version": "TemaTres 3.5.2",
+          "cant_result": 14
+        }
+      }
+    },
+    {
+      "url": "https://www.vocabularyserver.com/tbci/en/services.php?task=fetchVocabularyData&output=json",
+      "status_http": 404,
+      "payload": null
+    }
+  ]
+}

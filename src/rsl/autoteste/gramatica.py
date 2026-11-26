@@ -127,7 +127,6 @@ ESPECIFICOS = {
     G.D_MODO: _celula_da_primeira("instrumento", "cabecalho_instrumentos",
                                        G.D_MODO.campo),
     G.D_ACAO: _acao,
-    G.D_PAPEL: _no_primeiro_item(G.C_PAPEL.chave, lambda v: FORA_DA_FORMA),
     # Linha fora da forma deixa um buraco na numeração: quem reprova é o identificador.
     G.F_QER: _com_nomeado(_frase, G.I_QER),
     G.D_ANCORA: _celula_da_primeira("faceta", "cabecalho_facetas", G.D_ANCORA.campo),

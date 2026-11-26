@@ -28,7 +28,7 @@ ESQUEMA = {
     "busca": ("ano_recencia", "amostra_sensibilidade"),
     "dados": ("registro", "validacao", "execucoes", "evidencia"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
-               "sensibilidade", "aderencia"),
+               "sensibilidade", "aderencia", "anatomia", "anatomia_consultas", "candidatos"),
     "documentos": ("procedimento", "procedimento_fonte", "flexoes", "sementes"),
     "planilha": ("campos_validacao",),
 }
@@ -55,10 +55,15 @@ RETIRADAS = {
     "documentos.ficha": "renomeada para `[documentos] procedimento`; renomeá-la, mantendo "
                         "o valor",
 }
-# Marcadores que cada padrão de caminho tem de conter.
+# Marcadores que cada padrão de caminho tem de conter. A fidelidade é por base e por
+# expressão: sem a base no nome, a conferência de uma base sobrescreveria a de outra.
 MARCADORES = {"documentos.procedimento": "{sigla}",
-              "documentos.procedimento_fonte": "{sigla}", "saidas.fidelidade": "{expressao}",
-              "saidas.sensibilidade": "{base}"}
+              "documentos.procedimento_fonte": "{sigla}",
+              "saidas.fidelidade": ("{base}", "{expressao}"),
+              "saidas.sensibilidade": "{base}",
+              "saidas.anatomia": "{base}",
+              "saidas.anatomia_consultas": "{base}",
+              "saidas.candidatos": "{base}"}
 
 
 def caminho_padrao():
@@ -98,11 +103,12 @@ def valida(dado, nome=NOME):
                     f"{nome}: chave desconhecida em `[{chave}]`: {desconhecidas}")
         elif chave not in ESQUEMA[""]:
             raise ConfiguracaoInvalida(f"{nome}: chave ou seção desconhecida `{chave}`")
-    for chave, marca in MARCADORES.items():
+    for chave, marcas in MARCADORES.items():
         secao, campo = chave.split(".")
         valor = dado[secao][campo]
-        if not isinstance(valor, str) or marca not in valor:
-            raise ConfiguracaoInvalida(f"{nome}: `{chave}` {valor!r} não contém {marca}")
+        for marca in (marcas,) if isinstance(marcas, str) else marcas:
+            if not isinstance(valor, str) or marca not in valor:
+                raise ConfiguracaoInvalida(f"{nome}: `{chave}` {valor!r} não contém {marca}")
     lo, hi = dado["padroes"]["sensibilidade"]
     if not lo < hi:
         raise ConfiguracaoInvalida(f"{nome}: `padroes.sensibilidade` com inferior ≥ "

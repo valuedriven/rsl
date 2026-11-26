@@ -247,7 +247,11 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Script principal: `python3 -m rsl aderencia planilhar` — grava a planilha do teste de
     aderência e imprime o ensaio seco
   - Script principal: `python3 -m rsl aderencia medir` — teste de aderência ao
-    conjunto-semente, por papel; lê só as execuções registradas da executada
+    conjunto-semente; lê só as execuções registradas da executada
+  - Script principal: `python3 -m rsl aderencia diagnosticar BASE` — anatomia da perda:
+    monta as consultas por nível com o DOI das sementes não recuperadas; sem `--retorno`,
+    imprime o roteiro e não grava; com `--retorno N K`, `--exportacao N ARQUIVO` e
+    `--data-hora`, confere, atribui a causa e grava as saídas
   - Skill principal: `testar-aderencia-das-expressoes`
   - Skill: `definir-conjunto-semente`
 - Acessar as fontes de pesquisa na ordem predefinida
@@ -269,11 +273,14 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Notas explicativas; plano §6.2
   - Script principal: `python3 -m rsl busca derivar` — deriva as expressões não executadas, as
     contagens e a ordem de triagem
-  - Script principal: `python3 -m rsl conferencia fidelidade EXPRESSAO ARQUIVO` — compara o
-    conjunto derivado com a execução direta; `ARQUIVO`: exportação da execução direta da
-    expressão
+  - Script principal: `python3 -m rsl conferencia fidelidade BASE EXPRESSAO [ARQUIVO]` —
+    compara o conjunto derivado com a execução direta, na mesma base; sem `ARQUIVO`, a
+    execução direta registrada da expressão na base
   - Script principal: `python3 -m rsl conferencia sensibilidade [BASE]` — mede a perda da
     sonda para a executada e grava a amostra a classificar; sem `BASE`, todas as bases
+  - Script principal: `python3 -m rsl conferencia simular BASE [--termo FCTn TERMO]` —
+    analisa a perda da sensibilidade: facetas reconhecidas na amostra, termos candidatos e,
+    com `--termo`, a executada ampliada sobre os registros da perda
   - Skill principal: `avaliar-resultados-da-busca`; índices na tabela abaixo
 - Exportar metadados dos resultados
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Procedimentos; exportações intactas
@@ -301,8 +308,7 @@ origem saem de `python3 -m rsl configuracao mostrar`. Saídas em `[saidas]`, na 
 | Recorte temporal | registros dentro, fora e sem ano | contagem por situação | linha "fora" igual a zero; recorte no critério de intervalo temporal do protocolo, padrão `recorte_ano_min` | `busca derivar` (terminal) | `[saidas] registros`, coluna `recorte` |
 | Âncoras não confirmadas | registros únicos em que o casamento local não confirma as âncoras | sem âncora confirmada / registros únicos | sem limiar: aviso, nenhum registro descartado | `busca derivar` (terminal) | `[saidas] registros`, coluna `ancoras_confirmadas` |
 | Ordem de triagem | ordem de leitura da 1ª filtragem, não critério | riqueza das expressões atingidas, recência e ano | `[busca] ano_recencia` | `busca derivar` | `[saidas] ordem_triagem` |
-| Aderência de validação | recall da busca sobre as sementes que decidem a passagem | sementes de validação recuperadas por título exato / sementes de validação; denominador definitivo: as indexadas, coluna `indexada` preenchida à mão; com intervalo de Wilson a 95% | `limiar_aderencia`: regra de ajuste em protocolo §Conjunto-semente | `aderencia medir` (terminal); conferência manual na planilha | `[saidas] aderencia` (planilha de `aderencia planilhar`) |
-| Aderência de desenvolvimento | recall sobre as sementes que orientaram o vocabulário | recuperadas / sementes de desenvolvimento | não decisória | `aderencia medir` (terminal) | terminal |
+| Aderência | recall da busca sobre o conjunto-semente, que decide a passagem | sementes recuperadas por título exato / sementes do conjunto; denominador definitivo: as indexadas, coluna `indexada` preenchida à mão; com intervalo de Wilson a 95% | `limiar_aderencia`: regra de ajuste em protocolo §Conjunto-semente | `aderencia medir` (terminal); conferência manual na planilha | `[saidas] aderencia` (planilha de `aderencia planilhar`) |
 | Indício por prefixo | semente com título casado só por prefixo | contagem; fora do numerador | conferência humana obrigatória | `aderencia medir` (terminal) e manual | coluna `recuperada` da planilha |
 | Divergência da fidelidade | quanto a derivação local difere da execução direta da mesma expressão | (só na direta + só na derivada) / união | `divergencia_fidelidade` | `conferencia fidelidade` | `[saidas] fidelidade` |
 | Perda da sonda | registros da sonda que a executada não recupera, por base | só na sonda / registros da sonda | sem limiar: tamanho da perda, não decide | `conferencia sensibilidade` | terminal; `[saidas] sensibilidade` |
