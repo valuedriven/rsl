@@ -64,12 +64,13 @@ elemento = "Proximidade `W/n` e `PRE/n`"
 categoria = "proximidade"
 situacao = "oficial"
 fonte = "Elsevier, *Scopus Search API — search tips*"
-nota = "`W/5` **não medido**"
+nota = "`W/5` medido só entre os grupos inteiros das âncoras (BD2/sd2-2026-11-25)"
 
 [[sintaxe]]
 elemento = "`W/5` entre os grupos inteiros das duas âncoras"
 categoria = "proximidade"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd2-2026-11-25"
 sondagem = "SD2"
 nota = "recusa leva à variante \"Redução por recusa da interface\""
 
@@ -80,57 +81,90 @@ situacao = "oficial"
 fonte = "Elsevier, *Scopus Search API — search tips*"
 
 [[sintaxe]]
-elemento = "`\"\"` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento"
-categoria = "frase"
-situacao = "nao_verificado"
-sondagem = "SD3"
-nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+elemento = "Curinga `*` dentro de `\"\"`"
+categoria = "truncamento"
+situacao = "medicao"
+citacao = "BD2/sd8-2026-11-25"
+sondagem = "SD8"
+nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23: a frase aproximada admite truncamento; conferir também na documentação oficial"
+
+[[sintaxe]]
+elemento = "Curinga `*` dentro de `{}`"
+categoria = "truncamento"
+situacao = "medicao"
+citacao = "BD2/sd9-2026-11-25"
+sondagem = "SD9"
+nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23: a frase exata não admite truncamento; conferir também na documentação oficial"
 
 [[sintaxe]]
 elemento = "Limite de operadores por consulta"
 categoria = "limite_consulta"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd4-2026-11-25"
 sondagem = "SD4"
-nota = "não documentado"
+nota = "não documentado; a consulta de EB4, com 104 operadores, é aceita; o limite não foi medido"
 
 [[sintaxe]]
 elemento = "Comprimento máximo da consulta"
 categoria = "limite_consulta"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd4-2026-11-25"
 sondagem = "SD4"
-nota = "a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres"
+nota = "a consulta de EB4, com 2.655 caracteres, é aceita; o máximo não foi medido; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres"
 
 [[sintaxe]]
-elemento = "Lematização do plural"
+elemento = "Lematização do plural entre `\"\"`, em inglês"
 categoria = "lematizacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd3-2026-11-25-2"
 sondagem = "SD3"
+nota = "as aspas casam singular e plural; medido só em `\"conceptual model\"`"
+
+[[sintaxe]]
+elemento = "Lematização do plural entre `\"\"`, em português"
+categoria = "lematizacao"
+situacao = "medicao"
+citacao = "BD2/sd3-2026-11-25-2"
+sondagem = "SD3"
+nota = "as aspas não casam o plural; plural explícito necessário; medido só em `\"modelo conceitual\"`"
+
+[[sintaxe]]
+elemento = "Lematização do plural entre `\"\"`, em espanhol"
+categoria = "lematizacao"
+situacao = "medicao"
+citacao = "BD2/sd3-2026-11-25-2"
+sondagem = "SD3"
+nota = "as aspas não casam o plural; plural explícito necessário; medido só em `\"modelo conceptual\"`"
 
 [[sintaxe]]
 elemento = "Tratamento de diacríticos"
 categoria = "idioma_indexacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd5-2026-11-25"
 sondagem = "SD5"
-nota = "as strings trazem as duas grafias"
+nota = "medido só em `\"educação\"`/`\"educacao\"`, entre aspas; as strings trazem só a grafia acentuada"
 
 [[sintaxe]]
 elemento = "Teto de retorno exibido"
 categoria = "limite_retorno"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd6-2026-11-25"
 sondagem = "SD6"
-nota = "conferir na interface antes de exportar"
+nota = "a navegação chega só ao registro 2.000; a exportação não fica limitada a ele (BD2/sd7-2026-11-25)"
 
 [[sintaxe]]
 elemento = "Teto de exportação por lote"
 categoria = "limite_exportacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd7-2026-11-25"
 sondagem = "SD7"
-nota = "conferir na interface antes de exportar"
+nota = "lote de 6.625 registros aceito, igual ao retorno; teto acima disso não medido; conferir na interface antes de exportar"
 
 [[sintaxe]]
 elemento = "Parênteses para agrupamento"
 categoria = "agrupamento"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd1-2026-11-25-2"
 sondagem = "SD1"
 
 [[sintaxe]]
@@ -142,7 +176,8 @@ sem_sondagem = "verificação documental: os termos de indexação da Scopus nã
 [[sintaxe]]
 elemento = "Exportação em RIS com todos os campos"
 categoria = "exportacao"
-situacao = "nao_verificado"
+situacao = "medicao"
+citacao = "BD2/sd7-2026-11-25"
 sondagem = "SD7"
 
 # ------------------------------------------------------------------ §2 critérios
@@ -297,14 +332,25 @@ texto = "TITLE-ABS-KEY(ontology OR taxonomy AND education)"
 onde = "busca avançada"
 muda = "sem parênteses, pela precedência"
 
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(ontology OR (taxonomy AND education))"
+onde = "busca avançada"
+muda = "parênteses contra a precedência: só agrupando o retorno difere do segundo teste"
+
 [[sondagens.leituras]]
-resultado = "0 < primeiro teste ≤ controle, e o segundo teste = primeiro teste (precedência `OR` antes de `AND`)"
-conclusao = "os parênteses agrupam; a precedência documentada se confirma"
+resultado = "0 < primeiro teste ≤ controle, segundo teste = primeiro teste, e primeiro teste < terceiro teste ≤ controle"
+conclusao = "os parênteses agrupam, também contra a precedência; a precedência documentada (`OR` antes de `AND`) se confirma"
 estado = "medicao"
 
 [[sondagens.leituras]]
-resultado = "primeiro teste = 0, primeiro teste > controle, ou mensagem de erro"
-conclusao = "o agrupamento não se confirma; levar ao pesquisador"
+resultado = "0 < primeiro teste ≤ controle, e terceiro teste = segundo teste, sem mensagem"
+conclusao = "os parênteses são aceitos mas não alteram a precedência; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens.leituras]]
+resultado = "algum teste = 0, primeiro teste > controle, terceiro teste > controle, ou mensagem de erro"
+conclusao = "inconclusiva: o agrupamento não se confirma; levar ao pesquisador"
 estado = "nao_verificado"
 
 [[sondagens]]
@@ -341,10 +387,10 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD3"
-elementos = ["Lematização do plural", "`\"\"` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento"]
-objetivo = "saber se a base casa singular e plural sem que a consulta os traga, entre aspas e entre chaves"
+elementos = ["Lematização do plural entre `\"\"`, em inglês", "Lematização do plural entre `\"\"`, em português", "Lematização do plural entre `\"\"`, em espanhol"]
+objetivo = "saber se a frase aproximada entre aspas casa o plural da locução sem que a consulta o traga, em inglês, português e espanhol"
 pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
-passos = ["submeter cada consulta, uma por vez, e anotar o retorno e a mensagem, se houver", "comparar também, com consultas análogas entre aspas, `ontologia`/`ontologias` e `ontología`/`ontologías`, e anotar os retornos"]
+passos = ["submeter cada consulta, uma por vez, na mesma sessão, e anotar o retorno e a mensagem, se houver", "comparar cada teste com o controle do mesmo idioma, imediatamente acima dele"]
 observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
 evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
 
@@ -357,34 +403,43 @@ onde = "busca avançada"
 papel = "teste"
 texto = "TITLE-ABS-KEY(\"conceptual models\")"
 onde = "busca avançada"
-muda = "o plural entre aspas"
+muda = "o plural inglês entre aspas"
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY(\"modelo conceitual\")"
+onde = "busca avançada"
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "TITLE-ABS-KEY({conceptual model})"
+texto = "TITLE-ABS-KEY(\"modelos conceituais\")"
 onde = "busca avançada"
-muda = "frase exata entre chaves"
+muda = "o plural português entre aspas"
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY(\"modelo conceptual\")"
+onde = "busca avançada"
 
 [[sondagens.consultas]]
 papel = "teste"
-texto = "TITLE-ABS-KEY(\"conceptual model*\")"
+texto = "TITLE-ABS-KEY(\"modelos conceptuales\")"
 onde = "busca avançada"
-muda = "truncamento dentro das aspas"
-
-[[sondagens.consultas]]
-papel = "teste"
-texto = "TITLE-ABS-KEY({conceptual model*})"
-onde = "busca avançada"
-muda = "truncamento dentro das chaves"
+muda = "o plural espanhol entre aspas"
 
 [[sondagens.leituras]]
-resultado = "controle = plural entre aspas; chaves < controle; truncamento entre aspas ≥ controle; truncamento entre chaves recusado ou sem efeito"
-conclusao = "as aspas incluem plurais e admitem truncamento; as chaves são exatas e não o admitem"
+resultado = "nos três idiomas, teste = controle > 0, sem mensagem"
+conclusao = "as aspas casam singular e plural da locução em inglês, português e espanhol"
 estado = "medicao"
 
 [[sondagens.leituras]]
-resultado = "controle ≠ plural entre aspas, ou qualquer outra relação, ou pt e es diferentes do inglês"
-conclusao = "não se confirma o comportamento afirmado; levar ao pesquisador antes de declarar `pela lematização`"
+resultado = "nos três idiomas, 0 < teste ≠ controle, sem mensagem"
+conclusao = "as aspas não casam o plural em nenhum dos três idiomas; o plural explícito é necessário"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle num idioma e ≠ noutro, algum retorno = 0, ou mensagem de erro"
+conclusao = "inconclusiva para o elemento como um todo; levar ao pesquisador, que decide se o elemento se divide por idioma"
 estado = "nao_verificado"
 
 [[sondagens]]
@@ -498,4 +553,74 @@ estado = "medicao"
 [[sondagens.leituras]]
 resultado = "a exportação falha, o arquivo vem sem resumo ou o número não corresponde ao pedido"
 conclusao = "não se confirma a exportação; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD8"
+elementos = ["Curinga `*` dentro de `\"\"`"]
+objetivo = "saber se o curinga trunca dentro da frase aproximada entre aspas"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
+passos = ["submeter cada consulta, uma por vez, na mesma sessão, e anotar o retorno e a mensagem, se houver"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro ou de recusa, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY(\"conceptual model\")"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY(\"conceptual model*\")"
+onde = "busca avançada"
+muda = "curinga no fim da locução entre aspas"
+
+[[sondagens.leituras]]
+resultado = "teste > controle, sem mensagem"
+conclusao = "o curinga trunca dentro das aspas, na forma testada"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "0 < teste ≤ controle, sem mensagem, ou consulta recusada com mensagem"
+conclusao = "o curinga não trunca dentro das aspas"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0 sem mensagem, ou controle = 0"
+conclusao = "inconclusiva: o zero não distingue recusa silenciosa de ausência do termo"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD9"
+elementos = ["Curinga `*` dentro de `{}`"]
+objetivo = "saber se o curinga trunca dentro da frase exata entre chaves"
+pre_requisitos = ["busca avançada da Scopus aberta no navegador do pesquisador"]
+passos = ["submeter cada consulta, uma por vez, na mesma sessão, e anotar o retorno e a mensagem, se houver"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro ou de recusa, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "TITLE-ABS-KEY({conceptual model})"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "TITLE-ABS-KEY({conceptual model*})"
+onde = "busca avançada"
+muda = "curinga no fim da locução entre chaves"
+
+[[sondagens.leituras]]
+resultado = "teste > controle, sem mensagem"
+conclusao = "o curinga trunca dentro das chaves, na forma testada"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "0 < teste ≤ controle, sem mensagem, ou consulta recusada com mensagem"
+conclusao = "o curinga não trunca dentro das chaves"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0 sem mensagem, ou controle = 0"
+conclusao = "inconclusiva: o zero não distingue recusa silenciosa de ausência do termo"
 estado = "nao_verificado"

@@ -639,14 +639,21 @@ def texto_procedimento(ctx, d, fonte, comp, registro=None):
 
 
 # --------------------------------------------------------------------- geração
-def gera_base(ctx, d, sigla, flexao=True, registro=None):
-    """(fonte, composição, texto) da base; ProtocoloInvalido ou Reprovado sobem."""
+def composicao_da_base(ctx, d, sigla, flexao=True):
+    """(fonte, composição) da base; a flexão indecidível reprova nomeando a base.
+    ProtocoloInvalido ou Reprovado sobem."""
     fonte = le_fonte(ctx, d, sigla)
     comp = Composicao(ctx, d, fonte, flexao=flexao)
     if comp.indecidiveis:
         raise Reprovado(f"{sigla}: flexão indecidível — " + "; ".join(
             f"{e.termo!r} ({e.idioma}): {e.motivo}" for e in comp.indecidiveis)
             + f"; declarar a exceção em `{ctx.config.valor('documentos.flexoes')}`")
+    return fonte, comp
+
+
+def gera_base(ctx, d, sigla, flexao=True, registro=None):
+    """(fonte, composição, texto) da base; ProtocoloInvalido ou Reprovado sobem."""
+    fonte, comp = composicao_da_base(ctx, d, sigla, flexao=flexao)
     return fonte, comp, texto_procedimento(ctx, d, fonte, comp, registro)
 
 

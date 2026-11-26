@@ -11,7 +11,7 @@ from . import Busca
 from .composicao import satisfaz_em
 from .derivacao import carrega_facetas, facetas_atingidas
 from .leitores import le_arquivo
-from .registro import carrega_consultas, chave_dedup, coleta, identifica
+from .registro import chave_dedup, coleta, consultas_do_corpus, identifica
 
 
 def fidelidade(b, expr, caminho):
@@ -28,10 +28,10 @@ def fidelidade(b, expr, caminho):
     if not direto:
         raise DadosInvalidos("Nenhum registro lido do arquivo de conferência.")
 
-    facetas = carrega_facetas(b)
-    _, validas = carrega_consultas(b)
+    lidas = consultas_do_corpus(b)
+    facetas = carrega_facetas(b, (c["base"] for c in lidas))
     derivado = set()
-    for r in identifica(coleta(validas)):
+    for r in identifica(coleta(lidas)):
         if r["duplicata_de"]:
             continue
         fac = facetas_atingidas(r, facetas)

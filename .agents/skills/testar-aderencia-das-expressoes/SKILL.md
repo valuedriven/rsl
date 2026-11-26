@@ -14,7 +14,8 @@ Mede uma coisa só: **a busca recupera os estudos que tinha obrigação de recup
 python3 -m rsl aderencia medir
 ```
 
-Lê o conjunto-semente e as execuções registradas em `data/registro_execucao.json`, casa por título
+Lê o conjunto-semente e, de `data/registro_execucao.json`, só as execuções da expressão
+executada (a sonda e as execuções diretas de conferência ficam de fora), casa por título
 normalizado e, na falta dele, por prefixo, e imprime o relato **separado por papel**:
 recuperação das sementes de **validação** e das de **desenvolvimento**. Só a validação é
 comparada ao limiar; ela traz a proporção e o intervalo de Wilson a 95%. O desenvolvimento é

@@ -11,7 +11,8 @@ protocolo, precedência, configuração, arquivo de sementes, leitura estrutural
 planejamento da validação, cliente TemaTres e reabertura, arquivos alimentados, cobertura por base, fonte do
 procedimento, geração dos procedimentos, sondagens, consulta de sondagem por
 referência, flexão dos termos,
-composição da derivação, aderência por papel, geração das strings, gramática do protocolo,
+composição da derivação, aderência por papel, casamento local pelos termos da base,
+corpus da derivação, geração das strings, gramática do protocolo,
 catálogo de apoio e nomes antigos recusados.
 
 Sem os arquivos alimentados, os casos que dependem deles não rodam: o resultado é PARCIAL,
@@ -114,6 +115,8 @@ def grupos():
         ("flexão dos termos", procedimentos.flexao),
         ("prova da composição da derivação", busca.composicao),
         ("aderência por papel", busca.aderencia),
+        ("casamento local pelos termos da base", busca.casamento),
+        ("corpus da derivação é a executada", busca.corpus),
         ("gramática do protocolo", gramatica.casos),
         ("catálogo de apoio", catalogo.casos),
         ("nomes antigos recusados", nomes_antigos.casos),

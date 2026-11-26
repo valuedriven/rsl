@@ -1,0 +1,6 @@
+﻿base;expressao;facetas_exigidas;registros;registros_com_duplicatas;procedencia
+scopus;EB1;FCT1 AND FCT2 AND FCT3 AND FCT4;3;3;DERIVADA
+scopus;EB2;FCT1 AND FCT2 AND FCT3;61;61;DERIVADA
+scopus;EB3;FCT1 AND FCT2 AND FCT4;75;75;DERIVADA
+scopus;EB4;FCT1 AND FCT2 AND (FCT3 OR FCT4);133;133;EXECUTADA
+scopus;EB5;FCT1 AND FCT2;;;SONDA — fora do corpus, executada à parte

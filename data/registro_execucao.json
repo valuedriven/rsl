@@ -217,7 +217,363 @@
     },
     "BD2": {
       "base": "Scopus",
-      "execucoes": []
+      "execucoes": [
+        {
+          "id": "EX1",
+          "expressao": "EB4",
+          "forma": "registrada por busca registrar",
+          "retorno": 133,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:34",
+          "mede": "EB4, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/scopus/eb4_2026-11-25T2034.ris",
+          "registros_lidos": 133,
+          "status": "valida",
+          "justificativa_divergencia": ""
+        },
+        {
+          "id": "EX2",
+          "expressao": "EB2",
+          "forma": "registrada por busca registrar",
+          "retorno": 61,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:34",
+          "mede": "EB2, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/scopus/eb2_2026-11-25T2034.ris",
+          "registros_lidos": 61,
+          "status": "valida",
+          "justificativa_divergencia": ""
+        },
+        {
+          "id": "EX3",
+          "expressao": "EB3",
+          "forma": "registrada por busca registrar",
+          "retorno": 74,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:34",
+          "mede": "EB3, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/scopus/eb3_2026-11-25T2034.ris",
+          "registros_lidos": 74,
+          "status": "valida",
+          "justificativa_divergencia": ""
+        },
+        {
+          "id": "EX4",
+          "expressao": "EB5",
+          "forma": "registrada por busca registrar",
+          "retorno": 1082,
+          "data": "2026-11-25",
+          "data_hora": "2026-11-25T20:34",
+          "mede": "EB5, execução registrada",
+          "estado": "registrada",
+          "origem": "exportacao",
+          "arquivo": "data/execucoes/scopus/eb5_2026-11-25T2034.ris",
+          "registros_lidos": 1082,
+          "status": "valida",
+          "justificativa_divergencia": ""
+        }
+      ],
+      "sondagens": [
+        {
+          "id": "sd1-2026-11-25",
+          "sondagem": "SD1",
+          "data_hora": "2026-11-25T19:30",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(ontology OR taxonomy)",
+              "retorno": 564997
+            },
+            {
+              "texto": "TITLE-ABS-KEY((ontology OR taxonomy) AND education)",
+              "retorno": 15301
+            },
+            {
+              "texto": "TITLE-ABS-KEY(ontology OR taxonomy AND education)",
+              "retorno": 15301
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < primeiro teste ≤ controle, e o segundo teste = primeiro teste (precedência `OR` antes de `AND`)",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD1_2026-11-25T1930.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada"
+        },
+        {
+          "id": "sd1-2026-11-25-2",
+          "sondagem": "SD1",
+          "data_hora": "2026-11-25T19:37",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(ontology OR taxonomy)",
+              "retorno": 564997
+            },
+            {
+              "texto": "TITLE-ABS-KEY((ontology OR taxonomy) AND education)",
+              "retorno": 15301
+            },
+            {
+              "texto": "TITLE-ABS-KEY(ontology OR taxonomy AND education)",
+              "retorno": 15301
+            },
+            {
+              "texto": "TITLE-ABS-KEY(ontology OR (taxonomy AND education))",
+              "retorno": 279494
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < primeiro teste ≤ controle, segundo teste = primeiro teste, e primeiro teste < terceiro teste ≤ controle",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD1_2026-11-25T1930.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; consultas 1 a 3 de 2026-11-25T19:30 (BD2/sd1-2026-11-25), não repetidas; consulta 4 informada depois, sessão não declarada; mensagem de erro não relatada"
+        },
+        {
+          "id": "sd2-2026-11-25",
+          "sondagem": "SD2",
+          "data_hora": "2026-11-25T19:47",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") AND (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))",
+              "retorno": 10010
+            },
+            {
+              "texto": "TITLE-ABS-KEY((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") W/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))",
+              "retorno": 1082
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste aceito, com 0 < teste ≤ controle",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD2-SD3_2026-11-25T1947.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada"
+        },
+        {
+          "id": "sd3-2026-11-25",
+          "sondagem": "SD3",
+          "data_hora": "2026-11-25T19:47",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual model\")",
+              "retorno": 83361
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual models\")",
+              "retorno": 83361
+            },
+            {
+              "texto": "TITLE-ABS-KEY({conceptual model})",
+              "retorno": 73469
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual model*\")",
+              "retorno": 86998
+            },
+            {
+              "texto": "TITLE-ABS-KEY({conceptual model*})",
+              "retorno": 3
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "controle ≠ plural entre aspas, ou qualquer outra relação, ou pt e es diferentes do inglês",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD2-SD3_2026-11-25T1947.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; leitura 2 porque a consulta 5 retornou 3, valor que não é recusa nem equivale à consulta 3, e porque as comparações pt/es do segundo passo não foram relatadas"
+        },
+        {
+          "id": "sd3-2026-11-25-2",
+          "sondagem": "SD3",
+          "data_hora": "2026-11-25T20:05",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual model\")",
+              "retorno": 83361
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual models\")",
+              "retorno": 83361
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"modelo conceitual\")",
+              "retorno": 93
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"modelos conceituais\")",
+              "retorno": 18
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"modelo conceptual\")",
+              "retorno": 132
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"modelos conceptuales\")",
+              "retorno": 35
+            }
+          ],
+          "leitura": {
+            "numero": 3,
+            "resultado": "teste = controle num idioma e ≠ noutro, algum retorno = 0, ou mensagem de erro",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD3-SD9_2026-11-25T2005.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada; teste = controle em inglês, teste < controle em português e em espanhol"
+        },
+        {
+          "id": "sd5-2026-11-25",
+          "sondagem": "SD5",
+          "data_hora": "2026-11-25T20:05",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(\"educação\")",
+              "retorno": 10667
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"educacao\")",
+              "retorno": 10667
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste = controle > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD3-SD9_2026-11-25T2005.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada"
+        },
+        {
+          "id": "sd8-2026-11-25",
+          "sondagem": "SD8",
+          "data_hora": "2026-11-25T20:05",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual model\")",
+              "retorno": 83361
+            },
+            {
+              "texto": "TITLE-ABS-KEY(\"conceptual model*\")",
+              "retorno": 86998
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste > controle, sem mensagem",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD3-SD9_2026-11-25T2005.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada"
+        },
+        {
+          "id": "sd9-2026-11-25",
+          "sondagem": "SD9",
+          "data_hora": "2026-11-25T20:05",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY({conceptual model})",
+              "retorno": 73469
+            },
+            {
+              "texto": "TITLE-ABS-KEY({conceptual model*})",
+              "retorno": 3
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "0 < teste ≤ controle, sem mensagem, ou consulta recusada com mensagem",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD3-SD9_2026-11-25T2005.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; mensagem de erro não relatada; executada de novo depois do redesenho, com o mesmo retorno de BD2/sd3-2026-11-25"
+        },
+        {
+          "id": "sd4-2026-11-25",
+          "sondagem": "SD4",
+          "data_hora": "2026-11-25T20:26",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY((\"ontologia\" OR \"ontologias\" OR \"modelo conceitual\" OR \"modelos conceituais\" OR \"representação do conhecimento\" OR \"organização do conhecimento\" OR \"knowledge representation\" OR \"knowledge representations\" OR \"knowledge organization\" OR \"knowledge organizations\" OR \"conceptual model\" OR \"conceptual models\" OR \"ontology\" OR \"ontologies\" OR \"representación del conocimiento\" OR \"organización del conocimiento\" OR \"modelo conceptual\" OR \"modelos conceptuales\" OR \"ontología\" OR \"ontologías\") W/5 (\"educacional\" OR \"educacionais\" OR \"educacionales\" OR \"ensino-aprendizagem\" OR \"ensino-aprendizagens\" OR \"ensino e aprendizagem\" OR \"educação\" OR \"educational\" OR \"teaching-learning\" OR \"teaching and learning\" OR \"education\" OR \"enseñanza-aprendizaje\" OR \"enseñanza-aprendizajes\" OR \"enseñanza y aprendizaje\" OR \"educación\")) AND (TITLE-ABS-KEY(\"prática educacional\" OR \"práticas educacionais\" OR \"método de ensino\" OR \"métodos de ensino\" OR \"estratégia educacional\" OR \"estratégias educacionais\" OR \"atividade de aprendizagem\" OR \"atividades de aprendizagem\" OR \"intervenção educacional\" OR \"intervenções educacionais\" OR \"educational practice\" OR \"educational practices\" OR \"teaching method\" OR \"teaching methods\" OR \"educational strategy\" OR \"educational strategies\" OR \"learning activity\" OR \"learning activities\" OR \"educational intervention\" OR \"educational interventions\" OR \"práctica educativa\" OR \"prácticas educativas\" OR \"estrategia educativa\" OR \"estrategias educativas\" OR \"actividad de aprendizaje\" OR \"actividades de aprendizaje\" OR \"intervención educativa\" OR \"intervenciones educativas\" OR \"método de enseñanza\" OR \"métodos de enseñanza\") OR TITLE-ABS-KEY(\"contexto educacional\" OR \"contextos educacionais\" OR \"contexto de aprendizagem\" OR \"contextos de aprendizagem\" OR \"fator contextual\" OR \"fatores contextuais\" OR \"fator situacional\" OR \"fatores situacionais\" OR \"ambiente educacional\" OR \"ambientes educacionais\" OR \"ambientes educacionales\" OR \"educational context\" OR \"educational contexts\" OR \"learning context\" OR \"learning contexts\" OR \"contextual factor\" OR \"contextual factors\" OR \"situational factor\" OR \"situational factors\" OR \"educational environment\" OR \"educational environments\" OR \"contexto educativo\" OR \"contextos educativos\" OR \"contexto de aprendizaje\" OR \"contextos de aprendizaje\" OR \"factor contextual\" OR \"factores contextuales\" OR \"factor situacional\" OR \"factores situacionales\" OR \"entorno educativo\" OR \"entornos educativos\")) AND PUBYEAR > 2016 AND PUBYEAR < 2027 AND (LANGUAGE(portuguese) OR LANGUAGE(english) OR LANGUAGE(spanish)) AND (DOCTYPE(ar) OR DOCTYPE(re) OR DOCTYPE(cp) OR DOCTYPE(ch))",
+              "retorno": 133
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "aceita, com retorno > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD4-SD7_2026-11-25T2026.md"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; consulta aceita, sem mensagem relatada; 2.655 caracteres, 104 operadores (98 OR, 5 AND, 1 W/5)"
+        },
+        {
+          "id": "sd6-2026-11-25",
+          "sondagem": "SD6",
+          "data_hora": "2026-11-25T20:26",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(education)",
+              "retorno": 3324805
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "o último registro acessível tem posição menor que o retorno, ou há aviso de limite",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD4-SD7_2026-11-25T2026.md"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; último registro acessível na posição 2000, informada pelo pesquisador"
+        },
+        {
+          "id": "sd7-2026-11-25",
+          "sondagem": "SD7",
+          "data_hora": "2026-11-25T20:26",
+          "consultas": [
+            {
+              "texto": "TITLE-ABS-KEY(ontology AND education)",
+              "retorno": 6625
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "o arquivo traz o número de registros pedido, com resumo e palavras-chave, e a exportação anuncia o máximo",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/scopus/SD4-SD7_2026-11-25T2026.md",
+            "data/evidencia/sondagens/scopus/SD7_2026-11-25T2026.ris"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela da opção de exportação; máximo anunciado 6625, igual ao retorno: lote de 6625 aceito, teto acima disso não medido; arquivo com 6625 registros, 6570 com resumo e 5852 com palavras-chave"
+        }
+      ]
     },
     "BD3": {
       "base": "ERIC",

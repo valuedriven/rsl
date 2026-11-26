@@ -7,6 +7,18 @@ composição prova contidas na executada são calculadas aqui, sobre a exportaç
 composição, a executada, a sonda, o recorte e os limiares vêm do protocolo
 (`configuracao mostrar` exibe os valores em uso).
 
+Corpus: a derivação, o conjunto derivado da fidelidade e a aderência leem só as execuções
+registradas da executada; a sonda e as execuções diretas das expressões de conferência ficam
+de fora, e cada comando relata as lidas e as deixadas de fora, com o motivo. A sensibilidade
+lê a executada e a sonda, cada uma pela sua execução; a fidelidade lê a execução direta pelo
+arquivo que recebe.
+
+Vocabulário do casamento local: em cada base, os termos da string composta para ela (a mesma
+composição que gera a consulta do procedimento de busca, com as formas de número e o radical
+truncado) mais as formas de número de cada termo, também onde a base lematiza. Não há sufixo
+de plural aproximado. Proximidade e restrição de campo não se reproduzem localmente: é o que
+o teste de fidelidade mede.
+
 O que este pacote NÃO faz: não exclui registro algum, não decide inclusão e não substitui
 o teste de fidelidade. As contagens que produz são DERIVADAS e devem ser declaradas como tal
 nas contagens da busca e no relatório.

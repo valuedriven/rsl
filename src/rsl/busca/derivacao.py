@@ -5,37 +5,50 @@ import csv
 import re
 
 from ..config import relativo
+from ..flexao import formas_de_numero
 from ..markdown import normaliza
+from ..procedimentos import composicao_da_base, idiomas_do_termo
 from ..saida import Saida
 from . import Busca
 from .composicao import satisfaz_em
 from .leitores import CAMPOS
-from .registro import aplica_recorte, carrega_consultas, coleta, exige_registros, identifica
+from .registro import (aplica_recorte, coleta, consultas_do_corpus, exige_registros,
+                       identifica)
 
 
 def padrao(termo):
-    """Casamento por palavra inteira, com flexão simples de plural.
+    """Casamento por palavra inteira, sobre o texto normalizado.
 
-    O '*' do termo vira prefixo livre. Cada palavra admite sufixo de plural
-    opcional (s/es), o que aproxima — sem reproduzir — a lematização que as bases
-    aplicam em TS= e TITLE-ABS-KEY. É justamente essa aproximação que o teste de
-    fidelidade mede: ela é a origem esperada da divergência."""
-    t = normaliza(termo.replace("*", "\x00"))
+    O '*' do termo vira prefixo livre; fora dele, a palavra casa só como está. As formas de
+    número vêm do vocabulário da base (`vocabulario_da_base`), geradas pela mesma flexão
+    que compõe a consulta, e não de sufixo aproximado. As palavras se ligam por espaço, e
+    hífen e pontuação, que `normaliza` reduz a espaço, equivalem a ele. A proximidade e a
+    restrição de campo da base não se reproduzem: são a aproximação que o teste de
+    fidelidade mede."""
     partes = []
-    for palavra in t.split():
-        if "\x00" in palavra:
-            partes.append(re.escape(palavra).replace("\x00", r"\w*"))
-        else:
-            partes.append(re.escape(palavra) + r"(?:e?s)?")
+    for palavra in termo.split():
+        # O '*' separa pedaços normalizados à parte: `normaliza` apagaria um marcador.
+        pedacos = [r"\s+".join(map(re.escape, normaliza(x).split()))
+                   for x in palavra.split("*")]
+        if any(pedacos):
+            partes.append(r"\w*".join(pedacos))
     return re.compile(r"(?<!\w)" + r"\s+".join(partes) + r"(?!\w)")
 
 
-def carrega_facetas(b):
-    """Facetas e padrões de casamento, da lista executada de cada faceta no protocolo."""
+def vocabulario_da_base(b, sigla):
+    """{fid: {"nome", "termos", "padroes"}} da base: os termos da string composta para ela
+    (`Composicao`: idiomas e redução da fonte, formas de número da regra e da exceção,
+    radical truncado), mais as formas de número de cada termo sem '*', mesmo quando a base
+    lematiza — a string dela não traz o plural, mas a base o casa. A soma não muda a
+    consulta, só o casamento local. Flexão indecidível reprova nomeando a base."""
+    _, comp = composicao_da_base(b.ctx, b.d, sigla)
     facetas = {}
-    for fid, v in b.d["strings"].items():
+    for fid, s in comp.strings.items():
+        idioma_de = idiomas_do_termo(b.d, fid)
+        numero = formas_de_numero([t for t in s["termos"] if "*" not in t],
+                                  lambda x, m=idioma_de: m.get(x, []), comp.excecoes)
         vistos, limpos = set(), []
-        for t in v["termos"]:
+        for t in list(s["termos"]) + sorted(numero):
             k = t.lower()
             if k not in vistos:
                 vistos.add(k)
@@ -46,12 +59,20 @@ def carrega_facetas(b):
     return facetas
 
 
+def carrega_facetas(b, siglas):
+    """{sigla: vocabulário da base} das bases pedidas: cada registro se casa com os termos
+    da sua própria base."""
+    return {sigla: vocabulario_da_base(b, sigla) for sigla in sorted(set(siglas))}
+
+
 def texto_do(reg):
     return normaliza(" ".join((reg["titulo"], reg["resumo"], reg["palavras_chave"])))
 
 
-def facetas_atingidas(reg, facetas):
+def facetas_atingidas(reg, vocabulario):
+    """Facetas reconhecidas no registro pelos termos da base dele."""
     alvo = texto_do(reg)
+    facetas = vocabulario[reg["base"]]
     return {n for n, f in facetas.items() if any(p.search(alvo) for p in f["padroes"])}
 
 
@@ -80,10 +101,10 @@ def chave_ordem(b, reg, exprs):
 
 
 def derivar(b):
-    facetas = carrega_facetas(b)
-    _, validas = carrega_consultas(b)
-    print("Lendo exportações registradas:")
-    regs = exige_registros(identifica(coleta(validas)))
+    lidas = consultas_do_corpus(b)
+    facetas = carrega_facetas(b, (c["base"] for c in lidas))
+    print("\nLendo as exportações da executada:")
+    regs = exige_registros(identifica(coleta(lidas)))
     regs, fora = aplica_recorte(b, regs)
     unicos = [r for r in regs if not r["duplicata_de"]]
 

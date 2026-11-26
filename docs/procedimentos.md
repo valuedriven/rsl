@@ -247,7 +247,7 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Script principal: `python3 -m rsl aderencia planilhar` — grava a planilha do teste de
     aderência e imprime o ensaio seco
   - Script principal: `python3 -m rsl aderencia medir` — teste de aderência ao
-    conjunto-semente, por papel; lê as execuções registradas
+    conjunto-semente, por papel; lê só as execuções registradas da executada
   - Skill principal: `testar-aderencia-das-expressoes`
   - Skill: `definir-conjunto-semente`
 - Acessar as fontes de pesquisa na ordem predefinida
@@ -297,7 +297,7 @@ origem saem de `python3 -m rsl configuracao mostrar`. Saídas em `[saidas]`, na 
 | --- | --- | --- | --- | --- | --- |
 | Retorno declarado × lido | se a exportação traz o número de registros que a base exibiu | igualdade entre `--retorno` e os registros lidos do arquivo | igualdade; divergência só com `--justificar` (ressalva no procedimento de busca da base) | `busca registrar`; `busca derivar` reconfere e para com DADOS se o arquivo mudou | `[dados] registro` (`registros_lidos`, `status`) |
 | Contagens bruta e única | registros por base e por expressão, executada e derivadas | contagem, com e sem duplicatas; a sonda fica fora | sem limiar; derivada só se aceita após a fidelidade | `busca derivar` | `[saidas] contagens` |
-| Duplicatas | registros repetidos no mesmo DOI ou título normalizado, entre as execuções registradas | contagem; nada é apagado | sem limiar | `busca derivar` | `[saidas] registros`, coluna `duplicata_de` |
+| Duplicatas | registros repetidos no mesmo DOI ou título normalizado, entre as execuções registradas da executada | contagem; nada é apagado | sem limiar | `busca derivar` | `[saidas] registros`, coluna `duplicata_de` |
 | Recorte temporal | registros dentro, fora e sem ano | contagem por situação | linha "fora" igual a zero; recorte no critério de intervalo temporal do protocolo, padrão `recorte_ano_min` | `busca derivar` (terminal) | `[saidas] registros`, coluna `recorte` |
 | Âncoras não confirmadas | registros únicos em que o casamento local não confirma as âncoras | sem âncora confirmada / registros únicos | sem limiar: aviso, nenhum registro descartado | `busca derivar` (terminal) | `[saidas] registros`, coluna `ancoras_confirmadas` |
 | Ordem de triagem | ordem de leitura da 1ª filtragem, não critério | riqueza das expressões atingidas, recência e ano | `[busca] ano_recencia` | `busca derivar` | `[saidas] ordem_triagem` |

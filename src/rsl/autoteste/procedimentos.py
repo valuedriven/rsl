@@ -107,15 +107,24 @@ def fonte(ctx, g):
          lambda x: (x["criterios"][criterio_sem].update(destino="consulta"),
                     x["criterios"][criterio_sem].pop("clausula", None)),
          trechos="`clausula`")
-    criterio_com = next((k for k, c in enumerate(dado0["criterios"])
-                         if c["destino"] in G.DESTINOS_COM_CLAUSULA), None)
-    if criterio_com is None:
-        g.falha(f"mutação não aplicada: cláusula com conector [{alvo}] sem critério com cláusula")
+    # A cláusula vem de um critério que já a declara: a da base-alvo ou, se ela não tem
+    # nenhum, a da primeira base da tabela que tenha. Sem nenhuma, o caso não executa.
+    def tem_clausula(x):
+        return any(c["destino"] in G.DESTINOS_COM_CLAUSULA for c in x.get("criterios", []))
+
+    com_clausula = alvo if tem_clausula(dado0) else base_com(ctx, d, tem_clausula)
+    if com_clausula is None:
+        g.nao_executa(1, "cláusula com conector na borda: nenhuma base com critério de "
+                         "destino " + " ou ".join(G.DESTINOS_COM_CLAUSULA))
     else:
-        caso("cláusula com conector na borda",
-             lambda x: x["criterios"][criterio_com].update(
-                 clausula="AND " + x["criterios"][criterio_com]["clausula"]),
-             trechos="conector na borda")
+        dado_c, frag_c, arqs_c = fonte_de(ctx, d, com_clausula)
+        k = next(i for i, c in enumerate(dado_c["criterios"])
+                 if c["destino"] in G.DESTINOS_COM_CLAUSULA)
+        dado_c["criterios"][k]["clausula"] = "AND " + dado_c["criterios"][k]["clausula"]
+        cx = com_fonte(ctx, com_clausula, dado_c, frag_c, arqs_c)
+        cod, texto = _codigo(lambda: le_fonte(cx, d, com_clausula))
+        g.testa(f"reprovou ({P.name}): cláusula com conector na borda [{com_clausula}]",
+                cod == P and "conector na borda" in texto, f"{cod.name} — {texto[-160:]}")
     caso("fragmento de nome errado", frags=lambda f: dict(f, **{"variante.md": "x\n"}),
          trechos="variante.md")
     caso("falta como_executar.md",

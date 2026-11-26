@@ -14,19 +14,22 @@
 | `OPENACCESS(0` ou `1)` | filtros | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
 | `AND`, `OR`, `AND NOT`; precedência `OR` → `AND` → `AND NOT` | operadores | Verificado em fonte oficial; a precedência muda em 2026 | Elsevier, *Scopus Search API — search tips* | — |
 | Truncamento `*` e `?`, mínimo de 3 caracteres antes do curinga | truncamento | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
-| Proximidade `W/n` e `PRE/n` | proximidade | Verificado em fonte oficial; `W/5` **não medido** | Elsevier, *Scopus Search API — search tips* | — |
-| `W/5` entre os grupos inteiros das duas âncoras | proximidade | **Não verificado**; recusa leva à variante "Redução por recusa da interface" | — | SD2 |
+| Proximidade `W/n` e `PRE/n` | proximidade | Verificado em fonte oficial; `W/5` medido só entre os grupos inteiros das âncoras (BD2/sd2-2026-11-25) | Elsevier, *Scopus Search API — search tips* | — |
+| `W/5` entre os grupos inteiros das duas âncoras | proximidade | Verificado por medição (BD2/sd2-2026-11-25); recusa leva à variante "Redução por recusa da interface" | — | SD2 |
 | `{}` frase exata *versus* `""` frase aproximada | frase | Verificado em fonte oficial | Elsevier, *Scopus Search API — search tips* | — |
-| `""` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento | frase | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD3 |
-| Limite de operadores por consulta | limite_consulta | **Não verificado**; não documentado | — | SD4 |
-| Comprimento máximo da consulta | limite_consulta | **Não verificado**; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres | — | SD4 |
-| Lematização do plural | lematizacao | **Não verificado** | — | SD3 |
-| Tratamento de diacríticos | idioma_indexacao | **Não verificado**; as strings trazem as duas grafias | — | SD5 |
-| Teto de retorno exibido | limite_retorno | **Não verificado**; conferir na interface antes de exportar | — | SD6 |
-| Teto de exportação por lote | limite_exportacao | **Não verificado**; conferir na interface antes de exportar | — | SD7 |
-| Parênteses para agrupamento | agrupamento | **Não verificado** | — | SD1 |
+| Curinga `*` dentro de `""` | truncamento | Verificado por medição (BD2/sd8-2026-11-25); afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23: a frase aproximada admite truncamento; conferir também na documentação oficial | — | SD8 |
+| Curinga `*` dentro de `{}` | truncamento | Verificado por medição (BD2/sd9-2026-11-25); afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23: a frase exata não admite truncamento; conferir também na documentação oficial | — | SD9 |
+| Limite de operadores por consulta | limite_consulta | Verificado por medição (BD2/sd4-2026-11-25); não documentado; a consulta de EB4, com 104 operadores, é aceita; o limite não foi medido | — | SD4 |
+| Comprimento máximo da consulta | limite_consulta | Verificado por medição (BD2/sd4-2026-11-25); a consulta de EB4, com 2.655 caracteres, é aceita; o máximo não foi medido; a maior consulta executável é medida por `python3 -m rsl documentos conferir`, no relato do teto de caracteres | — | SD4 |
+| Lematização do plural entre `""`, em inglês | lematizacao | Verificado por medição (BD2/sd3-2026-11-25-2); as aspas casam singular e plural; medido só em `"conceptual model"` | — | SD3 |
+| Lematização do plural entre `""`, em português | lematizacao | Verificado por medição (BD2/sd3-2026-11-25-2); as aspas não casam o plural; plural explícito necessário; medido só em `"modelo conceitual"` | — | SD3 |
+| Lematização do plural entre `""`, em espanhol | lematizacao | Verificado por medição (BD2/sd3-2026-11-25-2); as aspas não casam o plural; plural explícito necessário; medido só em `"modelo conceptual"` | — | SD3 |
+| Tratamento de diacríticos | idioma_indexacao | Verificado por medição (BD2/sd5-2026-11-25); medido só em `"educação"`/`"educacao"`, entre aspas; as strings trazem só a grafia acentuada | — | SD5 |
+| Teto de retorno exibido | limite_retorno | Verificado por medição (BD2/sd6-2026-11-25); a navegação chega só ao registro 2.000; a exportação não fica limitada a ele (BD2/sd7-2026-11-25) | — | SD6 |
+| Teto de exportação por lote | limite_exportacao | Verificado por medição (BD2/sd7-2026-11-25); lote de 6.625 registros aceito, igual ao retorno; teto acima disso não medido; conferir na interface antes de exportar | — | SD7 |
+| Parênteses para agrupamento | agrupamento | Verificado por medição (BD2/sd1-2026-11-25-2) | — | SD1 |
 | Vocabulário controlado de assunto | vocabulario_controlado | **Não verificado** | — | sem sondagem: verificação documental: os termos de indexação da Scopus não foram conferidos; nenhuma expressão depende deles |
-| Exportação em RIS com todos os campos | exportacao | **Não verificado** | — | SD7 |
+| Exportação em RIS com todos os campos | exportacao | Verificado por medição (BD2/sd7-2026-11-25) | — | SD7 |
 
 Todas as facetas vão entre parênteses explícitos; nenhuma expressão depende da ordem implícita de avaliação.
 
@@ -36,7 +39,7 @@ Uma consulta por vez, sem nova tentativa automática; parar diante de captcha, a
 
 #### SD1 — saber se os parênteses agrupam dentro de `TITLE-ABS-KEY()` como booleanos
 
-**Elementos verificados:** Parênteses para agrupamento (Não verificado).
+**Elementos verificados:** Parênteses para agrupamento (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -60,6 +63,12 @@ TITLE-ABS-KEY((ontology OR taxonomy) AND education)
 TITLE-ABS-KEY(ontology OR taxonomy AND education)
 ```
 
+**Consulta 4 — teste**, em busca avançada. Muda em relação ao controle: parênteses contra a precedência: só agrupando o retorno difere do segundo teste.
+
+```
+TITLE-ABS-KEY(ontology OR (taxonomy AND education))
+```
+
 **Passos.**
 
 1. submeter cada consulta, uma por vez, e anotar o retorno exibido
@@ -71,16 +80,22 @@ TITLE-ABS-KEY(ontology OR taxonomy AND education)
 
 | # | Resultado | Conclusão | Estado |
 | :---: | :--- | :--- | :--- |
-| 1 | 0 < primeiro teste ≤ controle, e o segundo teste = primeiro teste (precedência `OR` antes de `AND`) | os parênteses agrupam; a precedência documentada se confirma | Verificado por medição |
-| 2 | primeiro teste = 0, primeiro teste > controle, ou mensagem de erro | o agrupamento não se confirma; levar ao pesquisador | Não verificado |
+| 1 | 0 < primeiro teste ≤ controle, segundo teste = primeiro teste, e primeiro teste < terceiro teste ≤ controle | os parênteses agrupam, também contra a precedência; a precedência documentada (`OR` antes de `AND`) se confirma | Verificado por medição |
+| 2 | 0 < primeiro teste ≤ controle, e terceiro teste = segundo teste, sem mensagem | os parênteses são aceitos mas não alteram a precedência; levar ao pesquisador | Não verificado |
+| 3 | algum teste = 0, primeiro teste > controle, terceiro teste > controle, ou mensagem de erro | inconclusiva: o agrupamento não se confirma; levar ao pesquisador | Não verificado |
 
 **Evidência a registrar.**
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD2/sd1-2026-11-25) 2026-11-25T19:30: leitura 1
+- (BD2/sd1-2026-11-25-2) 2026-11-25T19:37: leitura 1
+
 #### SD2 — saber se a interface aceita `W/5` entre os grupos inteiros das duas âncoras
 
-**Elementos verificados:** `W/5` entre os grupos inteiros das duas âncoras (Não verificado).
+**Elementos verificados:** `W/5` entre os grupos inteiros das duas âncoras (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -118,9 +133,13 @@ TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos co
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
-#### SD3 — saber se a base casa singular e plural sem que a consulta os traga, entre aspas e entre chaves
+**Resultados registrados.**
 
-**Elementos verificados:** Lematização do plural (Não verificado); `""` aproximada já inclui plurais e admite truncamento dentro dela; `{}` exata não admite truncamento (Não verificado).
+- (BD2/sd2-2026-11-25) 2026-11-25T19:47: leitura 1
+
+#### SD3 — saber se a frase aproximada entre aspas casa o plural da locução sem que a consulta o traga, em inglês, português e espanhol
+
+**Elementos verificados:** Lematização do plural entre `""`, em inglês (Verificado por medição); Lematização do plural entre `""`, em português (Verificado por medição); Lematização do plural entre `""`, em espanhol (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -132,34 +151,40 @@ TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos co
 TITLE-ABS-KEY("conceptual model")
 ```
 
-**Consulta 2 — teste**, em busca avançada. Muda em relação ao controle: o plural entre aspas.
+**Consulta 2 — teste**, em busca avançada. Muda em relação ao controle: o plural inglês entre aspas.
 
 ```
 TITLE-ABS-KEY("conceptual models")
 ```
 
-**Consulta 3 — teste**, em busca avançada. Muda em relação ao controle: frase exata entre chaves.
+**Consulta 3 — controle**, em busca avançada.
 
 ```
-TITLE-ABS-KEY({conceptual model})
+TITLE-ABS-KEY("modelo conceitual")
 ```
 
-**Consulta 4 — teste**, em busca avançada. Muda em relação ao controle: truncamento dentro das aspas.
+**Consulta 4 — teste**, em busca avançada. Muda em relação ao controle: o plural português entre aspas.
 
 ```
-TITLE-ABS-KEY("conceptual model*")
+TITLE-ABS-KEY("modelos conceituais")
 ```
 
-**Consulta 5 — teste**, em busca avançada. Muda em relação ao controle: truncamento dentro das chaves.
+**Consulta 5 — controle**, em busca avançada.
 
 ```
-TITLE-ABS-KEY({conceptual model*})
+TITLE-ABS-KEY("modelo conceptual")
+```
+
+**Consulta 6 — teste**, em busca avançada. Muda em relação ao controle: o plural espanhol entre aspas.
+
+```
+TITLE-ABS-KEY("modelos conceptuales")
 ```
 
 **Passos.**
 
-1. submeter cada consulta, uma por vez, e anotar o retorno e a mensagem, se houver
-2. comparar também, com consultas análogas entre aspas, `ontologia`/`ontologias` e `ontología`/`ontologías`, e anotar os retornos
+1. submeter cada consulta, uma por vez, na mesma sessão, e anotar o retorno e a mensagem, se houver
+2. comparar cada teste com o controle do mesmo idioma, imediatamente acima dele
 
 **Observar.**
 
@@ -168,16 +193,22 @@ TITLE-ABS-KEY({conceptual model*})
 
 | # | Resultado | Conclusão | Estado |
 | :---: | :--- | :--- | :--- |
-| 1 | controle = plural entre aspas; chaves < controle; truncamento entre aspas ≥ controle; truncamento entre chaves recusado ou sem efeito | as aspas incluem plurais e admitem truncamento; as chaves são exatas e não o admitem | Verificado por medição |
-| 2 | controle ≠ plural entre aspas, ou qualquer outra relação, ou pt e es diferentes do inglês | não se confirma o comportamento afirmado; levar ao pesquisador antes de declarar `pela lematização` | Não verificado |
+| 1 | nos três idiomas, teste = controle > 0, sem mensagem | as aspas casam singular e plural da locução em inglês, português e espanhol | Verificado por medição |
+| 2 | nos três idiomas, 0 < teste ≠ controle, sem mensagem | as aspas não casam o plural em nenhum dos três idiomas; o plural explícito é necessário | Verificado por medição |
+| 3 | teste = controle num idioma e ≠ noutro, algum retorno = 0, ou mensagem de erro | inconclusiva para o elemento como um todo; levar ao pesquisador, que decide se o elemento se divide por idioma | Não verificado |
 
 **Evidência a registrar.**
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD2/sd3-2026-11-25) 2026-11-25T19:47: leitura 2
+- (BD2/sd3-2026-11-25-2) 2026-11-25T20:05: leitura 3
+
 #### SD4 — saber se a interface aceita inteira a consulta de EB4
 
-**Elementos verificados:** Comprimento máximo da consulta (Não verificado); Limite de operadores por consulta (Não verificado).
+**Elementos verificados:** Comprimento máximo da consulta (Verificado por medição); Limite de operadores por consulta (Verificado por medição).
 **Depende de:** SD2.
 
 **Pré-requisitos.**
@@ -209,9 +240,13 @@ TITLE-ABS-KEY(("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos co
 
 - captura da tela, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD2/sd4-2026-11-25) 2026-11-25T20:26: leitura 1
+
 #### SD5 — saber se a base ignora diacríticos
 
-**Elementos verificados:** Tratamento de diacríticos (Não verificado).
+**Elementos verificados:** Tratamento de diacríticos (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -247,9 +282,13 @@ TITLE-ABS-KEY("educacao")
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD2/sd5-2026-11-25) 2026-11-25T20:05: leitura 1
+
 #### SD6 — saber se a base exibe e deixa percorrer o retorno inteiro de uma busca larga
 
-**Elementos verificados:** Teto de retorno exibido (Não verificado).
+**Elementos verificados:** Teto de retorno exibido (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -282,9 +321,13 @@ TITLE-ABS-KEY(education)
 
 - captura da tela do retorno e da última página acessível
 
+**Resultados registrados.**
+
+- (BD2/sd6-2026-11-25) 2026-11-25T20:26: leitura 2
+
 #### SD7 — saber quantos registros a base exporta de uma vez em RIS com todos os campos
 
-**Elementos verificados:** Teto de exportação por lote (Não verificado); Exportação em RIS com todos os campos (Não verificado).
+**Elementos verificados:** Teto de exportação por lote (Verificado por medição); Exportação em RIS com todos os campos (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -317,6 +360,96 @@ TITLE-ABS-KEY(ontology AND education)
 
 - captura da tela da opção de exportação
 - o arquivo exportado
+
+**Resultados registrados.**
+
+- (BD2/sd7-2026-11-25) 2026-11-25T20:26: leitura 1
+
+#### SD8 — saber se o curinga trunca dentro da frase aproximada entre aspas
+
+**Elementos verificados:** Curinga `*` dentro de `""` (Verificado por medição).
+
+**Pré-requisitos.**
+
+- busca avançada da Scopus aberta no navegador do pesquisador
+
+**Consulta 1 — controle**, em busca avançada.
+
+```
+TITLE-ABS-KEY("conceptual model")
+```
+
+**Consulta 2 — teste**, em busca avançada. Muda em relação ao controle: curinga no fim da locução entre aspas.
+
+```
+TITLE-ABS-KEY("conceptual model*")
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, na mesma sessão, e anotar o retorno e a mensagem, se houver
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro ou de recusa, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste > controle, sem mensagem | o curinga trunca dentro das aspas, na forma testada | Verificado por medição |
+| 2 | 0 < teste ≤ controle, sem mensagem, ou consulta recusada com mensagem | o curinga não trunca dentro das aspas | Verificado por medição |
+| 3 | teste = 0 sem mensagem, ou controle = 0 | inconclusiva: o zero não distingue recusa silenciosa de ausência do termo | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD2/sd8-2026-11-25) 2026-11-25T20:05: leitura 1
+
+#### SD9 — saber se o curinga trunca dentro da frase exata entre chaves
+
+**Elementos verificados:** Curinga `*` dentro de `{}` (Verificado por medição).
+
+**Pré-requisitos.**
+
+- busca avançada da Scopus aberta no navegador do pesquisador
+
+**Consulta 1 — controle**, em busca avançada.
+
+```
+TITLE-ABS-KEY({conceptual model})
+```
+
+**Consulta 2 — teste**, em busca avançada. Muda em relação ao controle: curinga no fim da locução entre chaves.
+
+```
+TITLE-ABS-KEY({conceptual model*})
+```
+
+**Passos.**
+
+1. submeter cada consulta, uma por vez, na mesma sessão, e anotar o retorno e a mensagem, se houver
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro ou de recusa, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste > controle, sem mensagem | o curinga trunca dentro das chaves, na forma testada | Verificado por medição |
+| 2 | 0 < teste ≤ controle, sem mensagem, ou consulta recusada com mensagem | o curinga não trunca dentro das chaves | Verificado por medição |
+| 3 | teste = 0 sem mensagem, ou controle = 0 | inconclusiva: o zero não distingue recusa silenciosa de ausência do termo | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD2/sd9-2026-11-25) 2026-11-25T20:05: leitura 2
 
 ---
 

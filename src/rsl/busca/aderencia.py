@@ -7,7 +7,7 @@ from ..markdown import normaliza
 from ..saida import Saida
 from ..sementes import COL_INDEXADA, COL_RECUPERADA
 from . import Busca
-from .registro import carrega_consultas, coleta, exige_registros, identifica
+from .registro import coleta, consultas_do_corpus, exige_registros, identifica
 
 
 def chave_titulo(t):
@@ -65,6 +65,20 @@ def avalia_aderencia(sementes, recuperadas, limiar):
     return {"por_papel": por_papel, "decide": val, "limiar": limiar}
 
 
+def registros_unicos(b):
+    """Registros únicos do corpus: só as execuções da executada, com o relato das lidas."""
+    return [r for r in exige_registros(identifica(coleta(consultas_do_corpus(b))))
+            if not r["duplicata_de"]]
+
+
+def casa_sementes(sementes, regs):
+    """[(semente, casamentos exatos, candidatos por prefixo)], na ordem das sementes."""
+    idx = {}
+    for r in regs:
+        idx.setdefault(chave_titulo(r.get("titulo")), []).append(r)
+    return [(e, *casa_titulo(idx, chave_titulo(e["titulo"]))) for e in sementes]
+
+
 def aderencia(b):
     """Mede recall: quantos dos estudos-semente aparecem na exportação. NÃO aplica o
     recorte temporal — o conjunto-semente valida o desenho da busca, não os critérios de
@@ -81,19 +95,12 @@ def aderencia(b):
     abaixo do limiar é relatada, porque o denominador definitivo é o da planilha.
     """
     sementes = b.d["sementes"]
-    _, validas = carrega_consultas(b)
-    regs = [r for r in exige_registros(identifica(coleta(validas))) if not r["duplicata_de"]]
-
-    idx = {}
-    for r in regs:
-        idx.setdefault(chave_titulo(r.get("titulo")), []).append(r)
+    regs = registros_unicos(b)
 
     print(f"\nADERÊNCIA AO CONJUNTO-SEMENTE — {len(sementes)} estudos, "
           f"{len(regs)} registros únicos\n")
     recuperadas, indicios = set(), set()
-    for e in sementes:
-        k = chave_titulo(e["titulo"])
-        exatas, prefixo = casa_titulo(idx, k)
+    for e, exatas, prefixo in casa_sementes(sementes, regs):
         if exatas:
             recuperadas.add(e["id"])
             bases = ", ".join(sorted({r.get("base", "?") for r in exatas}))

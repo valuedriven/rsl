@@ -38,6 +38,7 @@ def consultas_do_registro(b, dado):
                 continue
             consultas.append({
                 "id": f"{nome}-{e.get('expressao')}-{pathlib.Path(arq).stem}",
+                "execucao": f"{bd}/{e.get('id') or '?'}",
                 "base": nome,
                 "expressao": e.get("expressao"),
                 "data_hora": e.get("data_hora") or e.get("data") or "",
@@ -71,6 +72,46 @@ def carrega_consultas(b, exigir=True):
             f"  Registre a execução primeiro:\n"
             f"  {CMD_REGISTRAR} <base> <expressao> <arquivo> --retorno <n>")
     return dado, validas
+
+
+MOTIVO_SONDA = "sonda"
+MOTIVO_CONFERENCIA = "execução direta de conferência"
+
+
+def selecao_do_corpus(b, validas):
+    """(lidas, deixadas de fora): o corpus é só a expressão executada.
+
+    A sonda fica fora do corpus pelo protocolo, e as execuções diretas das expressões de
+    conferência são subconjuntos da executada: lidas, inflariam as contagens brutas e a
+    coluna `duplicata_de` sem acrescentar registro. Cada deixada de fora leva o motivo."""
+    lidas, fora = [], []
+    for c in validas:
+        if c.get("expressao") == b.executada:
+            lidas.append(c)
+        else:
+            motivo = MOTIVO_SONDA if c.get("expressao") == b.sonda else MOTIVO_CONFERENCIA
+            fora.append((c, motivo))
+    return lidas, fora
+
+
+def consultas_do_corpus(b):
+    """As consultas da executada, com o relato das lidas e das deixadas de fora; DADOS se
+    nenhuma execução da executada está registrada."""
+    _, validas = carrega_consultas(b)
+    lidas, fora = selecao_do_corpus(b, validas)
+    print(f"Execuções lidas (expressão executada, {b.executada}):")
+    for c in lidas:
+        print(f"  {c['execucao']}  {c['base']} {c['expressao']}")
+    if fora:
+        print("Execuções registradas deixadas de fora do corpus:")
+        for c, motivo in fora:
+            print(f"  {c['execucao']}  {c['base']} {c['expressao']} — {motivo}")
+    if not lidas:
+        raise DadosInvalidos(
+            f"nenhuma execução de {b.executada} (a executada) registrada em "
+            f"{relativo(b.registro)}: o corpus é só a executada.\n"
+            f"  {CMD_REGISTRAR} <base> {b.executada} <arquivo> --retorno <n>")
+    return lidas
 
 
 def coleta(consultas):
