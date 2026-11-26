@@ -9,24 +9,27 @@
 | Nomes de campo (`title`, `abstract`, `descriptor`, `educationlevel`, `language`, `publicationtype`, `pubyear`, `author`, `source`, `institution`, `sponsor`, `audience`, `assessment`, `law`, `location`, `e_yearadded`, `iesgrantcontractnum`) e filtros (`pubyearmin`, `pubyearmax`) | campos | Verificado em fonte oficial | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
 | Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` | campos | Verificado em fonte oficial; comportamento **não medido** | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
 | Prefixo de campo restringe de fato | campos | Verificado por medição (BD3/sd1-2026-11-26) | — | SD1 |
+| Prefixo `abstract:` restringe ao resumo | campos | Verificado por medição (BD3/sd21-2026-11-26); a busca restrita ao resumo devolveu menos que a busca livre | — | SD21 |
 | Parênteses para agrupamento | agrupamento | Verificado por medição (BD3/sd2-2026-11-26) | — | SD2 |
-| Parênteses aplicam a condição externa ao grupo inteiro | agrupamento | **Não verificado**; o teste agrupado devolveu mais que o controle plano (BD3/sd17-2026-11-26), resultado que não corresponde a nenhuma das leituras; o agrupamento segue não estabelecido | — | SD17 |
-| Parêntese em torno de um único termo | agrupamento | **Não verificado** | — | SD18 |
+| Parênteses aplicam a condição externa ao grupo inteiro | agrupamento | **Não verificado**; o teste agrupado devolveu mais que o controle plano (BD3/sd17-2026-11-26), resultado que não corresponde a nenhuma das leituras; a SD19 mostrou que o `OR` plano do controle foi descartado (BD3/sd19-2026-11-26), o que explica a diferença | — | SD17 |
+| Parêntese em torno de um único termo | agrupamento | Verificado por medição (BD3/sd18-2026-11-26); o parêntese em torno de um termo não mudou o conjunto | — | SD18 |
+| `OR` fora de parênteses | agrupamento | Verificado por medição (BD3/sd19-2026-11-26); a base descartou o `OR` acrescentado sem parênteses; nenhuma expressão usa essa forma | — | SD19 |
 | Exigência de condição externa ao grupo | agrupamento | **Não verificado**; o grupo com `OR` sozinho devolveu registros sem condição fora dele (BD3/sd3-2026-11-26); a exigência não se sustenta, e a composição não depende dela | — | SD3 |
 | Campos diferentes num mesmo grupo | agrupamento | **Não verificado**; a ERIC aceita campos diferentes na mesma disjunção: o teste devolveu registros (BD3/sd5-2026-11-26), e a regra de que devolveria zero não se sustenta | — | SD5 |
 | `pubyearmin`/`pubyearmax` junto a um grupo | filtros | **Não verificado**; os campos de ano na consulta não recortam como o filtro da página (BD3/sd6-2026-11-26); o recorte de ano é feito no filtro da página | — | SD6 |
 | `pubyearmin`/`pubyearmax` ligados por `AND` em consulta sem parênteses | filtros | **Não verificado**; no teste, o retorno sem o filtro da página foi maior que o do controle com o filtro (BD3/sd7-2026-11-26); o recorte de ano é feito no filtro da página | — | SD7 |
-| Truncamento com `*` | truncamento | **Não verificado**; a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json` | — | SD8 |
-| Mínimo de três letras antes do `*` | truncamento | **Não verificado**; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial | — | SD8 |
+| Truncamento com `*` | truncamento | Verificado por medição (BD3/sd8-2026-11-26-2); o `*` não trunca no título; o zero do `ontolog*` é o aviso padrão de retorno zero, e a afirmação da skill `executar-sondagens-de-sintaxe` fica confirmada | — | SD8 |
+| Mínimo de três letras antes do `*` | truncamento | **Não existe** (BD3/sd8-2026-11-26-2); o `*` não trunca nesta base: o zero do `ontolog*` é o aviso padrão de retorno zero, não recusa; não há mínimo de letras a medir | — | — |
 | Derivação automática de radicais desativada, com casamento exato sem aspas | lematizacao | **Não verificado**; a forma derivada devolveu retorno menor que o do singular (BD3/sd10-2026-11-26), o que não confirma a derivação automática; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23 | — | SD10 |
 | API pública de exportação | exportacao | **Não verificado** | — | sem sondagem: verificação documental, não sondagem: conferir na documentação oficial; afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23 |
-| Lematização | lematizacao | **Não verificado**; o plural devolveu o mesmo retorno do singular (BD3/sd10-2026-11-26); não se declara `pela lematização` sem decisão | — | SD10 |
+| Lematização | lematizacao | **Não verificado**; o plural devolveu o mesmo retorno do singular (BD3/sd10-2026-11-26), e os registros da consulta pelo singular trazem `Ontologies` nos títulos (BD3/sd8-2026-11-26-2); a declaração de número segue `explícito`, que não depende da lematização, e não se declara `pela lematização` | — | SD10 |
 | Aspas como frase | frase | Verificado por medição (BD3/sd9-2026-11-26) | — | SD9 |
 | Campo `descriptor` | vocabulario_controlado | **Não verificado**; os três registros abertos de `descriptor:Thesauri` não traziam `Thesauri` entre os descritores (BD3/sd11-2026-11-26); o campo não se confirma | — | SD11 |
-| Comprimento máximo da consulta | limite_consulta | Verificado por medição (BD3/sd12-2026-11-26); a consulta mais longa do procedimento foi aceita inteira (BD3/sd12-2026-11-26); 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação | — | SD12 |
+| Comprimento máximo da consulta | limite_consulta | Verificado por medição (BD3/sd12-2026-11-26); a consulta mais longa do procedimento foi aceita inteira; 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação | — | SD12 |
 | Negação com prefixo `-` | operadores | Verificado em fonte oficial; não medida | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
-| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | Verificado por medição (BD3/sd13-2026-11-26); a forma com espaço e a hifenizada são buscas distintas, e a forma sem hífen nem espaço devolve menos (BD3/sd13-2026-11-26) | — | SD13 |
+| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | Verificado por medição (BD3/sd13-2026-11-26); a forma com espaço e a hifenizada são buscas distintas, e a forma sem hífen nem espaço devolve menos | — | SD13 |
 | Teto de retorno exibido | limite_retorno | Verificado por medição (BD3/sd14-2026-11-26); o último registro acessível ficou na posição 100.115, abaixo do retorno exibido | — | SD14 |
+| Aviso da interface para retorno zero | limite_retorno | Verificado por medição (BD3/sd20-2026-11-26); todo retorno zero traz o mesmo aviso, inclusive o de um termo que não existe; o aviso não é recusa de sintaxe | — | SD20 |
 | Teto de exportação por lote | limite_exportacao | Verificado por medição (BD3/sd15-2026-11-26); a interface oferece até 200 registros por lote; o teste exportou os 101 do retorno | — | SD15 |
 | Controles `Include Synonyms` e `Include Dead terms` | vocabulario_controlado | **Não verificado** | — | sem sondagem: não localizados na interface; nenhuma expressão depende deles |
 | Operador de proximidade | proximidade | **Não verificado** | — | sem sondagem: verificação documental antes de sondagem: o painel *Advanced Search Tips* não foi conferido quanto a proximidade; nenhuma expressão depende dele |
@@ -359,7 +362,7 @@ title:ontology AND abstract:education AND pubyearmin:2017 AND pubyearmax:2026
 
 #### SD8 — saber se o `*` trunca e com quantas letras antes dele
 
-**Elementos verificados:** Truncamento com `*` (Não verificado); Mínimo de três letras antes do `*` (Não verificado); sem truncamento nas expressões (Não verificado).
+**Elementos verificados:** Truncamento com `*` (Verificado por medição); sem truncamento nas expressões (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -414,7 +417,8 @@ title:on*
 
 **Resultados registrados.**
 
-- (BD3/sd8-2026-11-26) 2026-11-26T13:22: leitura 3
+- (BD3/sd8-2026-11-26) 2026-11-26T13:22: leitura 2
+- (BD3/sd8-2026-11-26-2) 2026-11-26T16:16: leitura 2
 
 #### SD9 — saber se as aspas exigem a sequência exata das palavras
 
@@ -824,7 +828,7 @@ abstract:ontology AND (abstract:education OR abstract:learning)
 
 #### SD18 — saber se um parêntese redundante, em torno de um único termo, muda o conjunto devolvido
 
-**Elementos verificados:** Parêntese em torno de um único termo (Não verificado).
+**Elementos verificados:** Parêntese em torno de um único termo (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -862,6 +866,152 @@ title:ontology AND (abstract:education)
 **Evidência a registrar.**
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd18-2026-11-26) 2026-11-26T15:56: leitura 1
+
+#### SD19 — saber se um `OR` acrescentado no fim de uma consulta sem parênteses amplia o conjunto
+
+**Elementos verificados:** `OR` fora de parênteses (Verificado por medição).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+abstract:ontology AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o acréscimo de `OR abstract:learning`, sem parênteses.
+
+```
+abstract:ontology AND abstract:education OR abstract:learning
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste = controle > 0 | a base descarta o `OR` fora de parênteses: a forma plana não amplia o conjunto, os parênteses são honrados e a composição não usa a forma plana | Verificado por medição |
+| 2 | teste ≠ controle, ambos > 0 | o `OR` fora de parênteses amplia o conjunto, e o resultado da SD17 segue sem explicação; levar ao pesquisador | Não verificado |
+| 3 | controle = 0, teste = 0, ou mensagem de erro | não se distingue o efeito do `OR` plano; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd19-2026-11-26) 2026-11-26T16:05: leitura 1
+
+#### SD20 — saber se a interface exibe o mesmo aviso para todo retorno zero, inclusive o de um termo que não existe
+
+**Elementos verificados:** Aviso da interface para retorno zero (Verificado por medição).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+title:ontology
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: um termo que não existe na base.
+
+```
+title:zzzqqqx
+```
+
+**Consulta 3 — teste**, em caixa de busca. Muda em relação ao controle: o termo com `*` que devolveu zero na SD8.
+
+```
+title:ontolog*
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o primeiro teste e anotar o retorno e a mensagem exibida
+3. submeter o segundo teste e anotar o retorno e a mensagem exibida
+4. comparar as mensagens dos dois testes
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- texto exato da mensagem de cada teste
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | os dois testes = 0, com a mesma mensagem | o aviso é o padrão do retorno zero, não recusa de sintaxe; o zero do `ontolog*` não indica que o `*` foi recusado | Verificado por medição |
+| 2 | os dois testes = 0, com mensagens diferentes, ou o primeiro teste sem mensagem | a interface distingue o zero por ausência do termo do zero do `ontolog*`, que tem outra causa | Verificado por medição |
+| 3 | controle = 0, primeiro teste > 0, ou mensagem de erro | não se distingue a origem do aviso; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd20-2026-11-26) 2026-11-26T16:22: leitura 1
+
+#### SD21 — saber se `abstract:` restringe a busca ao resumo, em vez de ser ignorado
+
+**Elementos verificados:** Prefixo `abstract:` restringe ao resumo (Verificado por medição).
+
+**Pré-requisitos.**
+
+- busca de `eric.ed.gov` aberta no navegador do pesquisador, sem filtro de data e sem `Peer reviewed only`
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+ontology
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o prefixo `abstract:`.
+
+```
+abstract:ontology
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | 0 < teste < controle | o prefixo `abstract:` restringe ao resumo | Verificado por medição |
+| 2 | teste = controle > 0 | o prefixo `abstract:` não restringe: a consulta pelo resumo casa o termo em qualquer campo | Verificado por medição |
+| 3 | teste = 0, controle = 0, ou mensagem de erro | não se distingue o efeito do prefixo `abstract:`; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd21-2026-11-26) 2026-11-26T17:41: leitura 1
 
 ---
 
@@ -963,7 +1113,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 | Regra | Situação | Sondagem |
 | :--- | :--- | :--- |
 | a condição externa pode ser de campo, de texto livre ou outro grupo, antes ou depois | Verificado por medição (BD3/sd4-2026-11-26) | SD4 |
-| sem truncamento nas expressões | **Não verificado** | SD8 |
+| sem truncamento nas expressões | Verificado por medição (BD3/sd8-2026-11-26-2) | SD8 |
 | expressão composta sempre entre aspas | Verificado por medição (BD3/sd9-2026-11-26) | SD9 |
 
 ### EB1 (geral — as quatro facetas)

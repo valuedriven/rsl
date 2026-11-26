@@ -855,14 +855,14 @@
             }
           ],
           "leitura": {
-            "numero": 3,
-            "resultado": "qualquer outra combinação, ou primeiro teste = controle",
-            "estado": "nao_verificado"
+            "numero": 2,
+            "resultado": "primeiro teste = 0 sem mensagem",
+            "estado": "medicao"
           },
           "evidencia": [
             "data/evidencia/sondagens/eric/SD4-SD8_2026-11-26T1322.md"
           ],
-          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; o primeiro teste devolveu zero com a mensagem 'No results matched your query.', não o zero silencioso da leitura 2; segundo teste 8 e terceiro 224.913; nenhuma leitura do roteiro cobre o conjunto"
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; o primeiro teste devolveu zero com a mensagem 'No results matched your query.', não o zero silencioso da leitura 2; segundo teste 8 e terceiro 224.913; nenhuma leitura do roteiro cobre o conjunto; retificado em 2026-11-26T16:22: a leitura 3, registrada antes, tomou o aviso 'No results matched your query.' como mensagem; a SD20 (BD3/sd20-2026-11-26) mostrou que o aviso é o padrão de todo retorno zero, não recusa, e a leitura passa a 2"
         },
         {
           "id": "sd9-2026-11-26",
@@ -1079,6 +1079,138 @@
             "data/evidencia/sondagens/eric/SD13-SD17_2026-11-26T1540.md"
           ],
           "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; teste 917 > controle 612, resultado que nenhuma leitura do roteiro previu"
+        },
+        {
+          "id": "sd18-2026-11-26",
+          "sondagem": "SD18",
+          "data_hora": "2026-11-26T15:56",
+          "consultas": [
+            {
+              "texto": "title:ontology AND abstract:education",
+              "retorno": 101
+            },
+            {
+              "texto": "title:ontology AND (abstract:education)",
+              "retorno": 101
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste = controle > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD18_2026-11-26T1556.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; o controle veio igual ao registrado na SD2 e na SD6"
+        },
+        {
+          "id": "sd19-2026-11-26",
+          "sondagem": "SD19",
+          "data_hora": "2026-11-26T16:05",
+          "consultas": [
+            {
+              "texto": "abstract:ontology AND abstract:education",
+              "retorno": 612
+            },
+            {
+              "texto": "abstract:ontology AND abstract:education OR abstract:learning",
+              "retorno": 612
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "teste = controle > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD19_2026-11-26T1605.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; o controle é a forma reduzida e o teste é a consulta que serviu de controle à SD17"
+        },
+        {
+          "id": "sd8-2026-11-26-2",
+          "sondagem": "SD8",
+          "data_hora": "2026-11-26T16:16",
+          "consultas": [
+            {
+              "texto": "title:ontology",
+              "retorno": 344
+            },
+            {
+              "texto": "title:ontolog*",
+              "retorno": 0
+            },
+            {
+              "texto": "title:ont*",
+              "retorno": 8
+            },
+            {
+              "texto": "title:on*",
+              "retorno": 224913
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "primeiro teste = 0 sem mensagem",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD8_2026-11-26T1616.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; repetição com os mesmos retornos de BD3/sd8-2026-11-26; os três registros abertos são do controle (o primeiro teste devolveu zero) e trazem Ontology e Ontologies nos títulos, o que interessa à SD10; retificado em 2026-11-26T16:22: a leitura 3, registrada antes, tomou o aviso 'No results matched your query.' como mensagem; a SD20 (BD3/sd20-2026-11-26) mostrou que o aviso é o padrão de todo retorno zero, não recusa, e a leitura passa a 2"
+        },
+        {
+          "id": "sd20-2026-11-26",
+          "sondagem": "SD20",
+          "data_hora": "2026-11-26T16:22",
+          "consultas": [
+            {
+              "texto": "title:ontology",
+              "retorno": 344
+            },
+            {
+              "texto": "title:zzzqqqx",
+              "retorno": 0
+            },
+            {
+              "texto": "title:ontolog*",
+              "retorno": 0
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "os dois testes = 0, com a mesma mensagem",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD20_2026-11-26T1622.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; os dois testes devolveram zero com a mesma mensagem"
+        },
+        {
+          "id": "sd21-2026-11-26",
+          "sondagem": "SD21",
+          "data_hora": "2026-11-26T17:41",
+          "consultas": [
+            {
+              "texto": "ontology",
+              "retorno": 1507
+            },
+            {
+              "texto": "abstract:ontology",
+              "retorno": 1418
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "0 < teste < controle",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD21_2026-11-26T1741.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; o controle repetiu o 1.507 da SD1"
         }
       ]
     },

@@ -1,22 +1,12 @@
 {
   "levantamento": {
     "data": "2026-11-18",
-    "revisao": "2026-11-22",
-    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl projeto pendencias` e contra o código.",
+    "revisao": "2026-11-26",
+    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl projeto pendencias` e contra o código. 2026-11-26: revisão depois das sondagens de sintaxe da ERIC e das decisões registradas no histórico; cada pendência conferida contra a fonte que cita e contra o registro de execução.",
     "limitacao": "A busca por termos pode não pegar ressalvas escritas de outra forma. As origens citam seção, e não linha.",
     "regra": "O arquivo contém só ações não concluídas; pendência resolvida ou descartada é excluída, e o que a encerrou vai ao histórico (README, Três registros)."
   },
   "pendencias": [
-    {
-      "id": "PD03",
-      "categoria": "validacao-terminologica",
-      "descricao": "Validação terminológica sem decisão: TBCI, UNESCO Thesaurus, ERIC Thesaurus e Brased/INEP consultados pelo cliente TemaTres nos endereços do protocolo, com as propostas da máquina e a forma do termo no instrumento na planilha; nenhuma `decisao_ReT` preenchida. Até a decisão, todo termo fica em \"Termo livre\". A validação decide a linha de cada termo pela `decisao_ReT` (descritor em algum instrumento → \"Descritores correspondentes\"; senão sinônimo ou relacionado → \"Termos sinônimos ou relacionados\"; senão \"Termo livre\"), e `documentos conferir` reprova o termo fora da linha que a decisão determina.",
-      "origem": "python3 -m rsl projeto pendencias; data/validacao_terminologica.csv; data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
-      "bloqueia": "validação terminológica (M3/E1, passo 2)",
-      "acao_sugerida": "preencher `decisao_ReT` em data/validacao_terminologica.csv a partir das propostas e da evidência; mover cada termo para a linha que a decisão determina; strings gerar --gravar e procedimentos gerar <sigla> --gravar",
-      "responsavel": "pesquisador",
-      "atualizacao": "2026-11-26: fazer por faceta; toda mudança de linha altera a STR e é emenda de busca, com reexecução."
-    },
     {
       "id": "PD04",
       "categoria": "validacao-terminologica",
@@ -30,10 +20,10 @@
       "id": "PD09",
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
-      "descricao": "Comportamento da sintaxe da ERIC e teto de retorno e de exportação marcados como não verificados ou não medidos no cabeçalho e na seção 1 do procedimento de busca.",
+      "descricao": "Elementos de sintaxe da ERIC ainda não medidos: a lematização e a derivação, o campo `descriptor`, a negação com `-`, os campos de casamento exato, a proximidade, `Include Synonyms`/`Dead terms` e a API de exportação; os elementos de agrupamento e de ano na consulta cujas sondagens não concluíram seguem não verificados. Já medidos: `title:`, `abstract:`, parênteses, aspas, truncamento, comprimento da consulta e os tetos de retorno e de exportação.",
       "origem": "docs/procedimentos_busca_eric.md, cabeçalho e seção 1",
-      "bloqueia": "execução definitiva na ERIC (M3/E2); a sondagem de sintaxe é obrigatória",
-      "acao_sugerida": "sondagem de sintaxe com as contagens registradas",
+      "bloqueia": "as variantes que usam `descriptor`, `descriptorx` ou `-`; não bloqueia a EB4 nem a EB5, cuja sintaxe está medida",
+      "acao_sugerida": "sondar `descriptor`, `descriptorx` e `-` quando a variante correspondente for acionada; tratar proximidade, `Include Synonyms`/`Dead terms` e a API de exportação como recursos que nenhuma consulta usa. A declaração de número fica `explícito`, que não depende da lematização",
       "responsavel": "pesquisador"
     },
     {
@@ -58,7 +48,7 @@
     {
       "id": "PD20",
       "categoria": "aderencia",
-      "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio nas 10 sementes do arquivo de sementes (`[documentos] sementes`). É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
+      "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio em parte das sementes do arquivo de sementes (`[documentos] sementes`); as que faltam se listam por `python3 -m rsl projeto pendencias`. É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
       "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl projeto pendencias",
       "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda (`aderencia diagnosticar`); não bloqueia a execução do teste de aderência",
       "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill definir-conjunto-semente, §4)",
@@ -94,16 +84,6 @@
       "atualizacao": "2026-11-26: candidatos, a escolher pelo pesquisador — MMAT 2018 (Hong et al., Education for Information 34(4), 285–291, doi:10.3233/EFI-180221), critérios de qualidade de Dybå e Dingsøyr (Information and Software Technology 50(9-10), 833–859, 2008) e checklist de Kitchenham e Charters (EBSE-2007-01, v2.3); dados bibliográficos conferidos em busca na web em 2026-11-26, conteúdo dos critérios dos dois últimos não lido."
     },
     {
-      "id": "PD27",
-      "categoria": "sintaxe-base",
-      "base": "BD3 — ERIC",
-      "descricao": "Contradição de verificação na ERIC: a seção 4 do procedimento anterior à migração chamava de \"regras medidas\" as regras de montagem (grupo com OR exige condição externa; grupo não mistura campos; pubyearmin/pubyearmax não convivem com grupo; sem truncamento), e a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca (`ontolog*` devolve 0); a seção 1 do mesmo procedimento dava esses elementos como não verificados, e nenhuma sondagem com evidência está no repositório. Transcritos como `nao_verificado`, com sondagem no roteiro, sem resolver a contradição.",
-      "origem": "docs/procedimentos_busca_eric.md antes da migração de 2026-11-23 (seções 1 e 4); .agents/skills/executar-sondagens-de-sintaxe/SKILL.md, seção \"4. O roteiro\"; change `geracao-das-fichas-de-busca`, tarefa 6.2",
-      "bloqueia": "execução definitiva na ERIC, junto com a PD09",
-      "acao_sugerida": "executar as sondagens SD1 a SD9 do roteiro da ERIC, registrá-las por `sondagens registrar` e corrigir a afirmação da skill `executar-sondagens-de-sintaxe` pelo resultado registrado",
-      "responsavel": "pesquisador"
-    },
-    {
       "id": "PD31",
       "categoria": "aderencia",
       "descricao": "Teste de aderência a refazer: as STRs mudaram de conteúdo em 2026-11-24 (termos retirados e acrescentados ao controle terminológico; en/es da linha \"Termo livre\" reduzidos aos equivalentes dos termos pt; \"Termos sinônimos ou relacionados\" fora da STR), e o pesquisador decidiu refazer o teste.",
@@ -126,8 +106,8 @@
       "categoria": "conferencias-da-busca",
       "descricao": "Amostra da sonda de sensibilidade da WoS a classificar: data/sensibilidade_wos.csv, gravada por `conferencia sensibilidade wos`, sem nenhum registro classificado.",
       "origem": "python3 -m rsl conferencia sensibilidade wos",
-      "bloqueia": "decisão da sensibilidade da WoS (manter EB4 ou reconsiderar, com emenda)",
-      "acao_sugerida": "classificar cada registro da amostra quanto à elegibilidade e rodar de novo `conferencia sensibilidade wos`",
+      "bloqueia": "nada por ora: o bloqueio anterior, a decisão da sensibilidade da WoS, caiu com a decisão de 2026-11-26 que manteve a EB4 (data/historico.md)",
+      "acao_sugerida": "decidir o destino da classificação: se o relato for declarar a sensibilidade da WoS, classificar a amostra de data/leitura_sensibilidade_wos.md e preencher `elegivel`; se não, encerrar a pendência",
       "responsavel": "pesquisador",
       "atualizacao": "2026-11-26: lista de leitura com título e resumo dos 52 registros em data/leitura_sensibilidade_wos.md; a classificação vai à coluna `elegivel` do CSV, com `;` como separador."
     },
@@ -139,16 +119,6 @@
       "origem": "verificação da change diagnostico-das-perdas-da-busca (2026-11-26); docs/procedimentos/scopus/procedimento.toml",
       "bloqueia": "atribuição da causa `não indexada` no diagnóstico da Scopus (nível 1)",
       "acao_sugerida": "ao submeter o nível 1 de `aderencia diagnosticar scopus`: se o retorno for menor que o número de DOIs, submeter cada DOI ausente sozinho antes de registrar; DOI que volta sozinho e não no grupo indica falha do agrupamento — parar e não registrar.",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD41",
-      "categoria": "sintaxe-base",
-      "base": "BD3 — ERIC",
-      "descricao": "A SD2 (controle 101, teste 101) e a SD3 (teste 344) não distinguiram parênteses honrados de avaliação da esquerda para a direita. A SD17, desenhada para separar as duas, devolveu mais no teste agrupado que no controle plano, resultado que a semântica booleana padrão não prevê — o conjunto do teste estaria contido no do controle — e que nenhuma leitura do roteiro cobriu. O agrupamento segue não estabelecido, e a EB4, composta de grupos `(A OR B)` unidos por `AND`, depende dele.",
-      "origem": "data/registro_execucao.json, bases.BD3.sondagens (BD3/sd2-2026-11-26, BD3/sd3-2026-11-26 e BD3/sd17-2026-11-26); docs/procedimentos/eric/procedimento.toml, [[sondagens]] SD18",
-      "bloqueia": "execução definitiva na ERIC (M3/E2), junto com a PD09; a composição da EB4 pressupõe agrupamento",
-      "acao_sugerida": "executar a SD18, que isola o efeito do parêntese redundante (`title:ontology AND abstract:education` contra `title:ontology AND (abstract:education)`), e registrar por `sondagens registrar`; se o teste diferir do controle, a composição da EB4 vai à decisão do pesquisador antes de qualquer execução",
       "responsavel": "pesquisador"
     }
   ]

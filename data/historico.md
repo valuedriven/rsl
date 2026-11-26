@@ -115,3 +115,27 @@ Alcance: **método**.
 - **A regra de ajuste continua valendo:** se a aderência com o denominador definitivo ficar abaixo de `limiar_aderencia`, a revisão do controle terminológico volta a ser obrigatória.
 
 Encerra a PD39. Alcance: **busca**.
+
+## 2026-11-26 — Agrupamento na ERIC
+
+- **A composição da ERIC pode apoiar-se em grupos entre parênteses.** Os parênteses são honrados: um grupo com `OR` sozinho devolve registros, a condição externa se aplica ao grupo, a forma agrupada acrescenta o que a disjunção interna acrescenta, e um parêntese em torno de um único termo não muda o conjunto.
+- **Não se usa `OR` fora de parênteses nesta base.** A base descarta esse `OR`: a consulta com ele devolve o mesmo que a consulta sem ele. Toda expressão da ERIC já escreve o `OR` dentro de parênteses.
+- **Nenhuma expressão muda** e a EB4 fica como está. O bloqueio da execução por esta questão cai; a PD09 continua pelos demais elementos de sintaxe ainda não medidos.
+
+Encerra a PD41. Alcance: **busca**.
+
+## 2026-11-26 — Truncamento na ERIC
+
+- **O `*` não trunca no título.** A consulta truncada devolve zero com o aviso padrão de retorno zero, e não recusa de sintaxe; a afirmação de que a ERIC não trunca fica confirmada por sondagem registrada.
+- **Não há mínimo de três letras antes do `*`:** sem truncamento, não há mínimo a exigir. O elemento correspondente passa a inexistente, com a citação da sondagem.
+- **A skill `executar-sondagens-de-sintaxe` deixa de afirmar** que as verificações feitas de memória não têm sondagem registrada: afirmação de memória só vale depois de sondagem no roteiro da própria base.
+
+Encerra a PD27. Alcance: **busca**.
+
+## 2026-11-26 — Validação terminológica encerrada
+
+- **As decisões já estão tomadas** desde 2026-11-25 e registradas na planilha de validação: os descritores correspondentes, as formas livres que permanecem e os casos decididos como termo livre.
+- **Nenhum termo fica sem estatuto.** O termo sem `decisao_ReT` é "Termo livre" pela regra de 2026-11-24, e o vazio da planilha não é decisão pendente. As propostas da máquina que apontam para outro conceito seguem como termo livre e não entram na STR.
+- **As STRs e os procedimentos já refletem esse estado** e `documentos conferir` aprova; nenhuma regeneração é necessária por esta decisão.
+
+Encerra a PD03. Alcance: **busca**.

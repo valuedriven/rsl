@@ -53,7 +53,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
 | *Termo livre* | contexto educacional, contexto de aprendizagem, fator contextual, fator situacional, ambiente educacional | educational context, learning context, contextual factor, situational factor | contexto educativo, contexto de aprendizaje, factor contextual, factor situacional, entorno educativo |
-| *Descritores correspondentes* |  | educational environment | ambiente educacional  |
+| *Descritores correspondentes* | fatores de rendimento escolar | educational environment | ambiente educacional  |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
 ## Instrumentos para controle terminológico

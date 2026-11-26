@@ -35,6 +35,14 @@ sondagem = "SD1"
 citacao = "BD3/sd1-2026-11-26"
 
 [[sintaxe]]
+elemento = "Prefixo `abstract:` restringe ao resumo"
+categoria = "campos"
+situacao = "medicao"
+sondagem = "SD21"
+citacao = "BD3/sd21-2026-11-26"
+nota = "a busca restrita ao resumo devolveu menos que a busca livre"
+
+[[sintaxe]]
 elemento = "Parênteses para agrupamento"
 categoria = "agrupamento"
 situacao = "medicao"
@@ -46,13 +54,23 @@ elemento = "Parênteses aplicam a condição externa ao grupo inteiro"
 categoria = "agrupamento"
 situacao = "nao_verificado"
 sondagem = "SD17"
-nota = "o teste agrupado devolveu mais que o controle plano (BD3/sd17-2026-11-26), resultado que não corresponde a nenhuma das leituras; o agrupamento segue não estabelecido"
+nota = "o teste agrupado devolveu mais que o controle plano (BD3/sd17-2026-11-26), resultado que não corresponde a nenhuma das leituras; a SD19 mostrou que o `OR` plano do controle foi descartado (BD3/sd19-2026-11-26), o que explica a diferença"
 
 [[sintaxe]]
 elemento = "Parêntese em torno de um único termo"
 categoria = "agrupamento"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD18"
+citacao = "BD3/sd18-2026-11-26"
+nota = "o parêntese em torno de um termo não mudou o conjunto"
+
+[[sintaxe]]
+elemento = "`OR` fora de parênteses"
+categoria = "agrupamento"
+situacao = "medicao"
+sondagem = "SD19"
+citacao = "BD3/sd19-2026-11-26"
+nota = "a base descartou o `OR` acrescentado sem parênteses; nenhuma expressão usa essa forma"
 
 [[sintaxe]]
 elemento = "Exigência de condição externa ao grupo"
@@ -85,16 +103,17 @@ nota = "no teste, o retorno sem o filtro da página foi maior que o do controle 
 [[sintaxe]]
 elemento = "Truncamento com `*`"
 categoria = "truncamento"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD8"
-nota = "a skill `executar-sondagens-de-sintaxe` afirma que a ERIC não trunca; contradição registrada em `data/pendencias.json`"
+citacao = "BD3/sd8-2026-11-26-2"
+nota = "o `*` não trunca no título; o zero do `ontolog*` é o aviso padrão de retorno zero, e a afirmação da skill `executar-sondagens-de-sintaxe` fica confirmada"
 
 [[sintaxe]]
 elemento = "Mínimo de três letras antes do `*`"
 categoria = "truncamento"
-situacao = "nao_verificado"
-sondagem = "SD8"
-nota = "afirmado sem fonte na skill `auditoria-das-strings` até 2026-11-23; conferir também na documentação oficial"
+situacao = "inexistente"
+citacao = "BD3/sd8-2026-11-26-2"
+nota = "o `*` não trunca nesta base: o zero do `ontolog*` é o aviso padrão de retorno zero, não recusa; não há mínimo de letras a medir"
 
 [[sintaxe]]
 elemento = "Derivação automática de radicais desativada, com casamento exato sem aspas"
@@ -115,7 +134,7 @@ categoria = "lematizacao"
 idioma = "en"
 situacao = "nao_verificado"
 sondagem = "SD10"
-nota = "o plural devolveu o mesmo retorno do singular (BD3/sd10-2026-11-26); não se declara `pela lematização` sem decisão"
+nota = "o plural devolveu o mesmo retorno do singular (BD3/sd10-2026-11-26), e os registros da consulta pelo singular trazem `Ontologies` nos títulos (BD3/sd8-2026-11-26-2); a declaração de número segue `explícito`, que não depende da lematização, e não se declara `pela lematização`"
 
 [[sintaxe]]
 elemento = "Aspas como frase"
@@ -137,7 +156,7 @@ categoria = "limite_consulta"
 situacao = "medicao"
 sondagem = "SD12"
 citacao = "BD3/sd12-2026-11-26"
-nota = "a consulta mais longa do procedimento foi aceita inteira (BD3/sd12-2026-11-26); 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação"
+nota = "a consulta mais longa do procedimento foi aceita inteira; 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação"
 
 [[sintaxe]]
 elemento = "Negação com prefixo `-`"
@@ -152,7 +171,7 @@ categoria = "frase"
 situacao = "medicao"
 sondagem = "SD13"
 citacao = "BD3/sd13-2026-11-26"
-nota = "a forma com espaço e a hifenizada são buscas distintas, e a forma sem hífen nem espaço devolve menos (BD3/sd13-2026-11-26)"
+nota = "a forma com espaço e a hifenizada são buscas distintas, e a forma sem hífen nem espaço devolve menos"
 
 [[sintaxe]]
 elemento = "Teto de retorno exibido"
@@ -161,6 +180,14 @@ situacao = "medicao"
 sondagem = "SD14"
 citacao = "BD3/sd14-2026-11-26"
 nota = "o último registro acessível ficou na posição 100.115, abaixo do retorno exibido"
+
+[[sintaxe]]
+elemento = "Aviso da interface para retorno zero"
+categoria = "limite_retorno"
+situacao = "medicao"
+sondagem = "SD20"
+citacao = "BD3/sd20-2026-11-26"
+nota = "todo retorno zero traz o mesmo aviso, inclusive o de um termo que não existe; o aviso não é recusa de sintaxe"
 
 [[sintaxe]]
 elemento = "Teto de exportação por lote"
@@ -352,8 +379,9 @@ citacao = "BD3/sd4-2026-11-26"
 
 [[regras_de_montagem]]
 texto = "sem truncamento nas expressões"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD8"
+citacao = "BD3/sd8-2026-11-26-2"
 
 [[regras_de_montagem]]
 texto = "expressão composta sempre entre aspas"
@@ -600,7 +628,7 @@ estado = "nao_verificado"
 
 [[sondagens]]
 id = "SD8"
-elementos = ["Truncamento com `*`", "Mínimo de três letras antes do `*`", "sem truncamento nas expressões"]
+elementos = ["Truncamento com `*`", "sem truncamento nas expressões"]
 objetivo = "saber se o `*` trunca e com quantas letras antes dele"
 pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
 depende_de = ["SD1"]
@@ -984,4 +1012,117 @@ estado = "medicao"
 [[sondagens.leituras]]
 resultado = "controle = 0, teste = 0, ou mensagem de erro"
 conclusao = "não se distingue o efeito do parêntese; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD19"
+elementos = ["`OR` fora de parênteses"]
+objetivo = "saber se um `OR` acrescentado no fim de uma consulta sem parênteses amplia o conjunto"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "abstract:ontology AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:ontology AND abstract:education OR abstract:learning"
+onde = "caixa de busca"
+muda = "o acréscimo de `OR abstract:learning`, sem parênteses"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "a base descarta o `OR` fora de parênteses: a forma plana não amplia o conjunto, os parênteses são honrados e a composição não usa a forma plana"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste ≠ controle, ambos > 0"
+conclusao = "o `OR` fora de parênteses amplia o conjunto, e o resultado da SD17 segue sem explicação; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens.leituras]]
+resultado = "controle = 0, teste = 0, ou mensagem de erro"
+conclusao = "não se distingue o efeito do `OR` plano; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD20"
+elementos = ["Aviso da interface para retorno zero"]
+objetivo = "saber se a interface exibe o mesmo aviso para todo retorno zero, inclusive o de um termo que não existe"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter o controle e anotar o retorno", "submeter o primeiro teste e anotar o retorno e a mensagem exibida", "submeter o segundo teste e anotar o retorno e a mensagem exibida", "comparar as mensagens dos dois testes"]
+observar = ["retorno exibido de cada consulta", "texto exato da mensagem de cada teste"]
+evidencia = ["captura da tela de cada consulta, com a consulta, o retorno e a mensagem visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "title:ontology"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:zzzqqqx"
+onde = "caixa de busca"
+muda = "um termo que não existe na base"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontolog*"
+onde = "caixa de busca"
+muda = "o termo com `*` que devolveu zero na SD8"
+
+[[sondagens.leituras]]
+resultado = "os dois testes = 0, com a mesma mensagem"
+conclusao = "o aviso é o padrão do retorno zero, não recusa de sintaxe; o zero do `ontolog*` não indica que o `*` foi recusado"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "os dois testes = 0, com mensagens diferentes, ou o primeiro teste sem mensagem"
+conclusao = "a interface distingue o zero por ausência do termo do zero do `ontolog*`, que tem outra causa"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = 0, primeiro teste > 0, ou mensagem de erro"
+conclusao = "não se distingue a origem do aviso; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD21"
+elementos = ["Prefixo `abstract:` restringe ao resumo"]
+objetivo = "saber se `abstract:` restringe a busca ao resumo, em vez de ser ignorado"
+pre_requisitos = ["busca de `eric.ed.gov` aberta no navegador do pesquisador, sem filtro de data e sem `Peer reviewed only`"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "ontology"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "abstract:ontology"
+onde = "caixa de busca"
+muda = "o prefixo `abstract:`"
+
+[[sondagens.leituras]]
+resultado = "0 < teste < controle"
+conclusao = "o prefixo `abstract:` restringe ao resumo"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "o prefixo `abstract:` não restringe: a consulta pelo resumo casa o termo em qualquer campo"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste = 0, controle = 0, ou mensagem de erro"
+conclusao = "não se distingue o efeito do prefixo `abstract:`; levar ao pesquisador"
 estado = "nao_verificado"

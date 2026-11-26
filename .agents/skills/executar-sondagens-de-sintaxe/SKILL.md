@@ -97,10 +97,10 @@ da seção 4. `texto` que aponte outro trecho do procedimento ("o bloco de EB4",
 faceta) reprova a base: a consulta seria prosa, e quem a executa teria de montá-la à mão.
 Esquema em `python3 -m rsl documentos gramatica`.
 
-O roteiro se executa antes da primeira execução numa base, na ordem das dependências. Já se
-afirmou que a ERIC não trunca (`ontolog*` devolve 0) e que a BRAPCI tem teto de 1.000
-registros no retorno; nenhuma das duas afirmações tem sondagem registrada (PD27, PD09, PD10),
-e o roteiro as sonda.
+O roteiro se executa antes da primeira execução numa base, na ordem das dependências. Afirmação
+feita de memória — que a ERIC não trunca (`ontolog*` devolve 0), que a BRAPCI tem teto de 1.000
+registros no retorno — só vale depois de sondagem registrada no roteiro da própria base, e não
+se transfere entre bases.
 
 ## 5. Desenho
 
