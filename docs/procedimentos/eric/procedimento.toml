@@ -46,6 +46,13 @@ elemento = "Parênteses aplicam a condição externa ao grupo inteiro"
 categoria = "agrupamento"
 situacao = "nao_verificado"
 sondagem = "SD17"
+nota = "o teste agrupado devolveu mais que o controle plano (BD3/sd17-2026-11-26), resultado que não corresponde a nenhuma das leituras; o agrupamento segue não estabelecido"
+
+[[sintaxe]]
+elemento = "Parêntese em torno de um único termo"
+categoria = "agrupamento"
+situacao = "nao_verificado"
+sondagem = "SD18"
 
 [[sintaxe]]
 elemento = "Exigência de condição externa ao grupo"
@@ -142,20 +149,26 @@ nota = "não medida"
 [[sintaxe]]
 elemento = "Hífen como separador de palavras (`ontology-driven`, `e-learning`)"
 categoria = "frase"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD13"
+citacao = "BD3/sd13-2026-11-26"
+nota = "a forma com espaço e a hifenizada são buscas distintas, e a forma sem hífen nem espaço devolve menos (BD3/sd13-2026-11-26)"
 
 [[sintaxe]]
 elemento = "Teto de retorno exibido"
 categoria = "limite_retorno"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD14"
+citacao = "BD3/sd14-2026-11-26"
+nota = "o último registro acessível ficou na posição 100.115, abaixo do retorno exibido"
 
 [[sintaxe]]
 elemento = "Teto de exportação por lote"
 categoria = "limite_exportacao"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD15"
+citacao = "BD3/sd15-2026-11-26"
+nota = "a interface oferece até 200 registros por lote; o teste exportou os 101 do retorno"
 
 [[sintaxe]]
 elemento = "Controles `Include Synonyms` e `Include Dead terms`"
@@ -172,8 +185,10 @@ sem_sondagem = "verificação documental antes de sondagem: o painel *Advanced S
 [[sintaxe]]
 elemento = "Idioma do título e do resumo indexados"
 categoria = "idioma_indexacao"
-situacao = "nao_verificado"
+situacao = "medicao"
 sondagem = "SD16"
+citacao = "BD3/sd16-2026-11-26"
+nota = "os registros lidos traziam título e resumo em inglês; os termos em inglês alcançam o documento em outro idioma"
 
 # ------------------------------------------------------------------ §2 critérios
 [[criterios]]
@@ -933,4 +948,40 @@ estado = "medicao"
 [[sondagens.leituras]]
 resultado = "controle = 0, teste > controle, ou mensagem de erro"
 conclusao = "não se distingue o efeito dos parênteses; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD18"
+elementos = ["Parêntese em torno de um único termo"]
+objetivo = "saber se um parêntese redundante, em torno de um único termo, muda o conjunto devolvido"
+pre_requisitos = ["SD1 registrada com o prefixo de campo verificado"]
+depende_de = ["SD1"]
+passos = ["submeter o controle e anotar o retorno", "submeter o teste e anotar o retorno e a mensagem exibida"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro, se houver"]
+evidencia = ["captura da tela de cada consulta, com a consulta e o retorno visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+texto = "title:ontology AND abstract:education"
+onde = "caixa de busca"
+
+[[sondagens.consultas]]
+papel = "teste"
+texto = "title:ontology AND (abstract:education)"
+onde = "caixa de busca"
+muda = "o parêntese em torno de um único termo"
+
+[[sondagens.leituras]]
+resultado = "teste = controle > 0"
+conclusao = "o parêntese em torno de um termo não muda o conjunto nessa forma"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "teste ≠ controle, ambos > 0"
+conclusao = "um parêntese redundante muda o conjunto: a base não segue a semântica booleana padrão, e a composição da EB4 precisa de decisão"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "controle = 0, teste = 0, ou mensagem de erro"
+conclusao = "não se distingue o efeito do parêntese; levar ao pesquisador"
 estado = "nao_verificado"

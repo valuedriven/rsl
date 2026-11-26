@@ -145,10 +145,10 @@
       "id": "PD41",
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
-      "descricao": "A SD2 (controle 101, teste 101) e a SD3 (teste 344) não distinguem parênteses honrados de avaliação da esquerda para a direita: nos dois desenhos o retorno é o mesmo. A conclusão registrada em `[sintaxe]` \"Parênteses para agrupamento\" diz que os parênteses agrupam, mas o resultado não estabelece que a condição externa se aplica ao grupo inteiro. A questão importa para a EB4, cuja forma `1 AND 2 AND (3 OR 4)` sem agrupamento efetivo equivaleria a `(1 AND 2 AND 3) OR 4`.",
-      "origem": "data/registro_execucao.json, bases.BD3.sondagens (BD3/sd2-2026-11-26 e BD3/sd3-2026-11-26); docs/procedimentos/eric/procedimento.toml, [[sondagens]] SD17",
+      "descricao": "A SD2 (controle 101, teste 101) e a SD3 (teste 344) não distinguiram parênteses honrados de avaliação da esquerda para a direita. A SD17, desenhada para separar as duas, devolveu mais no teste agrupado que no controle plano, resultado que a semântica booleana padrão não prevê — o conjunto do teste estaria contido no do controle — e que nenhuma leitura do roteiro cobriu. O agrupamento segue não estabelecido, e a EB4, composta de grupos `(A OR B)` unidos por `AND`, depende dele.",
+      "origem": "data/registro_execucao.json, bases.BD3.sondagens (BD3/sd2-2026-11-26, BD3/sd3-2026-11-26 e BD3/sd17-2026-11-26); docs/procedimentos/eric/procedimento.toml, [[sondagens]] SD18",
       "bloqueia": "execução definitiva na ERIC (M3/E2), junto com a PD09; a composição da EB4 pressupõe agrupamento",
-      "acao_sugerida": "executar a SD17 do roteiro da ERIC (controle `abstract:ontology AND abstract:education OR abstract:learning` contra o teste agrupado) e registrar por `sondagens registrar`; se o teste for igual ao controle, levar ao pesquisador antes de executar a busca",
+      "acao_sugerida": "executar a SD18, que isola o efeito do parêntese redundante (`title:ontology AND abstract:education` contra `title:ontology AND (abstract:education)`), e registrar por `sondagens registrar`; se o teste diferir do controle, a composição da EB4 vai à decisão do pesquisador antes de qualquer execução",
       "responsavel": "pesquisador"
     }
   ]

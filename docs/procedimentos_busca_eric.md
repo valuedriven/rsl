@@ -10,7 +10,8 @@
 | Campos de casamento exato (`descriptorx`, `sourcex`, `locationx`, `lawx`, `assessmentx`) e prefixo `+` | campos | Verificado em fonte oficial; comportamento **não medido** | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
 | Prefixo de campo restringe de fato | campos | Verificado por medição (BD3/sd1-2026-11-26) | — | SD1 |
 | Parênteses para agrupamento | agrupamento | Verificado por medição (BD3/sd2-2026-11-26) | — | SD2 |
-| Parênteses aplicam a condição externa ao grupo inteiro | agrupamento | **Não verificado** | — | SD17 |
+| Parênteses aplicam a condição externa ao grupo inteiro | agrupamento | **Não verificado**; o teste agrupado devolveu mais que o controle plano (BD3/sd17-2026-11-26), resultado que não corresponde a nenhuma das leituras; o agrupamento segue não estabelecido | — | SD17 |
+| Parêntese em torno de um único termo | agrupamento | **Não verificado** | — | SD18 |
 | Exigência de condição externa ao grupo | agrupamento | **Não verificado**; o grupo com `OR` sozinho devolveu registros sem condição fora dele (BD3/sd3-2026-11-26); a exigência não se sustenta, e a composição não depende dela | — | SD3 |
 | Campos diferentes num mesmo grupo | agrupamento | **Não verificado**; a ERIC aceita campos diferentes na mesma disjunção: o teste devolveu registros (BD3/sd5-2026-11-26), e a regra de que devolveria zero não se sustenta | — | SD5 |
 | `pubyearmin`/`pubyearmax` junto a um grupo | filtros | **Não verificado**; os campos de ano na consulta não recortam como o filtro da página (BD3/sd6-2026-11-26); o recorte de ano é feito no filtro da página | — | SD6 |
@@ -24,12 +25,12 @@
 | Campo `descriptor` | vocabulario_controlado | **Não verificado**; os três registros abertos de `descriptor:Thesauri` não traziam `Thesauri` entre os descritores (BD3/sd11-2026-11-26); o campo não se confirma | — | SD11 |
 | Comprimento máximo da consulta | limite_consulta | Verificado por medição (BD3/sd12-2026-11-26); a consulta mais longa do procedimento foi aceita inteira (BD3/sd12-2026-11-26); 1.400 é regra de bolso, mantida como teto, e consulta acima do comprimento medido vai à base sem verificação | — | SD12 |
 | Negação com prefixo `-` | operadores | Verificado em fonte oficial; não medida | painel *Advanced Search Tips* de `eric.ed.gov/?advanced` | — |
-| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | **Não verificado** | — | SD13 |
-| Teto de retorno exibido | limite_retorno | **Não verificado** | — | SD14 |
-| Teto de exportação por lote | limite_exportacao | **Não verificado** | — | SD15 |
+| Hífen como separador de palavras (`ontology-driven`, `e-learning`) | frase | Verificado por medição (BD3/sd13-2026-11-26); a forma com espaço e a hifenizada são buscas distintas, e a forma sem hífen nem espaço devolve menos (BD3/sd13-2026-11-26) | — | SD13 |
+| Teto de retorno exibido | limite_retorno | Verificado por medição (BD3/sd14-2026-11-26); o último registro acessível ficou na posição 100.115, abaixo do retorno exibido | — | SD14 |
+| Teto de exportação por lote | limite_exportacao | Verificado por medição (BD3/sd15-2026-11-26); a interface oferece até 200 registros por lote; o teste exportou os 101 do retorno | — | SD15 |
 | Controles `Include Synonyms` e `Include Dead terms` | vocabulario_controlado | **Não verificado** | — | sem sondagem: não localizados na interface; nenhuma expressão depende deles |
 | Operador de proximidade | proximidade | **Não verificado** | — | sem sondagem: verificação documental antes de sondagem: o painel *Advanced Search Tips* não foi conferido quanto a proximidade; nenhuma expressão depende dele |
-| Idioma do título e do resumo indexados | idioma_indexacao | **Não verificado** | — | SD16 |
+| Idioma do título e do resumo indexados | idioma_indexacao | Verificado por medição (BD3/sd16-2026-11-26); os registros lidos traziam título e resumo em inglês; os termos em inglês alcançam o documento em outro idioma | — | SD16 |
 
 Nomes de campo verificados no painel *Advanced Search Tips* de `eric.ed.gov/?advanced`; comportamento **não verificado** — medir pelas sondagens abaixo e registrar cada uma.
 
@@ -609,7 +610,7 @@ descriptorx:Thesauri
 
 #### SD13 — saber se o hífen separa palavras, de modo que `e-learning` case `e learning`
 
-**Elementos verificados:** Hífen como separador de palavras (`ontology-driven`, `e-learning`) (Não verificado).
+**Elementos verificados:** Hífen como separador de palavras (`ontology-driven`, `e-learning`) (Verificado por medição).
 **Depende de:** SD9.
 
 **Pré-requisitos.**
@@ -652,9 +653,13 @@ abstract:elearning
 
 - captura da tela de cada consulta, com a consulta e o retorno visíveis
 
+**Resultados registrados.**
+
+- (BD3/sd13-2026-11-26) 2026-11-26T15:40: leitura 2
+
 #### SD14 — saber se a ERIC exibe e deixa percorrer o retorno inteiro de uma busca larga
 
-**Elementos verificados:** Teto de retorno exibido (Não verificado).
+**Elementos verificados:** Teto de retorno exibido (Verificado por medição).
 
 **Pré-requisitos.**
 
@@ -687,9 +692,13 @@ education
 
 - captura da tela do retorno e da última página acessível
 
+**Resultados registrados.**
+
+- (BD3/sd14-2026-11-26) 2026-11-26T15:40: leitura 2
+
 #### SD15 — saber quantos registros a ERIC exporta de uma vez
 
-**Elementos verificados:** Teto de exportação por lote (Não verificado).
+**Elementos verificados:** Teto de exportação por lote (Verificado por medição).
 **Depende de:** SD14.
 
 **Pré-requisitos.**
@@ -724,9 +733,13 @@ title:ontology AND abstract:education
 - captura da tela da opção de exportação
 - o arquivo exportado
 
+**Resultados registrados.**
+
+- (BD3/sd15-2026-11-26) 2026-11-26T15:40: leitura 1
+
 #### SD16 — saber se o registro de documento em português ou espanhol traz título e resumo em inglês, buscáveis pelos termos da string
 
-**Elementos verificados:** Idioma do título e do resumo indexados (Não verificado).
+**Elementos verificados:** Idioma do título e do resumo indexados (Verificado por medição).
 **Depende de:** SD1.
 
 **Pré-requisitos.**
@@ -758,6 +771,10 @@ language:Portuguese AND abstract:education
 **Evidência a registrar.**
 
 - captura da tela do retorno e de cada registro aberto
+
+**Resultados registrados.**
+
+- (BD3/sd16-2026-11-26) 2026-11-26T15:40: leitura 1
 
 #### SD17 — distinguir se os parênteses são honrados — com a condição externa aplicada ao grupo inteiro — ou se a base avalia a expressão da esquerda para a direita, ignorando-os
 
@@ -796,6 +813,51 @@ abstract:ontology AND (abstract:education OR abstract:learning)
 | 1 | 0 < teste < controle | os parênteses são honrados: a condição externa se aplica ao grupo inteiro | Verificado por medição |
 | 2 | teste = controle > 0 | os parênteses não são honrados: a forma agrupada se comporta como a plana, por avaliação da esquerda para a direita ou por precedência do `OR` | Verificado por medição |
 | 3 | controle = 0, teste > controle, ou mensagem de erro | não se distingue o efeito dos parênteses; levar ao pesquisador | Não verificado |
+
+**Evidência a registrar.**
+
+- captura da tela de cada consulta, com a consulta e o retorno visíveis
+
+**Resultados registrados.**
+
+- (BD3/sd17-2026-11-26) 2026-11-26T15:40: leitura 3
+
+#### SD18 — saber se um parêntese redundante, em torno de um único termo, muda o conjunto devolvido
+
+**Elementos verificados:** Parêntese em torno de um único termo (Não verificado).
+**Depende de:** SD1.
+
+**Pré-requisitos.**
+
+- SD1 registrada com o prefixo de campo verificado
+
+**Consulta 1 — controle**, em caixa de busca.
+
+```
+title:ontology AND abstract:education
+```
+
+**Consulta 2 — teste**, em caixa de busca. Muda em relação ao controle: o parêntese em torno de um único termo.
+
+```
+title:ontology AND (abstract:education)
+```
+
+**Passos.**
+
+1. submeter o controle e anotar o retorno
+2. submeter o teste e anotar o retorno e a mensagem exibida
+
+**Observar.**
+
+- retorno exibido de cada consulta
+- mensagem de erro, se houver
+
+| # | Resultado | Conclusão | Estado |
+| :---: | :--- | :--- | :--- |
+| 1 | teste = controle > 0 | o parêntese em torno de um termo não muda o conjunto nessa forma | Verificado por medição |
+| 2 | teste ≠ controle, ambos > 0 | um parêntese redundante muda o conjunto: a base não segue a semântica booleana padrão, e a composição da EB4 precisa de decisão | Verificado por medição |
+| 3 | controle = 0, teste = 0, ou mensagem de erro | não se distingue o efeito do parêntese; levar ao pesquisador | Não verificado |
 
 **Evidência a registrar.**
 
@@ -986,7 +1048,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 
 ### Como executar
 
-1. Executar as consultas de EB4, na ordem em que aparecem acima, e exportar cada uma em arquivo próprio, `eric_<consulta>.ris` (`eric_4a1.ris`, …), em `data/execucoes/eric/`.
+1. Executar as consultas de EB4, na ordem em que aparecem acima, e exportar cada uma em arquivo próprio, `eric_<consulta>.ris` (`eric_4a1.ris`, …), em `data/execucoes/eric/`. A exportação aceita até 200 registros por lote (BD3/sd15-2026-11-26): consulta com retorno acima disso exige mais de uma exportação.
 2. Aplicar o filtro de data da página e anotar o retorno antes e depois, com o rótulo exato do filtro.
 3. Registrar as execuções, uma por arquivo: `python3 -m rsl busca registrar eric EB4 <arquivo> --retorno <n>`; rodar `busca derivar`. O retorno da base é a união deduplicada, nunca a soma: o número que vai às contagens da busca é o dos únicos, com o bruto ao lado.
 4. Executar EB5 (5a e 5b) uma única vez e registrar com `EB5`.

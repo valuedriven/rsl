@@ -967,6 +967,118 @@
             "data/evidencia/sondagens/eric/SD9-SD12_2026-11-26T1433.md"
           ],
           "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; a caixa mostrou a consulta inteira, com os 719 caracteres"
+        },
+        {
+          "id": "sd13-2026-11-26",
+          "sondagem": "SD13",
+          "data_hora": "2026-11-26T15:40",
+          "consultas": [
+            {
+              "texto": "abstract:\"e-learning\"",
+              "retorno": 8419
+            },
+            {
+              "texto": "abstract:\"e learning\"",
+              "retorno": 8412
+            },
+            {
+              "texto": "abstract:elearning",
+              "retorno": 6603
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "primeiro teste ≠ controle, ambos > 0",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD13-SD17_2026-11-26T1540.md"
+          ],
+          "observacao": "evidência: transcrição dos retornos pelo pesquisador, sem captura de tela; primeiro teste difere do controle e ambos são maiores que zero"
+        },
+        {
+          "id": "sd14-2026-11-26",
+          "sondagem": "SD14",
+          "data_hora": "2026-11-26T15:40",
+          "consultas": [
+            {
+              "texto": "education",
+              "retorno": 1501723
+            }
+          ],
+          "leitura": {
+            "numero": 2,
+            "resultado": "o último registro acessível tem posição menor que o retorno, ou há aviso de limite",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD13-SD17_2026-11-26T1540.md"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; último registro acessível na posição 100.115, abaixo do retorno exibido"
+        },
+        {
+          "id": "sd15-2026-11-26",
+          "sondagem": "SD15",
+          "data_hora": "2026-11-26T15:40",
+          "consultas": [
+            {
+              "texto": "title:ontology AND abstract:education",
+              "retorno": 101
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "o arquivo traz todos os registros do retorno",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD13-SD17_2026-11-26T1540.md"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; máximo anunciado pela interface: 200 por lote; arquivo com os 101 registros do retorno"
+        },
+        {
+          "id": "sd16-2026-11-26",
+          "sondagem": "SD16",
+          "data_hora": "2026-11-26T15:40",
+          "consultas": [
+            {
+              "texto": "language:Portuguese AND abstract:education",
+              "retorno": 24
+            }
+          ],
+          "leitura": {
+            "numero": 1,
+            "resultado": "os registros abertos têm título e resumo em inglês",
+            "estado": "medicao"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD13-SD17_2026-11-26T1540.md"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; os três registros lidos traziam título e resumo em inglês"
+        },
+        {
+          "id": "sd17-2026-11-26",
+          "sondagem": "SD17",
+          "data_hora": "2026-11-26T15:40",
+          "consultas": [
+            {
+              "texto": "abstract:ontology AND abstract:education OR abstract:learning",
+              "retorno": 612
+            },
+            {
+              "texto": "abstract:ontology AND (abstract:education OR abstract:learning)",
+              "retorno": 917
+            }
+          ],
+          "leitura": {
+            "numero": 3,
+            "resultado": "controle = 0, teste > controle, ou mensagem de erro",
+            "estado": "nao_verificado"
+          },
+          "evidencia": [
+            "data/evidencia/sondagens/eric/SD13-SD17_2026-11-26T1540.md"
+          ],
+          "observacao": "evidência: transcrição pelo pesquisador, sem captura de tela; teste 917 > controle 612, resultado que nenhuma leitura do roteiro previu"
         }
       ]
     },
