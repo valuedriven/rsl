@@ -67,6 +67,10 @@ validacao = "data/validacao_terminologica.csv"
 execucoes = "data/execucoes"
 # Respostas brutas das consultas aos instrumentos de controle terminológico.
 evidencia = "data/evidencia"
+# Cópia da coleção de sementes do Zotero (resposta bruta da API web, com biblioteca, coleção,
+# versão e data e hora da leitura). Gravada só por `sementes copiar` (e regravada por
+# `sementes completar --gravar`); os demais subcomandos a leem, sem acessar o Zotero.
+zotero = "data/zotero_sementes.json"
 
 [saidas]
 # Arquivos derivados, regeráveis, gravados em `pasta`. Nomes em snake_case, em português,
@@ -77,7 +81,6 @@ contagens = "contagens_busca.csv"
 ordem_triagem = "ordem_triagem.csv"
 fidelidade = "fidelidade_{base}_{expressao}.csv"
 sensibilidade = "sensibilidade_{base}.csv"
-aderencia = "semente_aderencia.csv"
 anatomia = "anatomia_{base}.csv"
 anatomia_consultas = "anatomia_consultas_{base}.csv"
 candidatos = "candidatos_{base}.csv"
@@ -94,10 +97,21 @@ procedimento_fonte = "docs/procedimentos/{sigla}"
 # Exceções de flexão de número (irregular, não contável, vetada), por termo e idioma, cada
 # uma com a origem que a sustenta.
 flexoes = "docs/flexoes.toml"
-# Arquivo do conjunto-semente (TOML, uma tabela [[sementes]] por estudo, com os dados
-# bibliográficos, a aferição e a conferência de cada semente, campo a campo), editado pelo
-# pesquisador. É o único lugar de dado de semente. Esquema em `python3 -m rsl documentos gramatica`.
+# Arquivo do conjunto-semente (TOML, uma tabela [[sementes]] por estudo, com o controle e o
+# juízo do pesquisador: DOI, referência curta, bases, alinhamento das facetas, verificação e
+# nota), editado pelo pesquisador. Os dados bibliográficos, o resumo e as palavras-chave
+# ficam no Zotero ([zotero]) e chegam pela cópia ([dados] zotero), ligados pelo DOI. Esquema
+# em `python3 -m rsl documentos gramatica`.
 sementes = "docs/conjunto_semente.toml"
+
+[zotero]
+# Biblioteca e coleção do Zotero que guardam os dados das sementes (autoria, ano, título,
+# veículo, volume, número, páginas, resumo e palavras-chave), ligadas ao arquivo de sementes
+# pelo DOI. A chave da API web NÃO fica aqui: vem da variável de ambiente ZOTERO_API_KEY ou,
+# na falta dela, da linha ZOTERO_API_KEY= do .env da raiz (que tem de estar no .gitignore);
+# é emitida pelo pesquisador e nunca se grava em arquivo versionado nem se imprime.
+biblioteca = "groups/5969244"
+colecao = "V2C73IKE"
 
 # ----------------------------------------------------------------- planilhas e JSON
 [planilha]

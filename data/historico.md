@@ -116,26 +116,33 @@ Alcance: **método**.
 
 Encerra a PD39. Alcance: **busca**.
 
-## 2026-11-26 — Agrupamento na ERIC
+## 2026-11-26 — Descritor `fatores de rendimento escolar`
 
-- **A composição da ERIC pode apoiar-se em grupos entre parênteses.** Os parênteses são honrados: um grupo com `OR` sozinho devolve registros, a condição externa se aplica ao grupo, a forma agrupada acrescenta o que a disjunção interna acrescenta, e um parêntese em torno de um único termo não muda o conjunto.
-- **Não se usa `OR` fora de parênteses nesta base.** A base descarta esse `OR`: a consulta com ele devolve o mesmo que a consulta sem ele. Toda expressão da ERIC já escreve o `OR` dentro de parênteses.
-- **Nenhuma expressão muda** e a EB4 fica como está. O bloqueio da execução por esta questão cai; a PD09 continua pelos demais elementos de sintaxe ainda não medidos.
+`fatores de rendimento escolar` (FCT4, pt) entra como descritor correspondente do Brased. A STR4 passa a incluí-lo, e os procedimentos o buscam nas formas plural e singular, esta por exceção de flexão (`fator de rendimento escolar`). Alcance: **busca**.
 
-Encerra a PD41. Alcance: **busca**.
+## 2026-11-26 — Ampliação do conjunto-semente
 
-## 2026-11-26 — Truncamento na ERIC
+- **Entram no conjunto-semente** SE11 (Quigley et al., 2017), SE12 (Ferreira et al., 2020), SE13 (Hernández-Carrasco et al., 2022), SE14 (Nunes Passos et al., 2024), SE15 (Griful-Freixenet et al., 2021), SE16 (Kokkinou e Kyriakides, 2022), SE17 (Čuka e Cindrić, 2025), SE18 (Nascimento et al., 2020) e SE19 (Lopes e Lima, 2020). O denominador muda, e o teste de aderência se refaz com o conjunto ampliado.
+- **As sementes são indicadas pelos pesquisadores**, e esse é o caminho independente da busca; a origem não se registra semente a semente.
+- **Não se alteraram** a FCT1 nem os critérios de elegibilidade: a FCT1 não exige que o estudo proponha o artefato de representação, basta que o use, como a QGR já prevê ("propostos, especificados, aplicados ou avaliados").
 
-- **O `*` não trunca no título.** A consulta truncada devolve zero com o aviso padrão de retorno zero, e não recusa de sintaxe; a afirmação de que a ERIC não trunca fica confirmada por sondagem registrada.
-- **Não há mínimo de três letras antes do `*`:** sem truncamento, não há mínimo a exigir. O elemento correspondente passa a inexistente, com a citação da sondagem.
-- **A skill `executar-sondagens-de-sintaxe` deixa de afirmar** que as verificações feitas de memória não têm sondagem registrada: afirmação de memória só vale depois de sondagem no roteiro da própria base.
+Encerra a PD18. Alcance: **método**.
 
-Encerra a PD27. Alcance: **busca**.
+## 2026-11-27 — Dados das sementes no Zotero
 
-## 2026-11-26 — Validação terminológica encerrada
+- **Os dados das sementes ficam no Zotero** — autoria, ano, título, veículo, volume, número, páginas, resumo e palavras-chave —, na coleção `sementes` da biblioteca de grupo; **o controle e o juízo ficam no arquivo de sementes**. O DOI, obrigatório, liga os dois.
+- **A planilha de aderência sai.** A indexação declarada é o campo `bases`; a recuperação se calcula das exportações.
+- **A semente conta como recuperada também pelo DOI**, além do casamento exato de título, como a fórmula do protocolo já prevê ("por identificador bibliográfico quanto por correspondência de referência"). O prefixo de título sem o DOI continua sendo só indício.
+- **Resumo e palavras-chave vêm da OpenAlex**; o Crossref é complemento do resumo, e a semente sem resumo em fonte nenhuma tem o resumo preenchido pelo pesquisador no Zotero.
+- **O alinhamento das facetas passa a ser por frase** (`alinhamento_facetas`): o motivo por que a semente pertence a cada faceta, juízo do pesquisador. Encerra a PD20.
 
-- **As decisões já estão tomadas** desde 2026-11-25 e registradas na planilha de validação: os descritores correspondentes, as formas livres que permanecem e os casos decididos como termo livre.
-- **Nenhum termo fica sem estatuto.** O termo sem `decisao_ReT` é "Termo livre" pela regra de 2026-11-24, e o vazio da planilha não é decisão pendente. As propostas da máquina que apontam para outro conceito seguem como termo livre e não entram na STR.
-- **As STRs e os procedimentos já refletem esse estado** e `documentos conferir` aprova; nenhuma regeneração é necessária por esta decisão.
+Alcance: **método**.
 
-Encerra a PD03. Alcance: **busca**.
+## 2026-11-27 — Substituição de SE16, SE17 e SE18
+
+- **Saem do conjunto-semente** SE16 (Kokkinou e Kyriakides, 2022), SE17 (Čuka e Cindrić, 2025) e SE18 (Nascimento et al., 2020), por não atenderem às facetas.
+- **Entram, nos mesmos `id`**, SE16 (King et al., 2023), SE17 (Hickey e Riddle, 2024) e SE18 (Tondeur et al., 2024). Não há renumeração.
+- **SE16 é aceita**, embora seja síntese de literatura, por propor um modelo. **A indexação da SE17 em Scopus e Web of Science é aceita** a partir de fonte secundária.
+- A troca altera o conjunto: o recall anterior e o posterior não se comparam sem esta entrada.
+
+Alcance: **método**.

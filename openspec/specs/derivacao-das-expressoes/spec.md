@@ -47,7 +47,7 @@ identificador.
 - **THEN** o script termina com erro que lista as siglas e os identificadores lidos
 
 ### Requirement: Facetas do instrumento de aderência vêm do protocolo
-As facetas usadas por `gen_semente.py` SHALL vir das facetas lidas do protocolo, na ordem
+As facetas usadas por `aderencia ensaiar` SHALL vir das facetas lidas do protocolo, na ordem
 declarada; o código MUST NOT fixar a lista de facetas.
 
 #### Scenario: Facetas lidas
@@ -71,7 +71,9 @@ Ficam fora dessa exigência só estas exceções:
   que delas depende (colunas `facetas` e `expressoes` de `registros.csv`, contagens
   derivadas, ordem de triagem, conjunto derivado da fidelidade);
 - os registros lidos pela derivação, pela fidelidade e pela aderência, que passam a ser só
-  os da executada, e as contagens, a ordem de triagem e a aderência que deles dependem.
+  os da executada, e as contagens, a ordem de triagem e a aderência que deles dependem;
+- na aderência, a semente cujo DOI aparece na exportação, que passa a contar como
+  recuperada mesmo sem casamento exato de título.
 
 #### Scenario: Mesmo resultado
 - **WHEN** a prova da composição, as deriváveis e o mapa de bases são calculados antes e
@@ -97,12 +99,17 @@ Ficam fora dessa exigência só estas exceções:
 ### Requirement: Casamento por prefixo é indício
 
 `--aderencia` SHALL imprimir o casamento por prefixo de título como indício e MUST NOT
-contá-lo no numerador da aderência. A confirmação do casamento por prefixo exige registro
-humano na coluna `recuperada`.
+contá-lo no numerador da aderência. A semente só conta como recuperada por casamento exato
+de título ou pelo DOI.
 
 #### Scenario: Prefixo não entra no numerador
 - **WHEN** uma semente só casa com um registro por prefixo de título
 - **THEN** o relato a marca como indício e não a conta como recuperada
+
+#### Scenario: Prefixo confirmado pelo DOI
+- **WHEN** uma semente casa com um registro por prefixo de título e o DOI do registro é o da
+  semente
+- **THEN** a semente conta como recuperada, pelo DOI
 
 ### Requirement: Intervalo de confiança da aderência
 
@@ -130,8 +137,8 @@ passagem.
 ### Requirement: Arquivos de entrada e de saída lidos da configuração
 A derivação, a aderência, a fidelidade, a sensibilidade e o instrumento de aderência
 SHALL obter do `config.toml` o caminho de cada arquivo que leem ou gravam. Isso inclui
-`registro_execucao.json`, o arquivo de sementes (`[documentos] sementes`),
-`semente_aderencia.csv` e as saídas na raiz de `data/`.
+`registro_execucao.json`, o arquivo de sementes (`[documentos] sementes`), a cópia da
+coleção do Zotero (`[dados] zotero`) e as saídas na raiz de `data/`.
 
 #### Scenario: Registro em outro caminho
 - **WHEN** o `config.toml` aponta o registro de execução para outro caminho
@@ -140,83 +147,16 @@ SHALL obter do `config.toml` o caminho de cada arquivo que leem ou gravam. Isso 
 
 #### Scenario: Arquivo de sementes em outro caminho
 - **WHEN** `[documentos] sementes` aponta outro arquivo
-- **THEN** `aderencia planilhar` e `aderencia medir` leem as sementes desse arquivo
+- **THEN** `aderencia ensaiar` e `aderencia medir` leem as sementes desse arquivo
 
 #### Scenario: Chave antiga do arquivo de conferência
 - **WHEN** o `config.toml` traz a chave `[dados] sementes`
 - **THEN** a configuração reprova, nomeando a chave, como as demais chaves fora do esquema
 
-### Requirement: Regravação da planilha de aderência preserva o preenchimento manual
-`aderencia planilhar` SHALL regravar `semente_aderencia.csv` conservando, em cada linha, as
-colunas preenchidas à mão (`indexada`, `data_etapa1`, `recuperada`, `como_localizada`,
-`data_etapa2` e `observacao`). A linha anterior casa com a nova por `id` e `base`, e só
-casa se o título for o mesmo, sem distinguir acento nem caixa. As demais colunas MUST vir
-sempre do arquivo de sementes e da tabela de bases, e a planilha MUST NOT trazer a coluna
-`escopo`.
-
-#### Scenario: Preenchimento conservado
-- **WHEN** a planilha traz `indexada = sim` e `observacao` preenchida na linha SE2 × wos,
-  e `aderencia planilhar` é executado de novo, sem mudança no arquivo de sementes
-- **THEN** a linha SE2 × wos sai com o mesmo `indexada` e a mesma `observacao`
-
-#### Scenario: Coluna derivada atualizada
-- **WHEN** a `verificacao` de SE2 é alterada no arquivo de sementes e a planilha já traz
-  colunas manuais de SE2
-- **THEN** a regravação traz a `verificacao` nova e conserva as colunas manuais de SE2
-
-#### Scenario: Sem coluna de escopo
-- **WHEN** `aderencia planilhar` gera a planilha
-- **THEN** o cabeçalho não traz `escopo`
-
-#### Scenario: Primeira geração
-- **WHEN** `semente_aderencia.csv` não existe
-- **THEN** `aderencia planilhar` grava a planilha com as colunas manuais vazias
-
-#### Scenario: Linha anterior sem preenchimento
-- **WHEN** a planilha traz uma linha de semente ou de base que deixou de existir, com as
-  colunas manuais vazias
-- **THEN** a regravação omite essa linha e sai OK
-
-### Requirement: Regravação recusada quando perderia preenchimento manual
-`aderencia planilhar` MUST NOT gravar a planilha quando a regravação perderia conteúdo não
-vazio da planilha anterior: coluna manual de linha sem par, de linha cujo título mudou, ou
-de coluna fora do esquema. O subcomando SHALL sair com REPROVADO, nomeando cada `id`,
-`base` e coluna afetados, e deixar o arquivo anterior intacto.
-
-#### Scenario: Semente renumerada
-- **WHEN** SE3 é retirada, SE4 passa a SE3, e a planilha traz `indexada` preenchida na
-  linha SE3 × scopus com o título da semente retirada
-- **THEN** `aderencia planilhar` sai com REPROVADO, nomeando SE3 × scopus e o título
-  divergente, e `semente_aderencia.csv` não muda
-
-#### Scenario: Semente retirada com preenchimento
-- **WHEN** SE10 sai do arquivo de sementes e a planilha traz `recuperada` preenchida em
-  SE10 × wos
-- **THEN** `aderencia planilhar` sai com REPROVADO, nomeando SE10 × wos e a coluna
-  `recuperada`, e `semente_aderencia.csv` não muda
-
-#### Scenario: Coluna acrescentada à mão
-- **WHEN** a planilha traz uma coluna fora do esquema com algum valor preenchido
-- **THEN** `aderencia planilhar` sai com REPROVADO, nomeando a coluna, e
-  `semente_aderencia.csv` não muda
-
-#### Scenario: Planilha anterior ilegível
-- **WHEN** `semente_aderencia.csv` existe e não é CSV legível
-- **THEN** `aderencia planilhar` sai com DADOS, nomeando o arquivo, e não o regrava
-
-### Requirement: Autoteste prova a preservação da planilha de aderência
-O autoteste SHALL gerar a planilha num diretório temporário, preencher colunas manuais,
-regravá-la e exigir que o preenchimento seja conservado. SHALL também exigir a recusa,
-com o arquivo intacto, para semente renumerada e para linha sem par com preenchimento.
-Os valores e os `id` usados MUST vir das sementes lidas, e não de literais.
-
-#### Scenario: Regravação que apaga
-- **WHEN** a regravação grava a planilha sem ler a anterior
-- **THEN** o autoteste falha no caso de preservação
-
-#### Scenario: Recusa ausente
-- **WHEN** a regravação descarta a linha sem par com preenchimento
-- **THEN** o autoteste falha no caso de recusa
+#### Scenario: Cópia da coleção em outro caminho
+- **WHEN** `[dados] zotero` aponta outro arquivo
+- **THEN** `aderencia ensaiar`, `aderencia medir` e `sementes copiar` leem e gravam esse
+  arquivo
 
 ### Requirement: Retorno declarado obrigatório no registro de execução
 `busca registrar` SHALL exigir `--retorno` na validação de argumentos. Sem ele, o
@@ -288,8 +228,8 @@ a sonda.
 #### Scenario: Execução direta da expressão de conferência
 - **WHEN** a EB2 está registrada com exportação própria
 - **THEN** `busca derivar` não lê essa exportação, e as contagens brutas não a somam;
-  `conferencia fidelidade EB2 <arquivo>` lê o arquivo como execução direta e compara com o
-  conjunto derivado da EB4
+  `conferencia fidelidade <base> EB2 <arquivo>` lê o arquivo como execução direta e compara
+  com o conjunto derivado da EB4 da mesma base
 
 #### Scenario: Sensibilidade inalterada
 - **WHEN** a base tem EB4 e EB5 registradas
@@ -317,3 +257,67 @@ da sonda fica fora das contagens, da ordem de triagem e da aderência.
 #### Scenario: Sonda de volta ao corpus
 - **WHEN** a derivação volta a ler todas as execuções registradas
 - **THEN** o autoteste falha no caso do registro só da sonda
+
+### Requirement: Fidelidade por base
+`conferencia fidelidade` SHALL receber a base e SHALL derivar o conjunto só das exportações
+da executada dessa base, com o vocabulário dela. A execução direta SHALL ser o arquivo
+dado ou, sem ele, as exportações registradas da expressão na base. Base sem a executada
+registrada, ou sem execução direta registrada quando não se dá arquivo, MUST sair com
+DADOS e nomear o registro que falta. A executada e a sonda MUST ser recusadas com USO.
+
+#### Scenario: Corpus de outra base
+- **WHEN** a WoS e a Scopus têm a EB4 registrada, e um registro só da EB4 da Scopus
+  satisfaz a EB2
+- **THEN** `conferencia fidelidade wos EB2` não o conta no conjunto derivado
+
+#### Scenario: Execução direta registrada
+- **WHEN** a EB2 da WoS está registrada e se executa `conferencia fidelidade wos EB2`
+- **THEN** a execução direta são as exportações registradas da EB2 na WoS
+
+#### Scenario: Sem execução direta
+- **WHEN** a base não tem a EB2 registrada e não se dá arquivo
+- **THEN** o subcomando sai com DADOS e mostra o `busca registrar` que falta
+
+### Requirement: Casamento local respeita a fronteira entre trechos
+O casamento local SHALL procurar cada termo no título, no resumo e em cada palavra-chave,
+separadamente. Um termo MUST NOT casar juntando o fim de um trecho com o começo de outro.
+O separador entre valores de um campo SHALL ser o mesmo que os leitores das exportações
+usam ao unir esses valores.
+
+#### Scenario: Duas palavras-chave
+- **WHEN** um registro tem as palavras-chave `learning` e `context awareness`, e nenhum
+  outro trecho traz `learning context`
+- **THEN** o casamento local não reconhece o termo `learning context`
+
+#### Scenario: Título e resumo
+- **WHEN** o título termina com a primeira palavra de um termo e o resumo começa com a
+  segunda
+- **THEN** o casamento local não reconhece o termo
+
+#### Scenario: Termo inteiro numa palavra-chave
+- **WHEN** uma das palavras-chave é o termo inteiro
+- **THEN** o casamento local reconhece a faceta
+
+### Requirement: Autoteste prova a fidelidade por base e a fronteira
+O autoteste SHALL provar, com registros sintéticos e termos lidos do vocabulário das bases,
+que a fidelidade de uma base não conta o registro da executada de outra base, que sem
+arquivo ela lê a execução direta registrada, e que um termo partido entre palavras-chave
+ou entre título e resumo não é reconhecido.
+
+#### Scenario: Mistura de bases reintroduzida
+- **WHEN** o conjunto derivado volta a ler todas as bases
+- **THEN** o caso de fidelidade por base falha
+
+#### Scenario: Texto único reintroduzido
+- **WHEN** o casamento volta a procurar os termos no texto unido
+- **THEN** os casos de fronteira falham
+
+### Requirement: Recuperação da semente pelo DOI
+`aderencia medir` SHALL contar como recuperada a semente cujo DOI, comparado em caixa baixa
+e sem prefixo de URL, aparece num registro da exportação da executada, e SHALL relatar se a
+semente foi recuperada pelo título, pelo DOI ou pelos dois.
+
+#### Scenario: Título divergente, mesmo DOI
+- **WHEN** o título do registro exportado difere do título do item do Zotero e o DOI é o
+  mesmo
+- **THEN** a semente conta como recuperada, e o relato diz que foi pelo DOI

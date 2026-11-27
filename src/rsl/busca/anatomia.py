@@ -15,6 +15,7 @@ import datetime
 import pathlib
 import re
 
+from .. import doi as _doi
 from .. import gramatica as G
 from ..config import RAIZ, relativo
 from ..erros import DadosInvalidos, Reprovado, Uso
@@ -36,9 +37,8 @@ CAUSAS = (CAUSA_NAO_INDEXADA, CAUSA_FILTRO, CAUSA_ANCORAS, CAUSA_PROXIMIDADE, CA
 
 
 def normaliza_doi(valor):
-    """DOI para comparação: caixa baixa, sem o prefixo de URL do DOI."""
-    s = str(valor or "").strip().lower()
-    return re.sub(r"^https?://(?:dx\.)?doi\.org/", "", s)
+    """DOI para comparação: caixa baixa, sem o prefixo de URL do DOI (`doi.normaliza`)."""
+    return _doi.normaliza(valor)
 
 
 def selecao(b, sigla, sementes=None):
@@ -318,7 +318,8 @@ def atribui(resultados, sementes, quando, datas_lidas):
             primeiro = next(n for n in numeros if not presenca[n])
             causa = MAPA_CAUSA[primeiro]
             if causa == CAUSA_NAO_INDEXADA:
-                obs = "sugere `indexada = não` na planilha de aderência (o comando não preenche)"
+                obs = ("sugere que a base não indexa a semente: conferir o campo `bases` do "
+                       "arquivo de sementes (o comando não o altera)")
             elif causa == CAUSA_FILTRO:
                 reg = _registro_do_doi(resultados, doi)
                 partes = [f"{k}: {reg.get(k)}" for k in ("ano", "idioma", "tipo")

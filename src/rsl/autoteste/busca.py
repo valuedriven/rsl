@@ -13,14 +13,15 @@ import tempfile
 
 from .. import gramatica as G
 from ..busca import Busca
-from ..busca.aderencia import (avalia_aderencia, casa_sementes, casa_titulo, chave_titulo,
+from ..busca.aderencia import (VIA_AMBOS, VIA_DOI, avalia_aderencia, casa_sementes,
+                               casa_titulo, chave_titulo, recupera_sementes,
                                registros_unicos, wilson)
 from ..busca.anatomia import diagnosticar, monta_niveis, selecao
 from ..busca.composicao import grupos_em_facetas, prova_da_composicao, satisfaz_em
-from ..busca.derivacao import (carrega_facetas, derivar, facetas_atingidas, texto_do,
-                               vocabulario_da_base)
+from ..busca.derivacao import (carrega_facetas, derivar, facetas_atingidas, padrao,
+                               texto_do, vocabulario_da_base)
 from ..busca.fidelidade import fidelidade
-from ..busca.leitores import SEPARADOR_VALORES
+from ..busca.leitores import SEPARADOR_VALORES, le_wos_txt
 from ..busca.registro import chave_dedup
 from ..busca.simulacao import analisa, valida_termos
 from ..busca.simulacao import candidatos as candidatos_da_amostra
@@ -113,6 +114,31 @@ def aderencia(ctx, g):
     g.testa("ids recuperados na ordem das sementes",
             av["ids"] == [f"SE{k}" for k in range(1, 8)], f"{av['ids']}")
 
+    # Recuperação também pelo DOI: título divergente com o mesmo DOI conta, pelo DOI; o
+    # prefixo confirmado pelo DOI conta pelo DOI; o prefixo sem DOI segue indício.
+    titulo = "Um título completo para o teste de recuperação pelo identificador"
+    regs = [{"titulo": "Título que a base grafou de outra forma", "doi": "10.9999/AUTO.1",
+             "base": "x"},
+            {"titulo": titulo + " com subtítulo", "doi": "https://doi.org/10.9999/auto.2",
+             "base": "x"},
+            {"titulo": titulo + " e outro subtítulo", "doi": "10.9999/outro", "base": "x"},
+            {"titulo": "Título exato da semente quatro do autoteste", "doi": "10.9999/auto.4",
+             "base": "x"}]
+    sementes = [{"id": "SX1", "titulo": "Título da semente no Zotero", "doi": "10.9999/auto.1"},
+                {"id": "SX2", "titulo": titulo, "doi": "10.9999/auto.2"},
+                {"id": "SX3", "titulo": titulo, "doi": "10.9999/auto.3"},
+                {"id": "SX4", "titulo": "Título exato da semente quatro do autoteste",
+                 "doi": "10.9999/auto.4"}]
+    via = {e["id"]: (v, bool(p)) for e, v, _, p in recupera_sementes(sementes, regs)}
+    g.testa("título divergente e mesmo DOI: recuperada, pelo DOI",
+            via["SX1"] == (VIA_DOI, False), str(via["SX1"]))
+    g.testa("prefixo de título confirmado pelo DOI: recuperada, pelo DOI",
+            via["SX2"] == (VIA_DOI, False), str(via["SX2"]))
+    g.testa("prefixo de título sem o DOI da semente: segue indício, não recuperada",
+            via["SX3"] == ("", True), str(via["SX3"]))
+    g.testa("título exato e DOI: recuperada pelos dois",
+            via["SX4"] == (VIA_AMBOS, False), str(via["SX4"]))
+
 
 # ------------------------------------------------------------- casamento e corpus
 def _padrao_com_sufixo(termo):
@@ -193,8 +219,18 @@ def casamento(ctx, g):
                 fid not in facetas_atingidas(reg, vocab))
 
     _fronteira(g, sigla, vocab)
+    _leitor_wos_txt(g)
     _lematizacao(ctx, g, b, sigla)
     _outra_base(ctx, g, b)
+
+
+def _leitor_wos_txt(g):
+    """O texto plano da WoS separa palavras-chave repetidas com o mesmo separador que os
+    demais leitores: unidas por espaço, a fronteira entre valores se perderia no casamento."""
+    reg = le_wos_txt("PT J\nTI Titulo do teste\nDE learning\nDE context awareness\nER\n")[0]
+    esperado = f"learning{SEPARADOR_VALORES}context awareness"
+    g.testa("leitor .txt da WoS separa palavras-chave repetidas com o separador de valores",
+            reg["palavras_chave"] == esperado, repr(reg["palavras_chave"]))
 
 
 def _fronteira(g, sigla, vocab):
@@ -231,6 +267,11 @@ def _fronteira(g, sigla, vocab):
             f"forma {t!r}", fid not in facetas_atingidas(entre_chaves, vocab))
     g.testa(f"fronteira ({sigla}, {fid}): {a!r} no título e {c!r} no resumo não formam "
             f"{t!r}", fid not in facetas_atingidas(entre_campos, vocab))
+    # Controle: com o texto unido, o mesmo par casaria. É o que prova que os dois casos
+    # acima reprovam se o casamento voltar a procurar no texto único.
+    g.testa(f"controle da fronteira ({sigla}, {fid}): com o texto unido, {t!r} casaria",
+            any(p.search(texto_do(entre_chaves)) for p in f["padroes"]),
+            texto_do(entre_chaves))
 
 
 def _lematizacao(ctx, g, b, sigla):
@@ -389,6 +430,22 @@ def corpus(ctx, g):
             fidelidade(bx, sigla, conf, str(pasta / "conferencia.ris"))
         with contextlib.redirect_stdout(relato_reg):
             fidelidade(bx, sigla, conf)
+
+        def sem_execucao(ident):
+            """Busca com o registro de execuções sem a execução `ident` da base testada."""
+            d2 = copy.deepcopy(registro)
+            d2["bases"][bd]["execucoes"] = [
+                e for e in d2["bases"][bd]["execucoes"] if e["id"] != ident]
+            arq = pasta / f"registro_sem_{ident}.json"
+            arq.write_text(json.dumps(d2), encoding="utf-8")
+            c2 = Configuracao(cfg.com("dados.registro", str(arq)), cfg.arquivo)
+            return Busca(ctx.com_config(c2))
+
+        # EX1 é a executada; EX3 é a execução direta da expressão de conferência.
+        cod_sem_executada, _, erro_sem_executada = _roda_analise(
+            lambda: fidelidade(sem_execucao("EX1"), sigla, conf))
+        cod_sem_direta, _, erro_sem_direta = _roda_analise(
+            lambda: fidelidade(sem_execucao("EX3"), sigla, conf))
         # Só os da base sob teste: a segunda base, quando há, entra nas saídas pela sua
         # própria executada.
         registros = [x for x in _linhas_csv(cfg.saida("registros")) if x["base"] == sigla]
@@ -415,6 +472,14 @@ def corpus(ctx, g):
             f"(2 registros)", re.search(r"execução direta na base\s*:\s*2\b",
                                         relato_reg.getvalue()) is not None,
             relato_reg.getvalue()[-300:])
+    g.testa("fidelidade sem a executada registrada sai com DADOS e nomeia o registro",
+            cod_sem_executada == Saida.DADOS and b.executada in erro_sem_executada
+            and "busca registrar" in erro_sem_executada,
+            f"{cod_sem_executada.name} {erro_sem_executada[:120]}")
+    g.testa("fidelidade sem execução direta registrada sai com DADOS e nomeia o registro",
+            cod_sem_direta == Saida.DADOS and conf in erro_sem_direta
+            and "busca registrar" in erro_sem_direta,
+            f"{cod_sem_direta.name} {erro_sem_direta[:120]}")
     if outra is None:
         g.nao_executa("fidelidade por base: nenhuma segunda base com registro que "
                       f"satisfaça {conf}", quantos=1)
@@ -837,6 +902,24 @@ def sensibilidade_analise(ctx, g):
                 "registro que só traz o plural",
                 (linha.get("elegiveis"), linha.get("nao_elegiveis"),
                  linha.get("acrescimo")) == ("2", "1", "4"), str(linha))
+
+        # Fronteira na análise: o termo inteiro numa palavra-chave é candidato; o mesmo par
+        # partido em duas palavras-chave não alcança o registro da perda.
+        fronteira = "zzqx zzqy"
+        com_termo = {"titulo": "", "resumo": "", "palavras_chave": fronteira, "base": sigla}
+        com_partes = {"titulo": "", "resumo": "",
+                      "palavras_chave": f"zzqx{SEPARADOR_VALORES}zzqy", "base": sigla}
+        with contextlib.redirect_stdout(io.StringIO()):
+            linhas_f, *_ = candidatos_da_amostra(
+                bx, sigla, [({"chave": "F1", "elegivel": "sim"}, com_termo)],
+                {"F2": com_partes})
+        cand = {x[0]: x for x in linhas_f}.get(fronteira)
+        g.testa("fronteira na análise: termo de duas palavras não alcança o registro com as "
+                "partes em palavras-chave distintas",
+                cand is not None and cand[3] == 0, str(cand))
+        g.testa("controle da fronteira na análise: com o texto unido, o termo alcançaria",
+                any(p.search(texto_do(com_partes)) for p in [padrao(fronteira)]),
+                texto_do(com_partes))
 
         cod, texto, erro = _roda_analise(lambda: analisa(bx, sigla, [(fct, termo)]))
         g.testa("simulação conta só a perda, com as formas de número do termo: 2/2 "

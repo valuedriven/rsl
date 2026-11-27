@@ -32,6 +32,17 @@ sua origem, em `python3 -m rsl configuracao mostrar`. O mapeamento de cada passo
 comandos, conferido contra as skills e o parser, sai de `python3 -m rsl catalogo gerar`
 (ensaio; `--gravar` regrava o catálogo).
 
+Os dados das sementes ficam na coleção do Zotero de `[zotero]` (biblioteca e coleção), e
+só `sementes copiar` e `sementes completar` acessam a API web do Zotero. A chave da API é
+emitida pelo pesquisador, com escrita só na biblioteca de grupo, e fica fora do controle de
+versão: na variável de ambiente `ZOTERO_API_KEY` ou, na falta dela, na linha
+`ZOTERO_API_KEY=<chave>` do `.env` da raiz. O `.env` tem de estar no `.gitignore`; se não
+estiver, a leitura é recusada com CONFIGURACAO. A chave nunca se grava em arquivo versionado
+nem se imprime, e em relato aparecem só os quatro últimos caracteres. Sem a chave, esses dois
+subcomandos saem com CONFIGURACAO e os demais funcionam, porque leem a cópia da coleção em
+`[dados] zotero`, sem rede. Antes de `sementes copiar`, sincronizar o Zotero: a API web não
+vê edição ainda não sincronizada.
+
 ### Códigos de saída
 
 Todo subcomando termina com um destes códigos, e toda saída diferente de OK termina com uma
@@ -63,7 +74,7 @@ chave, não pelo caminho.
 | `docs/01_plano.md` | plano: contexto, objetivos, base metodológica, escopo, cronograma, recursos, custos, qualidade, riscos e uso de IA | pesquisador |
 | `docs/02_protocolo_informacoes_gerais.md` | protocolo, informações gerais: tópicos preliminares, delimitação do assunto e objeto | pesquisador |
 | `docs/03_protocolo_estrategia_pesquisa.md` (`protocolo`) | protocolo, estratégias de pesquisa: questão, facetas, controle terminológico, strings, expressões, critérios, fontes, conjunto-semente, procedimentos, instrumentos e ferramentas; fonte única dos parâmetros que declara | pesquisador; a tabela "Strings de busca por faceta", `strings gerar --gravar`, a partir do quadro terminológico |
-| `docs/conjunto_semente.toml` (`[documentos] sementes`) | conjunto-semente, uma tabela `[[sementes]]` por estudo; único lugar de dado de semente | pesquisador; nenhum subcomando grava |
+| `docs/conjunto_semente.toml` (`[documentos] sementes`) | conjunto-semente, uma tabela `[[sementes]]` por estudo, com o controle e o juízo do pesquisador; os dados de cada semente ficam no Zotero, ligados pelo DOI | pesquisador; nenhum subcomando grava |
 | `docs/procedimentos/<sigla>/` (`[documentos] procedimento_fonte`) | fonte do procedimento de busca de cada base: `procedimento.toml` (sintaxe e roteiro de sondagens, critérios, declaração de cobertura com `plural` e `teto`, composição, execução, regras de montagem, sementes, ressalvas) e fragmentos de prosa de nome fixo; esquema em `documentos gramatica` | pesquisador e agente, a pedido; base nova começa por `procedimentos iniciar` |
 | `docs/procedimentos_busca_<sigla>.md` (`[documentos] procedimento`) | procedimento de busca de cada base, inteiro: sintaxe e roteiro de sondagens, critérios, strings, expressões, execução, conjunto-semente e ressalvas; saída de geração, não se edita à mão | `procedimentos gerar --gravar`, a partir da fonte, do protocolo, do arquivo de sementes e do de exceções |
 | `docs/flexoes.toml` (`[documentos] flexoes`) | exceções de flexão de número dos termos das STR, por idioma (irregular, não contável, vetada), cada uma com a origem | pesquisador; agente, a pedido, com revisão antes de gravar |
@@ -77,7 +88,9 @@ chave, não pelo caminho.
 | `data/validacao_terminologica.csv` (`[dados] validacao`) — *sob demanda* | estatuto de cada termo; preserva as decisões e as linhas fora do protocolo | `termos exportar`, `termos validar`, `termos importar`; decisões pelo pesquisador |
 | `data/evidencia/<instrumento>/` (`[dados] evidencia`) — *sob demanda* | resposta bruta de cada consulta terminológica | `termos validar` |
 | `data/evidencia/referencias/` | resposta bruta da conferência de referências, `SEn_…` pelo `id` da semente | agente, a pedido |
-| `data/semente_aderencia.csv` (`[saidas] aderencia`) | planilha do teste de aderência, uma linha por semente e por base; regravada a cada execução, com as colunas manuais preservadas | `aderencia planilhar` |
+| `data/evidencia/openalex/` | resposta bruta da OpenAlex por semente, `<DOI normalizado>.json`, nomeada pelo DOI e não pelo `id` | `sementes metadados` |
+| `data/evidencia/zotero/` | pontos de restauração da coleção de sementes, gravados antes de cada escrita no Zotero | `sementes completar --gravar`; agente, a pedido |
+| `data/zotero_sementes.json` (`[dados] zotero`) | cópia da coleção de sementes do Zotero: resposta bruta da API web, com biblioteca, coleção, versão da biblioteca e data e hora da leitura; os comandos de análise a leem em vez de consultar o Zotero | `sementes copiar`; `sementes completar --gravar` |
 | `data/registros.csv`, `data/contagens_busca.csv`, `data/ordem_triagem.csv` (`[saidas]`) — *sob demanda* | registros com pertinência e marcas, contagens por base e expressão, ordem da 1ª filtragem | `busca derivar` |
 | `data/fidelidade_<base>_<expressao>.csv` (`[saidas] fidelidade`) — *sob demanda* | divergências entre derivação e execução direta | `conferencia fidelidade` |
 | `data/sensibilidade_<base>.csv` (`[saidas] sensibilidade`) — *sob demanda* | perda da sonda e amostra a classificar; preserva a coluna `elegivel` | `conferencia sensibilidade`; classificação pelo pesquisador |
@@ -97,15 +110,23 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
 
 | Registro | Guarda | Não guarda |
 | --- | --- | --- |
-| `data/historico.md` | só **decisões arquiteturais** da revisão — questão, escopo, critérios, método, estratégia de busca e emendas do protocolo —, em entrada curta: data, decisão, alcance e fundamento | decisão de instrumento, de ferramenta ou de redação; curadoria e manutenção de artefatos; correção de defeito; ação por fazer; resultado de consulta; contagem — de termos, de sementes, de caracteres, de casos — e resultado de conferência ou de autoteste |
+| `data/historico.md` | só **decisões arquiteturais** da revisão — questão, escopo, critérios, método, estratégia de busca e emendas do protocolo —, em entrada curta: data, decisão, alcance e fundamento | decisão de instrumento, de ferramenta ou de redação; curadoria e manutenção de artefatos; correção de defeito; ação por fazer; resultado de consulta ou de sondagem, ainda que confirme ou derrube uma regra do procedimento de busca, quando nenhuma expressão muda; constatação de estado — que decisões anteriores já estão aplicadas, que uma etapa terminou, que nada falta —; encerramento de pendência sem decisão arquitetural nova; contagem — de termos, de sementes, de caracteres, de casos — e resultado de conferência ou de autoteste |
 | `data/pendencias.json` | **ações ainda a executar**, e só elas, com `id`, `origem`, o que bloqueia, ação sugerida e responsável | ação concluída ou descartada; decisão; resultado de consulta |
 | `data/registro_execucao.json` | **resultados da execução das consultas** nas bases — sondagens de sintaxe (`bases.BDn.sondagens`, por `sondagens registrar`), retornos, exportações e conferências | decisão; ação por fazer |
+
+A cópia da coleção do Zotero (`[dados] zotero`) e as respostas da OpenAlex
+(`data/evidencia/openalex/`) não são registro de decisão nem de execução das buscas: são dado
+de semente lido de fonte externa, versionado para que os comandos funcionem sem rede e o
+resultado se reproduza. Nenhum dos três registros os transcreve.
 
 - **Nenhum artefato guarda registro histórico** em cabeçalho ou comentário (quem aprovou,
   quando, o que se retirou): o artefato traz só o conteúdo vigente.
 - Pendência resolvida ou descartada **sai** de `data/pendencias.json`; não se arquiva. O que
-  a encerrou vai ao seu registro antes da exclusão: a decisão, inclusive a de descartar, ao
-  histórico, que cita o `id`; o resultado de consulta, ao registro de execução. O `id` de
+  a encerrou vai ao seu registro antes da exclusão: a decisão arquitetural, inclusive a de
+  descartar, ao histórico, que cita o `id`; o resultado de consulta ou de sondagem, ao registro
+  de execução e à fonte do procedimento de busca. Encerramento que não decide nada de
+  arquitetura — a sondagem respondeu, a constatação foi feita, a ação foi executada — **não
+  gera entrada no histórico**: a exclusão da pendência e o controle de versão bastam. O `id` de
   pendência excluída não se reutiliza.
 - A pendência remete à sua `origem` (fonte do procedimento de busca, protocolo, plano, comando) em vez de copiar o
   conteúdo dela.
@@ -150,9 +171,10 @@ Os demais instrumentos do RS Banyan e o portfólio não integram este repositór
   ou cria-se, renomeia-se ou retira-se uma skill ou um comando —, e a ordem é guia →
   `catalogo gerar` (ensaio e conferência) → `catalogo gerar --gravar`. Catálogo editado à
   mão, ou defasado do guia, reprova em `catalogo gerar`.
-- A planilha de aderência é **artefato misto**: as colunas manuais — as que `aderencia planilhar` deixa vazias na primeira geração — editam-se no próprio arquivo e se conservam
-  na regravação; as demais vêm do arquivo de sementes e da tabela de bases, e corrigem-se
-  lá. A regravação que perderia preenchimento manual é recusada, sem gravar.
+- A **cópia da coleção de sementes** (`[dados] zotero`) é saída de leitura do Zotero: o dado
+  se corrige no Zotero, e a ordem é Zotero (sincronizado) → `sementes copiar`, que relata o
+  acrescentado, o retirado e o alterado antes de gravar. Cópia editada à mão some na leitura
+  seguinte.
 
 ## Convenções
 

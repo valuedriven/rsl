@@ -3,7 +3,7 @@ student;19;4;350;students
 learning;17;5;449;
 design;8;5;212;designs
 teaching;8;7;228;
-learning systems;7;0;93;
+learning systems;7;0;92;
 curriculum;7;0;111;
 education computing;6;0;75;
 curricula;6;4;88;
@@ -41,9 +41,9 @@ sustainability education;2;2;7;
 active learning;2;0;8;
 intelligent educational systems;2;0;8;
 robotics;2;0;8;
+knowledge engineering;2;0;9;
 prerequisite;2;0;11;prerequisites
 search engines;2;0;11;
-knowledge engineering;2;0;12;
 software engineering;2;1;12;
 sustainable development goals;2;1;13;
 ict;2;0;14;
@@ -53,7 +53,7 @@ conceptual framework;2;1;30;conceptual frameworks
 educational resource;2;0;34;educational resources
 learn;2;0;38;learns
 epistemology;2;0;39;epistemologies
-knowledge graph;2;0;48;knowledge graphs
+knowledge graph;2;0;47;knowledge graphs
 competencies;2;2;49;
 semantics;2;1;65;
 higher education institutions;2;2;67;
@@ -61,6 +61,7 @@ human;2;8;162;humans
 academic fields;1;0;1;
 aerospace engineering;1;0;1;
 agile values;1;0;1;
+analysis system;1;0;1;
 assessment traceability;1;0;1;
 based reasonings;1;0;1;
 chinese language;1;0;1;
@@ -145,12 +146,12 @@ web3 technologies;1;0;1;
 adaptive model;1;0;2;adaptive models
 advanced analytics;1;0;2;
 ai application;1;0;2;ai applications
-analysis system;1;0;2;analysis systems
 biodiversity;1;0;2;
 computer scientists;1;0;2;
 cooperative learning;1;0;2;
 curriculum knowledge;1;0;2;
 digital railway;1;0;2;digital railways
+educational models;1;0;2;
 educational standards;1;0;2;
 electronic information;1;0;2;
 english course;1;0;2;
@@ -173,7 +174,6 @@ teaching objectives;1;0;2;
 total quality management;1;0;2;
 traditional knowledge;1;0;2;
 computation theory;1;0;3;
-educational models;1;0;3;
 evaluation methods;1;0;3;
 explicit knowledge;1;0;3;
 interdisciplinarity;1;0;3;
@@ -218,17 +218,18 @@ success model;1;0;4;success models
 virtual learning environments;1;0;4;
 business education;1;0;5;business educations
 information retrieval systems;1;0;5;
+language education;1;0;5;
 ontology evaluation;1;0;5;ontology evaluations
 ontomath sup edu sup;1;0;5;
 program evaluation;1;0;5;program evaluations
 university sector;1;0;5;
+web services;1;0;5;
 colleges and universities;1;0;6;
 education medical undergraduate;1;0;6;
 generative artificial intelligence genai;1;1;6;
 intelligent education;1;0;6;intelligent educations
 knowledge map;1;0;6;knowledge maps
-language education;1;0;6;
-web services;1;0;6;
+course ontology;1;0;7;
 engineering research;1;0;7;
 foundational ontologies;1;0;7;
 learning contents;1;0;7;
@@ -239,15 +240,14 @@ robots;1;0;7;
 semantic search;1;0;7;semantic searches
 computational thinking;1;0;8;
 education for sustainable development;1;0;8;
+education medical;1;0;8;
 educational data mining;1;0;8;
 educational quality;1;0;8;educational qualities
 graphic methods;1;0;8;
 mathematical education;1;0;8;mathematical educations
 accreditation;1;0;9;
 collaborative learning;1;0;9;
-course ontology;1;0;9;
 data analytics;1;0;9;
-education medical;1;0;9;
 game design;1;0;9;
 cloud computing;1;0;10;
 critical thinking;1;0;10;

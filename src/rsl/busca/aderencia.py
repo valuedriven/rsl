@@ -2,9 +2,9 @@
 
 import math
 
+from .. import doi as _doi
 from ..markdown import normaliza
 from ..saida import Saida
-from ..sementes import COL_INDEXADA, COL_RECUPERADA
 from . import Busca
 from .registro import coleta, consultas_do_corpus, exige_registros, identifica
 
@@ -69,37 +69,66 @@ def casa_sementes(sementes, regs):
     return [(e, *casa_titulo(idx, chave_titulo(e["titulo"]))) for e in sementes]
 
 
+VIA_TITULO, VIA_DOI, VIA_AMBOS = "título", "DOI", "título e DOI"
+
+
+def recupera_sementes(sementes, regs):
+    """[(semente, via, registros, prefixo)], na ordem das sementes.
+
+    A semente é recuperada por casamento exato de título ou pelo DOI (caixa baixa, sem
+    prefixo de URL) de um registro da exportação; `via` diz por qual dos dois, ou pelos
+    dois, e é "" quando não foi recuperada. `prefixo` só traz candidatos quando a semente
+    não foi recuperada: o casamento por prefixo confirmado pelo DOI conta pelo DOI, e o sem
+    DOI continua sendo só indício.
+    """
+    por_doi = {}
+    for r in regs:
+        chave = _doi.normaliza(r.get("doi"))
+        if chave:
+            por_doi.setdefault(chave, []).append(r)
+    saida = []
+    for e, exatas, prefixo in casa_sementes(sementes, regs):
+        pelo_doi = por_doi.get(_doi.normaliza(e.get("doi")), []) if e.get("doi") else []
+        via = (VIA_AMBOS if exatas and pelo_doi else VIA_TITULO if exatas
+               else VIA_DOI if pelo_doi else "")
+        registros = exatas + [r for r in pelo_doi if r not in exatas]
+        saida.append((e, via, registros, [] if via else prefixo))
+    return saida
+
+
 def aderencia(b):
     """Mede recall: quantos dos estudos-semente aparecem na exportação. NÃO aplica o
     recorte temporal — o conjunto-semente valida o desenho da busca, não os critérios de
     elegibilidade.
 
     Relata uma única aderência, sobre o conjunto, com o intervalo de Wilson a 95%, e a
-    compara ao limiar: é a que decide a passagem. A coluna de indexação da planilha de
-    aderência (`sementes.COL_INDEXADA`) é o denominador definitivo e precisa ser preenchida
-    à mão, base por base, buscando cada semente pelo título: ausência por falta de
-    indexação não é falha da string.
+    compara ao limiar: é a que decide a passagem. A semente conta como recuperada por
+    casamento exato de título ou pelo DOI, e o relato diz por qual. A indexação declarada de
+    cada semente é o campo `bases` do arquivo de sementes: ausência por falta de indexação
+    não é falha da string, e `aderencia diagnosticar` separa as causas de cada perda.
 
-    A aderência abaixo do limiar é relatada, sem reprovar, porque o denominador definitivo
-    é o da planilha; o conjunto vazio já reprova na leitura do arquivo de sementes.
+    A aderência abaixo do limiar é relatada, sem reprovar; o conjunto vazio já reprova na
+    leitura do arquivo de sementes.
     """
     sementes = b.d["sementes"]
     regs = registros_unicos(b)
 
+    z = b.d["zotero"]
     print(f"\nADERÊNCIA AO CONJUNTO-SEMENTE — {len(sementes)} estudos, "
-          f"{len(regs)} registros únicos\n")
+          f"{len(regs)} registros únicos (cópia da coleção do Zotero: versão {z['versao']}, "
+          f"lida em {z['lida_em']})\n")
     recuperadas, indicios = set(), set()
-    for e, exatas, prefixo in casa_sementes(sementes, regs):
-        if exatas:
+    for e, via, registros, prefixo in recupera_sementes(sementes, regs):
+        if via:
             recuperadas.add(e["id"])
-            bases = ", ".join(sorted({r.get("base", "?") for r in exatas}))
+            bases = ", ".join(sorted({r.get("base", "?") for r in registros}))
             print(f"  [OK ] {e['id']:>4}. {e['ano']} "
-                  f"{e['titulo'][:48]:<50} {bases}")
+                  f"{e['titulo'][:48]:<50} {bases} — pelo {via}")
         elif prefixo:
             indicios.add(e["id"])
             bases = ", ".join(sorted({r.get("base", "?") for r in prefixo}))
             print(f"  [? ] {e['id']:>4}. {e['ano']} "
-                  f"{e['titulo'][:48]:<50} {bases} — prefixo; conferir à mão")
+                  f"{e['titulo'][:48]:<50} {bases} — prefixo sem DOI; conferir à mão")
         else:
             print(f"  [   ] {e['id']:>4}. {e['ano']} "
                   f"{e['titulo'][:48]:<50} esperado em: {', '.join(e['bases'])}")
@@ -115,12 +144,11 @@ def aderencia(b):
     if indicios:
         print(f"\n  INDÍCIO POR PREFIXO — {len(indicios)} semente(s) NÃO contabilizada(s): "
               f"{', '.join(sorted(indicios))}")
-        print(f"    prefixo não é acerto: conferir à mão e registrar na coluna "
-              f"`{COL_RECUPERADA}`.")
-    print("\n  ATENÇÃO: a razão acima é sobre as sementes informadas. O denominador definitivo")
-    print(f"  são as sementes que cada base INDEXA, apurado à mão na coluna `{COL_INDEXADA}`")
-    print("  da planilha. Semente ausente por não ser indexada não conta contra a string.")
-    print("  Cada ausência acima exige diagnóstico: qual termo a teria alcançado?")
+        print("    prefixo de título sem o DOI da semente não é acerto: conferir à mão.")
+    print("\n  ATENÇÃO: a razão acima é sobre as sementes informadas. A indexação declarada de")
+    print("  cada semente é o campo `bases` do arquivo de sementes; semente ausente por não ser")
+    print("  indexada não conta contra a string. Cada ausência acima exige diagnóstico")
+    print("  (`aderencia diagnosticar <base>`): qual termo a teria alcançado?")
     return Saida.OK
 
 

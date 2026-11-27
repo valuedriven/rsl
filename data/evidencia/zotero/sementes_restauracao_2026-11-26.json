@@ -1,0 +1,1574 @@
+{
+ "biblioteca": "groups/5969244",
+ "colecao": "V2C73IKE",
+ "versao": 13084,
+ "lida_em": "2026-11-26T22:53:49-03:00",
+ "via": "API local do Zotero (http://localhost:23119/api), só leitura; ponto de restauração anterior a sementes completar",
+ "itens": [
+  {
+   "key": "8CRZMZLB",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/8CRZMZLB",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/8CRZMZLB",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Das et al.",
+    "parsedDate": "2022",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "8CRZMZLB",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Reorganizing Educational Institutional Domain using Faceted Ontological Principles",
+    "date": "2022",
+    "DOI": "10.5771/0943-7444-2022-1-6",
+    "volume": "49",
+    "pages": "6-21",
+    "publicationTitle": "Knowledge Organization",
+    "issue": "1",
+    "creators": [
+     {
+      "firstName": "S.",
+      "lastName": "Das",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "D.",
+      "lastName": "Naskar",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S.",
+      "lastName": "Roy",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "5QTLWAME",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/5QTLWAME",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/5QTLWAME",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Palomino et al.",
+    "parsedDate": "2023",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "5QTLWAME",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "An ontology for modelling user’ profiles and activities in gamified education",
+    "date": "2023",
+    "DOI": "10.58459/rptel.2023.18018",
+    "volume": "18",
+    "pages": "018",
+    "publicationTitle": "Research and Practice in Technology Enhanced Learning",
+    "creators": [
+     {
+      "firstName": "P. T.",
+      "lastName": "Palomino",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "A. M.",
+      "lastName": "Toda",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "L.",
+      "lastName": "Rodrigues",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "W.",
+      "lastName": "Oliveira",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "L.",
+      "lastName": "Nacke",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S.",
+      "lastName": "Isotani",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "GJCGAIJ2",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/GJCGAIJ2",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/GJCGAIJ2",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Iatrellis et al.",
+    "parsedDate": "2019",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "GJCGAIJ2",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "EDUC8 ontology: semantic modeling of multi-facet learning pathways",
+    "date": "2019",
+    "DOI": "10.1007/s10639-019-09877-4",
+    "volume": "24",
+    "pages": "2371-2390",
+    "publicationTitle": "Education and Information Technologies",
+    "issue": "4",
+    "creators": [
+     {
+      "firstName": "O.",
+      "lastName": "Iatrellis",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "A.",
+      "lastName": "Kameas",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "P.",
+      "lastName": "Fitsilis",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "TMYL48UF",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/TMYL48UF",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/TMYL48UF",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Chimalakonda⁩ e ⁨Nori⁩",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "TMYL48UF",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "An ontology based modeling framework for design of educational technologies",
+    "date": "2020",
+    "DOI": "10.1186/s40561-020-00135-6",
+    "volume": "7",
+    "publicationTitle": "Smart Learning Environments",
+    "creators": [
+     {
+      "firstName": "S.",
+      "lastName": "Chimalakonda",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "K. V.",
+      "lastName": "Nori",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "MF9D6BHW",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/MF9D6BHW",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/MF9D6BHW",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Cenka et al.",
+    "parsedDate": "2023",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "MF9D6BHW",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Personal learning environment toward lifelong learning: an ontology-driven conceptual model",
+    "date": "2023",
+    "DOI": "10.1080/10494820.2022.2039947",
+    "volume": "31",
+    "pages": "6445-6461",
+    "publicationTitle": "Interactive Learning Environments",
+    "issue": "10",
+    "creators": [
+     {
+      "firstName": "B. A. N.",
+      "lastName": "Cenka",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "H. B.",
+      "lastName": "Santoso",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "K.",
+      "lastName": "Junus",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "CXVC2H5V",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/CXVC2H5V",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/CXVC2H5V",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Piriyapongpipat et al.",
+    "parsedDate": "2024",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "CXVC2H5V",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "An alternative approach to ontology-based curriculum development in higher education",
+    "date": "2024",
+    "DOI": "10.1186/s40561-024-00307-8",
+    "volume": "11",
+    "pages": "1-19",
+    "publicationTitle": "Smart Learning Environments",
+    "issue": "1",
+    "creators": [
+     {
+      "firstName": "P.",
+      "lastName": "Piriyapongpipat",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S.",
+      "lastName": "Goldin",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "N.",
+      "lastName": "Ditcharoen",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "7GUUMV4J",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/7GUUMV4J",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/7GUUMV4J",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Quigley et al.",
+    "parsedDate": "2017",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "7GUUMV4J",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Developing a Conceptual Model of STEAM Teaching Practices",
+    "date": "2017",
+    "DOI": "10.1111/ssm.12201",
+    "volume": "117",
+    "pages": "1-12",
+    "publicationTitle": "School Science and Mathematics",
+    "issue": "1-2",
+    "creators": [
+     {
+      "firstName": "C. F.",
+      "lastName": "Quigley",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "D.",
+      "lastName": "Herro",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "F. M.",
+      "lastName": "Jamil",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "FLPHXSKH",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/FLPHXSKH",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/FLPHXSKH",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Ferreira et al.",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "FLPHXSKH",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Promoting Sustainable Social Emotional Learning at School through Relationship-Centered Learning Environment, Teaching Methods and Formative Assessment",
+    "date": "2020",
+    "DOI": "10.2478/jtes-2020-0003",
+    "volume": "22",
+    "pages": "21-36",
+    "publicationTitle": "Journal of Teacher Education for Sustainability",
+    "issue": "1",
+    "creators": [
+     {
+      "firstName": "M.",
+      "lastName": "Ferreira",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "B.",
+      "lastName": "Martinsone",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S.",
+      "lastName": "Talić",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "EMKUXDXQ",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/EMKUXDXQ",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/EMKUXDXQ",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Hernández-Carrasco et al.",
+    "parsedDate": "2022",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EMKUXDXQ",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "A Framework to Assist in Didactic Planning at Undergraduate Level",
+    "date": "2022",
+    "DOI": "10.3390/math10091355",
+    "volume": "10",
+    "publicationTitle": "Mathematics",
+    "issue": "9",
+    "creators": [
+     {
+      "firstName": "D. A.",
+      "lastName": "Hernández-Carrasco",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "C. E.",
+      "lastName": "Rose-Gómez",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S.",
+      "lastName": "González-López",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "A.",
+      "lastName": "López-López",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "J. M.",
+      "lastName": "García-Gorrostieta",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "G.",
+      "lastName": "Borrego",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "K4REDCGK",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/K4REDCGK",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/K4REDCGK",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Nunes Passos et al.",
+    "parsedDate": "2024",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "K4REDCGK",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Uma ontologia para apoiar o ensino de matemática básica com uso de robótica educacional",
+    "date": "2024",
+    "DOI": "10.15628/holos.2023.10328",
+    "volume": "8",
+    "publicationTitle": "HOLOS",
+    "issue": "39",
+    "creators": [
+     {
+      "firstName": "D. D.",
+      "lastName": "Nunes Passos",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S. R.",
+      "lastName": "Fernandes de Araújo",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "S. D.",
+      "lastName": "Silva",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "P. G.",
+      "lastName": "Gadelha Queiroz",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "RES8X5NL",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/RES8X5NL",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/RES8X5NL",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Daniel et al.",
+    "parsedDate": "2023",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "RES8X5NL",
+    "version": 13084,
+    "itemType": "conferencePaper",
+    "title": "Transformando o Processo de Avaliação da Qualidade no Ensino Superior: Uma Proposta Ontológica para a UFRGS",
+    "date": "2023",
+    "DOI": "10.5753/wetie.2023.236130",
+    "pages": "62-72",
+    "proceedingsTitle": "Anais do Workshop em Estratégias Transformadoras e Inovação na Educação (WETIE)",
+    "creators": [
+     {
+      "firstName": "E. M. P.",
+      "lastName": "Daniel",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "J. P. M. de",
+      "lastName": "Oliveira",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "L. K.",
+      "lastName": "Wives",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "A.",
+      "lastName": "Lorandi",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "A8A5GL5W",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/A8A5GL5W",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/A8A5GL5W",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Griful-Freixenet et al.",
+    "parsedDate": "2021",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "A8A5GL5W",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Toward More Inclusive Education: An Empirical Test of the Universal Design for Learning Conceptual Model among Preservice Teachers",
+    "date": "2021",
+    "DOI": "10.1177/0022487120965525",
+    "volume": "72",
+    "pages": "381-395",
+    "publicationTitle": "Journal of Teacher Education",
+    "issue": "3",
+    "creators": [
+     {
+      "firstName": "J.",
+      "lastName": "Griful-Freixenet",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "K.",
+      "lastName": "Struyven",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "W.",
+      "lastName": "Vantieghem",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "MKYRA93F",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/MKYRA93F",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/MKYRA93F",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Kokkinou⁩ e ⁨Kyriakides⁩",
+    "parsedDate": "2022",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "MKYRA93F",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Investigating differential teacher effectiveness: searching for the impact of classroom context factors",
+    "date": "2022",
+    "DOI": "10.1080/09243453.2022.2030762",
+    "volume": "33",
+    "pages": "403-430",
+    "publicationTitle": "School Effectiveness and School Improvement",
+    "issue": "3",
+    "creators": [
+     {
+      "firstName": "E.",
+      "lastName": "Kokkinou",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "L.",
+      "lastName": "Kyriakides",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "RSXRM4GC",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/RSXRM4GC",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/RSXRM4GC",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Čuka⁩ e ⁨Cindrić⁩",
+    "parsedDate": "2025",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "RSXRM4GC",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Teacher beliefs about mathematics instruction and teaching practices in Croatian primary schools",
+    "date": "2025",
+    "DOI": "10.30935/scimath/17512",
+    "volume": "13",
+    "pages": "433-448",
+    "publicationTitle": "European Journal of Science and Mathematics Education",
+    "issue": "4",
+    "creators": [
+     {
+      "firstName": "J.",
+      "lastName": "Čuka",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "M.",
+      "lastName": "Cindrić",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "XI7VYYL6",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/XI7VYYL6",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/XI7VYYL6",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Nascimento et al.",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "XI7VYYL6",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Implicações da metodologia da problematização na Ciência da Informação: o uso do Arco de Maguerez na Organização da Informação e do Conhecimento",
+    "date": "2020",
+    "DOI": "10.24208/rebecin.v7i2.189",
+    "volume": "7",
+    "pages": "3-22",
+    "publicationTitle": "Revista Brasileira de Educação em Ciência da Informação",
+    "issue": "2",
+    "creators": [
+     {
+      "firstName": "F. M. S.",
+      "lastName": "Nascimento",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "F. A.",
+      "lastName": "Pinho",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "M. I.",
+      "lastName": "Braz",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "86S8NTGS",
+   "version": 13084,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/86S8NTGS",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/86S8NTGS",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Lopes⁩ e ⁨Lima⁩",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "86S8NTGS",
+    "version": 13084,
+    "itemType": "journalArticle",
+    "title": "Interfaces de visualização de trilhas de aprendizagem: uma análise a partir dos princípios dos sistemas de hipertexto",
+    "date": "2020",
+    "DOI": "10.9771/rpa.v14i1.35952",
+    "volume": "14",
+    "pages": "40-56",
+    "publicationTitle": "PontodeAcesso",
+    "issue": "1",
+    "creators": [
+     {
+      "firstName": "P.",
+      "lastName": "Lopes",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "G. A.",
+      "lastName": "Lima",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T00:33:00Z"
+   }
+  },
+  {
+   "key": "T2PQFY33",
+   "version": 12323,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/T2PQFY33",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/T2PQFY33",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Alvarenga⁩ e ⁨Cristovão⁩",
+    "parsedDate": "2023-03-27",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "T2PQFY33",
+    "version": 12323,
+    "itemType": "journalArticle",
+    "title": "Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica",
+    "abstractNote": "Distance Education has increased the supply of Learning Objects (LOs) generally made available in repositories without interoperability, which generates content redundancy, raising the cost of creation and maintenance, contradicting its main feature, which is reusability. This work proposes to create an operational domain ontology to help organize LOs in the context of the Semantic Web. With a qualitative approach and applied nature, the following steps were performed: (1) the choice of the LOM-IEE standard based on research in the area; (2) choice of ARCA repository and compatibility of metadata with the standard for some OAs in the repository; (3) elaboration of a design model for the domain operational ontology of the LOM-IEEE standard; (4) implementation of the domain operational ontology, as well as the incorporation of data from some LOs. As this is an ongoing research, equivalent properties and individuals will still be investigated for the interoperability of the structural and semantic layers. A mapping between ontology and data will also be carried out to create an RDF base and, finally, interoperable SPARQL queries as a proof of concept.\n&nbsp;",
+    "date": "2023-03-27",
+    "DOI": "10.26512/rici.v16.n1.2023.47618",
+    "url": "https://periodicos.unb.br/index.php/RICI/article/view/47618",
+    "accessDate": "2026-11-26T12:08:15Z",
+    "language": "en",
+    "libraryCatalog": "periodicos.unb.br",
+    "rights": "Copyright (c) 2023 Viviane Bessa Lopes Alvarenga, Henrique Monteiro Cristovão",
+    "volume": "16",
+    "pages": "263-285",
+    "publicationTitle": "Revista Ibero-Americana De Ciência Da Informação",
+    "ISSN": "1983-5213",
+    "issue": "1",
+    "journalAbbreviation": "Rev. Ibero-Am. Ciênc. Inf.",
+    "creators": [
+     {
+      "firstName": "Viviane Bessa Lopes",
+      "lastName": "Alvarenga",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "Henrique Monteiro",
+      "lastName": "Cristovão",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [
+     {
+      "tag": "Design model",
+      "type": 1
+     },
+     {
+      "tag": "Distance education",
+      "type": 1
+     },
+     {
+      "tag": "Educação a distância",
+      "type": 1
+     },
+     {
+      "tag": "Educación a distancia",
+      "type": 1
+     },
+     {
+      "tag": "Knowledge representation",
+      "type": 1
+     },
+     {
+      "tag": "Learning object repositories",
+      "type": 1
+     },
+     {
+      "tag": "Modelo de design",
+      "type": 1
+     },
+     {
+      "tag": "Open Educational Resources",
+      "type": 1
+     },
+     {
+      "tag": "Plantilla de diseño",
+      "type": 1
+     },
+     {
+      "tag": "Recursos Educacionais Abertos",
+      "type": 1
+     },
+     {
+      "tag": "Recursos educativos abiertos",
+      "type": 1
+     },
+     {
+      "tag": "Repositórios de objetos de aprendizagem",
+      "type": 1
+     },
+     {
+      "tag": "Repositorios de objetos de aprendizaje",
+      "type": 1
+     },
+     {
+      "tag": "Representação do conhecimento",
+      "type": 1
+     },
+     {
+      "tag": "Representación del conocimiento",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE",
+     "UAZEU26U"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:08:13Z",
+    "dateModified": "2026-11-26T12:59:58Z"
+   }
+  },
+  {
+   "key": "C8HPB536",
+   "version": 12322,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/C8HPB536",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/C8HPB536",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Shvets et al.",
+    "parsedDate": "2024",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "C8HPB536",
+    "version": 12322,
+    "itemType": "conferencePaper",
+    "title": "Towards a domain model for learning and teaching",
+    "date": "2024",
+    "DOI": "10.5220/0012471400003645",
+    "language": "en",
+    "publisher": "SciTePress",
+    "proceedingsTitle": "MODELSWARD 2024",
+    "creators": [
+     {
+      "firstName": "O.",
+      "lastName": "Shvets",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "K.",
+      "lastName": "Murtazin",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "M.",
+      "lastName": "Meeter",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "G.",
+      "lastName": "Piho",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:11Z",
+    "dateModified": "2026-11-26T12:59:58Z"
+   }
+  },
+  {
+   "key": "EHG6SPZF",
+   "version": 12322,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/EHG6SPZF",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/EHG6SPZF",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Sousa⁩ e ⁨Duque⁩",
+    "parsedDate": "2018",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EHG6SPZF",
+    "version": 12322,
+    "itemType": "journalArticle",
+    "title": "Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade",
+    "date": "2018",
+    "DOI": "10.5433/1981-8920.2018v23n1p271",
+    "language": "en",
+    "volume": "23",
+    "pages": "271-289",
+    "publicationTitle": "Informação & Informação",
+    "issue": "1",
+    "journalAbbreviation": "Inf. Inf.",
+    "creators": [
+     {
+      "firstName": "E. E. de",
+      "lastName": "Sousa",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "C.",
+      "lastName": "Duque",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:19Z",
+    "dateModified": "2026-11-26T12:59:58Z"
+   }
+  },
+  {
+   "key": "EWEKSQIF",
+   "version": 12322,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/EWEKSQIF",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/EWEKSQIF",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "⁨Khoo⁩ e ⁨Kan⁩",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EWEKSQIF",
+    "version": 12322,
+    "itemType": "bookSection",
+    "title": "An ontology for conceptual analysis of signature pedagogies",
+    "date": "2020",
+    "DOI": "10.5771/9783956507762-484",
+    "language": "en",
+    "publisher": "Ergon Verlag",
+    "place": "Aalborg, Dinamarca",
+    "pages": "484-488",
+    "bookTitle": "Knowledge organization at the interface: proceedings of the sixteenth international ISKO conference",
+    "creators": [
+     {
+      "firstName": "C. S. G.",
+      "lastName": "Khoo",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "R. Y. P.",
+      "lastName": "Kan",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "M.",
+      "lastName": "Lykke",
+      "creatorType": "editor"
+     },
+     {
+      "firstName": "T.",
+      "lastName": "Svarre",
+      "creatorType": "editor"
+     },
+     {
+      "firstName": "M.",
+      "lastName": "Skov",
+      "creatorType": "editor"
+     },
+     {
+      "firstName": "D.",
+      "lastName": "Martínez-Ávila",
+      "creatorType": "editor"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:20Z",
+    "dateModified": "2026-11-26T12:59:58Z"
+   }
+  },
+  {
+   "key": "WMNHV7AS",
+   "version": 12321,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "self": {
+      "href": "http://localhost:23119/api/groups/5969244",
+      "type": "application/json"
+     },
+     "alternate": {
+      "href": "https://www.zotero.org/groups/5969244",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "http://localhost:23119/api/groups/5969244/items/WMNHV7AS",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/5969244/items/WMNHV7AS",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "creatorSummary": "Chi et al.",
+    "parsedDate": "2018",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "WMNHV7AS",
+    "version": 12321,
+    "itemType": "journalArticle",
+    "title": "Learning adaptivity in support of flipped learning: an ontological problem-solving approach",
+    "date": "2018",
+    "DOI": "10.1111/exsy.12246",
+    "shortTitle": "Learning adaptivity in support of flipped learning",
+    "language": "en",
+    "publicationTitle": "Expert Systems",
+    "journalAbbreviation": "Expert Syst.",
+    "creators": [
+     {
+      "firstName": "Y.-L.",
+      "lastName": "Chi",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "T.-Y.",
+      "lastName": "Chen",
+      "creatorType": "author"
+     },
+     {
+      "firstName": "C.",
+      "lastName": "Hung",
+      "creatorType": "author"
+     }
+    ],
+    "tags": [],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:09Z",
+    "dateModified": "2026-11-26T12:52:36Z"
+   }
+  }
+ ]
+}

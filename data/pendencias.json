@@ -2,7 +2,7 @@
   "levantamento": {
     "data": "2026-11-18",
     "revisao": "2026-11-26",
-    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl projeto pendencias` e contra o código. 2026-11-26: revisão depois das sondagens de sintaxe da ERIC e das decisões registradas no histórico; cada pendência conferida contra a fonte que cita e contra o registro de execução.",
+    "procedimento": "2026-11-18: relato do comando de pendências; leitura de data/historico.md; busca por 'não verificad', 'não medid', 'não conferid', 'inferido' e 'A definir' em docs/*.md; leitura de openspec/changes/ e git status. 2026-11-22: cada pendência conferida contra a fonte que cita, contra `python3 -m rsl projeto pendencias` e contra o código. 2026-11-26: revisão depois das sondagens de sintaxe da ERIC e das decisões registradas no histórico; cada pendência conferida contra a fonte que cita e contra o registro de execução. 2026-11-26 (2ª): cada pendência conferida contra a fonte que cita, contra `projeto pendencias`, `aderencia medir`, `documentos conferir` e contra os textos registrados das execuções da WoS e da Scopus.",
     "limitacao": "A busca por termos pode não pegar ressalvas escritas de outra forma. As origens citam seção, e não linha.",
     "regra": "O arquivo contém só ações não concluídas; pendência resolvida ou descartada é excluída, e o que a encerrou vai ao histórico (README, Três registros)."
   },
@@ -20,7 +20,7 @@
       "id": "PD09",
       "categoria": "sintaxe-base",
       "base": "BD3 — ERIC",
-      "descricao": "Elementos de sintaxe da ERIC ainda não medidos: a lematização e a derivação, o campo `descriptor`, a negação com `-`, os campos de casamento exato, a proximidade, `Include Synonyms`/`Dead terms` e a API de exportação; os elementos de agrupamento e de ano na consulta cujas sondagens não concluíram seguem não verificados. Já medidos: `title:`, `abstract:`, parênteses, aspas, truncamento, comprimento da consulta e os tetos de retorno e de exportação.",
+      "descricao": "Elementos de sintaxe da ERIC ainda não verificados: a lematização e a derivação (SD10 inconclusiva), o campo `descriptor` (SD11 não o confirmou), a negação com `-` e os campos de casamento exato (só em fonte oficial, sem medição), a proximidade, `Include Synonyms`/`Dead terms` e a API de exportação; os elementos de agrupamento e de ano na consulta cujas sondagens não concluíram seguem não verificados. Já medidos: `title:`, `abstract:`, parênteses, `OR` fora de parênteses, aspas, hífen, truncamento, comprimento da consulta, aviso de retorno zero, idioma indexado e os tetos de retorno e de exportação.",
       "origem": "docs/procedimentos_busca_eric.md, cabeçalho e seção 1",
       "bloqueia": "as variantes que usam `descriptor`, `descriptorx` ou `-`; não bloqueia a EB4 nem a EB5, cuja sintaxe está medida",
       "acao_sugerida": "sondar `descriptor`, `descriptorx` e `-` quando a variante correspondente for acionada; tratar proximidade, `Include Synonyms`/`Dead terms` e a API de exportação como recursos que nenhuma consulta usa. A declaração de número fica `explícito`, que não depende da lematização",
@@ -33,34 +33,15 @@
       "descricao": "Sintaxe da BRAPCI não documentada em fonte alguma: os itens de sintaxe e de exportação estão marcados como não verificados ou não medidos no cabeçalho e na seção 1 do procedimento de busca.",
       "origem": "docs/procedimentos_busca_brapci.md, cabeçalho e seção 1",
       "bloqueia": "execução definitiva na BRAPCI (M3/E2); a sondagem de sintaxe é obrigatória",
-      "acao_sugerida": "sondar o comprimento antes da primeira execução, conforme o procedimento de busca",
+      "acao_sugerida": "executar o roteiro de sondagens SD1 a SD9 do procedimento de busca antes da primeira execução, uma consulta por vez (skill executar-sondagens-de-sintaxe), e registrar cada uma com `sondagens registrar`",
       "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD18",
-      "categoria": "aderencia",
-      "descricao": "Conjunto-semente pequeno: todo o conjunto é de validação, e com o tamanho atual o intervalo de Wilson a 95% fica largo, qualquer que seja a aderência; o tamanho e a aderência vigentes se calculam com `configuracao mostrar` e `aderencia medir`. Tamanho-alvo recomendado e acatado: 15 a 20 sementes.",
-      "origem": "data/historico.md, 2026-11-19 e 2026-11-26 (conjunto-semente único); openspec/changes/archive/2026-11-19-conjunto-semente-independente",
-      "bloqueia": "precisão da estimativa de aderência; não bloqueia a execução do teste",
-      "acao_sugerida": "buscar sementes novas por procedimento independente da string — indicação de especialista e referências das revisões existentes (skill definir-conjunto-semente) —, conferir cada referência e acrescentá-las ao arquivo de sementes",
-      "responsavel": "pesquisador"
-    },
-    {
-      "id": "PD20",
-      "categoria": "aderencia",
-      "descricao": "Facetas das sementes a informar: o campo `facetas` está vazio em parte das sementes do arquivo de sementes (`[documentos] sementes`); as que faltam se listam por `python3 -m rsl projeto pendencias`. É juízo do pesquisador, feito a partir do resumo ou do texto completo, e não se copia do ensaio seco.",
-      "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design D2 e D4); python3 -m rsl projeto pendencias",
-      "bloqueia": "o contraste entre faceta declarada e termos no título na anatomia da perda (`aderencia diagnosticar`); não bloqueia a execução do teste de aderência",
-      "acao_sugerida": "informar as FCTn de cada semente no arquivo de sementes (skill definir-conjunto-semente, §4)",
-      "responsavel": "pesquisador",
-      "atualizacao": "2026-11-26: o preenchimento fica para depois da refatoração do conjunto-semente (data/historico.md, 2026-11-26 — Conjunto-semente único)."
     },
     {
       "id": "PD21",
       "categoria": "aderencia",
-      "descricao": "Regra para semente sem faceta âncora: não há regra para a semente cujas `facetas` não incluem nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl projeto pendencias` só relata o caso, sem reprovar.",
+      "descricao": "Regra para semente sem faceta âncora: não há regra para a semente cujo `alinhamento_facetas` não inclui nenhuma faceta marcada 'Sim' na coluna 'Âncora obrigatória' da tabela de facetas do protocolo. Por decisão do pesquisador (2026-11-20), a regra fica em branco: `python3 -m rsl projeto pendencias` só relata o caso, sem reprovar.",
       "origem": "openspec/changes/archive/2026-11-20-sementes-estruturadas-no-protocolo (design, Non-Goals e D4); decisão do pesquisador de 2026-11-20",
-      "bloqueia": "nada por ora; o caso só aparece quando as facetas das sementes forem informadas (PD20)",
+      "bloqueia": "nada por ora; o caso aparece em `python3 -m rsl projeto pendencias` quando uma semente for alinhada sem faceta âncora",
       "acao_sugerida": "decidir a regra e registrá-la (skill registrar-decisao); até lá, o caso é relatado",
       "responsavel": "pesquisador"
     },
@@ -89,8 +70,9 @@
       "descricao": "Teste de aderência a refazer: as STRs mudaram de conteúdo em 2026-11-24 (termos retirados e acrescentados ao controle terminológico; en/es da linha \"Termo livre\" reduzidos aos equivalentes dos termos pt; \"Termos sinônimos ou relacionados\" fora da STR), e o pesquisador decidiu refazer o teste.",
       "origem": "data/historico.md, 2026-11-24 (controle terminológico pela natureza do termo)",
       "bloqueia": "passagem da busca (M3/E2) com as STRs vigentes",
-      "acao_sugerida": "executar a busca de cada base com os procedimentos regenerados e refazer o teste de aderência (skill testar-aderencia-das-expressoes; aderencia planilhar)",
-      "responsavel": "pesquisador"
+      "acao_sugerida": "executar a busca de cada base com os procedimentos regenerados e refazer o teste de aderência (skill testar-aderencia-das-expressoes; aderencia ensaiar; aderencia medir)",
+      "responsavel": "pesquisador",
+      "atualizacao": "2026-11-26: WoS e Scopus executadas em 2026-11-25, depois das decisões de 2026-11-24 e 2026-11-25; os textos registrados da WoS coincidem com os do procedimento de busca vigente, e os da Scopus não estão registrados (campo `texto` ausente). 2026-11-26 (2ª): `fatores de rendimento escolar` entrou na STR4, com o singular `fator de rendimento escolar` por exceção de flexão; os procedimentos da WoS, da Scopus e da BRAPCI foram regenerados. As execuções da WoS e da Scopus de 2026-11-25 ficaram anteriores à STR vigente e precisam ser refeitas. Faltam a ERIC e a BRAPCI (BRAPCI depende da PD10) e o denominador definitivo (coluna `indexada` da planilha de aderência)."
     },
     {
       "id": "PD34",

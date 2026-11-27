@@ -21,8 +21,8 @@ Autoria, ano, título e DOI MUST ser lidos dos campos, sem extração por padrã
 nenhum outro arquivo SHALL guardar dado de semente.
 
 #### Scenario: Arquivo atual
-- **WHEN** o arquivo de sementes tem as 10 sementes de SE1 a SE10, com os campos do
-  esquema estruturado
+- **WHEN** o arquivo de sementes vigente tem as sementes do esquema estruturado, em
+  sequência a partir de SE1
 - **THEN** a leitura aprova, e a distribuição por base exibida por `configuracao mostrar` é
   a mesma exibida antes da troca do esquema intermediário pelo estruturado
 

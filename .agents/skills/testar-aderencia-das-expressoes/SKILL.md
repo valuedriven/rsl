@@ -16,30 +16,42 @@ python3 -m rsl aderencia medir
 
 Lê o conjunto-semente e, de `data/registro_execucao.json`, só as execuções da expressão
 executada (a sonda e as execuções diretas de conferência ficam de fora), casa por título
-normalizado e, na falta dele, por prefixo, e imprime um **relato único** sobre o
+normalizado e pelo DOI, relatando por qual dos dois casou, e, na falta de ambos, procura
+candidato por prefixo de título; imprime um **relato único** sobre o
 conjunto-semente, todo de validação: a proporção recuperada, o intervalo de Wilson a 95%
 sobre o mesmo numerador e denominador, e a comparação com o limiar, que decide a passagem.
 **Prefixo é indício, nunca acerto**: o candidato por
-prefixo é impresso como `[? ]` e **não entra no numerador** — exige conferência humana e
-registro na coluna `recuperada`. A razão impressa é sobre as sementes informadas; o denominador
-definitivo são as sementes que cada base indexa.
+prefixo sem o DOI da semente é impresso como `[? ]` e **não entra no numerador** — exige
+conferência humana; o prefixo confirmado pelo DOI conta, pelo DOI. A razão impressa é sobre as
+sementes informadas; a indexação declarada de cada semente é o campo `bases` do arquivo de
+sementes.
 
 O conjunto-semente é lido do arquivo de sementes (`[documentos] sementes` do
-`config.toml`), o único lugar de dado de semente; a regra de ajuste e o limiar, do
+`config.toml`), e os dados de cada semente (título, resumo, palavras-chave), da cópia da
+coleção do Zotero (`[dados] zotero`), ligada pelo DOI; a regra de ajuste e o limiar, do
 protocolo. No arquivo, o campo `bases` declara **indexação**, não recuperação: a
-recuperação é o resultado deste teste e fica na planilha. O campo `facetas`, quando o
-pesquisador o preenche, é o contraponto da anatomia da perda: semente declarada numa
-faceta sem termo dela no título ou no resumo aponta lacuna de vocabulário. Semente retirada
+recuperação é o resultado deste teste, calculado das exportações, e não se transcreve. O
+alinhamento das facetas, juízo do pesquisador, é o contraponto da anatomia da perda: semente
+alinhada a uma faceta sem termo dela no título, nas palavras-chave ou no resumo aponta lacuna
+de vocabulário. Semente retirada
 muda o denominador; recall de antes e de depois só se comparam com o registro da retirada
 em `data/historico.md` (ver `definir-conjunto-semente`, §4). As exportações das bases são a
 única entrada externa, depositam-se em `data/execucoes/<base>/` e se registram com
 `busca registrar` antes do teste; sinopse em `docs/procedimentos.md`, M3/E2, e caminhos no
 `README.md`, seção Mapa.
 
-O instrumento de campo é `data/semente_aderencia.csv` — uma linha por semente e por
-base, gerado por `python3 -m rsl aderencia planilhar`. O preenchimento das etapas 1 e 2 e o
-significado de cada coluna estão em `definir-conjunto-semente`, §7. A linha de comando não
-substitui esse registro: ela mede, o instrumento documenta.
+Antes de executar a busca, o **ensaio seco** antecipa o que cada semente entrega às facetas:
+
+```
+python3 -m rsl aderencia ensaiar
+```
+
+Imprime, por semente e faceta, os termos encontrados e o campo onde apareceram (T título,
+P palavras-chave, R resumo), quantas sementes satisfazem a composição da executada só pelo
+título e pelos três campos, o campo ausente na cópia e a faceta alinhada sem termo. Não
+grava nada. É ensaio, não medição: as palavras-chave vêm da OpenAlex, e não da base, e a
+base pode indexar outros campos. Campo ausente não é termo ausente. Quem mede é
+`aderencia medir`; quem explica cada perda é a anatomia (§3).
 
 ## 2. Limiar e consequência
 

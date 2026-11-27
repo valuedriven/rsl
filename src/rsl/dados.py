@@ -14,6 +14,7 @@ import json
 import pathlib
 import re
 
+from . import doi as _doi
 from . import gramatica as G
 from .config import RAIZ, relativo
 from .coerencia import Problema, Resultado, imprime_problemas, problemas_bases
@@ -31,6 +32,10 @@ STATUS_EXECUCAO = ("valida", "divergente_justificada")
 # Subpasta de `[dados] evidencia` com a evidência bruta das referências das sementes,
 # nomeada `SEn_…`; só ela é conferida contra o arquivo de sementes (D6).
 SUBPASTA_REFERENCIAS = "referencias"
+# Respostas brutas da OpenAlex, nomeadas pelo DOI (`sementes metadados`).
+SUBPASTA_OPENALEX = "openalex"
+# Respostas brutas do Crossref, complemento do resumo (`sementes metadados --fonte crossref`).
+SUBPASTA_CROSSREF = "crossref"
 
 
 def le_json(caminho):
@@ -238,6 +243,28 @@ def problemas_sondagens_registradas(ctx, d, registro):
     return problemas, relatos
 
 
+def _evidencia_por_doi(d, pasta):
+    """Resposta ou marcador de 404 da OpenAlex ou do Crossref (`pasta/openalex/`,
+    `pasta/crossref/`, nome derivado do DOI) cujo DOI não está no arquivo de sementes: a
+    semente foi retirada e a evidência ficou. Reprova, nomeando o arquivo. Renumerar semente
+    não muda o nome: a evidência é do DOI, não do `id`."""
+    esperados = set()
+    for e in d["sementes"]:
+        if e.get("doi"):
+            nome = _doi.nome_arquivo(e["doi"])
+            esperados |= {nome, nome[:-len(".json")] + ".404"}
+    problemas = []
+    for sub in (SUBPASTA_OPENALEX, SUBPASTA_CROSSREF):
+        alvo = pathlib.Path(pasta) / sub
+        if not alvo.is_dir():
+            continue
+        problemas += [f"evidência {relativo(arq)} é de um DOI que não está no arquivo de "
+                      f"sementes — remover a resposta da semente retirada"
+                      for arq in sorted(x for x in alvo.iterdir() if x.is_file())
+                      if arq.name not in esperados]
+    return problemas
+
+
 def problemas_evidencia(d, pasta):
     """Evidência bruta de semente que não está no arquivo de sementes (D6).
 
@@ -247,12 +274,12 @@ def problemas_evidencia(d, pasta):
     As outras subpastas da evidência não são conferidas. Não confere se a evidência de um
     `id` existente é mesmo daquela semente.
     """
+    problemas = _evidencia_por_doi(d, pasta)
     pasta = pathlib.Path(pasta) / SUBPASTA_REFERENCIAS
     if not pasta.is_dir():
-        return []
+        return problemas
     ids = {e["id"] for e in d["sementes"]}
     padrao = re.compile(rf"({G.I_SE.padrao.pattern})_")
-    problemas = []
     for arq in sorted(x for x in pasta.rglob("*") if x.is_file()):
         m = padrao.match(arq.name)
         if m and m.group(1) not in ids:
@@ -292,7 +319,9 @@ def cmd_conferir_dados(ctx, a=None):
         imprime_problemas(problemas)
         return problemas.codigo
     pasta = relativo(ctx.config.caminho("dados.registro").parent)
-    print(f"Arquivos alimentados de {pasta}/ na forma esperada.")
+    z = ctx.protocolo()["zotero"]
+    print(f"Arquivos alimentados de {pasta}/ na forma esperada (cópia da coleção do Zotero: "
+          f"versão {z['versao']}, lida em {z['lida_em']}).")
     return Saida.OK
 
 
@@ -307,27 +336,35 @@ def campo_pendente(valor):
 
 
 def pendencias_sementes(d):
-    """Dado ainda não obtido e juízo ainda não feito, por semente, sem reprovar (D4).
+    """Juízo ainda não feito e dado ainda não obtido, por semente, sem reprovar.
 
-    DOI ausente; facetas a informar; semente cujas facetas não incluem nenhuma âncora (a regra está em aberto: só se relata); campo de conferência vazio.
-    Com `facetas` vazia, relata-se só "facetas a informar": a falta de âncora é
-    consequência dela, não segundo juízo pendente.
+    Alinhamento a informar; alinhamento sem nenhuma faceta âncora (a regra está em aberto:
+    só se relata) — com o alinhamento vazio, só "alinhamento a informar", porque a falta de
+    âncora é consequência dele; verificação pendente; palavras-chave ausentes no item; e os
+    itens da cópia fora do arquivo de sementes. O resumo é relatado pelas fontes (`metadados.pendencias`).
     """
     ancoras_ = set(d["ancoras"])
     linhas = []
     for e in d["sementes"]:
         abertos = []
-        if not e[G.C_DOI.chave]:
-            abertos.append("DOI ausente")
-        if not e[G.C_FACETAS.chave]:
-            abertos.append("facetas a informar")
-        elif not ancoras_ & set(e[G.C_FACETAS.chave]):
+        alinhamento = e.get(G.C_ALINHAMENTO.chave) or {}
+        if not alinhamento:
+            abertos.append(f"alinhamento a informar ({G.C_ALINHAMENTO.chave})")
+        elif not ancoras_ & set(alinhamento):
             abertos.append(f"sem faceta âncora ({', '.join(d['ancoras'])}) — "
                            f"regra a decidir")
         abertos += [rotulo for campo, rotulo in CAMPOS_PENDENTES
                     if campo_pendente(e.get(campo))]
+        z = e.get("zotero")
+        if z and not z["palavras_chave"]:
+            abertos.append("palavras-chave ausentes no item do Zotero — "
+                           "`sementes completar --gravar`")
         if abertos:
             linhas.append(f"[semente {e['id']} {e['chave']}] pendente: {', '.join(abertos)}")
+    for c in (d.get("zotero") or {}).get("fora", []):
+        linhas.append(f"[zotero] item {c['doi'] or c['chave_item']} na coleção e fora do arquivo "
+                      f"de sementes — `sementes completar --retirar <DOI> --gravar`, ou "
+                      f"acrescentar a semente")
     return linhas
 
 
@@ -343,7 +380,12 @@ def cmd_pendencias(ctx, a=None):
         linhas.append(f"[ausente] {relativo(registro_)} — registre a primeira execução com  "
                       f"{CMD_REGISTRAR}")
 
+    z = d["zotero"]
+    print(f"Cópia da coleção do Zotero: {z['arquivo']}, versão {z['versao']}, lida em "
+          f"{z['lida_em']}.")
     linhas += pendencias_sementes(d)
+    from .metadados import pendencias as pendencias_metadados       # noqa: PLC0415
+    linhas += pendencias_metadados(ctx, d)
 
     registro, erro = le_json(registro_)
     if erro is not None:

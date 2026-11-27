@@ -2,13 +2,11 @@
 
 ## Purpose
 
-
 Oferecer um ponto de entrada único para as operações do projeto, com códigos de saída que
 distinguem a reprovação do conteúdo da falha em ler, e com nomes previsíveis para os
 comandos e para os arquivos que eles gravam.
 
 ## Requirements
-
 
 ### Requirement: Ponto de entrada único
 Toda operação SHALL ser executada por `python3 -m rsl <subcomando>`, a partir da raiz do
@@ -23,7 +21,8 @@ projeto. Os subcomandos canônicos SHALL ser estes:
 - `procedimentos gerar [<sigla>]` e `procedimentos iniciar <sigla>`;
 - `sondagens registrar <sigla> <SDn>`;
 - `catalogo gerar`;
-- `aderencia planilhar` e `aderencia medir`;
+- `aderencia ensaiar` e `aderencia medir`;
+- `sementes copiar`, `sementes metadados` e `sementes completar`;
 - `busca registrar` e `busca derivar`;
 - `conferencia fidelidade` e `conferencia sensibilidade`.
 
@@ -32,7 +31,8 @@ conforme o requisito “Nomes antigos recusados”. Os scripts
 `src/protocolo.py`, `src/derivar_expressoes.py`, `src/validar_termos.py` e
 `src/gen_semente.py` MUST NOT continuar existindo como ponto de entrada. O subcomando
 `sementes sincronizar` MUST NOT existir, porque o conjunto-semente não tem mais arquivo
-separado a reconciliar.
+separado a reconciliar. O subcomando `aderencia planilhar` MUST NOT existir, porque a
+planilha de aderência foi retirada.
 
 #### Scenario: Ajuda
 - **WHEN** se executa `python3 -m rsl` sem subcomando
@@ -72,6 +72,15 @@ separado a reconciliar.
 - **WHEN** se executa `python3 -m rsl aderencia medir`
 - **THEN** a operação mede a aderência ao conjunto-semente
 
+#### Scenario: Ensaio seco sem planilha
+- **WHEN** se executa `python3 -m rsl aderencia ensaiar`
+- **THEN** o ensaio seco é impresso e nenhum arquivo é gravado
+
+#### Scenario: Ajuda do complemento do Zotero
+- **WHEN** se executa `python3 -m rsl sementes completar -h`
+- **THEN** a ajuda mostra as opções `--gravar` e `--retirar`, e diz que, sem `--gravar`,
+  nada é gravado no Zotero
+
 ### Requirement: Correspondência com os nomes das specs
 As specs que citam as operações pelos nomes antigos SHALL ser lidas por esta
 correspondência:
@@ -83,7 +92,7 @@ correspondência:
 | `--autoteste` | `projeto autoteste` |
 | `--mostrar` | `configuracao mostrar` |
 | `--pendencias` | `projeto pendencias` |
-| `gen_semente.py` | `aderencia planilhar` |
+| `gen_semente.py` | `aderencia ensaiar` |
 | `--sonda` | `termos sondar` |
 | `--exportar` | `termos exportar` |
 | `--validar` | `termos validar` |
@@ -95,7 +104,9 @@ correspondência:
 | `--sensibilidade` | `conferencia sensibilidade` |
 
 O comportamento exigido por essas specs MUST NOT mudar com a troca de nome. `--sincronizar`
-não tem sucessor: requisito que o cite fica sem efeito.
+não tem sucessor: requisito que o cite fica sem efeito. Requisito que exija de
+`gen_semente.py` a gravação da planilha de aderência também fica sem efeito, porque a
+planilha foi retirada.
 
 #### Scenario: Requisito antigo
 - **WHEN** uma spec exige que `--conferir` reprove um defeito
@@ -174,14 +185,15 @@ gravam SHALL seguir estas regras:
 
 - `snake_case`, em português e sem acento;
 - o nome é o substantivo do conteúdo;
-- quando há um arquivo por chave (expressão, base), o sufixo é a chave em minúsculas
-  (`fidelidade_eb2.csv`, `sensibilidade_wos.csv`).
+- quando há um arquivo por chave (expressão, base), o sufixo é a chave em minúsculas, e
+  com duas chaves, a base antes da expressão (`fidelidade_wos_eb2.csv`,
+  `sensibilidade_wos.csv`).
 
 O nome de cada arquivo de entrada e de saída SHALL vir do `config.toml`.
 
 #### Scenario: Saída por expressão
-- **WHEN** `conferencia fidelidade` confere a EB2
-- **THEN** a saída gravada se chama `fidelidade_eb2.csv`
+- **WHEN** `conferencia fidelidade wos EB2` confere a EB2 na WoS
+- **THEN** a saída gravada se chama `fidelidade_wos_eb2.csv`
 
 #### Scenario: Planilha de validação
 - **WHEN** a configuração é a do projeto
@@ -196,7 +208,8 @@ O nome de cada arquivo de entrada e de saída SHALL vir do `config.toml`.
 Os nomes antigos de comando renomeados pela change `namespace-de-comandos-e-skills` MUST NOT
 ser aceitos: cada um MUST terminar com o código USO, sem executar operação. A chave antiga
 `[documentos] ficha` do `config.toml` MUST reprovar com o código CONFIGURACAO, e a mensagem
-MUST nomear `[documentos] procedimento`.
+MUST nomear `[documentos] procedimento`. A chave retirada `[saidas] aderencia` MUST reprovar
+com o código CONFIGURACAO, e a mensagem MUST dizer que a planilha de aderência foi retirada.
 
 #### Scenario: Comando antigo
 - **WHEN** se executa `python3 -m rsl busca aderencia`
@@ -210,3 +223,12 @@ MUST nomear `[documentos] procedimento`.
 - **WHEN** o `config.toml` traz `[documentos] ficha`
 - **THEN** qualquer subcomando que lê a configuração sai com CONFIGURACAO, e a mensagem
   nomeia a chave antiga e `[documentos] procedimento`
+
+#### Scenario: Planilha retirada
+- **WHEN** se executa `python3 -m rsl aderencia planilhar`
+- **THEN** a saída tem o código USO, e nenhum arquivo é gravado
+
+#### Scenario: Chave da planilha na configuração
+- **WHEN** o `config.toml` traz `[saidas] aderencia`
+- **THEN** qualquer subcomando que lê a configuração sai com CONFIGURACAO, e a mensagem diz
+  que a planilha de aderência foi retirada

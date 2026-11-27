@@ -23,7 +23,9 @@ Em ordem de preferência:
 5. o **próprio documento**, quando em mãos.
 
 Captura de tela ou a resposta bruta da consulta ficam anexadas. **Conferência sem evidência
-não é conferência.**
+não é conferência.** Exceção: no conjunto-semente, a declaração do pesquisador
+(`verificacao = true`) basta, sem evidência anexada; a conferência feita pelo agente guarda
+a evidência como em qualquer instrumento.
 
 ## O que NÃO conta como fonte
 
@@ -45,17 +47,19 @@ fica ao lado dele e muda à medida que a consulta ocorra.
 
 ## Procedimento
 
-1. Verificar se o item já tem estado registrado — conjunto-semente no arquivo de
-   sementes (`[documentos] sementes` do `config.toml`), com os dados bibliográficos e a
-   conferência campo a campo; leitura exploratória em `docs/02`, seção Estudos
+1. Verificar se o item já tem estado registrado — conjunto-semente: os dados
+   bibliográficos no item da coleção `sementes` do Zotero (`[zotero]` do `config.toml`), e o
+   estado de conferência no arquivo de sementes (`[documentos] sementes`); leitura exploratória em `docs/02`, seção Estudos
    inicialmente consultados; obras de referência em `docs/02`, seção Obras de referência
    a consultar.
 2. Não tendo, consultar a fonte. Havendo busca na web disponível, usá-la e **resolver até o
    registro do item**; não havendo, dizer que não se pode conferir aqui e deixar o item como
    designado — **não preencher**.
-3. Registrar na fonte única: os dados conferidos, o estado e onde se conferiu. No arquivo
-   de sementes, o estado é `verificacao = true` (conferida) ou `false` (pendente), e onde e
-   como se conferiu vai em `nota`.
+3. Registrar na fonte única: os dados conferidos, o estado e onde se conferiu. No
+   conjunto-semente, o dado se corrige **no item do Zotero** e chega aos comandos por
+   `python3 -m rsl sementes copiar`, que relata o que mudou; o estado é `verificacao = true`
+   (conferida) ou `false` (pendente) no arquivo de sementes, sem exigir registro de onde e
+   como se conferiu.
 4. Atualizar o instrumento correspondente e conferir o texto final nele.
 5. Havendo divergência com o que estava escrito, **retificar explicitamente** no relato ao
    pesquisador. Não corrigir em silêncio.

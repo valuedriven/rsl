@@ -7,6 +7,9 @@ import re
 # Separador entre valores de um mesmo campo (várias palavras-chave, várias colunas de
 # palavras-chave): o casamento local o usa para não casar termo através de dois valores.
 SEPARADOR_VALORES = "; "
+# Campos em que uma repetição de tag é um valor novo, e não a continuação do mesmo valor.
+# A continuação (linha indentada) sempre se une com espaço.
+MULTIVALORADOS = {"palavras_chave"}
 
 CAMPOS = ("titulo", "resumo", "palavras_chave", "ano", "doi", "id_base", "autores", "fonte")
 # Campos lidos para a anatomia da perda (ano, idioma e tipo documental da semente
@@ -57,13 +60,22 @@ def le_wos_txt(texto):
         m = re.match(r"^([A-Z0-9]{2}) (.*)$", linha)
         if m:
             tag, val = m.group(1), m.group(2).strip()
+            continua = False
         elif linha.startswith("   ") and tag:
             val = linha.strip()
+            continua = True
         else:
             continue
         if tag in mapa:
             campo = mapa[tag]
-            atual[campo] = (atual[campo] + " " + val).strip() if atual[campo] else val
+            if not atual[campo]:
+                atual[campo] = val
+            else:
+                # Tag repetida de campo multivalorado são valores distintos (`DE learning`
+                # seguido de `DE context awareness`); a continuação é o mesmo valor.
+                separador = (" " if continua or campo not in MULTIVALORADOS
+                             else SEPARADOR_VALORES)
+                atual[campo] += separador + val
     if atual["titulo"]:
         regs.append(atual)
     return regs

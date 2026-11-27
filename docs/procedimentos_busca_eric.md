@@ -1260,17 +1260,20 @@ Disparo: necessidade de levar ao resumo termos de `STR1` hoje restritos ao títu
 
 ## 5. Conjunto-semente
 
-Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de sementes (`[documentos] sementes`); aferição em `data/semente_aderencia.csv`.
+Esperadas nesta base, conforme o protocolo. Estado de conferência e indexação declarada (`bases`) no arquivo de sementes (`[documentos] sementes`); recuperação medida por `python3 -m rsl aderencia medir`.
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |
-| SE6 | Iatrellis et al. (2019) | `10.1007/s10639-019-09877-4` | — |
+| SE6 | Iatrellis, Kameas & Fitsilis (2019) | `10.1007/s10639-019-09877-4` | — |
 | SE7 | Chimalakonda & Nori (2020) | `10.1186/s40561-020-00135-6` | — |
-| SE8 | Cenka et al. (2023) | `10.1080/10494820.2022.2039947` | alcance depende do hífen (`ontology-driven`) |
-| SE11 | Quigley et al. (2017) | `10.1111/ssm.12201` | — |
-| SE12 | Ferreira et al. (2020) | `10.2478/jtes-2020-0003` | — |
+| SE8 | Cenka, Santoso & Junus (2023) | `10.1080/10494820.2022.2039947` | alcance depende do hífen (`ontology-driven`) |
+| SE11 | Quigley, Herro & Jamil (2017) | `10.1111/ssm.12201` | — |
+| SE12 | Ferreira, Martinsone & Talić (2020) | `10.2478/jtes-2020-0003` | — |
+| SE15 | Griful-Freixenet, Struyven & Vantieghem (2021) | `10.1177/0022487120965525` | — |
+| SE16 | King, Poekert & Pierre (2023) | `10.1080/19415257.2023.2248478` | — |
+| SE17 | Hickey & Riddle (2024) | `10.1080/13603116.2023.2259906` | — |
 
-**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
+**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e se registra no campo `bases` do arquivo de sementes. *Etapa 2:* `aderencia medir` procura a semente na exportação de EB4 pelo DOI e pelo título, sem reexecutar a busca.
 
 **Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 

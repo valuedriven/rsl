@@ -96,3 +96,10 @@ termo = "teaching-learning"
 idioma = "en"
 tipo = "nao_contavel"
 origem = "forma composta de processo, sem plural"
+
+[[excecoes]]
+termo = "fatores de rendimento escolar"
+idioma = "pt"
+tipo = "irregular"
+formas = ["fator de rendimento escolar"]
+origem = "locução já flexionada no plural; o singular é a forma de número complementar, revisada pelo pesquisador"

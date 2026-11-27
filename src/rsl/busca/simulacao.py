@@ -20,7 +20,7 @@ from ..markdown import normaliza
 from ..saida import Saida
 from . import Busca
 from .aderencia import wilson
-from .derivacao import carrega_facetas, facetas_atingidas, padrao, texto_do
+from .derivacao import carrega_facetas, facetas_atingidas, padrao, segmentos_do
 from .registro import carrega_consultas, chave_dedup
 from .sensibilidade import registros_da_expressao
 
@@ -220,16 +220,17 @@ def candidatos(b, sigla, pares, perda):
     elegíveis sem palavras-chave, {palavra-chave excluída: motivo}, número de palavras-chave
     candidatas antes do agrupamento). As palavras-chave que
     são forma de número uma da outra formam um candidato só, e o alcance se mede com
-    `padrao` de cada forma sobre `texto_do`."""
+    `padrao` de cada forma sobre os trechos de `segmentos_do`."""
     vocab = carrega_facetas(b, [sigla])[sigla]
     nao_ancora = [(fid, p) for fid, f in vocab.items() if fid not in b.ancoras
                   for p in f["padroes"]]
     ancora = [(fid, p) for fid, f in vocab.items() if fid in b.ancoras
               for p in f["padroes"]]
-    elegiveis = [(linha, reg, texto_do(reg)) for linha, reg in pares if elegivel(linha)]
-    nao_elegiveis = [(linha, reg, texto_do(reg)) for linha, reg in pares
+    elegiveis = [(linha, reg, segmentos_do(reg)) for linha, reg in pares
+                 if elegivel(linha)]
+    nao_elegiveis = [(linha, reg, segmentos_do(reg)) for linha, reg in pares
                      if not elegivel(linha)]
-    perdidos = [texto_do(reg) for reg in perda.values()]
+    perdidos = [segmentos_do(reg) for reg in perda.values()]
     sem_palavras = sum(1 for _, reg, _ in elegiveis
                        if not (reg.get("palavras_chave") or "").strip())
     termos, excluidas = set(), {}
@@ -247,10 +248,14 @@ def candidatos(b, sigla, pares, perda):
     linhas = []
     for t, todas in grupos.items():
         ps = [padrao(f) for f in sorted(todas)]
-        el = sum(1 for _, _, texto in elegiveis if any(p.search(texto) for p in ps))
-        ne = sum(1 for _, _, texto in nao_elegiveis if any(p.search(texto) for p in ps))
-        acrescimo = sum(1 for texto in perdidos if any(p.search(texto) for p in ps))
-        textos = [x for _, _, x in elegiveis + nao_elegiveis] + perdidos
+        el = sum(1 for _, _, trechos in elegiveis
+                 if any(p.search(t) for p in ps for t in trechos))
+        ne = sum(1 for _, _, trechos in nao_elegiveis
+                 if any(p.search(t) for p in ps for t in trechos))
+        acrescimo = sum(1 for trechos in perdidos
+                        if any(p.search(t) for p in ps for t in trechos))
+        textos = [t for _, _, ts in elegiveis + nao_elegiveis for t in ts]
+        textos += [t for ts in perdidos for t in ts]
         linhas.append((t, el, ne, acrescimo, presentes(todas - {t}, textos)))
     linhas.sort(key=lambda x: (-x[1], x[3], x[0]))
     return linhas, sem_palavras, excluidas, len(termos)
@@ -290,21 +295,25 @@ def valida_termos(b, termos):
 def simula(b, termos, pares, perda, executada):
     """Relato da executada ampliada: para cada termo e para o conjunto, os elegíveis e não
     elegíveis da amostra recuperados, o acréscimo à executada e o total ampliado."""
-    elegiveis = [texto_do(reg) for linha, reg in pares if elegivel(linha)]
-    nao_elegiveis = [texto_do(reg) for linha, reg in pares if not elegivel(linha)]
-    perdidos = [texto_do(reg) for reg in perda.values()]
+    elegiveis = [segmentos_do(reg) for linha, reg in pares if elegivel(linha)]
+    nao_elegiveis = [segmentos_do(reg) for linha, reg in pares if not elegivel(linha)]
+    perdidos = [segmentos_do(reg) for reg in perda.values()]
     total_exec = len({chave_dedup(r) for r in executada})
     idiomas, excecoes = b.d["idiomas"], le_excecoes(b.ctx)
+    todos = [t for ts in elegiveis + nao_elegiveis + perdidos for t in ts]
     itens = []
     for fct, t in termos:
         todas = formas_do_termo(t, idiomas, excecoes)
-        itens.append((fct, t, presentes(todas - {t}, elegiveis + nao_elegiveis + perdidos),
+        itens.append((fct, t, presentes(todas - {t}, todos),
                       [padrao(f) for f in sorted(todas)]))
 
     def conta(padroes):
-        el = sum(1 for texto in elegiveis if any(p.search(texto) for p in padroes))
-        ne = sum(1 for texto in nao_elegiveis if any(p.search(texto) for p in padroes))
-        acrescimo = sum(1 for texto in perdidos if any(p.search(texto) for p in padroes))
+        el = sum(1 for trechos in elegiveis
+                 if any(p.search(t) for p in padroes for t in trechos))
+        ne = sum(1 for trechos in nao_elegiveis
+                 if any(p.search(t) for p in padroes for t in trechos))
+        acrescimo = sum(1 for trechos in perdidos
+                        if any(p.search(t) for p in padroes for t in trechos))
         return el, ne, acrescimo
 
     print(f"\nSIMULAÇÃO DA EXECUTADA AMPLIADA — {b.executada} com os termos acrescentados")

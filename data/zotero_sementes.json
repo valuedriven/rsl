@@ -1,0 +1,2655 @@
+{
+ "biblioteca": "groups/5969244",
+ "colecao": "V2C73IKE",
+ "versao": 46384,
+ "lida_em": "2026-11-27T11:40:00-03:00",
+ "itens": [
+  {
+   "key": "EHG6SPZF",
+   "version": 46384,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/EHG6SPZF",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/EHG6SPZF",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Sousa and Duque",
+    "parsedDate": "2018",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EHG6SPZF",
+    "version": 46384,
+    "itemType": "journalArticle",
+    "title": "Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "E. E. de",
+      "lastName": "Sousa"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "C.",
+      "lastName": "Duque"
+     }
+    ],
+    "abstractNote": "Introdução: O feedback é a informação sobre a performance de uma pessoa em uma determinada tarefa. A falta desse item na sala de aula pode trazer diversos prejuízos para a qualidade do ensino. Objetivo: O estudo busca analisar a percepção do aluno para gerar informação relevante ao professor em forma de feedback. Metodologia: Para tanto, propomos uma modelagem inovadora com aspectos da teoria da atividade, multimodalidade e uso de ontologia. Resultados: Como resultado, pretende-se criar uma ontologia das salas de aulas que determine as atividades do professor que podem ser auxiliadas com a percepção dos alunos na educação. Conclusões: A possibilidade da aplicação de seus resultados no auxílio e capacitação dos professores, provendo um meio para o uso da informação no enfrentamento dos desafios da sala de aula e qualificação do ensino.",
+    "publicationTitle": "Informação & Informação",
+    "publisher": "",
+    "place": "",
+    "date": "2018",
+    "volume": "23",
+    "issue": "1",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "271-289",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "Inf. Inf.",
+    "DOI": "10.5433/1981-8920.2018v23n1p271",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "en",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "publisher: UEL",
+    "tags": [
+     {
+      "tag": "activity theory",
+      "type": 1
+     },
+     {
+      "tag": "classroom activities",
+      "type": 1
+     },
+     {
+      "tag": "educational quality",
+      "type": 1
+     },
+     {
+      "tag": "feedback in teaching",
+      "type": 1
+     },
+     {
+      "tag": "information system model",
+      "type": 1
+     },
+     {
+      "tag": "multimodality",
+      "type": 1
+     },
+     {
+      "tag": "student perceptions",
+      "type": 1
+     },
+     {
+      "tag": "teacher professional development",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:19Z",
+    "dateModified": "2026-11-27T14:39:57Z"
+   }
+  },
+  {
+   "key": "GJCGAIJ2",
+   "version": 46383,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/GJCGAIJ2",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/GJCGAIJ2",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Iatrellis et al.",
+    "parsedDate": "2019",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "GJCGAIJ2",
+    "version": 46383,
+    "itemType": "journalArticle",
+    "title": "EDUC8 ontology: semantic modeling of multi-facet learning pathways",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "O.",
+      "lastName": "Iatrellis"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "A.",
+      "lastName": "Kameas"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "P.",
+      "lastName": "Fitsilis"
+     }
+    ],
+    "abstractNote": "One of the main challenges to be confronted in Higher Education, so as to increase quality, is the personalization of education services, since each student constitutes a unique case. In this paper, we present the conceptualization of the domain of Learning Pathways in Higher Education. We present the EDUC8 (EDUCATE) ontology, which models the needed domain knowledge streams for the learning pathways and consists of four (4) main modules: 1) the learner model 2) the learning pathway model 3) the business model and 4) the quality assurance model. Taking into account the multifaceted nature of a learning pathway in a Higher Educational Institution (HEI), our proposal achieves a holistic conceptualization of the domain of educational provision, in order to be further utilized for the implementation of a Semantic Web Rules repository. This rule base is in control of the required streams of knowledge enclosed in the learning pathway for developing, recommending and executing tailored educational processes to meet each learner’s personal characteristics. Finally, EDUC8 ontology is applied for the definition of a ruleset for the Computer Science program case study.",
+    "publicationTitle": "Education and Information Technologies",
+    "publisher": "",
+    "place": "",
+    "date": "2019",
+    "volume": "24",
+    "issue": "4",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "2371-2390",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.1007/s10639-019-09877-4",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "publisher: Springer",
+    "tags": [
+     {
+      "tag": "business models",
+      "type": 1
+     },
+     {
+      "tag": "computer science education",
+      "type": 1
+     },
+     {
+      "tag": "educational quality",
+      "type": 1
+     },
+     {
+      "tag": "higher education",
+      "type": 1
+     },
+     {
+      "tag": "learning trajectories",
+      "type": 1
+     },
+     {
+      "tag": "personalization of education",
+      "type": 1
+     },
+     {
+      "tag": "quality assurance model",
+      "type": 1
+     },
+     {
+      "tag": "semantic web rules",
+      "type": 1
+     },
+     {
+      "tag": "student model",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T14:39:56Z"
+   }
+  },
+  {
+   "key": "EHI7ECVW",
+   "version": 46382,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/EHI7ECVW",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/EHI7ECVW",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "King et al.",
+    "parsedDate": "2023-11-02",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EHI7ECVW",
+    "version": 46382,
+    "itemType": "journalArticle",
+    "title": "A pragmatic meta-model to navigate complexity in teachers’ professional learning",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "Fiona",
+      "lastName": "King"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Philip",
+      "lastName": "Poekert"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Takeshia",
+      "lastName": "Pierre"
+     }
+    ],
+    "abstractNote": "",
+    "publicationTitle": "Professional Development in Education",
+    "publisher": "",
+    "place": "",
+    "date": "2023-11-02",
+    "volume": "49",
+    "issue": "6",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "958-977",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "Professional Development in Education",
+    "DOI": "10.1080/19415257.2023.2248478",
+    "citationKey": "",
+    "url": "https://www.tandfonline.com/doi/full/10.1080/19415257.2023.2248478",
+    "accessDate": "2026-11-27T13:31:34Z",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "1941-5257, 1941-5265",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "en",
+    "libraryCatalog": "DOI.org (Crossref)",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "complexity",
+      "type": 1
+     },
+     {
+      "tag": "meta-model",
+      "type": 1
+     },
+     {
+      "tag": "professional development",
+      "type": 1
+     },
+     {
+      "tag": "teacher learning",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T13:31:34Z",
+    "dateModified": "2026-11-27T14:14:20Z"
+   }
+  },
+  {
+   "key": "BLGY6IWA",
+   "version": 46377,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/BLGY6IWA",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/BLGY6IWA",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Hickey and Riddle",
+    "parsedDate": "2024-11-09",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "BLGY6IWA",
+    "version": 46377,
+    "itemType": "journalArticle",
+    "title": "Proposing a conceptual framework for relational pedagogy: pedagogical informality, interface, exchange and enactment",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "Andrew",
+      "lastName": "Hickey"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Stewart",
+      "lastName": "Riddle"
+     }
+    ],
+    "abstractNote": "This paper outlines a conceptual framework for enacting relational pedagogy. Commencing with a description of a relational ontology that can work to provide the foundation for engaged and participatory enactments of teaching and learning, the paper moves to consider the dynamics that support inclusive modes of education and the dimensions of relational pedagogical encounters. In particular, the pedagogical encounter is examined with a view to illuminating how the ontological and epistemological dynamics and dimensions of relational pedagogy open opportunities for inclusive and participatory modes of teaching and learning. In addition, the practical implications of pedagogical informality are considered, including the in-the-moment immediacy inherent to the relational encounter and concomitant enactments of the pedagogical exchange. In doing so, we argue for a relational pedagogy that widens the possibility for meaningful engagement with young people through pedagogical enactments that build upon the inter-relationality of teachers and students.",
+    "publicationTitle": "International Journal of Inclusive Education",
+    "publisher": "",
+    "place": "",
+    "date": "2024-11-09",
+    "volume": "28",
+    "issue": "13",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "3271-3285",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "International Journal of Inclusive Education",
+    "DOI": "10.1080/13603116.2023.2259906",
+    "citationKey": "",
+    "url": "https://www.tandfonline.com/doi/full/10.1080/13603116.2023.2259906",
+    "accessDate": "2026-11-27T13:31:47Z",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "1360-3116, 1464-5173",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "Proposing a conceptual framework for relational pedagogy",
+    "language": "en",
+    "libraryCatalog": "DOI.org (Crossref)",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "conceptual framework",
+      "type": 1
+     },
+     {
+      "tag": "inclusive education",
+      "type": 1
+     },
+     {
+      "tag": "pedagogical exchange",
+      "type": 1
+     },
+     {
+      "tag": "relational ontology",
+      "type": 1
+     },
+     {
+      "tag": "relational pedagogy",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T13:31:47Z",
+    "dateModified": "2026-11-27T14:08:12Z"
+   }
+  },
+  {
+   "key": "VVD4KB4Z",
+   "version": 46376,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/VVD4KB4Z",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/VVD4KB4Z",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Tondeur et al.",
+    "parsedDate": "2024",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "VVD4KB4Z",
+    "version": 46376,
+    "itemType": "journalArticle",
+    "title": "The DTALE Model: Designing Digital and Physical Spaces for Integrated Learning Environments",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "Jo",
+      "lastName": "Tondeur"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Sarah",
+      "lastName": "Howard"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Ana Amélia",
+      "lastName": "Carvalho"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Marijke",
+      "lastName": "Kral"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Dominik",
+      "lastName": "Petko"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Lakshmi T.",
+      "lastName": "Ganesh"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Fredrik Mørk",
+      "lastName": "Røkenes"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Louise",
+      "lastName": "Starkey"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Matt",
+      "lastName": "Bower"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Petrea",
+      "lastName": "Redmond"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Bent B.",
+      "lastName": "Andresen"
+     }
+    ],
+    "abstractNote": "Abstract\n            Despite the widely recognised impact of both digital and physical spaces as active contributors to teaching and learning processes, relatively little is known about the learning environment. Furthermore, it is time to explore the interplay between these two spaces. Therefore, we proposed employing a holistic approach to develop a new conceptual model for Designing Teaching and Learning Environments (DTALE). To do this, the paper presents first a critical review of the research literature underpinning learning environments, with a particular interest in the integration of the physical and digital spaces, to develop the DTALE model. In the second step, the DTALE model has been developed and validated by applying the model to existing cases from different contexts. Based on the study’s findings, we outline the implications for theory and practice. Limitations and suggestions for future research are also included.",
+    "publicationTitle": "Technology, Knowledge and Learning",
+    "publisher": "",
+    "place": "",
+    "date": "12/2024",
+    "volume": "29",
+    "issue": "4",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "1767-1789",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "Tech Know Learn",
+    "DOI": "10.1007/s10758-024-09784-9",
+    "citationKey": "",
+    "url": "https://link.springer.com/10.1007/s10758-024-09784-9",
+    "accessDate": "2026-11-27T13:31:57Z",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "2211-1662, 2211-1670",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "The DTALE Model",
+    "language": "en",
+    "libraryCatalog": "DOI.org (Crossref)",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "conceptual model",
+      "type": 1
+     },
+     {
+      "tag": "digital learning spaces",
+      "type": 1
+     },
+     {
+      "tag": "holistic approach",
+      "type": 1
+     },
+     {
+      "tag": "learning environment",
+      "type": 1
+     },
+     {
+      "tag": "physical learning environment",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T13:31:57Z",
+    "dateModified": "2026-11-27T14:08:11Z"
+   }
+  },
+  {
+   "key": "EWEKSQIF",
+   "version": 46375,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/EWEKSQIF",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/EWEKSQIF",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Khoo and Kan",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EWEKSQIF",
+    "version": 46375,
+    "itemType": "bookSection",
+    "title": "An ontology for conceptual analysis of signature pedagogies",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "C. S. G.",
+      "lastName": "Khoo"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "R. Y. P.",
+      "lastName": "Kan"
+     },
+     {
+      "creatorType": "editor",
+      "firstName": "M.",
+      "lastName": "Lykke"
+     },
+     {
+      "creatorType": "editor",
+      "firstName": "T.",
+      "lastName": "Svarre"
+     },
+     {
+      "creatorType": "editor",
+      "firstName": "M.",
+      "lastName": "Skov"
+     },
+     {
+      "creatorType": "editor",
+      "firstName": "D.",
+      "lastName": "Martínez-Ávila"
+     }
+    ],
+    "abstractNote": "Signature pedagogy is a multifaceted concept that has been found useful by education researchers for analyzing and characterizing pedagogical methods for particular professions. A signature pedagogy must impart not just the formal disciplinary knowledge but also the cognitive, behavioral and attitudinal norms of the profession. The pedagogy is characterized by four dimensions of surface structure, deep structure, implicit structure and shadow structure. The abstract and multifaceted nature of the concept affords researchers latitude in construing and applying the concept in analyzing and describing pedagogies, making it difficult to compare pedagogies across professions and across academic papers. Based on a conceptual analysis of twenty-four journal papers describing signature pedagogies of various professions, the paper proposes and outlines a Research in Signature Pedagogy (ReSiPe) ontology.",
+    "bookTitle": "Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference",
+    "series": "",
+    "seriesNumber": "",
+    "volume": "",
+    "numberOfVolumes": "",
+    "edition": "",
+    "date": "2020",
+    "publisher": "Ergon Verlag",
+    "place": "Aalborg, Dinamarca",
+    "originalDate": "",
+    "originalPublisher": "",
+    "originalPlace": "",
+    "format": "",
+    "pages": "484-488",
+    "ISBN": "",
+    "DOI": "10.5771/9783956507762-484",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "en",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "conceptual analysis",
+      "type": 1
+     },
+     {
+      "tag": "learning outcomes",
+      "type": 1
+     },
+     {
+      "tag": "ontology (information science)",
+      "type": 1
+     },
+     {
+      "tag": "signature pedagogy",
+      "type": 1
+     },
+     {
+      "tag": "university teaching",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:20Z",
+    "dateModified": "2026-11-27T13:41:45Z"
+   }
+  },
+  {
+   "key": "T2PQFY33",
+   "version": 46361,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/T2PQFY33",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/T2PQFY33",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Alvarenga and Cristovão",
+    "parsedDate": "2023-03-27",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "T2PQFY33",
+    "version": 46361,
+    "itemType": "journalArticle",
+    "title": "Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "Viviane Bessa Lopes",
+      "lastName": "Alvarenga"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "Henrique Monteiro",
+      "lastName": "Cristovão"
+     }
+    ],
+    "abstractNote": "Distance Education has increased the supply of Learning Objects (LOs) generally made available in repositories without interoperability, which generates content redundancy, raising the cost of creation and maintenance, contradicting its main feature, which is reusability. This work proposes to create an operational domain ontology to help organize LOs in the context of the Semantic Web. With a qualitative approach and applied nature, the following steps were performed: (1) the choice of the LOM-IEE standard based on research in the area; (2) choice of ARCA repository and compatibility of metadata with the standard for some OAs in the repository; (3) elaboration of a design model for the domain operational ontology of the LOM-IEEE standard; (4) implementation of the domain operational ontology, as well as the incorporation of data from some LOs. As this is an ongoing research, equivalent properties and individuals will still be investigated for the interoperability of the structural and semantic layers. A mapping between ontology and data will also be carried out to create an RDF base and, finally, interoperable SPARQL queries as a proof of concept.\n&nbsp;",
+    "publicationTitle": "Revista Ibero-Americana De Ciência Da Informação",
+    "publisher": "",
+    "place": "",
+    "date": "2023-03-27",
+    "volume": "16",
+    "issue": "1",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "263-285",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "Rev. Ibero-Am. Ciênc. Inf.",
+    "DOI": "10.26512/rici.v16.n1.2023.47618",
+    "citationKey": "",
+    "url": "https://periodicos.unb.br/index.php/RICI/article/view/47618",
+    "accessDate": "2026-11-26T12:08:15Z",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "1983-5213",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "en",
+    "libraryCatalog": "periodicos.unb.br",
+    "callNumber": "",
+    "rights": "Copyright (c) 2023 Viviane Bessa Lopes Alvarenga, Henrique Monteiro Cristovão",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "Arca repository",
+      "type": 1
+     },
+     {
+      "tag": "Design model",
+      "type": 1
+     },
+     {
+      "tag": "Distance education",
+      "type": 1
+     },
+     {
+      "tag": "Educación a distancia",
+      "type": 1
+     },
+     {
+      "tag": "Educação a distância",
+      "type": 1
+     },
+     {
+      "tag": "Knowledge representation",
+      "type": 1
+     },
+     {
+      "tag": "Learning object repositories",
+      "type": 1
+     },
+     {
+      "tag": "Modelo de design",
+      "type": 1
+     },
+     {
+      "tag": "Open Educational Resources",
+      "type": 1
+     },
+     {
+      "tag": "Plantilla de diseño",
+      "type": 1
+     },
+     {
+      "tag": "RDF",
+      "type": 1
+     },
+     {
+      "tag": "Recursos Educacionais Abertos",
+      "type": 1
+     },
+     {
+      "tag": "Recursos educativos abiertos",
+      "type": 1
+     },
+     {
+      "tag": "Repositorios de objetos de aprendizaje",
+      "type": 1
+     },
+     {
+      "tag": "Repositórios de objetos de aprendizagem",
+      "type": 1
+     },
+     {
+      "tag": "Representación del conocimiento",
+      "type": 1
+     },
+     {
+      "tag": "Representação do conhecimento",
+      "type": 1
+     },
+     {
+      "tag": "SPARQL queries",
+      "type": 1
+     },
+     {
+      "tag": "interoperability",
+      "type": 1
+     },
+     {
+      "tag": "learning object metadata",
+      "type": 1
+     },
+     {
+      "tag": "learning object reuse",
+      "type": 1
+     },
+     {
+      "tag": "learning objects",
+      "type": 1
+     },
+     {
+      "tag": "ontology design",
+      "type": 1
+     },
+     {
+      "tag": "semantic web",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "UAZEU26U",
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:08:13Z",
+    "dateModified": "2026-11-27T10:12:17Z"
+   }
+  },
+  {
+   "key": "8CRZMZLB",
+   "version": 46358,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/8CRZMZLB",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/8CRZMZLB",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Das et al.",
+    "parsedDate": "2022",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "8CRZMZLB",
+    "version": 46358,
+    "itemType": "journalArticle",
+    "title": "Reorganizing Educational Institutional Domain using Faceted Ontological Principles",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "Das"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "D.",
+      "lastName": "Naskar"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "Roy"
+     }
+    ],
+    "abstractNote": "The purpose of this work is to find out how different library classification systems and linguistic ontologies arrange a particular domain of interest and what are the limitations for information retrieval. We use knowledge representation techniques and languages for construction of a domain specific ontology. This ontology would help not only in problem solving, but it would demonstrate the ease with which complex queries can be handled using principles of domain ontology, thereby facilitating better information retrieval. Facet-based methodology has been used for ontology formalization for quite some time. Ontology formalization involves different steps such as, Identification of the terminology, Analysis, Synthesis, Standardization and Ordering. Firstly, for purposes of conceptualization OntoUML has been used which is a well-founded and established language for Ontology driven Conceptual Modelling. Phase transformation of “the same mode” has been subsequently obtained by OWL-DL using Protégé software. The final OWL ontology contains a total of around 232 axioms. These axioms comprise 148 logical axioms, 76 declaration axioms and 43 classes. These axioms glue together classes, properties and data types as well as a constraint. Such data clustering cannot be achieved through general use of simple classification schemes. Hence it has been observed and established that domain ontology using faceted principles provide better information retrieval with enhanced precision. This ontology should be seen not only as an alternative of the existing classification system but as a Knowledge Base (KB) system which can handle complex queries well, which is the ultimate purpose of any classification system or indexing system. In this paper, we try to understand how ontology-based information retrieval systems can prove its utility as a useful tool in the field of library science with a particular focus on the education domain.",
+    "publicationTitle": "Knowledge Organization",
+    "publisher": "",
+    "place": "",
+    "date": "2022",
+    "volume": "49",
+    "issue": "1",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "6-21",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.5771/0943-7444-2022-1-6",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "OWL DL",
+      "type": 1
+     },
+     {
+      "tag": "OntoUML",
+      "type": 1
+     },
+     {
+      "tag": "complex queries",
+      "type": 1
+     },
+     {
+      "tag": "domain ontology",
+      "type": 1
+     },
+     {
+      "tag": "educational domain",
+      "type": 1
+     },
+     {
+      "tag": "faceted classification",
+      "type": 1
+     },
+     {
+      "tag": "information retrieval",
+      "type": 1
+     },
+     {
+      "tag": "knowledge base",
+      "type": 1
+     },
+     {
+      "tag": "knowledge representation",
+      "type": 1
+     },
+     {
+      "tag": "library classification systems",
+      "type": 1
+     },
+     {
+      "tag": "ontology formalization",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:15Z"
+   }
+  },
+  {
+   "key": "5QTLWAME",
+   "version": 46357,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/5QTLWAME",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/5QTLWAME",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Palomino et al.",
+    "parsedDate": "2023",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "5QTLWAME",
+    "version": 46357,
+    "itemType": "journalArticle",
+    "title": "An ontology for modelling user’ profiles and activities in gamified education",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "P. T.",
+      "lastName": "Palomino"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "A. M.",
+      "lastName": "Toda"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "L.",
+      "lastName": "Rodrigues"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "W.",
+      "lastName": "Oliveira"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "L.",
+      "lastName": "Nacke"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "Isotani"
+     }
+    ],
+    "abstractNote": "Gamification studies in the educational domain usually focus on motivating students to increase their learning performance by enhancing their motivation. Classifications of behavioural profiles are often used for this (referred to as “gamer” or “user types”), which support the personalization of students’ experiences. These classifications consider these profiles from gamers’ or non-gamers’ points of view. However, within education research, it is necessary to broadly inspect these behavioural profiles to create an instructional design based on learners’ intrinsic drivers and motivations. The relationship between these concepts is subjective, complex, and difficult to categorize, demanding research to bridge this gap. Therefore, in this article we present the design and evaluation of an application ontology that seeks to represent relationships between Jung’s archetypes (e.g., the Hero, the Outlaw and others) adapted for educational purposes, creating a new approach for modelling user profiles, a taxonomy of game elements specific for use in educational contexts, and Bloom’s revised taxonomy to classify learning activities types. This ontology enables personalized and instructional designs directly related to the learning activity type for students. We demonstrate that the proposed ontology can help create better gamification designs to support learning, and we envision it to be used both to create unplugged gamification strategies and personalized gamified educational systems.",
+    "publicationTitle": "Research and Practice in Technology Enhanced Learning",
+    "publisher": "",
+    "place": "",
+    "date": "2023",
+    "volume": "18",
+    "issue": "",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "018",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.58459/rptel.2023.18018",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "Bloom's revised taxonomy",
+      "type": 1
+     },
+     {
+      "tag": "behavioral profiles",
+      "type": 1
+     },
+     {
+      "tag": "gamification",
+      "type": 1
+     },
+     {
+      "tag": "instructional design",
+      "type": 1
+     },
+     {
+      "tag": "intrinsic motivation",
+      "type": 1
+     },
+     {
+      "tag": "ontology (information science)",
+      "type": 1
+     },
+     {
+      "tag": "personalized learning",
+      "type": 1
+     },
+     {
+      "tag": "student motivation",
+      "type": 1
+     },
+     {
+      "tag": "user profiles",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:14Z"
+   }
+  },
+  {
+   "key": "TMYL48UF",
+   "version": 46355,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/TMYL48UF",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/TMYL48UF",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Chimalakonda and Nori",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "TMYL48UF",
+    "version": 46355,
+    "itemType": "journalArticle",
+    "title": "An ontology based modeling framework for design of educational technologies",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "Chimalakonda"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "K. V.",
+      "lastName": "Nori"
+     }
+    ],
+    "abstractNote": "Despite rapid progress, most of the educational technologies today lack a strong instructional design knowledge basis leading to questionable quality of instruction. In addition, a major challenge is to customize these educational technologies for a wide range of customizable instructional designs. Ontologies are one of the pertinent mechanisms to represent instructional design in the literature. However, existing approaches do not support modeling of flexible instructional designs. To address this problem, in this paper, we propose an ontology based framework for systematic modeling of different aspects of instructional design knowledge based on domain patterns. As part of the framework, we present ontologies for modeling goals, instructional processes and instructional material. We demonstrate the ontology framework by presenting instances of the ontology for the large scale case study of adult literacy in India (287 million learners spread across 22 Indian Languages), which requires creation of hundreds of similar but varied e Learning Systems based on flexible instructional designs. The implemented framework is available at http://rice.iiit.ac.in and is transferred to National Literacy Mission Authority of Government of India. The proposed framework could be potentially used for modeling instructional design knowledge for school education, vocational skills and beyond.",
+    "publicationTitle": "Smart Learning Environments",
+    "publisher": "",
+    "place": "",
+    "date": "2020",
+    "volume": "7",
+    "issue": "",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.1186/s40561-020-00135-6",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "adult literacy",
+      "type": 1
+     },
+     {
+      "tag": "domain patterns",
+      "type": 1
+     },
+     {
+      "tag": "e-learning systems",
+      "type": 1
+     },
+     {
+      "tag": "educational technology design",
+      "type": 1
+     },
+     {
+      "tag": "instructional design",
+      "type": 1
+     },
+     {
+      "tag": "learning objectives",
+      "type": 1
+     },
+     {
+      "tag": "multilingual literacy",
+      "type": 1
+     },
+     {
+      "tag": "ontology modeling",
+      "type": 1
+     },
+     {
+      "tag": "teaching materials",
+      "type": 1
+     },
+     {
+      "tag": "teaching process",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:09Z"
+   }
+  },
+  {
+   "key": "MF9D6BHW",
+   "version": 46354,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/MF9D6BHW",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/MF9D6BHW",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Cenka et al.",
+    "parsedDate": "2023",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "MF9D6BHW",
+    "version": 46354,
+    "itemType": "journalArticle",
+    "title": "Personal learning environment toward lifelong learning: an ontology-driven conceptual model",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "B. A. N.",
+      "lastName": "Cenka"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "H. B.",
+      "lastName": "Santoso"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "K.",
+      "lastName": "Junus"
+     }
+    ],
+    "abstractNote": "Presently, learning is more flexible, personal and has richer learning resources. In the digital era, students use digital tools in almost all aspects of learning, such as seeking information, note-taking, discussion and communication, which is in line with personal learning environments. Therefore, this study proposes a conceptual model of the personal learning environment. The design science research framework is applied as a research guide to guarantee that the proposed model is relevant to our research statement, and the model design is rigorously grounded in relevant theory and methodology. The researcher conducted a systematic literature review and content analysis of relevant articles to identify the components of the personal learning environment and then proposed an initial ontology-driven conceptual model. Activity theory is used as a qualitative framework for preliminary evaluations of the resulting artefacts. The proposed conceptual model comprises four dimensions, including personal, technological, organisational and social, as well as teaching and learning. The implications of the proposed model are to equip teachers, developers, researchers and policymakers in understanding the design and promoting personal learning environments.",
+    "publicationTitle": "Interactive Learning Environments",
+    "publisher": "",
+    "place": "",
+    "date": "2023",
+    "volume": "31",
+    "issue": "10",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "6445-6461",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.1080/10494820.2022.2039947",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "activity theory",
+      "type": 1
+     },
+     {
+      "tag": "conceptual model",
+      "type": 1
+     },
+     {
+      "tag": "digital learning tools",
+      "type": 1
+     },
+     {
+      "tag": "lifelong learning",
+      "type": 1
+     },
+     {
+      "tag": "personal learning environments",
+      "type": 1
+     },
+     {
+      "tag": "teaching-learning process",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:08Z"
+   }
+  },
+  {
+   "key": "CXVC2H5V",
+   "version": 46353,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/CXVC2H5V",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/CXVC2H5V",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Piriyapongpipat et al.",
+    "parsedDate": "2024",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "CXVC2H5V",
+    "version": 46353,
+    "itemType": "journalArticle",
+    "title": "An alternative approach to ontology-based curriculum development in higher education",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "P.",
+      "lastName": "Piriyapongpipat"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "Goldin"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "N.",
+      "lastName": "Ditcharoen"
+     }
+    ],
+    "abstractNote": "Global trends in higher education emphasize the development of curricula that offer greater responsiveness to learners. Creating flexible and responsive curricula will require additional support systems for curriculum management. The first step toward sustainably developing this kind of system is to represent essential curricular information in a way that allows sharing common components across various work processes within the educational environment. The current research implements a new approach for representing curriculum components, by systematically analyzing external source data to extract the basic knowledge, skills and dependencies which then become objects into an ontology. The resulting ontology should act as a computationally-accessible model of the curriculum with sufficient information and usable quality. This paper describes a trial implementation of our approach using actual curriculum documents. Results from performance metrics and expert evaluation validate the proposed strategy and suggest that the approach is feasible for real-world practice.",
+    "publicationTitle": "Smart Learning Environments",
+    "publisher": "",
+    "place": "",
+    "date": "2024",
+    "volume": "11",
+    "issue": "1",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "1-19",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.1186/s40561-024-00307-8",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "curriculum management",
+      "type": 1
+     },
+     {
+      "tag": "curriculum representation",
+      "type": 1
+     },
+     {
+      "tag": "flexible curricula",
+      "type": 1
+     },
+     {
+      "tag": "higher education curriculum",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:07Z"
+   }
+  },
+  {
+   "key": "7GUUMV4J",
+   "version": 46352,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/7GUUMV4J",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/7GUUMV4J",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Quigley et al.",
+    "parsedDate": "2017",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "7GUUMV4J",
+    "version": 46352,
+    "itemType": "journalArticle",
+    "title": "Developing a Conceptual Model of STEAM Teaching Practices",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "C. F.",
+      "lastName": "Quigley"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "D.",
+      "lastName": "Herro"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "F. M.",
+      "lastName": "Jamil"
+     }
+    ],
+    "abstractNote": "STEAM, where the “A” represents arts and humanities, is considered a transdisciplinary learning process that has the potential to increase diverse participation in science, technology, engineering, and math (STEM) fields. However, a well‐defined conceptual model that clearly articulates essential components of the STEAM approach is needed to conduct empirical research on STEAM's efficacy–in particular, the teaching content that should be considered when enacting STEAM teaching practices. This paper proposes a conceptual model of STEAM, providing educators with the opportunity to teach effectively using transdisciplinary inquiry. The instructional content domain of the model includes problem‐based delivery, discipline integration, and problem‐solving skills.",
+    "publicationTitle": "School Science and Mathematics",
+    "publisher": "",
+    "place": "",
+    "date": "2017",
+    "volume": "117",
+    "issue": "1-2",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "1-12",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.1111/ssm.12201",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "STEAM education",
+      "type": 1
+     },
+     {
+      "tag": "STEM participation",
+      "type": 1
+     },
+     {
+      "tag": "arts integration",
+      "type": 1
+     },
+     {
+      "tag": "conceptual model",
+      "type": 1
+     },
+     {
+      "tag": "humanities integration",
+      "type": 1
+     },
+     {
+      "tag": "problem-based learning",
+      "type": 1
+     },
+     {
+      "tag": "problem-solving skills",
+      "type": 1
+     },
+     {
+      "tag": "teaching practice",
+      "type": 1
+     },
+     {
+      "tag": "transdisciplinary learning",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:07Z"
+   }
+  },
+  {
+   "key": "FLPHXSKH",
+   "version": 46351,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/FLPHXSKH",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/FLPHXSKH",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Ferreira et al.",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "FLPHXSKH",
+    "version": 46351,
+    "itemType": "journalArticle",
+    "title": "Promoting Sustainable Social Emotional Learning at School through Relationship-Centered Learning Environment, Teaching Methods and Formative Assessment",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "M.",
+      "lastName": "Ferreira"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "B.",
+      "lastName": "Martinsone"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "Talić"
+     }
+    ],
+    "abstractNote": "How to promote social emotional learning (SEL) at school depends largely on teachers. Mostly teachers implement specific programs, but they have difficulties in incorporating SEL into the regular curriculum. The main aim of the paper is to present the conceptual model of sustainable integration of SEL into everyday teaching practices in every subject. This approach has been developed in the project ìLearning to Be: Development of Practices and Methodologies for Assessing Social, Emotional and Health Skills within Education Systemsî. This initiative is based on the premise that the assessment of learning at school should go beyond grading studentsí knowledge and should include practices for observing young peopleís personal growth, social skills, attitudes and other general competences. The novelty of this conceptual approach is associated with integrating SEL standards, formative assessment and classroom instruction into a single sustainability-oriented model. The relationship between SEL standards (ISBE, 2003) and formative assessment strategies established by Wiliam (2011) is described, providing a detailed description of specific classroom activities. The objective of this approach is, therefore, towards building emotionally strong and flexible individuals who can deal with complex challenges through prosocial behavior that encourages human prospering and the attainment of the United Nationsí Sustainable Development Goals.",
+    "publicationTitle": "Journal of Teacher Education for Sustainability",
+    "publisher": "",
+    "place": "",
+    "date": "2020",
+    "volume": "22",
+    "issue": "1",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "21-36",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.2478/jtes-2020-0003",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "Sustainable Development Goals",
+      "type": 1
+     },
+     {
+      "tag": "classroom teaching",
+      "type": 1
+     },
+     {
+      "tag": "formative assessment",
+      "type": 1
+     },
+     {
+      "tag": "prosocial behavior",
+      "type": 1
+     },
+     {
+      "tag": "psychological resilience",
+      "type": 1
+     },
+     {
+      "tag": "social skills assessment",
+      "type": 1
+     },
+     {
+      "tag": "social-emotional learning",
+      "type": 1
+     },
+     {
+      "tag": "teacher practices",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:06Z"
+   }
+  },
+  {
+   "key": "EMKUXDXQ",
+   "version": 46350,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/EMKUXDXQ",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/EMKUXDXQ",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Hernández-Carrasco et al.",
+    "parsedDate": "2022",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "EMKUXDXQ",
+    "version": 46350,
+    "itemType": "journalArticle",
+    "title": "A Framework to Assist in Didactic Planning at Undergraduate Level",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "D. A.",
+      "lastName": "Hernández-Carrasco"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "C. E.",
+      "lastName": "Rose-Gómez"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S.",
+      "lastName": "González-López"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "A.",
+      "lastName": "López-López"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "J. M.",
+      "lastName": "García-Gorrostieta"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "G.",
+      "lastName": "Borrego"
+     }
+    ],
+    "abstractNote": "In the teaching-learning process under the competency-based educational model, the instructor is a facilitator and seeks to generate a flexible and adaptable environment for student learning. One of the first tasks of the facilitator is the structuring of didactic planning. Didactic planning includes strategies for teaching and learning, evidence gathering, and choice of evaluation instruments. In this paper, we propose a framework based on natural language processing techniques with the support of an ontology grounded in the experience of instructors and university level course plans in the information systems area. We employ Bloom’s taxonomy in the ontology design, producing an ascending structure for didactic planning, which allows the student to learn gradually. The developed framework can analyze the key elements that a didactic plan must contain and identify inter-related areas. Evaluation results with Cohen’s kappa coefficient between expert judgement and our framework show that is possible to assist instructors in structuring their didactic planning. Out of the nine processes analyzed with the framework, an almost perfect kappa level was achieved in five processes, a substantial level in three processes, and a moderate level for one process.",
+    "publicationTitle": "Mathematics",
+    "publisher": "",
+    "place": "",
+    "date": "2022",
+    "volume": "10",
+    "issue": "9",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.3390/math10091355",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "Bloom's taxonomy",
+      "type": 1
+     },
+     {
+      "tag": "assessment instruments",
+      "type": 1
+     },
+     {
+      "tag": "competency-based education",
+      "type": 1
+     },
+     {
+      "tag": "course plans",
+      "type": 1
+     },
+     {
+      "tag": "information systems education",
+      "type": 1
+     },
+     {
+      "tag": "natural language processing",
+      "type": 1
+     },
+     {
+      "tag": "ontology (information science)",
+      "type": 1
+     },
+     {
+      "tag": "pedagogical planning",
+      "type": 1
+     },
+     {
+      "tag": "teacher as facilitator",
+      "type": 1
+     },
+     {
+      "tag": "teaching-learning process",
+      "type": 1
+     },
+     {
+      "tag": "undergraduate teaching",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:05Z"
+   }
+  },
+  {
+   "key": "K4REDCGK",
+   "version": 46349,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/K4REDCGK",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/K4REDCGK",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Nunes Passos et al.",
+    "parsedDate": "2024",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "K4REDCGK",
+    "version": 46349,
+    "itemType": "journalArticle",
+    "title": "Uma ontologia para apoiar o ensino de matemática básica com uso de robótica educacional",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "D. D.",
+      "lastName": "Nunes Passos"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S. R.",
+      "lastName": "Fernandes de Araújo"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "S. D.",
+      "lastName": "Silva"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "P. G.",
+      "lastName": "Gadelha Queiroz"
+     }
+    ],
+    "abstractNote": "O ensino de conteúdos de matemática na educação básica apresenta alguns desafios. Muitos desses vêm sendo superados com a utilização de tecnologias da informação e comunicação. Nesse contexto, a robótica educacional vem ganhando espaço, estando cada vez mais presente em ambientes escolares. Porém, há escassez de materiais que auxiliem os professores no uso dessa tecnologia em sala de aula. Para começar a suplantar esse problema, neste artigo, apresenta-se o desenvolvimento de uma ontologia capaz de auxiliar o ensino e aprendizagem da disciplina de matemática utilizando robótica educacional. A ontologia denominada Ontologia de Conteúdo de Matemática Combinada com Robótica Educacional (Onto-ENSINARE) foi construída com base na metodologia Ontology Development 101 com os aspectos de completude, consistência e concisão. Para validar a ontologia foram utilizadas consultas SPARQL para obtenção de respostas úteis aos professores de matemática da educação básica.",
+    "publicationTitle": "HOLOS",
+    "publisher": "",
+    "place": "",
+    "date": "2024",
+    "volume": "8",
+    "issue": "39",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.15628/holos.2023.10328",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "ICT in education",
+      "type": 1
+     },
+     {
+      "tag": "SPARQL queries",
+      "type": 1
+     },
+     {
+      "tag": "educational robotics",
+      "type": 1
+     },
+     {
+      "tag": "ontology construction",
+      "type": 1
+     },
+     {
+      "tag": "teacher support",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:04Z"
+   }
+  },
+  {
+   "key": "A8A5GL5W",
+   "version": 46347,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/A8A5GL5W",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/A8A5GL5W",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Griful-Freixenet et al.",
+    "parsedDate": "2021",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "A8A5GL5W",
+    "version": 46347,
+    "itemType": "journalArticle",
+    "title": "Toward More Inclusive Education: An Empirical Test of the Universal Design for Learning Conceptual Model among Preservice Teachers",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "J.",
+      "lastName": "Griful-Freixenet"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "K.",
+      "lastName": "Struyven"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "W.",
+      "lastName": "Vantieghem"
+     }
+    ],
+    "abstractNote": "Universal Design for Learning (UDL) holds considerable promise to create inclusive educational environments. Nevertheless, the most recent theoretical UDL model, which includes both teachers’ philosophy and praxis of teaching, has never been tested empirically. Therefore, this study aims to validate the UDL model as a “whole” among preservice teachers. Results show that the three philosophical constructs of UDL predict the performance of preservice teachers’ practices associated with UDL. These constructs are growth mindset about learning, self-efficacy to implement inclusion, and self-regulation and motivation for teaching. Results also show that preservice teachers think and reason about UDL not as three separate principles (i.e., engagement, representation, action, and expression) but in an interrelated way as the analysis shows them to be a unidimensional factor. Finally, this article discusses the implications of a validated model on UDL for teacher-educators, practitioners, and researchers.",
+    "publicationTitle": "Journal of Teacher Education",
+    "publisher": "",
+    "place": "",
+    "date": "2021",
+    "volume": "72",
+    "issue": "3",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "381-395",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.1177/0022487120965525",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "Universal Design for Learning",
+      "type": 1
+     },
+     {
+      "tag": "conceptual model validation",
+      "type": 1
+     },
+     {
+      "tag": "engagement",
+      "type": 1
+     },
+     {
+      "tag": "growth mindset",
+      "type": 1
+     },
+     {
+      "tag": "inclusive education",
+      "type": 1
+     },
+     {
+      "tag": "pre-service teachers",
+      "type": 1
+     },
+     {
+      "tag": "representation",
+      "type": 1
+     },
+     {
+      "tag": "self-efficacy",
+      "type": 1
+     },
+     {
+      "tag": "self-regulation",
+      "type": 1
+     },
+     {
+      "tag": "teacher motivation",
+      "type": 1
+     },
+     {
+      "tag": "teacher professional development",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:12:03Z"
+   }
+  },
+  {
+   "key": "86S8NTGS",
+   "version": 46343,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/86S8NTGS",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/86S8NTGS",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Lopes and Lima",
+    "parsedDate": "2020",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "86S8NTGS",
+    "version": 46343,
+    "itemType": "journalArticle",
+    "title": "Interfaces de visualização de trilhas de aprendizagem: uma análise a partir dos princípios dos sistemas de hipertexto",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "P.",
+      "lastName": "Lopes"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "G. A.",
+      "lastName": "Lima"
+     }
+    ],
+    "abstractNote": "As trilhas de aprendizagem podem ser consideradas um conjunto sistemático e multimodal de unidades de aprendizagem, contendo diferentes esquemas de navegação, que podem ir desde modelos lineares, prescritivos, passando-se por modelos mais hierárquicos, em que são permitidas escolhas, e chegando-se a modelos em rede, cuja navegação é mais livre e tem como propósito o desenvolvimento de competências. Esses esquemas de navegação podem ser personalizados, com base em variáveis, como: objetivos, perfil do aluno e características de aprendizagem. Este artigo tem como objetivo apresentar os resultados de uma das etapas de pesquisa de mestrado, que teve como um dos objetivos esboçar um metamodelo conceitual de representação dessas trilhas de aprendizagem. Para alcance desse objetivo, foi conduzida análise de dados por meio das etapas sugeridas no método da análise de conteúdo. Os resultados indicaram que, por meio da metodologia adotada, foi possível identificar uma variedade de categorias e entidades que foram usadas na composição do modelo conceitual para organização e representação de trilhas de aprendizagem. Entretanto, observou-se necessidade de refinamento dos elementos identificados, principalmente do ponto de vista de tratamento terminológico, o que evidencia a importância do uso de um vocabulário controlado, visando o enriquecimento semântico.",
+    "publicationTitle": "PontodeAcesso",
+    "publisher": "",
+    "place": "",
+    "date": "2020",
+    "volume": "14",
+    "issue": "1",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "40-56",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "DOI": "10.9771/rpa.v14i1.35952",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "",
+    "language": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "competence development",
+      "type": 1
+     },
+     {
+      "tag": "controlled vocabulary",
+      "type": 1
+     },
+     {
+      "tag": "hypertext systems",
+      "type": 1
+     },
+     {
+      "tag": "learning trajectories",
+      "type": 1
+     },
+     {
+      "tag": "personalized learning",
+      "type": 1
+     },
+     {
+      "tag": "semantic enrichment",
+      "type": 1
+     },
+     {
+      "tag": "visualization interface",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-27T00:33:00Z",
+    "dateModified": "2026-11-27T10:11:57Z"
+   }
+  },
+  {
+   "key": "WMNHV7AS",
+   "version": 46342,
+   "library": {
+    "type": "group",
+    "id": 5969244,
+    "name": "fatores",
+    "links": {
+     "alternate": {
+      "href": "https://www.zotero.org/groups/fatores",
+      "type": "text/html"
+     }
+    }
+   },
+   "links": {
+    "self": {
+     "href": "https://api.zotero.org/groups/5969244/items/WMNHV7AS",
+     "type": "application/json"
+    },
+    "alternate": {
+     "href": "https://www.zotero.org/groups/fatores/items/WMNHV7AS",
+     "type": "text/html"
+    }
+   },
+   "meta": {
+    "createdByUser": {
+     "id": 15707828,
+     "username": "junilson",
+     "name": "",
+     "links": {
+      "alternate": {
+       "href": "https://www.zotero.org/junilson",
+       "type": "text/html"
+      }
+     }
+    },
+    "creatorSummary": "Chi et al.",
+    "parsedDate": "2018",
+    "numChildren": 0
+   },
+   "data": {
+    "key": "WMNHV7AS",
+    "version": 46342,
+    "itemType": "journalArticle",
+    "title": "Learning adaptivity in support of flipped learning: an ontological problem-solving approach",
+    "creators": [
+     {
+      "creatorType": "author",
+      "firstName": "Y.-L.",
+      "lastName": "Chi"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "T.-Y.",
+      "lastName": "Chen"
+     },
+     {
+      "creatorType": "author",
+      "firstName": "C.",
+      "lastName": "Hung"
+     }
+    ],
+    "abstractNote": "In recent years, flipped learning has received tremendous attention from educational practitioners and researchers. However, this study argues that existing e‐learning systems mainly serve for learning management and content delivery purposes, although they lack support for flipped learning. As an innovative educational approach, flipped learning requires more pedagogical elements, such as integrated instructional design and adaptive content delivery, to achieve effective direct instruction. This study aims to create a learning adaptivity design to support effective learning in the flipped individual learning space in which the teacher is absent. Because teaching involves various pedagogical and content knowledge sources, we propose a conceptual model of teaching as a function of the knowledge triad of Guideline (G), Teaching Activity (T), and Material (M). To realize this conceptualization, an ontological problem‐solving approach is used for knowledge‐based systems development to integrate the relevant knowledge sources. The knowledge model is created using the Protégé platform to develop OWL‐based domain ontology, task ontology, and SWRL‐based semantic rules to enable inference in the GTM triad for learning adaptivity. The case illustration shows that the knowledge‐based system prototype can adaptively guide student learning in the flipped individual learning space with the knowledge sources integrated.",
+    "publicationTitle": "Expert Systems",
+    "publisher": "",
+    "place": "",
+    "date": "2018",
+    "volume": "35",
+    "issue": "3",
+    "section": "",
+    "partNumber": "",
+    "partTitle": "",
+    "pages": "",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "Expert Syst.",
+    "DOI": "10.1111/exsy.12246",
+    "citationKey": "",
+    "url": "",
+    "accessDate": "",
+    "PMID": "",
+    "PMCID": "",
+    "ISSN": "",
+    "archive": "",
+    "archiveLocation": "",
+    "shortTitle": "Learning adaptivity in support of flipped learning",
+    "language": "en",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+     {
+      "tag": "Protégé",
+      "type": 1
+     },
+     {
+      "tag": "SWRL",
+      "type": 1
+     },
+     {
+      "tag": "domain ontology",
+      "type": 1
+     },
+     {
+      "tag": "e-learning systems",
+      "type": 1
+     },
+     {
+      "tag": "expert systems",
+      "type": 1
+     },
+     {
+      "tag": "flipped learning",
+      "type": 1
+     },
+     {
+      "tag": "owls",
+      "type": 1
+     },
+     {
+      "tag": "semantic rules",
+      "type": 1
+     },
+     {
+      "tag": "task ontology",
+      "type": 1
+     },
+     {
+      "tag": "teaching activities",
+      "type": 1
+     }
+    ],
+    "collections": [
+     "V2C73IKE"
+    ],
+    "relations": {},
+    "dateAdded": "2026-11-26T12:34:09Z",
+    "dateModified": "2026-11-27T10:11:56Z"
+   }
+  }
+ ]
+}

@@ -469,7 +469,7 @@ Declarada em `docs/procedimentos/brapci/procedimento.toml`, `[cobertura]`; confe
 ### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
 
 ```
-("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais")
+("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "fatores de rendimento escolar" OR "fator de rendimento escolar")
 ```
 
 ---
@@ -515,7 +515,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
 ```
-("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação") AND (("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais") OR ("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais"))
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação") AND (("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais") OR ("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "fatores de rendimento escolar" OR "fator de rendimento escolar"))
 ```
 
 ### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
@@ -554,14 +554,15 @@ Disparo: consulta que encosta no teto de 1.000 mesmo com o recorte temporal. For
 
 ## 5. Conjunto-semente
 
-Esperadas nesta base, conforme o protocolo. Estado de conferência no arquivo de sementes (`[documentos] sementes`); aferição em `data/semente_aderencia.csv`.
+Esperadas nesta base, conforme o protocolo. Estado de conferência e indexação declarada (`bases`) no arquivo de sementes (`[documentos] sementes`); recuperação medida por `python3 -m rsl aderencia medir`.
 
 | # | Estudo | DOI ou identificador | Observação |
 | :---: | :--- | :--- | :--- |
 | SE1 | Alvarenga & Cristovão (2023) | `10.26512/rici.v16.n1.2023.47618` | — |
 | SE5 | Sousa & Duque (2018) | `10.5433/1981-8920.2018v23n1p271` | **caso-teste de cobertura de campo**: o artefato está fora do título |
+| SE19 | Lopes & Lima (2020) | `10.9771/rpa.v14i1.35952` | — |
 
-**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e registra-se como cobertura. *Etapa 2:* procurar a semente na exportação de EB4 por DOI e depois por título, sem reexecutar a busca.
+**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem recorte temporal e sem as expressões; semente não indexada sai do denominador e se registra no campo `bases` do arquivo de sementes. *Etapa 2:* `aderencia medir` procura a semente na exportação de EB4 pelo DOI e pelo título, sem reexecutar a busca.
 
 **Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao mostrar`), sobre a união das bases. A aderência por base indica qual base e qual faceta falharam.
 

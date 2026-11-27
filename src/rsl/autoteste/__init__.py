@@ -113,12 +113,16 @@ def conferir_texto(ctx):
 
 def grupos():
     from . import (busca, catalogo, configuracao, dados, derivado, geracao, gramatica,
-                   nomes_antigos, procedimentos, protocolo, sementes, validacao)
+                   nomes_antigos, procedimentos, protocolo, sementes, validacao, zotero)
     return [
         ("defeitos injetados no protocolo", protocolo.mutacoes),
         ("precedência", protocolo.precedencia),
         ("configuração", configuracao.casos),
         ("arquivo de sementes", sementes.casos),
+        ("junção com a cópia do Zotero", sementes.juncao),
+        ("regra do et al.", sementes.et_al),
+        ("ensaio seco por campo", sementes.ensaio),
+        ("Zotero e OpenAlex, com servidor simulado", zotero.casos),
         ("leitura estrutural que aprova", protocolo.estrutural),
         ("planejamento da validação", validacao.casos),
         ("cliente TemaTres e reabertura", validacao.cliente),
@@ -151,6 +155,8 @@ def cmd_autoteste(ctx, a=None):
             print("  -", p)
         print("O documento corrente já está reprovado; o autoteste não teria o que provar.")
         return Saida.REPROVADO
+    z = ctx.protocolo()["zotero"]
+    print(f"Cópia da coleção do Zotero: versão {z['versao']}, lida em {z['lida_em']}.")
     feitos = []
     for nome, funcao in grupos():
         print(f"\n== {nome}")

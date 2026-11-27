@@ -165,9 +165,40 @@ def _parser():
     p.add_argument("--json", action="store_true",
                    help="emite o catálogo e os problemas em JSON")
 
+    grupo("sementes", "dados das sementes: cópia da coleção do Zotero, resumo e "
+          "palavras-chave pela OpenAlex e complemento da coleção")
+    novo("sementes", "copiar", "lê pela API web do Zotero os itens de topo da coleção de "
+         "[zotero], relata o que mudou em relação à cópia anterior e grava a cópia em "
+         "[dados] zotero; a chave vem de ZOTERO_API_KEY ou do .env da raiz e nunca se "
+         "imprime",
+         "zotero", "cmd_copiar")
+    p = novo("sementes", "metadados", "consulta a OpenAlex (ou, com --fonte crossref, o "
+             "Crossref) pelo DOI das sementes ainda sem resultado registrado, uma por vez, e "
+             "grava a resposta bruta em [dados] evidencia/<fonte>/; 404 deixa marcador de "
+             "\"sem registro\", e outra falha interrompe sem nova tentativa nem outra fonte",
+             "metadados", "cmd_metadados")
+    p.add_argument("--fonte", choices=("openalex", "crossref"), default="openalex",
+                   help="crossref: complemento do resumo, só para as sementes sem resumo na "
+                        "OpenAlex (404 ou resposta sem resumo) nem no item do Zotero")
+    p.add_argument("--todas", action="store_true",
+                   help="consulta também os DOIs com resultado já registrado na fonte")
+    p = novo("sementes", "completar", "imprime o que gravaria no Zotero a partir das "
+             "respostas da OpenAlex, do Crossref e da cópia: resumo (o da OpenAlex ou, na falta, o "
+             "do Crossref) só onde está vazio, palavras-chave "
+             "como etiquetas automáticas novas, e os itens fora do arquivo de sementes; sem "
+             "--gravar, nada é gravado no Zotero", "zotero", "cmd_completar")
+    p.add_argument("--gravar", action="store_true",
+                   help="aplica o plano item a item, com controle de versão, e regrava a "
+                        "cópia; conflito, limite ou pedido de espera interrompem sem nova "
+                        "tentativa")
+    p.add_argument("--retirar", action="append", default=[], metavar="DOI",
+                   help="tira da coleção (não da biblioteca) o item desse DOI, que não pode "
+                        "ser de semente do arquivo; repetível; só com --gravar")
+
     grupo("aderencia", "teste de aderência ao conjunto-semente")
-    novo("aderencia", "planilhar", "grava a planilha do teste de aderência e imprime o "
-         "ensaio seco", "sementes", "cmd_planilha")
+    novo("aderencia", "ensaiar", "ensaio seco: imprime os termos de cada faceta no título, "
+         "nas palavras-chave e no resumo de cada semente, com o campo onde apareceram; "
+         "não grava arquivo", "sementes", "cmd_ensaiar")
     novo("aderencia", "medir", "teste de aderência ao conjunto-semente",
          "busca.aderencia", "cmd_aderencia")
     p = novo("aderencia", "diagnosticar", "anatomia da perda: monta as consultas por nível "

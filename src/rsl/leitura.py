@@ -15,8 +15,9 @@ import re
 import tomllib
 import urllib.parse
 
+from . import doi as _doi
 from . import gramatica as G
-from .erros import ProtocoloInvalido
+from .erros import DadosInvalidos, ProtocoloInvalido
 from .markdown import (blocos_de_tabela, celulas, desescapa, le_tabela, linhas,
                        linhas_de_tabela, lista, normaliza, paragrafos, secao,
                        tabela_da_secao)
@@ -749,13 +750,14 @@ def _lista_de_siglas(item, campo, ident, admitidas, rotulo_tabela, vazia_reprova
 
 
 def sementes(texto, siglas, facetas_, locais):
-    """Sementes do arquivo de sementes (TOML), campo a campo.
+    """Sementes do arquivo de sementes (TOML), campo a campo, no esquema mínimo.
 
     O esquema é o da gramática (`TT_SEMENTES` e os seus campos): campo exigido ausente,
-    campo de outro tipo ou campo desconhecido reprova, nomeando a semente e o campo. Cada
-    base citada tem de ser sigla da tabela de bases, e cada faceta, `FCTn` da tabela de
-    facetas, na grafia exata e sem repetição; o `id`, em sequência a partir de SE1. Autoria, ano, título e DOI são os campos: nada se extrai
-    por padrão de texto. Campo opcional ausente vale vazio.
+    campo de outro tipo ou campo desconhecido — inclusive os bibliográficos retirados —
+    reprova, nomeando a semente e o campo. Cada base citada tem de ser sigla da tabela de
+    bases, e cada faceta do alinhamento, `FCTn` da tabela de facetas; o `id`, em sequência a
+    partir de SE1; o DOI, na forma e sem repetição. Os dados bibliográficos vêm depois, da
+    cópia da coleção do Zotero (`junta_zotero`). Campo opcional ausente vale vazio.
     """
     T = G.TT_SEMENTES
     campos = {c.chave: c for c in T.campos}
@@ -771,7 +773,7 @@ def sementes(texto, siglas, facetas_, locais):
                                                          for x in itens):
         raise ProtocoloInvalido(T, f"tabela [[{T.chave}]] ausente ou vazia")
     locais["semente"] = {}
-    estudos, vistos = [], set()
+    estudos, vistos, dois = [], set(), {}
     for k, item in enumerate(itens, 1):
         bruto = item.get(G.C_ID.chave)
         ident = bruto if isinstance(bruto, str) and bruto.strip() else f"nº {k}"
@@ -798,30 +800,143 @@ def sementes(texto, siglas, facetas_, locais):
         for c in T.campos:
             if c is G.C_ID:
                 continue
-            vazio = {"lista de textos": [], "booleano": False}.get(c.tipo_valor, "")
+            vazio = {"lista de textos": [], "booleano": False,
+                     "tabela de textos": {}}.get(c.tipo_valor, "")
             valor = item.get(c.chave, vazio)
             e[c.chave] = valor.strip() if isinstance(valor, str) else valor
-        for c in (G.C_TITULO, G.C_VEICULO):
-            if not e[c.chave]:
-                raise _semente_invalida(c, ident, f"campo '{c.chave}' vazio")
-        e[G.C_AUTORES.chave] = [a.strip() for a in e[G.C_AUTORES.chave]]
-        if not e[G.C_AUTORES.chave] or not all(e[G.C_AUTORES.chave]):
-            raise _semente_invalida(G.C_AUTORES, ident, f"campo '{G.C_AUTORES.chave}' vazio "
-                                                        f"ou com autor vazio")
-        if e[G.C_DOI.chave] and not G.F_DOI.padrao.match(e[G.C_DOI.chave]):
+        if not e[G.C_REFERENCIA_CURTA.chave]:
+            raise _semente_invalida(G.C_REFERENCIA_CURTA, ident,
+                                    f"campo '{G.C_REFERENCIA_CURTA.chave}' vazio")
+        if not e[G.C_DOI.chave]:
+            raise _semente_invalida(G.C_DOI, ident, f"campo '{G.C_DOI.chave}' vazio")
+        if not G.F_DOI.padrao.match(e[G.C_DOI.chave]):
             raise _semente_invalida(G.F_DOI, ident, f"campo '{G.C_DOI.chave}' "
                                                     f"{e[G.C_DOI.chave]!r} fora da forma "
                                                     f"{G.F_DOI.texto.split()[0]}")
         e[G.C_BASES.chave] = _lista_de_siglas(item, G.C_BASES, ident, siglas,
                                               G.T_BASES.rotulo, vazia_reprova=True)
-        e[G.C_FACETAS.chave] = _lista_de_siglas(item, G.C_FACETAS, ident, facetas_,
-                                                G.T_FACETAS.rotulo, vazia_reprova=False)
-        primeiro = e[G.C_AUTORES.chave][0].split(",")[0].strip()
-        e["chave"] = f"{primeiro} {e[G.C_ANO.chave]}"
+        normalizado = _doi.normaliza(e[G.C_DOI.chave])
+        if normalizado in dois:
+            raise _semente_invalida(G.C_DOI, ident, f"campo '{G.C_DOI.chave}' repetido: "
+                                                    f"{e[G.C_DOI.chave]!r} já é de "
+                                                    f"{dois[normalizado]}")
+        dois[normalizado] = ident
+        alinhamento = {}
+        for fid, frase in (item.get(G.C_ALINHAMENTO.chave) or {}).items():
+            if fid.strip() not in facetas_:
+                raise _semente_invalida(G.C_ALINHAMENTO, ident,
+                                        f"{G.C_ALINHAMENTO.chave}: {fid!r} não é faceta da "
+                                        f"{G.T_FACETAS.rotulo} {list(facetas_)}")
+            if not frase.strip():
+                raise _semente_invalida(G.C_ALINHAMENTO, ident,
+                                        f"{G.C_ALINHAMENTO.chave}: frase vazia em {fid}")
+            alinhamento[fid.strip()] = frase.strip()
+        e[G.C_ALINHAMENTO.chave] = alinhamento
         estudos.append(e)
         locais["semente"][ident] = k - 1
     numeracao([e["id"] for e in estudos], G.I_SE, "sementes", G.SEMENTES)
     return estudos
+
+
+def junta_zotero(estudos, doc):
+    """Junta cada semente ao item da cópia da coleção com o mesmo DOI (caixa baixa, sem
+    prefixo de URL), trazendo `resumo` e `palavras_chave` do item, e os campos do item em
+    `zotero`, e os dados bibliográficos — autores, ano, título, veículo, volume, número e
+    páginas —, sem transcrição: o dicionário de saída é o mesmo de antes, com outra origem.
+    DOI sem item, ou com mais de um, e item sem título, sem autor ou sem ano reprovam com
+    DADOS, nomeando a semente, o DOI, o item e `sementes copiar`. Devolve os itens da cópia
+    cujo DOI não está no arquivo de sementes."""
+    from .zotero import CMD_COPIAR, por_doi                        # noqa: PLC0415
+    indice = por_doi(doc)
+    for e in estudos:
+        chave = _doi.normaliza(e["doi"])
+        itens = indice.get(chave) or []
+        if len(itens) != 1:
+            motivo = ("nenhum item da cópia da coleção tem esse DOI" if not itens
+                      else f"{len(itens)} itens da cópia da coleção têm esse DOI")
+            raise DadosInvalidos(f"semente {e['id']}: DOI {e['doi']} — {motivo}; acertar o "
+                                 f"DOI no arquivo de sementes ou no Zotero e rodar  "
+                                 f"{CMD_COPIAR}")
+        z = itens[0]
+        faltam = [n for n, v in (("título", z["titulo"]), ("autor", z["autores"]),
+                                 ("ano", z["ano"])) if not v]
+        if faltam:
+            raise DadosInvalidos(f"semente {e['id']}: o item {z['chave_item']} do Zotero "
+                                 f"(DOI {e['doi']}) está sem {', '.join(faltam)}; completar o "
+                                 f"item no Zotero e rodar  {CMD_COPIAR}")
+        e["zotero"] = z
+        for campo in G.BIBLIOGRAFICOS:
+            e[campo] = list(z[campo]) if isinstance(z[campo], list) else z[campo]
+        e["resumo"] = z["resumo"]
+        e["palavras_chave"] = list(z["palavras_chave"])
+        e["chave"] = f"{z['autores'][0].split(',')[0].strip()} {z['ano']}"
+    dois = {_doi.normaliza(e["doi"]) for e in estudos}
+    return [c for k, cs in indice.items() if k not in dois for c in cs]
+
+
+PALAVRAS_REFERENCIA_CURTA = 8
+# Regra do et al.: com quatro ou mais autores, a autoria se abrevia ao primeiro autor seguido
+# de "et al.", na exibição e no registro do arquivo de sementes.
+ET_AL_MINIMO = 4
+_ET_AL = re.compile(r"\s*,?\s*et\s+al\.?\s*$", re.IGNORECASE)
+
+
+def abrevia_autoria(autores):
+    """(sobrenomes, et_al): os sobrenomes registrados e se a lista termina abreviada por
+    "et al." (o último autor registrado traz a marca)."""
+    nomes = list(autores or [])
+    et_al = bool(nomes) and bool(_ET_AL.search(nomes[-1]))
+    if et_al:
+        nomes[-1] = _ET_AL.sub("", nomes[-1])
+    return [n.split(",")[0].strip() for n in nomes if n.strip()], et_al
+
+
+def autoria_exibida(autores):
+    """Autoria abreviada pela regra do et al.: até três autores, todos; quatro ou mais, ou a
+    lista já abreviada, o primeiro seguido de "et al."."""
+    nomes, et_al = abrevia_autoria(autores)
+    if et_al or len(nomes) >= ET_AL_MINIMO:
+        return f"{nomes[0]} et al."
+    if len(nomes) <= 2:
+        return " & ".join(nomes)
+    return f"{', '.join(nomes[:-1])} & {nomes[-1]}"
+
+
+def referencia_curta_sugerida(z):
+    """`<sobrenome do primeiro autor> <ano>: <primeiras palavras do título>`, do item do
+    Zotero; reticências quando o título continua."""
+    sobrenome = (z["autores"][0].split(",")[0].strip() if z["autores"] else "")
+    palavras = z["titulo"].split()
+    inicio = " ".join(palavras[:PALAVRAS_REFERENCIA_CURTA]).rstrip(" .,:;")
+    return (f"{sobrenome} {z['ano']}: {inicio}"
+            f"{'…' if len(palavras) > PALAVRAS_REFERENCIA_CURTA else ''}")
+
+
+def confere_referencia_curta(e):
+    """Motivo da divergência entre `referencia_curta` e o item do Zotero; None se confere
+    ou se o campo está ausente. O ano é o do item; o resto se compara sem acento, caixa nem
+    pontuação; o título abreviado
+    é o começo do título do item, por palavras inteiras; reticências finais são aceitas."""
+    rc = e.get(G.C_REFERENCIA_CURTA.chave) or ""
+    if not rc:
+        return None
+    z = e["zotero"]
+    autoria, _, titulo = rc.partition(":")
+    m = re.fullmatch(r"(.+?)\s+(\d{4})", autoria.strip())
+    if not _ or not m:
+        return "fora da forma `<sobrenome> <ano>: <início do título>`"
+    sobrenome, ano = m.group(1), int(m.group(2))
+    titulo = titulo.strip()
+    titulo = re.sub(r"(?:…|\.\.\.)$", "", titulo).strip()
+    primeiro = z["autores"][0].split(",")[0] if z["autores"] else ""
+    if normaliza(sobrenome) != normaliza(primeiro):
+        return f"o sobrenome {sobrenome!r} não é o do primeiro autor do item ({primeiro!r})"
+    if ano != z["ano"]:
+        return f"o ano {ano} não é o do item ({z['ano']})"
+    abreviado, completo = normaliza(titulo).split(), normaliza(z["titulo"]).split()
+    if not abreviado or completo[:len(abreviado)] != abreviado:
+        return "o título abreviado não é o começo do título do item"
+    return None
 
 
 def referencia(e):
@@ -930,6 +1045,8 @@ def analisa(ctx):
     _estrutural(params, "bases", [f"{b['id']} {b['sigla']} → {b['procedimento']}"
                                   for b in fts["bases"]])
     est = sementes(ctx.texto_sementes, siglas, ids_facetas, locais)
+    copia = ctx.zotero
+    fora_do_arquivo = junta_zotero(est, copia)
     params["sementes"] = {"valor": [f"{e['id']}: {', '.join(e['bases'])}"
                                     for e in est],
                           "origem": f"arquivo de sementes ({ctx.caminho_sementes})"}
@@ -952,6 +1069,8 @@ def analisa(ctx):
         "bases": fts["bases"],
         "limiar": limiar(ctx, t, params, locais),
         "sementes": est,
+        "zotero": {"versao": copia["versao"], "lida_em": copia["lida_em"],
+                   "arquivo": ctx.config.valor("dados.zotero"), "fora": fora_do_arquivo},
         "distribuicao": distribuicao(est, siglas),
     }
     # O protocolo não declara estes; valem os do config.toml, com a origem registrada.

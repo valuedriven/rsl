@@ -55,6 +55,11 @@ def casos(ctx, g):
     # que voltasse ao esquema saindo de RETIRADAS.
     testa("mínimo de termos por string, retirado, na configuração",
           valida(cfg.com("conferencia.minimo_termos_string", 20)), "minimo_termos_string")
+    testa("chave da planilha de aderência, retirada, na configuração",
+          valida(cfg.com("saidas.aderencia", "semente_aderencia.csv")),
+          "a planilha de aderência foi retirada")
+    testa("biblioteca do Zotero fora da forma groups/<id> ou users/<id>",
+          valida(cfg.com("zotero.biblioteca", "fatores")), "zotero.biblioteca")
     testa("chave fora do esquema", valida(cfg.com("padroes.chave_inventada", 1)),
           "chave desconhecida")
     testa("faixa padrão invertida",

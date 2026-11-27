@@ -10,6 +10,7 @@ Caminhos da configuração são relativos à raiz do projeto; caminho absoluto v
 import copy
 import os
 import pathlib
+import re
 import tomllib
 
 from .erros import ConfiguracaoInvalida
@@ -26,10 +27,11 @@ ESQUEMA = {
                 "divergencia_fidelidade"),
     "conferencia": ("dimensoes_criterio", "dimensao_recorte"),
     "busca": ("ano_recencia", "amostra_sensibilidade"),
-    "dados": ("registro", "validacao", "execucoes", "evidencia"),
+    "dados": ("registro", "validacao", "execucoes", "evidencia", "zotero"),
     "saidas": ("pasta", "registros", "contagens", "ordem_triagem", "fidelidade",
-               "sensibilidade", "aderencia", "anatomia", "anatomia_consultas", "candidatos"),
+               "sensibilidade", "anatomia", "anatomia_consultas", "candidatos"),
     "documentos": ("procedimento", "procedimento_fonte", "flexoes", "sementes"),
+    "zotero": ("biblioteca", "colecao"),
     "planilha": ("campos_validacao",),
 }
 # Chaves retiradas: a presença de qualquer uma reprova com mensagem própria, para que não
@@ -54,6 +56,9 @@ RETIRADAS = {
                                         "(decisão de 2026-11-24)" + _RETIRAR,
     "documentos.ficha": "renomeada para `[documentos] procedimento`; renomeá-la, mantendo "
                         "o valor",
+    "saidas.aderencia": "a planilha de aderência foi retirada: a indexação declarada é o "
+                        "campo `bases` do arquivo de sementes, a recuperação se calcula com "
+                        "`aderencia medir` e o ensaio seco é `aderencia ensaiar`" + _RETIRAR,
 }
 # Marcadores que cada padrão de caminho tem de conter. A fidelidade é por base e por
 # expressão: sem a base no nome, a conferência de uma base sobrescreveria a de outra.
@@ -109,6 +114,12 @@ def valida(dado, nome=NOME):
         for marca in (marcas,) if isinstance(marcas, str) else marcas:
             if not isinstance(valor, str) or marca not in valor:
                 raise ConfiguracaoInvalida(f"{nome}: `{chave}` {valor!r} não contém {marca}")
+    biblioteca = dado["zotero"]["biblioteca"]
+    if not isinstance(biblioteca, str) or not re.fullmatch(r"(groups|users)/\d+", biblioteca):
+        raise ConfiguracaoInvalida(f"{nome}: `zotero.biblioteca` {biblioteca!r} fora da forma "
+                                   f"groups/<id> ou users/<id>")
+    if not isinstance(dado["zotero"]["colecao"], str) or not dado["zotero"]["colecao"].strip():
+        raise ConfiguracaoInvalida(f"{nome}: `zotero.colecao` vazia ou de outro tipo")
     lo, hi = dado["padroes"]["sensibilidade"]
     if not lo < hi:
         raise ConfiguracaoInvalida(f"{nome}: `padroes.sensibilidade` com inferior ≥ "

@@ -246,7 +246,8 @@ class CampoToml(Elemento):
     """Campo de um item de uma tabela TOML: nome, tipo e exigência."""
 
     tipo = "campo"
-    TIPOS = {"texto": str, "lista de textos": list, "inteiro": int, "booleano": bool}
+    TIPOS = {"texto": str, "lista de textos": list, "inteiro": int, "booleano": bool,
+             "tabela de textos": dict}
 
     def __init__(self, nome, documento, tabela, chave, tipo_valor, exigencia=EXIGIDO,
                  descricao=""):
@@ -270,6 +271,8 @@ class CampoToml(Elemento):
         # bool é subclasse de int no Python; no TOML, `true` não é número.
         if not isinstance(valor, tipo) or isinstance(valor, bool):
             return False
+        if tipo is dict:
+            return all(isinstance(k, str) and isinstance(v, str) for k, v in valor.items())
         return tipo is not list or all(isinstance(x, str) for x in valor)
 
 
@@ -468,38 +471,39 @@ def _campo(chave, tipo_valor, descricao, exigencia=EXIGIDO):
 
 
 _OPC = "campo opcional: ausente equivale a vazio; presente e de outro tipo, reprova"
-# Bibliográficos. A referência legível é montada destes campos; nada se extrai de texto.
+# Esquema mínimo: o controle e o juízo do pesquisador. Os dados bibliográficos, o resumo e as
+# palavras-chave vêm do item da cópia da coleção do Zotero (`[dados] zotero`), ligado pelo
+# DOI; os campos bibliográficos, `facetas` e `veiculo_conferido` reprovam como desconhecidos.
 C_ID = _campo("id", "texto", "ausente, de outro tipo, fora da forma SEn, repetido ou fora "
                              "da sequência a partir de SE1, sem lacuna, reprova")
-C_AUTORES = _campo("autores", "lista de textos", "ausente, de outro tipo, vazia ou com "
-                                                 "autor vazio reprova")
-C_ANO = _campo("ano", "inteiro", "ausente ou de outro tipo (texto, por exemplo) reprova")
-C_TITULO = _campo("titulo", "texto", "ausente, de outro tipo ou vazio reprova")
-C_VEICULO = _campo("veiculo", "texto", "ausente, de outro tipo ou vazio reprova")
-C_VOLUME = _campo("volume", "texto", _OPC, OPCIONAL)
-C_NUMERO = _campo("numero", "texto", _OPC, OPCIONAL)
-C_PAGINAS = _campo("paginas", "texto", _OPC, OPCIONAL)
-C_DOI = _campo("doi", "texto", "campo opcional: ausente ou vazio vira pendência "
-                               "(`projeto pendencias`); presente fora da forma 10.x/…, reprova",
-               OPCIONAL)
+C_DOI = _campo("doi", "texto", "liga a semente ao item da cópia da coleção do Zotero "
+                               "(`[dados] zotero`); ausente, vazio, fora da forma 10.x/… ou "
+                               "repetido (sem distinção de caixa) reprova")
+C_REFERENCIA_CURTA = _campo(
+    "referencia_curta", "texto",
+    "identificação legível, `<sobrenome do primeiro autor> <ano>: <início do título>`, conferida "
+    "contra o item do Zotero por `documentos conferir`; ausente reprova a leitura")
 # Aferição.
 C_BASES = _campo("bases", "lista de textos",
                  "siglas das bases que indexam a semente (indexação, não recuperação); "
                  "lista vazia, base que não é sigla da tabela de bases do protocolo (grafia "
                  "exata) e base repetida reprovam")
-C_FACETAS = _campo("facetas", "lista de textos",
-                   "FCTn informadas pelo pesquisador (não do ensaio seco); faceta fora da "
-                   "tabela de facetas ou repetida reprova; vazia vira pendência", OPCIONAL)
-# Conferência: estado da referência e juízos do pesquisador.
+# Juízo e conferência do pesquisador.
+C_ALINHAMENTO = _campo(
+    "alinhamento_facetas", "tabela de textos",
+    "tabela embutida { FCTn = \"frase\" }: por que a semente se alinha a cada faceta, juízo "
+    "do pesquisador; chave fora da tabela de facetas ou frase vazia reprova; ausente ou vazia "
+    "vira pendência", OPCIONAL)
 C_VERIFICACAO = _campo("verificacao", "booleano",
-                       "true: dados bibliográficos conferidos; false ou ausente: conferência "
-                       "pendente (`projeto pendencias`); texto ou outro tipo reprova. Onde e "
-                       "como se conferiu vai em `nota`", OPCIONAL)
-# `nota` reúne o registro de conferência (onde e como se conferiu) e o que a referência
-# traz e não cabe em outro campo (editores, evento, local, editora), transcrito como está.
+                       "true: o pesquisador declara conferidos os dados bibliográficos do item "
+                       "no Zotero; false ou ausente: conferência pendente (`projeto "
+                       "pendencias`); texto ou outro tipo reprova", OPCIONAL)
+# `nota`: só informação relativa à revisão sistemática (limitação da semente para o teste ou
+# pendência específica dela); não guarda dado bibliográfico, que fica no Zotero, nem o
+# conteúdo do estudo, que vai ao alinhamento, nem registro de conferência ou de decisão.
 C_NOTA = _campo("nota", "texto", _OPC, OPCIONAL)
-C_VEICULO_CONFERIDO = _campo("veiculo_conferido", "texto", _OPC, OPCIONAL)
-CONFERENCIA = (C_VERIFICACAO, C_NOTA, C_VEICULO_CONFERIDO)
+# Campos bibliográficos retirados (fase 2): lidos do item do Zotero.
+BIBLIOGRAFICOS = ("autores", "ano", "titulo", "veiculo", "volume", "numero", "paginas")
 
 I_SE = Identificador("se", A, None, "SE", descricao="id fora da sequência reprova")
 F_DOI = FrasePadrao("doi", A, None, "10.<prefixo>/<sufixo>  (no campo doi, sem `DOI:` nem "
@@ -936,14 +940,15 @@ TEXTO_FIXO = {
     "retorno_zero": "- **Retorno zero:** {executada} = 0 ou {sonda} = 0 é defeito de "
                     "execução até prova em contrário; contagem derivada próxima de zero "
                     "exige execução direta antes do relato.",
-    "s5_intro": "Esperadas nesta base, conforme o protocolo. Estado de conferência no "
-                "arquivo de sementes (`[documentos] sementes`); aferição em "
-                "`data/semente_aderencia.csv`.",
+    "s5_intro": "Esperadas nesta base, conforme o protocolo. Estado de conferência e "
+                "indexação declarada (`bases`) no arquivo de sementes "
+                "(`[documentos] sementes`); recuperação medida por "
+                "`python3 -m rsl aderencia medir`.",
     "s5_procedimento": "**Procedimento.** *Etapa 1:* buscar o título entre aspas, sem "
                        "recorte temporal e sem as expressões; semente não indexada sai do "
-                       "denominador e registra-se como cobertura. *Etapa 2:* procurar a "
-                       "semente na exportação de {executada} por DOI e depois por título, "
-                       "sem reexecutar a busca.",
+                       "denominador e se registra no campo `bases` do arquivo de sementes. "
+                       "*Etapa 2:* `aderencia medir` procura a semente na exportação de "
+                       "{executada} pelo DOI e pelo título, sem reexecutar a busca.",
     "s5_limiar": "**Limiar de aderência** (`limiar_aderencia`, `python3 -m rsl configuracao "
                  "mostrar`), sobre a união das bases. A aderência por base indica qual base "
                  "e qual faceta falharam.",

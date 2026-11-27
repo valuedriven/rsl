@@ -1,185 +1,155 @@
 [[sementes]]
 id = "SE1"
-autores = ["Alvarenga, V. B. L.", "Cristovão, H. M."]
-ano = 2023
-titulo = "Objetos de aprendizagem organizados com base no padrão LOM-IEEE adaptado a uma ontologia operacional de domínio na web semântica"
-veiculo = "Revista Ibero-Americana de Ciência da Informação (RICI)"
-volume = "16"
-numero = "1"
 doi = "10.26512/rici.v16.n1.2023.47618"
+referencia_curta = "Alvarenga 2023: Objetos de aprendizagem organizados com base no padrão…"
 bases = ["brapci"]
-facetas = []
+alinhamento_facetas = { FCT1 = "modelo formal de domínio que organiza objetos de aprendizagem segundo o padrão LOM na web semântica", FCT2 = "repositório de objetos de aprendizagem do ensino a distância" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE2"
-autores = ["Das, S.", "Naskar, D.", "Roy, S."]
-ano = 2022
-titulo = "Reorganizing Educational Institutional Domain using Faceted Ontological Principles"
-veiculo = "Knowledge Organization"
-volume = "49"
-numero = "1"
-paginas = "6-21"
 doi = "10.5771/0943-7444-2022-1-6"
+referencia_curta = "Das 2022: Reorganizing Educational Institutional Domain using Faceted Ontological Principles"
 bases = ["wos", "scopus"]
-facetas = []
+alinhamento_facetas = { FCT1 = "classificação facetada de um domínio institucional formalizada em OWL", FCT2 = "estrutura de instituições de ensino como domínio modelado" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE3"
-autores = ["Chi, Y.-L.", "Chen, T.-Y.", "Hung, C."]
-ano = 2018
-titulo = "Learning adaptivity in support of flipped learning: An ontological problem-solving approach"
-veiculo = "Expert Systems"
-volume = "35"
-numero = "3"
 doi = "10.1111/exsy.12246"
+referencia_curta = "Chi 2018: Learning adaptivity in support of flipped learning: an…"
 bases = ["scopus"]
-facetas = []
+alinhamento_facetas = { FCT1 = "base de conhecimento com regras semânticas para adaptar o conteúdo", FCT2 = "sistemas de e-learning", FCT3 = "sala de aula invertida e desenho instrucional adaptativo" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; volume e número conferidos no Crossref em 2026-11-26; conteúdo não consultado. Conferência declarada pelo pesquisador; volume e número conferidos no Crossref em 2026-11-26; resposta bruta em data/evidencia/referencias/SE3_crossref.json."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE4"
-autores = ["Palomino, P. T.", "Toda, A. M.", "Rodrigues, L.", "Oliveira, W.", "Nacke, L.", "Isotani, S."]
-ano = 2023
-titulo = "An ontology for modelling user’ profiles and activities in gamified education"
-veiculo = "Research and Practice in Technology Enhanced Learning"
-volume = "18"
-numero = ""
-paginas = "018"
 doi = "10.58459/rptel.2023.18018"
+referencia_curta = "Palomino 2023: An ontology for modelling user’ profiles and activities…"
 bases = ["scopus"]
-facetas = ["FCT1", "FCT2", "FCT3", "FCT4"]
+alinhamento_facetas = { FCT1 = "modelo de aplicação que relaciona perfis de usuário, elementos de jogo e taxonomia de Bloom", FCT2 = "gamificação no ensino", FCT3 = "tarefas didáticas classificadas pela taxonomia revisada de Bloom", FCT4 = "perfis comportamentais e motivações dos alunos que condicionam o desenho instrucional" }
 verificacao = true
-nota = "Página oficial do periódico e registro de pesquisa consultados em 2026-11-26; identificador Scopus AN=85152788106 localizado em registro institucional; conteúdo do resumo consultado; indexação deve ser reconfirmada diretamente na Scopus antes do teste de aderência. A publicação apresenta uma ontologia que relaciona arquétipos/perfis de usuários, elementos de jogos e tipos de atividades de aprendizagem classificados pela taxonomia revisada de Bloom. Registro Scopus AN=85152788106 identificado no portal institucional; confirmar diretamente na base. DOI, autoria, periódico, volume e artigo 018 conferidos na página oficial do periódico."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE5"
-autores = ["Sousa, E. E. de", "Duque, C."]
-ano = 2018
-titulo = "Modelo de sistema da informação para gerar feedback no ensino baseado na teoria da atividade"
-veiculo = "Informação & Informação"
-volume = "23"
-numero = "1"
-paginas = "271-289"
 doi = "10.5433/1981-8920.2018v23n1p271"
+referencia_curta = "Sousa 2018: Modelo de sistema da informação para gerar feedback…"
 bases = ["brapci"]
-facetas = []
+alinhamento_facetas = { FCT1 = "modelagem da sala de aula pela teoria da atividade para gerar devolutiva ao professor", FCT2 = "qualidade do ensino em sala de aula", FCT3 = "devolutiva ao professor a partir da percepção dos alunos" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo. Referência: (UEL)."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE6"
-autores = ["Iatrellis, O.", "Kameas, A.", "Fitsilis, P."]
-ano = 2019
-titulo = "EDUC8 ontology: semantic modeling of multi-facet learning pathways"
-veiculo = "Education and Information Technologies"
-volume = "24"
-numero = "4"
-paginas = "2371-2390"
 doi = "10.1007/s10639-019-09877-4"
+referencia_curta = "Iatrellis 2019: EDUC8 ontology: semantic modeling of multi-facet learning pathways"
 bases = ["eric"]
-facetas = []
+alinhamento_facetas = { FCT1 = "modelagem semântica de trajetórias formativas com múltiplas facetas", FCT2 = "ensino superior em computação", FCT3 = "personalização das trajetórias dos estudantes" }
 verificacao = true
-nota = "Dados bibliográficos conferidos no Crossref em 2026-11-26; conteúdo não consultado. Conferência dos dados bibliográficos no Crossref em 2026-11-26; resposta bruta em data/evidencia/referencias/SE6_crossref.json. Referência: (Springer)."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE7"
-autores = ["Chimalakonda, S.", "Nori, K. V."]
-ano = 2020
-titulo = "An ontology based modeling framework for design of educational technologies"
-veiculo = "Smart Learning Environments"
-volume = "7"
 doi = "10.1186/s40561-020-00135-6"
+referencia_curta = "Chimalakonda 2020: An ontology based modeling framework for design of…"
 bases = ["eric", "wos", "scopus"]
-facetas = []
+alinhamento_facetas = { FCT1 = "arcabouço de modelagem do desenho instrucional baseado em padrões de domínio", FCT2 = "tecnologias para o ensino", FCT3 = "processos instrucionais, objetivos e materiais didáticos", FCT4 = "alfabetização de adultos em larga escala e em muitas línguas" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE8"
-autores = ["Cenka, B. A. N.", "Santoso, H. B.", "Junus, K."]
-ano = 2023
-titulo = "Personal learning environment toward lifelong learning: an ontology-driven conceptual model"
-veiculo = "Interactive Learning Environments"
-volume = "31"
-numero = "10"
-paginas = "6445-6461"
 doi = "10.1080/10494820.2022.2039947"
+referencia_curta = "Cenka 2023: Personal learning environment toward lifelong learning: an ontology-driven…"
 bases = ["eric", "scopus"]
-facetas = []
+alinhamento_facetas = { FCT1 = "componentes de um ambiente pessoal de estudo, extraídos de revisão sistemática e formalizados", FCT2 = "aprendizagem ao longo da vida", FCT3 = "uso de ferramentas digitais para buscar, anotar e discutir", FCT4 = "dimensões pessoal, tecnológica, organizacional e social do ambiente" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE9"
-autores = ["Piriyapongpipat, P.", "Goldin, S.", "Ditcharoen, N."]
-ano = 2024
-titulo = "An alternative approach to ontology-based curriculum development in higher education"
-veiculo = "Smart Learning Environments"
-volume = "11"
-numero = "1"
-paginas = "1-19"
 doi = "10.1186/s40561-024-00307-8"
+referencia_curta = "Piriyapongpipat 2024: An alternative approach to ontology-based curriculum development in…"
 bases = ["wos", "scopus"]
-facetas = []
+alinhamento_facetas = { FCT1 = "representação computável de componentes curriculares: saberes, habilidades e dependências", FCT2 = "currículos flexíveis no ensino superior" }
 verificacao = true
-nota = "Dados bibliográficos conferidos pelo pesquisador em 2026-11-19; conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE10"
-autores = ["Khoo, C. S. G.", "Kan, R. Y. P."]
-ano = 2020
-titulo = "An ontology for conceptual analysis of signature pedagogies"
-veiculo = "Knowledge Organization at the Interface: Proceedings of the Sixteenth International ISKO Conference"
-paginas = "484-488"
 doi = "10.5771/9783956507762-484"
+referencia_curta = "Khoo 2020: An ontology for conceptual analysis of signature pedagogies"
 bases = ["wos"]
-facetas = []
+alinhamento_facetas = { FCT1 = "análise conceitual formalizada das pedagogias características das profissões", FCT2 = "ensino universitário", FCT3 = "pedagogias típicas de cada área profissional" }
 verificacao = true
-nota = "Dados bibliográficos do volume e do capítulo conferidos no Crossref em 2026-11-26 (DOI do capítulo: 10.5771/9783956507762-484); conteúdo não consultado. Conferência declarada pelo pesquisador; dados do protocolo. O DOI do capítulo foi conferido no Crossref em 2026-11-26; resposta bruta em data/evidencia/referencias/SE10_crossref.json. Referência: Lykke, M., Svarre, T., Skov, M., & Martínez-Ávila, D. (Eds.); Aalborg, Dinamarca; Ergon Verlag."
-veiculo_conferido = "sim"
 
 [[sementes]]
 id = "SE11"
-autores = ["Quigley, C. F.", "Herro, D.", "Jamil, F. M."]
-ano = 2017
-titulo = "Developing a Conceptual Model of STEAM Teaching Practices"
-veiculo = "School Science and Mathematics"
-volume = "117"
-numero = "1-2"
-paginas = "1-12"
 doi = "10.1111/ssm.12201"
+referencia_curta = "Quigley 2017: Developing a Conceptual Model of STEAM Teaching Practices"
 bases = ["eric"]
-facetas = ["FCT1", "FCT2", "FCT3"]
+alinhamento_facetas = { FCT1 = "esquema dos componentes essenciais da abordagem STEAM", FCT2 = "ensino integrado de ciências, artes e humanidades", FCT3 = "ensino por problemas e integração das disciplinas" }
 verificacao = true
-nota = "Registro oficial ERIC EJ1129872 e página oficial do periódico consultados em 2026-11-26; título, autoria, ano, volume, número, páginas e DOI conferidos; indexação individual na ERIC confirmada; conteúdo avaliado com base no resumo, sem leitura integral."
 
 
 [[sementes]]
 id = "SE12"
-autores = ["Ferreira, M.", "Martinsone, B.", "Talić, S."]
-ano = 2020
-titulo = "Promoting Sustainable Social Emotional Learning at School through Relationship-Centered Learning Environment, Teaching Methods and Formative Assessment"
-veiculo = "Journal of Teacher Education for Sustainability"
-volume = "22"
-numero = "1"
-paginas = "21-36"
 doi = "10.2478/jtes-2020-0003"
+referencia_curta = "Ferreira 2020: Promoting Sustainable Social Emotional Learning at School through…"
 bases = ["eric"]
-facetas = ["FCT1", "FCT2", "FCT3", "FCT4"]
+alinhamento_facetas = { FCT1 = "modelo que integra padrões socioemocionais, avaliação formativa e instrução", FCT2 = "escola regular", FCT3 = "avaliação formativa no cotidiano das aulas", FCT4 = "ambiente escolar centrado nas relações" }
 verificacao = true
-nota = "Registro oficial ERIC EJ1261559 e página da publicação consultados em 2026-11-26; título, autoria, ano, volume, número, páginas e DOI conferidos; indexação individual na ERIC confirmada; conteúdo avaliado com base no resumo, sem leitura integral."
-veiculo_conferido = "sim"
+
+[[sementes]]
+id = "SE13"
+doi = "10.3390/math10091355"
+referencia_curta = "Hernández-Carrasco 2022: A Framework to Assist in Didactic Planning at…"
+bases = ["wos", "scopus"]
+alinhamento_facetas = { FCT1 = "estrutura formal do plano didático apoiada por processamento de linguagem natural", FCT2 = "graduação em sistemas de informação", FCT3 = "planejamento didático, estratégias e instrumentos de avaliação", FCT4 = "ambiente flexível e adaptável criado pelo professor como facilitador" }
+verificacao = true
+
+[[sementes]]
+id = "SE14"
+doi = "10.15628/holos.2023.10328"
+referencia_curta = "Nunes Passos 2024: Uma ontologia para apoiar o ensino de matemática…"
+bases = ["wos"]
+alinhamento_facetas = { FCT1 = "modelo formal de conteúdos de matemática combinados com robótica (Onto-ENSINARE)", FCT2 = "matemática nos ensinos fundamental e médio", FCT3 = "uso de robótica em sala de aula", FCT4 = "escassez de materiais de apoio aos professores para usar robótica em aula" }
+verificacao = true
+
+[[sementes]]
+id = "SE15"
+doi = "10.1177/0022487120965525"
+referencia_curta = "Griful-Freixenet 2021: Toward More Inclusive Education: An Empirical Test of…"
+bases = ["eric", "scopus", "wos"]
+alinhamento_facetas = { FCT1 = "modelo do Desenho Universal para a Aprendizagem testado empiricamente", FCT2 = "formação inicial de professores", FCT3 = "práticas docentes associadas ao Desenho Universal para a Aprendizagem", FCT4 = "inclusão de estudantes diversos" }
+verificacao = true
+
+[[sementes]]
+id = "SE16"
+doi = "10.1080/19415257.2023.2248478"
+referencia_curta = "King 2023: A pragmatic meta-model to navigate complexity in teachers’…"
+bases = ["eric"]
+alinhamento_facetas = { FCT1 = "metamodelo que articula contexto, experiência e resultados da formação docente", FCT2 = "formação continuada de professores", FCT3 = "planejamento, realização e avaliação de experiências formativas docentes", FCT4 = "condições da escola, cultura organizacional e influências do sistema, nos níveis micro, meso e macro" }
+verificacao = true
+nota = "O artigo não tem resumo publicado."
+
+[[sementes]]
+id = "SE17"
+doi = "10.1080/13603116.2023.2259906"
+referencia_curta = "Hickey 2024: Proposing a conceptual framework for relational pedagogy: pedagogical…"
+bases = ["eric", "scopus", "wos"]
+alinhamento_facetas = { FCT1 = "arcabouço que estrutura as dimensões do encontro pedagógico", FCT2 = "escolarização inclusiva", FCT3 = "pedagogia relacional: informalidade, interface, intercâmbio e realização", FCT4 = "condições socioculturais, espaço-temporais e materiais do encontro pedagógico" }
+verificacao = true
+nota = "Indexação em Scopus e Web of Science indicada em fonte bibliográfica secundária. Proposição conceitual, não avaliação empírica do framework."
+
+[[sementes]]
+id = "SE18"
+doi = "10.1007/s10758-024-09784-9"
+referencia_curta = "Tondeur 2024: The DTALE Model: Designing Digital and Physical Spaces…"
+bases = ["scopus"]
+alinhamento_facetas = { FCT1 = "modelo DTALE de integração de espaços físicos e digitais", FCT2 = "desenho de espaços para ensinar e aprender", FCT3 = "desenho da aprendizagem em espaços integrados", FCT4 = "espaços físicos e digitais e fatores institucionais, sociais e culturais" }
+verificacao = true
+nota = "Modelo desenvolvido a partir de revisão crítica da literatura e validado em quatro casos."
+
+[[sementes]]
+id = "SE19"
+doi = "10.9771/rpa.v14i1.35952"
+referencia_curta = "Lopes 2020: Interfaces de visualização de trilhas de aprendizagem: uma…"
+bases = ["brapci"]
+alinhamento_facetas = { FCT1 = "metamodelo de representação de trilhas de aprendizagem", FCT2 = "trilhas para desenvolvimento de competências", FCT3 = "navegação em percursos lineares, hierárquicos ou em rede", FCT4 = "objetivos, perfil e características de aprendizagem do aluno" }
+verificacao = true

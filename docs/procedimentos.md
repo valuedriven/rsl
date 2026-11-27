@@ -193,7 +193,25 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Apoio: manual — escolha das fontes pelo pesquisador, registrada no protocolo
 - Definir conjunto semente (adaptação do projeto)
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais;
-    arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2
+    arquivo de sementes (`[documentos] sementes` do `config.toml`); coleção de sementes do
+    Zotero (`[zotero]`), lida da cópia em `[dados] zotero`; plano §6.2
+  - Script principal: `python3 -m rsl sementes copiar` — lê pela API web do Zotero a
+    coleção de `[zotero]`, relata o que mudou em relação à cópia anterior e grava a cópia;
+    a chave vem de `ZOTERO_API_KEY` ou do `.env` da raiz (listado no `.gitignore`) e nunca
+    se imprime
+  - Script principal: `python3 -m rsl sementes metadados` — consulta a OpenAlex pelo DOI das
+    sementes ainda sem resultado, uma por vez, e grava a resposta bruta em
+    `[dados] evidencia`/openalex/ (o 404 deixa marcador de "sem registro"); erro interrompe,
+    sem nova tentativa nem outra fonte. Com `--fonte crossref`, complemento do resumo, só para
+    as sementes sem resumo na OpenAlex nem no Zotero; a que fica sem resumo em todas as fontes
+    é pendência do pesquisador, que preenche o resumo no Zotero
+  - Script principal: `python3 -m rsl sementes completar` — imprime o que gravaria no
+    Zotero (resumo onde está vazio, palavras-chave como etiquetas automáticas novas, itens
+    fora do arquivo de sementes); com `--gravar`, grava item a item e regrava a cópia; com
+    `--retirar DOI`, tira o item só da coleção
+  - Ordem: item no Zotero pelo DOI → `sementes copiar` → `sementes metadados` →
+    `sementes metadados --fonte crossref` → `sementes completar` → `sementes completar --gravar` → arquivo de sementes →
+    `documentos conferir`
   - Skill principal: `definir-conjunto-semente`
 - Definir a ferramenta de gestão bibliográfica
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Ferramentas e §Procedimentos
@@ -244,10 +262,11 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
 - Realizar teste de aderência das expressões de busca
   - Fonte: `docs/03_protocolo_estrategia_pesquisa.md` §Conjunto-semente e §Acervos pessoais;
     arquivo de sementes (`[documentos] sementes` do `config.toml`); plano §6.2
-  - Script principal: `python3 -m rsl aderencia planilhar` — grava a planilha do teste de
-    aderência e imprime o ensaio seco
+  - Script principal: `python3 -m rsl aderencia ensaiar` — ensaio seco: imprime os termos de
+    cada faceta no título, nas palavras-chave e no resumo de cada semente, com o campo onde
+    apareceram; não grava arquivo
   - Script principal: `python3 -m rsl aderencia medir` — teste de aderência ao
-    conjunto-semente; lê só as execuções registradas da executada
+    conjunto-semente, pelo título e pelo DOI; lê só as execuções registradas da executada
   - Script principal: `python3 -m rsl aderencia diagnosticar BASE` — anatomia da perda:
     monta as consultas por nível com o DOI das sementes não recuperadas; sem `--retorno`,
     imprime o roteiro e não grava; com `--retorno N K`, `--exportacao N ARQUIVO` e
@@ -308,8 +327,8 @@ origem saem de `python3 -m rsl configuracao mostrar`. Saídas em `[saidas]`, na 
 | Recorte temporal | registros dentro, fora e sem ano | contagem por situação | linha "fora" igual a zero; recorte no critério de intervalo temporal do protocolo, padrão `recorte_ano_min` | `busca derivar` (terminal) | `[saidas] registros`, coluna `recorte` |
 | Âncoras não confirmadas | registros únicos em que o casamento local não confirma as âncoras | sem âncora confirmada / registros únicos | sem limiar: aviso, nenhum registro descartado | `busca derivar` (terminal) | `[saidas] registros`, coluna `ancoras_confirmadas` |
 | Ordem de triagem | ordem de leitura da 1ª filtragem, não critério | riqueza das expressões atingidas, recência e ano | `[busca] ano_recencia` | `busca derivar` | `[saidas] ordem_triagem` |
-| Aderência | recall da busca sobre o conjunto-semente, que decide a passagem | sementes recuperadas por título exato / sementes do conjunto; denominador definitivo: as indexadas, coluna `indexada` preenchida à mão; com intervalo de Wilson a 95% | `limiar_aderencia`: regra de ajuste em protocolo §Conjunto-semente | `aderencia medir` (terminal); conferência manual na planilha | `[saidas] aderencia` (planilha de `aderencia planilhar`) |
-| Indício por prefixo | semente com título casado só por prefixo | contagem; fora do numerador | conferência humana obrigatória | `aderencia medir` (terminal) e manual | coluna `recuperada` da planilha |
+| Aderência | recall da busca sobre o conjunto-semente, que decide a passagem | sementes recuperadas por título exato ou pelo DOI / sementes do conjunto; indexação declarada no campo `bases` do arquivo de sementes; com intervalo de Wilson a 95% | `limiar_aderencia`: regra de ajuste em protocolo §Conjunto-semente | `aderencia medir` (terminal) | terminal |
+| Indício por prefixo | semente com título casado só por prefixo e sem o DOI dela na exportação | contagem; fora do numerador | conferência humana obrigatória | `aderencia medir` (terminal) e manual | terminal |
 | Divergência da fidelidade | quanto a derivação local difere da execução direta da mesma expressão | (só na direta + só na derivada) / união | `divergencia_fidelidade` | `conferencia fidelidade` | `[saidas] fidelidade` |
 | Perda da sonda | registros da sonda que a executada não recupera, por base | só na sonda / registros da sonda | sem limiar: tamanho da perda, não decide | `conferencia sensibilidade` | terminal; `[saidas] sensibilidade` |
 | Fração elegível da amostra | quanto da perda da sonda seria elegível | elegíveis / amostra sistemática (tamanho-alvo `[busca] amostra_sensibilidade`) | `sensibilidade`: faixa nas notas explicativas citadas pela executada | manual (coluna `elegivel`); o cálculo sai de `conferencia sensibilidade` reexecutada com a amostra inteira classificada | `[saidas] sensibilidade` |

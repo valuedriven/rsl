@@ -68,7 +68,15 @@ def relatorio(ctx, d):
     L.append(f"  sementes: {len(d['sementes'])}  "
              f"incidências: {dist['incidencias']}  "
              f"por base: " + ", ".join(f"{b} {v}" for b, v in dist["por_base"].items()))
-    L.append("  sementes (referência montada dos campos do arquivo de sementes; só exibição):")
+    cfg = ctx.config
+    L.append(f"  zotero: biblioteca {cfg.valor('zotero.biblioteca')}, coleção "
+             f"{cfg.valor('zotero.colecao')}  [{cfg.nome}: [zotero]]; cópia "
+             f"{cfg.valor('dados.zotero')}  [{cfg.nome}: [dados] zotero]; chave da API "
+             f"web em ZOTERO_API_KEY ou no .env da raiz (não impressa)")
+    L.append(f"  cópia da coleção em uso: versão {d['zotero']['versao']}, lida em "
+             f"{d['zotero']['lida_em']}; {len(d['zotero']['fora'])} item(ns) fora do arquivo "
+             f"de sementes")
+    L.append("  sementes (referência montada do item do Zotero, ligado pelo DOI; só exibição):")
     for e in d["sementes"]:
         L.append(f"    {e['id']:>4} {referencia(e)}")
     L.append("  instrumentos (endereço resolvido por idioma):")

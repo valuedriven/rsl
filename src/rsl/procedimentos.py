@@ -22,7 +22,7 @@ from .erros import ProtocoloInvalido, Reprovado, Uso
 from .flexao import Indecidivel, formas, formas_de_numero, le_excecoes
 from .fonte import le_fonte, ordem_das_sondagens
 from .geracao import grava_atomico
-from .leitura import LINHAS
+from .leitura import LINHAS, autoria_exibida
 from .saida import Saida, mais_grave
 
 
@@ -433,14 +433,7 @@ def _tabela(colunas, linhas, centro=()):
 
 
 def _estudo(s):
-    nomes = [a.split(",")[0].strip() for a in s["autores"]]
-    if len(nomes) == 1:
-        quem = nomes[0]
-    elif len(nomes) == 2:
-        quem = f"{nomes[0]} & {nomes[1]}"
-    else:
-        quem = f"{nomes[0]} et al."
-    return f"{quem} ({s['ano']})"
+    return f"{autoria_exibida(s['autores'])} ({s['ano']})"
 
 
 def _situacao(item):

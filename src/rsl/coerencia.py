@@ -14,7 +14,7 @@ from .erros import DadosInvalidos, ProtocoloInvalido
 from .derivado import base_derivada
 from .flexao import le_excecoes, orfas
 from .geracao import candidatos, problemas_atribuicao, problemas_str
-from .leitura import LINHAS
+from .leitura import LINHAS, confere_referencia_curta, referencia_curta_sugerida
 from .markdown import normaliza
 from .saida import Saida, mais_grave
 
@@ -209,6 +209,12 @@ def conferir(ctx):
     for e in d["sementes"]:
         if not e["titulo"] or len(e["titulo"]) < 12:
             problemas.append(f"semente {e['id']}: título não legível ({e['titulo']!r})")
+        motivo = confere_referencia_curta(e)
+        if motivo:
+            problemas.append(f"semente {e['id']}: referencia_curta "
+                             f"{e['referencia_curta']!r} não confere com o item do Zotero — "
+                             f"{motivo}; forma sugerida: "
+                             f"{referencia_curta_sugerida(e['zotero'])!r}")
 
     resultado = Resultado(Problema(p) for p in problemas)
     resultado += problemas_classificacao(ctx, d)

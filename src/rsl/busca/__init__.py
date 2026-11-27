@@ -10,8 +10,8 @@ composição, a executada, a sonda, o recorte e os limiares vêm do protocolo
 Corpus: a derivação, o conjunto derivado da fidelidade e a aderência leem só as execuções
 registradas da executada; a sonda e as execuções diretas das expressões de conferência ficam
 de fora, e cada comando relata as lidas e as deixadas de fora, com o motivo. A sensibilidade
-lê a executada e a sonda, cada uma pela sua execução; a fidelidade lê a execução direta pelo
-arquivo que recebe.
+lê a executada e a sonda, cada uma pela sua execução; a fidelidade lê a execução direta do
+arquivo que recebe ou, sem ele, da execução registrada da expressão na base.
 
 Vocabulário do casamento local: em cada base, os termos da string composta para ela (a mesma
 composição que gera a consulta do procedimento de busca, com as formas de número e o radical
@@ -24,8 +24,9 @@ o teste de fidelidade. As contagens que produz são DERIVADAS e devem ser declar
 nas contagens da busca e no relatório.
 
 Entradas (caminhos do config.toml): o protocolo; o registro de execuções (`[dados]
-registro`), escrito por `busca registrar`; o arquivo de sementes (`[dados] sementes`); o
-arquivo de cada execução registrada, intacto, onde estiver.
+registro`), escrito por `busca registrar`; o arquivo de sementes (`[documentos]
+sementes`); a cópia da coleção do Zotero (`[dados] zotero`); o arquivo de cada execução
+registrada, intacto, onde estiver.
 
 Saídas (`[saidas]` do config.toml): registros, contagens da busca, ordem de triagem,
 fidelidade por expressão e sensibilidade por base.

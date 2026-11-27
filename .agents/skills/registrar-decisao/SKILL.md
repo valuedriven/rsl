@@ -28,7 +28,11 @@ deixa o portfólio incoerente com a expressão que o produziu.
 **Só decisão arquitetural da revisão** — questão, escopo, critérios, método, estratégia
 de busca, emenda do protocolo. Decisão de instrumento, de ferramenta ou de redação,
 curadoria e manutenção de artefato e correção de defeito **não se registram**: o
-artefato corrigido e o controle de versão bastam.
+artefato corrigido e o controle de versão bastam. Também não se registram o resultado de
+sondagem que não muda expressão — vai ao registro de execução e à fonte do procedimento —,
+a constatação de estado ("as decisões já estão aplicadas", "nada falta") e o encerramento de
+pendência que não decide nada de arquitetura. Teste: se a entrada só relata o que se mediu
+ou constatou, não é decisão.
 
 A entrada é curta, o mínimo que um leitor precisa para entender a decisão:
 

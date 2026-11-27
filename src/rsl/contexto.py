@@ -1,6 +1,6 @@
 """Contexto explícito de uma execução: a configuração, o texto do protocolo, dos
-procedimentos de busca gerados, da fonte de cada procedimento, do arquivo de sementes e do
-arquivo de exceções de flexão.
+procedimentos de busca gerados, da fonte de cada procedimento, do arquivo de sementes, do
+arquivo de exceções de flexão e da cópia da coleção do Zotero.
 
 O subcomando cria o contexto e o passa às funções; não há estado de módulo. O autoteste
 cria contextos sobre cópias em memória (texto alterado, procedimento de busca alterado, configuração
@@ -15,7 +15,7 @@ _NAO_LIDA = object()
 
 class Contexto:
     def __init__(self, cfg, texto=None, procedimentos=None, sementes=None, fontes=None,
-                 flexoes=None, validacao=_NAO_LIDA):
+                 flexoes=None, validacao=_NAO_LIDA, zotero=None):
         self.config = cfg
         self._texto = texto
         self._procedimentos = dict(procedimentos or {})
@@ -23,6 +23,7 @@ class Contexto:
         self._fontes = dict(fontes or {})
         self._flexoes = flexoes
         self._validacao = validacao
+        self._zotero = zotero
         self._protocolo = None
 
     @classmethod
@@ -101,6 +102,15 @@ class Contexto:
                                      f"ilegível ({e})") from None
         return self._validacao
 
+    @property
+    def zotero(self):
+        """A cópia da coleção do Zotero (`[dados] zotero`): a em memória, ou a do arquivo.
+        DadosInvalidos se ausente ou ilegível, com a indicação de `sementes copiar`."""
+        if self._zotero is None:
+            from .zotero import le_copia                            # noqa: PLC0415
+            self._zotero = le_copia(self.config.caminho("dados.zotero"))
+        return self._zotero
+
     def protocolo(self):
         """O protocolo lido, uma vez por contexto (ProtocoloInvalido se ilegível)."""
         if self._protocolo is None:
@@ -112,7 +122,8 @@ class Contexto:
     def _copia(self, **mudou):
         atual = {"cfg": self.config, "texto": self._texto, "procedimentos": self._procedimentos,
                  "sementes": self._sementes, "fontes": self._fontes,
-                 "flexoes": self._flexoes, "validacao": self._validacao}
+                 "flexoes": self._flexoes, "validacao": self._validacao,
+                 "zotero": self._zotero}
         atual.update(mudou)
         return Contexto(**atual)
 
@@ -136,6 +147,10 @@ class Contexto:
 
     def com_sementes(self, texto):
         return self._copia(sementes=texto)
+
+    def com_zotero(self, doc):
+        """Cópia com a cópia da coleção do Zotero em memória (dict já lido)."""
+        return self._copia(zotero=doc)
 
     def com_config(self, cfg):
         return self._copia(cfg=cfg)

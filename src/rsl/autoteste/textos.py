@@ -150,6 +150,9 @@ def _valor_toml(v):
         return "true" if v else "false"
     if isinstance(v, list):
         return "[" + ", ".join(_valor_toml(x) for x in v) + "]"
+    if isinstance(v, dict):
+        return "{ " + ", ".join(f"{json.dumps(k, ensure_ascii=False)} = {_valor_toml(x)}"
+                                for k, x in v.items()) + " }" if v else "{}"
     if isinstance(v, str):
         return json.dumps(v, ensure_ascii=False)
     return str(v)
@@ -157,7 +160,7 @@ def _valor_toml(v):
 
 def toml_de(itens, chave):
     """Texto TOML de uma lista de itens `[[chave]]` (textos, listas de textos, números,
-    booleanos)."""
+    booleanos e tabelas embutidas)."""
     blocos = []
     for item in itens:
         blocos.append(f"[[{chave}]]\n" +
