@@ -8,7 +8,8 @@ motivo ou com outro código faz o autoteste falhar; mutação que não se aplica
 
 Grupos executados numa só chamada, cada um com a sua contagem: defeitos injetados no
 protocolo, precedência, configuração, arquivo de sementes, leitura estrutural que aprova,
-planejamento da validação, cliente TemaTres e reabertura, arquivos alimentados, cobertura por base, fonte do
+planejamento da validação, cliente TemaTres e reabertura, classificação do controle
+terminológico, registro da validação, arquivos alimentados, cobertura por base, fonte do
 procedimento, geração dos procedimentos, sondagens, consulta de sondagem por
 referência, flexão dos termos,
 composição da derivação, aderência sobre o conjunto, casamento local pelos termos da base,
@@ -127,6 +128,7 @@ def grupos():
         ("planejamento da validação", validacao.casos),
         ("cliente TemaTres e reabertura", validacao.cliente),
         ("classificação do controle terminológico", validacao.classificacao),
+        ("registro da validação", validacao.registros),
         ("conferências dos arquivos alimentados", dados.casos),
         ("geração das strings", geracao.casos),
         ("cobertura por base, sobre a fonte", derivado.casos),
@@ -141,6 +143,9 @@ def grupos():
         ("corpus da derivação é a executada", busca.corpus),
         ("anatomia da perda", busca.anatomia),
         ("análise da sensibilidade", busca.sensibilidade_analise),
+        ("exportação do cache, sem consultar o Zotero", busca.exportacao_do_cache),
+        ("leitura RIS do original e da reexportação do Zotero", busca.leitor_ris),
+        ("identificador da execução", busca.identificador),
         ("gramática do protocolo", gramatica.casos),
         ("catálogo de apoio", catalogo.casos),
         ("nomes antigos recusados", nomes_antigos.casos),

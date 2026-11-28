@@ -1,1 +1,1 @@
-"""Validação terminológica assistida: planejamento, planilha, clientes e cliente HTTP."""
+"""Validação terminológica assistida: planejamento, registros, clientes e cliente HTTP."""

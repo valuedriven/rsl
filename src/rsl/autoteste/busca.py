@@ -21,8 +21,9 @@ from ..busca.composicao import grupos_em_facetas, prova_da_composicao, satisfaz_
 from ..busca.derivacao import (carrega_facetas, derivar, facetas_atingidas, padrao,
                                texto_do, vocabulario_da_base)
 from ..busca.fidelidade import fidelidade
-from ..busca.leitores import SEPARADOR_VALORES, le_wos_txt
-from ..busca.registro import chave_dedup
+from ..busca.leitores import SEPARADOR_VALORES, TIPOS_RIS, le_ris, le_wos_txt
+from ..busca.registro import OBTER_DO_ZOTERO, chave_dedup, identificador_execucao
+from ..busca.sensibilidade import sensibilidade
 from ..busca.simulacao import analisa, valida_termos
 from ..busca.simulacao import candidatos as candidatos_da_amostra
 from ..config import Configuracao
@@ -981,3 +982,145 @@ def sensibilidade_analise(ctx, g):
             bx, sigla, [(sorted(b.ancoras)[0], termo)]))
         g.testa("faceta âncora recusada com USO", cod == Saida.USO and "âncora" in erro,
                 f"{cod.name} {erro[:120]}")
+
+
+@contextlib.contextmanager
+def _sem_zotero(chamadas):
+    """Todo pedido de rede e toda construção de cliente do Zotero são registrados e falham:
+    o caso prova que as análises não consultam o Zotero."""
+    import urllib.request                                           # noqa: PLC0415
+    from .. import zotero as Z                                      # noqa: PLC0415
+    antes_abrir, antes_cliente = urllib.request.urlopen, Z.cliente
+
+    def abrir(req, *a, **k):
+        chamadas.append(getattr(req, "full_url", str(req)))
+        raise AssertionError("pedido de rede durante a análise")
+
+    def cliente(*a, **k):
+        chamadas.append("zotero.cliente")
+        raise AssertionError("cliente do Zotero construído durante a análise")
+    urllib.request.urlopen, Z.cliente = abrir, cliente
+    try:
+        yield
+    finally:
+        urllib.request.urlopen, Z.cliente = antes_abrir, antes_cliente
+
+
+def exportacao_do_cache(ctx, g):
+    """Execução registrada com `identificador`: a exportação é lida do cache em
+    `[dados] execucoes`, pelo ponto único de resolução. Cache vazio é DADOS, nomeando a
+    execução e a obtenção do Zotero, sem pedido ao Zotero; com o arquivo no cache, a mesma
+    derivação passa (controle)."""
+    from ..dados import problemas_registro                         # noqa: PLC0415
+    b, sigla, motivos = _base_que_compoe(ctx)
+    if sigla is None:
+        g.nao_executa("nenhuma base com composição legível — " + "; ".join(motivos),
+                      quantos=5)
+        return
+    bd = b.bd_de[sigla]
+    executados = [(f"Registro sintetico {k} do cache no autoteste", b.ano_min,
+                   f"10.0000/autoteste.cache.{k}") for k in (1, 2)]
+    ids = {"EX1": "a1b2c3d4e5f6", "EX2": "f6e5d4c3b2a1"}
+    with tempfile.TemporaryDirectory() as tmp:
+        pasta = pathlib.Path(tmp)
+        registro = {"bases": {x["id"]: {"base": x["sigla"], "execucoes": []}
+                              for x in b.d["bases"]}}
+        registro["bases"][bd]["execucoes"] = [
+            {"id": "EX1", "expressao": b.executada, "identificador": ids["EX1"],
+             "registros_lidos": len(executados), "status": "valida"},
+            {"id": "EX2", "expressao": b.sonda, "identificador": ids["EX2"],
+             "registros_lidos": len(executados), "status": "valida"}]
+        (pasta / "registro.json").write_text(json.dumps(registro), encoding="utf-8")
+        dado = copy.deepcopy(ctx.config.dado)
+        dado["dados"].update(registro=str(pasta / "registro.json"),
+                             temporarios=str(pasta / "tmp"),
+                             execucoes=str(pasta / "tmp" / "execucoes"))
+        dado["saidas"]["pasta"] = str(pasta / "saidas")
+        cfg = Configuracao(dado, ctx.config.arquivo)
+        cx = ctx.com_config(cfg)
+        bx = Busca(cx)
+        chamadas = []
+        with _sem_zotero(chamadas):
+            cod_d, _, erro_d = _roda_analise(lambda: derivar(bx))
+            cod_s, _, erro_s = _roda_analise(lambda: sensibilidade(bx, sigla))
+            problemas = problemas_registro(cx, registro, [x["id"] for x in b.d["bases"]])
+        esperado = cfg.caminho("dados.execucoes") / sigla / f"{ids['EX1']}.ris"
+        g.testa("cache vazio: `busca derivar` sai com DADOS, nomeia a execução e indica a "
+                "obtenção do Zotero",
+                cod_d == Saida.DADOS and f"{bd}/EX1" in erro_d and OBTER_DO_ZOTERO in erro_d
+                and esperado.name in erro_d, f"{cod_d.name} {erro_d[:160]}")
+        g.testa("cache vazio: `conferencia sensibilidade` sai com DADOS e indica a obtenção",
+                cod_s == Saida.DADOS and OBTER_DO_ZOTERO in erro_s,
+                f"{cod_s.name} {erro_s[:160]}")
+        g.testa("cache vazio: `dados conferir` relata a execução e a obtenção do Zotero",
+                any(f"{bd}/EX1" in x and OBTER_DO_ZOTERO in x for x in problemas),
+                f"{problemas[:1]}")
+        g.testa("cache vazio: nenhum pedido ao Zotero nem cliente construído",
+                not chamadas, f"{chamadas[:2]}")
+        prova = []
+        with _sem_zotero(prova):
+            from .. import zotero as Z                              # noqa: PLC0415
+            try:
+                Z.cliente(cx)
+            except AssertionError:
+                pass
+        g.testa("o detector registra a construção de cliente do Zotero (sem isso, o caso acima "
+                "nada provaria)", bool(prova), "nada registrado")
+        esperado.parent.mkdir(parents=True)
+        esperado.write_text(_ris(executados), encoding="utf-8")
+        (esperado.parent / f"{ids['EX2']}.ris").write_text(_ris(executados),
+                                                           encoding="utf-8")
+        with _sem_zotero(chamadas):
+            cod_c, saida_c, erro_c = _roda_analise(lambda: derivar(bx))
+        g.testa("controle: com a exportação no cache (<execucoes>/<sigla>/<identificador>.ris)"
+                ", a mesma derivação lê os registros, sem pedido ao Zotero",
+                cod_c == Saida.OK and not chamadas
+                and f"{len(executados)} registros" in saida_c, f"{cod_c.name} {erro_c[:160]}")
+
+
+def leitor_ris(ctx, g):
+    """Leitura RIS do original da base e da reexportação do Zotero: BOM inicial, autores em
+    `A1`, título dos anais em `C3`, só o primeiro `DO` e o tipo na forma canônica. Cada caso
+    tem o controle que mostra o que o defeito faria."""
+    bom = "\ufeffTY  - JOUR\nTI  - Primeiro registro com BOM\nER  - \n"
+    r = le_ris(bom)
+    g.testa("BOM inicial: o TY do primeiro registro é lido",
+            len(r) == 1 and r[0]["tipo"] == "JOUR", f"{r[:1]}")
+    g.testa("controle do BOM: sem retirá-lo, a expressão das tags não casaria a primeira linha",
+            re.match(r"^([A-Z][A-Z0-9])\s+-\s?(.*)$", bom.splitlines()[0]) is None
+            and re.match(r"^([A-Z][A-Z0-9])\s+-\s?(.*)$",
+                         bom.lstrip("\ufeff").splitlines()[0]) is not None,
+            "a primeira linha casaria mesmo com o BOM")
+    r = le_ris("TY  - CHAP\nAU  - Eybers, OO\nA1  - Muller, A\nTI  - Capítulo\n"
+               "T2  - Livro\nDO  - 10.1/a.ch1\nDO  - 10.1/a\nER  - \n")[0]
+    g.testa("`A1` entra nos autores, depois de `AU`",
+            r["autores"] == f"Eybers, OO{SEPARADOR_VALORES}Muller, A", r["autores"])
+    g.testa("só o primeiro `DO` vale, e a chave de deduplicação sai dele",
+            r["doi"] == "10.1/a.ch1" and chave_dedup(r) == "doi:10.1/a.ch1", r["doi"])
+    conf = le_ris("TY  - CONF\nTI  - Trabalho\nC3  - Anais do Autoteste\nER  - \n")[0]
+    g.testa("`C3` (título dos anais na exportação do Zotero) é a fonte",
+            conf["fonte"] == "Anais do Autoteste", conf["fonte"])
+    tipos = {x: le_ris(f"TY  - {x}\nTI  - T\nER  - \n")[0]["tipo"]
+             for x in ("CPAPER", "CONF", "CHAP", "label.ris.referenceType.BOOK_CHAPTER", "JOUR")}
+    g.testa("tipo canônico: CONF = CPAPER, rótulo de capítulo da Scopus = CHAP, JOUR intacto",
+            tipos == {"CPAPER": "CPAPER", "CONF": "CPAPER", "CHAP": "CHAP",
+                      "label.ris.referenceType.BOOK_CHAPTER": "CHAP", "JOUR": "JOUR"}
+            and set(TIPOS_RIS.values()) <= {"CPAPER", "CHAP"}, f"{tipos}")
+
+
+def identificador(ctx, g):
+    """Identificador da execução (D4): indiferente à ordem dos registros, diferente com um
+    registro a mais e com outra data e hora; 12 hexadecimais."""
+    regs = le_ris(_ris([(f"Registro sintetico {k}", 2020, f"10.0000/autoteste.id.{k}")
+                        for k in range(5)]))
+    base = identificador_execucao("wos", "EB4", "2026-11-25T20:54:46-03:00", regs)
+    g.testa("identificador: 12 hexadecimais",
+            len(base) == 12 and all(c in "0123456789abcdef" for c in base), base)
+    g.testa("identificador indiferente à ordem dos registros",
+            identificador_execucao("wos", "EB4", "2026-11-25T20:54:46-03:00",
+                                   list(reversed(regs))) == base)
+    g.testa("identificador muda com um registro a mais",
+            identificador_execucao("wos", "EB4", "2026-11-25T20:54:46-03:00",
+                                   regs + regs[:1]) != base)
+    g.testa("identificador muda com a mesma lista em outra data e hora",
+            identificador_execucao("wos", "EB4", "2026-11-26T20:54:46-03:00", regs) != base)

@@ -4,7 +4,7 @@
 
 ### Questão geral de revisão
 
-- QGR: Como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento (P), propostos, especificados, aplicados ou avaliados na literatura científica e técnica internacional, estruturam e representam, no domínio educacional (Co), as práticas do processo de ensino-aprendizagem e os fatores situacionais associados à sua aplicação (I), e quais são suas características quanto à cobertura conceitual, à granularidade e ao grau de formalização (O)?
+- QGR: Como os modelos conceituais, as ontologias e os demais sistemas de organização do conhecimento (P), propostos, especificados, aplicados ou avaliados na literatura científica e técnica internacional, estruturam e representam, no domínio educacional (Co), as práticas do processo de ensino-aprendizagem e/ou os fatores situacionais associados à sua aplicação (I), e quais são suas características quanto à cobertura conceitual, à granularidade e ao grau de formalização (O)?
 
 A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho ou outcome (O), em adaptação declarada: P designa os artefatos de representação, que são o objeto de interesse, e não uma população de participantes; Co é o domínio educacional; os fatores situacionais integram o fenômeno de interesse (I); O é a qualidade da formalização — cobertura, granularidade e grau de formalização. A conjunção "e" da QGR delimita o recorte da revisão, que examina no conjunto as práticas e os fatores situacionais; a regra de inclusão de cada estudo é a disjunção "e/ou" do CE6.
 
@@ -30,7 +30,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 ### CT1 (FCT1) 
 | Termo    | pt | en | es |
 | ----- | ----- | ----- | ----- |
-| *Termo livre* | ontologia, modelo conceitual, sistema de organização do conhecimento | knowledge representation, knowledge organization, conceptual model, knowledge organization system | representación del conocimiento, organización del conocimiento, modelo conceptual, sistema de organización del conocimiento |
+| *Termo livre* | vocabulário controlado, taxonomia, thesaurus, tesauro, esquema de classificação, ontologia, modelo conceitual, modelo semântico, framework conceitual, sistema de organização do conhecimento | knowledge representation, knowledge organization, conceptual model, knowledge organization system | representación del conocimiento, organización del conocimiento, modelo conceptual, sistema de organización del conocimiento |
 | *Descritores correspondentes* | representação do conhecimento, organização do conhecimento, ontologias | ontology | ontología |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
@@ -44,7 +44,7 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 ### CT3 (FCT3)
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
-| *Termo livre* | prática de ensino, prática instrucional, prática docente, técnica de ensino, técnica instrucional, técnica docente | teaching practice, instructional practice, teacher practice, teaching technique, instructional technique | práctica de enseñanza, práctica instruccional, práctica docente, técnica de enseñanza, técnica instruccional, técnica docente |
+| *Termo livre* | prática de ensino, prática educacional, prática instrucional, prática docente, técnica de ensino, técnica instrucional, técnica docente, atividade de ensino, atividade educacional, atividade instrucional, atividade docente, intervenção de ensino, intervenção educacional, intervenção instrucional, intervenção docente | teaching practice, instructional practice, teacher practice, teaching technique, instructional technique | práctica de enseñanza, práctica instruccional, práctica docente, técnica de enseñanza, técnica instruccional, técnica docente |
 | *Descritores correspondentes* | métodos de ensino | educational practices, teaching methods | método de enseñanza |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
@@ -69,9 +69,9 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 
 | ID String | Faceta | String | 
 | :---: | :---- | :---- |
-| STR1 | FCT1  | ("ontologia" OR "modelo conceitual" OR "representação do conhecimento" OR "organização do conhecimento" OR "ontologias" OR "knowledge representation" OR "knowledge organization" OR "conceptual model" OR "ontology" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "ontología") |
+| STR1 | FCT1  | ("vocabulário controlado" OR "taxonomia" OR "thesaurus" OR "tesauro" OR "esquema de classificação" OR "ontologia" OR "modelo conceitual" OR "modelo semântico" OR "framework conceitual" OR "representação do conhecimento" OR "organização do conhecimento" OR "ontologias" OR "knowledge representation" OR "knowledge organization" OR "conceptual model" OR "ontology" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "ontología") |
 | STR2 | FCT2 | ("educacional" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação" OR "educational" OR "teaching" OR "learning" OR "teaching-learning" OR "education" OR "enseñanza" OR "aprendizaje" OR "enseñanza-aprendizaje" OR "educación") |
-| STR3 | FCT3 | ("prática de ensino" OR "prática instrucional" OR "prática docente" OR "técnica de ensino" OR "técnica instrucional" OR "técnica docente" OR "métodos de ensino" OR "teaching practice" OR "instructional practice" OR "teacher practice" OR "teaching technique" OR "instructional technique" OR "educational practices" OR "teaching methods" OR "práctica de enseñanza" OR "práctica instruccional" OR "práctica docente" OR "técnica de enseñanza" OR "técnica instruccional" OR "método de enseñanza") |
+| STR3 | FCT3 | ("prática de ensino" OR "prática educacional" OR "prática instrucional" OR "prática docente" OR "técnica de ensino" OR "técnica instrucional" OR "técnica docente" OR "atividade de ensino" OR "atividade educacional" OR "atividade instrucional" OR "atividade docente" OR "intervenção de ensino" OR "intervenção educacional" OR "intervenção instrucional" OR "intervenção docente" OR "métodos de ensino" OR "teaching practice" OR "instructional practice" OR "teacher practice" OR "teaching technique" OR "instructional technique" OR "educational practices" OR "teaching methods" OR "práctica de enseñanza" OR "práctica instruccional" OR "práctica docente" OR "técnica de enseñanza" OR "técnica instruccional" OR "método de enseñanza") |
 | STR4 | FCT4 | ("contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fator situacional" OR "ambiente educacional" OR "fatores de rendimento escolar" OR "educational context" OR "learning context" OR "contextual factor" OR "situational factor" OR "educational environment" OR "contexto educativo" OR "contexto de aprendizaje" OR "factor contextual" OR "factor situacional" OR "entorno educativo") |
 
 ## Expressões de busca
@@ -104,7 +104,6 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 | CE7 | Domínio de aplicação | Incluir | Artefatos propostos para, aplicados a ou avaliados no domínio educacional, em qualquer nível ou modalidade de ensino — educação básica, superior, profissional e tecnológica, educação a distância e aprendizagem em ambientes digitais. |  | As lacunas a serem enunciadas ao final endereçam esse domínio e precisam ser constatadas por comparação entre as soluções nele existentes, e não inferidas por ausência. |
 | CE8 | Domínio de aplicação | Excluir | Artefatos de domínios diversos do educacional. |  | Preserva-se a densidade probatória do portfólio e a comensurabilidade entre os itens analisados. Soluções de outros domínios, quando citadas pelos estudos incluídos como modelos reutilizados, alinhados ou estendidos, são registradas no fichamento como referência de reuso, sem integrar o portfólio. |
 | CE9 | Outros critérios | Excluir | Editoriais, cartas, erratas, resenhas, apresentações de dossiê, resumos simples e expandidos sem texto completo, e versões preliminares quando houver versão posterior do mesmo trabalho — mantém-se a mais completa. |  | Documentos sem conteúdo analítico suficiente para o fichamento. |
-| CE10 | Fator de impacto | Não aplicável | Fator de impacto dos estudos e dos veículos de publicação. |  | Critério previsto no modelo RS Banyan (Módulo 3, Etapa 1), registrado para fins documentais; não é aplicado na seleção. |
 
 ### Fontes de informação
 
@@ -173,3 +172,63 @@ Não se aplica como fonte autônoma de inclusão. Os itens de acervo pessoal —
 | F5 | Agente de IA com instruções, skills e MCPs versionados | Apoio assistido conforme P8. | Registrar versão, prompt, saída e conferência. |
 | F6 | Software de cálculo do Cohen’s Kappa | Cálculo de Kappa, percentual e tabelas. | Registrar fórmula, software e versão. |
 | F7 | Editor de texto e planilhas | Organização de registros, planilhas e matrizes. | Preservar versões dos arquivos. |
+
+
+## Parametros complementares
+
+### Estrutura de extração recomendada
+
+Grupo	Dimensão	Informações a extrair
+G1	Identificação e caracterização	Referência, ano, autores, tipo documental, objetivo e domínio de aplicação.
+G2	Caracterização do artefato	Nome, tipo, finalidade, escopo, origem, versão e situação de desenvolvimento.
+G3	Representação das práticas	Conceitos, definições, categorias, granularidade e relações entre práticas.
+G4	Representação dos fatores situacionais	Tipos de fatores, propriedades, categorias e relações com práticas, inclusive a população-alvo e os recursos disponíveis declarados no artefato como fatores situacionais.
+G5	Formalização e estrutura semântica	Linguagem, formalismo, modelos, axiomas, restrições, hierarquias e relações semânticas.
+G6	Integração e interoperabilidade	Integração entre práticas e contextos, alinhamentos, reutilização, dependências e compatibilidade.
+G7	Limitações e avaliação	Limitações relatadas, lacunas identificadas, validação, aplicação, avaliação e evidências de utilização.
+
+### Cobertura conceitual
+
+- Práticas educacionais.
+- Estratégias.
+- Métodos.
+- Atividades.
+- Características dos alunos.
+- Recursos.
+- Condições institucionais.
+- Restrições contextuais.
+
+
+### Granularidade
+
+Representação genérica de práticas pedagógicas.
+Representação de categorias específicas de práticas.
+Representação de práticas individuais.
+Representação de práticas com propriedades, condições e relações detalhadas.
+
+### Grau de formalização
+
+Nível	Caracterização
+F1	Representação textual ou descritiva estruturada.
+F2	Representação conceitual com categorias e relações explícitas.
+F3	Representação formal estruturada, com semântica definida.
+F4	Formalização computacional com restrições, axiomas ou regras verificáveis.
+
+### Parâmetros para operacionalização da QER4 
+
+- Ausência de conceitos relevantes.
+- Ausência de relações entre conceitos.
+- Ausência de representação dos fatores situacionais.
+- Baixa granularidade.
+- Insuficiência de formalização.
+- Incompatibilidade entre modelos.
+- Ausência de mecanismos de validação.
+
+### Tratamento de categorias de documento 
+
+Categoria - Tratamento
+Estudos primários elegíveis	- Corpus principal
+Revisões anteriores	- Fontes suplementares
+Especificações técnicas	- Corpus principal ou suplementar, conforme regra explícita
+Obras seminais anteriores a 2017	- Fundamentação teórica
+Versões preliminares de estudos	- Substituídas pela versão mais completa

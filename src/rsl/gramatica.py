@@ -356,7 +356,7 @@ SEPARADOR_TERMOS = r"\s*,\s*"
 # Forma antiga da lista de termos (`\- termo \- termo`): reprova, em vez de virar um termo só.
 SEPARADOR_ANTIGO = r"(?:^|\s)\\-\s"
 # As linhas classificam o termo pela natureza dele, e a linha de cada termo resulta da
-# decisão do ReT na planilha de validação (DECISAO_RET, abaixo).
+# decisão do ReT no arquivo de decisões da validação (DECISAO_RET, abaixo).
 R_LIVRE = RotuloLinha("livre", P, T_QUADRO, "Termo livre", "livre",
                       descricao="linha ausente ou repetida reprova")
 R_DESCRITORES = RotuloLinha("descritores", P, T_QUADRO, "Descritores correspondentes",
@@ -370,7 +370,7 @@ LINHAS_CT = (R_LIVRE, R_DESCRITORES, R_RELACIONADOS)
 # documenta a relação do termo com o vocabulário controlado e não entra na STR (decisão do
 # pesquisador, 2026-11-24).
 LINHAS_STR = (R_LIVRE, R_DESCRITORES)
-# Domínio de `decisao_ReT` na planilha de validação, sem distinção de caixa: decisão → linha
+# Domínio de `decisao_ReT` no arquivo de decisões, sem distinção de caixa: decisão → linha
 # do CT. O vazio é "sem decisão". Entre os instrumentos do termo vale PRECEDENCIA_LINHA:
 # descritor em algum, senão sinônimo ou relacionado em algum, senão termo livre.
 DECISAO_RET = {"descritor": R_DESCRITORES.interno,

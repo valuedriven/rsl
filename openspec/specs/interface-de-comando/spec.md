@@ -197,12 +197,37 @@ O nome de cada arquivo de entrada e de saída SHALL vir do `config.toml`.
 
 #### Scenario: Planilha de validação
 - **WHEN** a configuração é a do projeto
-- **THEN** a planilha de validação se chama `validacao_terminologica.csv`
+- **THEN** o arquivo de decisões se chama `validacao_terminologica.toml` e o resultado
+  técnico se chama `consulta_terminologica.json`
 
 #### Scenario: Ação nominal recusada
 - **WHEN** se tenta registrar um comando cuja ação é substantivo, como a sonda do grupo
   `termos`
 - **THEN** o nome canônico é `termos sondar`, e o substantivo não é aceito como comando
+
+### Requirement: Configuração dos registros da validação
+`[dados] validacao` e `[dados] consulta_terminologica` SHALL constar do `config.toml` e
+apontar, respectivamente, o arquivo de decisões e o resultado técnico da validação. A seção
+`[planilha]` MUST reprovar com mensagem que nomeia as duas chaves novas.
+
+#### Scenario: Chaves presentes
+- **WHEN** a configuração do projeto é lida
+- **THEN** `[dados] validacao` resolve o arquivo de decisões e
+  `[dados] consulta_terminologica` resolve o resultado técnico
+
+#### Scenario: Chave ausente
+- **WHEN** o `config.toml` não traz `[dados] consulta_terminologica`
+- **THEN** qualquer subcomando que lê a configuração termina com CONFIGURACAO, nomeando a
+  chave
+
+#### Scenario: Seção retirada
+- **WHEN** o `config.toml` traz a seção `[planilha]`
+- **THEN** qualquer subcomando que lê a configuração termina com CONFIGURACAO, e a mensagem
+  nomeia `[dados] validacao` e `[dados] consulta_terminologica`
+
+#### Scenario: Caminho alterado
+- **WHEN** o pesquisador muda `[dados] validacao`
+- **THEN** `termos exportar` grava no caminho novo, e o caminho antigo não é lido
 
 ### Requirement: Nomes antigos recusados
 Os nomes antigos de comando renomeados pela change `namespace-de-comandos-e-skills` MUST NOT

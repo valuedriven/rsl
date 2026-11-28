@@ -95,15 +95,31 @@ def problemas_bases(ctx, d, igualdade=True):
     return problemas
 
 
+def problemas_decisoes_fora_do_protocolo(d, tabelas):
+    """Decisão cuja chave não é do protocolo: o registro está defasado e se sincroniza por
+    `termos exportar`, que a remove. Não se mantém histórico de termos."""
+    from .termos.registro import chave, chaves_do_protocolo      # noqa: PLC0415
+    validas = {chave(fid, idioma, termo, i["sigla"])
+               for fid, idioma, termo, i in chaves_do_protocolo(d)}
+    saida = []
+    for r in tabelas or []:
+        if chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"]) not in validas:
+            saida.append(
+                f"arquivo de decisões: tabela de {r['termo']!r} ({r['faceta']}, "
+                f"{r['idioma']}, {r['instrumento']}) fora do protocolo — rode  "
+                f"python3 -m rsl termos exportar")
+    return saida
+
+
 def problemas_classificacao(ctx, d):
     """A linha de cada termo do CT confere com a decisão do ReT (`termos/decisao.py`).
 
     Cada termo tem uma única linha esperada por idioma: a repetição entre linhas do mesmo CT
-    e idioma reprova. Termo fora da linha esperada reprova; sem planilha a linha esperada é
-    "Termo livre", e o termo em outra linha reprova, porque o protocolo afirmaria uma
-    classificação não verificada. Planilha ilegível não é planilha ausente: DADOS.
+    e idioma reprova. Termo fora da linha esperada reprova; sem arquivo de decisões a linha
+    esperada é "Termo livre", e o termo em outra linha reprova, porque o protocolo afirmaria
+    uma classificação não verificada. Arquivo de decisões ilegível não é ausente: DADOS.
     """
-    from .termos.decisao import ROTULO, esperada, fora_do_dominio, linhas_esperadas, planilha
+    from .termos.decisao import ROTULO, decisoes, esperada, fora_do_dominio, linhas_esperadas
     saida = []
     for f in d["tabelas"]:
         for i in d["idiomas"]:
@@ -120,13 +136,14 @@ def problemas_classificacao(ctx, d):
                         f"{f['ct']} ({', '.join(repr(ROTULO[c]) for c in cs)}); cada termo "
                         f"tem uma única linha"))
     try:
-        linhas = planilha(ctx)
+        tabelas = decisoes(ctx)
     except DadosInvalidos as e:
         return saida + [Problema(str(e), Saida.DADOS)]
-    origem = "pela decisão do ReT" if linhas is not None else \
-        "sem planilha de validação, todo termo é termo livre"
-    saida += [Problema(f"planilha de validação: {x}") for x in fora_do_dominio(linhas or [])]
-    mapa = linhas_esperadas(d, linhas)
+    origem = "pela decisão do ReT" if tabelas is not None else \
+        "sem arquivo de decisões, todo termo é termo livre"
+    saida += [Problema(f"arquivo de decisões: {x}") for x in fora_do_dominio(tabelas or [])]
+    saida += [Problema(x) for x in problemas_decisoes_fora_do_protocolo(d, tabelas)]
+    mapa = linhas_esperadas(d, tabelas)
     for f in d["tabelas"]:
         for i in d["idiomas"]:
             for c in LINHAS:

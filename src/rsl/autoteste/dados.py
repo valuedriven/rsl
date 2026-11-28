@@ -52,10 +52,10 @@ def casos(ctx, g):
             return bool(problemas_registro(ctx, copia, bds))
         return caso
 
-    def execucao_extra(arquivo, lidos):
+    def execucao_extra(arquivo, lidos, **extra):
         return lambda c: c["bases"][bds[0]]["execucoes"].append({
             "id": "EX-autoteste", "expressao": d["executada"], "arquivo": arquivo,
-            "registros_lidos": lidos, "status": "valida"})
+            "registros_lidos": lidos, "status": "valida", **extra})
 
     def so_a_base(alvo, linha):
         """A citação injetada na fonte de `alvo` (nota do primeiro elemento de sintaxe)
@@ -88,6 +88,12 @@ def casos(ctx, g):
         ("execução apontando arquivo de exportação ausente",
          lambda: registro_reprova(execucao_extra(
              f"{cfg.valor('dados.execucoes')}/ausente-autoteste.ris", 1))()),
+        # Com `identificador`, a exportação é a do cache em `[dados] execucoes`, ainda que
+        # `arquivo` aponte arquivo existente: o registro do próprio projeto.
+        ("execução com identificador e exportação ausente do cache de `[dados] execucoes`",
+         lambda: registro_reprova(execucao_extra(
+             relativo(cfg.caminho("dados.registro")), 1,
+             identificador="autoteste0000"))()),
         ("execução com `registros_lidos` que não é inteiro",
          lambda: registro_reprova(execucao_extra(relativo(cfg.caminho("dados.registro")),
                                                  "um"))()),

@@ -7,24 +7,26 @@ para cada instrumento da sua faceta que cubra o seu idioma (`planejamento.py`). 
 `Caminho`; instrumento `Manual` não é consultado, e as suas linhas nascem pendentes de
 validação manual.
 
+O REGISTRO são dois arquivos (`registro.py`): as decisões do ReT (`[dados] validacao`,
+TOML) e o resultado técnico (`[dados] consulta_terminologica`, JSON). Toda resposta bruta é
+gravada na pasta de evidência (`[dados] evidencia`), por instrumento; linha consultada sem
+evidência correspondente é linha inválida.
+
 REABERTURA (`carrega`): linha sem decisão do ReT, de instrumento `Automático`, que esteja
 pendente de validação manual, cuja `url_consultada` não pertença ao endereço resolvido
 vigente, ou que seja termo livre não localizado sem `sugestao_similar` (consultada antes da
 consulta de similaridade) volta a aguardar consulta; a evidência anterior fica na pasta de
 evidência até a reconsulta, que a substitui no mesmo arquivo (o nome vem de instrumento,
-idioma e termo). Linha nessa situação com decisão é preservada e listada na saída. A regra mora na reconstrução da
-planilha: mudar o `Caminho` reabre as linhas afetadas sem passo manual.
+idioma e termo). Linha nessa situação com decisão é preservada e listada na saída. A regra
+mora na reconstrução dos registros: mudar o `Caminho` reabre as linhas afetadas sem passo
+manual.
 
 FRONTEIRA DE USO (protocolo): este módulo RECUPERA e REGISTRA. Não decide.
   - nenhum termo é excluído, reescrito ou incorporado automaticamente;
   - termo não localizado NÃO é erro: é termo livre, e assim é classificado;
   - TR e TE revelados pela consulta entram como CANDIDATOS, nunca nas strings;
-  - a coluna `decisao_ReT` sai em branco: a decisão é do pesquisador, com o VT, e o seu
-    domínio é fechado (`decisao.py`): dela resulta a linha do termo no CT.
-
-O REGISTRO é a própria planilha de validação (`[dados] validacao`). Toda resposta bruta é
-gravada na pasta de evidência (`[dados] evidencia`), por instrumento; linha sem evidência
-correspondente é linha inválida.
+  - o campo `decisao_ReT` fica vazio: a decisão é do pesquisador, com o VT, e o seu domínio
+    é fechado (`decisao.py`): dela resulta a linha do termo no CT.
 
 Fonte externa com erro de rede, bloqueio, captcha, limite ou resposta fora do formato
 interrompe a validação na hora, sem nova tentativa e sem consultar o termo seguinte: o que
@@ -32,32 +34,24 @@ já foi consultado fica gravado, a linha do termo interrompido registra a condi�
 subcomando sai com FONTE_EXTERNA.
 """
 
-import collections
-import csv
 import datetime
-import hashlib
 import json
 import time
 
 from .. import gramatica as G
 from ..config import relativo
-from ..erros import ConfiguracaoInvalida, DadosInvalidos, FonteExterna, Reprovado, Uso
+from ..erros import DadosInvalidos, FonteExterna, Reprovado, Uso
 from ..leitura import endereco, instrumentos_do_termo
-from ..markdown import normaliza
 from ..saida import Saida
+from . import registro as R
 from . import tematres
 from .decisao import fora_do_dominio
 from .planejamento import (STATUS_CANDIDATO, STATUS_MANUAL, STATUS_NAO_LOCALIZADO,
                            estado_inicial)
 
-CAMPOS_DECISAO = ("decisao_ReT", "justificativa_ReT", "data_decisao")
-CAMPOS_RESPOSTA = ("rotulo_autorizado", "forma_no_instrumento", "sugestao_similar",
-                   "uri_conceito",
-                   "equivalentes_USE_UP", "termos_genericos_TG", "termos_especificos_TE",
-                   "termos_relacionados_TR", "nota_de_escopo")
-# Campos que a consulta preenche: limpos quando a linha volta a aguardar consulta.
-CAMPOS_CONSULTA = ("consultado_em", "versao_instrumento", "url_consultada", "status_proposto",
-                   "arquivo_evidencia", "observacao_tecnica") + CAMPOS_RESPOSTA
+CAMPOS_DECISAO = R.CAMPOS_DECISAO
+CAMPOS_RESPOSTA = R.CAMPOS_RESPOSTA
+CAMPOS_TECNICOS = R.CAMPOS_TECNICOS
 # Sem esta coluna, toda linha não localizada pareceria nunca consultada pela similaridade e
 # seria reaberta a cada execução: a configuração que não a traz é recusada.
 COLUNA_SIMILAR = "sugestao_similar"
@@ -68,39 +62,43 @@ def agora():
     return datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 
 
-class Planilha:
-    """A planilha de validação e a pasta de evidência, pelos caminhos da configuração."""
+class Registro:
+    """Os dois registros da validação e a pasta de evidência, pelos caminhos da configuração."""
 
     def __init__(self, ctx):
+        self.ctx = ctx
         self.caminho = ctx.config.caminho("dados.validacao")
+        self.caminho_resultado = ctx.config.caminho("dados.consulta_terminologica")
         self.evidencia = ctx.config.caminho("dados.evidencia")
-        self.campos = list(ctx.config.valor("planilha.campos_validacao"))
-        if COLUNA_SIMILAR not in self.campos:
-            raise ConfiguracaoInvalida(
-                f"planilha.campos_validacao não traz {COLUNA_SIMILAR!r}: sem ela, a linha "
-                f"não localizada já consultada não se distingue da nunca consultada")
-        self.colunas = ["faceta", "faceta_nome", "ancora", "idioma", "termo"] + self.campos
         self.reabertas = 0
         self.preservadas = []      # (termo, instrumento, idioma, motivo, evidência)
         self._relatado = False
 
     @staticmethod
     def chave(faceta, idioma, termo, instrumento):
-        return (str(faceta), idioma, normaliza(termo), instrumento)
+        return R.chave(faceta, idioma, termo, instrumento)
+
+    def decisoes(self):
+        """Tabelas do arquivo de decisões (ou cópia em memória); [] se ausente."""
+        return R.le_decisoes(self.ctx.texto_decisoes, relativo(self.caminho))
+
+    def resultado(self):
+        """Objetos do resultado técnico (ou cópia em memória); [] se ausente."""
+        return R.le_resultado(self.ctx.texto_resultado, relativo(self.caminho_resultado))
 
     def existente(self):
-        """Linhas já registradas, por faceta, idioma, termo normalizado e instrumento."""
-        if not self.caminho.exists():
-            return {}
-        with self.caminho.open(encoding="utf-8-sig", newline="") as fh:
-            return {self.chave(r.get("faceta", ""), r.get("idioma", ""), r.get("termo", ""),
-                               r.get("instrumento", "")): r
-                    for r in csv.DictReader(fh, delimiter=";")}
+        """({chave: decisão}, {chave: linha técnica}) dos registros correntes."""
+        return ({self.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"]): r
+                 for r in self.decisoes()},
+                {self.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"]): r
+                 for r in self.resultado()})
 
-    def grava_evidencia(self, instrumento, chave, payload):
-        pasta = self.evidencia / instrumento
-        pasta.mkdir(parents=True, exist_ok=True)
-        caminho = pasta / (hashlib.sha1(chave.encode("utf-8")).hexdigest()[:16] + ".json")
+    def grava_evidencia(self, instrumento, idioma, termo, payload):
+        """Grava a resposta bruta no caminho calculado por `registro.caminho_evidencia` e
+        devolve o caminho relativo à pasta-mãe da evidência."""
+        caminho = R.caminho_evidencia(self.evidencia, instrumento, idioma, termo)
+        caminho.parent.mkdir(parents=True, exist_ok=True)
+        chave = f"{instrumento}|{idioma}|{termo}"
         caminho.write_text(
             json.dumps({"chave": chave, "recuperado_em": agora(), "payload": payload},
                        ensure_ascii=False, indent=2),
@@ -128,16 +126,16 @@ def motivo_reabertura(v, instrumento):
     return None
 
 
-def carrega(ctx, d, planilha):
-    """O registro reconstruído do protocolo e da planilha existente.
+def carrega(ctx, d, registro):
+    """Os registros reconstruídos do protocolo, das decisões e do resultado técnico.
 
     Termo novo nasce aguardando consulta, ou pendente de validação manual se o instrumento
     é `Manual`; linha já registrada é preservada campo a campo, inclusive decisão do ReT e
     evidência, salvo a reabertura (docstring do módulo). Devolve as linhas na ordem do
     protocolo: faceta, idioma, termo, instrumento; cada uma com o endereço resolvido.
     """
-    planilha.reabertas, planilha.preservadas = 0, []
-    existente = planilha.existente()
+    registro.reabertas, registro.preservadas = 0, []
+    decisoes, resultado = registro.existente()
     info = {f["id"]: f for f in d["facetas"]}
     linhas = []
     for f in d["tabelas"]:
@@ -146,21 +144,27 @@ def carrega(ctx, d, planilha):
             insts = instrumentos_do_termo(d, f["id"], idioma)
             for termo in f["termos"][idioma]:
                 for i in insts:
-                    r = existente.get(planilha.chave(f["id"], idioma, termo, i["sigla"]))
-                    v = {c: ((r.get(c) or "").strip() if r else "") for c in planilha.campos}
+                    k = registro.chave(f["id"], idioma, termo, i["sigla"])
+                    v = {c: "" for c in CAMPOS_TECNICOS + CAMPOS_DECISAO}
+                    dec = decisoes.get(k)
+                    tec = resultado.get(k)
+                    if dec:
+                        v.update({c: dec.get(c, "") for c in CAMPOS_DECISAO})
+                    if tec:
+                        v.update({c: tec.get(c, "") for c in CAMPOS_TECNICOS})
                     v["instrumento"] = i["sigla"]
-                    if r is None:
+                    if tec is None:
                         v.update(estado_inicial(i))
                     elif (motivo := motivo_reabertura(v, i)):
                         if v.get("decisao_ReT"):
-                            planilha.preservadas.append(
+                            registro.preservadas.append(
                                 (termo, i["sigla"], idioma, motivo,
                                  v.get("url_consultada") or v.get("arquivo_evidencia")))
                         else:
-                            for c in CAMPOS_CONSULTA:
+                            for c in CAMPOS_TECNICOS:
                                 v[c] = ""
                             v.update(estado_inicial(i))
-                            planilha.reabertas += 1
+                            registro.reabertas += 1
                     linhas.append({"faceta": f["id"], "faceta_nome": meta.get("nome", ""),
                                    "ancora": "sim" if meta.get("ancora") else "não",
                                    "idioma": idioma, "termo": termo,
@@ -168,44 +172,107 @@ def carrega(ctx, d, planilha):
     return linhas
 
 
-def grava_planilha(planilha, linhas):
-    """Grava o registro na planilha, preservando as linhas fora do protocolo."""
-    planilha.caminho.parent.mkdir(parents=True, exist_ok=True)
-    saida = [{**{k: ln[k] for k in ("faceta", "faceta_nome", "ancora", "idioma", "termo")},
-              **{c: ln["_v"].get(c, "") for c in planilha.campos}} for ln in linhas]
-    chaves = {planilha.chave(l["faceta"], l["idioma"], l["termo"], l["instrumento"])
-              for l in saida}
-    orfaos = [r for k, r in planilha.existente().items() if k not in chaves]
-    with planilha.caminho.open("w", encoding="utf-8-sig", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=planilha.colunas, delimiter=";")
-        w.writeheader()
-        w.writerows(saida)
-        for r in orfaos:
-            w.writerow({c: r.get(c, "") for c in planilha.colunas})
-    manuais = sum(1 for l in saida if l["status_proposto"] == STATUS_MANUAL)
-    a_validar = sum(1 for l in saida if not l["status_proposto"])
-    candidatas = sum(1 for l in saida if l["status_proposto"] == STATUS_CANDIDATO)
-    print(f"{relativo(planilha.caminho)}: {len(saida)} linhas — {a_validar} a validar por "
-          f"cliente automatizado, {manuais} {STATUS_MANUAL}, {candidatas} "
+def _objetos(linhas, d):
+    """Linhas técnicas dos registros reconstruídos, na ordem do protocolo."""
+    tecnicas = []
+    for ln in linhas:
+        v = ln["_v"]
+        i = d["instrumentos"][v["instrumento"]]
+        if R.tem_linha_tecnica(v, i):
+            objeto = {c: v.get(c, "") for c in CAMPOS_TECNICOS}
+            objeto.update({c: ln[c] for c in ("faceta", "idioma", "termo")})
+            objeto["instrumento"] = v["instrumento"]
+            tecnicas.append(objeto)
+    return tecnicas
+
+
+def _decisoes_para_gravar(registro, linhas):
+    """Decisões na ordem do protocolo; tabela de chave fora do protocolo não é gravada.
+
+    Devolve também as tabelas removidas, só para o relato da execução: não se guarda
+    histórico de termos."""
+    lidas = registro.decisoes()
+    por_chave = {registro.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"]): r
+                 for r in lidas}
+    chaves_protocolo = {registro.chave(ln["faceta"], ln["idioma"], ln["termo"],
+                                       ln["_v"]["instrumento"]) for ln in linhas}
+    saida = []
+    for ln in linhas:
+        k = registro.chave(ln["faceta"], ln["idioma"], ln["termo"],
+                           ln["_v"]["instrumento"])
+        r = por_chave.get(k)
+        if r and any((r.get(c) or "").strip() for c in CAMPOS_DECISAO):
+            saida.append(r)
+    removidas = [r for r in lidas if registro.chave(
+        r["faceta"], r["idioma"], r["termo"], r["instrumento"]) not in chaves_protocolo]
+    return saida, removidas
+
+
+def _resumo(registro, linhas, d):
+    manuais = sum(1 for ln in linhas
+                  if d["instrumentos"][ln["_v"]["instrumento"]]["modo"] == G.MODO_MANUAL)
+    a_validar = sum(1 for ln in linhas if not ln["_v"].get("status_proposto"))
+    candidatas = sum(1 for ln in linhas
+                     if ln["_v"].get("status_proposto") == STATUS_CANDIDATO)
+    print(f"{relativo(registro.caminho_resultado)}: {len(linhas)} linhas — {a_validar} a "
+          f"validar por cliente automatizado, {manuais} {STATUS_MANUAL}, {candidatas} "
           f"{STATUS_CANDIDATO}.")
-    if orfaos:
-        print(f"  {len(orfaos)} linha(s) fora do protocolo preservada(s) na planilha — "
-              f"decidir: manter com registro ou retirar à mão.")
-    if planilha._relatado:
+    if registro._relatado:
         return
-    planilha._relatado = True
-    if planilha.reabertas:
-        print(f"  {planilha.reabertas} linha(s) sem decisão voltaram a aguardar consulta "
+    registro._relatado = True
+    if registro.reabertas:
+        print(f"  {registro.reabertas} linha(s) sem decisão voltaram a aguardar consulta "
               f"(pendentes de validação manual, consultadas fora do endereço vigente ou "
               f"não localizadas sem consulta de similaridade); a evidência anterior fica "
-              f"em {relativo(planilha.evidencia)}/ até a reconsulta, que a substitui.")
-    if planilha.preservadas:
-        print(f"  {len(planilha.preservadas)} linha(s) com decisão do ReT tomada sobre "
+              f"em {relativo(registro.evidencia)}/ até a reconsulta, que a substitui.")
+    if registro.preservadas:
+        print(f"  {len(registro.preservadas)} linha(s) com decisão do ReT tomada sobre "
               f"consulta que hoje seria refeita (motivo em cada linha), preservada(s) sem "
               f"reconsulta — decidir se mantêm a decisão:")
-        for termo, sigla, idioma, motivo, evid in planilha.preservadas:
+        for termo, sigla, idioma, motivo, evid in registro.preservadas:
             print(f"    - {termo!r} ({idioma}) em {sigla}: {motivo}; evidência: "
                   f"{evid or 'sem registro'}")
+
+
+def grava_registros(registro, linhas, d):
+    """Grava os dois arquivos, confere a evidência e expurga a evidência de chave retirada."""
+    decisoes, removidas = _decisoes_para_gravar(registro, linhas)
+    tecnicas = _objetos(linhas, d)
+    protocolo_chaves = {registro.chave(ln["faceta"], ln["idioma"], ln["termo"],
+                                       ln["_v"]["instrumento"]) for ln in linhas}
+    removidas_tecnicas = [r for r in registro.resultado()
+                          if registro.chave(r["faceta"], r["idioma"], r["termo"],
+                                            r["instrumento"]) not in protocolo_chaves]
+    chaves_tecnicas = {registro.chave(o["faceta"], o["idioma"], o["termo"],
+                                      o["instrumento"]) for o in tecnicas}
+    sem_consulta = [r for r in decisoes
+                    if registro.chave(r["faceta"], r["idioma"], r["termo"],
+                                      r["instrumento"]) not in chaves_tecnicas]
+    R.confere_evidencia(registro.evidencia, tecnicas)
+    R.grava_decisoes(registro.caminho, decisoes)
+    R.grava_resultado(registro.caminho_resultado, tecnicas)
+    R.expurga(registro.evidencia, R.caminhos_esperados(registro.evidencia, d))
+    _resumo(registro, linhas, d)
+    if sem_consulta:
+        print(f"  {len(sem_consulta)} decisão(ões) sem linha no resultado técnico "
+              f"(consulta não registrada), preservada(s):")
+        for r in sem_consulta:
+            print(f"    - {r['termo']!r} ({r['faceta']}, {r['idioma']}, "
+                  f"{r['instrumento']})")
+    if removidas:
+        print(f"  {len(removidas)} decisão(ões) de termo fora do protocolo removida(s).")
+    if removidas_tecnicas:
+        print(f"  {len(removidas_tecnicas)} linha(s) técnica(s) de termo fora do protocolo "
+              f"removida(s).")
+
+
+def grava_resultado(registro, linhas, d):
+    """Grava só o resultado técnico e a evidência; nunca toca no arquivo de decisões."""
+    tecnicas = _objetos(linhas, d)
+    R.confere_evidencia(registro.evidencia, tecnicas)
+    R.grava_resultado(registro.caminho_resultado, tecnicas)
+    if not registro._relatado:
+        _resumo(registro, linhas, d)
 
 
 def automaticos(d):
@@ -216,8 +283,8 @@ def automaticos(d):
 def validar(ctx, quais, faceta=None):
     """Consulta, um termo por vez, os termos ainda sem estatuto nos instrumentos `quais`."""
     d = ctx.protocolo()
-    planilha = Planilha(ctx)
-    linhas = carrega(ctx, d, planilha)
+    registro = Registro(ctx)
+    linhas = carrega(ctx, d, registro)
     pendentes = [ln for ln in linhas
                  if not ln["_v"].get("status_proposto")
                  and (not faceta or ln["faceta"] == f"{G.I_FCT.prefixo}{faceta}")
@@ -236,7 +303,7 @@ def validar(ctx, quais, faceta=None):
             reg["fetchVocabularyData"] = reg_versao
         except FonteExterna as e:
             v["observacao_tecnica"] = f"CONSULTA INTERROMPIDA em {agora()}: {e}"
-            grava_planilha(planilha, linhas)
+            grava_resultado(registro, linhas, d)
             restantes = len(pendentes) - k
             raise FonteExterna(
                 f"instrumento {inst}, termo {termo!r}: {e}. Validação interrompida sem nova "
@@ -250,18 +317,18 @@ def validar(ctx, quais, faceta=None):
         v["observacao_tecnica"] = obs
         for c in CAMPOS_RESPOSTA:
             v[c] = dados_inst.get(c, "")
-        v["arquivo_evidencia"] = planilha.grava_evidencia(
-            inst.lower(), f"{inst}|{ln['idioma']}|{termo}", reg)
+        v["arquivo_evidencia"] = registro.grava_evidencia(
+            inst, ln["idioma"], termo, reg)
         feitos += 1
         print(f"[{feitos:>3}] {inst:<7} {termo[:48]:<50} {status}")
         if feitos % GRAVA_A_CADA == 0:
-            grava_planilha(planilha, linhas)
+            grava_resultado(registro, linhas, d)
         time.sleep(tematres.PAUSA)
 
-    grava_planilha(planilha, linhas)
-    print(f"\n{feitos} termos consultados. Evidência bruta em {relativo(planilha.evidencia)}/.")
-    print("As colunas decisao_ReT, justificativa_ReT e data_decisao ficam em branco: "
-          "a classificação final e a incorporação de TR/TE são do pesquisador, com o VT.")
+    grava_resultado(registro, linhas, d)
+    print(f"\n{feitos} termos consultados. Evidência bruta em {relativo(registro.evidencia)}/.")
+    print("A validação não altera o arquivo de decisões: a classificação final e a "
+          "incorporação de TR/TE são do pesquisador, com o VT.")
     return Saida.OK
 
 
@@ -286,56 +353,35 @@ def cmd_sonda(ctx, a=None):
 
 
 def cmd_exportar(ctx, a=None):
-    """Reconstrói a planilha a partir do protocolo, sem rede."""
-    planilha = Planilha(ctx)
-    grava_planilha(planilha, carrega(ctx, ctx.protocolo(), planilha))
+    """Reconstrói os dois registros a partir do protocolo, sem rede."""
+    registro = Registro(ctx)
+    d = ctx.protocolo()
+    grava_registros(registro, carrega(ctx, d, registro), d)
     return Saida.OK
 
 
 def cmd_importar(ctx, a=None):
-    """Reconcilia a planilha com o protocolo, preservando decisões e linhas órfãs."""
-    planilha = Planilha(ctx)
-    if not planilha.caminho.exists():
-        raise DadosInvalidos(f"{relativo(planilha.caminho)} não existe. Rode  "
+    """Reconcilia os registros com o protocolo, preservando decisões e retirando a técnica
+    órfã."""
+    registro = Registro(ctx)
+    if not registro.caminho.exists():
+        raise DadosInvalidos(f"{relativo(registro.caminho)} não existe. Rode  "
                              f"python3 -m rsl termos exportar  antes.")
-    linhas_ = carrega(ctx, ctx.protocolo(), planilha)
-    idx = {planilha.chave(ln["faceta"], ln["idioma"], ln["termo"],
-                          ln["_v"].get("instrumento")): ln["_v"] for ln in linhas_}
-    with planilha.caminho.open(encoding="utf-8-sig", newline="") as fh:
-        lidas = list(csv.DictReader(fh, delimiter=";"))
+    lidas = registro.decisoes()
     # Decisão fora do domínio reprova antes de qualquer gravação: preservá-la seria levar
     # adiante uma classificação que a conferência do CT não sabe ler.
     invalidas = fora_do_dominio(lidas)
     if invalidas:
-        raise Reprovado("planilha de validação com decisão do ReT fora do domínio; nada "
+        raise Reprovado("arquivo de decisões com decisão do ReT fora do domínio; nada "
                         "foi gravado:\n  - " + "\n  - ".join(invalidas))
-    casadas, sem_casa, com_decisao = 0, [], 0
-    for r in lidas:
-        k = planilha.chave(r.get("faceta", ""), r.get("idioma", ""), r.get("termo", ""),
-                           r.get("instrumento", ""))
-        v = idx.get(k)
-        if v is None:
-            sem_casa.append(k)
-            continue
-        casadas += 1
-        for c in CAMPOS_DECISAO:
-            valor = (r.get(c) or "").strip()
-            if valor:
-                v[c] = valor
-                if c == "decisao_ReT":
-                    com_decisao += 1
-    grava_planilha(planilha, linhas_)
-    print(f"{casadas} linha(s) casada(s), {com_decisao} decisão(ões) preservada(s), "
-          f"{len(sem_casa)} fora do protocolo (preservadas).")
-    duplas = [k for k, n in collections.Counter(
-        (r.get("faceta"), r.get("idioma"), normaliza(r.get("termo"))) for r in lidas).items()
-        if n > 1]
-    if duplas:
-        print(f"AVISO: {len(duplas)} termo(s) aparecem mais de uma vez na planilha; a última "
-              "linha lida prevalece.")
-    for k in sem_casa[:10]:
-        print(f"  fora do protocolo: {k}")
-    return Saida.OK if not sem_casa else Saida.REPROVADO
+    d = ctx.protocolo()
+    linhas_ = carrega(ctx, d, registro)
+    gravadas, _ = _decisoes_para_gravar(registro, linhas_)
+    grava_registros(registro, linhas_, d)
+    com_decisao = sum(1 for r in gravadas if (r.get("decisao_ReT") or "").strip())
+    print(f"{len(gravadas)} tabela(s) de chave do protocolo, {com_decisao} decisão(ões) "
+          f"preservada(s).")
+    return Saida.OK
 
 
 def cmd_validar(ctx, a):

@@ -1,6 +1,7 @@
 """Consultas registradas: leitura do registro de execuções, coleta das exportações,
 deduplicação e recorte temporal."""
 
+import hashlib
 import json
 import pathlib
 import re
@@ -15,9 +16,39 @@ STATUS_VALIDOS = ("valida", "divergente_justificada")
 ESTADOS_EXCLUIDOS = ("vencido", "nao executado")
 
 
-def caminho_do_arquivo(c):
-    p = pathlib.Path(c.get("arquivo") or "")
+# Indicação de quem obtém a exportação do cache. O comando de obtenção ainda não existe; a
+# indicação passa a nomeá-lo quando existir.
+OBTER_DO_ZOTERO = "obter a exportação do Zotero (coleção da execução)"
+
+
+def exportacao(cfg, c):
+    """O ponto único de resolução da exportação de uma execução, sem consultar o Zotero.
+
+    `c` é a execução do registro, com a sigla da base em `base`. Com `identificador`, a
+    exportação é a do cache: `<[dados] execucoes>/<sigla>/<identificador>.ris`. Sem ele, é o
+    caminho declarado em `arquivo`, relativo à raiz (absoluto vale como está)."""
+    ident = str(c.get("identificador") or "").strip()
+    if ident:
+        return cfg.caminho("dados.execucoes") / str(c.get("base") or "") / f"{ident}.ris"
+    p = pathlib.Path(str(c.get("arquivo") or "").strip())
     return p if p.is_absolute() else RAIZ / p
+
+
+def falta_exportacao(c, caminho, execucao):
+    """A mensagem da exportação ausente no disco, nomeando a execução e o que a obtém."""
+    if str(c.get("identificador") or "").strip():
+        return (f"execução {execucao}: exportação {relativo(caminho)} ausente no cache — "
+                f"{OBTER_DO_ZOTERO}")
+    return f"execução {execucao}: arquivo ausente {c.get('arquivo')}"
+
+
+def exige_exportacao(c):
+    """O caminho resolvido da consulta, ou DADOS quando ausente no disco."""
+    caminho = c["exportacao"]
+    if not caminho.exists():
+        raise DadosInvalidos(f"consulta {c.get('id')}: "
+                             + falta_exportacao(c, caminho, c.get("execucao")))
+    return caminho
 
 
 def consultas_do_registro(b, dado):
@@ -29,7 +60,8 @@ def consultas_do_registro(b, dado):
         nome = b.sigla_de_bd.get(bd, base.get("base") or bd)
         for e in base.get("execucoes") or []:
             arq = str(e.get("arquivo") or "").strip()
-            if not arq:
+            ident = str(e.get("identificador") or "").strip()
+            if not arq and not ident:
                 continue
             if normaliza(e.get("estado")) in ESTADOS_EXCLUIDOS:
                 continue
@@ -37,7 +69,7 @@ def consultas_do_registro(b, dado):
             if status not in STATUS_VALIDOS:
                 continue
             consultas.append({
-                "id": f"{nome}-{e.get('expressao')}-{pathlib.Path(arq).stem}",
+                "id": f"{nome}-{e.get('expressao')}-{ident or pathlib.Path(arq).stem}",
                 "execucao": f"{bd}/{e.get('id') or '?'}",
                 "base": nome,
                 "expressao": e.get("expressao"),
@@ -45,6 +77,8 @@ def consultas_do_registro(b, dado):
                 "retorno_declarado": e.get("retorno"),
                 "registros_lidos": e.get("registros_lidos"),
                 "arquivo": arq,
+                "identificador": ident,
+                "exportacao": exportacao(b.config, {**e, "base": nome}),
                 "status": status,
                 "justificativa_divergencia": e.get("justificativa_divergencia", ""),
                 "texto": str(e.get("texto") or ""),
@@ -119,9 +153,7 @@ def coleta(consultas):
     """Lê as exportações registradas e reconfere a contagem de cada uma."""
     tudo = []
     for c in consultas:
-        caminho = caminho_do_arquivo(c)
-        if not caminho.exists():
-            raise DadosInvalidos(f"consulta {c.get('id')}: arquivo ausente {c.get('arquivo')}")
+        caminho = exige_exportacao(c)
         regs = le_arquivo(caminho)
         if len(regs) != int(c.get("registros_lidos", -1)):
             raise DadosInvalidos(
@@ -140,6 +172,20 @@ def coleta(consultas):
 def chave_dedup(reg):
     d = (reg.get("doi") or "").strip().lower()
     return "doi:" + d if d else "ti:" + normaliza(reg.get("titulo"))[:120]
+
+
+# Hexadecimais do SHA-256 que formam o identificador da execução (48 bits).
+TAMANHO_IDENTIFICADOR = 12
+
+
+def identificador_execucao(sigla, expressao, data_hora, registros):
+    """O identificador de uma execução, calculado (D4): os primeiros hexadecimais do SHA-256
+    da sigla da base, do identificador da expressão, da data e hora da execução e da lista
+    ordenada das chaves de deduplicação dos registros, com as repetições. Indiferente à ordem
+    dos registros; diferente com um registro a mais ou com outra data e hora."""
+    objeto = json.dumps([sigla, expressao, data_hora, sorted(chave_dedup(r) for r in registros)],
+                        ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(objeto.encode("utf-8")).hexdigest()[:TAMANHO_IDENTIFICADOR]
 
 
 def identifica(regs):

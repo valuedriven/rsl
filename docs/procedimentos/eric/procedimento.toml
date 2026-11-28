@@ -260,12 +260,6 @@ rotulo = "Outros tipos documentais"
 destino = "nao"
 como = "2ª filtragem"
 
-[[criterios]]
-ids = ["CE10"]
-rotulo = "Fator de impacto — não aplicável"
-destino = "nao"
-como = "não se aplica: critério só documental"
-
 # ------------------------------------------------------------------ §3 cobertura
 [cobertura]
 plural = "explícito"

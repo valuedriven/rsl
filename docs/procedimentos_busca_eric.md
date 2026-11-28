@@ -1026,7 +1026,6 @@ abstract:ontology
 | Adequação temática — não pertinência e contra-escopo | CE6 | **Não** | exclusões temáticas manifestas na 2ª filtragem; aplicação integral na 3ª, com justificativa por ID |
 | Domínio de aplicação educacional | CE7 / CE8 | **Sim**, por âncora | faceta 🟨 (FCT2) como grupo de quatro palavras-raiz, em forma radical |
 | Outros tipos documentais | CE9 | **Não** | 2ª filtragem |
-| Fator de impacto — não aplicável | CE10 | **Não** | não se aplica: critério só documental |
 
 ---
 

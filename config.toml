@@ -62,14 +62,27 @@ amostra_sensibilidade = 50
 [dados]
 # Arquivos alimentados e pastas de entrada. Caminhos relativos à raiz do projeto.
 registro = "data/registro_execucao.json"
-validacao = "data/validacao_terminologica.csv"
-# Exportações brutas de cada execução, por base.
-execucoes = "data/execucoes"
+# Arquivo de decisões do ReT sobre o controle terminológico (TOML, editado pelo pesquisador:
+# só os campos decisao_ReT, justificativa_ReT e data_decisao). A chave de cada tabela é a
+# faceta, o idioma, o termo e o instrumento.
+validacao = "data/validacao_terminologica.toml"
+# Resultado técnico das consultas aos instrumentos (JSON, escrito só pelo script e não
+# editado à mão): uma linha por chave consultada, com a resposta e a evidência.
+consulta_terminologica = "data/consulta_terminologica.json"
+# Pasta dos temporários: o que se obtém do Zotero para leitura local e as saídas
+# regeneráveis. Fica fora do controle de versão: tem de estar listada no .gitignore da raiz,
+# ou a configuração reprova. Nada temporário se grava em data/.
+temporarios = "tmp"
+# Cache das exportações de cada execução, por base (<execucoes>/<sigla>/<identificador>.ris),
+# obtidas da coleção da execução no Zotero. Tem de ficar dentro de `temporarios`, ou a
+# configuração reprova. A execução registrada só com `arquivo` continua lida desse caminho.
+execucoes = "tmp/execucoes"
 # Respostas brutas das consultas aos instrumentos de controle terminológico.
 evidencia = "data/evidencia"
-# Cópia da coleção de sementes do Zotero (resposta bruta da API web, com biblioteca, coleção,
-# versão e data e hora da leitura). Gravada só por `sementes copiar` (e regravada por
-# `sementes completar --gravar`); os demais subcomandos a leem, sem acessar o Zotero.
+# Cópia da coleção de sementes do Zotero (resposta bruta, lida pela via de [zotero] acesso,
+# com biblioteca, coleção, versão, via e data e hora da leitura). Gravada só por
+# `sementes copiar` (e regravada por `sementes completar --gravar`); os demais subcomandos a
+# leem, sem acessar o Zotero.
 zotero = "data/zotero_sementes.json"
 
 [saidas]
@@ -112,16 +125,16 @@ sementes = "docs/conjunto_semente.toml"
 # é emitida pelo pesquisador e nunca se grava em arquivo versionado nem se imprime.
 biblioteca = "groups/5969244"
 colecao = "V2C73IKE"
-
-# ----------------------------------------------------------------- planilhas e JSON
-[planilha]
-# Colunas da planilha de validação, na ordem em que é escrita.
-campos_validacao = [
-    "instrumento", "consultado_em", "versao_instrumento", "url_consultada",
-    "status_proposto", "rotulo_autorizado", "forma_no_instrumento", "sugestao_similar",
-    "uri_conceito",
-    "equivalentes_USE_UP", "termos_genericos_TG", "termos_especificos_TE",
-    "termos_relacionados_TR", "nota_de_escopo",
-    "arquivo_evidencia", "observacao_tecnica",
-    "decisao_ReT", "justificativa_ReT", "data_decisao",
-]
+# Via de acesso ao Zotero, para ler e para escrever: "local" (o Zotero aberto na máquina do
+# pesquisador, com o acesso local habilitado nas preferências; sem chave) ou "web" (a API
+# web, com a chave acima). Nenhum subcomando troca de via sozinho.
+acesso = "local"
+# Biblioteca e coleção das buscas, que guardam os registros recuperados nas bases: uma
+# subcoleção por base, nomeada pela sigla; dentro dela, uma coleção por execução, com o
+# identificador da execução no início do nome. `library` vale na forma groups/<id> ou pelo
+# endereço da biblioteca de grupo no site; sem ela, as buscas ficam na de `biblioteca`.
+# `search_collection` é o NOME da coleção, localizada na raiz da biblioteca: duas coleções
+# com esse nome na raiz reprovam. Sem padrão: entram aqui depois de o pesquisador criar a
+# coleção no Zotero.
+library="groups/6781444"
+search_collection="buscas"

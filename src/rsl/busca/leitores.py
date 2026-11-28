@@ -21,13 +21,25 @@ def vazio():
     return {k: "" for k in CAMPOS + EXTRAS}
 
 
+# Códigos de tipo RIS que designam o mesmo tipo documental, na forma canônica: a conferência
+# é `CPAPER` na WoS e `CONF` na Scopus e no Zotero; o capítulo é `CHAP` na WoS e no Zotero, e a
+# Scopus exporta o rótulo interno não traduzido.
+TIPOS_RIS = {"CONF": "CPAPER", "label.ris.referenceType.BOOK_CHAPTER": "CHAP"}
+# Campos em que só vale o primeiro valor: o item do Zotero guarda um só DOI, e a chave de
+# deduplicação se calcula dele.
+PRIMEIRO_VALOR = {"doi"}
+
+
 def le_ris(texto):
+    """Registros RIS. O BOM inicial não esconde a primeira tag; `A1` são autores, como `AU`;
+    `C3` (título dos anais, na exportação do Zotero) é a fonte, como `JO` e `T2`; só o primeiro
+    `DO` vale; o tipo sai na forma canônica de `TIPOS_RIS`."""
     regs, atual = [], vazio()
     mapa = {"TI": "titulo", "T1": "titulo", "AB": "resumo", "N2": "resumo",
             "KW": "palavras_chave", "PY": "ano", "Y1": "ano", "DO": "doi",
-            "AU": "autores", "JO": "fonte", "T2": "fonte", "ID": "id_base",
-            "LA": "idioma", "TY": "tipo"}
-    for linha in texto.splitlines():
+            "AU": "autores", "A1": "autores", "JO": "fonte", "T2": "fonte", "C3": "fonte",
+            "ID": "id_base", "LA": "idioma", "TY": "tipo"}
+    for linha in texto.lstrip("\ufeff").splitlines():
         m = re.match(r"^([A-Z][A-Z0-9])\s+-\s?(.*)$", linha)
         if not m:
             continue
@@ -38,6 +50,10 @@ def le_ris(texto):
             atual = vazio()
         elif tag in mapa:
             campo = mapa[tag]
+            if campo == "tipo":
+                val = TIPOS_RIS.get(val, val)
+            if atual[campo] and campo in PRIMEIRO_VALOR:
+                continue
             atual[campo] = (atual[campo] + SEPARADOR_VALORES + val).strip(SEPARADOR_VALORES) \
                 if atual[campo] else val
     if atual["titulo"]:

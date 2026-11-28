@@ -5,6 +5,7 @@ import copy
 from .. import gramatica as G
 from ..leitura import instrumentos_do_termo
 from ..markdown import lista
+from ..termos import registro as R
 from ..termos.tematres import item_exato
 from ..termos.planejamento import STATUS_MANUAL, estado_inicial
 from .textos import celula, coluna, troca_celula
@@ -127,7 +128,7 @@ def casos(ctx, g):
 
 # ------------------------------------------------- cliente TemaTres, bloqueio e reabertura
 def cliente(ctx, g):
-    """Sobre respostas e corpos em memória e sobre uma planilha em memória: a proposta de
+    """Sobre respostas e corpos em memória e sobre registros em memória: a proposta de
     estatuto do cliente TemaTres, a consulta de similaridade, a sonda, a interrupção por
     página anti-robô e a reabertura das linhas de instrumento `Automático` (pendente manual,
     de outro endereço, ou não localizada sem consulta de similaridade)."""
@@ -193,17 +194,23 @@ def cliente(ctx, g):
     g.testa("corpo JSON TemaTres não é tomado por bloqueio",
             http.sem_bloqueio('{"resume": {"status": "available"}}', "u").startswith("{"))
 
-    # Reabertura, sobre uma planilha em memória gerada das linhas do protocolo.
+    # Reabertura, sobre registros em memória gerados das linhas do protocolo.
     d = ctx.protocolo()
 
-    class EmMemoria(V.Planilha):
+    class EmMemoria(V.Registro):
         def __init__(self, linhas_):
             super().__init__(ctx)
             self.linhas_ = linhas_
 
         def existente(self):
-            return {self.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"]): r
-                    for r in self.linhas_}
+            decisoes, tecnicas = {}, {}
+            for r in self.linhas_:
+                k = self.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"])
+                if any((r.get(c) or "").strip() for c in R.CAMPOS_DECISAO):
+                    decisoes[k] = {c: r.get(c, "") for c in R.CAMPOS_ID + R.CAMPOS_DECISAO}
+                if any((r.get(c) or "").strip() for c in R.CAMPOS_TECNICOS):
+                    tecnicas[k] = {c: r.get(c, "") for c in R.CAMPOS_ID + R.CAMPOS_TECNICOS}
+            return decisoes, tecnicas
 
     base = V.carrega(ctx, d, EmMemoria([]))
     auto = [ln for ln in base
@@ -405,22 +412,18 @@ def similaridade(g, valida, sonda, d, S):
 
 
 # ------------------------------------------------- decisão do ReT e linha do termo no CT
-def _planilha(linhas):
-    """Texto CSV mínimo da planilha de validação, com as colunas exigidas."""
-    from ..termos.decisao import COLUNAS_EXIGIDAS                   # noqa: PLC0415
-    colunas = list(COLUNAS_EXIGIDAS) + ["status_proposto"]
-    corpo = [";".join(colunas)]
-    corpo += [";".join(r.get(c, "") for c in colunas) for r in linhas]
-    return "\n".join(corpo) + "\n"
+def _decisoes(linhas):
+    """Texto TOML mínimo do arquivo de decisões; tabela sem decisão não é escrita."""
+    return R.escreve_decisoes(linhas)
 
 
 def classificacao(ctx, g):
-    """Domínio de `decisao_ReT`, regra da linha esperada e conferência cruzada CT × planilha,
-    sobre planilhas em memória e cópias do protocolo. Tudo gerado da estrutura lida: o
-    primeiro termo livre da primeira faceta, os instrumentos planejados para ele."""
+    """Domínio de `decisao_ReT`, regra da linha esperada e conferência cruzada CT × arquivo
+    de decisões, sobre decisões em memória e cópias do protocolo. Tudo gerado da estrutura
+    lida: o primeiro termo livre da primeira faceta, os instrumentos planejados para ele."""
     from ..coerencia import conferir                              # noqa: PLC0415
     from ..saida import Saida                                       # noqa: PLC0415
-    from ..termos.decisao import (esperada, fora_do_dominio, le_planilha,  # noqa: PLC0415
+    from ..termos.decisao import (esperada, fora_do_dominio, le_decisoes,  # noqa: PLC0415
                                   linhas_esperadas)
     from . import resultado                                         # noqa: PLC0415
     from .textos import edita_celula                                # noqa: PLC0415
@@ -465,8 +468,8 @@ def classificacao(ctx, g):
             linha({a: ""}, {a: "descritor autorizado (a conferir pelo ReT)"}) == livre)
     g.testa("candidato por similaridade sem decisão do ReT → livre",
             linha({a: ""}, {a: "candidato por similaridade (a conferir pelo ReT)"}) == livre)
-    g.testa("planilha ausente → livre", esperada(linhas_esperadas(d, None), fid, idioma,
-                                                termo) == livre)
+    g.testa("arquivo de decisões ausente → livre",
+            esperada(linhas_esperadas(d, None), fid, idioma, termo) == livre)
     if nao_planejado:
         g.testa(f"decisão em instrumento não planejado para o termo ({nao_planejado}) não "
                 f"classifica", linha({nao_planejado: "descritor"}) == livre)
@@ -474,11 +477,11 @@ def classificacao(ctx, g):
              "decisao_ReT": "autorizado"}]
     g.testa("valor fora do domínio é reprovado (o que `termos importar` usa)",
             bool(fora_do_dominio(fora)) and "autorizado" in fora_do_dominio(fora)[0])
-    cod, msgs = resultado(lambda: le_planilha("faceta;termo\nFCT1;x\n", "planilha"))
-    g.testa("planilha sem as colunas exigidas é ilegível (DADOS)", cod == Saida.DADOS,
-            f"{cod.name} {msgs[:1]}")
+    cod, msgs = resultado(lambda: le_decisoes("[[decisoes]]\nfaceta = 1\n", "decisões"))
+    g.testa("tabela de decisão sem as chaves de identificação é ilegível (DADOS)",
+            cod == Saida.DADOS and "faceta" in msgs[0], f"{cod.name} {msgs[:1]}")
 
-    # Conferência cruzada: cópias do protocolo e planilhas em memória. O termo movido junta-se
+    # Conferência cruzada: cópias do protocolo e decisões em memória. O termo movido junta-se
     # aos descritores que a célula já tiver: substituí-los apagaria do quadro um termo que a
     # STR ainda traz, e a reprovação deixaria de ser só a da ordem.
     q = L["quadro"][fid]
@@ -489,8 +492,8 @@ def classificacao(ctx, g):
                           q[desc], k,
                           lambda c: ", ".join([x for x in (c.strip(), termo) if x]))
 
-    # A planilha de prova parte da classificação corrente do protocolo: sem isso, todo termo
-    # já classificado fora de "Termo livre" reprovaria em qualquer caso com planilha, e o
+    # O arquivo de decisões de prova parte da classificação corrente do protocolo: sem isso, todo termo
+    # já classificado fora de "Termo livre" reprovaria em qualquer caso com decisões, e o
     # caso dependeria de o quadro corrente não ter descritores.
     valor_de = {v: k for k, v in G.DECISAO_RET.items()}
     atual = [{"faceta": ff["id"], "idioma": i, "termo": x,
@@ -500,14 +503,14 @@ def classificacao(ctx, g):
              for x in ff["linhas"][i][c] if instrumentos_do_termo(d, ff["id"], i)]
 
     def com(texto, plan):
-        return lambda m: conferir(ctx.com_texto(m).com_validacao(
-            texto if plan is None else _planilha(atual + plan)))
+        return lambda m: conferir(ctx.com_texto(m).com_decisoes(
+            texto if plan is None else _decisoes(atual + plan)))
     decide = [{"faceta": fid, "idioma": idioma, "termo": termo, "instrumento": a,
                "decisao_ReT": "descritor"}]
     R = Saida.REPROVADO
-    g.espera("termo sem decisão movido para Descritores, sem planilha", movido, t,
+    g.espera("termo sem decisão movido para Descritores, sem arquivo de decisões", movido, t,
              com(None, None), R, (repr(termo), "a linha esperada é 'Termo livre'"))
-    g.espera("termo sem decisão movido para Descritores, com planilha sem decisão", movido, t,
+    g.espera("termo sem decisão movido para Descritores, com arquivo sem decisão", movido, t,
              com(None, [{**decide[0], "decisao_ReT": ""}]), R,
              (repr(termo), "a linha esperada é 'Termo livre'", "pela decisão do ReT"))
     g.espera("descritor decidido ainda em Termo livre", t + "\n", t,
@@ -519,12 +522,13 @@ def classificacao(ctx, g):
     g.testa("descritor decidido na linha de descritores: nenhuma reprovação de classificação, "
             "só a STR em outra ordem",
             bool(msgs) and all("ordem diferente" in m for m in msgs), f"{cod.name} {msgs[:2]}")
-    g.espera("decisão fora do domínio na planilha", t + "\n", t,
+    g.espera("decisão fora do domínio no arquivo de decisões", t + "\n", t,
              com(None, [{**decide[0], "decisao_ReT": "autorizado"}]), R,
              ("fora do domínio", "'autorizado'", repr(termo)))
-    g.espera("planilha ilegível", t + "\n", t,
-             lambda m: conferir(ctx.com_texto(m).com_validacao("faceta;termo\nx;y\n")),
-             Saida.DADOS, "ilegível")
+    g.espera("arquivo de decisões ilegível", t + "\n", t,
+             lambda m: conferir(ctx.com_texto(m).com_decisoes(
+                 '[[decisoes]]\nidioma = "pt"\ntermo = "x"\ninstrumento = "tbci"\n')),
+             Saida.DADOS, ("falta a chave de identificação", "faceta"))
     repetido = edita_celula(t, q[desc], k, lambda c: termo)
     g.espera("termo em duas linhas do mesmo CT e idioma", repetido, t, com(None, None), R,
              (repr(termo), "mais de uma linha", f["ct"]))
@@ -532,7 +536,7 @@ def classificacao(ctx, g):
     if outro:
         k2 = coluna(t, q["cabecalho"], outro)
         mesma = edita_celula(t, q[livre], k2, lambda c: f"{c}, {termo}" if c else termo)
-        cod, msgs = resultado(lambda: conferir(ctx.com_texto(mesma).com_validacao(None)))
+        cod, msgs = resultado(lambda: conferir(ctx.com_texto(mesma).com_decisoes(None)))
         g.testa("mesma forma em Termo livre de dois idiomas não reprova por repetição",
                 mesma != t and not any("mais de uma linha" in m for m in msgs),
                 f"{msgs[:1]}")
@@ -543,3 +547,291 @@ def classificacao(ctx, g):
     cod, msgs = resultado(lambda: conferir(ctx))
     g.testa("célula vazia no CT não reprova (documento corrente com células vazias aprova)",
             bool(vazias) and cod == Saida.OK, f"{len(vazias)} vazias, {cod.name} {msgs[:1]}")
+
+
+# ------------------------------------------------- registros: formato, expurgo e reconciliação
+def registros(ctx, g):
+    """Ida e volta dos dois formatos, leitura estrita, expurgo da evidência e reconciliação
+    (decisão sem consulta, consulta sem decisão, órfãs), em diretório temporário."""
+    import contextlib
+    import io
+    import pathlib
+    import tempfile
+
+    from ..config import Configuracao
+    from ..contexto import Contexto
+    from ..saida import Saida
+    from ..termos import validacao as V
+    from . import resultado
+
+    def ident(fid, idioma, termo, sigla):
+        return {"faceta": fid, "idioma": idioma, "termo": termo, "instrumento": sigla}
+
+    # Ida e volta do TOML, com os caracteres que o escape precisa preservar.
+    termo = 'ontologia "aspas" \\ #\nlinha'
+    tabela = {**ident("FCT1", "pt", termo, "tbci"), "decisao_ReT": "termo livre",
+              "justificativa_ReT": "primeira linha\nsegunda linha", "data_decisao": "2026-11-26"}
+    lido = R.le_decisoes(R.escreve_decisoes([tabela]), "decisões")
+    g.testa("TOML ida e volta com acento, aspas, barra invertida, quebra de linha e `#`",
+            lido == [tabela], f"{lido!r}")
+    vazia = {**ident("FCT1", "pt", "ontologia", "tbci"), "decisao_ReT": ""}
+    g.testa("tabela sem campo de decisão não é escrita",
+            "[[decisoes]]" not in R.escreve_decisoes([vazia]),
+            R.escreve_decisoes([vazia])[:60])
+    cod, msgs = resultado(lambda: R.le_decisoes(R.escreve_decisoes([tabela, tabela]),
+                                                "decisões"))
+    g.testa("chave duplicada no TOML termina em DADOS", cod == Saida.DADOS
+            and "repetida" in msgs[0], f"{cod.name} {msgs[:1]}")
+    fora_da_data = {**tabela, "data_decisao": "26/11/2026"}
+    cod, msgs = resultado(lambda: R.le_decisoes(R.escreve_decisoes([fora_da_data]),
+                                                "decisões"))
+    g.testa("data fora de AAAA-MM-DD termina em DADOS, nomeando o termo, o instrumento e a "
+            "forma",
+            cod == Saida.DADOS and "AAAA-MM-DD" in msgs[0] and "ontologia" in msgs[0]
+            and "tbci" in msgs[0], f"{cod.name} {msgs[:1]}")
+    cod, msgs = resultado(lambda: R.le_decisoes(
+        '[[decisoes]]\nfaceta = "FCT1"\nidioma = "pt"\ntermo = "x"\n'
+        'instrumento = "tbci"\ncampo_inventado = "y"\n', "decisões"))
+    g.testa("campo desconhecido no TOML termina em DADOS",
+            cod == Saida.DADOS and "campo desconhecido" in msgs[0], f"{cod.name} {msgs[:1]}")
+    for nome, funcao in (("TOML", lambda: R.le_decisoes("[[decisoes]\n", "decisões")),
+                         ("JSON", lambda: R.le_resultado("{", "resultado"))):
+        cod, msgs = resultado(funcao)
+        g.testa(f"{nome} ilegível termina em DADOS e nomeia o arquivo",
+                cod == Saida.DADOS and ("ilegível" in msgs[0] or "ilegivel" in msgs[0]),
+                f"{cod.name} {msgs[:1]}")
+
+    # Ida e volta do JSON, com os mesmos caracteres no campo de resposta.
+    resposta = 'rótulo "aspas" \\ #\nlinha'
+    linha = {**ident("FCT1", "pt", "ontologia", "tbci"),
+             "consultado_em": "2026-11-25T09:58:00-03:00", "status_proposto": "candidato",
+             "rotulo_autorizado": resposta, "arquivo_evidencia": "evidencia/tbci/x.json"}
+    lido = R.le_resultado(R.escreve_resultado([linha]), "resultado")
+    g.testa("JSON ida e volta com acento, aspas, barra invertida, quebra de linha e `#`",
+            lido == [linha], f"{lido!r}")
+    g.testa("campo vazio é omitido do JSON",
+            "observacao_tecnica" not in R.escreve_resultado([linha]))
+    cod, msgs = resultado(lambda: R.le_resultado(R.escreve_resultado([linha, linha]),
+                                                 "resultado"))
+    g.testa("chave duplicada no JSON termina em DADOS, nomeando a chave",
+            cod == Saida.DADOS and "repetida" in msgs[0], f"{cod.name} {msgs[:1]}")
+
+    d = ctx.protocolo()
+    chaves = list(R.chaves_do_protocolo(d))
+    auto = next((x for x in chaves if x[3]["modo"] == G.MODO_AUTOMATICO), None)
+    if auto is None:
+        g.falha("registros: nenhum instrumento automático no protocolo")
+        return
+    fid, idioma, termo_p, inst = auto
+    sigla = inst["sigla"]
+    decisao = {**ident(fid, idioma, termo_p, sigla), "decisao_ReT": "descritor",
+               "justificativa_ReT": "decisão de ensaio", "data_decisao": "2026-11-26"}
+    orfa = {**ident("FCT9", "pt", "termo fora", "tbci"), "decisao_ReT": "termo livre"}
+
+    # A conferência acusa a decisão de chave que saiu do protocolo: o registro está defasado
+    # e se sincroniza por `termos exportar`, que a remove.
+    from ..coerencia import conferir                               # noqa: PLC0415
+    atuais = R.le_decisoes(ctx.texto_decisoes, "decisões") if ctx.texto_decisoes else []
+    cod, msgs = resultado(lambda: conferir(ctx.com_decisoes(
+        R.escreve_decisoes(atuais + [orfa]))))
+    g.testa("documentos conferir reprova decisão de chave fora do protocolo",
+            cod == Saida.REPROVADO and any("fora do protocolo" in m for m in msgs),
+            f"{cod.name} {msgs[:2]}")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = pathlib.Path(tmp)
+        dec = tmp / "validacao_terminologica.toml"
+        res = tmp / "consulta_terminologica.json"
+        ev = tmp / "evidencia"
+        dado = ctx.config.com("dados.validacao", str(dec))
+        dado["dados"]["consulta_terminologica"] = str(res)
+        dado["dados"]["evidencia"] = str(ev)
+        cfg = Configuracao(dado, ctx.config.arquivo)
+
+        def roda(funcao):
+            with contextlib.redirect_stdout(io.StringIO()) as saida:
+                codigo = funcao()
+            return codigo, saida.getvalue()
+
+        dec.write_text(R.escreve_decisoes([decisao, orfa]), encoding="utf-8")
+        codigo, texto = roda(lambda: V.cmd_exportar(Contexto(cfg)))
+        dec_lidas = R.le_decisoes(dec.read_text(encoding="utf-8"), "decisões")
+        g.testa("exportar remove a decisão fora do protocolo e termina em OK",
+                codigo == Saida.OK and "removida" in texto
+                and not any(r["faceta"] == "FCT9" for r in dec_lidas),
+                f"{codigo.name} {texto[:120]}")
+        g.testa("exportar mantém a decisão de chave do protocolo",
+                any(r["faceta"] == fid and r["termo"] == termo_p
+                    and r["instrumento"] == sigla for r in dec_lidas), f"{dec_lidas}")
+        g.testa("decisão sem consulta não vira linha do resultado técnico",
+                R.le_resultado(res.read_text(encoding="utf-8"), "resultado") == [])
+        g.testa("decisão sem consulta é listada na reconciliação",
+                "sem linha no resultado técnico" in texto and termo_p in texto,
+                texto[:200])
+        dec.write_text(R.escreve_decisoes([decisao, orfa]), encoding="utf-8")
+        codigo, texto = roda(lambda: V.cmd_importar(Contexto(cfg)))
+        dec_lidas = R.le_decisoes(dec.read_text(encoding="utf-8"), "decisões")
+        g.testa("importar remove a decisão fora do protocolo e termina em OK",
+                codigo == Saida.OK and "removida" in texto
+                and not any(r["faceta"] == "FCT9" for r in dec_lidas),
+                f"{codigo.name} {texto[:120]}")
+        dec.write_text(R.escreve_decisoes([{**decisao, "decisao_ReT": "autorizado"}]),
+                       encoding="utf-8")
+        cod, msgs = resultado(lambda: V.cmd_importar(Contexto(cfg)))
+        g.testa("importar com decisão fora do domínio termina em REPROVADO",
+                cod == Saida.REPROVADO and "fora do domínio" in msgs[0]
+                and "autorizado" in msgs[0], f"{cod.name} {msgs[:1]}")
+
+        dec.unlink()
+        cod, msgs = resultado(lambda: V.cmd_importar(Contexto(cfg)))
+        g.testa("importar sem arquivo de decisões termina em DADOS, indicando exportar",
+                cod == Saida.DADOS and "termos exportar" in msgs[0], f"{cod.name} {msgs[:1]}")
+
+        # `termos validar` grava só o resultado técnico: o arquivo de decisões fica byte a byte.
+        dec.write_text(R.escreve_decisoes([decisao]), encoding="utf-8")
+        antes = dec.read_bytes()
+        ctx_v = Contexto(cfg)
+        registro = V.Registro(ctx_v)
+        with contextlib.redirect_stdout(io.StringIO()):
+            V.grava_resultado(registro, V.carrega(ctx_v, d, registro), d)
+        g.testa("gravar o resultado técnico não toca no arquivo de decisões",
+                dec.read_bytes() == antes)
+
+        # Consulta sem decisão: preservada; a linha técnica órfã sai com a evidência dela.
+        outra = next((x for x in chaves
+                      if x[3]["modo"] == G.MODO_AUTOMATICO
+                      and (x[0], x[1], x[2]) != (fid, idioma, termo_p)), None)
+        if outra is None:
+            g.falha("registros: não há segunda chave automática para a consulta sem decisão")
+        else:
+            fid2, idioma2, termo2, inst2 = outra
+            sigla2 = inst2["sigla"]
+            caminho = R.caminho_evidencia(ev, sigla2, idioma2, termo2)
+            caminho.parent.mkdir(parents=True, exist_ok=True)
+            caminho.write_text("{}", encoding="utf-8")
+            tecnica = {**ident(fid2, idioma2, termo2, sigla2),
+                       "consultado_em": "2026-11-25T09:58:00-03:00",
+                       "status_proposto": "descritor autorizado (a conferir pelo ReT)",
+                       "arquivo_evidencia": str(caminho.relative_to(ev.parent))}
+            orfa_tec = {**ident("FCT9", "pt", "termo fora", "tbci"),
+                        "status_proposto": "termo livre (não localizado no instrumento)",
+                        "arquivo_evidencia": str(R.caminho_evidencia(
+                            ev, "tbci", "pt", "termo fora").relative_to(ev.parent))}
+            R.caminho_evidencia(ev, "tbci", "pt", "termo fora").parent.mkdir(
+                parents=True, exist_ok=True)
+            R.caminho_evidencia(ev, "tbci", "pt", "termo fora").write_text(
+                "{}", encoding="utf-8")
+            dec.write_text(R.escreve_decisoes([]), encoding="utf-8")
+            res.write_text(R.escreve_resultado([tecnica, orfa_tec]), encoding="utf-8")
+            roda(lambda: V.cmd_exportar(Contexto(cfg)))
+            tec_lidas = R.le_resultado(res.read_text(encoding="utf-8"), "resultado")
+            g.testa("consulta sem decisão é preservada e não cria decisão",
+                    len(tec_lidas) == 1 and not R.le_decisoes(
+                        dec.read_text(encoding="utf-8"), "decisões"), f"{tec_lidas}")
+            g.testa("linha técnica órfã é retirada do resultado",
+                    all(r["faceta"] != "FCT9" for r in tec_lidas), f"{tec_lidas}")
+            g.testa("evidência da linha técnica órfã é expurgada",
+                    not R.caminho_evidencia(ev, "tbci", "pt", "termo fora").exists())
+
+            # Consulta interrompida: fica no resultado técnico com a observação, sem
+            # `status_proposto` nem evidência (docstring de `validacao.py`).
+            interrompida = {**ident(fid2, idioma2, termo2, sigla2),
+                            "observacao_tecnica": "CONSULTA INTERROMPIDA em "
+                                                  "2026-11-28T10:00:00-03:00: HTTP 429"}
+            res.write_text(R.escreve_resultado([interrompida]), encoding="utf-8")
+            roda(lambda: V.cmd_exportar(Contexto(cfg)))
+            tec_lidas = R.le_resultado(res.read_text(encoding="utf-8"), "resultado")
+            g.testa("consulta interrompida fica no resultado técnico, sem status nem "
+                    "evidência",
+                    len(tec_lidas) == 1
+                    and tec_lidas[0].get("observacao_tecnica", "").startswith(
+                        "CONSULTA INTERROMPIDA")
+                    and not tec_lidas[0].get("status_proposto")
+                    and not tec_lidas[0].get("arquivo_evidencia"), f"{tec_lidas}")
+
+        # Expurgo: a chave do protocolo fica (inclusive a de linha reaberta), a chave retirada
+        # sai, e as pastas reservadas e os arquivos de outro tipo ficam byte a byte.
+        esperado = R.caminho_evidencia(ev, sigla, idioma, termo_p)
+        esperado.parent.mkdir(parents=True, exist_ok=True)
+        esperado.write_text("vigente", encoding="utf-8")
+        stale = R.caminho_evidencia(ev, "tbci", "pt", "termo retirado")
+        stale.parent.mkdir(parents=True, exist_ok=True)
+        stale.write_text("stale", encoding="utf-8")
+        alheios = {
+            ev / "instrumentos" / "tbci_idiomas.json": b"{\"sonda\": 1}",
+            ev / "sondagens" / "foo.json": b"{\"sondagem\": 1}",
+            ev / "tbci" / "nao_hex.json": b"arquivo alheio",
+        }
+        for caminho_, conteudo in alheios.items():
+            caminho_.parent.mkdir(parents=True, exist_ok=True)
+            caminho_.write_bytes(conteudo)
+        removidos = R.expurga(ev, R.caminhos_esperados(ev, d))
+        g.testa("expurgo remove a evidência de termo retirado e mantém a do protocolo",
+                stale in removidos and not stale.exists() and esperado.exists(),
+                f"removidos {removidos}")
+        g.testa("expurgo não toca em pasta reservada nem em arquivo de outro tipo",
+                all(p.exists() and p.read_bytes() == b for p, b in alheios.items()))
+        registro_ev = V.Registro(Contexto(cfg))
+        devolvido = registro_ev.grava_evidencia(sigla, idioma, termo_p, {"prova": 1})
+        g.testa("a gravação da evidência usa o caminho calculado de `registro`",
+                (ev.parent / devolvido).resolve() == esperado.resolve()
+                and "prova" in esperado.read_text(encoding="utf-8"), f"{devolvido}")
+
+        # Referência ausente reprova e impede o expurgo.
+        stale2 = R.caminho_evidencia(ev, "tbci", "pt", "termo retirado dois")
+        stale2.write_text("stale", encoding="utf-8")
+        perdida = ev / "tbci" / "0000000000000000.json"
+        res.write_text(R.escreve_resultado([{**ident(fid, idioma, termo_p, sigla),
+                                             "status_proposto": "descritor autorizado",
+                                             "arquivo_evidencia": str(
+                                                 perdida.relative_to(ev.parent))}]),
+                       encoding="utf-8")
+        cod, msgs = resultado(lambda: V.cmd_exportar(Contexto(cfg)))
+        g.testa("evidência ausente reprova com DADOS e bloqueia o expurgo",
+                cod == Saida.DADOS and "evidência ausente" in msgs[0] and stale2.exists(),
+                f"{cod.name} {msgs[:1]}")
+        cod, msgs = resultado(lambda: V.cmd_importar(Contexto(cfg)))
+        g.testa("importar com evidência ausente reprova com DADOS e não expurga",
+                cod == Saida.DADOS and "evidência ausente" in msgs[0] and stale2.exists(),
+                f"{cod.name} {msgs[:1]}")
+        res.write_text(R.escreve_resultado([{**ident(fid, idioma, termo_p, sigla),
+                                             "status_proposto": "descritor autorizado"}]),
+                       encoding="utf-8")
+        cod, msgs = resultado(lambda: V.cmd_exportar(Contexto(cfg)))
+        g.testa("linha consultada sem `arquivo_evidencia` reprova com DADOS",
+                cod == Saida.DADOS and "sem `arquivo_evidencia`" in msgs[0],
+                f"{cod.name} {msgs[:1]}")
+
+        # Instrumento Manual: a pendência é derivada do protocolo, e nenhuma linha dele é
+        # gravada no resultado técnico.
+        from ..dados import cmd_pendencias                          # noqa: PLC0415
+        from .textos import coluna, troca_celula                     # noqa: PLC0415
+        L = d["locais"]
+        k = coluna(ctx.texto, L["cabecalho_instrumentos"], G.T_INSTRUMENTOS.colunas[2])
+        modo_doc = {v: c for c, v in G.D_MODO.valores.items()}
+        manual = troca_celula(ctx.texto, L["instrumento"][sigla], k,
+                              modo_doc[G.MODO_MANUAL])
+        dm = ctx.com_texto(manual).protocolo()
+        if dm["instrumentos"][sigla]["modo"] != G.MODO_MANUAL:
+            g.falha("instrumento Manual: a cópia do protocolo não mudou o modo")
+        else:
+            dec_m = tmp / "manual.toml"
+            res_m = tmp / "manual.json"
+            ev_m = tmp / "evidencia_manual"
+            dado_m = ctx.config.com("dados.validacao", str(dec_m))
+            dado_m["dados"]["consulta_terminologica"] = str(res_m)
+            dado_m["dados"]["evidencia"] = str(ev_m)
+            ctx_m = Contexto(Configuracao(dado_m, ctx.config.arquivo)).com_texto(manual)
+            with contextlib.redirect_stdout(io.StringIO()):
+                V.cmd_exportar(ctx_m)
+            res_manual = R.le_resultado(res_m.read_text(encoding="utf-8"), "resultado")
+            g.testa("instrumento Manual não grava linha no resultado técnico",
+                    all(r["instrumento"] != sigla for r in res_manual), f"{res_manual}")
+            saida = io.StringIO()
+            with contextlib.redirect_stdout(saida):
+                cmd_pendencias(ctx_m)
+            manuais = sum(1 for _, _, _, i in R.chaves_do_protocolo(dm)
+                          if i["modo"] == G.MODO_MANUAL)
+            g.testa("projeto pendencias deriva a pendência manual do protocolo",
+                    f"{manuais} linha(s) {STATUS_MANUAL}" in saida.getvalue(),
+                    saida.getvalue()[:180])

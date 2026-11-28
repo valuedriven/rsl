@@ -33,15 +33,57 @@ comandos, conferido contra as skills e o parser, sai de `python3 -m rsl catalogo
 (ensaio; `--gravar` regrava o catálogo).
 
 Os dados das sementes ficam na coleção do Zotero de `[zotero]` (biblioteca e coleção), e
-só `sementes copiar` e `sementes completar` acessam a API web do Zotero. A chave da API é
-emitida pelo pesquisador, com escrita só na biblioteca de grupo, e fica fora do controle de
-versão: na variável de ambiente `ZOTERO_API_KEY` ou, na falta dela, na linha
-`ZOTERO_API_KEY=<chave>` do `.env` da raiz. O `.env` tem de estar no `.gitignore`; se não
-estiver, a leitura é recusada com CONFIGURACAO. A chave nunca se grava em arquivo versionado
-nem se imprime, e em relato aparecem só os quatro últimos caracteres. Sem a chave, esses dois
-subcomandos saem com CONFIGURACAO e os demais funcionam, porque leem a cópia da coleção em
-`[dados] zotero`, sem rede. Antes de `sementes copiar`, sincronizar o Zotero: a API web não
-vê edição ainda não sincronizada.
+só `sementes copiar` e `sementes completar` acessam o Zotero. A via de acesso, para ler e para
+escrever, é a de `[zotero] acesso`: `local` (o Zotero aberto na máquina do pesquisador, com o
+acesso local habilitado nas preferências, sem chave) ou `web` (a API web, com a chave).
+Nenhum subcomando troca de via sozinho: pedido recusado numa via sai com FONTE_EXTERNA, sem
+repetir pela outra. Na via local, o Zotero fechado também sai com FONTE_EXTERNA, e a mensagem
+diz que ele tem de estar aberto com o acesso local habilitado.
+
+A chave da API web só se exige na via `web`. Ela é emitida pelo pesquisador, com escrita só
+na biblioteca de grupo, e fica fora do controle de versão: na variável de ambiente
+`ZOTERO_API_KEY` ou, na falta dela, na linha `ZOTERO_API_KEY=<chave>` do `.env` da raiz. O
+`.env` tem de estar no `.gitignore`; se não estiver, a leitura é recusada com CONFIGURACAO. A
+chave nunca se grava em arquivo versionado nem se imprime, e em relato aparecem só os quatro
+últimos caracteres. Na via `web`, sem a chave, esses dois subcomandos saem com CONFIGURACAO e
+os demais funcionam, porque leem a cópia da coleção em `[dados] zotero`, sem rede. Antes de
+`sementes copiar` pela via `web`, sincronizar o Zotero: a API web não vê edição ainda não
+sincronizada.
+
+A premissa é manter a mesma via em toda a sessão: as versões que a cópia registra só valem na
+via que a leu. `sementes completar` recusa com DADOS a cópia lida por outra via (a cópia sem
+via registrada conta como `web`), e `sementes copiar` avisa quando a via mudou desde a cópia
+anterior.
+
+Na via `local`, a leitura dispensa chave, mas a escrita exige duas credenciais da API local:
+a chave da API local (`ZOTERO_LOCAL_API_KEY`) e o identificador do servidor
+(`ZOTERO_SERVER_ID`). Elas ficam onde fica a chave web (variável de ambiente ou linha do
+`.env` listado no `.gitignore`), com as mesmas guardas, e só se leem no primeiro pedido de
+escrita. Sem elas, a escrita sai com CONFIGURACAO antes de qualquer pedido. O pesquisador as
+obtém no Zotero da máquina, aberto e com o acesso local habilitado:
+
+```bash
+# 1. Identificador do servidor: ler o cabeçalho Zotero-Server-ID da resposta.
+curl -i http://localhost:23119/api/
+
+# 2. Chave da API local: ler o parâmetro `key` do JSON da resposta.
+curl -d '{ "appName": "<nome da aplicação>" }' -H "Content-Type: application/json" \
+     -H "Zotero-Server-ID: <Zotero-Server-ID>" -X POST http://localhost:23119/api/local/authorize
+```
+
+Os dois valores vão para o `.env` (`ZOTERO_SERVER_ID=…` e `ZOTERO_LOCAL_API_KEY=…`), nunca
+para arquivo versionado nem para a conversa com o agente.
+
+Os registros recuperados nas bases ficam na coleção das buscas, cujo nome é
+`[zotero] search_collection`, na raiz da biblioteca de `[zotero] library` (sem ela, na de
+`[zotero] biblioteca`). A biblioteca vale como `groups/<id>` ou pelo endereço da biblioteca
+de grupo no site. Dentro da coleção, há uma subcoleção por base, nomeada pela sigla, e,
+dentro dela, uma coleção por execução, cujo nome começa pelo identificador da execução. As
+duas chaves não têm padrão e entram no `config.toml` depois de o pesquisador criar a
+coleção. O subcomando que precisa da coleção e não tem `search_collection` sai com
+CONFIGURACAO; a coleção ausente na raiz, ou duas com o mesmo nome, saem com DADOS. Os subcomandos de análise e de conferência não consultam o Zotero: leem a
+exportação de cada execução do cache em `[dados] execucoes` ou, na execução registrada só
+com o caminho do arquivo, desse caminho. Exportação ausente no disco sai com DADOS.
 
 ### Códigos de saída
 
@@ -84,13 +126,16 @@ chave, não pelo caminho.
 | `data/historico.md` | decisões arquiteturais, inclusive emendas | pesquisador; agente, a pedido |
 | `data/pendencias.json` | ações ainda a executar, `PDnn` | pesquisador; agente, a pedido |
 | `data/registro_execucao.json` (`[dados] registro`) — *sob demanda* | resultados das consultas nas bases, por base: execuções (`execucoes`) e sondagens de sintaxe (`sondagens`) | pesquisador, `busca registrar` e `sondagens registrar` |
-| `data/execucoes/<base>/` (`[dados] execucoes`) — *sob demanda* | exportações intactas das bases | pesquisador |
-| `data/validacao_terminologica.csv` (`[dados] validacao`) — *sob demanda* | estatuto de cada termo; preserva as decisões e as linhas fora do protocolo | `termos exportar`, `termos validar`, `termos importar`; decisões pelo pesquisador |
-| `data/evidencia/<instrumento>/` (`[dados] evidencia`) — *sob demanda* | resposta bruta de cada consulta terminológica | `termos validar` |
+| `data/execucoes/<base>/` — *sob demanda* | exportações intactas das bases, das execuções registradas só com o caminho do arquivo (campo `arquivo` do registro), lidas desse caminho até migrarem para o Zotero | pesquisador |
+| `tmp/` (`[dados] temporarios`) — *sob demanda* | cache do que se obtém do Zotero e saídas regeneráveis; fora do controle de versão (listada no `.gitignore`, ou a configuração reprova) e regenerável a partir do Zotero | subcomandos que obtêm do Zotero |
+| `tmp/execucoes/<sigla>/<identificador>.ris` (`[dados] execucoes`) — *sob demanda* | cache da exportação de cada execução que tem coleção no Zotero, obtida dela em RIS; tem de ficar dentro de `[dados] temporarios`, ou a configuração reprova | obtenção do Zotero |
+| `data/validacao_terminologica.toml` (`[dados] validacao`) — *sob demanda* | decisões do ReT, uma tabela `[[decisoes]]` por termo, idioma e instrumento do protocolo; a decisão de termo retirado é removida na sincronização | pesquisador, só os campos `decisao_ReT`, `justificativa_ReT` e `data_decisao`; `termos exportar` e `termos importar` normalizam o arquivo |
+| `data/consulta_terminologica.json` (`[dados] consulta_terminologica`) — *sob demanda* | resultado técnico: uma linha por chave consultada, com a resposta do instrumento e o caminho da evidência; a ausência significa "aguardando consulta" | `termos validar`, `termos exportar` e `termos importar`; não se edita à mão |
+| `data/evidencia/<instrumento>/` (`[dados] evidencia`) — *sob demanda* | resposta bruta da consulta vigente de cada termo do protocolo, `<16 hex>.json`; a de termo retirado é expurgada | `termos validar`; expurgo por `termos exportar` e `termos importar` |
 | `data/evidencia/referencias/` | resposta bruta da conferência de referências, `SEn_…` pelo `id` da semente | agente, a pedido |
 | `data/evidencia/openalex/` | resposta bruta da OpenAlex por semente, `<DOI normalizado>.json`, nomeada pelo DOI e não pelo `id` | `sementes metadados` |
 | `data/evidencia/zotero/` | pontos de restauração da coleção de sementes, gravados antes de cada escrita no Zotero | `sementes completar --gravar`; agente, a pedido |
-| `data/zotero_sementes.json` (`[dados] zotero`) | cópia da coleção de sementes do Zotero: resposta bruta da API web, com biblioteca, coleção, versão da biblioteca e data e hora da leitura; os comandos de análise a leem em vez de consultar o Zotero | `sementes copiar`; `sementes completar --gravar` |
+| `data/zotero_sementes.json` (`[dados] zotero`) | cópia da coleção de sementes do Zotero: resposta bruta, lida pela via de `[zotero] acesso`, com biblioteca, coleção, versão da biblioteca, via (nas cópias gravadas a partir do registro da via) e data e hora da leitura; os comandos de análise a leem em vez de consultar o Zotero | `sementes copiar`; `sementes completar --gravar` |
 | `data/registros.csv`, `data/contagens_busca.csv`, `data/ordem_triagem.csv` (`[saidas]`) — *sob demanda* | registros com pertinência e marcas, contagens por base e expressão, ordem da 1ª filtragem | `busca derivar` |
 | `data/fidelidade_<base>_<expressao>.csv` (`[saidas] fidelidade`) — *sob demanda* | divergências entre derivação e execução direta | `conferencia fidelidade` |
 | `data/sensibilidade_<base>.csv` (`[saidas] sensibilidade`) — *sob demanda* | perda da sonda e amostra a classificar; preserva a coluna `elegivel` | `conferencia sensibilidade`; classificação pelo pesquisador |
@@ -155,7 +200,13 @@ resultado se reproduza. Nenhum dos três registros os transcreve.
   este repositório; `data/registro_execucao.json` registra data e hora operacionais, como
   rastro técnico.
 - Altera-se a fonte, não a saída: as planilhas e CSVs gravados pelos subcomandos se
-  regeneram; a exceção é a planilha de validação, que é o registro do estatuto dos termos.
+  regeneram. Os registros da validação não são saída de geração: o arquivo de decisões é
+  fonte editada pelo pesquisador, e o resultado técnico e a evidência são registro da
+  consulta, escritos só pelo script.
+- A sincronização dos registros da validação parte sempre das chaves do protocolo:
+  `termos exportar` e `termos importar` removem decisão, linha técnica e evidência de termo
+  retirado, sem guardar histórico de termos. `documentos conferir` reprova enquanto houver
+  decisão de chave fora do protocolo.
 - A tabela **"Strings de busca por faceta"** do protocolo é saída de geração: cada STR é a
   união dos termos do quadro terminológico da faceta, menos os subsumidos. Altera-se o
   quadro, e a ordem é quadro → `strings gerar` (ensaio) → `strings gerar --gravar` →

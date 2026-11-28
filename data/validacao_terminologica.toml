@@ -1,0 +1,507 @@
+# Decisões do ReT sobre o controle terminológico.
+# Editar só os campos decisao_ReT, justificativa_ReT e data_decisao.
+# A regravação normaliza o arquivo e descarta comentários escritos à mão.
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "pt"
+termo = "ontologia"
+instrumento = "tbci"
+decisao_ReT = "termo livre"
+justificativa_ReT = "forma livre do singular ao lado do descritor da faceta ('ontologias')"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "pt"
+termo = "modelo conceitual"
+instrumento = "tbci"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "pt"
+termo = "sistema de organização do conhecimento"
+instrumento = "tbci"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "pt"
+termo = "representação do conhecimento"
+instrumento = "tbci"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'representação do conhecimento' [743], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "pt"
+termo = "organização do conhecimento"
+instrumento = "tbci"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'organização do conhecimento' [613], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "pt"
+termo = "ontologias"
+instrumento = "tbci"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'ontologias' [155], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "en"
+termo = "knowledge representation"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "en"
+termo = "knowledge organization"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "en"
+termo = "conceptual model"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "en"
+termo = "knowledge organization system"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "en"
+termo = "ontology"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Ontology' [2246], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "es"
+termo = "representación del conocimiento"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "es"
+termo = "organización del conocimiento"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "es"
+termo = "modelo conceptual"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "es"
+termo = "sistema de organización del conocimiento"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT1"
+idioma = "es"
+termo = "ontología"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Ontología' [2714], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "pt"
+termo = "educacional"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "pt"
+termo = "ensino-aprendizagem"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "pt"
+termo = "educação"
+instrumento = "brased"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Educação' [6413], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "en"
+termo = "educational"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "en"
+termo = "educational"
+instrumento = "eric"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "en"
+termo = "teaching-learning"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "en"
+termo = "teaching-learning"
+instrumento = "eric"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "en"
+termo = "education"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Education' [1333], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "en"
+termo = "education"
+instrumento = "eric"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Education' [202], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "es"
+termo = "educacional"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "es"
+termo = "enseñanza-aprendizaje"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT2"
+idioma = "es"
+termo = "educación"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Educación' [1592], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT3"
+idioma = "pt"
+termo = "métodos de ensino"
+instrumento = "brased"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Métodos de Ensino' [7988], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT3"
+idioma = "en"
+termo = "educational practices"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "descritor em outro instrumento da faceta; a linha do termo é 'Descritores correspondentes'"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT3"
+idioma = "en"
+termo = "educational practices"
+instrumento = "eric"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Educational Practices' [6382], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT3"
+idioma = "en"
+termo = "teaching methods"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Teaching methods' [6917], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT3"
+idioma = "en"
+termo = "teaching methods"
+instrumento = "eric"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Teaching Methods' [1021], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT3"
+idioma = "es"
+termo = "método de enseñanza"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Método de enseñanza' [8220], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "pt"
+termo = "contexto educacional"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "sem correspondência exata; o candidato 'Estatísticas do Contexto Educacional' é outro conceito"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "pt"
+termo = "contexto de aprendizagem"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "pt"
+termo = "fator contextual"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "pt"
+termo = "fator situacional"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "pt"
+termo = "ambiente educacional"
+instrumento = "brased"
+decisao_ReT = "termo livre"
+justificativa_ReT = "sem correspondência exata no instrumento; candidato 'Organização do Ambiente Educacional' [7816] é outro conceito"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "pt"
+termo = "fatores de rendimento escolar"
+instrumento = "brased"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Fatores de Rendimento Escolar' [7779], forma preferido"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "educational context"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "educational context"
+instrumento = "eric"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "learning context"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "learning context"
+instrumento = "eric"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "contextual factor"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "contextual factor"
+instrumento = "eric"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "situational factor"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "situational factor"
+instrumento = "eric"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "educational environment"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Educational environment' [2376], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "en"
+termo = "educational environment"
+instrumento = "eric"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Educational Environment' [229], forma preferido"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "es"
+termo = "contexto educativo"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "es"
+termo = "contexto de aprendizaje"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "entrada não preferida de 'Ambiente educacional' [2864], adotado como descritor; mantido como termo livre na busca"
+data_decisao = "2026-11-25"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "es"
+termo = "factor contextual"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "es"
+termo = "factor situacional"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "es"
+termo = "entorno educativo"
+instrumento = "unesco"
+decisao_ReT = "termo livre"
+justificativa_ReT = "não localizado no instrumento; permanece termo livre"
+data_decisao = "2026-11-26"
+
+[[decisoes]]
+faceta = "FCT4"
+idioma = "es"
+termo = "ambiente educacional"
+instrumento = "unesco"
+decisao_ReT = "descritor"
+justificativa_ReT = "correspondência exata com 'Ambiente educacional' [2864], forma preferido"
+data_decisao = "2026-11-25"

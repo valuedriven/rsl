@@ -93,17 +93,17 @@ def _parser():
     novo("termos", "sondar", "consulta de prova em cada endereço resolvido dos instrumentos "
          "Automático, um por idioma; não grava",
          "termos.validacao", "cmd_sonda")
-    novo("termos", "exportar", "reconstrói a planilha de validação a partir do protocolo, "
-         "sem rede, reabrindo as linhas que deixaram de valer", "termos.validacao",
-         "cmd_exportar")
+    novo("termos", "exportar", "reconstrói os registros da validação a partir do protocolo "
+         "(decisões em TOML e resultado técnico em JSON), sem rede, reabrindo as linhas que "
+         "deixaram de valer", "termos.validacao", "cmd_exportar")
     p = novo("termos", "validar", "consulta, no endereço resolvido do instrumento "
              "Automático de sigla SIGLA (ou de todos: `todos`), os termos ainda sem "
              "estatuto", "termos.validacao",
              "cmd_validar")
     p.add_argument("sigla", metavar="SIGLA")
     p.add_argument("--faceta", type=int, help="restringe a uma faceta (número n de FCTn)")
-    novo("termos", "importar", "reconcilia a planilha com o protocolo, preservando as "
-         "decisões", "termos.validacao", "cmd_importar")
+    novo("termos", "importar", "reconcilia os registros com o protocolo, preservando as "
+         "decisões e retirando a linha técnica órfã", "termos.validacao", "cmd_importar")
 
     grupo("strings", "strings de busca por faceta geradas do quadro")
     p = novo("strings", "gerar", "calcula cada STR a partir do quadro terminológico e "

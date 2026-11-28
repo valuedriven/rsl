@@ -4,3 +4,4 @@ __pycache__/
 .deep-copilot
 *.ris
 .env
+tmp/

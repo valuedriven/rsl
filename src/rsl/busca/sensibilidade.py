@@ -9,7 +9,7 @@ from ..markdown import normaliza
 from ..saida import Saida
 from . import Busca
 from .leitores import le_arquivo
-from .registro import caminho_do_arquivo, carrega_consultas, chave_dedup
+from .registro import carrega_consultas, chave_dedup, exige_exportacao
 
 
 def registros_da_expressao(base, ident, validas):
@@ -19,10 +19,7 @@ def registros_da_expressao(base, ident, validas):
         return None
     chaves, registros = set(), []
     for c in consultas:
-        caminho = caminho_do_arquivo(c)
-        if not caminho.exists():
-            raise DadosInvalidos(f"consulta {c.get('id')}: arquivo ausente {c.get('arquivo')}")
-        for r in le_arquivo(caminho):
+        for r in le_arquivo(exige_exportacao(c)):
             k = chave_dedup(r)
             if k not in chaves:
                 chaves.add(k)

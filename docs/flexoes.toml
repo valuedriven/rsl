@@ -147,3 +147,45 @@ termo = "enseñanza-aprendizaje"
 idioma = "es"
 tipo = "nao_contavel"
 origem = "forma composta de processo, sem plural, como `teaching-learning` (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "thesaurus"
+idioma = "pt"
+tipo = "irregular"
+formas = ["thesauri"]
+origem = "estrangeirismo latino; plural latino `thesauri`. O uso invariável no plural (`os thesaurus`) já é coberto pelo próprio termo, e a forma portuguesa é `tesauro`"
+
+[[excecoes]]
+termo = "framework conceitual"
+idioma = "pt"
+tipo = "irregular"
+formas = ["frameworks conceituais"]
+origem = "estrangeirismo com o plural em -s (`frameworks`) e o adjetivo em -ais (`conceituais`)"
+
+[[excecoes]]
+termo = "intervenção de ensino"
+idioma = "pt"
+tipo = "irregular"
+formas = ["intervenções de ensino"]
+origem = "substantivo em -ção, plural em -ções; o complemento `de ensino` não se flexiona"
+
+[[excecoes]]
+termo = "intervenção educacional"
+idioma = "pt"
+tipo = "irregular"
+formas = ["intervenções educacionais"]
+origem = "substantivo em -ção, plural em -ções; adjetivo em -al, plural em -ais"
+
+[[excecoes]]
+termo = "intervenção instrucional"
+idioma = "pt"
+tipo = "irregular"
+formas = ["intervenções instrucionais"]
+origem = "substantivo em -ção, plural em -ções; adjetivo em -al, plural em -ais"
+
+[[excecoes]]
+termo = "intervenção docente"
+idioma = "pt"
+tipo = "irregular"
+formas = ["intervenções docentes"]
+origem = "substantivo em -ção, plural em -ções; adjetivo em -e, plural em -es"

@@ -1,5 +1,5 @@
 """Planejamento da validação terminológica: que termo se valida em que instrumento, e com que
-estatuto nasce a linha da planilha.
+estatuto nasce a linha do registro.
 
 Um termo do quadro de uma faceta é planejado para cada instrumento cuja coluna FCTs traz a
 faceta e cuja coluna Idiomas traz o idioma do termo, no endereço resolvido do seu `Caminho`.
@@ -28,7 +28,7 @@ TERMO_INEXISTENTE = "palavra-que-nao-existe-xyz"
 
 
 def estado_inicial(instrumento):
-    """Campos com que nasce a linha de um termo ainda não registrado na planilha."""
+    """Campos com que nasce a linha de um termo ainda não registrado."""
     if instrumento["modo"] == G.MODO_MANUAL:
         return {"status_proposto": STATUS_MANUAL, "observacao_tecnica": OBS_MANUAL}
     return {"observacao_tecnica": OBS_AGUARDANDO}

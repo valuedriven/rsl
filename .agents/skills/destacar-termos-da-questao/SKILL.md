@@ -34,7 +34,7 @@ relacionados" (`livre` · `descritores` · `relacionados`), em `pt`, `en`, `es`.
 está em `python3 -m rsl documentos gramatica`.
 
 A linha **não é distância conceitual nem grau de confiança**: é a **natureza do termo**, e
-resulta da decisão do ReT (`decisao_ReT`) na planilha de validação, sobre os instrumentos
+resulta da decisão do ReT (`decisao_ReT`) no arquivo de decisões da validação, sobre os instrumentos
 planejados para a faceta e o idioma do termo:
 
 - descritor autorizado em pelo menos um instrumento → "Descritores correspondentes";
@@ -42,8 +42,8 @@ planejados para a faceta e o idioma do termo:
 - senão → "Termo livre".
 
 **Termo sem decisão do ReT é termo livre** — inclusive o de instrumento manual ainda não
-consultado, o que só tem proposta da máquina (`status_proposto`) e todo termo enquanto a
-planilha não existe. Linhas de descritores e de sinônimos vazias significam "não validado",
+consultado, o que só tem proposta da máquina (`status_proposto`) e todo termo enquanto o
+arquivo de decisões não existe. Linhas de descritores e de sinônimos vazias significam "não validado",
 não "inexistente". Mover um termo de linha sem a decisão correspondente reprova em
 `documentos conferir`; a reclassificação vem da validação
 (`estabelecer-controle-terminologico`), e depois dela se regeneram STRs e procedimentos. O mesmo

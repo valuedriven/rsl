@@ -161,13 +161,14 @@ limiar não se transcrevem: o valor em uso e a origem saem de `python3 -m rsl co
   - Script principal: `python3 -m rsl termos sondar` — consulta de prova em cada endereço
     resolvido dos instrumentos `Automático`, um por idioma; não grava. Executar antes de
     validar.
-  - Script principal: `python3 -m rsl termos exportar` — reconstrói a planilha de validação a
-    partir do protocolo, sem rede, reabrindo as linhas que deixaram de valer
+  - Script principal: `python3 -m rsl termos exportar` — reconstrói os registros da validação
+    (decisões em TOML e resultado técnico em JSON) a partir do protocolo, sem rede, reabrindo
+    as linhas que deixaram de valer
   - Script principal: `python3 -m rsl termos validar [--faceta FACETA] SIGLA` — `SIGLA`:
     instrumento `Automático` da tabela de instrumentos, ou `todos`; `--faceta`: número n de
     `FCTn`
-  - Script principal: `python3 -m rsl termos importar` — reconcilia a planilha com o protocolo,
-    preservando as decisões
+  - Script principal: `python3 -m rsl termos importar` — reconcilia os registros com o
+    protocolo, preservando as decisões de chave do protocolo e removendo as demais
   - Skill principal: `estabelecer-controle-terminologico`
   - Skill: `gerar-strings-de-busca`
 - Gerar as strings de busca por faceta a partir do quadro terminológico (adaptação do projeto)

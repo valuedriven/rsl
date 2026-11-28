@@ -9,20 +9,21 @@ alterada) sem reimportar nada.
 
 from . import config as _config
 
-# Planilha de validação ainda não lida (None quer dizer "ausente").
+# Registros da validação ainda não lidos (None quer dizer "ausente").
 _NAO_LIDA = object()
 
 
 class Contexto:
     def __init__(self, cfg, texto=None, procedimentos=None, sementes=None, fontes=None,
-                 flexoes=None, validacao=_NAO_LIDA, zotero=None):
+                 flexoes=None, decisoes=_NAO_LIDA, resultado=_NAO_LIDA, zotero=None):
         self.config = cfg
         self._texto = texto
         self._procedimentos = dict(procedimentos or {})
         self._sementes = sementes
         self._fontes = dict(fontes or {})
         self._flexoes = flexoes
-        self._validacao = validacao
+        self._decisoes = decisoes
+        self._resultado = resultado
         self._zotero = zotero
         self._protocolo = None
 
@@ -87,20 +88,29 @@ class Contexto:
             self._flexoes = arquivo.read_text(encoding="utf-8") if arquivo.exists() else ""
         return self._flexoes
 
-    @property
-    def texto_validacao(self):
-        """Texto da planilha de validação terminológica; None se não existe.
-        DadosInvalidos se existe e não pode ser lida como texto."""
-        if self._validacao is _NAO_LIDA:
+    def _texto_registro(self, chave, atributo, rotulo):
+        """Texto de um dos registros da validação; None se o arquivo não existe."""
+        if getattr(self, atributo) is _NAO_LIDA:
             from .erros import DadosInvalidos                       # noqa: PLC0415
-            arquivo = self.config.caminho("dados.validacao")
+            arquivo = self.config.caminho(chave)
             try:
-                self._validacao = (arquivo.read_text(encoding="utf-8-sig")
-                                   if arquivo.exists() else None)
+                setattr(self, atributo, (arquivo.read_text(encoding="utf-8")
+                                         if arquivo.exists() else None))
             except (OSError, UnicodeDecodeError) as e:
-                raise DadosInvalidos(f"{_config.relativo(arquivo)}: planilha de validação "
-                                     f"ilegível ({e})") from None
-        return self._validacao
+                raise DadosInvalidos(f"{_config.relativo(arquivo)}: {rotulo} ilegível "
+                                     f"({e})") from None
+        return getattr(self, atributo)
+
+    @property
+    def texto_decisoes(self):
+        """Texto do arquivo de decisões do ReT (`[dados] validacao`); None se não existe."""
+        return self._texto_registro("dados.validacao", "_decisoes", "arquivo de decisões")
+
+    @property
+    def texto_resultado(self):
+        """Texto do resultado técnico (`[dados] consulta_terminologica`); None se não existe."""
+        return self._texto_registro("dados.consulta_terminologica", "_resultado",
+                                    "resultado técnico")
 
     @property
     def zotero(self):
@@ -122,8 +132,8 @@ class Contexto:
     def _copia(self, **mudou):
         atual = {"cfg": self.config, "texto": self._texto, "procedimentos": self._procedimentos,
                  "sementes": self._sementes, "fontes": self._fontes,
-                 "flexoes": self._flexoes, "validacao": self._validacao,
-                 "zotero": self._zotero}
+                 "flexoes": self._flexoes, "decisoes": self._decisoes,
+                 "resultado": self._resultado, "zotero": self._zotero}
         atual.update(mudou)
         return Contexto(**atual)
 
@@ -141,9 +151,13 @@ class Contexto:
     def com_flexoes(self, texto):
         return self._copia(flexoes=texto)
 
-    def com_validacao(self, texto):
-        """Cópia com a planilha de validação em memória; None: planilha ausente."""
-        return self._copia(validacao=texto)
+    def com_decisoes(self, texto):
+        """Cópia com o arquivo de decisões em memória; None: arquivo ausente."""
+        return self._copia(decisoes=texto)
+
+    def com_resultado(self, texto):
+        """Cópia com o resultado técnico em memória; None: arquivo ausente."""
+        return self._copia(resultado=texto)
 
     def com_sementes(self, texto):
         return self._copia(sementes=texto)

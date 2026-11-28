@@ -9,14 +9,13 @@ Arquivo ausente ou ilegível sai com o código DADOS; conteúdo incoerente com o
 com REPROVADO; procedimento de busca fora da gramática, com PROTOCOLO_ILEGIVEL, só na sua base.
 """
 
-import csv
 import json
 import pathlib
 import re
 
 from . import doi as _doi
 from . import gramatica as G
-from .config import RAIZ, relativo
+from .config import relativo
 from .coerencia import Problema, Resultado, imprime_problemas, problemas_bases
 from .erros import DadosInvalidos, ProtocoloInvalido
 from .derivado import base_derivada
@@ -72,6 +71,8 @@ def problemas_registro(ctx, dado, bds):
     if faltam:
         return [f"{nome} sem as bases {faltam}"]
 
+    from .busca.registro import exportacao, falta_exportacao        # noqa: PLC0415
+    sigla_de = {b["id"]: b["sigla"] for b in ctx.protocolo()["bases"]}
     problemas = []
     for bd in bds:
         base = bases[bd]
@@ -88,14 +89,12 @@ def problemas_registro(ctx, dado, bds):
                 problemas.append(f"{nome}: {bd} com execução que não é objeto")
                 continue
             arq = str(e.get("arquivo") or "").strip()
-            if not arq:
+            if not arq and not str(e.get("identificador") or "").strip():
                 continue
-            caminho = pathlib.Path(arq)
-            if not caminho.is_absolute():
-                caminho = RAIZ / caminho
+            caminho = exportacao(ctx.config, {**e, "base": sigla_de.get(bd, bd)})
             if not caminho.exists():
-                problemas.append(f"{nome}: {bd}/{e.get('id')} aponta arquivo ausente "
-                                 f"{arq!r}")
+                problemas.append(f"{nome}: " + falta_exportacao(e, caminho,
+                                                                f"{bd}/{e.get('id')}"))
             if not isinstance(e.get("registros_lidos"), int):
                 problemas.append(f"{nome}: {bd}/{e.get('id')} declara arquivo sem "
                                  f"`registros_lidos` inteiro")
@@ -370,11 +369,13 @@ def pendencias_sementes(d):
 
 def cmd_pendencias(ctx, a=None):
     """Relata o que está aberto, sem escrever arquivo algum."""
+    from .termos import registro as R                              # noqa: PLC0415
     from .termos.planejamento import STATUS_MANUAL                  # noqa: PLC0415
     d = ctx.protocolo()
     linhas = []
     registro_ = ctx.config.caminho("dados.registro")
-    validacao = ctx.config.caminho("dados.validacao")
+    decisoes_ = ctx.config.caminho("dados.validacao")
+    resultado_ = ctx.config.caminho("dados.consulta_terminologica")
 
     if not registro_.exists():
         linhas.append(f"[ausente] {relativo(registro_)} — registre a primeira execução com  "
@@ -411,23 +412,34 @@ def cmd_pendencias(ctx, a=None):
             linhas.append(f"[registro] nenhuma execução com exportação registrada — use  "
                           f"{CMD_REGISTRAR}")
 
-    if not validacao.exists():
-        linhas.append(f"[validação] {relativo(validacao)} ausente: nenhum termo tem decisão do "
+    if not decisoes_.exists():
+        linhas.append(f"[validação] {relativo(decisoes_)} ausente: nenhum termo tem decisão do "
                       f"ReT, e todo termo do controle terminológico fica em 'Termo livre' "
                       f"até a validação — rode  {CMD_EXPORTAR}")
-    else:
-        with validacao.open(encoding="utf-8-sig", newline="") as fh:
-            linhas_validacao = list(csv.DictReader(fh, delimiter=";"))
-        sem_status = sum(1 for r in linhas_validacao
-                         if not (r.get("status_proposto") or "").strip())
-        if sem_status:
-            linhas.append(f"[validação] {sem_status} linha(s) sem `status_proposto` — rode  "
-                          f"{CMD_VALIDAR} <sigla>")
-        manuais = sum(1 for r in linhas_validacao
-                      if (r.get("status_proposto") or "").strip() == STATUS_MANUAL)
-        if manuais:
-            linhas.append(f"[validação] {manuais} linha(s) {STATUS_MANUAL} — consultar o "
-                          f"instrumento e registrar na planilha")
+    decisoes_lidas = R.le_decisoes(ctx.texto_decisoes, relativo(decisoes_))
+    resultado_lido = R.le_resultado(ctx.texto_resultado, relativo(resultado_))
+    # A ausência da linha no resultado técnico significa "aguardando consulta": a chave do
+    # protocolo sem objeto, ou com objeto interrompido sem `status_proposto`, está a validar.
+    resultado_por_chave = {R.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"]): r
+                           for r in resultado_lido}
+    sem_status = sum(
+        1 for fid, idioma, termo, i in R.chaves_do_protocolo(d)
+        if i["modo"] == G.MODO_AUTOMATICO
+        and not (resultado_por_chave.get(R.chave(fid, idioma, termo, i["sigla"]), {})
+                 .get("status_proposto") or "").strip())
+    if sem_status:
+        linhas.append(f"[validação] {sem_status} linha(s) sem `status_proposto` — rode  "
+                      f"{CMD_VALIDAR} <sigla>")
+    # A pendência manual é derivada do protocolo; nenhuma linha dela é gravada no resultado
+    # técnico. Só fica pendente a chave que ainda não tem decisão registrada.
+    decididas = {R.chave(r["faceta"], r["idioma"], r["termo"], r["instrumento"])
+                 for r in decisoes_lidas if (r.get("decisao_ReT") or "").strip()}
+    manuais = sum(1 for fid, idioma, termo, i in R.chaves_do_protocolo(d)
+                  if i["modo"] == G.MODO_MANUAL
+                  and R.chave(fid, idioma, termo, i["sigla"]) not in decididas)
+    if manuais:
+        linhas.append(f"[validação] {manuais} linha(s) {STATUS_MANUAL} — consultar o "
+                      f"instrumento e registrar a decisão em {relativo(decisoes_)}")
 
     # Lacuna que o próprio procedimento de busca declara e deixa em aberto. A decisão é do
     # pesquisador: acrescentar o termo à string, com nova execução e novo teste de

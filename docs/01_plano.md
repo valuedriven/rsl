@@ -268,6 +268,6 @@ Objetivos específicos (um por questão secundária, na ordem do protocolo):
 | Todo uso de IA é registrado num artefato único, o LOG\_IA, apêndice do protocolo: uma linha por ação assistida. Campos e regras de operação: protocolo (`docs/03`, assistência de IA). |
 | :---- |
 
-| Regras de operação. (1) O LOG\_IA é preenchido no momento da ação, não reconstituído depois. (2) Os registros específicos já existentes passam a referenciar o campo id: a planilha de validação terminológica e o registro de execução das buscas por base deixam de duplicar os dados de ferramenta e versão e apontam para a linha correspondente. (3) O LOG\_IA é versionado junto ao repositório do projeto e entregue como apêndice do protocolo na montagem final (Módulo 3, Etapa 1, montagem do protocolo). (4) A declaração de uso de IA na seção de métodos do relatório é redigida a partir dele. |
+| Regras de operação. (1) O LOG\_IA é preenchido no momento da ação, não reconstituído depois. (2) Os registros específicos já existentes passam a referenciar o campo id: o registro de validação terminológica e o registro de execução das buscas por base deixam de duplicar os dados de ferramenta e versão e apontam para a linha correspondente. (3) O LOG\_IA é versionado junto ao repositório do projeto e entregue como apêndice do protocolo na montagem final (Módulo 3, Etapa 1, montagem do protocolo). (4) A declaração de uso de IA na seção de métodos do relatório é redigida a partir dele. |
 | :---- |
 

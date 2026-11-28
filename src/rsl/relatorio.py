@@ -69,10 +69,27 @@ def relatorio(ctx, d):
              f"incidências: {dist['incidencias']}  "
              f"por base: " + ", ".join(f"{b} {v}" for b, v in dist["por_base"].items()))
     cfg = ctx.config
-    L.append(f"  zotero: biblioteca {cfg.valor('zotero.biblioteca')}, coleção "
+    L.append(f"  zotero: biblioteca {cfg.biblioteca()}, coleção "
              f"{cfg.valor('zotero.colecao')}  [{cfg.nome}: [zotero]]; cópia "
-             f"{cfg.valor('dados.zotero')}  [{cfg.nome}: [dados] zotero]; chave da API "
-             f"web em ZOTERO_API_KEY ou no .env da raiz (não impressa)")
+             f"{cfg.valor('dados.zotero')}  [{cfg.nome}: [dados] zotero]")
+    acesso = cfg.valor("zotero.acesso")
+    L.append(f"  zotero: via de acesso {acesso}  [{cfg.nome}: [zotero] acesso]; "
+             + ("chave da API web em ZOTERO_API_KEY ou no .env da raiz (não impressa)"
+                if acesso == "web" else "sem chave (Zotero aberto, acesso local habilitado)"))
+    z = cfg.dado["zotero"]
+    if z.get("search_collection"):
+        bib, nome = cfg.buscas()
+        origem = ("[zotero] library" if "library" in z
+                  else "[zotero] biblioteca, sem [zotero] library")
+        L.append(f"  zotero: coleção das buscas {nome!r} na raiz de {bib}  [{cfg.nome}: "
+                 f"[zotero] search_collection; {origem}]")
+    else:
+        L.append(f"  zotero: coleção das buscas ausente  [{cfg.nome}: [zotero] "
+                 f"search_collection, sem padrão — entra depois de o pesquisador criar a "
+                 f"coleção]")
+    L.append(f"  temporários: {cfg.valor('dados.temporarios')}  [{cfg.nome}: [dados] "
+             f"temporarios, fora do controle de versão]; cache das exportações "
+             f"{cfg.valor('dados.execucoes')}  [{cfg.nome}: [dados] execucoes]")
     L.append(f"  cópia da coleção em uso: versão {d['zotero']['versao']}, lida em "
              f"{d['zotero']['lida_em']}; {len(d['zotero']['fora'])} item(ns) fora do arquivo "
              f"de sementes")
