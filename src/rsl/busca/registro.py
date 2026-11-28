@@ -47,6 +47,7 @@ def consultas_do_registro(b, dado):
                 "arquivo": arq,
                 "status": status,
                 "justificativa_divergencia": e.get("justificativa_divergencia", ""),
+                "texto": str(e.get("texto") or ""),
             })
     return consultas
 

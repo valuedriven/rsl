@@ -37,14 +37,14 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 ### CT2 (FCT2)
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
-| *Termo livre* | educacional, ensino-aprendizagem, ensino e aprendizagem | educational, teaching-learning, teaching and learning | educacional, enseñanza-aprendizaje, enseñanza y aprendizaje |
+| *Termo livre* | educacional, ensino, aprendizagem, ensino-aprendizagem | educational, teaching, learning, teaching-learning | educacional, enseñanza, aprendizaje, enseñanza-aprendizaje |
 | *Descritores correspondentes* |educação | education  | educación |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
 ### CT3 (FCT3)
 | Termo | pt | en | es |
 | ----: | ----- | ----- | ----- |
-| *Termo livre* | prática educacional, método de ensino, estratégia educacional, atividade de aprendizagem, intervenção educacional | educational practice, teaching method, educational strategy, learning activity, educational intervention | práctica educativa, estrategia educativa, actividad de aprendizaje, intervención educativa |
+| *Termo livre* | prática de ensino, prática instrucional, prática docente, técnica de ensino, técnica instrucional, técnica docente | teaching practice, instructional practice, teacher practice, teaching technique, instructional technique | práctica de enseñanza, práctica instruccional, práctica docente, técnica de enseñanza, técnica instruccional, técnica docente |
 | *Descritores correspondentes* | métodos de ensino | educational practices, teaching methods | método de enseñanza |
 | *Termos sinônimos ou relacionados* |  |  |  |
 
@@ -70,8 +70,8 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 | ID String | Faceta | String | 
 | :---: | :---- | :---- |
 | STR1 | FCT1  | ("ontologia" OR "modelo conceitual" OR "representação do conhecimento" OR "organização do conhecimento" OR "ontologias" OR "knowledge representation" OR "knowledge organization" OR "conceptual model" OR "ontology" OR "representación del conocimiento" OR "organización del conocimiento" OR "modelo conceptual" OR "ontología") |
-| STR2 | FCT2 | ("educacional" OR "ensino-aprendizagem" OR "ensino e aprendizagem" OR "educação" OR "educational" OR "teaching-learning" OR "teaching and learning" OR "education" OR "enseñanza-aprendizaje" OR "enseñanza y aprendizaje" OR "educación") |
-| STR3 | FCT3 | ("prática educacional" OR "método de ensino" OR "estratégia educacional" OR "atividade de aprendizagem" OR "intervenção educacional" OR "métodos de ensino" OR "educational practice" OR "teaching method" OR "educational strategy" OR "learning activity" OR "educational intervention" OR "educational practices" OR "teaching methods" OR "práctica educativa" OR "estrategia educativa" OR "actividad de aprendizaje" OR "intervención educativa" OR "método de enseñanza") |
+| STR2 | FCT2 | ("educacional" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação" OR "educational" OR "teaching" OR "learning" OR "teaching-learning" OR "education" OR "enseñanza" OR "aprendizaje" OR "enseñanza-aprendizaje" OR "educación") |
+| STR3 | FCT3 | ("prática de ensino" OR "prática instrucional" OR "prática docente" OR "técnica de ensino" OR "técnica instrucional" OR "técnica docente" OR "métodos de ensino" OR "teaching practice" OR "instructional practice" OR "teacher practice" OR "teaching technique" OR "instructional technique" OR "educational practices" OR "teaching methods" OR "práctica de enseñanza" OR "práctica instruccional" OR "práctica docente" OR "técnica de enseñanza" OR "técnica instruccional" OR "método de enseñanza") |
 | STR4 | FCT4 | ("contexto educacional" OR "contexto de aprendizagem" OR "fator contextual" OR "fator situacional" OR "ambiente educacional" OR "fatores de rendimento escolar" OR "educational context" OR "learning context" OR "contextual factor" OR "situational factor" OR "educational environment" OR "contexto educativo" OR "contexto de aprendizaje" OR "factor contextual" OR "factor situacional" OR "entorno educativo") |
 
 ## Expressões de busca
@@ -86,8 +86,8 @@ A estrutura da questão foi adaptada do protocolo PICo e acrescida do desfecho o
 
 
 ### Notas explicativas
-- N1 — EB1: calibração, não exclusão. Calculada localmente sobre a exportação de EB4, no estrato E1. Serve à calibração inicial e à caracterização da maior interseção. A calibração deve ser documentada, mas não apresentada como avaliação independente da confiabilidade dos critérios. EB1 é sonda de precisão, nunca critério de exclusão.
-- N2 — EB2 e EB3: sensibilidade e fidelidade da derivação local. São subconjuntos de EB4, calculados localmente, no estrato E2. Servem à análise de sensibilidade e ao teste de fidelidade da derivação. Na base, só devem ser executadas no procedimento-piloto de fidelidade, com EB5, fora do corpus. A comparação deve envolver conjuntos, identificadores e diferenças, não apenas contagens; divergências por stemming, expansão automática, indexação ou sintaxe devem ser registradas.
+- N1 — EB1: calibração, não exclusão. Calculada localmente sobre a exportação de EB4. Serve à calibração inicial e à caracterização da maior interseção. A calibração deve ser documentada, mas não apresentada como avaliação independente da confiabilidade dos critérios. EB1 é sonda de precisão, nunca critério de exclusão.
+- N2 — EB2 e EB3: sensibilidade e fidelidade da derivação local. São subconjuntos de EB4, calculados localmente. Servem à análise de sensibilidade e ao teste de fidelidade da derivação. Na base, só devem ser executadas no procedimento-piloto de fidelidade, com EB5, fora do corpus. A comparação deve envolver conjuntos, identificadores e diferenças, não apenas contagens; divergências por stemming, expansão automática, indexação ou sintaxe devem ser registradas.
 - N3 — EB4: busca definitiva e regra de decisão. É a única expressão executada como busca definitiva nas bases e equivale a EB2 ∪ EB3. Exige termo de prática ou de fator situacional. A decisão sobre mantê-la usa a diferença EB5 − EB4: proporção de elegíveis < 5% favorece manutenção; > 15% exige reconsideração e, se necessário, emenda; 5%–15% é inconclusivo e requer análise qualitativa dos elegíveis, das razões de não recuperação e da viabilidade de ampliar a expressão. Os limiares são decisões do projeto, não normas universais.
 - N4 — EB5: controle de recall e elegibilidade. Executada uma única vez, na mesma base e data de EB4, fora do corpus, com os mesmos campos, filtros, intervalo temporal, idiomas e demais parâmetros, alterando-se somente a exigência de STR3 ou STR4. A diferença examinada é EB5 − EB4, após deduplicação dentro da base; registros já recuperados por EB4 não entram no denominador. A elegibilidade é avaliação humana; a IA pode apoiar a organização, mas não decidir. A proporção é calculada como elegíveis na diferença ÷ registros efetivamente avaliados na diferença × 100, informando numerador, denominador e, se houver amostragem, método e incerteza. Sempre que viável, examinar toda a diferença; se inviável, usar amostra aleatória documentada, nunca amostra de conveniência.
 

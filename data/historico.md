@@ -146,3 +146,14 @@ Alcance: **método**.
 - A troca altera o conjunto: o recall anterior e o posterior não se comparam sem esta entrada.
 
 Alcance: **método**.
+
+## 2026-11-28 — Vocabulário novo da FCT2 e da FCT3, sem validação nos instrumentos
+
+- **FCT2.** Entram como termos livres `ensino` e `aprendizagem` (pt), `teaching` e `learning` (en), `enseñanza` e `aprendizaje` (es). Saem `ensino e aprendizagem`, `teaching and learning` e `enseñanza y aprendizaje`.
+- **FCT3.** Os termos livres passam a ser `prática de ensino`, `prática instrucional`, `prática docente`, `técnica de ensino`, `técnica instrucional` e `técnica docente` (pt); `teaching practice`, `instructional practice`, `teacher practice`, `teaching technique` e `instructional technique` (en); e os seis correspondentes em es. Saem `prática educacional`, `método de ensino`, `estratégia educacional`, `atividade de aprendizagem`, `intervenção educacional` e os equivalentes en e es.
+- **Equivalentes en e es.** Prevalece a forma de maior potencial de busca sobre a correspondência um a um: `técnica docente` fica sem equivalente próprio em en, coberta por `teaching technique`.
+- **Validação suprimida para esses termos.** Ficam termos livres e assim se declaram no relato; nenhum se apresenta como descritor autorizado. A busca não depende da autoridade do termo (plano, riscos). A validação fica por fazer (PD41).
+- **Não se alteraram** as linhas de descritores da FCT2 e da FCT3, decididas em 2026-11-25, a FCT1, a FCT4 e as expressões. Na ERIC, `learner` e `learners` continuam na lista própria da STR2, como forma da base.
+- **O teste de aderência e as execuções se refazem** com as STRs novas (PD31).
+
+Alcance: **busca**.

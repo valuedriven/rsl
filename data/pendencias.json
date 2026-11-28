@@ -102,6 +102,15 @@
       "bloqueia": "atribuição da causa `não indexada` no diagnóstico da Scopus (nível 1)",
       "acao_sugerida": "ao submeter o nível 1 de `aderencia diagnosticar scopus`: se o retorno for menor que o número de DOIs, submeter cada DOI ausente sozinho antes de registrar; DOI que volta sozinho e não no grupo indica falha do agrupamento — parar e não registrar.",
       "responsavel": "pesquisador"
+    },
+    {
+      "id": "PD41",
+      "categoria": "validacao-terminologica",
+      "descricao": "Termos livres da FCT2 e da FCT3 incluídos em 2026-11-27 sem estatuto na planilha de validação. A validação foi suprimida por decisão do pesquisador (data/historico.md, 2026-11-28), depois que o serviço TemaTres passou a recusar a conexão do cliente Python (`ConnectionResetError`) e continuou atendendo o navegador. Falha de acesso não é ausência: os termos continuam sem estatuto, e não \"não localizados\".",
+      "origem": "data/historico.md, 2026-11-28; data/validacao_terminologica.csv; openspec/changes/archive (change medicao-proximidade-e-ampliacao-da-fct2, tarefa 2.3)",
+      "bloqueia": "apresentar algum desses termos como descritor autorizado; não bloqueia a busca",
+      "acao_sugerida": "na change geral de otimização das consultas terminológicas: consultar pelo navegador (trecho de console na mesma origem do serviço), importar as respostas com `termos validar --respostas` e apresentar ao ReT a lista termo livre → descritor proposto; não disfarçar o cliente Python",
+      "responsavel": "pesquisador"
     }
   ]
 }

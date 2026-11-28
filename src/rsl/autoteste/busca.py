@@ -587,11 +587,18 @@ def anatomia(ctx, g):
         (pasta / "sonda.ris").write_text(registros(["SX5", "SX6"]), encoding="utf-8")
         (pasta / "executada.ris").write_text(
             _ris_anat([(titulo_exec, 2024, "10.0000/at.f", "eng", "JOUR")]), encoding="utf-8")
+        # A execução registrada só se lê com o texto vigente da expressão: o registro
+        # sintético traz o texto composto agora, como `busca registrar` o gravaria.
+        _, _, niveis0 = monta_niveis(Busca(com_fonte(ctx, sigla, dado, frag0, arqs0)), sigla,
+                                     sementes)
+        vigente = {n["expressao"]: n["texto_expressao"] for n in niveis0 if n["expressao"]}
         registro = {"bases": {b.bd_de[sigla]: {"base": sigla, "execucoes": [
             {"id": "EX1", "expressao": b.sonda, "arquivo": str(pasta / "sonda.ris"),
-             "registros_lidos": 2, "status": "valida", "data_hora": "2026-11-25T10:00"},
+             "registros_lidos": 2, "status": "valida", "data_hora": "2026-11-25T10:00",
+             "texto": vigente[b.sonda]},
             {"id": "EX2", "expressao": b.executada, "arquivo": str(pasta / "executada.ris"),
-             "registros_lidos": 1, "status": "valida", "data_hora": "2026-11-25T10:00"}]}}}
+             "registros_lidos": 1, "status": "valida", "data_hora": "2026-11-25T10:00",
+             "texto": vigente[b.executada]}]}}}
         # Outra base recupera SX7, esperada também nesta: a seleção é da executada desta
         # base, e SX7 tem de ser diagnosticada aqui mesmo recuperada lá.
         titulo_sx7 = "Semente sintetica SX7 recuperada so na outra base"
@@ -621,6 +628,11 @@ def anatomia(ctx, g):
 
         sem_prox = copy.deepcopy(dado)
         sem_prox["composicao"]["proximidade"] = "nenhum"
+        # Sem proximidade, as transformações dela não se declaram (a leitura as recusa).
+        for s_ in sem_prox.get("sondagens", []):
+            for c_ in s_["consultas"]:
+                c_.pop("sem_proximidade", None)
+                c_.pop("distancia", None)
         cx_np = com_fonte(ctx, sigla, sem_prox, frag0, arqs0).com_config(cfg)
         _, _, niveis_np = monta_niveis(Busca(cx_np), sigla, sementes)
         g.testa("base sem proximidade funde os níveis 3 e 4 e mantém o 5",
@@ -683,6 +695,36 @@ def anatomia(ctx, g):
                 and consultas[3]["origem"].startswith("execução")
                 and consultas[4]["origem"].startswith("execução")
                 and consultas[0]["origem"] == "submetido", str(consultas[-1:]))
+
+        # Texto registrado diferente do vigente, ou ausente: o nível não se lê de execução,
+        # e o roteiro o pede com o motivo. Com a conferência desligada, seria lido.
+        from ..busca import anatomia as AN
+        reg_mud = copy.deepcopy(registro)
+        exs = reg_mud["bases"][b.bd_de[sigla]]["execucoes"]
+        exs[0]["texto"] = exs[0]["texto"] + " OR zzz"
+        exs[1].pop("texto")
+        (pasta / "registro_mud.json").write_text(json.dumps(reg_mud), encoding="utf-8")
+        cfg_m = Configuracao(cfg.com("dados.registro", str(pasta / "registro_mud.json")),
+                             cfg.arquivo)
+        bx_m = Busca(com_fonte(ctx, sigla, dado, frag0, arqs0).com_config(cfg_m))
+
+        def roteiro_mud():
+            return _roda_anatomia(lambda: diagnosticar(bx_m, sigla, [], [], "",
+                                                       sementes=sementes))
+        cod, texto_m, erro = roteiro_mud()
+        g.testa("execução com texto diferente do vigente ou sem texto não se lê: o nível vai "
+                "ao roteiro, com o motivo",
+                cod == Saida.OK and "texto diferente do vigente" in texto_m
+                and "sem texto registrado" in texto_m and "lido de" not in texto_m,
+                f"{cod.name} {erro[:80]}")
+        original = AN.motivo_sem_leitura
+        AN.motivo_sem_leitura = lambda *a: None
+        try:
+            _, texto_sem, _ = roteiro_mud()
+        finally:
+            AN.motivo_sem_leitura = original
+        g.testa("com a conferência do texto desligada, o nível seria lido (o caso falharia)",
+                "lido de" in texto_sem, texto_sem[-120:])
 
         cod, texto_d, erro = resultado(retornos=[(1, 5), (2, 4), (3, 3)],
                                        exportacoes=[(1, l1), (2, l2), (3, l3)],

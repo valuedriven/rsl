@@ -669,8 +669,8 @@ def referencias(ctx, g):
                 and teste.replace(op, " AND ") == controle, f"{controle[:80]}")
 
         class SemEfeito(PR.Composicao):
-            def _ancoras(self, partes, sem_proximidade=False):
-                return super()._ancoras(partes, False)
+            def _ancoras(self, partes, sem_proximidade=False, distancia=None):
+                return super()._ancoras(partes, False, distancia)
         reprova("com a composição que ignora `sem_proximidade`, a transformação sem efeito",
                 compoe(*b5, classe=SemEfeito), (sd5, cons5, "não muda a consulta"), s5)
 
@@ -680,8 +680,10 @@ def referencias(ctx, g):
                                          for c in e["consultas"])
 
         class Alonga(PR.Composicao):
-            def _transformada(self, *a):
-                return super()._transformada(*a) + " " * (self.fonte["teto"] or 0)
+            # Só a consulta `sem_proximidade` se alonga: o caso mede a dela.
+            def _transformada(self, ident, onde, sem_prox, *a):
+                t = super()._transformada(ident, onde, sem_prox, *a)
+                return t + " " * (self.fonte["teto"] or 0) if sem_prox else t
         reprova("consulta resolvida acima do teto",
                 compoe(*muda(b5, teto_justo), classe=Alonga), (sd5, cons5, "passa do teto"),
                 s5)
@@ -711,10 +713,159 @@ def referencias(ctx, g):
                 confere_metades())
 
         class SemMetade(PR.Composicao):
-            def _transformada(self, ident, onde, sem_prox, metade):
-                return super()._transformada(ident, onde, sem_prox, None)
+            def _transformada(self, ident, onde, sem_prox, metade, *resto):
+                return super()._transformada(ident, onde, sem_prox, None, *resto)
         g.testa(f"com a `metade` desligada, a conferência das partes falha [{s6}]",
                 not confere_metades(SemMetade))
+
+    # -- `distancia`: o mesmo operador de proximidade, com outra distância
+    dist = acha(lambda x, c: c.get("distancia") is not None)
+    if dist is None:
+        g.falha("mutação não aplicada: nenhuma consulta com `distancia`")
+    else:
+        s7, dado7, fr7, ar7, i7, k7 = dist
+        b7 = (s7, dado7, fr7, ar7)
+        sd7, cons7 = _onde(dado7, i7, k7)
+        c7 = dado7["sondagens"][i7]["consultas"][k7]
+        comp7 = compoe(*b7)()
+        p7 = comp7.fonte["proximidade"]
+        op7 = f" {p7['operador']}/{p7['distancia']} "
+        bloco7 = comp7.expressoes[c7["expressao"]]["consultas"][0]["texto"]
+        r7 = comp7.sondagens[sd7][k7]
+        g.testa(f"`distancia` difere do bloco só na distância do operador [{s7}]",
+                bloco7.count(op7) == 1 and r7["texto"] == bloco7.replace(
+                    op7, f" {p7['operador']}/{c7['distancia']} ")
+                and f"distância {c7['distancia']}" in r7["origem"], r7["origem"])
+
+        class SemDistancia(PR.Composicao):
+            def _ancoras(self, partes, sem_proximidade=False, distancia=None):
+                return super()._ancoras(partes, sem_proximidade, None)
+        reprova("com a composição que ignora `distancia`, a transformação sem efeito",
+                compoe(*b7, classe=SemDistancia), (sd7, cons7, "não muda a consulta"), s7)
+
+        def na7(**mud):
+            def mutar(x):
+                c = x["sondagens"][i7]["consultas"][k7]
+                for chave, valor in mud.items():
+                    if valor is None:
+                        c.pop(chave, None)
+                    else:
+                        c[chave] = valor
+            return muda(b7, mutar)
+        reprova("`distancia` igual à da base", le(*na7(distancia=p7["distancia"])),
+                (sd7, cons7, "a mesma da base"), s7)
+        reprova("`distancia` que não é inteiro positivo", le(*na7(distancia=0)),
+                (sd7, cons7, "inteiro positivo"), s7)
+        reprova("`sem_proximidade` e `distancia` juntas", le(*na7(sem_proximidade=True)),
+                (sd7, cons7, "juntas"), s7)
+        semprox = None
+        for b in d["bases"]:
+            dado_b, fr_b, ar_b = fonte_de(ctx, d, b["sigla"])
+            if dado_b["composicao"].get("proximidade") == "nenhum":
+                ik = next(((i_, k_) for i_, k_, c in _consultas(dado_b) if "expressao" in c),
+                          None)
+                if ik:
+                    semprox = (b["sigla"], dado_b, fr_b, ar_b) + ik
+                    break
+        if semprox is None:
+            g.falha("mutação não aplicada: nenhuma base sem proximidade com consulta por "
+                    "referência")
+        else:
+            s8, dado8, fr8, ar8, i8, k8 = semprox
+            sd8, cons8 = _onde(dado8, i8, k8)
+            reprova("`distancia` numa base sem proximidade",
+                    le(*muda((s8, dado8, fr8, ar8), lambda x: x["sondagens"][i8]["consultas"][
+                        k8].update(distancia=15))), (sd8, cons8, "sem proximidade"), s8)
+
+    # -- `restricao`: grupo fora do protocolo, unido por AND, antes dos filtros
+    res = acha(lambda x, c: c.get("restricao"))
+    if res is None:
+        g.falha("mutação não aplicada: nenhuma consulta com `restricao`")
+    else:
+        s9, dado9, fr9, ar9, i9, k9 = res
+        b9 = (s9, dado9, fr9, ar9)
+        sd9, cons9 = _onde(dado9, i9, k9)
+        c9 = dado9["sondagens"][i9]["consultas"][k9]
+        termos9 = c9["restricao"]["termos"]
+
+        def confere_restricao(classe=None):
+            comp = compoe(*b9, classe=classe)()
+            r = comp.sondagens[sd9][k9]
+            ancora = comp.fonte["composicao"][d["facetas"][0]["id"]]
+            grupo9 = PR.grupo(termos9, ancora["campo"], ancora["forma"], comp.aspas)
+            filtros = [x for x in comp.clausulas if x in r["texto"]]
+            pos_f = min((r["texto"].index(x) for x in filtros), default=len(r["texto"]))
+            return (f" AND {grupo9}" in r["texto"]
+                    and r["texto"].index(grupo9) < pos_f
+                    and G.MARCA_FORA_DO_PROTOCOLO in r["origem"]
+                    and all(f"`{t}`" in r["origem"] for t in termos9)), r
+        ok9, r9 = confere_restricao()
+        g.testa(f"`restricao`: grupo no campo das âncoras, antes dos filtros, marcado fora do "
+                f"protocolo [{s9}]", ok9, r9["origem"])
+
+        class SemRestricao(PR.Composicao):
+            def _texto(self, ancoras, outros, sem_proximidade=False, distancia=None,
+                       restricao=None):
+                return super()._texto(ancoras, outros, sem_proximidade, distancia, None)
+        g.testa(f"com a `restricao` desligada, a conferência do grupo falha [{s9}]",
+                not confere_restricao(SemRestricao)[0])
+
+        class SemMarca(PR.Composicao):
+            def resolve(self, sd_, k_, c):
+                r = super().resolve(sd_, k_, c)
+                return dict(r, origem=(r["origem"] or "").replace(G.MARCA_FORA_DO_PROTOCOLO,
+                                                                  ""))
+        g.testa(f"sem a marca \"fora do protocolo\" no roteiro, a conferência falha [{s9}]",
+                not confere_restricao(SemMarca)[0])
+        reprova("`restricao` com lista vazia",
+                le(*muda(b9, lambda x: x["sondagens"][i9]["consultas"][k9].update(
+                    restricao={"termos": []}))), (sd9, cons9, "lista vazia"), s9)
+        reprova("`restricao` fora da forma",
+                le(*muda(b9, lambda x: x["sondagens"][i9]["consultas"][k9].update(
+                    restricao={"termo": "x"}))), (sd9, cons9, "exige só `termos`"), s9)
+
+        # Registro: o literal resolvido da consulta transformada traz os termos da restrição.
+        with tempfile.TemporaryDirectory() as tmp9:
+            reg9 = pathlib.Path(tmp9) / "registro.json"
+            ev9 = pathlib.Path(tmp9) / "evidencia.png"
+            ev9.write_bytes(b"autoteste")
+            n9 = len(dado9["sondagens"][i9]["consultas"])
+            _codigo(lambda: registra(com_fonte(ctx, *b9), s9, sd9, [1] * n9,
+                                     1, "2026-01-01T10:00", [str(ev9)], caminho=reg9))
+            bd9 = next(b["id"] for b in d["bases"] if b["sigla"] == s9)
+            txt9 = json.loads(reg9.read_text(encoding="utf-8"))["bases"][bd9]["sondagens"][0][
+                "consultas"][k9]["texto"] if reg9.exists() else ""
+            g.testa(f"registro grava o literal da consulta com `restricao` [{s9}]",
+                    txt9 == r9["texto"] and all(t in txt9 for t in termos9), txt9[-80:])
+
+    # -- strings alteradas: as consultas com `distancia` e com `restricao` acompanham a
+    # composição, sem edição da fonte, e a transformação continua aplicada.
+    for nome_t, achado_t in (("distancia", dist), ("restricao", res)):
+        if achado_t is None:
+            continue
+        st, dadot, frt, art, it, kt = achado_t
+        sdt, _ = _onde(dadot, it, kt)
+        ct = dadot["sondagens"][it]["consultas"][kt]
+        antes_t = compoe(st, dadot, frt, art)().sondagens[sdt][kt]["texto"]
+
+        def aplicada(texto, ct=ct, nome_t=nome_t):
+            if nome_t == "distancia":
+                return f"/{ct['distancia']} " in texto
+            return all(t in texto for t in ct["restricao"]["termos"])
+
+        def acompanha_t(classe, st=st, dadot=dadot, frt=frt, art=art, sdt=sdt, kt=kt,
+                        antes_t=antes_t, aplicada=aplicada):
+            r = compoe(st, dadot, frt, art, classe=classe)().sondagens[sdt][kt]["texto"]
+            return marca in r and r != antes_t and aplicada(r)
+        g.testa(f"com as strings alteradas, a consulta com `{nome_t}` acompanha a composição "
+                f"[{st}]", acompanha_t(Alterada))
+
+        class CongeladaT(Alterada):
+            def resolve(self, sd_, k_, c, sdt=sdt, kt=kt, antes_t=antes_t):
+                r = super().resolve(sd_, k_, c)
+                return dict(r, texto=antes_t) if sd_ == sdt and k_ == kt + 1 else r
+        g.testa(f"com a consulta com `{nome_t}` congelada no texto anterior, o caso falharia "
+                f"[{st}]", not acompanha_t(CongeladaT))
 
     # -- registro: o texto resolvido, não a referência
     with tempfile.TemporaryDirectory() as tmp:

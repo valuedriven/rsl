@@ -42,7 +42,7 @@ verificacao = true
 id = "SE6"
 doi = "10.1007/s10639-019-09877-4"
 referencia_curta = "Iatrellis 2019: EDUC8 ontology: semantic modeling of multi-facet learning pathways"
-bases = ["eric"]
+bases = ["eric", "wos", "scopus"]
 alinhamento_facetas = { FCT1 = "modelagem semântica de trajetórias formativas com múltiplas facetas", FCT2 = "ensino superior em computação", FCT3 = "personalização das trajetórias dos estudantes" }
 verificacao = true
 
@@ -123,7 +123,7 @@ verificacao = true
 id = "SE16"
 doi = "10.1080/19415257.2023.2248478"
 referencia_curta = "King 2023: A pragmatic meta-model to navigate complexity in teachers’…"
-bases = ["eric"]
+bases = ["eric", "wos"]
 alinhamento_facetas = { FCT1 = "metamodelo que articula contexto, experiência e resultados da formação docente", FCT2 = "formação continuada de professores", FCT3 = "planejamento, realização e avaliação de experiências formativas docentes", FCT4 = "condições da escola, cultura organizacional e influências do sistema, nos níveis micro, meso e macro" }
 verificacao = true
 nota = "O artigo não tem resumo publicado."
@@ -141,7 +141,7 @@ nota = "Indexação em Scopus e Web of Science indicada em fonte bibliográfica 
 id = "SE18"
 doi = "10.1007/s10758-024-09784-9"
 referencia_curta = "Tondeur 2024: The DTALE Model: Designing Digital and Physical Spaces…"
-bases = ["scopus"]
+bases = ["scopus", "wos"]
 alinhamento_facetas = { FCT1 = "modelo DTALE de integração de espaços físicos e digitais", FCT2 = "desenho de espaços para ensinar e aprender", FCT3 = "desenho da aprendizagem em espaços integrados", FCT4 = "espaços físicos e digitais e fatores institucionais, sociais e culturais" }
 verificacao = true
 nota = "Modelo desenvolvido a partir de revisão crítica da literatura e validado em quatro casos."

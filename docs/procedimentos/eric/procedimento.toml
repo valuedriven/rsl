@@ -345,7 +345,7 @@ id = "STR2"
 faceta = "FCT2"
 campo = "abstract:"
 termos = ["education", "educational", "learning", "teaching", "learner", "learners"]
-rotulo = "quatro palavras-raiz no resumo"
+rotulo = "palavras-raiz no resumo; `learner` e `learners` são forma desta base, fora do quadro da FCT2"
 
 # ------------------------------------------------------------------ §4 execução
 [execucao]

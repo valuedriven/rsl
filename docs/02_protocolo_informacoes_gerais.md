@@ -13,13 +13,11 @@
 
 ### Obras de referência a consultar
 
-- SOUZA, Renato Rocha; TUDHOPE, Douglas; ALMEIDA, Mauricio Barcellos. Towards a taxonomy of KOS: dimensions for classifying knowledge organization systems. Knowledge Organization, v. 39, n. 3, p. 179–192, 2012\. 
+
 - INSTITUTO BRASILEIRO DE INFORMAÇÃO EM CIÊNCIA E TECNOLOGIA. Tesauro Brasileiro de Ciência da Informação. Brasília: IBICT. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `tbci`.
 - INSTITUTO NACIONAL DE ESTUDOS E PESQUISAS EDUCACIONAIS ANÍSIO TEIXEIRA. Thesaurus Brasileiro da Educação (Brased). Brasília: INEP. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `brased`.
 - INSTITUTE OF EDUCATION SCIENCES. ERIC Thesaurus. Washington: IES/ED. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `eric`.
 - UNESCO. UNESCO Thesaurus. Paris: UNESCO. Endereço eletrônico: tabela "Instrumentos para controle terminológico" do protocolo, estratégias de pesquisa, linha `unesco`.
-- FINK, L. Dee. Creating significant learning experiences: an integrated approach to designing college courses. San Francisco: Jossey-Bass, 2003\. Ed. rev. e atual., 2013\. — fonte da noção de fatores situacionais. A edição consultada é registrada na citação (a paginação difere entre as duas). 
-- FINK, L. Dee. A self-directed guide to designing courses for significant learning. San Francisco: Jossey-Bass, 2003\. — cinco categorias de fatores situacionais, REFERÊNCIA DE PARTIDA da faceta 4 e do campo 4 do fichamento; orientam a codificação sem restringi-la: fator não previsto é registrado com a própria designação e constitui achado.
 - INSTITUTE OF ELECTRICAL AND ELECTRONICS ENGINEERS. IEEE 1484.12.1-2020 — IEEE Standard for Learning Object Metadata. New York: IEEE, 2020\. Edição anterior, superada: IEEE 1484.12.1-2002. Cita-se a edição que o estudo analisado empregue.
 
 ### Bibliotecas especializadas
@@ -30,9 +28,14 @@
 
 ### Estudos inicialmente consultados acerca do tema da revisão
 
-- ABU-SALIH, Bilal; ALOTAIBI, Salihah. A systematic literature review of knowledge graph construction and application in education. Heliyon, v. 10, n. 3, p. e25383, fev. 2024\.
-- CREEMERS, Bert; KYRIAKIDES, Leonidas. Situational effects of the school factors included in the dynamic model of educational effectiveness. South African Journal of Education, v. 29, n. 3, p. 293–315, 13 ago. 2009\.
-- CARTER, Emma et al. Evidence-based teaching: effective teaching practices in primary school classrooms. London Review of Education, v. 22, n. 1, 20 mar. 2024\.
+- ABU-SALIH, Bilal; ALOTAIBI, Salihah. A systematic literature review of knowledge graph construction and application in education. Heliyon, v. 10, n. 3, p. e25383, fev. 2024.
+- CREEMERS, Bert; KYRIAKIDES, Leonidas. Situational effects of the school factors included in the dynamic model of educational effectiveness. South African Journal of Education, v. 29, n. 3, p. 293–315, 13 ago. 2009.
+- CARTER, Emma et al. Evidence-based teaching: effective teaching practices in primary school classrooms. London Review of Education, v. 22, n. 1, 20 mar. 2024.
+- FINK, L. Dee. Creating significant learning experiences: an integrated approach to designing college courses. San Francisco: Jossey-Bass, 2003\. Ed. rev. e atual., 2013.
+- FINK, L. Dee. A self-directed guide to designing courses for significant learning. San Francisco: Jossey-Bass, 2003.
+- Lowell, V. L., & Ureña-Rodríguez, L. (2023). A Framework for Examining the Relationship and Classifying Instructional Strategies, Methods, and Techniques. Sage Open, 13(4). https://doi.org/10.1177/21582440231202911.
+- OECD, Unlocking High-Quality Teaching, OECD Publishing, Paris, https://doi.org/10.1787/f5b82176-en. 2025.
+- SOUZA, Renato Rocha; TUDHOPE, Douglas; ALMEIDA, Mauricio Barcellos. Towards a taxonomy of KOS: dimensions for classifying knowledge organization systems. Knowledge Organization, v. 39, n. 3, p. 179–192, 2012.
 
 ## Etapa 2 - Delimitação do assunto
 

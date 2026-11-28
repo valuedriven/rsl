@@ -271,6 +271,33 @@ def _valida_consultas_de_sondagem(sondagens, d, por_faceta, prox, doc):
                 raise ProtocoloInvalido(G.C_SOND_SEM_PROXIMIDADE, f"{onde}: `sem_proximidade` "
                                         f"numa base sem proximidade (`[composicao] "
                                         f"proximidade = \"nenhum\"`)", doc)
+            if "distancia" in c:
+                dist = c["distancia"]
+                if isinstance(dist, bool) or not isinstance(dist, int) or dist <= 0:
+                    raise ProtocoloInvalido(G.C_SOND_DISTANCIA, f"{onde}: `distancia` {dist!r}: "
+                                            f"exige inteiro positivo", doc)
+                if prox is None:
+                    raise ProtocoloInvalido(G.C_SOND_DISTANCIA, f"{onde}: `distancia` numa base "
+                                            f"sem proximidade (`[composicao] proximidade = "
+                                            f"\"nenhum\"`)", doc)
+                if c.get("sem_proximidade"):
+                    raise ProtocoloInvalido(G.C_SOND_DISTANCIA, f"{onde}: `sem_proximidade` e "
+                                            f"`distancia` juntas; a consulta é uma das duas", doc)
+                if dist == prox["distancia"]:
+                    raise ProtocoloInvalido(G.C_SOND_DISTANCIA, f"{onde}: `distancia` {dist}, a "
+                                            f"mesma da base; a transformação não muda a "
+                                            f"consulta", doc)
+            if "restricao" in c:
+                r = c["restricao"]
+                termos = r.get("termos") if isinstance(r, dict) else None
+                if not isinstance(r, dict) or set(r) != {"termos"} \
+                        or not isinstance(termos, list) \
+                        or not all(isinstance(t, str) and t.strip() for t in termos):
+                    raise ProtocoloInvalido(G.C_SOND_RESTRICAO, f"{onde}: `restricao` {r!r}: "
+                                            f"exige só `termos`, lista de textos", doc)
+                if not termos:
+                    raise ProtocoloInvalido(G.C_SOND_RESTRICAO, f"{onde}: `restricao` com lista "
+                                            f"vazia", doc)
             if "metade" in c:
                 m = c["metade"]
                 if set(m) != {"faceta", "parte"} or not isinstance(m["faceta"], str) \

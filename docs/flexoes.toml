@@ -37,35 +37,10 @@ formas = ["educacionales"]
 origem = "adjetivo isolado, que a regra não decide; plural do adjetivo"
 
 [[excecoes]]
-termo = "ensino e aprendizagem"
-idioma = "pt"
-tipo = "nao_contavel"
-origem = "locução coordenada que nomeia um processo, sem plural"
-
-[[excecoes]]
-termo = "intervenção educacional"
-idioma = "pt"
-tipo = "irregular"
-formas = ["intervenções educacionais"]
-origem = "plural do núcleo com a concordância do modificador, que a regra não decide"
-
-[[excecoes]]
 termo = "educational"
 idioma = "en"
 tipo = "nao_contavel"
 origem = "adjetivo, sem número"
-
-[[excecoes]]
-termo = "teaching and learning"
-idioma = "en"
-tipo = "nao_contavel"
-origem = "locução coordenada que nomeia um processo, sem plural"
-
-[[excecoes]]
-termo = "enseñanza y aprendizaje"
-idioma = "es"
-tipo = "nao_contavel"
-origem = "locução coordenada que nomeia um processo, sem plural"
 
 [[excecoes]]
 termo = "educación"
@@ -103,3 +78,72 @@ idioma = "pt"
 tipo = "irregular"
 formas = ["fator de rendimento escolar"]
 origem = "locução já flexionada no plural; o singular é a forma de número complementar, revisada pelo pesquisador"
+
+[[excecoes]]
+termo = "ensino"
+idioma = "pt"
+tipo = "nao_contavel"
+origem = "substantivo de processo ou de área, sem plural (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "aprendizagem"
+idioma = "pt"
+tipo = "nao_contavel"
+origem = "substantivo de processo ou de área, sem plural (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "teaching"
+idioma = "en"
+tipo = "nao_contavel"
+origem = "substantivo de processo ou de área, sem plural (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "learning"
+idioma = "en"
+tipo = "nao_contavel"
+origem = "substantivo de processo ou de área, sem plural (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "enseñanza"
+idioma = "es"
+tipo = "nao_contavel"
+origem = "substantivo de processo ou de área, sem plural (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "aprendizaje"
+idioma = "es"
+tipo = "nao_contavel"
+origem = "substantivo de processo ou de área, sem plural (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "métodos de ensino"
+idioma = "pt"
+tipo = "irregular"
+formas = ["método de ensino"]
+origem = "descritor já flexionado no plural; o singular é a forma de número complementar, como em `fatores de rendimento escolar`"
+
+[[excecoes]]
+termo = "educational practices"
+idioma = "en"
+tipo = "irregular"
+formas = ["educational practice"]
+origem = "descritor já flexionado no plural; o singular é a forma de número complementar, como em `fatores de rendimento escolar`"
+
+[[excecoes]]
+termo = "teaching methods"
+idioma = "en"
+tipo = "irregular"
+formas = ["teaching method"]
+origem = "descritor já flexionado no plural; o singular é a forma de número complementar, como em `fatores de rendimento escolar`"
+
+[[excecoes]]
+termo = "ensino-aprendizagem"
+idioma = "pt"
+tipo = "nao_contavel"
+origem = "forma composta de processo, sem plural, como `teaching-learning` (decisão de 2026-11-23)"
+
+[[excecoes]]
+termo = "enseñanza-aprendizaje"
+idioma = "es"
+tipo = "nao_contavel"
+origem = "forma composta de processo, sem plural, como `teaching-learning` (decisão de 2026-11-23)"

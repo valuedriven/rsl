@@ -178,22 +178,22 @@ organização AND conhecimento
 
 - SD1 registrada com os operadores verificados
 
-**Consulta 1 — teste**, em caixa de busca. Texto de EB5, 468 caracteres.
+**Consulta 1 — teste**, em caixa de busca. Texto de EB5, 445 caracteres.
 
 ```
-("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação")
 ```
 
-**Consulta 2 — controle**, em caixa de busca. Texto de EB5, metade 1 de 2 da faceta FCT1 🟦, 305 caracteres.
+**Consulta 2 — controle**, em caixa de busca. Texto de EB5, metade 1 de 2 da faceta FCT1 🟦, 282 caracteres.
 
 ```
-("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation") AND ("educacional" OR "educacionais" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação")
 ```
 
-**Consulta 3 — controle**, em caixa de busca. Texto de EB5, metade 2 de 2 da faceta FCT1 🟦, 291 caracteres.
+**Consulta 3 — controle**, em caixa de busca. Texto de EB5, metade 2 de 2 da faceta FCT1 🟦, 268 caracteres.
 
 ```
-("knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
+("knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação")
 ```
 
 **Passos.**
@@ -457,13 +457,13 @@ Declarada em `docs/procedimentos/brapci/procedimento.toml`, `[cobertura]`; confe
 ### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — **âncora obrigatória**
 
 ```
-("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
+("educacional" OR "educacionais" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação")
 ```
 
 ### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
 ```
-("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais")
+("prática de ensino" OR "práticas de ensino" OR "prática instrucional" OR "práticas instrucionais" OR "prática docente" OR "práticas docentes" OR "técnica de ensino" OR "técnicas de ensino" OR "técnica instrucional" OR "técnicas instrucionais" OR "técnica docente" OR "técnicas docentes" OR "métodos de ensino" OR "método de ensino")
 ```
 
 ### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
@@ -515,7 +515,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Executada e exportada nesta base.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨) AND (FCT3 (🟥) OR FCT4 (🟧))
 
 ```
-("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação") AND (("prática educacional" OR "práticas educacionais" OR "método de ensino" OR "métodos de ensino" OR "estratégia educacional" OR "estratégias educacionais" OR "atividade de aprendizagem" OR "atividades de aprendizagem" OR "intervenção educacional" OR "intervenções educacionais") OR ("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "fatores de rendimento escolar" OR "fator de rendimento escolar"))
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação") AND (("prática de ensino" OR "práticas de ensino" OR "prática instrucional" OR "práticas instrucionais" OR "prática docente" OR "práticas docentes" OR "técnica de ensino" OR "técnicas de ensino" OR "técnica instrucional" OR "técnicas instrucionais" OR "técnica docente" OR "técnicas docentes" OR "métodos de ensino" OR "método de ensino") OR ("contexto educacional" OR "contextos educacionais" OR "contexto de aprendizagem" OR "contextos de aprendizagem" OR "fator contextual" OR "fatores contextuais" OR "fator situacional" OR "fatores situacionais" OR "ambiente educacional" OR "ambientes educacionais" OR "fatores de rendimento escolar" OR "fator de rendimento escolar"))
 ```
 
 ### EB5 (sonda de sensibilidade — as duas âncoras, sem exigir prática nem fator situacional)
@@ -523,7 +523,7 @@ EB5 = #1 AND #2                    (sonda de sensibilidade)
 *Sonda de sensibilidade — executada uma única vez; não compõe o corpus.* **Facetas:** FCT1 (🟦) AND FCT2 (🟨)
 
 ```
-("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino-aprendizagem" OR "ensino-aprendizagens" OR "ensino e aprendizagem" OR "educação")
+("ontologia" OR "ontologias" OR "modelo conceitual" OR "modelos conceituais" OR "representação do conhecimento" OR "organização do conhecimento" OR "knowledge representation" OR "knowledge representations" OR "knowledge organization" OR "knowledge organizations" OR "conceptual model" OR "conceptual models" OR "ontology" OR "ontologies") AND ("educacional" OR "educacionais" OR "ensino" OR "aprendizagem" OR "ensino-aprendizagem" OR "educação")
 ```
 
 ### Como executar

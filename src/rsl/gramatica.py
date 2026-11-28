@@ -849,11 +849,25 @@ C_SOND_METADE = CampoFonte(
               "metade indicada dos termos da faceta, em ordem, entra (a parte 1 fica com o "
               "termo excedente); faceta fora da composição ou da expressão, e parte fora de "
               "{1, 2}, reprovam")
+C_SOND_DISTANCIA = CampoFonte(
+    T_SOND_CONSULTAS, "distancia", "inteiro", OPCIONAL,
+    descricao="com `expressao` de consulta única: o operador de proximidade da base com esta "
+              "distância (inteiro positivo) no lugar da declarada; reprova na base sem "
+              "`[composicao] proximidade`, igual à distância da base e junto com "
+              "`sem_proximidade`")
+C_SOND_RESTRICAO = CampoFonte(
+    T_SOND_CONSULTAS, "restricao", "tabela", OPCIONAL,
+    descricao="com `expressao` de consulta única: {termos = [\"…\"]}; um grupo com os termos, "
+              "em forma literal e fora do protocolo, unido por AND no campo das âncoras, antes "
+              "das cláusulas de filtro; lista vazia reprova")
 CampoFonte(T_SOND_CONSULTAS, "onde", "texto", descricao="caixa, campo ou filtro")
 CampoFonte(T_SOND_CONSULTAS, "muda", "texto", OPCIONAL,
            descricao="o que muda em relação ao controle")
 # Transformações da referência: conjunto fechado, aplicadas na composição.
-TRANSFORMACOES = (C_SOND_SEM_PROXIMIDADE.chave, C_SOND_METADE.chave)
+TRANSFORMACOES = (C_SOND_SEM_PROXIMIDADE.chave, C_SOND_METADE.chave, C_SOND_DISTANCIA.chave,
+                  C_SOND_RESTRICAO.chave)
+# Marca, no roteiro, dos termos que uma transformação leva à consulta sem estarem no protocolo.
+MARCA_FORA_DO_PROTOCOLO = "fora do protocolo"
 # Marcas de referência a outro trecho do procedimento: lista fechada. Em `texto`, reprovam
 # (a consulta seria prosa, não literal); a garantia é `expressao`, e a detecção impede que o
 # defeito conhecido volte. A cor de cada faceta vem de `[composicao.facetas] cor` da fonte.

@@ -629,3 +629,54 @@ estado = "medicao"
 resultado = "teste = 0 sem mensagem, ou controle = 0"
 conclusao = "inconclusiva: o zero não distingue recusa silenciosa de ausência do termo"
 estado = "nao_verificado"
+
+[[sondagens]]
+id = "SD10"
+elementos = []
+objetivo = "medir o retorno de EB5 com a proximidade declarada, com distância 15 e sem proximidade entre as âncoras, e a parcela de ruído da forma sem proximidade"
+pre_requisitos = ["busca avançada aberta no navegador do pesquisador, com o acesso institucional dele", "procedimento regenerado com as strings vigentes"]
+passos = ["submeter as quatro consultas na mesma sessão, uma por vez, na ordem, e anotar o retorno exibido de cada uma", "não exportar: a sondagem mede volume"]
+observar = ["retorno exibido de cada consulta", "mensagem de erro ou de recusa, se houver"]
+evidencia = ["captura da tela do histórico de busca, com as quatro consultas e os retornos visíveis"]
+
+[[sondagens.consultas]]
+papel = "controle"
+expressao = "EB5"
+onde = "busca avançada"
+
+[[sondagens.consultas]]
+papel = "teste"
+expressao = "EB5"
+distancia = 15
+onde = "busca avançada"
+muda = "`W/15` entre as âncoras"
+
+[[sondagens.consultas]]
+papel = "teste"
+expressao = "EB5"
+sem_proximidade = true
+onde = "busca avançada"
+muda = "`AND` entre as âncoras"
+
+[[sondagens.consultas]]
+papel = "teste"
+expressao = "EB5"
+sem_proximidade = true
+restricao = { termos = ["ontology learning", "machine learning", "deep learning", "aprendizaje automático"] }
+onde = "busca avançada"
+muda = "`AND` entre as âncoras e só os registros com uma forma de ruído conhecida (limite inferior do ruído)"
+
+[[sondagens.leituras]]
+resultado = "todas aceitas, com controle ≤ consulta 2 ≤ consulta 3 e consulta 4 ≤ consulta 3"
+conclusao = "retornos medidos; a decisão sobre a proximidade é do pesquisador"
+estado = "medicao"
+
+[[sondagens.leituras]]
+resultado = "alguma consulta recusada ou com mensagem"
+conclusao = "a forma recusada não se mede; levar ao pesquisador"
+estado = "nao_verificado"
+
+[[sondagens.leituras]]
+resultado = "retornos fora das relações da primeira leitura, ou controle = 0"
+conclusao = "inconclusiva: levar ao pesquisador"
+estado = "nao_verificado"

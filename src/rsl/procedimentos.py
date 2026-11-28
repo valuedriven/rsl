@@ -163,9 +163,10 @@ class Composicao:
         return self.fonte["composicao"][fid].get("rotulo") or fid
 
     # ---- consultas
-    def _ancoras(self, partes, sem_proximidade=False):
+    def _ancoras(self, partes, sem_proximidade=False, distancia=None):
         """Texto das âncoras: com proximidade, no mesmo campo, entre parênteses. Com
-        `sem_proximidade`, a mesma forma com AND no lugar do operador de proximidade."""
+        `sem_proximidade`, a mesma forma com AND no lugar do operador de proximidade; com
+        `distancia`, o mesmo operador com essa distância."""
         prox = self.fonte["proximidade"]
         if prox is None or len(partes) != 2:
             return [grupo(p["termos"], p["campo"], p["forma"], self.aspas) for p in partes]
@@ -174,20 +175,26 @@ class Composicao:
             raise ProtocoloInvalido(G.D_PROXIMIDADE, "proximidade entre âncoras exige as duas "
                                                      "no mesmo campo, na forma `envolve`",
                                     self.fonte["doc"])
-        op = "AND" if sem_proximidade else f"{prox['operador']}/{prox['distancia']}"
+        op = "AND" if sem_proximidade else \
+            f"{prox['operador']}/{prox['distancia'] if distancia is None else distancia}"
         ia = interior(a["termos"], "", G.FORMA_ENVOLVE, self.aspas)
         ib = interior(b["termos"], "", G.FORMA_ENVOLVE, self.aspas)
         return [f"{a['campo']}(({ia}) {op} ({ib}))"]
 
-    def _texto(self, ancoras, outros, sem_proximidade=False):
-        """Texto de uma consulta: âncoras, demais grupos e cláusulas de filtro."""
-        partes = list(self._ancoras(ancoras, sem_proximidade))
+    def _texto(self, ancoras, outros, sem_proximidade=False, distancia=None, restricao=None):
+        """Texto de uma consulta: âncoras, demais grupos e cláusulas de filtro. `restricao`
+        (termos fora do protocolo) entra como um grupo a mais, no campo da primeira âncora,
+        antes dos filtros."""
+        partes = list(self._ancoras(ancoras, sem_proximidade, distancia))
         for g in outros:
             if len(g) == 1:
                 partes.append(grupo(g[0]["termos"], g[0]["campo"], g[0]["forma"], self.aspas))
             else:
                 partes.append("(" + " OR ".join(grupo(x["termos"], x["campo"], x["forma"],
                                                       self.aspas) for x in g) + ")")
+        if restricao:
+            a = ancoras[0]
+            partes.append(grupo(restricao, a["campo"], a["forma"], self.aspas))
         # O conector dos filtros sai daqui, não da `clausula`: a fonte recusa cláusula com
         # conector na borda, e o filtro nunca fica justaposto ao bloco.
         return " AND ".join(partes + self.clausulas)
@@ -320,9 +327,12 @@ class Composicao:
         consultas = e["consultas"]
         ids = [x["id"] for x in consultas]
         sem_prox, metade = bool(c.get("sem_proximidade")), c.get("metade")
+        distancia = c.get("distancia")
+        restricao = (c.get("restricao") or {}).get("termos")
+        transforma = bool(sem_prox or metade or distancia is not None or restricao)
         sel = c.get("consulta")
         if len(consultas) > 1:
-            if sem_prox or metade:
+            if transforma:
                 raise ProtocoloInvalido(G.T_SOND_CONSULTAS, f"{onde}: transformação só em "
                                                             f"expressão de consulta única; "
                                                             f"{ident} tem {len(consultas)} "
@@ -343,17 +353,22 @@ class Composicao:
                 raise ProtocoloInvalido(G.C_SOND_CONSULTA, f"{onde}: consulta {sel!r} não "
                                                            f"existe em {ident} {ids}", doc)
         texto = escolhida["texto"]
-        if sem_prox or metade:
-            texto = self._transformada(ident, onde, sem_prox, metade)
+        if transforma:
+            texto = self._transformada(ident, onde, sem_prox, metade, distancia, restricao)
         origem = [ident]
         if len(consultas) > 1:
             origem.append(f"consulta {escolhida['id']}"
                           + (" (a mais longa)" if sel == G.CONSULTA_MAIS_LONGA else ""))
         if sem_prox:
             origem.append("sem proximidade")
+        if distancia is not None:
+            origem.append(f"proximidade com distância {distancia}")
         if metade:
             origem.append(f"metade {metade['parte']} de {len(G.METADE_PARTES)} da faceta "
                           f"{metade['faceta']}{_cor(self.fonte, metade['faceta'])}")
+        if restricao:
+            origem.append("restrição AND com termos " + G.MARCA_FORA_DO_PROTOCOLO + ": "
+                          + ", ".join(f"`{t}`" for t in restricao))
         origem.append(f"{_milhar(len(texto))} caracteres")
         teto = self.fonte["teto"]
         if teto is not None and len(texto) > teto:
@@ -362,7 +377,7 @@ class Composicao:
                                                         f"({teto}); a base a recusaria", doc)
         return {"texto": texto, "origem": ", ".join(origem)}
 
-    def _transformada(self, ident, onde, sem_prox, metade):
+    def _transformada(self, ident, onde, sem_prox, metade, distancia=None, restricao=None):
         """Texto da consulta única de `ident` composto com a transformação: as âncoras por
         AND no lugar da proximidade e/ou só uma metade dos termos de uma faceta. Composição,
         não substituição no texto final: o operador ou um termo podem aparecer em mais de um
@@ -398,7 +413,12 @@ class Composicao:
                 return dict(p, termos=termos[:meio] if parte == 1 else termos[meio:])
             ancoras = [corta(p) for p in ancoras]
             outros = [[corta(x) for x in g] for g in outros]
-        return self._texto(ancoras, outros, sem_prox)
+        if distancia is not None and \
+                self._texto(ancoras, outros, distancia=distancia) == self._texto(ancoras, outros):
+            raise ProtocoloInvalido(G.C_SOND_DISTANCIA, f"{onde}: `distancia` não muda a "
+                                                        f"consulta: {ident} não usa "
+                                                        f"proximidade", doc)
+        return self._texto(ancoras, outros, sem_prox, distancia, restricao)
 
     def consultas_executaveis(self):
         """[(expressão, id da consulta, rótulo, texto)] do que vai à base."""

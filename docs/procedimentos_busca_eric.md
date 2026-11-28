@@ -581,10 +581,10 @@ descriptorx:Thesauri
 (title:ontology OR title:ontologies) AND abstract:education
 ```
 
-**Consulta 2 — teste**, em caixa de busca. Texto de EB4, consulta 4a (a mais longa), 719 caracteres. Muda em relação ao controle: o comprimento: a consulta mais longa do procedimento.
+**Consulta 2 — teste**, em caixa de busca. Texto de EB4, consulta 4a (a mais longa), 849 caracteres. Muda em relação ao controle: o comprimento: a consulta mais longa do procedimento.
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teacher practice" OR abstract:"teacher practices" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"instructional technique" OR abstract:"instructional techniques" OR abstract:"educational practices" OR abstract:"educational practice" OR abstract:"teaching methods" OR abstract:"teaching method")
 ```
 
 **Passos.**
@@ -1064,7 +1064,7 @@ Declarada em `docs/procedimentos/eric/procedimento.toml`, `[cobertura]`; conferi
 (abstract:"controlled vocabulary" OR abstract:"metadata schema" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern")
 ```
 
-### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — forma radical: quatro palavras-raiz no resumo — **âncora obrigatória**
+### `STR2` — string `#2` — 🟨 FCT2 — Domínio educacional — forma radical: palavras-raiz no resumo; `learner` e `learners` são forma desta base, fora do quadro da FCT2 — **âncora obrigatória**
 
 ```
 (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners)
@@ -1073,7 +1073,7 @@ Declarada em `docs/procedimentos/eric/procedimento.toml`, `[cobertura]`; conferi
 ### `STR3` — string `#3` — 🟥 FCT3 — Práticas do processo de ensino-aprendizagem
 
 ```
-(abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teacher practice" OR abstract:"teacher practices" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"instructional technique" OR abstract:"instructional techniques" OR abstract:"educational practices" OR abstract:"educational practice" OR abstract:"teaching methods" OR abstract:"teaching method")
 ```
 
 ### `STR4` — string `#4` — 🟧 FCT4 — Fatores situacionais
@@ -1127,13 +1127,13 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 2a — artefato no título**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teacher practice" OR abstract:"teacher practices" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"instructional technique" OR abstract:"instructional techniques" OR abstract:"educational practices" OR abstract:"educational practice" OR abstract:"teaching methods" OR abstract:"teaching method")
 ```
 
 **Consulta 2b — termo específico no resumo**
 
 ```
-(abstract:"controlled vocabulary" OR abstract:"metadata schema" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(abstract:"controlled vocabulary" OR abstract:"metadata schema" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teacher practice" OR abstract:"teacher practices" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"instructional technique" OR abstract:"instructional techniques" OR abstract:"educational practices" OR abstract:"educational practice" OR abstract:"teaching methods" OR abstract:"teaching method")
 ```
 
 ### EB3 (específica — artefatos que formalizam os fatores situacionais do domínio educacional)
@@ -1159,7 +1159,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 4a — artefato no título × prática**
 
 ```
-(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(title:"knowledge representation" OR title:"knowledge representations" OR title:"knowledge organization" OR title:"knowledge organizations" OR title:"conceptual model" OR title:"conceptual models" OR title:ontology OR title:ontologies) AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teacher practice" OR abstract:"teacher practices" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"instructional technique" OR abstract:"instructional techniques" OR abstract:"educational practices" OR abstract:"educational practice" OR abstract:"teaching methods" OR abstract:"teaching method")
 ```
 
 **Consulta 4b — artefato no título × fator situacional**
@@ -1171,7 +1171,7 @@ Toda expressão é executada como duas consultas de campo único — `STR1` no t
 **Consulta 4c — termo específico no resumo × prática**
 
 ```
-(abstract:"controlled vocabulary" OR abstract:"metadata schema" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"educational practice" OR abstract:"educational practices" OR abstract:"teaching method" OR abstract:"teaching methods" OR abstract:"educational strategy" OR abstract:"educational strategies" OR abstract:"learning activity" OR abstract:"learning activities" OR abstract:"educational intervention" OR abstract:"educational interventions")
+(abstract:"controlled vocabulary" OR abstract:"metadata schema" OR abstract:thesauri OR abstract:"ontology engineering" OR abstract:"ontology design pattern") AND (abstract:education OR abstract:educational OR abstract:learning OR abstract:teaching OR abstract:learner OR abstract:learners) AND (abstract:"teaching practice" OR abstract:"teaching practices" OR abstract:"instructional practice" OR abstract:"instructional practices" OR abstract:"teacher practice" OR abstract:"teacher practices" OR abstract:"teaching technique" OR abstract:"teaching techniques" OR abstract:"instructional technique" OR abstract:"instructional techniques" OR abstract:"educational practices" OR abstract:"educational practice" OR abstract:"teaching methods" OR abstract:"teaching method")
 ```
 
 **Consulta 4d — termo específico no resumo × fator situacional**

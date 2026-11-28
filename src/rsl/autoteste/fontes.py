@@ -41,13 +41,14 @@ def base_com(ctx, d, condicao):
 
 
 def _inconclusiva(dado):
-    """A primeira sondagem cujos elementos a fonte ainda dá como não verificados: o
+    """A primeira sondagem com elemento, todos ainda dados como não verificados pela fonte: o
     resultado de leitura inconclusiva dela não tem nada a levar à fonte. Sondagem já medida
     não serve: o resultado inconclusivo contradiria a fonte e seria relatado."""
     situacao = {s["elemento"]: s["situacao"] for s in dado["sintaxe"]}
     situacao.update({r["texto"]: r["situacao"] for r in dado.get("regras_de_montagem", [])})
     return next((s for s in dado.get("sondagens", [])
-                 if all(situacao.get(e) == G.SITUACAO_NAO_VERIFICADO for e in s["elementos"])),
+                 if s["elementos"]
+                 and all(situacao.get(e) == G.SITUACAO_NAO_VERIFICADO for e in s["elementos"])),
                 None)
 
 

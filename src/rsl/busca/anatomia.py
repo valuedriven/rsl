@@ -73,8 +73,10 @@ def filtros_de_interface(fonte):
 def monta_niveis(b, sigla, sementes):
     """(fonte, composição, níveis) do diagnóstico, na ordem cumulativa.
 
-    Cada nível é {nivel, texto, expressao, rotulo}: `expressao` é o identificador da
-    expressão cuja execução registrada pode ser lida, ou None quando o nível se submete.
+    Cada nível é {nivel, texto, expressao, texto_expressao, rotulo}: `expressao` é o
+    identificador da expressão cuja execução registrada pode ser lida, ou None quando o nível
+    se submete; `texto_expressao`, o texto vigente dela, que a execução registrada tem de
+    trazer para ser lida.
     Base sem `[composicao] doi` ou com a sonda/executada particionada reprova.
     """
     fonte, comp = composicao_da_base(b.ctx, b.d, sigla)
@@ -99,13 +101,14 @@ def monta_niveis(b, sigla, sementes):
         niveis.append({"nivel": 3, "texto": f"{dois} AND {sem}", "expressao": None,
                        "rotulo": "mais as âncoras, sem proximidade"})
         niveis.append({"nivel": 4, "texto": f"{dois} AND {sonda}", "expressao": b.sonda,
-                       "rotulo": "mais a proximidade"})
+                       "texto_expressao": sonda, "rotulo": "mais a proximidade"})
     else:
         # Sem proximidade, os níveis 3 e 4 coincidem: um só nível de âncoras.
         niveis.append({"nivel": 3, "texto": f"{dois} AND {sonda}", "expressao": b.sonda,
+                       "texto_expressao": sonda,
                        "rotulo": "mais as âncoras (a base não declara proximidade)"})
     niveis.append({"nivel": 5, "texto": f"{dois} AND {executada}", "expressao": b.executada,
-                   "rotulo": "mais a executada"})
+                   "texto_expressao": executada, "rotulo": "mais a executada"})
     return fonte, comp, niveis
 
 
@@ -114,12 +117,34 @@ def execucoes_da_expressao(b, sigla, ident, validas):
     return [c for c in validas if c.get("base") == sigla and c.get("expressao") == ident]
 
 
+def _espacos(texto):
+    return " ".join(str(texto or "").split())
+
+
+def motivo_sem_leitura(b, sigla, nivel, validas):
+    """Por que a execução registrada do nível não se lê, ou None.
+
+    Lê-se só a execução cujo texto registrado é o texto vigente da expressão: com as strings
+    alteradas depois da execução, ler a exportação misturaria dois vocabulários entre os
+    níveis. Execução sem texto registrado também não se lê: a igualdade não se confere."""
+    if nivel["expressao"] is None:
+        return None
+    for c in execucoes_da_expressao(b, sigla, nivel["expressao"], validas):
+        if not _espacos(c.get("texto")):
+            return f"{c['execucao']} sem texto registrado: a igualdade ao vigente não se confere"
+        if _espacos(c["texto"]) != _espacos(nivel["texto_expressao"]):
+            return (f"{c['execucao']} registrada com texto diferente do vigente; as strings "
+                    f"mudaram depois da execução")
+    return None
+
+
 def leitura_registrada(b, sigla, nivel, validas):
     """{origem, registros, arquivos, datas} da execução registrada do nível, ou None.
 
-    Só o nível cuja expressão tem execução válida registrada se lê; os demais se submetem.
+    Só o nível cuja expressão tem execução válida registrada, com o texto vigente, se lê;
+    os demais se submetem (`motivo_sem_leitura`).
     """
-    if nivel["expressao"] is None:
+    if nivel["expressao"] is None or motivo_sem_leitura(b, sigla, nivel, validas):
         return None
     regs = registros_da_expressao(sigla, nivel["expressao"], validas)
     if regs is None:
@@ -140,7 +165,7 @@ def _milhar(n):
     return f"{n:,}".replace(",", ".")
 
 
-def roteiro(b, sigla, fonte, niveis, lidos, teto, sementes, sem_doi):
+def roteiro(b, sigla, fonte, niveis, lidos, teto, sementes, sem_doi, motivos=None):
     """Imprime o roteiro sem gravar: sementes, texto de cada nível, origem e chamada."""
     dois = {normaliza_doi(s.get("doi")) for s in sementes}
     print(f"\nANATOMIA DA PERDA — {sigla} ({b.bd_de.get(sigla, '?')})")
@@ -159,7 +184,8 @@ def roteiro(b, sigla, fonte, niveis, lidos, teto, sementes, sem_doi):
                       f"{' em ' + ', '.join(sorted(set(lido['datas']))) if lido['datas'] else ''}"
                       f" ({quantos} de {len(dois)} DOIs encontrados)")
         else:
-            origem = "a submeter"
+            motivo = (motivos or {}).get(n["nivel"])
+            origem = "a submeter" + (f" ({motivo})" if motivo else "")
         print(f"\n  Nível {n['nivel']} — {n['rotulo']} — {origem} — "
               f"{_milhar(len(n['texto']))} caracteres")
         print(n["texto"])
@@ -379,14 +405,16 @@ def diagnosticar(b, base, retornos=(), exportacoes=(), data_hora=None, sementes=
         return Saida.OK
     fonte, comp, niveis = monta_niveis(b, sigla, sel["diagnosticaveis"])
     _, validas = carrega_consultas(b)
-    lidos = {}
+    lidos, motivos = {}, {}
     for n in niveis:
         lido = leitura_registrada(b, sigla, n, validas)
         if lido:
             lidos[n["nivel"]] = lido
+        elif (motivo := motivo_sem_leitura(b, sigla, n, validas)):
+            motivos[n["nivel"]] = motivo
     if not retornos and not exportacoes and not data_hora:
         roteiro(b, sigla, fonte, niveis, lidos, fonte["teto"], sel["diagnosticaveis"],
-                sel["sem_doi"])
+                sel["sem_doi"], motivos)
         return Saida.OK
     if not data_hora:
         raise DadosInvalidos("falta --data-hora: com resultado, a data e a hora da "
